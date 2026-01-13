@@ -14,7 +14,13 @@ const {
   shape = 'Rounded'
 } = defineProps<Props>();
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
+const {
+  pressed,
+  onPointerDown,
+  onPointerUp,
+  onPointerCancel,
+  onLostPointerCapture
+} = usePressedState();
 
 </script>
 
@@ -31,8 +37,8 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState
     @pointerdown="onPointerDown"
     @pointerup="onPointerUp"
     @pointercancel="onPointerCancel"
+    @lostpointercapture="onLostPointerCapture"
   >
     <slot/>
   </button>
 </template>
-
