@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "m3-vue",
+  "compatibility_date": "2025-01-01",
+  "main": "worker.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "preview_urls": true
+}

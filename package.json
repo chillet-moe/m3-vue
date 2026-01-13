@@ -25,7 +25,8 @@
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "npm:rolldown-vite@7.2.5",
-    "vue-tsc": "^3.1.4"
+    "vue-tsc": "^3.1.4",
+    "wrangler": "^4.58.0"
   },
   "pnpm": {
     "overrides": {
