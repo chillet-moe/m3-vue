@@ -1,0 +1,183 @@
+.primary {
+  background-color: rgb(var(--md-sys-color-primary));
+}
+.primary-text {
+  color: rgb(var(--md-sys-color-primary));
+}
+.on-primary {
+  background-color: rgb(var(--md-sys-color-on-primary));
+}
+.on-primary-text {
+  color: rgb(var(--md-sys-color-on-primary));
+}
+.primary-container {
+  background-color: rgb(var(--md-sys-color-primary-container));
+}
+.primary-container-text {
+  color: rgb(var(--md-sys-color-primary-container));
+}
+.on-primary-container {
+  background-color: rgb(var(--md-sys-color-on-primary-container));
+}
+.on-primary-container-text {
+  color: rgb(var(--md-sys-color-on-primary-container));
+}
+.secondary {
+  background-color: rgb(var(--md-sys-color-secondary));
+}
+.secondary-text {
+  color: rgb(var(--md-sys-color-secondary));
+}
+.on-secondary {
+  background-color: rgb(var(--md-sys-color-on-secondary));
+}
+.on-secondary-text {
+  color: rgb(var(--md-sys-color-on-secondary));
+}
+.secondary-container {
+  background-color: rgb(var(--md-sys-color-secondary-container));
+}
+.secondary-container-text {
+  color: rgb(var(--md-sys-color-secondary-container));
+}
+.on-secondary-container {
+  background-color: rgb(var(--md-sys-color-on-secondary-container));
+}
+.on-secondary-container-text {
+  color: rgb(var(--md-sys-color-on-secondary-container));
+}
+.tertiary {
+  background-color: rgb(var(--md-sys-color-tertiary));
+}
+.tertiary-text {
+  color: rgb(var(--md-sys-color-tertiary));
+}
+.on-tertiary {
+  background-color: rgb(var(--md-sys-color-on-tertiary));
+}
+.on-tertiary-text {
+  color: rgb(var(--md-sys-color-on-tertiary));
+}
+.tertiary-container {
+  background-color: rgb(var(--md-sys-color-tertiary-container));
+}
+.tertiary-container-text {
+  color: rgb(var(--md-sys-color-tertiary-container));
+}
+.on-tertiary-container {
+  background-color: rgb(var(--md-sys-color-on-tertiary-container));
+}
+.on-tertiary-container-text {
+  color: rgb(var(--md-sys-color-on-tertiary-container));
+}
+.error {
+  background-color: rgb(var(--md-sys-color-error));
+}
+.error-text {
+  color: rgb(var(--md-sys-color-error));
+}
+.on-error {
+  background-color: rgb(var(--md-sys-color-on-error));
+}
+.on-error-text {
+  color: rgb(var(--md-sys-color-on-error));
+}
+.error-container {
+  background-color: rgb(var(--md-sys-color-error-container));
+}
+.error-container-text {
+  color: rgb(var(--md-sys-color-error-container));
+}
+.on-error-container {
+  background-color: rgb(var(--md-sys-color-on-error-container));
+}
+.on-error-container-text {
+  color: rgb(var(--md-sys-color-on-error-container));
+}
+.outline {
+  background-color: rgb(var(--md-sys-color-outline));
+}
+.outline-text {
+  color: rgb(var(--md-sys-color-outline));
+}
+.background {
+  background-color: rgb(var(--md-sys-color-background));
+}
+.background-text {
+  color: rgb(var(--md-sys-color-background));
+}
+.on-background {
+  background-color: rgb(var(--md-sys-color-on-background));
+}
+.on-background-text {
+  color: rgb(var(--md-sys-color-on-background));
+}
+.surface {
+  background-color: rgb(var(--md-sys-color-surface));
+}
+.surface-text {
+  color: rgb(var(--md-sys-color-surface));
+}
+.on-surface {
+  background-color: rgb(var(--md-sys-color-on-surface));
+}
+.on-surface-text {
+  color: rgb(var(--md-sys-color-on-surface));
+}
+.surface-variant {
+  background-color: rgb(var(--md-sys-color-surface-variant));
+}
+.surface-variant-text {
+  color: rgb(var(--md-sys-color-surface-variant));
+}
+.on-surface-variant {
+  background-color: rgb(var(--md-sys-color-on-surface-variant));
+}
+.on-surface-variant-text {
+  color: rgb(var(--md-sys-color-on-surface-variant));
+}
+.inverse-surface {
+  background-color: rgb(var(--md-sys-color-inverse-surface));
+}
+.inverse-surface-text {
+  color: rgb(var(--md-sys-color-inverse-surface));
+}
+.inverse-on-surface {
+  background-color: rgb(var(--md-sys-color-inverse-on-surface));
+}
+.inverse-on-surface-text {
+  color: rgb(var(--md-sys-color-inverse-on-surface));
+}
+.inverse-primary {
+  background-color: rgb(var(--md-sys-color-inverse-primary));
+}
+.inverse-primary-text {
+  color: rgb(var(--md-sys-color-inverse-primary));
+}
+.shadow {
+  background-color: rgb(var(--md-sys-color-shadow));
+}
+.shadow-text {
+  color: rgb(var(--md-sys-color-shadow));
+}
+.surface-tint {
+  background-color: rgb(var(--md-sys-color-surface-tint));
+}
+.surface-tint-text {
+  color: rgb(var(--md-sys-color-surface-tint));
+}
+.outline-variant {
+  background-color: rgb(var(--md-sys-color-outline-variant));
+}
+.outline-variant-text {
+  color: rgb(var(--md-sys-color-outline-variant));
+}
+.scrim {
+  background-color: rgb(var(--md-sys-color-scrim));
+}
+.scrim-text {
+  color: rgb(var(--md-sys-color-scrim));
+}
+.surface-container-high {
+  background-color: rgb(var(--md-sys-color-surface-container-high));
+}

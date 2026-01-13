@@ -1,0 +1,40 @@
+@layer tokens {
+  :root {
+    --md-timing-function-fast-spatial: cubic-bezier(0.42, 1.67, 0.21, 0.9);
+    --md-duration-fast-spatial: 350ms;
+    --md-easing-fast-spatial: var(--md-timing-function-fast-spatial) var(--md-duration-fast-spatial);
+
+    --md-timing-function-spatial: cubic-bezier(0.38, 1.21, 0.22, 1);
+    --md-duration-spatial: 500ms;
+    --md-easing-spatial: var(--md-timing-function-spatial) var(--md-duration-spatial);
+
+    --md-timing-function-slow-spatial: cubic-bezier(0.39, 1.29, 0.35, 0.98);
+    --md-duration-slow-spatial: 650ms;
+    --md-easing-slow-spatial: var(--md-timing-function-slow-spatial) var(--md-duration-slow-spatial);
+
+    --md-timing-function-fast: cubic-bezier(0.31, 0.94, 0.34, 1);
+    --md-duration-fast: 150ms;
+    --md-easing-fast: var(--md-timing-function-fast) var(--md-duration-fast);
+
+    --md-timing-function: cubic-bezier(0.34, 0.8, 0.34, 1);
+    --md-duration: 200ms;
+    --md-easing: var(--md-timing-function) var(--md-duration);
+
+    --md-timing-function-slow: cubic-bezier(0.34, 0.88, 0.34, 1);
+    --md-duration-slow: 300ms;
+    --md-easing-slow: var(--md-timing-function-slow) var(--md-duration-slow);
+
+    --md-sys-motion-spring-fast-spatial-damping: 0.6;
+    --md-sys-motion-spring-fast-spatial-stiffness: 800;
+    --md-sys-motion-spring-fast-effects-damping: 1;
+    --md-sys-motion-spring-fast-effects-stiffness: 3800;
+    --md-sys-motion-spring-default-spatial-damping: 0.8;
+    --md-sys-motion-spring-default-spatial-stiffness: 380;
+    --md-sys-motion-spring-default-effects-damping: 1;
+    --md-sys-motion-spring-default-effects-stiffness: 1600;
+    --md-sys-motion-spring-slow-spatial-damping: 0.8;
+    --md-sys-motion-spring-slow-spatial-stiffness: 200;
+    --md-sys-motion-spring-slow-effects-damping: 1;
+    --md-sys-motion-spring-slow-effects-stiffness: 800;
+  }
+}
