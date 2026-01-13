@@ -9,9 +9,9 @@ These projects for inspiration and reference:
 
 ## Deploy (Cloudflare Workers)
 
-Build and deploy the static site from `dist`:
+Build and deploy the static site from `.histoire/dist`:
 
 ```bash
-pnpm run build
+pnpm run story:build
 wrangler deploy
 ```

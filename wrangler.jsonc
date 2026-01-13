@@ -4,8 +4,11 @@
   "compatibility_date": "2025-01-01",
   "main": "worker.js",
   "assets": {
-    "directory": "./dist",
+    "directory": "./.histoire/dist",
     "binding": "ASSETS"
   },
-  "preview_urls": true
+  "preview_urls": true,
+  "build": {
+    "command": "pnpm run story:build"
+  }
 }

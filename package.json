@@ -4,33 +4,37 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "story:preview": "histoire preview"
   },
   "exports": {
     "./*": "./src/*"
   },
   "dependencies": {
-    "@chillet/postcss-custom-mixins": "^0.1.0",
-    "@yuheiy/postcss-custom-functions": "^0.1.1",
-    "oxfmt": "^0.24.0",
-    "oxlint": "^1.39.0",
     "vue": "^3.5.24"
   },
   "devDependencies": {
+    "histoire": "1.0.0-beta.1",
+    "@histoire/plugin-vue": "1.0.0-beta.1",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
-    "vite": "npm:rolldown-vite@7.2.5",
+    "vite": "^7.3.1",
     "vue-tsc": "^3.1.4",
-    "wrangler": "^4.58.0"
+    "wrangler": "^4.58.0",
+    "@chillet/postcss-custom-mixins": "^0.1.0",
+    "@yuheiy/postcss-custom-functions": "^0.1.1",
+    "oxfmt": "^0.24.0",
+    "oxlint": "^1.39.0"
   },
   "pnpm": {
-    "overrides": {
-      "vite": "npm:rolldown-vite@7.2.5"
-    }
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }
