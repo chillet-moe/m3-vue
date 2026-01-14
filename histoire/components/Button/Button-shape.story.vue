@@ -8,7 +8,7 @@ const shapes = ['Rounded', 'Square'];
 </script>
 
 <template>
-  <Story :layout="{ type: 'grid', width: '25%' }" title="Button/Shape">
+  <Story :layout="{ type: 'grid', width: '25%' }" title="Button/Shapes">
     <template #controls>
       <HstText title="default slot" v-model="text" />
     </template>
