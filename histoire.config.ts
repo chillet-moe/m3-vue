@@ -3,7 +3,7 @@ import { defaultColors, defineConfig } from 'histoire';
 
 export default defineConfig({
   theme: {
-    title: 'Material Web',
+    title: 'M3 - Vue',
     logo: {
       square: '/public/logo.svg',
       light: '/public/logo.svg',
