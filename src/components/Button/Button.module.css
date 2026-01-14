@@ -437,6 +437,10 @@
   --md-comp-button-disabled-container-opacity: var(--md-comp-button-elevated-disabled-container-opacity);
   --md-comp-button-disabled-container-elevation: var(--md-comp-button-elevated-disabled-container-elevation);
   --md-comp-button-disabled-label-text-color: var(--md-comp-button-elevated-disabled-label-text-color);
+  --md-comp-button-unselected-container-color: var(--md-comp-button-elevated-unselected-container-color);
+  --md-comp-button-selected-container-color: var(--md-comp-button-elevated-selected-container-color);
+  --md-comp-button-unselected-label-text-color: var(--md-comp-button-elevated-unselected-label-text-color);
+  --md-comp-button-selected-label-text-color: var(--md-comp-button-elevated-selected-label-text-color);
 }
 
 /* Filled */
@@ -454,6 +458,10 @@
   --md-comp-button-disabled-container-opacity: var(--md-comp-button-filled-disabled-container-opacity);
   --md-comp-button-disabled-container-elevation: var(--md-comp-button-filled-disabled-container-elevation);
   --md-comp-button-disabled-label-text-color: var(--md-comp-button-filled-disabled-label-text-color);
+  --md-comp-button-unselected-container-color: var(--md-comp-button-filled-unselected-container-color);
+  --md-comp-button-selected-container-color: var(--md-comp-button-filled-selected-container-color);
+  --md-comp-button-unselected-label-text-color: var(--md-comp-button-filled-unselected-label-text-color);
+  --md-comp-button-selected-label-text-color: var(--md-comp-button-filled-selected-label-text-color);
 }
 
 /* Tonal */
@@ -471,6 +479,10 @@
   --md-comp-button-disabled-container-opacity: var(--md-comp-button-tonal-disabled-container-opacity);
   --md-comp-button-disabled-container-elevation: var(--md-comp-button-tonal-disabled-container-elevation);
   --md-comp-button-disabled-label-text-color: var(--md-comp-button-tonal-disabled-label-text-color);
+  --md-comp-button-unselected-container-color: var(--md-comp-button-tonal-unselected-container-color);
+  --md-comp-button-selected-container-color: var(--md-comp-button-tonal-selected-container-color);
+  --md-comp-button-unselected-label-text-color: var(--md-comp-button-tonal-unselected-label-text-color);
+  --md-comp-button-selected-label-text-color: var(--md-comp-button-tonal-selected-label-text-color);
 }
 
 /* Outlined */
@@ -483,6 +495,10 @@
   --md-comp-button-pressed-label-text-color: var(--md-comp-button-outlined-pressed-label-text-color);
   --md-comp-button-disabled-container-color: transparent;
   --md-comp-button-disabled-label-text-color: var(--md-comp-button-outlined-disabled-label-text-color);
+  --md-comp-button-unselected-container-color: transparent;
+  --md-comp-button-selected-container-color: var(--md-comp-button-outlined-selected-container-color);
+  --md-comp-button-unselected-label-text-color: var(--md-comp-button-outlined-unselected-label-text-color);
+  --md-comp-button-selected-label-text-color: var(--md-comp-button-outlined-selected-label-text-color);
 }
 
 /* Text */
@@ -494,6 +510,10 @@
   --md-comp-button-pressed-label-text-color: var(--md-comp-button-text-pressed-label-text-color);
   --md-comp-button-disabled-container-color: transparent;
   --md-comp-button-disabled-label-text-color: var(--md-comp-button-text-disabled-label-text-color);
+  --md-comp-button-unselected-container-color: transparent;
+  --md-comp-button-selected-container-color: transparent;
+  --md-comp-button-unselected-label-text-color: var(--md-comp-button-text-label-text-color);
+  --md-comp-button-selected-label-text-color: var(--md-comp-button-text-label-text-color);
 }
 
 /* Size Variants */
@@ -607,8 +627,21 @@
     opacity: 0;
   }
 
-  --md-color-container: var(--md-comp-button-container-color);
-  --md-color-on-container: var(--md-comp-button-label-text-color);
+  --md-color-container: var(--md-comp-button-unselected-container-color);
+  --md-color-on-container: var(--md-comp-button-label-text-unselected-color);
+
+  &:hover {
+    --md-color-on-container: var(--md-comp-button-unselected-hovered-label-text-color);
+  }
+
+  &:focus-visible,
+  &:has(input:focus-visible) {
+    --md-color-on-container: var(--md-comp-button-unselected-focused-label-text-color);
+  }
+
+  &.Pressed {
+    --md-color-on-container: var(--md-comp-button-unselected-pressed-label-text-color);
+  }
 
   &:has(input[type='checkbox']:checked),
   &:has(input[type='radio']:checked) {

@@ -44,8 +44,8 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     @pointercancel="onPointerCancel"
     @lostpointercapture="onLostPointerCapture"
   >
-    <input v-if="toggleable == 'single'" type="radio" />
-    <input v-else-if="toggleable == 'multiple'" type="checkbox" />
+    <input v-if="toggleable == 'single'" type="radio" name="buttons" />
+    <input v-else-if="toggleable == 'multiple'" type="checkbox" name="buttons" />
     <slot />
   </component>
 </template>
