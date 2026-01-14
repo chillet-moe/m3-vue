@@ -5,7 +5,7 @@ export default defineConfig({
   theme: {
     title: 'Material Web',
     colors: {
-      primary: defaultColors.cyan,
+      primary: defaultColors.teal,
     },
   },
   setupFile: {
