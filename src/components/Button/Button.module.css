@@ -582,3 +582,33 @@
     --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
   }
 }
+
+.Toggleable {
+  input[type='checkbox'],
+  input[type='radio'] {
+    all: unset;
+    appearance: none;
+    opacity: 0;
+  }
+
+  --md-color-container: var(--md-comp-button-container-color);
+  --md-color-on-container: var(--md-comp-button-label-text-color);
+
+  &:has(input[type='checkbox']:checked),
+  &:has(input[type='radio']:checked) {
+    --md-comp-button-container-shape: var(--md-comp-button-selected-container-shape);
+
+    --md-color-container: var(--md-comp-button-selected-container-color);
+    --md-color-on-container: var(--md-comp-button-label-text-selected-color);
+
+    &:active {
+      --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
+    }
+  }
+}
+
+.ButtonGroup {
+  all: unset;
+  display: inline-flex;
+  gap: --dp(8);
+}
