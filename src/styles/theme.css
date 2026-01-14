@@ -4,3 +4,9 @@
 @import './elevation.css';
 @import './theme.light.css';
 @import './theme.dark.css';
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
