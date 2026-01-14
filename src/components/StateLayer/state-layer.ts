@@ -53,14 +53,7 @@ const createRippleCSS = (
   setTimeout(() => ripple.remove(), duration + 650);
 };
 
-const createRippleJS = (
-  node: Element,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  duration: number,
-): void => {
+const createRippleJS = (node: Element, x: number, y: number, width: number, height: number, duration: number): void => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   // 创建波纹层
@@ -81,8 +74,7 @@ const createRippleJS = (
     const progress = Math.min(elapsed / duration, 1);
 
     // cubic-bezier(0.4, 0, 0.2, 1) 近似
-    const ease =
-      progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
     // 当前半径百分比
     const currentRadius = ease * 120;

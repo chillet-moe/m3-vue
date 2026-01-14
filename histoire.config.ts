@@ -17,18 +17,16 @@ export default defineConfig({
     browser: 'histoire/histoire.setup.ts',
     server: 'histoire/histoire.setup.server.ts',
   },
-  storyMatch: [
-    'histoire/**/*.story.vue',
-  ],
+  storyMatch: ['histoire/**/*.story.vue'],
   tree: {
     file: 'title',
     order: 'asc',
     groups: [
       {
         title: 'Components',
-        include: file => file.path.includes('/components/'),
-      }
-    ]
+        include: (file) => file.path.includes('/components/'),
+      },
+    ],
   },
   plugins: [HstVue()],
 });

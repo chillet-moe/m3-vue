@@ -29,7 +29,7 @@ const step = ref(1);
         :stop-indicators="Array.from({ length: (max - min) / step + 1 }, (_, i) => min + i * step)"
         :formatter="{
           textToValue: value,
-          valueToText: (value) => `${value}`
+          valueToText: (value) => `${value}`,
         }"
       />
     </Variant>
@@ -54,6 +54,5 @@ const step = ref(1);
         <Slider :size="size" v-model:value="value" :min="min" :max="max" :step="step" />
       </template>
     </Variant>
-
   </Story>
 </template>

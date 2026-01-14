@@ -13,8 +13,8 @@
   --handle-inset: 0.125rem;
   --icon-size: 0;
   --stop-indicator-size: 0.25rem;
-
-  --track-inset: calc((var(--handle-width) / 2 + var(--handle-inset))); /* 必须是 var(--handle-width) / 2 + var(--handle-inset) */
+  /* 必须是 var(--handle-width) / 2 + var(--handle-inset) */
+  --track-inset: calc((var(--handle-width) / 2 + var(--handle-inset)));
   --track-inset-total: calc(var(--track-inset) * 2);
 
   block-size: var(--handle-height);
@@ -39,8 +39,8 @@
     inline-size: calc(100% - (var(--track-inset) * 2));
   }
 
-  input[type="range"]::-webkit-slider-runnable-track,
-  input[type="range"]::-moz-range-track {
+  input[type='range']::-webkit-slider-runnable-track,
+  input[type='range']::-moz-range-track {
     block-size: 100%;
     inline-size: 100%;
   }
@@ -52,7 +52,7 @@
   overflow: visible;
 }
 
-.Slider[aria-disabled="true"] {
+.Slider[aria-disabled='true'] {
   --md-comp-slider-active-track-color: rgba(var(--md-sys-color-on-surface), 0.38);
   --md-comp-slider-inactive-track-color: rgb(var(--md-sys-color-on-surface), 0.12);
   --md-comp-slider-handle-color: rgba(var(--md-sys-color-on-surface), 0.38);
@@ -114,7 +114,9 @@
   pointer-events: none;
 
   inset-block: 0;
-  inset-inline-start: calc(var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) - var(--handle-width) / 2);
+  inset-inline-start: calc(
+    var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) - var(--handle-width) / 2
+  );
 
   inline-size: var(--handle-width);
   block-size: var(--handle-height);
@@ -122,7 +124,9 @@
   border-radius: calc(var(--handle-height) * 2);
   background-color: var(--md-comp-slider-handle-color);
 
-  transition: inline-size, outline-width var(--mdui-motion-duration-short1) var(--mdui-motion-easing-standard-accelerate);
+  transition:
+    inline-size,
+    outline-width var(--md-easing-fast);
 
   outline: rgb(var(--md-sys-color-on-surface-variant)) solid 0;
   outline-offset: 0.25rem;
@@ -197,7 +201,9 @@
   position: absolute;
   z-index: 2;
 
-  inset-inline-start: calc(var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) + var(--handle-inset) - 1.5rem);
+  inset-inline-start: calc(
+    var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) + var(--handle-inset) - 1.5rem
+  );
   inset-block-end: calc(100% + 1rem);
 
   background: var(--md-comp-slider-value-indicator-background);
@@ -265,7 +271,10 @@
   --clip-active-start: calc(-1 * var(--stop-indicator-size) / 2);
   --clip-active-end: calc(100% - (var(--valid-length) * var(--percent)) + var(--handle-inset) + var(--handle-width));
 
-  --clip-inactive-start: calc((var(--valid-length) * var(--percent)) + var(--handle-inset) * 2 + var(--handle-width) + var(--track-inset) - var(--stop-indicator-size) / 2);
+  --clip-inactive-start: calc(
+    (var(--valid-length) * var(--percent)) + var(--handle-inset) * 2 + var(--handle-width) + var(--track-inset) -
+      var(--stop-indicator-size) / 2
+  );
   --clip-inactive-end: calc(-1 * var(--stop-indicator-size) / 2);
 }
 

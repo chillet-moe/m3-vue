@@ -108,6 +108,6 @@ export function usePressedState(minDuration = 200) {
     onPointerDown,
     onPointerUp,
     onPointerCancel,
-    onLostPointerCapture
+    onLostPointerCapture,
   };
 }

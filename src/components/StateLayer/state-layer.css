@@ -3,13 +3,13 @@
   -webkit-tap-highlight-color: transparent;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -62,16 +62,17 @@ html:not(.js) :active.state-layer::after {
   background-size: 100px 100px;
   background-blend-mode: luminosity;
   mask-image: radial-gradient(
-          circle at var(--x) var(--y),
-          transparent calc(var(--r) - 95%),
-          rgb(var(--md-color-container)) calc(var(--r) - 20%),
-          rgb(var(--md-color-container)) var(--r),
-          transparent calc(var(--r) + 10%)
+    circle at var(--x) var(--y),
+    transparent calc(var(--r) - 95%),
+    rgb(var(--md-color-container)) calc(var(--r) - 20%),
+    rgb(var(--md-color-container)) var(--r),
+    transparent calc(var(--r) + 10%)
   );
   opacity: 0.08;
   transition: opacity var(--md-easing-slow-spatial);
-  animation: ripple-expand var(--duration) cubic-bezier(0.4, 0, 0.2, 1) forwards,
-             ripple-fade-out 650ms ease-out var(--duration) forwards;
+  animation:
+    ripple-expand var(--duration) cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    ripple-fade-out 650ms ease-out var(--duration) forwards;
 }
 
 @keyframes ripple-expand {

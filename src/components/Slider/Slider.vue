@@ -4,22 +4,22 @@ import style from './Slider.module.css';
 import { useKeyModifier } from '@vueuse/core';
 
 type Props = {
-  vertical?: boolean
-  direction?: 'ltr' | 'rtl'
-  min: number
-  max: number
-  step: number
-  wheelStep?: number
-  lowerLimit?: number
-  upperLimit?: number
-  size?: 'XS' | 'S' | 'M' | 'L' | 'XL'
-  disabled?: boolean
-  valueIndicator?: boolean
+  vertical?: boolean;
+  direction?: 'ltr' | 'rtl';
+  min: number;
+  max: number;
+  step: number;
+  wheelStep?: number;
+  lowerLimit?: number;
+  upperLimit?: number;
+  size?: 'XS' | 'S' | 'M' | 'L' | 'XL';
+  disabled?: boolean;
+  valueIndicator?: boolean;
   formatter?: {
-    valueToText: (value: number) => string
-    textToValue: (text?: string) => number | undefined
-  },
-  stopIndicators?: number[]
+    valueToText: (value: number) => string;
+    textToValue: (text?: string) => number | undefined;
+  };
+  stopIndicators?: number[];
 };
 
 const {
@@ -33,14 +33,13 @@ const {
   lowerLimit,
   upperLimit,
   wheelStep,
-  valueIndicator = true
+  valueIndicator = true,
 } = defineProps<Props>();
 
 const value = defineModel<number>('value', { required: true });
 
 const valueDisplayed = ref(value.value);
 const valuePercent = computed(() => (valueDisplayed.value - min) / (max - min));
-
 
 watch(value, (newVal) => {
   valueDisplayed.value = newVal;
@@ -94,7 +93,6 @@ const onWheel = (e: WheelEvent) => {
   const [_, clampedValue] = clampValue(newValue);
   value.value = clampedValue as number;
 };
-
 </script>
 
 <template>
@@ -104,10 +102,10 @@ const onWheel = (e: WheelEvent) => {
       style.Slider,
       style[size],
       vertical ? style.Vertical : style.Horizontal,
-      direction === 'rtl' ? style.RTL : style.LTR
+      direction === 'rtl' ? style.RTL : style.LTR,
     ]"
     :style="{
-      '--percent': valuePercent
+      '--percent': valuePercent,
     }"
   >
     <input
@@ -121,8 +119,8 @@ const onWheel = (e: WheelEvent) => {
       @change="onChange"
       @wheel.prevent="onWheel"
     />
-    <div aria-hidden="true" :class="style.TrackActive"/>
-    <div aria-hidden="true" :class="style.TrackInactive"/>
+    <div aria-hidden="true" :class="style.TrackActive" />
+    <div aria-hidden="true" :class="style.TrackInactive" />
     <template v-if="stopIndicators">
       <div aria-hidden="true" :class="style.StopIndicatorActiveContainer">
         <div
@@ -131,7 +129,7 @@ const onWheel = (e: WheelEvent) => {
           aria-hidden="true"
           :class="style.StopIndicatorActive"
           :style="{
-            '--percent': (stop - min) / (max - min)
+            '--percent': (stop - min) / (max - min),
           }"
         />
       </div>
@@ -142,13 +140,13 @@ const onWheel = (e: WheelEvent) => {
           aria-hidden="true"
           :class="style.StopIndicatorInactive"
           :style="{
-            '--percent': (stop - min) / (max - min)
+            '--percent': (stop - min) / (max - min),
           }"
         />
       </div>
     </template>
 
-    <div aria-hidden="true" :class="style.Handle"/>
+    <div aria-hidden="true" :class="style.Handle" />
     <div aria-hidden="true" :class="style.ValueIndicator" v-if="valueIndicator">
       <span :class="style.ValueIndicatorText">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}

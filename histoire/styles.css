@@ -16,23 +16,19 @@ body {
 }
 
 body:lang(zh-CN) {
-  font-family:
-    'Roboto Flex', 'Noto Sans SC', 'Helvetica Neue', Helvetica, 'Microsoft Yahei', sans-serif;
+  font-family: 'Roboto Flex', 'Noto Sans SC', 'Helvetica Neue', Helvetica, 'Microsoft Yahei', sans-serif;
 }
 
 body:lang(zh-TW) {
-  font-family:
-    'Roboto Flex', 'Noto Sans TC', 'Helvetica Neue', Helvetica, 'Microsoft JhengHei', sans-serif;
+  font-family: 'Roboto Flex', 'Noto Sans TC', 'Helvetica Neue', Helvetica, 'Microsoft JhengHei', sans-serif;
 }
 
 body:lang(ko) {
-  font-family:
-    'Roboto Flex', 'Noto Sans KR', 'Helvetica Neue', Helvetica, 'Jeju Myeongjo', sans-serif;
+  font-family: 'Roboto Flex', 'Noto Sans KR', 'Helvetica Neue', Helvetica, 'Jeju Myeongjo', sans-serif;
 }
 
 body:lang(ja) {
-  font-family:
-    'Roboto Flex', 'Noto Sans JP', 'Helvetica Neue', Helvetica, 'Jeju Myeongjo', sans-serif;
+  font-family: 'Roboto Flex', 'Noto Sans JP', 'Helvetica Neue', Helvetica, 'Jeju Myeongjo', sans-serif;
 }
 
 button,

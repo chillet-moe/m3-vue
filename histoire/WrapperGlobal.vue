@@ -1,14 +1,13 @@
 <script lang="ts" setup>
-import { Story, Variant } from 'histoire'
+import { Story, Variant } from 'histoire';
 
 const props = defineProps<{
-  story: Story
-  variant?: Variant
-}>()
+  story: Story;
+  variant?: Variant;
+}>();
 
 function hasWrapper() {
-  return props.story.meta?.wrapper !== false
-    && props.variant?.meta?.wrapper !== false
+  return props.story.meta?.wrapper !== false && props.variant?.meta?.wrapper !== false;
 }
 </script>
 
@@ -16,10 +15,7 @@ function hasWrapper() {
   <template v-if="!hasWrapper()">
     <slot />
   </template>
-  <div
-    v-else
-    class="global-wrapper"
-  >
+  <div v-else class="global-wrapper">
     <slot />
   </div>
 </template>

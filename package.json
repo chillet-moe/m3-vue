@@ -1,19 +1,15 @@
 {
   "name": "@chillet/m3-vue",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "type": "module",
+  "exports": {
+    "./*": "./src/*"
+  },
   "scripts": {
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview"
-  },
-  "exports": {
-    "./*": "./src/*"
-  },
-  "peerDependencies": {
-    "@vueuse/core": "^14.1.0",
-    "vue": "^3.5.0"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
@@ -34,6 +30,10 @@
     "vite": "^7.3.1",
     "vue-tsc": "^3.1.4",
     "wrangler": "^4.58.0"
+  },
+  "peerDependencies": {
+    "@vueuse/core": "^14.1.0",
+    "vue": "^3.5.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
