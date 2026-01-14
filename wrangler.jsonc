@@ -2,10 +2,9 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "m3-vue",
   "compatibility_date": "2025-01-01",
-  "main": "worker.js",
   "assets": {
     "directory": "./.histoire/dist",
-    "binding": "ASSETS"
+    "not_found_handling": "single-page-application"
   },
   "preview_urls": true,
   "build": {
