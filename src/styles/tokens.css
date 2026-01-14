@@ -254,7 +254,7 @@
     --md-sys-color-surface-5: var(--md-sys-color-primary), 0.14;
 
     /* display - large */
-    --md-sys-typescale-display-large-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-display-large-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-display-large-font-family-style: Regular;
     --md-sys-typescale-display-large-font-weight: 400;
     --md-sys-typescale-display-large-font-size: 3.562rem;
@@ -263,7 +263,7 @@
     --md-sys-typescale-display-large-text-transform: none;
     --md-sys-typescale-display-large-text-decoration: none;
     /* display - medium */
-    --md-sys-typescale-display-medium-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-display-medium-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-display-medium-font-family-style: Regular;
     --md-sys-typescale-display-medium-font-weight: 400;
     --md-sys-typescale-display-medium-font-size: 2.812rem;
@@ -272,7 +272,7 @@
     --md-sys-typescale-display-medium-text-transform: none;
     --md-sys-typescale-display-medium-text-decoration: none;
     /* display - small */
-    --md-sys-typescale-display-small-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-display-small-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-display-small-font-family-style: Regular;
     --md-sys-typescale-display-small-font-weight: 400;
     --md-sys-typescale-display-small-font-size: 2.25rem;
@@ -281,7 +281,7 @@
     --md-sys-typescale-display-small-text-transform: none;
     --md-sys-typescale-display-small-text-decoration: none;
     /* headline - large */
-    --md-sys-typescale-headline-large-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-headline-large-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-headline-large-font-family-style: Regular;
     --md-sys-typescale-headline-large-font-weight: 400;
     --md-sys-typescale-headline-large-font-size: 2rem;
@@ -290,7 +290,7 @@
     --md-sys-typescale-headline-large-text-transform: none;
     --md-sys-typescale-headline-large-text-decoration: none;
     /* headline - medium */
-    --md-sys-typescale-headline-medium-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-headline-medium-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-headline-medium-font-family-style: Regular;
     --md-sys-typescale-headline-medium-font-weight: 400;
     --md-sys-typescale-headline-medium-font-size: 1.75rem;
@@ -299,7 +299,7 @@
     --md-sys-typescale-headline-medium-text-transform: none;
     --md-sys-typescale-headline-medium-text-decoration: none;
     /* headline - small */
-    --md-sys-typescale-headline-small-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-headline-small-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-headline-small-font-family-style: Regular;
     --md-sys-typescale-headline-small-font-weight: 400;
     --md-sys-typescale-headline-small-font-size: 1.5rem;
@@ -308,7 +308,7 @@
     --md-sys-typescale-headline-small-text-transform: none;
     --md-sys-typescale-headline-small-text-decoration: none;
     /* body - large */
-    --md-sys-typescale-body-large-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-body-large-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-body-large-font-family-style: Regular;
     --md-sys-typescale-body-large-font-weight: 400;
     --md-sys-typescale-body-large-font-size: 1rem;
@@ -317,7 +317,7 @@
     --md-sys-typescale-body-large-text-transform: none;
     --md-sys-typescale-body-large-text-decoration: none;
     /* body - medium */
-    --md-sys-typescale-body-medium-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-body-medium-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-body-medium-font-family-style: Regular;
     --md-sys-typescale-body-medium-font-weight: 400;
     --md-sys-typescale-body-medium-font-size: 0.875rem;
@@ -326,7 +326,7 @@
     --md-sys-typescale-body-medium-text-transform: none;
     --md-sys-typescale-body-medium-text-decoration: none;
     /* body - small */
-    --md-sys-typescale-body-small-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-body-small-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-body-small-font-family-style: Regular;
     --md-sys-typescale-body-small-font-weight: 400;
     --md-sys-typescale-body-small-font-size: 0.75rem;
@@ -335,7 +335,7 @@
     --md-sys-typescale-body-small-text-transform: none;
     --md-sys-typescale-body-small-text-decoration: none;
     /* label - large */
-    --md-sys-typescale-label-large-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-label-large-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-label-large-font-family-style: Medium;
     --md-sys-typescale-label-large-font-weight: 500;
     --md-sys-typescale-label-large-font-size: 0.875rem;
@@ -344,7 +344,7 @@
     --md-sys-typescale-label-large-text-transform: none;
     --md-sys-typescale-label-large-text-decoration: none;
     /* label - medium */
-    --md-sys-typescale-label-medium-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-label-medium-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-label-medium-font-family-style: Medium;
     --md-sys-typescale-label-medium-font-weight: 500;
     --md-sys-typescale-label-medium-font-size: 0.75rem;
@@ -353,7 +353,7 @@
     --md-sys-typescale-label-medium-text-transform: none;
     --md-sys-typescale-label-medium-text-decoration: none;
     /* label - small */
-    --md-sys-typescale-label-small-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-label-small-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-label-small-font-family-style: Medium;
     --md-sys-typescale-label-small-font-weight: 500;
     --md-sys-typescale-label-small-font-size: 0.688rem;
@@ -362,7 +362,7 @@
     --md-sys-typescale-label-small-text-transform: none;
     --md-sys-typescale-label-small-text-decoration: none;
     /* title - large */
-    --md-sys-typescale-title-large-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-title-large-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-title-large-font-family-style: Regular;
     --md-sys-typescale-title-large-font-weight: 400;
     --md-sys-typescale-title-large-font-size: 1.375rem;
@@ -371,7 +371,7 @@
     --md-sys-typescale-title-large-text-transform: none;
     --md-sys-typescale-title-large-text-decoration: none;
     /* title - medium */
-    --md-sys-typescale-title-medium-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-title-medium-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-title-medium-font-family-style: Medium;
     --md-sys-typescale-title-medium-font-weight: 500;
     --md-sys-typescale-title-medium-font-size: 1rem;
@@ -380,7 +380,7 @@
     --md-sys-typescale-title-medium-text-transform: none;
     --md-sys-typescale-title-medium-text-decoration: none;
     /* title - small */
-    --md-sys-typescale-title-small-font-family-name: 'Roboto Flex';
+    --md-sys-typescale-title-small-font-family-name: 'Google Sans Flex';
     --md-sys-typescale-title-small-font-family-style: Medium;
     --md-sys-typescale-title-small-font-weight: 500;
     --md-sys-typescale-title-small-font-size: 0.875rem;
