@@ -1,0 +1,310 @@
+/* https://m3.material.io/components/sliders/specs */
+
+.Slider {
+  position: relative;
+
+  --percent: 0;
+
+  --track-height: 1rem;
+  --track-shape: 0.5rem;
+  --track-shape-inner: 0.25rem;
+  --handle-height: 2.75rem;
+  --handle-width: 0.25rem;
+  --handle-inset: 0.125rem;
+  --icon-size: 0;
+  --stop-indicator-size: 0.25rem;
+
+  --track-inset: calc((var(--handle-width) / 2 + var(--handle-inset))); /* 必须是 var(--handle-width) / 2 + var(--handle-inset) */
+  --track-inset-total: calc(var(--track-inset) * 2);
+
+  block-size: var(--handle-height);
+
+  print-color-adjust: exact;
+
+  --md-comp-slider-active-track-color: rgb(var(--md-sys-color-primary));
+  --md-comp-slider-inactive-track-color: rgb(var(--md-sys-color-primary-container));
+  --md-comp-slider-handle-color: rgb(var(--md-sys-color-primary));
+  --md-comp-slider-value-indicator-background: rgb(var(--md-sys-color-inverse-surface));
+  --md-comp-slider-value-indicator-color: rgb(var(--md-sys-color-inverse-on-surface));
+
+  input {
+    cursor: pointer;
+    opacity: 0;
+    appearance: none;
+
+    margin-block: 0;
+    margin-inline: calc(var(--track-inset));
+
+    block-size: 100%;
+    inline-size: calc(100% - (var(--track-inset) * 2));
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track,
+  input[type="range"]::-moz-range-track {
+    block-size: 100%;
+    inline-size: 100%;
+  }
+
+  input[disabled] {
+    cursor: default;
+  }
+
+  overflow: visible;
+}
+
+.Slider[aria-disabled="true"] {
+  --md-comp-slider-active-track-color: rgba(var(--md-sys-color-on-surface), 0.38);
+  --md-comp-slider-inactive-track-color: rgb(var(--md-sys-color-on-surface), 0.12);
+  --md-comp-slider-handle-color: rgba(var(--md-sys-color-on-surface), 0.38);
+}
+
+.Horizontal {
+  writing-mode: horizontal-tb;
+}
+
+.Vertical {
+  writing-mode: vertical-rl;
+}
+
+.LTR {
+  direction: ltr;
+}
+
+.RTL {
+  direction: rtl;
+}
+
+.XS {
+  --track-height: 1rem;
+  --handle-height: 2.75rem;
+  --track-shape: 0.5rem;
+  --icon-size: 0;
+}
+
+.S {
+  --track-height: 1.5rem;
+  --handle-height: 2.75rem;
+  --track-shape: 0.5rem;
+  --icon-size: 0;
+}
+
+.M {
+  --track-height: 2.5rem;
+  --handle-height: 3.25rem;
+  --track-shape: 0.75rem;
+  --icon-size: 1.5rem;
+}
+
+.L {
+  --track-height: 3.5rem;
+  --handle-height: 4.25rem;
+  --track-shape: 1rem;
+  --icon-size: 1.5rem;
+}
+
+.XL {
+  --track-height: 6rem;
+  --handle-height: 6.75rem;
+  --track-shape: 1rem;
+  --icon-size: 2rem;
+}
+
+.Handle {
+  position: absolute;
+  pointer-events: none;
+
+  inset-block: 0;
+  inset-inline-start: calc(var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) - var(--handle-width) / 2);
+
+  inline-size: var(--handle-width);
+  block-size: var(--handle-height);
+
+  border-radius: calc(var(--handle-height) * 2);
+  background-color: var(--md-comp-slider-handle-color);
+
+  transition: inline-size, outline-width var(--mdui-motion-duration-short1) var(--mdui-motion-easing-standard-accelerate);
+
+  outline: rgb(var(--md-sys-color-on-surface-variant)) solid 0;
+  outline-offset: 0.25rem;
+  z-index: 2;
+}
+
+.Slider:has(input:not([disabled]):hover) {
+  .Handle {
+    --handle-width: 0.375rem;
+  }
+}
+
+.Slider:has(input:not([disabled]):active) {
+  .Handle {
+    --handle-width: 0.125rem;
+  }
+}
+
+.Slider:has(input:focus-visible) {
+  .Handle {
+    outline-width: 0.25rem;
+  }
+}
+
+.Track {
+  position: absolute;
+  pointer-events: none;
+
+  inset-inline: var(--track-inset);
+  inset-block: calc((var(--handle-height) - var(--track-height)) / 2);
+
+  --valid-length: calc(100% - var(--track-inset) * 2 - var(--handle-inset) * 2 - var(--handle-width));
+
+  --active-start: 0;
+  --active-length: calc(var(--valid-length) * var(--percent));
+
+  --inactive-start: calc(100% - var(--valid-length) + var(--active-length));
+  --inactive-length: calc(var(--valid-length) * (1 - var(--percent)));
+}
+
+.TrackActive {
+  composes: Track;
+
+  background-color: var(--md-comp-slider-active-track-color);
+
+  inline-size: var(--active-length);
+  inset-inline-start: var(--active-start);
+
+  border-start-start-radius: var(--track-shape);
+  border-end-end-radius: var(--track-shape-inner);
+  border-start-end-radius: var(--track-shape-inner);
+  border-end-start-radius: var(--track-shape);
+}
+
+.TrackInactive {
+  composes: Track;
+
+  background-color: var(--md-comp-slider-inactive-track-color);
+
+  inline-size: var(--inactive-length);
+  inset-inline-start: var(--inactive-start);
+
+  border-start-end-radius: var(--track-shape);
+  border-end-start-radius: var(--track-shape-inner);
+  border-start-start-radius: var(--track-shape-inner);
+  border-end-end-radius: var(--track-shape);
+}
+
+.ValueIndicator {
+  background-color: var(--md-comp-slider-inactive-track-color);
+
+  position: absolute;
+  z-index: 2;
+
+  inset-inline-start: calc(var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) + var(--handle-inset) - 1.5rem);
+  inset-block-end: calc(100% + 1rem);
+
+  background: var(--md-comp-slider-value-indicator-background);
+  color: var(--md-comp-slider-value-indicator-color);
+  border-radius: calc(infinity * 1px);
+
+  transition: opacity var(--md-easing-fast);
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.Slider:has(input:not([disabled]):active, input:not([disabled]):focus-visible, input:not([disabled]):hover) {
+  .ValueIndicator {
+    opacity: 1;
+  }
+}
+
+.ValueIndicatorText {
+  writing-mode: horizontal-tb;
+  direction: ltr;
+  composes: label-large from '@/styles/typography.module.css';
+  min-inline-size: 3rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.StopIndicator {
+  position: absolute;
+  inline-size: var(--stop-indicator-size);
+  block-size: var(--stop-indicator-size);
+
+  inset-block-start: calc((var(--track-height) - var(--stop-indicator-size)) / 2);
+  inset-inline-start: calc(100% * var(--percent) - var(--stop-indicator-size) / 2);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+.StopIndicatorActive {
+  composes: StopIndicator;
+  background-color: var(--md-comp-slider-inactive-track-color);
+}
+
+.StopIndicatorInactive {
+  composes: StopIndicator;
+  background-color: var(--md-comp-slider-active-track-color);
+}
+
+.StopIndicatorContainer {
+  position: absolute;
+  inline-size: calc(100% - var(--track-inset) * 2 - var(--stop-indicator-size) * 2);
+  inset-block: calc((var(--handle-height) - var(--track-height)) / 2);
+  inset-inline-start: calc(var(--track-inset) + var(--stop-indicator-size));
+  block-size: var(--track-height);
+  pointer-events: none;
+
+  --valid-length: calc(100% - var(--track-inset) * 2);
+}
+
+.StopIndicatorContainer {
+  --clip-active-start: calc(-1 * var(--stop-indicator-size) / 2);
+  --clip-active-end: calc(100% - (var(--valid-length) * var(--percent)) + var(--handle-inset) + var(--handle-width));
+
+  --clip-inactive-start: calc((var(--valid-length) * var(--percent)) + var(--handle-inset) * 2 + var(--handle-width) + var(--track-inset) - var(--stop-indicator-size) / 2);
+  --clip-inactive-end: calc(-1 * var(--stop-indicator-size) / 2);
+}
+
+.StopIndicatorActiveContainer {
+  composes: StopIndicatorContainer;
+}
+
+/* clip-path: top right bottom left */
+.LTR.Vertical .StopIndicatorActiveContainer {
+  clip-path: inset(var(--clip-active-start) 0 var(--clip-active-end) 0);
+}
+
+.RTL.Vertical .StopIndicatorActiveContainer {
+  clip-path: inset(var(--clip-active-end) 0 var(--clip-active-start) 0);
+}
+
+.LTR.Horizontal .StopIndicatorActiveContainer {
+  clip-path: inset(0 var(--clip-active-end) 0 var(--clip-active-start));
+}
+
+.RTL.Horizontal .StopIndicatorActiveContainer {
+  clip-path: inset(0 var(--clip-active-start) 0 var(--clip-active-end));
+}
+
+.StopIndicatorInactiveContainer {
+  composes: StopIndicatorContainer;
+}
+
+.LTR.Vertical .StopIndicatorInactiveContainer {
+  clip-path: inset(var(--clip-inactive-start) 0 var(--clip-inactive-end) 0);
+}
+
+.RTL.Vertical .StopIndicatorInactiveContainer {
+  clip-path: inset(var(--clip-inactive-end) 0 var(--clip-inactive-start) 0);
+}
+
+.LTR.Horizontal .StopIndicatorInactiveContainer {
+  clip-path: inset(0 var(--clip-inactive-end) 0 var(--clip-inactive-start));
+}
+.RTL.Horizontal .StopIndicatorInactiveContainer {
+  clip-path: inset(0 var(--clip-inactive-start) 0 var(--clip-inactive-end));
+}
