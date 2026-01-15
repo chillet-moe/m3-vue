@@ -225,7 +225,7 @@
 .ValueIndicatorText {
   writing-mode: horizontal-tb;
   direction: ltr;
-  composes: label-large from '@/styles/typography.module.css';
+  composes: label-large from '../../styles/typography.module.css';
   min-inline-size: 3rem;
   padding: 0.75rem 1rem;
   display: flex;

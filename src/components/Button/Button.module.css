@@ -518,7 +518,7 @@
 
 /* Size Variants */
 .XS {
-  composes: label-large from '@/styles/typography.module.css';
+  composes: label-large from '../../styles/typography.module.css';
 
   height: var(--md-comp-button-xsmall-container-height);
   padding-inline-start: var(--md-comp-button-xsmall-leading-space);
@@ -531,7 +531,7 @@
 }
 
 .S {
-  composes: label-large from '@/styles/typography.module.css';
+  composes: label-large from '../../styles/typography.module.css';
 
   height: var(--md-comp-button-small-container-height);
   padding-inline-start: var(--md-comp-button-small-leading-space);
@@ -544,7 +544,7 @@
 }
 
 .M {
-  composes: title-medium from '@/styles/typography.module.css';
+  composes: title-medium from '../../styles/typography.module.css';
 
   height: var(--md-comp-button-medium-container-height);
   padding-inline-start: var(--md-comp-button-medium-leading-space);
@@ -557,7 +557,7 @@
 }
 
 .L {
-  composes: headline-small from '@/styles/typography.module.css';
+  composes: headline-small from '../../styles/typography.module.css';
 
   height: var(--md-comp-button-large-container-height);
   padding-inline-start: var(--md-comp-button-large-leading-space);
@@ -570,7 +570,7 @@
 }
 
 .XL {
-  composes: headline-large from '@/styles/typography.module.css';
+  composes: headline-large from '../../styles/typography.module.css';
 
   height: var(--md-comp-button-xlarge-container-height);
   padding-inline-start: var(--md-comp-button-xlarge-leading-space);

@@ -1,9 +1,9 @@
 import './state-layer.css';
 
-const supportsAtProperty = window.CSS?.registerProperty !== undefined;
+const supportsAtProperty = typeof window != 'undefined' && window.CSS?.registerProperty !== undefined;
 let useJSAnimation = false;
 
-if (!supportsAtProperty && typeof CSS.registerProperty === 'function') {
+if (!supportsAtProperty && typeof CSS != 'undefined' && typeof CSS.registerProperty === 'function') {
   // 降级:使用 JS 动态注册
   try {
     CSS.registerProperty({

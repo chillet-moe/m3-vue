@@ -1,12 +1,32 @@
 {
   "name": "@chillet/m3-vue",
   "version": "0.0.1",
-  "private": true,
   "type": "module",
-  "exports": {
-    "./*": "./src/*"
+  "repository": {
+    "url": "https://github.com/chillet-moe/m3-vue"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json",
+    "./style.css": "./dist/style.css",
+    "./styles/*": "./src/styles/*",
+    "./components/*": "./src/components/*"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/styles",
+    "src/components"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
+    "build": "tsdown",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview"
@@ -25,6 +45,7 @@
     "histoire": "1.0.0-beta.1",
     "oxfmt": "^0.24.0",
     "oxlint": "^1.39.0",
+    "tsdown": "0.20.0-beta.3",
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
