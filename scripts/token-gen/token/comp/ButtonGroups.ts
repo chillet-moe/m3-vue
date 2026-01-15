@@ -1,64 +1,59 @@
 export const ButtonGroupStandard = {
-  sizes: {
-    xs: {
+    xsmall: {
       height: '32dp',
       betweenSpace: '18dp',
     },
-    s: {
+    small: {
       height: '40dp',
       betweenSpace: '12dp',
     },
-    m: {
+    medium: {
       height: '56dp',
       betweenSpace: '8dp',
     },
-    l: {
+    large: {
       height: '96dp',
       betweenSpace: '8dp',
     },
-    xl: {
+    xlarge: {
       height: '136dp',
       betweenSpace: '8dp',
     },
-  },
 } as const;
 
 export const ButtonGroupConnected = {
-  sizes: {
-    xs: {
-      height: '32dp',
+    xsmall: {
+      ...ButtonGroupStandard.xsmall,
       betweenSpace: '2dp',
       innerCornerSize: '8dp',
       pressedInnerCornerSize: '4dp',
       selectedCornerSize: '50%',
     },
-    s: {
-      height: '40dp',
+    small: {
+      ...ButtonGroupStandard.small,
       betweenSpace: '2dp',
       innerCornerSize: '8dp',
       pressedInnerCornerSize: '4dp',
       selectedCornerSize: '50%',
     },
-    m: {
-      height: '56dp',
-      betweenSpace: '8dp',
+    medium: {
+      ...ButtonGroupStandard.medium,
       innerCornerSize: '8dp',
       pressedInnerCornerSize: '4dp',
       selectedCornerSize: '50%',
     },
-    l: {
-      height: '96dp',
+    large: {
+      ...ButtonGroupStandard.large,
       betweenSpace: '2dp',
       innerCornerSize: '16dp',
       pressedInnerCornerSize: '12dp',
       selectedCornerSize: '50%',
     },
-    xl: {
-      height: '136dp',
+    xlarge: {
+      ...ButtonGroupStandard.xlarge,
       betweenSpace: '2dp',
       innerCornerSize: '20dp',
       pressedInnerCornerSize: '16dp',
       selectedCornerSize: '50%',
     },
-  },
 } as const;
