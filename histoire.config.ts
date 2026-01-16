@@ -14,10 +14,10 @@ export default defineConfig({
     },
   },
   setupFile: {
-    browser: 'histoire/histoire.setup.ts',
-    server: 'histoire/histoire.setup.server.ts',
+    browser: '.histoire/histoire.setup.ts',
+    server: '.histoire/histoire.setup.server.ts',
   },
-  storyMatch: ['histoire/**/*.story.vue'],
+  storyMatch: ['src/**/*.story.vue'],
   tree: {
     file: 'title',
     order: 'asc',
