@@ -1,23 +1,26 @@
 <script setup lang="ts">
 import style from './Button.module.css';
 import { usePressedState } from '@/composables/usePressedState';
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
+import { buttonContextKey, type ButtonProps } from '@/components/Button/Button.ts';
 
-type Props = {
-  toggleable?: 'none' | 'single' | 'multiple';
-  color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
-  size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
-  shape?: 'rounded' | 'square';
-  href?: string;
-};
+const props = defineProps<ButtonProps>();
 
-const { toggleable = 'none', color = 'filled', size = 'small', shape = 'rounded', href } = defineProps<Props>();
+// Inject context from ButtonGroup if available
+const context = inject(buttonContextKey, undefined);
+
+// Use context values as defaults, but allow props to override
+const toggleable = computed(() => props.toggleable ?? context?.toggleable?.value ?? 'none');
+const color = computed(() => props.color ?? context?.color?.value ?? 'filled');
+const size = computed(() => props.size ?? context?.size?.value ?? 'small');
+const shape = computed(() => props.shape ?? context?.shape?.value ?? 'rounded');
+const disabled = computed(() => props.disabled ?? context?.disabled?.value ?? false);
 
 const tag = computed(() => {
-  if (href) {
+  if (props.href) {
     return 'a';
   }
-  if (toggleable == 'single' || toggleable == 'multiple') {
+  if (toggleable.value == 'single' || toggleable.value == 'multiple') {
     return 'label';
   }
   return 'button';
@@ -38,7 +41,8 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     :data-shape="shape"
     :data-pressed="pressed ? 'true' : 'false'"
     :data-toggleable="toggleable != 'none' ? 'true' : 'false'"
-    :href="href ? href : null"
+    :href="props.href ? props.href : null"
+    :disabled="disabled"
     @pointerdown="onPointerDown"
     @pointerup="onPointerUp"
     @pointercancel="onPointerCancel"
