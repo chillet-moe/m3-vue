@@ -92,37 +92,37 @@
   gap: var(--md-comp-button-group-between-space);
 }
 
-.standard {
+.buttonGroup[data-type='standard'] {
   --md-comp-button-group-height: var(--md-comp-button-group-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-standard-medium-between-space);
 }
 
-.standard.extra-small {
+.buttonGroup[data-type='standard'][data-size='extra-small'] {
   --md-comp-button-group-height: var(--md-comp-button-group-standard-xsmall-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-standard-xsmall-between-space);
 }
 
-.standard.small {
+.buttonGroup[data-type='standard'][data-size='small'] {
   --md-comp-button-group-height: var(--md-comp-button-group-standard-small-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-standard-small-between-space);
 }
 
-.standard.medium {
+.buttonGroup[data-type='standard'][data-size='medium'] {
   --md-comp-button-group-height: var(--md-comp-button-group-standard-medium-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-standard-medium-between-space);
 }
 
-.standard.large {
+.buttonGroup[data-type='standard'][data-size='large'] {
   --md-comp-button-group-height: var(--md-comp-button-group-standard-large-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-standard-large-between-space);
 }
 
-.standard.extra-large {
+.buttonGroup[data-type='standard'][data-size='extra-large'] {
   --md-comp-button-group-height: var(--md-comp-button-group-standard-xlarge-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-standard-xlarge-between-space);
 }
 
-.connected {
+.buttonGroup[data-type='connected'] {
   --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-medium-container-shape);
   --md-comp-button-group-connected-inner-corner-corner-size: var(
     --md-comp-button-group-connected-medium-inner-corner-corner-size
@@ -135,7 +135,7 @@
   );
 }
 
-.connected.extra-small {
+.buttonGroup[data-type='connected'][data-size='extra-small'] {
   --md-comp-button-group-height: var(--md-comp-button-group-connected-xsmall-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-connected-xsmall-between-space);
   --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-xsmall-container-shape);
@@ -150,7 +150,7 @@
   );
 }
 
-.connected.small {
+.buttonGroup[data-type='connected'][data-size='small'] {
   --md-comp-button-group-height: var(--md-comp-button-group-connected-small-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-connected-small-between-space);
   --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-small-container-shape);
@@ -165,7 +165,7 @@
   );
 }
 
-.connected.medium {
+.buttonGroup[data-type='connected'][data-size='medium'] {
   --md-comp-button-group-height: var(--md-comp-button-group-connected-medium-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-connected-medium-between-space);
   --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-medium-container-shape);
@@ -180,7 +180,7 @@
   );
 }
 
-.connected.large {
+.buttonGroup[data-type='connected'][data-size='large'] {
   --md-comp-button-group-height: var(--md-comp-button-group-connected-large-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-connected-large-between-space);
   --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-large-container-shape);
@@ -195,7 +195,7 @@
   );
 }
 
-.connected.extra-large {
+.buttonGroup[data-type='connected'][data-size='extra-large'] {
   --md-comp-button-group-height: var(--md-comp-button-group-connected-xlarge-container-height);
   --md-comp-button-group-between-space: var(--md-comp-button-group-connected-xlarge-between-space);
   --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-xlarge-container-shape);
@@ -211,21 +211,21 @@
 }
 
 /* Connected button group children border-radius overrides */
-.connected > :first-child {
+.buttonGroup[data-type='connected'] > :first-of-type {
   border-start-start-radius: var(--md-comp-button-group-connected-container-shape);
   border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
   border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
   border-end-start-radius: var(--md-comp-button-group-connected-container-shape);
 }
 
-.connected > :last-child {
+.buttonGroup[data-type='connected'] > :last-of-type {
   border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
   border-start-end-radius: var(--md-comp-button-group-connected-container-shape);
   border-end-end-radius: var(--md-comp-button-group-connected-container-shape);
   border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
 }
 
-.connected > :not(:first-child):not(:last-child) {
+.buttonGroup[data-type='connected'] > :not(:first-of-type):not(:last-of-type) {
   border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
     border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
     border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
@@ -233,34 +233,34 @@
 }
 
 /* Pressed state border-radius overrides */
-.connected > :first-child:active,
-.connected > :last-child:active {
+.buttonGroup[data-type='connected'] > :first-of-type:active,
+.buttonGroup[data-type='connected'] > :last-of-type:active {
   --md-comp-button-group-connected-inner-corner-corner-size: var(
     --md-comp-button-group-connected-pressed-inner-corner-corner-size
   );
 }
 
-.connected > :not(:first-child):not(:last-child):active {
+.buttonGroup[data-type='connected'] > :not(:first-of-type):not(:last-of-type):active {
   border-radius: var(--md-comp-button-group-connected-pressed-inner-corner-corner-size);
 }
 
 /* Selected state border-radius overrides */
-.connected > :first-child:has(input:checked) {
+.buttonGroup[data-type='connected'] > :first-of-type:has(input:checked) {
   border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
   border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
 }
 
-.connected > :last-child:has(input:checked) {
+.buttonGroup[data-type='connected'] > :last-of-type:has(input:checked) {
   border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
   border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
 }
 
-.connected > :last-child:has(input:checked) {
+.buttonGroup[data-type='connected'] > :last-of-type:has(input:checked) {
   border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
   border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
 }
 
-.connected > :not(:first-child):not(:last-child):has(input:checked) {
+.buttonGroup[data-type='connected'] > :not(:first-of-type):not(:last-of-type):has(input:checked) {
   border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
   border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
   border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);

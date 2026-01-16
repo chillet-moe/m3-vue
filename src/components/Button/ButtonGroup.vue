@@ -11,7 +11,7 @@ const { type = 'standard', size = 'small' } = defineProps<Props>();
 </script>
 
 <template>
-  <fieldset :class="[style.buttonGroup, style[type], style[size]]">
+  <fieldset :class="style.buttonGroup" :data-type="type" :data-size="size">
     <slot/>
   </fieldset>
 </template>
