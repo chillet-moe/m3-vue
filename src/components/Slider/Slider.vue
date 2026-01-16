@@ -12,7 +12,7 @@ type Props = {
   wheelStep?: number;
   lowerLimit?: number;
   upperLimit?: number;
-  size?: 'XS' | 'S' | 'M' | 'L' | 'XL';
+  size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
   disabled?: boolean;
   valueIndicator?: boolean;
   formatter?: {
@@ -25,7 +25,7 @@ type Props = {
 const {
   vertical = false,
   direction = 'ltr',
-  size = 'M',
+  size = 'medium',
   min,
   max,
   step,
@@ -99,10 +99,10 @@ const onWheel = (e: WheelEvent) => {
   <div
     :aria-disabled="disabled"
     :class="[
-      style.Slider,
+      style.slider,
       style[size],
-      vertical ? style.Vertical : style.Horizontal,
-      direction === 'rtl' ? style.RTL : style.LTR,
+      vertical ? style.vertical : style.horizontal,
+      direction === 'rtl' ? style.rtl : style.lrt,
     ]"
     :style="{
       '--percent': valuePercent,
@@ -119,26 +119,26 @@ const onWheel = (e: WheelEvent) => {
       @change="onChange"
       @wheel.prevent="onWheel"
     />
-    <div aria-hidden="true" :class="style.TrackActive" />
-    <div aria-hidden="true" :class="style.TrackInactive" />
+    <div aria-hidden="true" :class="style.trackActive" />
+    <div aria-hidden="true" :class="style.trackInactive" />
     <template v-if="stopIndicators">
-      <div aria-hidden="true" :class="style.StopIndicatorActiveContainer">
+      <div aria-hidden="true" :class="style.stopIndicatorActiveContainer">
         <div
           v-for="(stop, index) in stopIndicators"
           :key="index"
           aria-hidden="true"
-          :class="style.StopIndicatorActive"
+          :class="style.stopIndicatorActive"
           :style="{
             '--percent': (stop - min) / (max - min),
           }"
         />
       </div>
-      <div aria-hidden="true" :class="style.StopIndicatorInactiveContainer">
+      <div aria-hidden="true" :class="style.stopIndicatorInactiveContainer">
         <div
           v-for="(stop, index) in stopIndicators"
           :key="index"
           aria-hidden="true"
-          :class="style.StopIndicatorInactive"
+          :class="style.stopIndicatorInactive"
           :style="{
             '--percent': (stop - min) / (max - min),
           }"
@@ -146,9 +146,9 @@ const onWheel = (e: WheelEvent) => {
       </div>
     </template>
 
-    <div aria-hidden="true" :class="style.Handle" />
-    <div aria-hidden="true" :class="style.ValueIndicator" v-if="valueIndicator">
-      <span :class="style.ValueIndicatorText">
+    <div aria-hidden="true" :class="style.handle" />
+    <div aria-hidden="true" :class="style.valueIndicator" v-if="valueIndicator">
+      <span :class="style.valueIndicatorText">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}
       </span>
     </div>

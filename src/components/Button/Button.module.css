@@ -1,5 +1,5 @@
 @layer tokens {
-  .Button {
+  .button {
     --md-comp-button-container-color: var(--md-sys-color-primary);
     --md-comp-button-unselected-container-color: var(--md-sys-color-surface-container);
     --md-comp-button-selected-container-color: var(--md-sys-color-primary);
@@ -358,7 +358,7 @@
   }
 }
 
-.Button {
+.button {
   border: none;
   user-select: none;
 
@@ -386,19 +386,19 @@
   padding-inline-end: var(--md-comp-button-trailing-space);
 }
 
-.Button:not(:disabled) {
+.button:not(:disabled) {
   cursor: pointer;
 }
 
-.Button:hover {
+.button:hover {
   --md-color-on-container: var(--md-comp-button-hovered-label-text-color);
   box-shadow:
     var(--md-comp-button-hovered-container-elevation, var(--md-comp-button-container-elevation)),
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
 }
 
-.Button:focus-visible,
-.Button:has(input:focus-visible) {
+.button:focus-visible,
+.button:has(input:focus-visible) {
   --md-color-on-container: var(--md-comp-button-focused-label-text-color);
   box-shadow:
     var(--md-comp-button-focused-container-elevation),
@@ -408,14 +408,14 @@
   outline: rgb(var(--md-comp-button-focus-indicator-color)) solid var(--md-comp-button-focus-indicator-thickness);
 }
 
-.Button.Pressed {
+.button.Pressed {
   --md-color-on-container: var(--md-comp-button-pressed-label-text-color);
   box-shadow:
     var(--md-comp-button-pressed-container-elevation),
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
 }
 
-.Button:disabled {
+.button:disabled {
   background-color: rgba(
     var(--md-comp-button-disabled-container-color),
     var(--md-comp-button-disabled-container-opacity)
@@ -426,8 +426,8 @@
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
 }
 
-/* Elevated */
-.Elevated {
+/* elevated */
+.elevated {
   --md-comp-button-container-color: var(--md-comp-button-elevated-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-elevated-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-elevated-label-text-color);
@@ -447,8 +447,8 @@
   --md-comp-button-selected-label-text-color: var(--md-comp-button-elevated-selected-label-text-color);
 }
 
-/* Filled */
-.Filled {
+/* filled */
+.filled {
   --md-comp-button-container-color: var(--md-comp-button-filled-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-filled-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-filled-label-text-color);
@@ -468,8 +468,8 @@
   --md-comp-button-selected-label-text-color: var(--md-comp-button-filled-selected-label-text-color);
 }
 
-/* Tonal */
-.Tonal {
+/* tonal */
+.tonal {
   --md-comp-button-container-color: var(--md-comp-button-tonal-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-tonal-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-tonal-label-text-color);
@@ -489,8 +489,8 @@
   --md-comp-button-selected-label-text-color: var(--md-comp-button-tonal-selected-label-text-color);
 }
 
-/* Outlined */
-.Outlined {
+/* outlined */
+.outlined {
   --md-comp-button-container-color: transparent;
   --md-comp-button-label-text-color: var(--md-comp-button-outlined-label-text-color);
   --button-outline-color: var(--md-comp-button-outlined-outline-color);
@@ -505,8 +505,8 @@
   --md-comp-button-selected-label-text-color: var(--md-comp-button-outlined-selected-label-text-color);
 }
 
-/* Text */
-.Text {
+/* text */
+.text {
   --md-comp-button-container-color: transparent;
   --md-comp-button-label-text-color: var(--md-comp-button-text-label-text-color);
   --md-comp-button-hovered-label-text-color: var(--md-comp-button-text-hovered-label-text-color);
@@ -521,7 +521,7 @@
 }
 
 /* Size Variants */
-.XS {
+.extra-small {
   composes: label-large from '../../styles/typography.module.css';
 
   --md-comp-button-container-height: var(--md-comp-button-xsmall-container-height);
@@ -534,7 +534,7 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-xsmall-selected-container-shape-round);
 }
 
-.S {
+.small {
   composes: label-large from '../../styles/typography.module.css';
 
   --md-comp-button-container-height: var(--md-comp-button-small-container-height);
@@ -547,7 +547,7 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-small-selected-container-shape-round);
 }
 
-.M {
+.medium {
   composes: title-medium from '../../styles/typography.module.css';
 
   --md-comp-button-container-height: var(--md-comp-button-medium-container-height);
@@ -560,7 +560,7 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-medium-selected-container-shape-round);
 }
 
-.L {
+.large {
   composes: headline-small from '../../styles/typography.module.css';
 
   --md-comp-button-container-height: var(--md-comp-button-large-container-height);
@@ -573,7 +573,7 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-large-selected-container-shape-round);
 }
 
-.XL {
+.extra-large {
   composes: headline-large from '../../styles/typography.module.css';
 
   --md-comp-button-container-height: var(--md-comp-button-xlarge-container-height);
@@ -586,28 +586,28 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-xlarge-selected-container-shape-round);
 }
 
-.XS.Outlined {
+.extra-small.outlined {
   --button-outline-width: var(--md-comp-button-xsmall-outlined-outline-width);
 }
 
-.S.Outlined {
+.small.outlined {
   --button-outline-width: var(--md-comp-button-small-outlined-outline-width);
 }
 
-.M.Outlined {
+.medium.outlined {
   --button-outline-width: var(--md-comp-button-medium-outlined-outline-width);
 }
 
-.L.Outlined {
+.large.outlined {
   --button-outline-width: var(--md-comp-button-large-outlined-outline-width);
 }
 
-.XL.Outlined {
+.extra-large.outlined {
   --button-outline-width: var(--md-comp-button-xlarge-outlined-outline-width);
 }
 
 /* Shape Variants */
-.Rounded {
+.rounded {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
 
   &.Pressed {
@@ -615,7 +615,7 @@
   }
 }
 
-.Square {
+.square {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-square);
 
   &.Pressed {
@@ -660,8 +660,3 @@
   }
 }
 
-.ButtonGroup {
-  all: unset;
-  display: inline-flex;
-  gap: --dp(8);
-}

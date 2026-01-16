@@ -44,7 +44,7 @@ function isVariant(obj: any): boolean {
   // - { container: { color: 'value' } } -> variant (elevated, xsmall)
   // - { height: '32dp', betweenSpace: '18dp' } -> NOT a variant (this is a base property group like 'container')
   // However, for ButtonGroups where each size IS a variant:
-  // - { xs: { height: '32dp' } } -> xs is a variant
+  // - { extra-small: { height: '32dp' } } -> extra-small is a variant
 
   if (typeof obj !== 'object' || obj === null) return false;
 

@@ -1,5 +1,5 @@
 @layer token {
-  .ButtonGroup {
+  .button-group {
     --md-comp-button-group-standard-xsmall-container-height: 2rem;
     --md-comp-button-group-standard-xsmall-between-space: 1.125rem;
     --md-comp-button-group-standard-xsmall-pressed-item-width-motion-spring-dampening: var(
@@ -108,7 +108,7 @@
   }
 }
 
-.ButtonGroup {
+.button-group {
   all: unset;
   display: inline-flex;
 
@@ -119,6 +119,6 @@
   gap: var(--md-comp-button-group-between-space);
 }
 
-.XSmall {
+.extra-small {
 
 }

@@ -2,7 +2,7 @@
 import Slider from '@/components/Slider/Slider.vue';
 import { ref } from 'vue';
 
-const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'];
 
 const value = ref(2);
 const min = ref(0);

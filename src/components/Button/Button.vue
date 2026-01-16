@@ -5,13 +5,13 @@ import { computed } from 'vue';
 
 type Props = {
   toggleable?: 'none' | 'single' | 'multiple';
-  variant?: 'Elevated' | 'Filled' | 'Tonal' | 'Outlined' | 'Text';
-  size?: 'XS' | 'S' | 'M' | 'L' | 'XL';
-  shape?: 'Rounded' | 'Square';
+  variant?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
+  size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
+  shape?: 'rounded' | 'square';
   href?: string;
 };
 
-const { toggleable = 'none', variant = 'Filled', size = 'S', shape = 'Rounded', href } = defineProps<Props>();
+const { toggleable = 'none', variant = 'filled', size = 'small', shape = 'rounded', href } = defineProps<Props>();
 
 const tag = computed(() => {
   if (href) {
@@ -31,7 +31,7 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     :is="tag"
     :class="[
       'state-layer',
-      style.Button,
+      style.button,
       style[variant],
       style[size],
       style[shape],

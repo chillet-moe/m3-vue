@@ -1,6 +1,4 @@
-/* https://m3.material.io/components/sliders/specs */
-
-.Slider {
+.slider {
   position: relative;
 
   --percent: 0;
@@ -52,64 +50,64 @@
   overflow: visible;
 }
 
-.Slider[aria-disabled='true'] {
+.slider[aria-disabled='true'] {
   --md-comp-slider-active-track-color: rgba(var(--md-sys-color-on-surface), 0.38);
   --md-comp-slider-inactive-track-color: rgb(var(--md-sys-color-on-surface), 0.12);
   --md-comp-slider-handle-color: rgba(var(--md-sys-color-on-surface), 0.38);
 }
 
-.Horizontal {
+.horizontal {
   writing-mode: horizontal-tb;
 }
 
-.Vertical {
+.vertical {
   writing-mode: vertical-rl;
 }
 
-.LTR {
+.lrt {
   direction: ltr;
 }
 
-.RTL {
+.rtl {
   direction: rtl;
 }
 
-.XS {
+.extra-small {
   --track-height: 1rem;
   --handle-height: 2.75rem;
   --track-shape: 0.5rem;
   --icon-size: 0;
 }
 
-.S {
+.small {
   --track-height: 1.5rem;
   --handle-height: 2.75rem;
   --track-shape: 0.5rem;
   --icon-size: 0;
 }
 
-.M {
+.medium {
   --track-height: 2.5rem;
   --handle-height: 3.25rem;
   --track-shape: 0.75rem;
   --icon-size: 1.5rem;
 }
 
-.L {
+.large {
   --track-height: 3.5rem;
   --handle-height: 4.25rem;
   --track-shape: 1rem;
   --icon-size: 1.5rem;
 }
 
-.XL {
+.extra-large {
   --track-height: 6rem;
   --handle-height: 6.75rem;
   --track-shape: 1rem;
   --icon-size: 2rem;
 }
 
-.Handle {
+.handle {
   position: absolute;
   pointer-events: none;
 
@@ -133,25 +131,25 @@
   z-index: 2;
 }
 
-.Slider:has(input:not([disabled]):hover) {
+.slider:has(input:not([disabled]):hover) {
   .Handle {
     --handle-width: 0.375rem;
   }
 }
 
-.Slider:has(input:not([disabled]):active) {
+.slider:has(input:not([disabled]):active) {
   .Handle {
     --handle-width: 0.125rem;
   }
 }
 
-.Slider:has(input:focus-visible) {
+.slider:has(input:focus-visible) {
   .Handle {
     outline-width: 0.25rem;
   }
 }
 
-.Track {
+.track {
   position: absolute;
   pointer-events: none;
 
@@ -167,8 +165,8 @@
   --inactive-length: calc(var(--valid-length) * (1 - var(--percent)));
 }
 
-.TrackActive {
-  composes: Track;
+.trackActive {
+  composes: track;
 
   background-color: var(--md-comp-slider-active-track-color);
 
@@ -181,8 +179,8 @@
   border-end-start-radius: var(--track-shape);
 }
 
-.TrackInactive {
-  composes: Track;
+.trackInactive {
+  composes: track;
 
   background-color: var(--md-comp-slider-inactive-track-color);
 
@@ -195,7 +193,7 @@
   border-end-end-radius: var(--track-shape);
 }
 
-.ValueIndicator {
+.valueIndicator {
   background-color: var(--md-comp-slider-inactive-track-color);
 
   position: absolute;
@@ -216,13 +214,13 @@
   pointer-events: none;
 }
 
-.Slider:has(input:not([disabled]):active, input:not([disabled]):focus-visible, input:not([disabled]):hover) {
-  .ValueIndicator {
+.slider:has(input:not([disabled]):active, input:not([disabled]):focus-visible, input:not([disabled]):hover) {
+  .value-indicator {
     opacity: 1;
   }
 }
 
-.ValueIndicatorText {
+.valueIndicatorText {
   writing-mode: horizontal-tb;
   direction: ltr;
   composes: label-large from '../../styles/typography.module.css';
@@ -233,7 +231,7 @@
   justify-content: center;
 }
 
-.StopIndicator {
+.stopIndicator {
   position: absolute;
   inline-size: var(--stop-indicator-size);
   block-size: var(--stop-indicator-size);
@@ -246,17 +244,17 @@
   pointer-events: none;
 }
 
-.StopIndicatorActive {
-  composes: StopIndicator;
+.stopIndicatorActive {
+  composes: stopIndicator;
   background-color: var(--md-comp-slider-inactive-track-color);
 }
 
-.StopIndicatorInactive {
-  composes: StopIndicator;
+.stopIndicatorInactive {
+  composes: stopIndicator;
   background-color: var(--md-comp-slider-active-track-color);
 }
 
-.StopIndicatorContainer {
+.stopIndicatorContainer {
   position: absolute;
   inline-size: calc(100% - var(--track-inset) * 2 - var(--stop-indicator-size) * 2);
   inset-block: calc((var(--handle-height) - var(--track-height)) / 2);
@@ -267,7 +265,7 @@
   --valid-length: calc(100% - var(--track-inset) * 2);
 }
 
-.StopIndicatorContainer {
+.stopIndicatorContainer {
   --clip-active-start: calc(-1 * var(--stop-indicator-size) / 2);
   --clip-active-end: calc(100% - (var(--valid-length) * var(--percent)) + var(--handle-inset) + var(--handle-width));
 
@@ -278,42 +276,42 @@
   --clip-inactive-end: calc(-1 * var(--stop-indicator-size) / 2);
 }
 
-.StopIndicatorActiveContainer {
-  composes: StopIndicatorContainer;
+.stopIndicatorActiveContainer {
+  composes: stopIndicatorContainer;
 }
 
 /* clip-path: top right bottom left */
-.LTR.Vertical .StopIndicatorActiveContainer {
+.lrt.vertical .stopIndicatorActiveContainer {
   clip-path: inset(var(--clip-active-start) 0 var(--clip-active-end) 0);
 }
 
-.RTL.Vertical .StopIndicatorActiveContainer {
+.rtl.vertical .stopIndicatorActiveContainer {
   clip-path: inset(var(--clip-active-end) 0 var(--clip-active-start) 0);
 }
 
-.LTR.Horizontal .StopIndicatorActiveContainer {
+.lrt.horizontal .stopIndicatorActiveContainer {
   clip-path: inset(0 var(--clip-active-end) 0 var(--clip-active-start));
 }
 
-.RTL.Horizontal .StopIndicatorActiveContainer {
+.rtl.horizontal .stopIndicatorActiveContainer {
   clip-path: inset(0 var(--clip-active-start) 0 var(--clip-active-end));
 }
 
-.StopIndicatorInactiveContainer {
-  composes: StopIndicatorContainer;
+.stopIndicatorInactiveContainer {
+  composes: stopIndicatorContainer;
 }
 
-.LTR.Vertical .StopIndicatorInactiveContainer {
+.lrt.vertical .stopIndicatorInactiveContainer {
   clip-path: inset(var(--clip-inactive-start) 0 var(--clip-inactive-end) 0);
 }
 
-.RTL.Vertical .StopIndicatorInactiveContainer {
+.rtl.vertical .stopIndicatorInactiveContainer {
   clip-path: inset(var(--clip-inactive-end) 0 var(--clip-inactive-start) 0);
 }
 
-.LTR.Horizontal .StopIndicatorInactiveContainer {
+.lrt.horizontal .stopIndicatorInactiveContainer {
   clip-path: inset(0 var(--clip-inactive-end) 0 var(--clip-inactive-start));
 }
-.RTL.Horizontal .StopIndicatorInactiveContainer {
+.rtl.horizontal .stopIndicatorInactiveContainer {
   clip-path: inset(0 var(--clip-inactive-start) 0 var(--clip-inactive-end));
 }
