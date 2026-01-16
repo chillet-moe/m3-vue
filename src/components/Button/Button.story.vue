@@ -25,5 +25,11 @@ const shapes = ['rounded', 'square'];
         {{ shape }}
       </Button>
     </Variant>
+
+    <Variant title="Toggle">
+      <Button variant="outlined" toggleable="multiple">
+        Toggleable
+      </Button>
+    </Variant>
   </Story>
 </template>

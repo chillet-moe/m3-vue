@@ -379,7 +379,10 @@
   box-shadow:
     var(--md-comp-button-container-elevation),
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
-  border-radius: var(--md-comp-button-container-shape);
+  border-start-start-radius: var(--md-comp-button-container-shape);
+  border-start-end-radius: var(--md-comp-button-container-shape);
+  border-end-end-radius: var(--md-comp-button-container-shape);
+  border-end-start-radius: var(--md-comp-button-container-shape);
 
   height: var(--md-comp-button-container-height);
   padding-inline-start: var(--md-comp-button-leading-space);
@@ -659,4 +662,3 @@
     }
   }
 }
-
