@@ -39,7 +39,7 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     :data-color="color"
     :data-size="size"
     :data-shape="shape"
-    :data-pressed="pressed ? 'true' : 'false'"
+    :data-pressed="!disabled && pressed ? 'true' : 'false'"
     :data-toggleable="toggleable != 'none' ? 'true' : 'false'"
     :href="props.href ? props.href : null"
     :disabled="disabled"
