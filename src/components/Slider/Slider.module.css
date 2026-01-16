@@ -1,3 +1,5 @@
+@import '../../styles/typography.css';
+
 .slider {
   position: relative;
 
@@ -215,15 +217,16 @@
 }
 
 .slider:has(input:not([disabled]):active, input:not([disabled]):focus-visible, input:not([disabled]):hover) {
-  .value-indicator {
+  .valueIndicator {
     opacity: 1;
   }
 }
 
 .valueIndicatorText {
+  @apply label-large;
+
   writing-mode: horizontal-tb;
   direction: ltr;
-  composes: label-large from '../../styles/typography.module.css';
   min-inline-size: 3rem;
   padding: 0.75rem 1rem;
   display: flex;
