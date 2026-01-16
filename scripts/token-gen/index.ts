@@ -23,13 +23,13 @@ function toCssVarName(parts: string[]): string {
   return `--md-comp-${kebabParts.join('-')}`;
 }
 
-function resolveValue(value: TokenValue, path: string[] = []): string {
+function resolveValue(value: TokenValue): string {
   if (typeof value === 'string') {
-    // Check if it ends with 'dp' - convert to --dp() function
     if (value.endsWith('dp')) {
-      return `--dp(${value.slice(0, -2)})`;
+      // 16dp = 1rem
+      const dp = value.slice(0, -2);
+      return `${parseFloat(dp) / 16}rem`;
     }
-    // Otherwise, it's a plain string value (like color token names)
     return value;
   }
   if (typeof value === 'number') {
@@ -83,23 +83,7 @@ function collectProperties(
     } else {
       // Leaf value - create a CSS custom property
       const varName = toCssVarName([componentName, ...prefix, key]);
-      const rawValue = resolveValue(value, [...prefix, key]);
-
-      // Determine if value should be wrapped in var()
-      let varValue: string;
-      if (
-        rawValue.startsWith('--dp(') ||
-        !isNaN(Number(rawValue)) ||
-        rawValue.endsWith('%') ||
-        rawValue.startsWith('calc(')
-      ) {
-        // Function calls, numbers, percentages, or calc() - use as-is
-        varValue = rawValue;
-      } else {
-        // It's a color token name, wrap it in var()
-        varValue = `var(--md-sys-color-${rawValue.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()})`;
-      }
-
+      const varValue = resolveValue(value);
       properties.push(`  ${varName}: ${varValue};`);
     }
   }
@@ -172,15 +156,15 @@ ${properties}
 }
 
 // Generate Button CSS
-/*const buttonOutputPath = join(import.meta.dirname, '../../src/components/Button/Button.module.css');
+const buttonOutputPath = join(import.meta.dirname, '../../src/components/Button/Button.tokens.module.css');
 generateCssModule({
   componentName: 'Button',
   tokens: Button,
   outputPath: buttonOutputPath,
-});*/
+});
 
 // Generate ButtonGroup CSS
-const buttonGroupOutputPath = join(import.meta.dirname, '../../src/components/Button/ButtonGroup.module.css');
+const buttonGroupOutputPath = join(import.meta.dirname, '../../src/components/Button/ButtonGroup.tokens.module.css');
 generateCssModule({
   componentName: 'ButtonGroup',
   tokens: { standard: ButtonGroupStandard, connected: ButtonGroupConnected },

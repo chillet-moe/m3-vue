@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "build": "tsdown",
+    "tokens:gen": "tsx scripts/token-gen/index.ts",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview"

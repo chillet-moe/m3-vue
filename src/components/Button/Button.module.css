@@ -380,6 +380,10 @@
     var(--md-comp-button-container-elevation),
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
   border-radius: var(--md-comp-button-container-shape);
+
+  height: var(--md-comp-button-container-height);
+  padding-inline-start: var(--md-comp-button-leading-space);
+  padding-inline-end: var(--md-comp-button-trailing-space);
 }
 
 .Button:not(:disabled) {
@@ -520,9 +524,9 @@
 .XS {
   composes: label-large from '../../styles/typography.module.css';
 
-  height: var(--md-comp-button-xsmall-container-height);
-  padding-inline-start: var(--md-comp-button-xsmall-leading-space);
-  padding-inline-end: var(--md-comp-button-xsmall-trailing-space);
+  --md-comp-button-container-height: var(--md-comp-button-xsmall-container-height);
+  --md-comp-button-leading-space: var(--md-comp-button-xsmall-leading-space);
+  --md-comp-button-trailing-space: var(--md-comp-button-xsmall-trailing-space);
 
   --md-comp-button-container-shape-round: var(--md-comp-button-xsmall-container-shape-round);
   --md-comp-button-container-shape-square: var(--md-comp-button-xsmall-container-shape-square);
@@ -533,9 +537,9 @@
 .S {
   composes: label-large from '../../styles/typography.module.css';
 
-  height: var(--md-comp-button-small-container-height);
-  padding-inline-start: var(--md-comp-button-small-leading-space);
-  padding-inline-end: var(--md-comp-button-small-trailing-space);
+  --md-comp-button-container-height: var(--md-comp-button-small-container-height);
+  --md-comp-button-leading-space: var(--md-comp-button-small-leading-space);
+  --md-comp-button-trailing-space: var(--md-comp-button-small-trailing-space);
 
   --md-comp-button-container-shape-round: var(--md-comp-button-small-container-shape-round);
   --md-comp-button-container-shape-square: var(--md-comp-button-small-container-shape-square);
@@ -546,9 +550,9 @@
 .M {
   composes: title-medium from '../../styles/typography.module.css';
 
-  height: var(--md-comp-button-medium-container-height);
-  padding-inline-start: var(--md-comp-button-medium-leading-space);
-  padding-inline-end: var(--md-comp-button-medium-trailing-space);
+  --md-comp-button-container-height: var(--md-comp-button-medium-container-height);
+  --md-comp-button-leading-space: var(--md-comp-button-medium-leading-space);
+  --md-comp-button-trailing-space: var(--md-comp-button-medium-trailing-space);
 
   --md-comp-button-container-shape-round: var(--md-comp-button-medium-container-shape-round);
   --md-comp-button-container-shape-square: var(--md-comp-button-medium-container-shape-square);
@@ -559,9 +563,9 @@
 .L {
   composes: headline-small from '../../styles/typography.module.css';
 
-  height: var(--md-comp-button-large-container-height);
-  padding-inline-start: var(--md-comp-button-large-leading-space);
-  padding-inline-end: var(--md-comp-button-large-trailing-space);
+  --md-comp-button-container-height: var(--md-comp-button-large-container-height);
+  --md-comp-button-leading-space: var(--md-comp-button-large-leading-space);
+  --md-comp-button-trailing-space: var(--md-comp-button-large-trailing-space);
 
   --md-comp-button-container-shape-round: var(--md-comp-button-large-container-shape-round);
   --md-comp-button-container-shape-square: var(--md-comp-button-large-container-shape-square);
@@ -572,9 +576,9 @@
 .XL {
   composes: headline-large from '../../styles/typography.module.css';
 
-  height: var(--md-comp-button-xlarge-container-height);
-  padding-inline-start: var(--md-comp-button-xlarge-leading-space);
-  padding-inline-end: var(--md-comp-button-xlarge-trailing-space);
+  --md-comp-button-container-height: var(--md-comp-button-xlarge-container-height);
+  --md-comp-button-leading-space: var(--md-comp-button-xlarge-leading-space);
+  --md-comp-button-trailing-space: var(--md-comp-button-xlarge-trailing-space);
 
   --md-comp-button-container-shape-round: var(--md-comp-button-xlarge-container-shape-round);
   --md-comp-button-container-shape-square: var(--md-comp-button-xlarge-container-shape-square);
