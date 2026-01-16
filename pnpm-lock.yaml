@@ -19,8 +19,8 @@ importers:
         specifier: 1.0.0-beta.1
         version: 1.0.0-beta.1(histoire@1.0.0-beta.1(@types/node@24.10.7)(lightningcss@1.30.2)(tsx@4.21.0)(vite@7.3.1(@types/node@24.10.7)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)))(vite@7.3.1(@types/node@24.10.7)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))(vue@3.5.26(typescript@5.9.3))
       '@chillet/postcss-custom-mixins':
-        specifier: ^0.1.0
-        version: 0.1.0(postcss@8.5.6)
+        specifier: ^0.2.1
+        version: 0.2.1(postcss@8.5.6)
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.7
@@ -799,8 +799,8 @@ packages:
   '@quansync/fs@1.0.0':
     resolution: {integrity: sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ==}
 
-  '@chillet/postcss-custom-mixins@0.1.0':
-    resolution: {integrity: sha512-AYfp2owqesRAnPSDsnHR0HwrAIk7S162Qlo3X9KabYxG7uX+LcaQVzxEQuB5FekRgz9e9hcC3tvZJBivd/ppVQ==, tarball: https://registry.npmjs.org/download/@chillet/postcss-custom-mixins/0.1.0/d25b58548c5c14b14da9de1ad7699ac127a10a07}
+  '@chillet/postcss-custom-mixins@0.2.1':
+    resolution: {integrity: sha512-56KOcHimRz41OZKQfrEfLUhGgVp6ofjuBt0L6VbODhJc2bHjkmfArK02g84tqhdf68s8Twcn2gwmxG1+7D35bQ==, tarball: https://registry.npmjs.org/download/@chillet/postcss-custom-mixins/0.2.1/4db0a99b334b8c33b7fdbef094ad340124b052e2}
     peerDependencies:
       postcss: ^8.0.0
 
@@ -2749,7 +2749,7 @@ snapshots:
     dependencies:
       quansync: 1.0.0
 
-  '@chillet/postcss-custom-mixins@0.1.0(postcss@8.5.6)':
+  '@chillet/postcss-custom-mixins@0.2.1(postcss@8.5.6)':
     dependencies:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
       '@csstools/css-tokenizer': 3.0.4

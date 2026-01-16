@@ -5,13 +5,13 @@ import { computed } from 'vue';
 
 type Props = {
   toggleable?: 'none' | 'single' | 'multiple';
-  variant?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
+  color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
   shape?: 'rounded' | 'square';
   href?: string;
 };
 
-const { toggleable = 'none', variant = 'filled', size = 'small', shape = 'rounded', href } = defineProps<Props>();
+const { toggleable = 'none', color = 'filled', size = 'small', shape = 'rounded', href } = defineProps<Props>();
 
 const tag = computed(() => {
   if (href) {
@@ -31,13 +31,13 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     :is="tag"
     :class="[
       'state-layer',
-      style.button,
-      style[variant],
-      style[size],
-      style[shape],
-      pressed ? style.Pressed : '',
-      toggleable != 'none' ? style.Toggleable : '',
+      style.button
     ]"
+    :data-color="color"
+    :data-size="size"
+    :data-shape="shape"
+    :data-pressed="pressed ? 'true' : 'false'"
+    :data-toggleable="toggleable != 'none' ? 'true' : 'false'"
     :href="href ? href : null"
     @pointerdown="onPointerDown"
     @pointerup="onPointerUp"

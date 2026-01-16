@@ -1,3 +1,5 @@
+@import '../../styles/typography.css';
+
 @layer tokens {
   .button {
     --md-comp-button-container-color: var(--md-sys-color-primary);
@@ -411,7 +413,7 @@
   outline: rgb(var(--md-comp-button-focus-indicator-color)) solid var(--md-comp-button-focus-indicator-thickness);
 }
 
-.button.Pressed {
+.button[data-pressed='true'] {
   --md-color-on-container: var(--md-comp-button-pressed-label-text-color);
   box-shadow:
     var(--md-comp-button-pressed-container-elevation),
@@ -430,7 +432,7 @@
 }
 
 /* elevated */
-.elevated {
+.button[data-color='elevated'] {
   --md-comp-button-container-color: var(--md-comp-button-elevated-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-elevated-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-elevated-label-text-color);
@@ -451,7 +453,7 @@
 }
 
 /* filled */
-.filled {
+.button[data-color='filled'] {
   --md-comp-button-container-color: var(--md-comp-button-filled-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-filled-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-filled-label-text-color);
@@ -472,7 +474,7 @@
 }
 
 /* tonal */
-.tonal {
+.button[data-color='tonal'] {
   --md-comp-button-container-color: var(--md-comp-button-tonal-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-tonal-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-tonal-label-text-color);
@@ -493,7 +495,7 @@
 }
 
 /* outlined */
-.outlined {
+.button[data-color='outlined'] {
   --md-comp-button-container-color: transparent;
   --md-comp-button-label-text-color: var(--md-comp-button-outlined-label-text-color);
   --button-outline-color: var(--md-comp-button-outlined-outline-color);
@@ -509,7 +511,7 @@
 }
 
 /* text */
-.text {
+.button[data-color='text'] {
   --md-comp-button-container-color: transparent;
   --md-comp-button-label-text-color: var(--md-comp-button-text-label-text-color);
   --md-comp-button-hovered-label-text-color: var(--md-comp-button-text-hovered-label-text-color);
@@ -524,8 +526,8 @@
 }
 
 /* Size Variants */
-.extra-small {
-  composes: label-large from '../../styles/typography.module.css';
+.button[data-size='extra-small'] {
+  @apply label-large;
 
   --md-comp-button-container-height: var(--md-comp-button-xsmall-container-height);
   --md-comp-button-leading-space: var(--md-comp-button-xsmall-leading-space);
@@ -537,8 +539,8 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-xsmall-selected-container-shape-round);
 }
 
-.small {
-  composes: label-large from '../../styles/typography.module.css';
+.button[data-size='small'] {
+  @apply label-large;
 
   --md-comp-button-container-height: var(--md-comp-button-small-container-height);
   --md-comp-button-leading-space: var(--md-comp-button-small-leading-space);
@@ -550,8 +552,8 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-small-selected-container-shape-round);
 }
 
-.medium {
-  composes: title-medium from '../../styles/typography.module.css';
+.button[data-size='medium'] {
+  @apply title-medium;
 
   --md-comp-button-container-height: var(--md-comp-button-medium-container-height);
   --md-comp-button-leading-space: var(--md-comp-button-medium-leading-space);
@@ -563,8 +565,8 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-medium-selected-container-shape-round);
 }
 
-.large {
-  composes: headline-small from '../../styles/typography.module.css';
+.button[data-size='large'] {
+  @apply headline-small;
 
   --md-comp-button-container-height: var(--md-comp-button-large-container-height);
   --md-comp-button-leading-space: var(--md-comp-button-large-leading-space);
@@ -576,8 +578,8 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-large-selected-container-shape-round);
 }
 
-.extra-large {
-  composes: headline-large from '../../styles/typography.module.css';
+.button[data-size='extra-large'] {
+  @apply headline-large;
 
   --md-comp-button-container-height: var(--md-comp-button-xlarge-container-height);
   --md-comp-button-leading-space: var(--md-comp-button-xlarge-leading-space);
@@ -589,44 +591,46 @@
   --md-comp-button-selected-container-shape: var(--md-comp-button-xlarge-selected-container-shape-round);
 }
 
-.extra-small.outlined {
-  --button-outline-width: var(--md-comp-button-xsmall-outlined-outline-width);
-}
+.button[data-color='outlined'] {
+  &[data-size='extra-small'] {
+    --button-outline-width: var(--md-comp-button-xsmall-outlined-outline-width);
+  }
 
-.small.outlined {
-  --button-outline-width: var(--md-comp-button-small-outlined-outline-width);
-}
+  &[data-size='small'] {
+    --button-outline-width: var(--md-comp-button-small-outlined-outline-width);
+  }
 
-.medium.outlined {
-  --button-outline-width: var(--md-comp-button-medium-outlined-outline-width);
-}
+  &[data-size='medium'] {
+    --button-outline-width: var(--md-comp-button-medium-outlined-outline-width);
+  }
 
-.large.outlined {
-  --button-outline-width: var(--md-comp-button-large-outlined-outline-width);
-}
+  &[data-size='large'] {
+    --button-outline-width: var(--md-comp-button-large-outlined-outline-width);
+  }
 
-.extra-large.outlined {
-  --button-outline-width: var(--md-comp-button-xlarge-outlined-outline-width);
+  &[data-size='extra-large'] {
+    --button-outline-width: var(--md-comp-button-xlarge-outlined-outline-width);
+  }
 }
 
 /* Shape Variants */
-.rounded {
+.button[data-shape='rounded'] {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
 
-  &.Pressed {
+  &[data-pressed='true'] {
     --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
   }
 }
 
-.square {
+.button[data-shape='square'] {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-square);
 
-  &.Pressed {
+  &[data-pressed='true'] {
     --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
   }
 }
 
-.Toggleable {
+.button[data-toggleable='true'] {
   input[type='checkbox'],
   input[type='radio'] {
     all: unset;
@@ -646,7 +650,7 @@
     --md-color-on-container: var(--md-comp-button-unselected-focused-label-text-color);
   }
 
-  &.Pressed {
+  &[data-pressed='true'] {
     --md-color-on-container: var(--md-comp-button-unselected-pressed-label-text-color);
   }
 
