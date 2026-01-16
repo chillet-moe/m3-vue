@@ -132,19 +132,19 @@
 }
 
 .slider:has(input:not([disabled]):hover) {
-  .Handle {
+  .handle {
     --handle-width: 0.375rem;
   }
 }
 
 .slider:has(input:not([disabled]):active) {
-  .Handle {
+  .handle {
     --handle-width: 0.125rem;
   }
 }
 
 .slider:has(input:focus-visible) {
-  .Handle {
+  .handle {
     outline-width: 0.25rem;
   }
 }
