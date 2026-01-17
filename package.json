@@ -1,9 +1,9 @@
 {
   "name": "@chillet/m3-vue",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "repository": {
-    "url": "https://github.com/chillet-moe/m3-vue"
+    "url": "git+https://github.com/chillet-moe/m3-vue.git"
   },
   "publishConfig": {
     "access": "public",
