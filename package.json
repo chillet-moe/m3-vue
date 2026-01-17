@@ -28,7 +28,7 @@
     "**/*.css"
   ],
   "scripts": {
-    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.app.json",
+    "build": "vite build && vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
     "tokens:gen": "tsx scripts/token-gen/index.ts",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
@@ -53,6 +53,7 @@
     "histoire": "1.0.0-beta.1",
     "oxfmt": "^0.24.0",
     "oxlint": "^1.39.0",
+    "tsc-alias": "^1.8.16",
     "tsdown": "0.20.0-beta.3",
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
