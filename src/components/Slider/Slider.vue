@@ -39,7 +39,16 @@ const {
 const value = defineModel<number>('value', { required: true });
 
 const valueDisplayed = ref(value.value);
-const valuePercent = computed(() => (valueDisplayed.value - min) / (max - min));
+const valuePercent = computed(() => {
+  const percent = (valueDisplayed.value - min) / (max - min);
+  if (percent < 0) {
+    return 0;
+  } else if (percent > 1) {
+    return 1;
+  } else {
+    return percent;
+  }
+});
 
 watch(value, (newVal) => {
   valueDisplayed.value = newVal;
