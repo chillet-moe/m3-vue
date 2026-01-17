@@ -28,8 +28,9 @@
     "**/*.css"
   ],
   "scripts": {
-    "build": "vite build && vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
-    "tokens:gen": "tsx scripts/token-gen/index.ts",
+    "build": "vite build",
+    "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
+    "prepublishOnly": "pnpm run build && pnpm run build:types",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview"
@@ -67,8 +68,5 @@
       "sharp",
       "workerd"
     ]
-  },
-  "web-types": [
-    "./node_modules/@chillet/postcss-custom-mixins/web-types.json"
-  ]
+  }
 }

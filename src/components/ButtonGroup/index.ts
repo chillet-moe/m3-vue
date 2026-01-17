@@ -1,4 +1,5 @@
-import ButtonGroup from './ButtonGroup.vue';
 import buttonGroupStyles from './ButtonGroup.module.css';
 
-export { ButtonGroup, buttonGroupStyles };
+export * from './ButtonGroup.vue';
+export { default as ButtonGroup } from './ButtonGroup.vue';
+export { buttonGroupStyles };

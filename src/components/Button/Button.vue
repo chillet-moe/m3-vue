@@ -2,12 +2,20 @@
 import style from './Button.module.css';
 import { usePressedState } from '@/composables/usePressedState';
 import { computed, inject } from 'vue';
-import { buttonContextKey } from './index.ts';
+
+import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 
 export type ButtonProps = {
+  /** Whether the button is toggleable (like a checkbox). */
   toggleable?: boolean;
+
+  /** The color style of the button. */
   color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
+
+  /** The size of the button. */
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
+
+  /** The shape of the button. */
   shape?: 'rounded' | 'square';
   href?: string;
   disabled?: boolean;

@@ -1,4 +1,5 @@
-import Slider from './Slider.vue';
 import sliderStyles from './Slider.module.css';
 
-export { Slider, sliderStyles };
+export * from './Slider.vue';
+export { default as Slider } from './Slider.vue';
+export { sliderStyles };

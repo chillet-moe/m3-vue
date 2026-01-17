@@ -3,15 +3,32 @@ import { computed, ref, watch } from 'vue';
 import style from './Slider.module.css';
 import { useKeyModifier } from '@vueuse/core';
 
-type Props = {
+export type SliderProps = {
+  /** Whether the slider is vertical. */
   vertical?: boolean;
+
+  /** The direction of the slider. */
   direction?: 'ltr' | 'rtl';
+
+  /** The minimum value of the slider. */
   min: number;
+
+  /** The maximum value of the slider. */
   max: number;
+
+  /** The step value of the slider. */
   step: number;
+
+  /** The amount the value changes when using the mouse wheel. */
   wheelStep?: number;
+
+  /** The lower limit for the slider value. */
   lowerLimit?: number;
+
+  /** The upper limit for the slider value. */
   upperLimit?: number;
+
+  /** The size of the slider. */
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
   disabled?: boolean;
   valueIndicator?: boolean;
@@ -35,7 +52,7 @@ const {
   wheelStep,
   valueIndicator = true,
   stopIndicators,
-} = defineProps<Props>();
+} = defineProps<SliderProps>();
 
 const value = defineModel<number>('value', { required: true });
 
