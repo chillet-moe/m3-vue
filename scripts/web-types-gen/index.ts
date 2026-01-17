@@ -30,6 +30,10 @@ type WebTypesSlot = {
 type WebTypesTag = {
   name: string;
   description?: string;
+  source?: {
+    module?: string;
+    symbol?: string;
+  };
   attributes?: WebTypesAttribute[];
   events?: WebTypesEvent[];
   slots?: WebTypesSlot[];
@@ -162,6 +166,9 @@ export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Pl
         // vue-component-meta 的 meta.name 通常来自 SFC 的组件名推导
         const baseName = meta.name || path.parse(file).name;
 
+        // 计算相对于项目根目录的路径
+        const relativeFilePath = path.relative(root, file).replace(/\\/g, '/');
+
         const names =
           tagNameStyle === 'both'
             ? Array.from(new Set([toKebabCase(baseName), baseName]))
@@ -198,6 +205,10 @@ export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Pl
           tags.push({
             name: n,
             description: meta.description,
+            source: {
+              module: `./${relativeFilePath}`,
+              symbol: baseName,
+            },
             attributes: attributes.length ? attributes : [],
             events: events.length ? events : [],
             slots: slots.length ? slots : [],
