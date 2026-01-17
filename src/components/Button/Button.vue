@@ -13,7 +13,11 @@ export type ButtonProps = {
   disabled?: boolean;
 };
 
-const props = defineProps<ButtonProps>();
+const props = withDefaults(defineProps<ButtonProps>(), {
+  // Without them, props.toggleable/disabled is false even if not provided, don't know why
+  toggleable: undefined,
+  disabled: undefined,
+});
 
 const context = inject(buttonContextKey, undefined);
 
