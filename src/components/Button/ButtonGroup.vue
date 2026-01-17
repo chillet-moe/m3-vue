@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import style from './ButtonGroup.module.css';
 import { provide, ref } from 'vue';
-import { buttonContextKey, type ButtonProps } from '@/components/Button/Button.ts';
+import { buttonContextKey, type ButtonProps } from './Button.ts';
 
 type Props = {
   type?: 'standard' | 'connected';
