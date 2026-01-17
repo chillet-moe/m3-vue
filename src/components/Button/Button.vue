@@ -2,14 +2,12 @@
 import style from './Button.module.css';
 import { usePressedState } from '@/composables/usePressedState';
 import { computed, inject } from 'vue';
-import { buttonContextKey, type ButtonProps } from '@/components/Button/Button.ts';
+import { buttonContextKey, type ButtonProps } from './Button.ts';
 
 const props = defineProps<ButtonProps>();
 
-// Inject context from ButtonGroup if available
 const context = inject(buttonContextKey, undefined);
 
-// Use context values as defaults, but allow props to override
 const toggleable = computed(() => props.toggleable ?? context?.toggleable?.value ?? 'none');
 const color = computed(() => props.color ?? context?.color?.value ?? 'filled');
 const size = computed(() => props.size ?? context?.size?.value ?? 'small');
@@ -48,8 +46,6 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     @pointercancel="onPointerCancel"
     @lostpointercapture="onLostPointerCapture"
   >
-    <input v-if="toggleable == 'single'" type="radio" name="buttons" />
-    <input v-else-if="toggleable == 'multiple'" type="checkbox" name="buttons" />
     <slot />
   </component>
 </template>
