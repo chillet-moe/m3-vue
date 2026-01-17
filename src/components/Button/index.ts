@@ -1,13 +1,9 @@
 import type { InjectionKey, Ref } from 'vue';
+import Button from './Button.vue';
+import buttonStyles from './Button.module.css';
+import type { ButtonProps } from '@/components/Button/Button.vue';
 
-export type ButtonProps = {
-  toggleable?: 'none' | 'single' | 'multiple';
-  color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
-  size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
-  shape?: 'rounded' | 'square';
-  href?: string;
-  disabled?: boolean;
-};
+export { Button, buttonStyles };
 
 export interface ButtonContext {
   toggleable?: Ref<ButtonProps['toggleable'] | undefined>;

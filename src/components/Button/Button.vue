@@ -2,13 +2,22 @@
 import style from './Button.module.css';
 import { usePressedState } from '@/composables/usePressedState';
 import { computed, inject } from 'vue';
-import { buttonContextKey, type ButtonProps } from './Button.ts';
+import { buttonContextKey } from './index.ts';
+
+export type ButtonProps = {
+  toggleable?: boolean;
+  color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
+  size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
+  shape?: 'rounded' | 'square';
+  href?: string;
+  disabled?: boolean;
+};
 
 const props = defineProps<ButtonProps>();
 
 const context = inject(buttonContextKey, undefined);
 
-const toggleable = computed(() => props.toggleable ?? context?.toggleable?.value ?? 'none');
+const toggleable = computed(() => props.toggleable ?? context?.toggleable?.value ?? false);
 const color = computed(() => props.color ?? context?.color?.value ?? 'filled');
 const size = computed(() => props.size ?? context?.size?.value ?? 'small');
 const shape = computed(() => props.shape ?? context?.shape?.value ?? 'rounded');
@@ -18,7 +27,7 @@ const tag = computed(() => {
   if (props.href) {
     return 'a';
   }
-  if (toggleable.value == 'single' || toggleable.value == 'multiple') {
+  if (toggleable.value) {
     return 'label';
   }
   return 'button';
@@ -38,7 +47,7 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     :data-size="size"
     :data-shape="shape"
     :data-pressed="!disabled && pressed ? 'true' : 'false'"
-    :data-toggleable="toggleable != 'none' ? 'true' : 'false'"
+    :data-toggleable="toggleable ? 'true' : 'false'"
     :href="props.href ? props.href : null"
     :disabled="disabled"
     @pointerdown="onPointerDown"

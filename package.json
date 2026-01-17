@@ -10,12 +10,14 @@
     "registry": "https://registry.npmjs.org/"
   },
   "exports": {
-    ".": "./dist/index.js",
     "./package.json": "./package.json",
-    "./style.css": "./dist/style.css",
-    "./styles/*": "./src/styles/*",
-    "./components/*": "./src/components/*"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    },
+    "./style.css": "./dist/index.css"
   },
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
@@ -26,11 +28,15 @@
     "**/*.css"
   ],
   "scripts": {
-    "build": "tsdown",
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.app.json",
     "tokens:gen": "tsx scripts/token-gen/index.ts",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview"
+  },
+  "peerDependencies": {
+    "@vueuse/core": "^14.1.0",
+    "vue": "^3.5.0"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
@@ -43,6 +49,7 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
     "@yuheiy/postcss-custom-functions": "^0.1.1",
+    "glob": "^13.0.0",
     "histoire": "1.0.0-beta.1",
     "oxfmt": "^0.24.0",
     "oxlint": "^1.39.0",
@@ -52,10 +59,6 @@
     "vite": "^7.3.1",
     "vue-tsc": "^3.1.4",
     "wrangler": "^4.58.0"
-  },
-  "peerDependencies": {
-    "@vueuse/core": "^14.1.0",
-    "vue": "^3.5.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

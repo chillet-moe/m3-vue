@@ -27,7 +27,8 @@ const shapes = ['rounded', 'square'];
     </Variant>
 
     <Variant title="Toggle">
-      <Button color="outlined" toggleable="multiple">
+      <Button color="outlined" toggleable>
+        <input type="checkbox" />
         Toggleable
       </Button>
     </Variant>

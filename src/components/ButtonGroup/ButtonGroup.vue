@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import style from './ButtonGroup.module.css';
 import { provide, ref } from 'vue';
-import { buttonContextKey, type ButtonProps } from './Button.ts';
+import type { ButtonProps } from '@/components/Button/Button.vue';
+import { buttonContextKey } from '@/components/Button';
 
-type Props = {
+export type Props = {
   type?: 'standard' | 'connected';
   size?: ButtonProps['size'];
   color?: ButtonProps['color'];
-  multiple?: boolean;
   disabled?: boolean;
 };
 
-const { type = 'standard', color = 'tonal', size = 'small', multiple = false, disabled = false } = defineProps<Props>();
+const { type = 'standard', color = 'tonal', size = 'small', disabled = false } = defineProps<Props>();
 
 provide(buttonContextKey, {
   size: ref(size),
-  color: ref(color as ButtonProps['color']),
-  toggleable: ref((multiple ? 'multiple' : 'single') as ButtonProps['toggleable']),
+  color: ref(color),
+  toggleable: ref(true),
   disabled: ref(disabled),
 });
 </script>
