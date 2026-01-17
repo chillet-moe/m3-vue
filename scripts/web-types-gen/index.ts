@@ -2,6 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import fg from 'fast-glob';
 import { createChecker, type MetaCheckerOptions } from 'vue-component-meta';
+import ts from 'typescript';
 import type { Plugin } from 'vite';
 
 type WebTypesValue = {
@@ -50,11 +51,13 @@ type WebTypesJson = {
 export type WebTypesPluginOptions = {
   /**
    * tsconfig 路径（非常关键：vue-component-meta 依赖它来做类型解析）
+   * - 会自动读取其中的 exclude 配置用于过滤文件
    */
   tsconfigPath: string;
 
   /**
    * 组件扫描 glob（相对项目根目录）
+   * - 会自动应用 tsconfig 中的 exclude 规则
    */
   components: string | string[];
 
@@ -103,6 +106,20 @@ async function readPkg(root: string): Promise<{ name: string; version: string }>
   };
 }
 
+async function readTsConfigExclude(tsconfigPath: string): Promise<string[]> {
+  try {
+    const configFile = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+    if (configFile.error) {
+      return [];
+    }
+
+    // 直接从配置对象中读取 exclude 字段
+    return configFile.config.exclude ?? [];
+  } catch {
+    return [];
+  }
+}
+
 export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Plugin {
   const outFile = options.outFile ?? 'web-types.json';
   const tagNameStyle = options.tagNameStyle ?? 'kebab';
@@ -118,16 +135,23 @@ export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Pl
       const libName = options.packageName ?? pkg.name;
       const libVersion = options.packageVersion ?? pkg.version;
 
-      const checker = createChecker(
-        path.isAbsolute(options.tsconfigPath) ? options.tsconfigPath : path.join(root, options.tsconfigPath),
-        options.checkerOptions ?? {},
-      ); // createChecker + getComponentMeta 用法见官方 README :contentReference[oaicite:3]{index=3}
+      const tsconfigAbsPath = path.isAbsolute(options.tsconfigPath)
+        ? options.tsconfigPath
+        : path.join(root, options.tsconfigPath);
+
+      const checker = createChecker(tsconfigAbsPath, options.checkerOptions ?? {}); // createChecker + getComponentMeta 用法见官方 README :contentReference[oaicite:3]{index=3}
+
+      // 读取 tsconfig 中的 exclude 配置
+      const excludePatterns = await readTsConfigExclude(tsconfigAbsPath);
+
+      this.info(`Excluding patterns from tsconfig: ${excludePatterns.join(', ')}`);
 
       const patterns = Array.isArray(options.components) ? options.components : [options.components];
       const files = await fg(patterns, {
         cwd: root,
         absolute: true,
         onlyFiles: true,
+        ignore: excludePatterns,
       });
 
       const tags: WebTypesTag[] = [];
