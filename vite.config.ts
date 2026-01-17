@@ -2,10 +2,23 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { fileURLToPath } from 'url';
 import pkg from './package.json';
+import { webTypesFromVueComponentMeta } from './scripts/web-types-gen';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    webTypesFromVueComponentMeta({
+      tsconfigPath: "tsconfig.types.json",
+      components: ["src/components/**/*.vue"],
+      outFile: "web-types.json",
+      tagNameStyle: "kebab",
+      checkerOptions: {
+        forceUseTs: true,
+        printer: { newLine: 1 },
+      },
+    })
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

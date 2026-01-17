@@ -21,12 +21,12 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "src/styles",
-    "src/components"
+    "web-types.json"
   ],
   "sideEffects": [
     "**/*.css"
   ],
+  "web-types": "./web-types.json",
   "scripts": {
     "build": "vite build",
     "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
@@ -50,6 +50,7 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
     "@yuheiy/postcss-custom-functions": "^0.1.1",
+    "fast-glob": "^3.3.3",
     "glob": "^13.0.0",
     "histoire": "1.0.0-beta.1",
     "oxfmt": "^0.24.0",
@@ -59,6 +60,7 @@
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
+    "vue-component-meta": "^3.2.2",
     "vue-tsc": "^3.1.4",
     "wrangler": "^4.58.0"
   },

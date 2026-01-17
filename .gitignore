@@ -28,3 +28,6 @@ dist-ssr
 
 # Histoire files
 .histoire/dist
+
+# Web types is generated
+web-types.json
