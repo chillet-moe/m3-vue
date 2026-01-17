@@ -34,6 +34,7 @@ const {
   upperLimit,
   wheelStep,
   valueIndicator = true,
+  stopIndicators,
 } = defineProps<Props>();
 
 const value = defineModel<number>('value', { required: true });
@@ -102,6 +103,15 @@ const onWheel = (e: WheelEvent) => {
   const [_, clampedValue] = clampValue(newValue);
   value.value = clampedValue as number;
 };
+
+const stopIndicatorsFiltered = computed(() => {
+  if (!stopIndicators) {
+    return undefined;
+  }
+  return stopIndicators!.filter(
+    (stop) => stop >= min && stop <= max
+  );
+});
 </script>
 
 <template>
@@ -130,10 +140,10 @@ const onWheel = (e: WheelEvent) => {
     />
     <div aria-hidden="true" :class="style.trackActive" />
     <div aria-hidden="true" :class="style.trackInactive" />
-    <template v-if="stopIndicators">
+    <template v-if="stopIndicatorsFiltered && stopIndicatorsFiltered.length > 0">
       <div aria-hidden="true" :class="style.stopIndicatorActiveContainer">
         <div
-          v-for="(stop, index) in stopIndicators"
+          v-for="(stop, index) in stopIndicatorsFiltered"
           :key="index"
           aria-hidden="true"
           :class="style.stopIndicatorActive"
@@ -144,7 +154,7 @@ const onWheel = (e: WheelEvent) => {
       </div>
       <div aria-hidden="true" :class="style.stopIndicatorInactiveContainer">
         <div
-          v-for="(stop, index) in stopIndicators"
+          v-for="(stop, index) in stopIndicatorsFiltered"
           :key="index"
           aria-hidden="true"
           :class="style.stopIndicatorInactive"
