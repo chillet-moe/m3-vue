@@ -171,15 +171,14 @@ export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Pl
               ? [baseName]
               : [toKebabCase(baseName)];
 
-        // props -> attributes
         const attributes: WebTypesAttribute[] = (meta.props ?? [])
-          .filter((p: any) => !p.global) // 过滤全局 prop（vue-component-meta 会标注 global）:contentReference[oaicite:4]{index=4}
-          .map((p: any) => ({
+          .filter((p) => !p.global) // 过滤全局 prop（vue-component-meta 会标注 global）:contentReference[oaicite:4]{index=4}
+          .map((p) => ({
             name: p.name,
             description: p.description,
             default: p.default ?? (p.required ? undefined : '-'),
             value: {
-              type: p.type?.text ?? p.type ?? 'any',
+              type: p.type ?? 'any',
               kind: 'expression',
             },
           }));
