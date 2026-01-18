@@ -12,7 +12,7 @@ if (!supportsAtProperty && typeof CSS != 'undefined' && typeof CSS.registerPrope
       inherits: false,
       initialValue: '0%',
     });
-  } catch (e) {
+  } catch {
     // 完全不支持,降级到 requestAnimationFrame
     console.warn('Browser does not support @property, falling back to JS animation');
     useJSAnimation = true;
@@ -142,3 +142,7 @@ if (typeof document != 'undefined') {
     createRipple(layer, rect.width / 2, rect.height / 2, rect.width, rect.height);
   });
 }
+
+// Export an empty object to prevent tree-shaking
+export {};
+

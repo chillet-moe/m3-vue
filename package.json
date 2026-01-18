@@ -24,7 +24,8 @@
     "web-types.json"
   ],
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "**/state-layer.ts"
   ],
   "web-types": "./web-types.json",
   "scripts": {
