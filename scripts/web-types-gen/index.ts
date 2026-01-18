@@ -148,8 +148,6 @@ export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Pl
       // 读取 tsconfig 中的 exclude 配置
       const excludePatterns = await readTsConfigExclude(tsconfigAbsPath);
 
-      this.info(`Excluding patterns from tsconfig: ${excludePatterns.join(', ')}`);
-
       const patterns = Array.isArray(options.components) ? options.components : [options.components];
       const files = await fg(patterns, {
         cwd: root,
@@ -165,9 +163,6 @@ export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Pl
 
         // vue-component-meta 的 meta.name 通常来自 SFC 的组件名推导
         const baseName = meta.name || path.parse(file).name;
-
-        // 计算相对于项目根目录的路径
-        const relativeFilePath = path.relative(root, file).replace(/\\/g, '/');
 
         const names =
           tagNameStyle === 'both'
@@ -206,7 +201,7 @@ export function webTypesFromVueComponentMeta(options: WebTypesPluginOptions): Pl
             name: n,
             description: meta.description,
             source: {
-              module: `./${relativeFilePath}`,
+              module: libName,
               symbol: baseName,
             },
             attributes: attributes.length ? attributes : [],

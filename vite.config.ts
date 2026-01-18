@@ -12,7 +12,7 @@ export default defineConfig({
       tsconfigPath: "tsconfig.types.json",
       components: ["src/components/**/*.vue"],
       outFile: "web-types.json",
-      tagNameStyle: "both",
+      tagNameStyle: "as-is",
       checkerOptions: {
         forceUseTs: true,
         printer: { newLine: 1 },
