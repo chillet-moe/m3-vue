@@ -31,5 +31,7 @@ dist-ssr
 
 # Web types is generated
 web-types.json
+
+# Storybook files
 *storybook.log
 storybook-static
