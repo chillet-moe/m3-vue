@@ -3,7 +3,7 @@
   "name": "m3-vue",
   "compatibility_date": "2025-01-01",
   "assets": {
-    "directory": "./.histoire/dist",
+    "directory": "./storybook-static",
     "not_found_handling": "single-page-application",
   },
   "preview_urls": true,

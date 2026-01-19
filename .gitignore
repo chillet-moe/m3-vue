@@ -26,9 +26,6 @@ dist-ssr
 # Wrangler cache
 .wrangler
 
-# Histoire files
-.histoire/dist
-
 # Web types is generated
 web-types.json
 

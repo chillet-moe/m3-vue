@@ -32,11 +32,8 @@
     "build": "vite build",
     "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
     "prepublishOnly": "pnpm run build && pnpm run build:types",
-    "story:dev": "histoire dev",
-    "story:build": "histoire build",
-    "story:preview": "histoire preview",
-    "storybook": "storybook dev -p 6006 --docs --no-open",
-    "build-storybook": "storybook build --docs"
+    "story:dev": "storybook dev -p 6006 --docs --no-open",
+    "story:build": "storybook build --docs"
   },
   "peerDependencies": {
     "@vueuse/core": "^14.1.0",
@@ -47,7 +44,6 @@
     "vue": "^3.5.24"
   },
   "devDependencies": {
-    "@histoire/plugin-vue": "1.0.0-beta.1",
     "@chillet/postcss-custom-mixins": "^0.2.1",
     "@storybook/addon-a11y": "^10.1.11",
     "@storybook/addon-docs": "^10.1.11",
@@ -62,7 +58,6 @@
     "@yuheiy/postcss-custom-functions": "^0.1.1",
     "fast-glob": "^3.3.3",
     "glob": "^13.0.0",
-    "histoire": "1.0.0-beta.1",
     "oxfmt": "^0.24.0",
     "oxlint": "^1.39.0",
     "storybook": "^10.1.11",
