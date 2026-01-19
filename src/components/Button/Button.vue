@@ -6,11 +6,12 @@ import { computed, inject } from 'vue';
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 
 export type ButtonProps = {
-  // Use Boolean: https://vuejs.org/guide/components/props#boolean-casting
+  // Why use Boolean: https://vuejs.org/guide/components/props#boolean-casting
 
   /** Whether the button is toggleable (like a checkbox).
    * When true, the button must contain an input element of type checkbox or radio.
    */
+  // oxlint-disable-next-line typescript/no-wrapper-object-types
   toggleable?: Boolean;
 
   /** The color style of the button. */
@@ -21,7 +22,12 @@ export type ButtonProps = {
 
   /** The shape of the button. */
   shape?: 'rounded' | 'square';
+
+  /** The href attribute. If provided, the button will be rendered as an anchor element. */
   href?: string;
+
+  /** Whether the button is disabled. */
+  // oxlint-disable-next-line typescript/no-wrapper-object-types
   disabled?: Boolean;
 };
 
