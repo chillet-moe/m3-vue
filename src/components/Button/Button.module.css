@@ -15,6 +15,7 @@
     --md-comp-button-selected-icon-color: var(--md-sys-color-on-primary);
     --md-comp-button-container-height: 2.5rem;
     --md-comp-button-icon-size: 1.25rem;
+    --md-comp-button-icon-optical-size: 20;
     --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
     --md-comp-button-container-shape-round: calc(var(--md-comp-button-container-height) / 2);
     --md-comp-button-container-shape-square: var(--md-sys-shape-corner-medium);
@@ -571,8 +572,8 @@ label.button:has(input:disabled) {
   --md-comp-button-pressed-container-shape: var(--md-comp-button-medium-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-medium-selected-container-shape-round);
 
-    --md-comp-button-icon-size: var(--md-comp-button-medium-icon-size);
-    --md-comp-button-icon-label-space: var(--md-comp-button-medium-icon-label-space);
+  --md-comp-button-icon-size: var(--md-comp-button-medium-icon-size);
+  --md-comp-button-icon-label-space: var(--md-comp-button-medium-icon-label-space);
 }
 
 .button[data-size='large'] {
@@ -587,8 +588,8 @@ label.button:has(input:disabled) {
   --md-comp-button-pressed-container-shape: var(--md-comp-button-large-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-large-selected-container-shape-round);
 
-    --md-comp-button-icon-size: var(--md-comp-button-large-icon-size);
-    --md-comp-button-icon-label-space: var(--md-comp-button-large-icon-label-space);
+  --md-comp-button-icon-size: var(--md-comp-button-large-icon-size);
+  --md-comp-button-icon-label-space: var(--md-comp-button-large-icon-label-space);
 }
 
 .button[data-size='extra-large'] {
@@ -603,8 +604,8 @@ label.button:has(input:disabled) {
   --md-comp-button-pressed-container-shape: var(--md-comp-button-xlarge-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-xlarge-selected-container-shape-round);
 
-    --md-comp-button-icon-size: var(--md-comp-button-xlarge-icon-size);
-    --md-comp-button-icon-label-space: var(--md-comp-button-xlarge-icon-label-space);
+  --md-comp-button-icon-size: var(--md-comp-button-xlarge-icon-size);
+  --md-comp-button-icon-label-space: var(--md-comp-button-xlarge-icon-label-space);
 }
 
 .button[data-color='outlined'] {
@@ -796,4 +797,5 @@ label.button:has(input:disabled) {
 
   width: var(--md-comp-button-icon-size);
   height: var(--md-comp-button-icon-size);
+  font-size: var(--md-comp-button-icon-size);
 }
