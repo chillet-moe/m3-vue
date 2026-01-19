@@ -12,6 +12,8 @@ const meta = {
     shape: 'rounded',
     disabled: false,
     default: 'Button',
+    leadingIcon: undefined,
+    trailingIcon: undefined,
   },
 } satisfies Meta<typeof Button>;
 
@@ -39,10 +41,25 @@ const EnumTemplate: StoryFn<ButtonArgs> = (args: ButtonArgs, { argTypes }) => ({
   `,
 });
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: { leadingIcon: 'favorite' },
+};
 
 export const Colors = EnumTemplate.bind({});
 Colors.args = { enum: 'color' };
+
+export const LeadingIcons = EnumTemplate.bind({});
+LeadingIcons.args = {
+  enum: 'color',
+  leadingIcon: 'settings',
+};
+
+const TrailingIcons = EnumTemplate.bind({});
+TrailingIcons.args = {
+  enum: 'color',
+  trailingIcon: 'favorite',
+};
+export { TrailingIcons };
 
 export const Sizes = EnumTemplate.bind({});
 Sizes.args = { enum: 'size', color: 'tonal' };

@@ -538,6 +538,9 @@ label.button:has(input:disabled) {
   --md-comp-button-container-shape-square: var(--md-comp-button-xsmall-container-shape-square);
   --md-comp-button-pressed-container-shape: var(--md-comp-button-xsmall-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-xsmall-selected-container-shape-round);
+
+  --md-comp-button-icon-size: var(--md-comp-button-xsmall-icon-size);
+  --md-comp-button-icon-label-space: var(--md-comp-button-xsmall-icon-label-space);
 }
 
 .button[data-size='small'] {
@@ -551,6 +554,9 @@ label.button:has(input:disabled) {
   --md-comp-button-container-shape-square: var(--md-comp-button-small-container-shape-square);
   --md-comp-button-pressed-container-shape: var(--md-comp-button-small-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-small-selected-container-shape-round);
+
+  --md-comp-button-icon-size: var(--md-comp-button-small-icon-size);
+  --md-comp-button-icon-label-space: var(--md-comp-button-small-icon-label-space);
 }
 
 .button[data-size='medium'] {
@@ -564,6 +570,9 @@ label.button:has(input:disabled) {
   --md-comp-button-container-shape-square: var(--md-comp-button-medium-container-shape-square);
   --md-comp-button-pressed-container-shape: var(--md-comp-button-medium-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-medium-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-medium-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-medium-icon-label-space);
 }
 
 .button[data-size='large'] {
@@ -577,6 +586,9 @@ label.button:has(input:disabled) {
   --md-comp-button-container-shape-square: var(--md-comp-button-large-container-shape-square);
   --md-comp-button-pressed-container-shape: var(--md-comp-button-large-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-large-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-large-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-large-icon-label-space);
 }
 
 .button[data-size='extra-large'] {
@@ -590,6 +602,9 @@ label.button:has(input:disabled) {
   --md-comp-button-container-shape-square: var(--md-comp-button-xlarge-container-shape-square);
   --md-comp-button-pressed-container-shape: var(--md-comp-button-xlarge-pressed-container-shape);
   --md-comp-button-selected-container-shape: var(--md-comp-button-xlarge-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-xlarge-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-xlarge-icon-label-space);
 }
 
 .button[data-color='outlined'] {
@@ -764,4 +779,21 @@ label.button:has(input:disabled) {
       );
     }
   }
+}
+
+.leading {
+  margin-inline-end: var(--md-comp-button-icon-label-space);
+}
+
+.trailing {
+  margin-inline-start: var(--md-comp-button-icon-label-space);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--md-comp-button-icon-size);
+  height: var(--md-comp-button-icon-size);
 }

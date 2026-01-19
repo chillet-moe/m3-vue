@@ -4,15 +4,13 @@ import { usePressedState } from '@/composables/usePressedState';
 import { computed, inject } from 'vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
+import { Icon } from '@/components/Icon';
 
 export type ButtonProps = {
-  // Why use Boolean: https://vuejs.org/guide/components/props#boolean-casting
-
   /** Whether the button is toggleable (like a checkbox).
    * When true, the button must contain an input element of type checkbox or radio.
    */
-  // oxlint-disable-next-line typescript/no-wrapper-object-types
-  toggleable?: Boolean;
+  toggleable?: boolean;
 
   /** The color style of the button. */
   color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
@@ -26,12 +24,20 @@ export type ButtonProps = {
   /** The href attribute. If provided, the button will be rendered as an anchor element. */
   href?: string;
 
+  /** Name of the leading icon. */
+  leadingIcon?: string;
+
+  /** Name of the trailing icon. */
+  trailingIcon?: string;
+
   /** Whether the button is disabled. */
-  // oxlint-disable-next-line typescript/no-wrapper-object-types
-  disabled?: Boolean;
+  disabled?: boolean;
 };
 
-const props = defineProps<ButtonProps>();
+const props = withDefaults(defineProps<ButtonProps>(), {
+  toggleable: undefined,
+  disabled: undefined,
+});
 
 const context = inject(buttonContextKey, undefined);
 
@@ -52,6 +58,17 @@ const tag = computed(() => {
 });
 
 const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCapture } = usePressedState();
+
+const slots = defineSlots<{
+  /** Slot for leading content, such as an icon. Receives `disabled` as a prop. */
+  leading(props: { disabled: boolean }): any;
+
+  /** Default slot for the main content of the button. Receives `disabled` as a prop. */
+  default(props: { disabled: boolean }): any;
+
+  /** Slot for trailing content, such as an icon. Receives `disabled` as a prop. */
+  trailing(props: { disabled: boolean }): any;
+}>();
 </script>
 
 <template>
@@ -70,6 +87,22 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
     @pointercancel="onPointerCancel"
     @lostpointercapture="onLostPointerCapture"
   >
-    <slot :disabled="disabled" />
+    <Icon
+      v-if="props.leadingIcon"
+      :name="props.leadingIcon"
+      :class="[style.leading, style.icon]"
+      :disabled="disabled"
+    />
+    <slot v-else name="leading" :disabled="disabled" />
+
+    <slot name="default" :disabled="disabled" />
+
+    <Icon
+      v-if="props.trailingIcon"
+      :name="props.trailingIcon"
+      :class="[style.trailing, style.icon]"
+      :disabled="disabled"
+    />
+    <slot v-else name="trailing" :disabled="disabled" />
   </component>
 </template>
