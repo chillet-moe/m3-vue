@@ -60,13 +60,17 @@ const tag = computed(() => {
 const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCapture } = usePressedState();
 
 const slots = defineSlots<{
-  /** Slot for leading content, such as an icon. Receives `disabled` as a prop. */
+  /** Slot for leading content, such as an icon.
+   * Receives `disabled` as a prop.
+   * Will not be used if `leadingIcon` prop is set. */
   leading(props: { disabled: boolean }): any;
 
   /** Default slot for the main content of the button. Receives `disabled` as a prop. */
   default(props: { disabled: boolean }): any;
 
-  /** Slot for trailing content, such as an icon. Receives `disabled` as a prop. */
+  /** Slot for trailing content, such as an icon.
+   * Receives `disabled` as a prop.
+   * Will not be used if `trailingIcon` prop is set. */
   trailing(props: { disabled: boolean }): any;
 }>();
 </script>

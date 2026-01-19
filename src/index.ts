@@ -11,3 +11,4 @@ export { usePressedState } from './composables/usePressedState';
 export * from './components/Button';
 export * from './components/ButtonGroup';
 export * from './components/Slider';
+export * from './components/Icon';
