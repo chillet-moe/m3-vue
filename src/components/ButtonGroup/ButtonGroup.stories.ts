@@ -12,20 +12,6 @@ const meta = {
     color: 'tonal',
     disabled: false,
   },
-  argTypes: {
-    type: {
-      control: 'select',
-      options: ['standard', 'connected'],
-    },
-    size: {
-      control: 'select',
-      options: ['extra-small', 'small', 'medium', 'large', 'extra-large'],
-    },
-    color: {
-      control: 'select',
-      options: ['elevated', 'filled', 'tonal', 'outlined', 'text'],
-    },
-  },
 } satisfies Meta<typeof ButtonGroup>;
 
 export default meta;

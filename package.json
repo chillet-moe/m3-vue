@@ -25,15 +25,17 @@
   ],
   "sideEffects": [
     "**/*.css",
-    "**/state-layer.ts"
+    "**/state-layer.ts",
+    "**/index.ts"
   ],
   "web-types": "./web-types.json",
   "scripts": {
     "build": "vite build",
     "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
     "prepublishOnly": "pnpm run build && pnpm run build:types",
-    "story:dev": "storybook dev -p 6006 --docs --no-open",
-    "story:build": "storybook build --docs"
+    "story:dev": "storybook dev -p 6006 --no-open",
+    "story:build": "storybook build",
+    "story:preview": "vite preview --host --outDir=storybook-static"
   },
   "peerDependencies": {
     "@vueuse/core": "^14.1.0",

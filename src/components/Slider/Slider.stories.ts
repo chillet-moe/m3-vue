@@ -20,16 +20,6 @@ const meta = {
       textToValue: (text?: string) => (text ? Number(text) : undefined),
     },
   },
-  argTypes: {
-    size: {
-      control: 'select',
-      options: ['extra-small', 'small', 'medium', 'large', 'extra-large'],
-    },
-    direction: {
-      control: 'select',
-      options: ['ltr', 'rtl'],
-    },
-  },
 } satisfies Meta<typeof Slider>;
 
 export default meta;
