@@ -3,28 +3,33 @@ import vue from '@vitejs/plugin-vue';
 import { fileURLToPath } from 'url';
 import pkg from './package.json';
 import { webTypesFromVueComponentMeta } from './scripts/web-types-gen';
+import path from 'node:path';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import { playwright } from '@vitest/browser-playwright';
 
-// https://vite.dev/config/
+const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
   plugins: [
     vue(),
     webTypesFromVueComponentMeta({
-      tsconfigPath: "tsconfig.types.json",
-      components: ["src/components/**/*.vue"],
-      outFile: "web-types.json",
-      tagNameStyle: "as-is",
+      tsconfigPath: 'tsconfig.types.json',
+      components: ['src/components/**/*.vue'],
+      outFile: 'web-types.json',
+      tagNameStyle: 'as-is',
       checkerOptions: {
         forceUseTs: true,
-        printer: { newLine: 1 },
+        printer: {
+          newLine: 1,
+        },
       },
-    })
+    }),
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-
   build: {
     minify: false,
     copyPublicDir: false,
@@ -51,14 +56,39 @@ export default defineConfig({
         preserveModulesRoot: 'src',
       },
     },
-
-    // 让所有 CSS（包括 CSS Modules）被抽到 dist/style.css（常见做法）
     cssCodeSplit: false,
   },
-
   css: {
     modules: {
       localsConvention: 'camelCase',
     },
+  },
+  test: {
+    projects: [
+      {
+        extends: true,
+        plugins: [
+          // The plugin will run tests for the stories defined in your Storybook config
+          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+          setupFiles: ['.storybook/vitest.setup.ts'],
+        },
+      },
+    ],
   },
 });

@@ -34,7 +34,9 @@
     "prepublishOnly": "pnpm run build && pnpm run build:types",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
-    "story:preview": "histoire preview"
+    "story:preview": "histoire preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "@vueuse/core": "^14.1.0",
@@ -63,7 +65,18 @@
     "vite": "^7.3.1",
     "vue-component-meta": "^3.2.2",
     "vue-tsc": "^3.1.4",
-    "wrangler": "^4.58.0"
+    "wrangler": "^4.58.0",
+    "storybook": "^10.1.11",
+    "@storybook/vue3-vite": "^10.1.11",
+    "@chromatic-com/storybook": "^5.0.0",
+    "@storybook/addon-vitest": "^10.1.11",
+    "@storybook/addon-a11y": "^10.1.11",
+    "@storybook/addon-docs": "^10.1.11",
+    "@storybook/addon-onboarding": "^10.1.11",
+    "vitest": "^4.0.17",
+    "playwright": "^1.57.0",
+    "@vitest/browser-playwright": "^4.0.17",
+    "@vitest/coverage-v8": "^4.0.17"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
