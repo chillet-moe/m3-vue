@@ -391,7 +391,7 @@
   padding-inline-end: var(--md-comp-button-trailing-space);
 }
 
-.button:not(:disabled) {
+.button:not(:disabled):not(:has(input:disabled)) {
   cursor: pointer;
 }
 
@@ -420,7 +420,8 @@
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
 }
 
-.button:disabled {
+.button:disabled,
+label.button:has(input:disabled) {
   background-color: rgba(
     var(--md-comp-button-disabled-container-color),
     var(--md-comp-button-disabled-container-opacity)

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import style from './ButtonGroup.module.css';
-import { provide, ref } from 'vue';
+import { provide, toRef } from 'vue';
 import type { ButtonProps } from '@/components/Button/Button.vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
@@ -12,13 +12,18 @@ export type ButtonGroupProps = {
   disabled?: boolean;
 };
 
-const { type = 'standard', color = 'tonal', size = 'small', disabled = false } = defineProps<ButtonGroupProps>();
+const props = withDefaults(defineProps<ButtonGroupProps>(), {
+  type: 'standard',
+  color: 'tonal',
+  size: 'small',
+  disabled: false,
+});
 
 provide(buttonContextKey, {
-  size: ref(size),
-  color: ref(color),
-  toggleable: ref(true),
-  disabled: ref(disabled),
+  size: toRef(() => props.size),
+  color: toRef(() => props.color),
+  toggleable: toRef(() => true),
+  disabled: toRef(() => props.disabled),
 });
 </script>
 

@@ -6,8 +6,12 @@ import { computed, inject } from 'vue';
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 
 export type ButtonProps = {
-  /** Whether the button is toggleable (like a checkbox). */
-  toggleable?: boolean;
+  // Use Boolean: https://vuejs.org/guide/components/props#boolean-casting
+
+  /** Whether the button is toggleable (like a checkbox).
+   * When true, the button must contain an input element of type checkbox or radio.
+   */
+  toggleable?: Boolean;
 
   /** The color style of the button. */
   color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
@@ -18,14 +22,10 @@ export type ButtonProps = {
   /** The shape of the button. */
   shape?: 'rounded' | 'square';
   href?: string;
-  disabled?: boolean;
+  disabled?: Boolean;
 };
 
-const props = withDefaults(defineProps<ButtonProps>(), {
-  // Without them, props.toggleable/disabled is false even if not provided, don't know why
-  toggleable: undefined,
-  disabled: undefined,
-});
+const props = defineProps<ButtonProps>();
 
 const context = inject(buttonContextKey, undefined);
 
@@ -51,22 +51,19 @@ const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCaptu
 <template>
   <component
     :is="tag"
-    :class="[
-      'state-layer',
-      style.button
-    ]"
+    :class="['state-layer', style.button]"
     :data-color="color"
     :data-size="size"
     :data-shape="shape"
     :data-pressed="!disabled && pressed ? 'true' : 'false'"
     :data-toggleable="toggleable ? 'true' : 'false'"
     :href="props.href ? props.href : null"
-    :disabled="disabled"
+    :disabled="disabled ? '' : undefined"
     @pointerdown="onPointerDown"
     @pointerup="onPointerUp"
     @pointercancel="onPointerCancel"
     @lostpointercapture="onLostPointerCapture"
   >
-    <slot />
+    <slot :disabled="disabled" />
   </component>
 </template>

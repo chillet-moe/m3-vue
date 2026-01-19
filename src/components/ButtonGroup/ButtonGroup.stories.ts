@@ -27,16 +27,16 @@ const BaseTemplate: StoryFn<ButtonGroupArgs> = (args: ButtonGroupArgs) => ({
   setup: () => ({ args }),
   template: `
     <ButtonGroup v-bind="args">
-      <Button>
-        <input :type="args.inputType || 'radio'" name="button-group" />
+      <Button v-slot="{ disabled }">
+        <input :type="args.inputType || 'radio'" name="button-group" :disabled="disabled"/>
         Option 1
       </Button>
-      <Button>
-        <input :type="args.inputType || 'radio'" name="button-group" />
+      <Button v-slot="{ disabled }">
+        <input :type="args.inputType || 'radio'" name="button-group" :disabled="disabled"/>
         Option 2
       </Button>
-      <Button>
-        <input :type="args.inputType || 'radio'" name="button-group" />
+      <Button v-slot="{ disabled }">
+        <input :type="args.inputType || 'radio'" name="button-group" :disabled="disabled"/>
         Option 3
       </Button>
     </ButtonGroup>
@@ -51,16 +51,16 @@ const EnumTemplate: StoryFn<ButtonGroupArgs> = (args: ButtonGroupArgs, { argType
       <div v-for="option in argTypes?.[args.enum]?.options" :key="option">
         <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.25rem;">{{ option }}</div>
         <ButtonGroup v-bind="getArgs(args, option)">
-          <Button>
-            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" />
+          <Button v-slot="{ disabled }">
+            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" :disabled="disabled" />
             Option 1
           </Button>
-          <Button>
-            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" />
+          <Button v-slot="{ disabled }">
+            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" :disabled="disabled" />
             Option 2
           </Button>
-          <Button>
-            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" />
+          <Button v-slot="{ disabled }">
+            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" :disabled="disabled" />
             Option 3
           </Button>
         </ButtonGroup>
