@@ -1,10 +1,12 @@
 import type { Preview } from '@storybook/vue3-vite';
+import { themes } from 'storybook/theming';
+import { storyDarkModeDecorator } from './decorator.ts';
 
 import '../src';
-//import '../src/components/StateLayer/state-layer';
-//import '../src/styles/theme.css';
 
 const preview: Preview = {
+  decorators: [storyDarkModeDecorator],
+
   parameters: {
     controls: {
       matchers: {
@@ -18,6 +20,11 @@ const preview: Preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: 'todo',
+    },
+
+    darkMode: {
+      dark: { ...themes.dark },
+      light: { ...themes.normal },
     },
   },
   tags: ['autodocs'],
