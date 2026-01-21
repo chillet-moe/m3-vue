@@ -3,6 +3,9 @@ import { themes } from 'storybook/theming';
 import { storyDarkModeDecorator } from './decorator.ts';
 
 import '../src';
+import './theme/preview.css';
+import './theme/manager.css';
+import './lib.css';
 
 const preview: Preview = {
   decorators: [storyDarkModeDecorator],
@@ -25,6 +28,9 @@ const preview: Preview = {
     darkMode: {
       dark: { ...themes.dark },
       light: { ...themes.normal },
+      stylePreview: true,
+      darkClass: 'dark',
+      lightClass: 'light',
     },
   },
   tags: ['autodocs'],

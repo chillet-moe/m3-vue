@@ -7,7 +7,7 @@ const config: StorybookConfig = {
     '@storybook/addon-a11y',
     '@storybook/addon-docs',
     '@storybook/addon-themes',
-    '@vueless/storybook-dark-mode'
+    '@vueless/storybook-dark-mode',
   ],
   framework: {
     name: '@storybook/vue3-vite',
@@ -20,6 +20,7 @@ const config: StorybookConfig = {
   },
   core: {
     disableTelemetry: true,
+    disableWhatsNewNotifications: true,
   },
 };
 export default config;
