@@ -7,7 +7,7 @@ import './theme/preview.css';
 import './theme/manager.css';
 import './lib.css';
 
-const preview: Preview = {
+export default {
   decorators: [storyDarkModeDecorator],
 
   parameters: {
@@ -34,6 +34,16 @@ const preview: Preview = {
     },
   },
   tags: ['autodocs'],
-};
+} as Preview;
 
-export default preview;
+/* Reload the page on the error "Failed to fetch dynamically imported module..." */
+window.addEventListener("error", (ev) => onFailedToFetchModule(ev.message));
+window.addEventListener("unhandledrejection", (ev) => onFailedToFetchModule(ev?.reason?.message));
+
+function onFailedToFetchModule(message: string) {
+  const isProd = import.meta.env.MODE === "production";
+
+  if (isProd && message?.includes("Failed to fetch dynamically imported module")) {
+    window.location.reload();
+  }
+}
