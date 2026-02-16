@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import style from './Button.module.css';
 import { usePressedState } from '@/composables/usePressedState';
-import { computed, inject } from 'vue';
+import { computed, inject, unref } from 'vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 import { Icon } from '@/components/Icon';
@@ -41,11 +41,11 @@ const props = withDefaults(defineProps<ButtonProps>(), {
 
 const context = inject(buttonContextKey, undefined);
 
-const toggleable = computed(() => props.toggleable ?? context?.toggleable?.value ?? false);
-const color = computed(() => props.color ?? context?.color?.value ?? 'filled');
-const size = computed(() => props.size ?? context?.size?.value ?? 'small');
-const shape = computed(() => props.shape ?? context?.shape?.value ?? 'rounded');
-const disabled = computed(() => props.disabled ?? context?.disabled?.value ?? false);
+const toggleable = computed(() => props.toggleable ?? unref(context?.toggleable) ?? false);
+const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
+const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
+const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
+const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
 const tag = computed(() => {
   if (props.href) {
