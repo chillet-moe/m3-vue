@@ -5,7 +5,10 @@ import './components/StateLayer/state-layer';
 import './styles/theme.css';
 
 // Composables
-export { usePressedState } from './composables/usePressedState';
+export { usePressedState } from './composables/pressedState.ts';
+
+// Directives
+export { default as vTooltip } from './directives/Tooltip/vTooltip.ts';
 
 // Components
 export * from './components/Button';

@@ -1,0 +1,150 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .tooltip {
+    --md-comp-plain-tooltip-container-color: var(--md-sys-color-inverse-surface);
+    --md-comp-plain-tooltip-container-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-plain-tooltip-supporting-text-font: var(--md-sys-typescale-body-small-font);
+    --md-comp-plain-tooltip-supporting-text-line-height: var(--md-sys-typescale-body-small-line-height);
+    --md-comp-plain-tooltip-supporting-text-size: var(--md-sys-typescale-body-small-size);
+    --md-comp-plain-tooltip-supporting-text-weight: var(--md-sys-typescale-body-small-weight);
+    --md-comp-plain-tooltip-supporting-text-tracking: var(--md-sys-typescale-body-small-tracking);
+    --md-comp-plain-tooltip-supporting-text-type: var(--md-sys-typescale-body-small);
+    --md-comp-plain-tooltip-supporting-text-color: var(--md-sys-color-inverse-on-surface);
+
+    --md-comp-rich-tooltip-container-color: var(--md-sys-color-surface-container);
+    --md-comp-rich-tooltip-container-elevation: var(--md-sys-elevation-level2);
+    --md-comp-rich-tooltip-container-shadow-color: var(--md-sys-color-shadow);
+    --md-comp-rich-tooltip-container-shape: var(--md-sys-shape-corner-medium);
+    --md-comp-rich-tooltip-action-label-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-rich-tooltip-action-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-rich-tooltip-action-label-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-rich-tooltip-action-label-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-rich-tooltip-action-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-rich-tooltip-action-label-text-type: var(--md-sys-typescale-label-large);
+    --md-comp-rich-tooltip-action-label-text-color: var(--md-sys-color-primary);
+    --md-comp-rich-tooltip-subhead-font: var(--md-sys-typescale-title-small-font);
+    --md-comp-rich-tooltip-subhead-line-height: var(--md-sys-typescale-title-small-line-height);
+    --md-comp-rich-tooltip-subhead-size: var(--md-sys-typescale-title-small-size);
+    --md-comp-rich-tooltip-subhead-weight: var(--md-sys-typescale-title-small-weight);
+    --md-comp-rich-tooltip-subhead-tracking: var(--md-sys-typescale-title-small-tracking);
+    --md-comp-rich-tooltip-subhead-type: var(--md-sys-typescale-title-small);
+    --md-comp-rich-tooltip-subhead-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-rich-tooltip-supporting-text-font: var(--md-sys-typescale-body-medium-font);
+    --md-comp-rich-tooltip-supporting-text-line-height: var(--md-sys-typescale-body-medium-line-height);
+    --md-comp-rich-tooltip-supporting-text-size: var(--md-sys-typescale-body-medium-size);
+    --md-comp-rich-tooltip-supporting-text-weight: var(--md-sys-typescale-body-medium-weight);
+    --md-comp-rich-tooltip-supporting-text-tracking: var(--md-sys-typescale-body-medium-tracking);
+    --md-comp-rich-tooltip-supporting-text-type: var(--md-sys-typescale-body-medium);
+    --md-comp-rich-tooltip-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-rich-tooltip-action-hover-label-text-color: var(--md-sys-color-primary);
+    --md-comp-rich-tooltip-action-hover-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-rich-tooltip-action-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+    --md-comp-rich-tooltip-action-focus-label-text-color: var(--md-sys-color-primary);
+    --md-comp-rich-tooltip-action-focus-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-rich-tooltip-action-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+    --md-comp-rich-tooltip-action-pressed-label-text-color: var(--md-sys-color-primary);
+    --md-comp-rich-tooltip-action-pressed-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-rich-tooltip-action-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  }
+}
+
+.tooltip[data-variant='plain'] {
+  background-color: rgb(var(--md-comp-plain-tooltip-container-color));
+  color: rgb(var(--md-comp-plain-tooltip-supporting-text-color));
+  border-radius: var(--md-comp-plain-tooltip-container-shape);
+
+  font-family: var(--md-comp-plain-tooltip-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--md-comp-plain-tooltip-supporting-text-size);
+  line-height: var(--md-comp-plain-tooltip-supporting-text-line-height);
+  font-weight: var(--md-comp-plain-tooltip-supporting-text-weight);
+  letter-spacing: var(--md-comp-plain-tooltip-supporting-text-tracking);
+}
+
+.tooltip[data-variant='rich'] {
+  background-color: rgb(var(--md-comp-rich-tooltip-container-color));
+  box-shadow: var(--md-comp-rich-tooltip-container-elevation);
+  color: rgb(var(--md-comp-rich-tooltip-supporting-text-color));
+  border-radius: var(--md-comp-rich-tooltip-container-shape);
+
+  font-family: var(--md-comp-rich-tooltip-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--md-comp-rich-tooltip-supporting-text-size);
+  line-height: var(--md-comp-rich-tooltip-supporting-text-line-height);
+  font-weight: var(--md-comp-rich-tooltip-supporting-text-weight);
+  letter-spacing: var(--md-comp-rich-tooltip-supporting-text-tracking);
+}
+
+.tooltip,
+.tooltip[data-vtt-fallback='1'] {
+  margin: 0;
+  inset: auto;
+  border: none;
+
+  padding-inline: 0.5rem;
+  padding-block: 0.25rem;
+
+  display: inline-flex;
+  align-items: center;
+
+  max-inline-size: min(28rem, calc(100vw - 16px));
+}
+
+/* 触发元素：减少移动端长按的系统气泡干扰（按需） */
+.vtt-trigger {
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* 有 Anchor Positioning 就走 CSS 锚定 */
+@supports (position-anchor: --a) and (position-area: block-start) {
+  .tooltip[popover] {
+    position: fixed;
+    /* position-anchor / position-area / position-try-fallbacks / position-visibility
+       由 directive 通过 style.setProperty 写入，避免你在 CSS 里写死 anchor-name */
+  }
+}
+
+/* 进/出场动画：fade（可选加一点点位移） */
+.tooltip[popover] {
+  opacity: 0;
+  transform: translateY(4px); /* 不需要位移就删掉这一行 */
+  pointer-events: none;
+
+  /* 关键：把 overlay / display 也加进 transition，并允许离散过渡 */
+  transition:
+    opacity var(--md-duration-fast) ease,
+    transform var(--md-duration-fast) ease,
+    overlay var(--md-duration-fast) allow-discrete,
+    display var(--md-duration-fast) allow-discrete;
+}
+
+/* 显示态 */
+.tooltip[popover]:popover-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 关键：popover 从 display:none 进入时需要一个“起始样式” */
+@starting-style {
+  .tooltip[popover]:popover-open {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* fallback 也复用同样的动画逻辑 */
+.tooltip[data-vtt-fallback='1'] {
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition:
+    opacity var(--md-duration-fast) ease,
+    transform var(--md-duration-fast) ease;
+}
+
+.tooltip[data-vtt-fallback='1'][data-vtt-open='1'] {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}

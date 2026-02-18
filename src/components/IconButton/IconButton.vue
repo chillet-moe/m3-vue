@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import style from './IconButton.module.css';
-import { usePressedState } from '@/composables/usePressedState';
+import { usePressedState } from '@/composables/pressedState.ts';
 import { computed, inject, unref } from 'vue';
 import { Icon } from '@/components/Icon';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext.ts';

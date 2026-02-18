@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import style from './Button.module.css';
-import { usePressedState } from '@/composables/usePressedState';
+import { usePressedState } from '@/composables/pressedState';
 import { computed, inject, unref } from 'vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';

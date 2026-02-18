@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/vue3-vite';
+import { setup } from '@storybook/vue3-vite';
 import { themes } from 'storybook/theming';
 import { storyDarkModeDecorator } from './decorator.ts';
 
@@ -6,6 +7,7 @@ import '../src';
 import './theme/preview.css';
 import './theme/manager.css';
 import './lib.css';
+import { vTooltip } from "@/index.ts";
 
 export default {
   decorators: [storyDarkModeDecorator],
@@ -47,3 +49,7 @@ function onFailedToFetchModule(message: string) {
     window.location.reload();
   }
 }
+
+setup((app) => {
+  app.directive("tooltip", vTooltip);
+});
