@@ -253,142 +253,6 @@
     --md-sys-color-surface-4: var(--md-sys-color-primary), 0.12;
     --md-sys-color-surface-5: var(--md-sys-color-primary), 0.14;
 
-    /* display - large */
-    --md-sys-typescale-display-large-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-display-large-font-family-style: Regular;
-    --md-sys-typescale-display-large-font-weight: 400;
-    --md-sys-typescale-display-large-font-size: 3.562rem;
-    --md-sys-typescale-display-large-tracking: -0.016rem;
-    --md-sys-typescale-display-large-height: 4rem;
-    --md-sys-typescale-display-large-text-transform: none;
-    --md-sys-typescale-display-large-text-decoration: none;
-    /* display - medium */
-    --md-sys-typescale-display-medium-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-display-medium-font-family-style: Regular;
-    --md-sys-typescale-display-medium-font-weight: 400;
-    --md-sys-typescale-display-medium-font-size: 2.812rem;
-    --md-sys-typescale-display-medium-tracking: 0rem;
-    --md-sys-typescale-display-medium-height: 3.25rem;
-    --md-sys-typescale-display-medium-text-transform: none;
-    --md-sys-typescale-display-medium-text-decoration: none;
-    /* display - small */
-    --md-sys-typescale-display-small-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-display-small-font-family-style: Regular;
-    --md-sys-typescale-display-small-font-weight: 400;
-    --md-sys-typescale-display-small-font-size: 2.25rem;
-    --md-sys-typescale-display-small-tracking: 0rem;
-    --md-sys-typescale-display-small-height: 2.75rem;
-    --md-sys-typescale-display-small-text-transform: none;
-    --md-sys-typescale-display-small-text-decoration: none;
-    /* headline - large */
-    --md-sys-typescale-headline-large-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-headline-large-font-family-style: Regular;
-    --md-sys-typescale-headline-large-font-weight: 400;
-    --md-sys-typescale-headline-large-font-size: 2rem;
-    --md-sys-typescale-headline-large-tracking: 0rem;
-    --md-sys-typescale-headline-large-height: 2.5rem;
-    --md-sys-typescale-headline-large-text-transform: none;
-    --md-sys-typescale-headline-large-text-decoration: none;
-    /* headline - medium */
-    --md-sys-typescale-headline-medium-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-headline-medium-font-family-style: Regular;
-    --md-sys-typescale-headline-medium-font-weight: 400;
-    --md-sys-typescale-headline-medium-font-size: 1.75rem;
-    --md-sys-typescale-headline-medium-tracking: 0rem;
-    --md-sys-typescale-headline-medium-height: 2.25rem;
-    --md-sys-typescale-headline-medium-text-transform: none;
-    --md-sys-typescale-headline-medium-text-decoration: none;
-    /* headline - small */
-    --md-sys-typescale-headline-small-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-headline-small-font-family-style: Regular;
-    --md-sys-typescale-headline-small-font-weight: 400;
-    --md-sys-typescale-headline-small-font-size: 1.5rem;
-    --md-sys-typescale-headline-small-tracking: 0rem;
-    --md-sys-typescale-headline-small-height: 1.5rem;
-    --md-sys-typescale-headline-small-text-transform: none;
-    --md-sys-typescale-headline-small-text-decoration: none;
-    /* body - large */
-    --md-sys-typescale-body-large-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-body-large-font-family-style: Regular;
-    --md-sys-typescale-body-large-font-weight: 400;
-    --md-sys-typescale-body-large-font-size: 1rem;
-    --md-sys-typescale-body-large-tracking: 0.031rem;
-    --md-sys-typescale-body-large-height: 1.5rem;
-    --md-sys-typescale-body-large-text-transform: none;
-    --md-sys-typescale-body-large-text-decoration: none;
-    /* body - medium */
-    --md-sys-typescale-body-medium-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-body-medium-font-family-style: Regular;
-    --md-sys-typescale-body-medium-font-weight: 400;
-    --md-sys-typescale-body-medium-font-size: 0.875rem;
-    --md-sys-typescale-body-medium-tracking: 0.016rem;
-    --md-sys-typescale-body-medium-height: 1.25rem;
-    --md-sys-typescale-body-medium-text-transform: none;
-    --md-sys-typescale-body-medium-text-decoration: none;
-    /* body - small */
-    --md-sys-typescale-body-small-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-body-small-font-family-style: Regular;
-    --md-sys-typescale-body-small-font-weight: 400;
-    --md-sys-typescale-body-small-font-size: 0.75rem;
-    --md-sys-typescale-body-small-tracking: 0.025rem;
-    --md-sys-typescale-body-small-height: 1rem;
-    --md-sys-typescale-body-small-text-transform: none;
-    --md-sys-typescale-body-small-text-decoration: none;
-    /* label - large */
-    --md-sys-typescale-label-large-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-label-large-font-family-style: Medium;
-    --md-sys-typescale-label-large-font-weight: 500;
-    --md-sys-typescale-label-large-font-size: 0.875rem;
-    --md-sys-typescale-label-large-tracking: 0.006rem;
-    --md-sys-typescale-label-large-height: 1.25rem;
-    --md-sys-typescale-label-large-text-transform: none;
-    --md-sys-typescale-label-large-text-decoration: none;
-    /* label - medium */
-    --md-sys-typescale-label-medium-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-label-medium-font-family-style: Medium;
-    --md-sys-typescale-label-medium-font-weight: 500;
-    --md-sys-typescale-label-medium-font-size: 0.75rem;
-    --md-sys-typescale-label-medium-tracking: 0.031rem;
-    --md-sys-typescale-label-medium-height: 1rem;
-    --md-sys-typescale-label-medium-text-transform: none;
-    --md-sys-typescale-label-medium-text-decoration: none;
-    /* label - small */
-    --md-sys-typescale-label-small-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-label-small-font-family-style: Medium;
-    --md-sys-typescale-label-small-font-weight: 500;
-    --md-sys-typescale-label-small-font-size: 0.688rem;
-    --md-sys-typescale-label-small-tracking: 0.031rem;
-    --md-sys-typescale-label-small-height: 1rem;
-    --md-sys-typescale-label-small-text-transform: none;
-    --md-sys-typescale-label-small-text-decoration: none;
-    /* title - large */
-    --md-sys-typescale-title-large-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-title-large-font-family-style: Regular;
-    --md-sys-typescale-title-large-font-weight: 400;
-    --md-sys-typescale-title-large-font-size: 1.375rem;
-    --md-sys-typescale-title-large-tracking: 0rem;
-    --md-sys-typescale-title-large-height: 1.75rem;
-    --md-sys-typescale-title-large-text-transform: none;
-    --md-sys-typescale-title-large-text-decoration: none;
-    /* title - medium */
-    --md-sys-typescale-title-medium-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-title-medium-font-family-style: Medium;
-    --md-sys-typescale-title-medium-font-weight: 500;
-    --md-sys-typescale-title-medium-font-size: 1rem;
-    --md-sys-typescale-title-medium-tracking: 0.009rem;
-    --md-sys-typescale-title-medium-height: 1.5rem;
-    --md-sys-typescale-title-medium-text-transform: none;
-    --md-sys-typescale-title-medium-text-decoration: none;
-    /* title - small */
-    --md-sys-typescale-title-small-font-family-name: 'Google Sans Flex';
-    --md-sys-typescale-title-small-font-family-style: Medium;
-    --md-sys-typescale-title-small-font-weight: 500;
-    --md-sys-typescale-title-small-font-size: 0.875rem;
-    --md-sys-typescale-title-small-tracking: 0.006rem;
-    --md-sys-typescale-title-small-height: 1.25rem;
-    --md-sys-typescale-title-small-text-transform: none;
-    --md-sys-typescale-title-small-text-decoration: none;
-
     --md-sys-state-focus-indicator-thickness: --dp(3);
     --md-sys-state-focus-indicator-outer-offset: --dp(2);
 
@@ -396,5 +260,538 @@
     --md-sys-state-focus-state-layer-opacity: 0.1;
     --md-sys-state-pressed-state-layer-opacity: 0.1;
     --md-sys-state-dragged-state-layer-opacity: 0.16;
+
+    --md-ref-typeface-brand: 'Google Sans Flex';
+    --md-ref-typeface-plain: 'Google Sans Flex';
+    --md-ref-typeface-weight-regular: 400;
+    --md-ref-typeface-weight-medium: 500;
+    --md-ref-typeface-weight-bold: 700;
+
+    --md-sys-typescale-display-large: "Display Large";
+    --md-sys-typescale-display-large-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-display-large-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-display-large-size: 3.5625rem;
+    --md-sys-typescale-display-large-tracking: -0.0044em;
+    --md-sys-typescale-display-large-line-height: 4rem;
+    --md-sys-typescale-display-large-wght: 400;
+    --md-sys-typescale-display-large-grad: 0;
+    --md-sys-typescale-display-large-wdth: 100;
+    --md-sys-typescale-display-large-rond: 0;
+    --md-sys-typescale-display-large-opsz: 57;
+    --md-sys-typescale-display-large-crsv: 0;
+    --md-sys-typescale-display-large-slnt: 0;
+    --md-sys-typescale-display-large-fill: 0;
+    --md-sys-typescale-display-large-hexp: 0;
+    --md-sys-typescale-display-medium: "Display Medium";
+    --md-sys-typescale-display-medium-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-display-medium-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-display-medium-size: 2.8125rem;
+    --md-sys-typescale-display-medium-tracking: 0em;
+    --md-sys-typescale-display-medium-line-height: 3.25rem;
+    --md-sys-typescale-display-medium-wght: 400;
+    --md-sys-typescale-display-medium-grad: 0;
+    --md-sys-typescale-display-medium-wdth: 100;
+    --md-sys-typescale-display-medium-rond: 0;
+    --md-sys-typescale-display-medium-opsz: 45;
+    --md-sys-typescale-display-medium-crsv: 0;
+    --md-sys-typescale-display-medium-slnt: 0;
+    --md-sys-typescale-display-medium-fill: 0;
+    --md-sys-typescale-display-medium-hexp: 0;
+    --md-sys-typescale-display-small: "Display Small";
+    --md-sys-typescale-display-small-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-display-small-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-display-small-size: 2.25rem;
+    --md-sys-typescale-display-small-tracking: 0em;
+    --md-sys-typescale-display-small-line-height: 2.75rem;
+    --md-sys-typescale-display-small-wght: 400;
+    --md-sys-typescale-display-small-grad: 0;
+    --md-sys-typescale-display-small-wdth: 100;
+    --md-sys-typescale-display-small-rond: 0;
+    --md-sys-typescale-display-small-opsz: 36;
+    --md-sys-typescale-display-small-crsv: 0;
+    --md-sys-typescale-display-small-slnt: 0;
+    --md-sys-typescale-display-small-fill: 0;
+    --md-sys-typescale-display-small-hexp: 0;
+    --md-sys-typescale-headline-large: "Headline Large";
+    --md-sys-typescale-headline-large-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-headline-large-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-headline-large-size: 2rem;
+    --md-sys-typescale-headline-large-tracking: 0em;
+    --md-sys-typescale-headline-large-line-height: 2.5rem;
+    --md-sys-typescale-headline-large-wght: 400;
+    --md-sys-typescale-headline-large-grad: 0;
+    --md-sys-typescale-headline-large-wdth: 100;
+    --md-sys-typescale-headline-large-rond: 0;
+    --md-sys-typescale-headline-large-opsz: 32;
+    --md-sys-typescale-headline-large-crsv: 0;
+    --md-sys-typescale-headline-large-slnt: 0;
+    --md-sys-typescale-headline-large-fill: 0;
+    --md-sys-typescale-headline-large-hexp: 0;
+    --md-sys-typescale-headline-medium: "Headline Medium";
+    --md-sys-typescale-headline-medium-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-headline-medium-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-headline-medium-size: 1.75rem;
+    --md-sys-typescale-headline-medium-tracking: 0em;
+    --md-sys-typescale-headline-medium-line-height: 2.25rem;
+    --md-sys-typescale-headline-medium-wght: 400;
+    --md-sys-typescale-headline-medium-grad: 0;
+    --md-sys-typescale-headline-medium-wdth: 100;
+    --md-sys-typescale-headline-medium-rond: 0;
+    --md-sys-typescale-headline-medium-opsz: 28;
+    --md-sys-typescale-headline-medium-crsv: 0;
+    --md-sys-typescale-headline-medium-slnt: 0;
+    --md-sys-typescale-headline-medium-fill: 0;
+    --md-sys-typescale-headline-medium-hexp: 0;
+    --md-sys-typescale-headline-small: "Headline Small";
+    --md-sys-typescale-headline-small-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-headline-small-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-headline-small-size: 1.5rem;
+    --md-sys-typescale-headline-small-tracking: 0em;
+    --md-sys-typescale-headline-small-line-height: 2rem;
+    --md-sys-typescale-headline-small-wght: 400;
+    --md-sys-typescale-headline-small-grad: 0;
+    --md-sys-typescale-headline-small-wdth: 100;
+    --md-sys-typescale-headline-small-rond: 0;
+    --md-sys-typescale-headline-small-opsz: 24;
+    --md-sys-typescale-headline-small-crsv: 0;
+    --md-sys-typescale-headline-small-slnt: 0;
+    --md-sys-typescale-headline-small-fill: 0;
+    --md-sys-typescale-headline-small-hexp: 0;
+    --md-sys-typescale-title-large: "Title Large";
+    --md-sys-typescale-title-large-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-title-large-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-title-large-size: 1.375rem;
+    --md-sys-typescale-title-large-tracking: 0em;
+    --md-sys-typescale-title-large-line-height: 1.75rem;
+    --md-sys-typescale-title-large-wght: 400;
+    --md-sys-typescale-title-large-grad: 0;
+    --md-sys-typescale-title-large-wdth: 100;
+    --md-sys-typescale-title-large-rond: 0;
+    --md-sys-typescale-title-large-opsz: 22;
+    --md-sys-typescale-title-large-crsv: 0;
+    --md-sys-typescale-title-large-slnt: 0;
+    --md-sys-typescale-title-large-fill: 0;
+    --md-sys-typescale-title-large-hexp: 0;
+    --md-sys-typescale-title-medium: "Title Medium";
+    --md-sys-typescale-title-medium-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-title-medium-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-title-medium-size: 1rem;
+    --md-sys-typescale-title-medium-tracking: 0.0094em;
+    --md-sys-typescale-title-medium-line-height: 1.5rem;
+    --md-sys-typescale-title-medium-wght: 500;
+    --md-sys-typescale-title-medium-grad: 0;
+    --md-sys-typescale-title-medium-wdth: 100;
+    --md-sys-typescale-title-medium-rond: 0;
+    --md-sys-typescale-title-medium-opsz: 16;
+    --md-sys-typescale-title-medium-crsv: 0;
+    --md-sys-typescale-title-medium-slnt: 0;
+    --md-sys-typescale-title-medium-fill: 0;
+    --md-sys-typescale-title-medium-hexp: 0;
+    --md-sys-typescale-title-small: "Title Small";
+    --md-sys-typescale-title-small-font: var(--md-ref-typeface-brand);
+    --md-sys-typescale-title-small-weight: var(--md-ref-typeface-weight-medium);
+    --md-sys-typescale-title-small-size: 0.875rem;
+    --md-sys-typescale-title-small-tracking: 0.0071em;
+    --md-sys-typescale-title-small-line-height: 1.25rem;
+    --md-sys-typescale-title-small-wght: 500;
+    --md-sys-typescale-title-small-grad: 0;
+    --md-sys-typescale-title-small-wdth: 100;
+    --md-sys-typescale-title-small-rond: 0;
+    --md-sys-typescale-title-small-opsz: 14;
+    --md-sys-typescale-title-small-crsv: 0;
+    --md-sys-typescale-title-small-slnt: 0;
+    --md-sys-typescale-title-small-fill: 0;
+    --md-sys-typescale-title-small-hexp: 0;
+    --md-sys-typescale-body-large: "Body Large";
+    --md-sys-typescale-body-large-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-body-large-weight: var(--md-ref-typeface-weight-regular);
+    --md-sys-typescale-body-large-size: 1rem;
+    --md-sys-typescale-body-large-tracking: 0.0313em;
+    --md-sys-typescale-body-large-line-height: 1.5rem;
+    --md-sys-typescale-body-large-wght: 400;
+    --md-sys-typescale-body-large-grad: 0;
+    --md-sys-typescale-body-large-wdth: 100;
+    --md-sys-typescale-body-large-rond: 0;
+    --md-sys-typescale-body-large-opsz: 16;
+    --md-sys-typescale-body-large-crsv: 0;
+    --md-sys-typescale-body-large-slnt: 0;
+    --md-sys-typescale-body-large-fill: 0;
+    --md-sys-typescale-body-large-hexp: 0;
+    --md-sys-typescale-body-medium: "Body Medium";
+    --md-sys-typescale-body-medium-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-body-medium-weight: var(
+        --md-ref-typeface-weight-regular
+    );
+    --md-sys-typescale-body-medium-size: 0.875rem;
+    --md-sys-typescale-body-medium-tracking: 0.0179em;
+    --md-sys-typescale-body-medium-line-height: 1.25rem;
+    --md-sys-typescale-body-medium-wght: 400;
+    --md-sys-typescale-body-medium-grad: 0;
+    --md-sys-typescale-body-medium-wdth: 100;
+    --md-sys-typescale-body-medium-rond: 0;
+    --md-sys-typescale-body-medium-opsz: 14;
+    --md-sys-typescale-body-medium-crsv: 0;
+    --md-sys-typescale-body-medium-slnt: 0;
+    --md-sys-typescale-body-medium-fill: 0;
+    --md-sys-typescale-body-medium-hexp: 0;
+    --md-sys-typescale-body-small: "Body Small";
+    --md-sys-typescale-body-small-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-body-small-weight: var(--md-ref-typeface-weight-regular);
+    --md-sys-typescale-body-small-size: 0.75rem;
+    --md-sys-typescale-body-small-tracking: 0.0333em;
+    --md-sys-typescale-body-small-line-height: 1rem;
+    --md-sys-typescale-body-small-wght: 400;
+    --md-sys-typescale-body-small-grad: 0;
+    --md-sys-typescale-body-small-wdth: 100;
+    --md-sys-typescale-body-small-rond: 0;
+    --md-sys-typescale-body-small-opsz: 12;
+    --md-sys-typescale-body-small-crsv: 0;
+    --md-sys-typescale-body-small-slnt: 0;
+    --md-sys-typescale-body-small-fill: 0;
+    --md-sys-typescale-body-small-hexp: 0;
+    --md-sys-typescale-label-large: "Label Large";
+    --md-sys-typescale-label-large-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-label-large-weight: var(--md-ref-typeface-weight-medium);
+    --md-sys-typescale-label-large-size: 0.875rem;
+    --md-sys-typescale-label-large-tracking: 0.0071em;
+    --md-sys-typescale-label-large-line-height: 1.25rem;
+    --md-sys-typescale-label-large-wght: 500;
+    --md-sys-typescale-label-large-grad: 0;
+    --md-sys-typescale-label-large-wdth: 100;
+    --md-sys-typescale-label-large-rond: 0;
+    --md-sys-typescale-label-large-opsz: 14;
+    --md-sys-typescale-label-large-crsv: 0;
+    --md-sys-typescale-label-large-slnt: 0;
+    --md-sys-typescale-label-large-fill: 0;
+    --md-sys-typescale-label-large-hexp: 0;
+    --md-sys-typescale-label-medium: "Label Medium";
+    --md-sys-typescale-label-medium-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-label-medium-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-label-medium-size: 0.75rem;
+    --md-sys-typescale-label-medium-tracking: 0.0417em;
+    --md-sys-typescale-label-medium-line-height: 1rem;
+    --md-sys-typescale-label-medium-wght: 500;
+    --md-sys-typescale-label-medium-grad: 0;
+    --md-sys-typescale-label-medium-wdth: 100;
+    --md-sys-typescale-label-medium-rond: 0;
+    --md-sys-typescale-label-medium-opsz: 12;
+    --md-sys-typescale-label-medium-crsv: 0;
+    --md-sys-typescale-label-medium-slnt: 0;
+    --md-sys-typescale-label-medium-fill: 0;
+    --md-sys-typescale-label-medium-hexp: 0;
+    --md-sys-typescale-label-small: "Label Small";
+    --md-sys-typescale-label-small-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-label-small-weight: var(--md-ref-typeface-weight-medium);
+    --md-sys-typescale-label-small-size: 0.6875rem;
+    --md-sys-typescale-label-small-tracking: 0.0455em;
+    --md-sys-typescale-label-small-line-height: 1rem;
+    --md-sys-typescale-label-small-wght: 500;
+    --md-sys-typescale-label-small-grad: 0;
+    --md-sys-typescale-label-small-wdth: 100;
+    --md-sys-typescale-label-small-rond: 0;
+    --md-sys-typescale-label-small-opsz: 11;
+    --md-sys-typescale-label-small-crsv: 0;
+    --md-sys-typescale-label-small-slnt: 0;
+    --md-sys-typescale-label-small-fill: 0;
+    --md-sys-typescale-label-small-hexp: 0;
+    --md-sys-typescale-emphasized-display-large: "Emphasized Display Large";
+    --md-sys-typescale-emphasized-display-large-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-display-large-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-display-large-size: 3.5625rem;
+    --md-sys-typescale-emphasized-display-large-tracking: -0.0044em;
+    --md-sys-typescale-emphasized-display-large-line-height: 4rem;
+    --md-sys-typescale-emphasized-display-large-wght: 500;
+    --md-sys-typescale-emphasized-display-large-grad: 0;
+    --md-sys-typescale-emphasized-display-large-wdth: 100;
+    --md-sys-typescale-emphasized-display-large-rond: 0;
+    --md-sys-typescale-emphasized-display-large-opsz: 57;
+    --md-sys-typescale-emphasized-display-large-crsv: 0;
+    --md-sys-typescale-emphasized-display-large-slnt: 0;
+    --md-sys-typescale-emphasized-display-large-fill: 0;
+    --md-sys-typescale-emphasized-display-large-hexp: 0;
+    --md-sys-typescale-emphasized-display-medium: "Emphasized Display Medium";
+    --md-sys-typescale-emphasized-display-medium-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-display-medium-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-display-medium-size: 2.8125rem;
+    --md-sys-typescale-emphasized-display-medium-tracking: 0em;
+    --md-sys-typescale-emphasized-display-medium-line-height: 3.25rem;
+    --md-sys-typescale-emphasized-display-medium-wght: 500;
+    --md-sys-typescale-emphasized-display-medium-grad: 0;
+    --md-sys-typescale-emphasized-display-medium-wdth: 100;
+    --md-sys-typescale-emphasized-display-medium-rond: 0;
+    --md-sys-typescale-emphasized-display-medium-opsz: 45;
+    --md-sys-typescale-emphasized-display-medium-crsv: 0;
+    --md-sys-typescale-emphasized-display-medium-slnt: 0;
+    --md-sys-typescale-emphasized-display-medium-fill: 0;
+    --md-sys-typescale-emphasized-display-medium-hexp: 0;
+    --md-sys-typescale-emphasized-display-small: "Emphasized Display Small";
+    --md-sys-typescale-emphasized-display-small-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-display-small-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-display-small-size: 2.25rem;
+    --md-sys-typescale-emphasized-display-small-tracking: 0em;
+    --md-sys-typescale-emphasized-display-small-line-height: 2.75rem;
+    --md-sys-typescale-emphasized-display-small-wght: 500;
+    --md-sys-typescale-emphasized-display-small-grad: 0;
+    --md-sys-typescale-emphasized-display-small-wdth: 100;
+    --md-sys-typescale-emphasized-display-small-rond: 0;
+    --md-sys-typescale-emphasized-display-small-opsz: 36;
+    --md-sys-typescale-emphasized-display-small-crsv: 0;
+    --md-sys-typescale-emphasized-display-small-slnt: 0;
+    --md-sys-typescale-emphasized-display-small-fill: 0;
+    --md-sys-typescale-emphasized-display-small-hexp: 0;
+    --md-sys-typescale-emphasized-headline-large: "Emphasized Headline Large";
+    --md-sys-typescale-emphasized-headline-large-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-headline-large-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-headline-large-size: 2rem;
+    --md-sys-typescale-emphasized-headline-large-tracking: 0em;
+    --md-sys-typescale-emphasized-headline-large-line-height: 2.5rem;
+    --md-sys-typescale-emphasized-headline-large-wght: 500;
+    --md-sys-typescale-emphasized-headline-large-grad: 0;
+    --md-sys-typescale-emphasized-headline-large-wdth: 100;
+    --md-sys-typescale-emphasized-headline-large-rond: 0;
+    --md-sys-typescale-emphasized-headline-large-opsz: 32;
+    --md-sys-typescale-emphasized-headline-large-crsv: 0;
+    --md-sys-typescale-emphasized-headline-large-slnt: 0;
+    --md-sys-typescale-emphasized-headline-large-fill: 0;
+    --md-sys-typescale-emphasized-headline-large-hexp: 0;
+    --md-sys-typescale-emphasized-headline-medium: "Emphasized Headline Medium";
+    --md-sys-typescale-emphasized-headline-medium-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-headline-medium-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-headline-medium-size: 1.75rem;
+    --md-sys-typescale-emphasized-headline-medium-tracking: 0em;
+    --md-sys-typescale-emphasized-headline-medium-line-height: 2.25rem;
+    --md-sys-typescale-emphasized-headline-medium-wght: 500;
+    --md-sys-typescale-emphasized-headline-medium-grad: 0;
+    --md-sys-typescale-emphasized-headline-medium-wdth: 100;
+    --md-sys-typescale-emphasized-headline-medium-rond: 0;
+    --md-sys-typescale-emphasized-headline-medium-opsz: 28;
+    --md-sys-typescale-emphasized-headline-medium-crsv: 0;
+    --md-sys-typescale-emphasized-headline-medium-slnt: 0;
+    --md-sys-typescale-emphasized-headline-medium-fill: 0;
+    --md-sys-typescale-emphasized-headline-medium-hexp: 0;
+    --md-sys-typescale-emphasized-headline-small: "Emphasized Headline Small";
+    --md-sys-typescale-emphasized-headline-small-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-headline-small-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-headline-small-size: 1.5rem;
+    --md-sys-typescale-emphasized-headline-small-tracking: 0em;
+    --md-sys-typescale-emphasized-headline-small-line-height: 2rem;
+    --md-sys-typescale-emphasized-headline-small-wght: 500;
+    --md-sys-typescale-emphasized-headline-small-grad: 0;
+    --md-sys-typescale-emphasized-headline-small-wdth: 100;
+    --md-sys-typescale-emphasized-headline-small-rond: 0;
+    --md-sys-typescale-emphasized-headline-small-opsz: 24;
+    --md-sys-typescale-emphasized-headline-small-crsv: 0;
+    --md-sys-typescale-emphasized-headline-small-slnt: 0;
+    --md-sys-typescale-emphasized-headline-small-fill: 0;
+    --md-sys-typescale-emphasized-headline-small-hexp: 0;
+    --md-sys-typescale-emphasized-title-large: "Emphasized Title Large";
+    --md-sys-typescale-emphasized-title-large-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-title-large-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-title-large-size: 1.375rem;
+    --md-sys-typescale-emphasized-title-large-tracking: 0em;
+    --md-sys-typescale-emphasized-title-large-line-height: 1.75rem;
+    --md-sys-typescale-emphasized-title-large-wght: 500;
+    --md-sys-typescale-emphasized-title-large-grad: 0;
+    --md-sys-typescale-emphasized-title-large-wdth: 100;
+    --md-sys-typescale-emphasized-title-large-rond: 0;
+    --md-sys-typescale-emphasized-title-large-opsz: 22;
+    --md-sys-typescale-emphasized-title-large-crsv: 0;
+    --md-sys-typescale-emphasized-title-large-slnt: 0;
+    --md-sys-typescale-emphasized-title-large-fill: 0;
+    --md-sys-typescale-emphasized-title-large-hexp: 0;
+    --md-sys-typescale-emphasized-title-medium: "Emphasized Title Medium";
+    --md-sys-typescale-emphasized-title-medium-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-title-medium-weight: var(
+        --md-ref-typeface-weight-bold
+    );
+    --md-sys-typescale-emphasized-title-medium-size: 1rem;
+    --md-sys-typescale-emphasized-title-medium-tracking: 0.0094em;
+    --md-sys-typescale-emphasized-title-medium-line-height: 1.5rem;
+    --md-sys-typescale-emphasized-title-medium-wght: 700;
+    --md-sys-typescale-emphasized-title-medium-grad: 0;
+    --md-sys-typescale-emphasized-title-medium-wdth: 100;
+    --md-sys-typescale-emphasized-title-medium-rond: 0;
+    --md-sys-typescale-emphasized-title-medium-opsz: 16;
+    --md-sys-typescale-emphasized-title-medium-crsv: 0;
+    --md-sys-typescale-emphasized-title-medium-slnt: 0;
+    --md-sys-typescale-emphasized-title-medium-fill: 0;
+    --md-sys-typescale-emphasized-title-medium-hexp: 0;
+    --md-sys-typescale-emphasized-title-small: "Emphasized Title Small";
+    --md-sys-typescale-emphasized-title-small-font: var(
+        --md-ref-typeface-brand
+    );
+    --md-sys-typescale-emphasized-title-small-weight: var(
+        --md-ref-typeface-weight-bold
+    );
+    --md-sys-typescale-emphasized-title-small-size: 0.875rem;
+    --md-sys-typescale-emphasized-title-small-tracking: 0.0071em;
+    --md-sys-typescale-emphasized-title-small-line-height: 1.25rem;
+    --md-sys-typescale-emphasized-title-small-wght: 700;
+    --md-sys-typescale-emphasized-title-small-grad: 0;
+    --md-sys-typescale-emphasized-title-small-wdth: 100;
+    --md-sys-typescale-emphasized-title-small-rond: 0;
+    --md-sys-typescale-emphasized-title-small-opsz: 14;
+    --md-sys-typescale-emphasized-title-small-crsv: 0;
+    --md-sys-typescale-emphasized-title-small-slnt: 0;
+    --md-sys-typescale-emphasized-title-small-fill: 0;
+    --md-sys-typescale-emphasized-title-small-hexp: 0;
+    --md-sys-typescale-emphasized-body-large: "Emphasized Body Large";
+    --md-sys-typescale-emphasized-body-large-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-emphasized-body-large-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-body-large-size: 1rem;
+    --md-sys-typescale-emphasized-body-large-tracking: 0.0313em;
+    --md-sys-typescale-emphasized-body-large-line-height: 1.5rem;
+    --md-sys-typescale-emphasized-body-large-wght: 500;
+    --md-sys-typescale-emphasized-body-large-grad: 0;
+    --md-sys-typescale-emphasized-body-large-wdth: 100;
+    --md-sys-typescale-emphasized-body-large-rond: 0;
+    --md-sys-typescale-emphasized-body-large-opsz: 16;
+    --md-sys-typescale-emphasized-body-large-crsv: 0;
+    --md-sys-typescale-emphasized-body-large-slnt: 0;
+    --md-sys-typescale-emphasized-body-large-fill: 0;
+    --md-sys-typescale-emphasized-body-large-hexp: 0;
+    --md-sys-typescale-emphasized-body-medium: "Emphasized Body Medium";
+    --md-sys-typescale-emphasized-body-medium-font: var(
+        --md-ref-typeface-plain
+    );
+    --md-sys-typescale-emphasized-body-medium-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-body-medium-size: 0.875rem;
+    --md-sys-typescale-emphasized-body-medium-tracking: 0.0179em;
+    --md-sys-typescale-emphasized-body-medium-line-height: 1.25rem;
+    --md-sys-typescale-emphasized-body-medium-wght: 500;
+    --md-sys-typescale-emphasized-body-medium-grad: 0;
+    --md-sys-typescale-emphasized-body-medium-wdth: 100;
+    --md-sys-typescale-emphasized-body-medium-rond: 0;
+    --md-sys-typescale-emphasized-body-medium-opsz: 14;
+    --md-sys-typescale-emphasized-body-medium-crsv: 0;
+    --md-sys-typescale-emphasized-body-medium-slnt: 0;
+    --md-sys-typescale-emphasized-body-medium-fill: 0;
+    --md-sys-typescale-emphasized-body-medium-hexp: 0;
+    --md-sys-typescale-emphasized-body-small: "Emphasized Body Small";
+    --md-sys-typescale-emphasized-body-small-font: var(--md-ref-typeface-plain);
+    --md-sys-typescale-emphasized-body-small-weight: var(
+        --md-ref-typeface-weight-medium
+    );
+    --md-sys-typescale-emphasized-body-small-size: 0.75rem;
+    --md-sys-typescale-emphasized-body-small-tracking: 0.0333em;
+    --md-sys-typescale-emphasized-body-small-line-height: 1rem;
+    --md-sys-typescale-emphasized-body-small-wght: 500;
+    --md-sys-typescale-emphasized-body-small-grad: 0;
+    --md-sys-typescale-emphasized-body-small-wdth: 100;
+    --md-sys-typescale-emphasized-body-small-rond: 0;
+    --md-sys-typescale-emphasized-body-small-opsz: 12;
+    --md-sys-typescale-emphasized-body-small-crsv: 0;
+    --md-sys-typescale-emphasized-body-small-slnt: 0;
+    --md-sys-typescale-emphasized-body-small-fill: 0;
+    --md-sys-typescale-emphasized-body-small-hexp: 0;
+    --md-sys-typescale-emphasized-label-large: "Emphasized Label Large";
+    --md-sys-typescale-emphasized-label-large-font: var(
+        --md-ref-typeface-plain
+    );
+    --md-sys-typescale-emphasized-label-large-weight: var(
+        --md-ref-typeface-weight-bold
+    );
+    --md-sys-typescale-emphasized-label-large-size: 0.875rem;
+    --md-sys-typescale-emphasized-label-large-tracking: 0.0071em;
+    --md-sys-typescale-emphasized-label-large-line-height: 1.25rem;
+    --md-sys-typescale-emphasized-label-large-wght: 700;
+    --md-sys-typescale-emphasized-label-large-grad: 0;
+    --md-sys-typescale-emphasized-label-large-wdth: 100;
+    --md-sys-typescale-emphasized-label-large-rond: 0;
+    --md-sys-typescale-emphasized-label-large-opsz: 14;
+    --md-sys-typescale-emphasized-label-large-crsv: 0;
+    --md-sys-typescale-emphasized-label-large-slnt: 0;
+    --md-sys-typescale-emphasized-label-large-fill: 0;
+    --md-sys-typescale-emphasized-label-large-hexp: 0;
+    --md-sys-typescale-emphasized-label-medium: "Emphasized Label Medium";
+    --md-sys-typescale-emphasized-label-medium-font: var(
+        --md-ref-typeface-plain
+    );
+    --md-sys-typescale-emphasized-label-medium-weight: var(
+        --md-ref-typeface-weight-bold
+    );
+    --md-sys-typescale-emphasized-label-medium-size: 0.75rem;
+    --md-sys-typescale-emphasized-label-medium-tracking: 0.0417em;
+    --md-sys-typescale-emphasized-label-medium-line-height: 1rem;
+    --md-sys-typescale-emphasized-label-medium-wght: 700;
+    --md-sys-typescale-emphasized-label-medium-grad: 0;
+    --md-sys-typescale-emphasized-label-medium-wdth: 100;
+    --md-sys-typescale-emphasized-label-medium-rond: 0;
+    --md-sys-typescale-emphasized-label-medium-opsz: 12;
+    --md-sys-typescale-emphasized-label-medium-crsv: 0;
+    --md-sys-typescale-emphasized-label-medium-slnt: 0;
+    --md-sys-typescale-emphasized-label-medium-fill: 0;
+    --md-sys-typescale-emphasized-label-medium-hexp: 0;
+    --md-sys-typescale-emphasized-label-small: "Emphasized Label Small";
+    --md-sys-typescale-emphasized-label-small-font: var(
+        --md-ref-typeface-plain
+    );
+    --md-sys-typescale-emphasized-label-small-weight: var(
+        --md-ref-typeface-weight-bold
+    );
+    --md-sys-typescale-emphasized-label-small-size: 0.6875rem;
+    --md-sys-typescale-emphasized-label-small-tracking: 0.0455em;
+    --md-sys-typescale-emphasized-label-small-line-height: 1rem;
+    --md-sys-typescale-emphasized-label-small-wght: 700;
+    --md-sys-typescale-emphasized-label-small-grad: 0;
+    --md-sys-typescale-emphasized-label-small-wdth: 100;
+    --md-sys-typescale-emphasized-label-small-rond: 0;
+    --md-sys-typescale-emphasized-label-small-opsz: 11;
+    --md-sys-typescale-emphasized-label-small-crsv: 0;
+    --md-sys-typescale-emphasized-label-small-slnt: 0;
+    --md-sys-typescale-emphasized-label-small-fill: 0;
+    --md-sys-typescale-emphasized-label-small-hexp: 0;
   }
 }
