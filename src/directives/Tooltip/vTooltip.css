@@ -1,0 +1,5 @@
+/* 触发元素：减少移动端长按的系统气泡干扰（按需） */
+.vtt-trigger {
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}

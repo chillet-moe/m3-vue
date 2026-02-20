@@ -1,4 +1,5 @@
 import type { ObjectDirective } from 'vue';
+import './vTooltip.css';
 
 type Placement = 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
 
