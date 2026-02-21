@@ -14,7 +14,7 @@
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    background-color: rgb(var(--md-color-on-container));
+    background-color: var(--md-color-on-container);
     opacity: 0;
     transition: opacity var(--md-easing-fast);
   }
@@ -56,7 +56,7 @@ html:not(.js) :active.state-layer::after {
   height: 100%;
   pointer-events: none;
   border-radius: inherit;
-  background-color: rgb(var(--md-color-on-container));
+  background-color: var(--md-color-on-container);
   overflow: hidden;
   background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="2.5" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.8"/%3E%3C/svg%3E');
   background-size: 100px 100px;
@@ -64,8 +64,8 @@ html:not(.js) :active.state-layer::after {
   mask-image: radial-gradient(
     circle at var(--x) var(--y),
     transparent calc(var(--r) - 95%),
-    rgb(var(--md-color-container)) calc(var(--r) - 20%),
-    rgb(var(--md-color-container)) var(--r),
+    var(--md-color-container) calc(var(--r) - 20%),
+    var(--md-color-container) var(--r),
     transparent calc(var(--r) + 10%)
   );
   opacity: 0.08;

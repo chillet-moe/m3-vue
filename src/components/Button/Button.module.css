@@ -377,8 +377,8 @@
   --md-color-container: var(--md-comp-button-container-color);
   --md-color-on-container: var(--md-comp-button-label-text-color);
 
-  background-color: rgb(var(--md-color-container));
-  color: rgb(var(--md-color-on-container));
+  background-color: var(--md-color-container);
+  color: var(--md-color-on-container);
   box-shadow:
     var(--md-comp-button-container-elevation),
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
@@ -411,7 +411,7 @@
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
 
   outline-offset: var(--md-comp-button-focus-indicator-outline-offset);
-  outline: rgb(var(--md-comp-button-focus-indicator-color)) solid var(--md-comp-button-focus-indicator-thickness);
+  outline: var(--md-comp-button-focus-indicator-color) solid var(--md-comp-button-focus-indicator-thickness);
 }
 
 .button[data-pressed='true'] {
@@ -423,11 +423,12 @@
 
 .button:disabled,
 label.button:has(input:disabled) {
-  background-color: rgba(
-    var(--md-comp-button-disabled-container-color),
-    var(--md-comp-button-disabled-container-opacity)
+  background-color: rgb(
+    from var(--md-comp-button-disabled-container-color) r g b / var(--md-comp-button-disabled-container-opacity)
   );
-  color: rgba(var(--md-comp-button-disabled-label-text-color), var(--md-comp-button-disabled-label-text-opacity));
+  color: rgb(
+    from var(--md-comp-button-disabled-label-text-color) r g b / var(--md-comp-button-disabled-label-text-opacity)
+  );
   box-shadow:
     var(--md-comp-button-disabled-container-elevation),
     inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));

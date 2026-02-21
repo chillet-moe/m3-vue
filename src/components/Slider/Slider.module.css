@@ -21,11 +21,11 @@
 
   print-color-adjust: exact;
 
-  --md-comp-slider-active-track-color: rgb(var(--md-sys-color-primary));
-  --md-comp-slider-inactive-track-color: rgb(var(--md-sys-color-primary-container));
-  --md-comp-slider-handle-color: rgb(var(--md-sys-color-primary));
-  --md-comp-slider-value-indicator-background: rgb(var(--md-sys-color-inverse-surface));
-  --md-comp-slider-value-indicator-color: rgb(var(--md-sys-color-inverse-on-surface));
+  --md-comp-slider-active-track-color: var(--md-sys-color-primary);
+  --md-comp-slider-inactive-track-color: var(--md-sys-color-primary-container);
+  --md-comp-slider-handle-color: var(--md-sys-color-primary);
+  --md-comp-slider-value-indicator-background: var(--md-sys-color-inverse-surface);
+  --md-comp-slider-value-indicator-color: var(--md-sys-color-inverse-on-surface);
 
   input {
     cursor: pointer;
@@ -53,9 +53,9 @@
 }
 
 .slider[aria-disabled='true'] {
-  --md-comp-slider-active-track-color: rgba(var(--md-sys-color-on-surface), 0.38);
-  --md-comp-slider-inactive-track-color: rgb(var(--md-sys-color-on-surface), 0.12);
-  --md-comp-slider-handle-color: rgba(var(--md-sys-color-on-surface), 0.38);
+  --md-comp-slider-active-track-color: rgb(from var(--md-sys-color-on-surface) r g b /  0.38);
+  --md-comp-slider-inactive-track-color: rgb(from var(--md-sys-color-on-surface) r g b /  0.12);
+  --md-comp-slider-handle-color: rgb(from var(--md-sys-color-on-surface) r g b /  0.38);
 }
 
 .horizontal {
@@ -128,7 +128,7 @@
     inline-size,
     outline-width var(--md-easing-fast);
 
-  outline: rgb(var(--md-sys-color-on-surface-variant)) solid 0;
+  outline: var(--md-sys-color-on-surface-variant) solid 0;
   outline-offset: 0.25rem;
   z-index: 2;
 }

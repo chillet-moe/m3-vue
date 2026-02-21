@@ -14,8 +14,8 @@
     --md-sys-elevation-level4-ambient: 0 6px 10px 4px;
     --md-sys-elevation-level5-ambient: 0 8px 12px 6px;
 
-    --md-sys-elevation-shadow-key: rgba(var(--md-sys-color-shadow), 0.19);
-    --md-sys-elevation-shadow-ambient: rgba(var(--md-sys-color-shadow), 0.04);
+    --md-sys-elevation-shadow-key: rgb(from var(--md-sys-color-shadow) r g b /  0.19);
+    --md-sys-elevation-shadow-ambient: rgb(from var(--md-sys-color-shadow) r g b /  0.04);
 
     --md-sys-elevation-level0:
       var(--md-sys-elevation-level0-key) var(--md-sys-elevation-shadow-key),

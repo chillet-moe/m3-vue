@@ -14,7 +14,7 @@ export const Default: Story = {
       style="
         width: 200px;
         height: 100px;
-        border: 1px solid rgb(var(--md-sys-color-outline));
+        border: 1px solid var(--md-sys-color-outline);
         border-radius: var(--md-sys-shape-corner-full);
         --md-color-on-container: var(--md-sys-color-on-primary-container);
         --md-color-container: var(--md-sys-color-primary-container);

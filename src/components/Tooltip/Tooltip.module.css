@@ -50,8 +50,8 @@
 }
 
 .tooltip[data-variant='plain'] {
-  background-color: rgb(var(--md-comp-plain-tooltip-container-color));
-  color: rgb(var(--md-comp-plain-tooltip-supporting-text-color));
+  background-color: var(--md-comp-plain-tooltip-container-color);
+  color: var(--md-comp-plain-tooltip-supporting-text-color);
   border-radius: var(--md-comp-plain-tooltip-container-shape);
 
   font-family: var(--md-comp-plain-tooltip-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -62,9 +62,9 @@
 }
 
 .tooltip[data-variant='rich'] {
-  background-color: rgb(var(--md-comp-rich-tooltip-container-color));
+  background-color: var(--md-comp-rich-tooltip-container-color);
   box-shadow: var(--md-comp-rich-tooltip-container-elevation);
-  color: rgb(var(--md-comp-rich-tooltip-supporting-text-color));
+  color: var(--md-comp-rich-tooltip-supporting-text-color);
   border-radius: var(--md-comp-rich-tooltip-container-shape);
 
   font-family: var(--md-comp-rich-tooltip-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
