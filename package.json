@@ -1,6 +1,6 @@
 {
   "name": "@chillet/m3-vue",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "type": "module",
   "repository": {
     "url": "git+https://github.com/chillet-moe/m3-vue.git"
@@ -16,16 +16,14 @@
       "import": "./dist/index.mjs"
     },
     "./style.css": "./dist/index.css",
-    "./typography.module.css": "./src/styles/typography.module.css",
-    "./colors.module.css": "./src/styles/colors.module.css"
+    "./typography.module.css": "./dist/typography.module.css",
+    "./colors.module.css": "./dist/colors.module.css"
   },
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "web-types.json",
-    "src/styles/typography.module.css",
-    "src/styles/colors.module.css"
+    "web-types.json"
   ],
   "sideEffects": [
     "**/*.css",

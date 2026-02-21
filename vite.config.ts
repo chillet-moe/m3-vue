@@ -5,6 +5,7 @@ import pkg from './package.json';
 import { webTypesFromVueComponentMeta } from './scripts/web-types-gen';
 import path from 'node:path';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import copyFiles from "./scripts/copy-files";
 
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,6 +24,16 @@ export default defineConfig({
         },
       },
     }),
+    copyFiles({
+      targets: [
+        {
+          src: 'src/styles/typography.module.css',
+        },
+        {
+          src: 'src/styles/colors.module.css',
+        },
+      ],
+    })
   ],
   resolve: {
     alias: {
