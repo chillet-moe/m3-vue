@@ -381,7 +381,7 @@
   color: var(--md-color-on-container);
   box-shadow:
     var(--md-comp-button-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
+    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
   border-start-start-radius: var(--md-comp-button-container-shape);
   border-start-end-radius: var(--md-comp-button-container-shape);
   border-end-end-radius: var(--md-comp-button-container-shape);
@@ -400,7 +400,7 @@
   --md-color-on-container: var(--md-comp-button-hovered-label-text-color);
   box-shadow:
     var(--md-comp-button-hovered-container-elevation, var(--md-comp-button-container-elevation)),
-    inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
+    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
 }
 
 .button:focus-visible,
@@ -408,7 +408,7 @@
   --md-color-on-container: var(--md-comp-button-focused-label-text-color);
   box-shadow:
     var(--md-comp-button-focused-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
+    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
 
   outline-offset: var(--md-comp-button-focus-indicator-outline-offset);
   outline: var(--md-comp-button-focus-indicator-color) solid var(--md-comp-button-focus-indicator-thickness);
@@ -418,7 +418,7 @@
   --md-color-on-container: var(--md-comp-button-pressed-label-text-color);
   box-shadow:
     var(--md-comp-button-pressed-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
+    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
 }
 
 .button:disabled,
@@ -431,7 +431,7 @@ label.button:has(input:disabled) {
   );
   box-shadow:
     var(--md-comp-button-disabled-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) rgb(var(--button-outline-color, 0 0 0 / 0));
+    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
 }
 
 /* elevated */
