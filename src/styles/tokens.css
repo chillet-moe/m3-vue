@@ -247,11 +247,11 @@
     --md-sys-color-error-variant-container-dark: var(--md-ref-palette-error20);
     --md-sys-color-on-error-variant-container-dark: var(--md-ref-palette-error90);
 
-    --md-sys-color-surface-1: var(--md-sys-color-primary), 0.05;
-    --md-sys-color-surface-2: var(--md-sys-color-primary), 0.08;
-    --md-sys-color-surface-3: var(--md-sys-color-primary), 0.11;
-    --md-sys-color-surface-4: var(--md-sys-color-primary), 0.12;
-    --md-sys-color-surface-5: var(--md-sys-color-primary), 0.14;
+    --md-sys-color-surface-1: --translucent(var(--md-sys-color-primary), 0.05);
+    --md-sys-color-surface-2: --translucent(var(--md-sys-color-primary), 0.08);
+    --md-sys-color-surface-3: --translucent(var(--md-sys-color-primary), 0.11);
+    --md-sys-color-surface-4: --translucent(var(--md-sys-color-primary), 0.12);
+    --md-sys-color-surface-5: --translucent(var(--md-sys-color-primary), 0.14);
 
     --md-sys-state-focus-indicator-thickness: --dp(3);
     --md-sys-state-focus-indicator-outer-offset: --dp(2);
