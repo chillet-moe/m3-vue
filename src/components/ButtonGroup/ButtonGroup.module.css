@@ -1,4 +1,4 @@
-@layer token {
+@layer tokens {
   .buttonGroup {
     --md-comp-button-group-standard-xsmall-container-height: 2rem;
     --md-comp-button-group-standard-xsmall-between-space: 1.125rem;
