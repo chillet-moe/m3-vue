@@ -50,7 +50,12 @@ function onFailedToFetchModule(message: string) {
   }
 }
 
+let stateLayerInitialized = false;
+
 setup((app) => {
   app.directive("tooltip", vTooltip);
-  initStateLayer();
+  if (!stateLayerInitialized) {
+    stateLayerInitialized = true;
+    initStateLayer();
+  }
 });
