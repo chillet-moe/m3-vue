@@ -113,36 +113,37 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
   }
 };
 
-if (typeof document != 'undefined') {
-  document.documentElement.classList.add('js');
+function initStateLayer() {
+  if (typeof document != 'undefined') {
+    document.documentElement.classList.add('js');
 
-  // Pointer events
-  document.addEventListener('pointerdown', (e) => {
-    if (e.button != 0) return;
+    // Pointer events
+    document.addEventListener('pointerdown', (e) => {
+      if (e.button != 0) return;
 
-    const layer = (e.target as Element).closest('.state-layer');
-    if (!layer || !isEnabled(layer)) return;
+      const layer = (e.target as Element).closest('.state-layer');
+      if (!layer || !isEnabled(layer)) return;
 
-    const rect = layer.getBoundingClientRect();
-    createRipple(layer, e.clientX - rect.left, e.clientY - rect.top, rect.width, rect.height);
-  });
+      const rect = layer.getBoundingClientRect();
+      createRipple(layer, e.clientX - rect.left, e.clientY - rect.top, rect.width, rect.height);
+    });
 
-  // Keyboard events
-  document.addEventListener('keydown', (e) => {
-    if (e.repeat) return;
+    // Keyboard events
+    document.addEventListener('keydown', (e) => {
+      if (e.repeat) return;
 
-    const target = e.target as Element;
-    const layer = target.closest('.state-layer');
-    if (!layer || !isEnabled(layer)) return;
+      const target = e.target as Element;
+      const layer = target.closest('.state-layer');
+      if (!layer || !isEnabled(layer)) return;
 
-    const isActivate = e.key == 'Enter' || (e.key == ' ' && layer.tagName == 'BUTTON');
-    if (!isActivate) return;
+      const isActivate = e.key == 'Enter' || (e.key == ' ' && layer.tagName == 'BUTTON');
+      if (!isActivate) return;
 
-    const rect = layer.getBoundingClientRect();
-    createRipple(layer, rect.width / 2, rect.height / 2, rect.width, rect.height);
-  });
+      const rect = layer.getBoundingClientRect();
+      createRipple(layer, rect.width / 2, rect.height / 2, rect.width, rect.height);
+    });
+  }
 }
 
-// Export an empty object to prevent tree-shaking
-export {};
+export { initStateLayer };
 

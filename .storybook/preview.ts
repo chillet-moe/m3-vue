@@ -7,7 +7,7 @@ import '../src';
 import './theme/preview.css';
 import './theme/manager.css';
 import './lib.css';
-import { vTooltip } from "@/index.ts";
+import { initStateLayer, vTooltip } from "@/index.ts";
 
 export default {
   decorators: [storyDarkModeDecorator],
@@ -52,4 +52,5 @@ function onFailedToFetchModule(message: string) {
 
 setup((app) => {
   app.directive("tooltip", vTooltip);
+  initStateLayer();
 });

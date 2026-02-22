@@ -1,5 +1,5 @@
 // State Layer
-import './components/StateLayer/state-layer';
+export { initStateLayer } from './components/StateLayer/state-layer';
 
 // Styles
 import './styles/theme.css';
