@@ -2,6 +2,7 @@ import type { ObjectDirective } from 'vue';
 import './vTooltip.css';
 
 type Placement = 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
+type TooltipBindingValue = Exclude<VTooltipBinding, undefined>;
 
 export type VTooltipBinding =
   | string
@@ -15,12 +16,13 @@ export type VTooltipBinding =
       openDelay?: number; // hover/focus 打开延迟
       closeDelay?: number; // 离开后关闭延迟（便于移入 tooltip 点击）
       longpressDelay?: number; // 触摸长按时间
-    };
+    }
+  | undefined;
 
 type State = {
   tip: HTMLElement;
   cleanup: () => void;
-  update: (next: VTooltipBinding) => void;
+  update: (next: TooltipBindingValue) => void;
 };
 
 const STATE = Symbol('vtt_state');
@@ -30,7 +32,7 @@ function isEl(v: any): v is HTMLElement {
   return v && typeof v === 'object' && v.nodeType === 1;
 }
 
-function normalize(binding: VTooltipBinding) {
+function normalize(binding: TooltipBindingValue) {
   const defaults = {
     placement: 'top' as Placement,
     interactive: true,
@@ -170,7 +172,7 @@ function ensureTipElement(opts: ReturnType<typeof normalize>, trigger: HTMLEleme
   return { tip, created };
 }
 
-function setup(trigger: HTMLElement, binding: VTooltipBinding): State {
+function setup(trigger: HTMLElement, binding: TooltipBindingValue): State {
   let opts = normalize(binding);
   let { tip, created } = ensureTipElement(opts, trigger);
 
@@ -439,7 +441,7 @@ function setup(trigger: HTMLElement, binding: VTooltipBinding): State {
     if (created) tip.remove();
   };
 
-  const update = (next: VTooltipBinding) => {
+  const update = (next: TooltipBindingValue) => {
     // 简化处理：若 target/content 类型变化，先清理再重建
     const nextOpts = normalize(next);
 
@@ -489,11 +491,21 @@ declare module 'vue' {
 
 export default {
   mounted(el, binding) {
+    if (binding.value === undefined) return;
     (el as any)[STATE] = setup(el, binding.value);
   },
   updated(el, binding) {
     const st: State | undefined = (el as any)[STATE];
-    if (!st) return;
+    if (binding.value === undefined) {
+      st?.cleanup();
+      delete (el as any)[STATE];
+      return;
+    }
+
+    if (!st) {
+      (el as any)[STATE] = setup(el, binding.value);
+      return;
+    }
     st.update(binding.value);
   },
   unmounted(el) {
