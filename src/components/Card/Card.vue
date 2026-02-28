@@ -17,8 +17,8 @@ const context = inject(cardContextKey, undefined);
 const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
 
 const slots = defineSlots<{
-  /** Default slot for the main content of the icon button. Receives `disabled` as a prop. */
-  default(props: { disabled: boolean }): any;
+  /** Default slot for the main content of the card. */
+  default(): any;
 }>();
 </script>
 
@@ -27,5 +27,6 @@ const slots = defineSlots<{
     :class="[style.card]"
     :data-color="color"
   >
+    <slot />
   </div>
 </template>
