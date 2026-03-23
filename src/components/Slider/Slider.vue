@@ -144,30 +144,6 @@ const isValueIndicatorHovered = ref(false);
 const isValueIndicatorFocused = ref(false);
 const isValueIndicatorDragging = ref(false);
 
-const valueIndicatorStyle = computed(() => {
-  if (valueIndicatorPlacement.value === 'top') {
-    return {
-      transform: `translateY(calc(-1 * var(--offset)))`,
-    };
-  }
-
-  if (valueIndicatorPlacement.value === 'bottom') {
-    return {
-      transform: `translateY(var(--offset))`,
-    };
-  }
-
-  if (valueIndicatorPlacement.value === 'start') {
-    return {
-      transform: `translateX(calc(-1 * var(--offset)))`,
-    };
-  }
-
-  return {
-    transform: `translateX(var(--offset))`,
-  };
-});
-
 const valueIndicatorBinding = computed(() => {
   const target = valueIndicatorRef.value;
 
@@ -372,7 +348,6 @@ onBeforeUnmount(() => {
       ref="valueIndicator"
       data-value-indicator="true"
       :class="style.valueIndicator"
-      :style="valueIndicatorStyle"
     >
       <span :class="style.valueIndicatorText">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}

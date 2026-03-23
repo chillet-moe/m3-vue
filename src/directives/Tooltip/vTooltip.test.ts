@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import vTooltip, { normalizeBinding } from './vTooltip';
-import { positionFallback, resolveFallbackPlacement } from './helpers';
+import { placementToTranslate, positionFallback, resolveFallbackPlacement } from './helpers';
 
 function createTrigger() {
   const el = document.createElement('button');
@@ -38,6 +38,14 @@ describe('normalizeBinding', () => {
     document.body.appendChild(tip);
 
     expect(normalizeBinding('#tip')).toMatchObject({ target: '#tip' });
+  });
+
+  it('normalizes offset from config bindings', () => {
+    expect(normalizeBinding({ content: 'Hello', offset: '1rem' })).toMatchObject({ content: 'Hello', offset: '1rem' });
+  });
+
+  it('uses 0.25rem as the default offset', () => {
+    expect(normalizeBinding('Hello')).toMatchObject({ offset: '0.25rem' });
   });
 });
 
@@ -79,6 +87,23 @@ describe('vTooltip directive', () => {
 
     expect(tip?.textContent).toBe('New content');
   });
+
+  it('applies placement-based offset as translate', () => {
+    const el = createTrigger();
+
+    vTooltip.mounted?.(el, {
+      value: {
+        content: 'Tooltip content',
+        placement: 'end',
+        offset: 'var(--space)',
+      },
+    } as never);
+
+    const tip = document.body.querySelector('.vtt-popover') as HTMLElement | null;
+
+    expect(tip).not.toBeNull();
+    expect(tip!.style.getPropertyValue('translate')).toBe('var(--space) 0');
+  });
 });
 
 describe('positionFallback', () => {
@@ -118,5 +143,19 @@ describe('positionFallback', () => {
 
     expect(tip.style.left).toBe('152px');
     expect(tip.style.top).toBe('82px');
+  });
+});
+
+describe('placementToTranslate', () => {
+  it('maps logical placements to translate directions', () => {
+    expect(placementToTranslate('top', '0.25rem')).toBe('0 calc(-1 * 0.25rem)');
+    expect(placementToTranslate('bottom', '0.25rem')).toBe('0 0.25rem');
+    expect(placementToTranslate('start', '0.25rem')).toBe('calc(-1 * 0.25rem) 0');
+    expect(placementToTranslate('end', '0.25rem')).toBe('0.25rem 0');
+  });
+
+  it('returns empty translate for zero offsets', () => {
+    expect(placementToTranslate('top', '0')).toBe('');
+    expect(placementToTranslate('top', '0px')).toBe('');
   });
 });

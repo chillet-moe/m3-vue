@@ -212,8 +212,6 @@
     opacity var(--md-duration-fast) ease,
     overlay var(--md-duration-fast) allow-discrete,
     display var(--md-duration-fast) allow-discrete;
-
-  --offset: 0.25rem;
 }
 
 .valueIndicator[popover]:popover-open {

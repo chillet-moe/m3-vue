@@ -74,8 +74,7 @@ describe('Slider', () => {
     expect(indicator!.dataset.vttOpen).toBe('1');
     expect(indicator!.style.left).toBe('198px');
     expect(indicator!.style.top).toBe('78px');
-    expect(indicator!.style.transform).toContain('translateY');
-    expect(indicator!.style.transform).toContain('--offset');
+    expect(indicator!.style.getPropertyValue('translate')).toBe('0 calc(-1 * 0.25rem)');
 
     input!.dispatchEvent(new Event('pointerleave', { bubbles: true }));
     await nextTick();
@@ -113,8 +112,7 @@ describe('Slider', () => {
     const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
 
     expect(indicator).not.toBeNull();
-    expect(indicator!.style.transform).toContain('translateX');
-    expect(indicator!.style.transform).toContain('var(--offset)');
+    expect(indicator!.style.getPropertyValue('translate')).toBe('0.25rem 0');
     app.unmount();
   });
 
@@ -146,8 +144,7 @@ describe('Slider', () => {
     const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
 
     expect(indicator).not.toBeNull();
-    expect(indicator!.style.transform).toContain('translateX');
-    expect(indicator!.style.transform).toContain('calc(-1 * var(--offset))');
+    expect(indicator!.style.getPropertyValue('translate')).toBe('calc(-1 * 0.25rem) 0');
 
     app.unmount();
   });

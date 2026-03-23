@@ -6,6 +6,7 @@ export type TooltipConfig = {
   target?: string | HTMLElement;
   content?: string;
   placement?: Placement;
+  offset?: string;
   interactive?: boolean;
   popoverType?: 'hint' | 'auto' | 'manual';
   openDelay?: number;
@@ -18,6 +19,7 @@ export type TooltipBindingValue = Exclude<VTooltipBinding, undefined>;
 
 export type NormalizedTooltipOptions = {
   placement: Placement;
+  offset: string;
   interactive: boolean;
   popoverType: 'hint' | 'auto' | 'manual';
   openDelay: number;

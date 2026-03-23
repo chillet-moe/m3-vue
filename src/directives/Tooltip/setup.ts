@@ -1,6 +1,7 @@
 import {
   ensureTipElement,
   normalizeBinding,
+  placementToTranslate,
   positionFallback,
   supportsAnchorPositioning,
   supportsPopover,
@@ -31,9 +32,20 @@ export function setupTooltip(
   const canAnchor = supportsAnchorPositioning();
   const anchorName = `--vtt-anchor-${tip.id}`;
   const animMs = opts.animDuration;
+  const applyOffsetCSS = () => {
+    const translate = placementToTranslate(opts.placement, opts.offset);
+
+    if (translate) {
+      tip.style.setProperty('translate', translate);
+      return;
+    }
+
+    tip.style.removeProperty('translate');
+  };
 
   anchor.style.setProperty('anchor-name', anchorName);
   tip.style.setProperty('position-anchor', anchorName);
+  applyOffsetCSS();
 
   function applyAnchorCSS() {
     tip.style.setProperty('position', 'fixed');
@@ -263,6 +275,7 @@ export function setupTooltip(
     tip.style.removeProperty('position-visibility');
     tip.style.removeProperty('left');
     tip.style.removeProperty('top');
+    tip.style.removeProperty('translate');
 
     if (created) {
       tip.remove();
@@ -308,6 +321,8 @@ export function setupTooltip(
     if (canAnchor) {
       tip.style.setProperty('position-area', placementToArea(opts.placement));
     }
+
+    applyOffsetCSS();
 
     updatePositionIfNeeded();
   };

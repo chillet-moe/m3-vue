@@ -10,6 +10,7 @@ function isEl(value: unknown): value is HTMLElement {
 export function normalizeBinding(binding: TooltipBindingValue): NormalizedTooltipOptions {
   const defaults: NormalizedTooltipOptions = {
     placement: 'top',
+    offset: '0.25rem',
     interactive: true,
     popoverType: 'hint',
     openDelay: 60,
@@ -32,6 +33,30 @@ export function normalizeBinding(binding: TooltipBindingValue): NormalizedToolti
   }
 
   return { ...defaults, ...binding };
+}
+
+function isZeroOffset(offset: string) {
+  return /^0(?:\.0+)?(?:[a-z%]+)?$/i.test(offset.trim());
+}
+
+export function placementToTranslate(placement: Placement, offset: string) {
+  if (isZeroOffset(offset)) {
+    return '';
+  }
+
+  if (placement === 'top') {
+    return `0 calc(-1 * ${offset})`;
+  }
+
+  if (placement === 'bottom') {
+    return `0 ${offset}`;
+  }
+
+  if (placement === 'left' || placement === 'start') {
+    return `calc(-1 * ${offset}) 0`;
+  }
+
+  return `${offset} 0`;
 }
 
 export function supportsAnchorPositioning() {
