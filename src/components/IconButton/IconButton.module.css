@@ -494,8 +494,8 @@ label.icon-button:has(input:disabled) {
   --md-comp-icon-button-default-trailing-space: var(--md-comp-icon-button-large-default-trailing-space);
   --md-comp-icon-button-narrow-leading-space: var(--md-comp-icon-button-large-narrow-leading-space);
   --md-comp-icon-button-narrow-trailing-space: var(--md-comp-icon-button-large-narrow-trailing-space);
-  --md-comp-icon-button-wide-leading_space: var(--md-comp-icon-button-large-wide-leading-space);
-  --md-comp-icon-button-wide-trailing_space: var(--md-comp-icon-button-large-wide-trailing-space);
+  --md-comp-icon-button-wide-leading-space: var(--md-comp-icon-button-large-wide-leading-space);
+  --md-comp-icon-button-wide-trailing-space: var(--md-comp-icon-button-large-wide-trailing-space);
 
   --md-comp-icon-button-container-shape-round: var(--md-comp-icon-button-large-container-shape-round);
   --md-comp-icon-button-container-shape-square: var(--md-comp-icon-button-large-container-shape-square);
@@ -514,8 +514,8 @@ label.icon-button:has(input:disabled) {
   --md-comp-icon-button-default-trailing-space: var(--md-comp-icon-button-xlarge-default-trailing-space);
   --md-comp-icon-button-narrow-leading-space: var(--md-comp-icon-button-xlarge-narrow-leading-space);
   --md-comp-icon-button-narrow-trailing-space: var(--md-comp-icon-button-xlarge-narrow-trailing-space);
-  --md-comp-icon-button-wide-leading_space: var(--md-comp-icon-button-xlarge-wide-leading-space);
-  --md-comp-icon-button-wide-trailing_space: var(--md-comp-icon-button-xlarge-wide-trailing-space);
+  --md-comp-icon-button-wide-leading-space: var(--md-comp-icon-button-xlarge-wide-leading-space);
+  --md-comp-icon-button-wide-trailing-space: var(--md-comp-icon-button-xlarge-wide-trailing-space);
 
   --md-comp-icon-button-container-shape-round: var(--md-comp-icon-button-xlarge-container-shape-round);
   --md-comp-icon-button-container-shape-square: var(--md-comp-icon-button-xlarge-container-shape-square);
