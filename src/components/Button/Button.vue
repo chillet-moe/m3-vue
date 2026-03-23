@@ -57,7 +57,50 @@ const tag = computed(() => {
   return 'button';
 });
 
+const isAnchor = computed(() => tag.value === 'a');
+const nativeDisabled = computed(() => (tag.value === 'button' ? disabled.value : undefined));
+// Anchors do not support the native disabled attribute, so mirror the state with ARIA and focus management.
+const ariaDisabled = computed(() => (disabled.value && isAnchor.value ? 'true' : undefined));
+const href = computed(() => (disabled.value && isAnchor.value ? undefined : props.href));
+const tabIndex = computed(() => (disabled.value && isAnchor.value ? -1 : undefined));
+const type = computed(() => (tag.value === 'button' ? 'button' : undefined));
+
 const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCapture } = usePressedState();
+
+const guardDisabledInteraction = (event: Event) => {
+  if (!disabled.value) {
+    return false;
+  }
+
+  // Guard all synthetic pressed-state handlers for label/anchor render paths.
+  event.preventDefault();
+  event.stopPropagation();
+  return true;
+};
+
+const handlePointerDown = (event: PointerEvent) => {
+  if (guardDisabledInteraction(event)) return;
+  onPointerDown(event);
+};
+
+const handlePointerUp = (event: PointerEvent) => {
+  if (guardDisabledInteraction(event)) return;
+  onPointerUp(event);
+};
+
+const handlePointerCancel = (event: PointerEvent) => {
+  if (guardDisabledInteraction(event)) return;
+  onPointerCancel(event);
+};
+
+const handleLostPointerCapture = (event: PointerEvent) => {
+  if (disabled.value) return;
+  onLostPointerCapture(event);
+};
+
+const handleClick = (event: MouseEvent) => {
+  guardDisabledInteraction(event);
+};
 
 const slots = defineSlots<{
   /** Slot for leading content, such as an icon.
@@ -84,12 +127,16 @@ const slots = defineSlots<{
     :data-shape="shape"
     :data-pressed="!disabled && pressed ? 'true' : 'false'"
     :data-toggleable="toggleable ? 'true' : 'false'"
-    :href="props.href ? props.href : null"
-    :disabled="disabled ? '' : undefined"
-    @pointerdown="onPointerDown"
-    @pointerup="onPointerUp"
-    @pointercancel="onPointerCancel"
-    @lostpointercapture="onLostPointerCapture"
+    :href="href"
+    :disabled="nativeDisabled"
+    :aria-disabled="ariaDisabled"
+    :tabindex="tabIndex"
+    :type="type"
+    @click="handleClick"
+    @pointerdown="handlePointerDown"
+    @pointerup="handlePointerUp"
+    @pointercancel="handlePointerCancel"
+    @lostpointercapture="handleLostPointerCapture"
   >
     <Icon
       v-if="props.leadingIcon"

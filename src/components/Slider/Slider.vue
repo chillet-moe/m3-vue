@@ -73,16 +73,16 @@ watch(value, (newVal) => {
 });
 
 const clampValue = (v: number) => {
-  if (lowerLimit && v < lowerLimit) {
-    return [true, lowerLimit];
-  } else if (upperLimit && v > upperLimit) {
-    return [true, upperLimit];
+  if (lowerLimit !== undefined && v < lowerLimit) {
+    return [true, lowerLimit] as const;
+  } else if (upperLimit !== undefined && v > upperLimit) {
+    return [true, upperLimit] as const;
   } else if (v < min) {
-    return [true, min];
+    return [true, min] as const;
   } else if (v > max) {
-    return [true, max];
+    return [true, max] as const;
   }
-  return [false, v];
+  return [false, v] as const;
 };
 
 const onInput = (e: Event) => {
@@ -93,7 +93,7 @@ const onInput = (e: Event) => {
   if (clamped) {
     e.preventDefault();
     e.stopPropagation();
-    valueDisplayed.value = clampedValue as number;
+    valueDisplayed.value = clampedValue;
   }
 };
 
@@ -117,17 +117,15 @@ const onWheel = (e: WheelEvent) => {
   }
 
   const newValue = valueDisplayed.value + dir * targetStep;
-  const [_, clampedValue] = clampValue(newValue);
-  value.value = clampedValue as number;
+  const [, clampedValue] = clampValue(newValue);
+  value.value = clampedValue;
 };
 
 const stopIndicatorsFiltered = computed(() => {
   if (!stopIndicators) {
     return undefined;
   }
-  return stopIndicators!.filter(
-    (stop) => stop >= min && stop <= max
-  );
+  return stopIndicators.filter((stop) => stop >= min && stop <= max);
 });
 </script>
 
@@ -183,7 +181,7 @@ const stopIndicatorsFiltered = computed(() => {
     </template>
 
     <div aria-hidden="true" :class="style.handle" />
-    <div aria-hidden="true" :class="style.valueIndicator" v-if="valueIndicator">
+    <div v-if="valueIndicator" aria-hidden="true" :class="style.valueIndicator">
       <span :class="style.valueIndicatorText">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}
       </span>
