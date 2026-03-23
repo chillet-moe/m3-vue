@@ -15,7 +15,6 @@ const meta = {
     vertical: false,
     disabled: false,
     valueIndicator: true,
-    valueIndicatorPlacement: 'top',
     formatter: {
       valueToText: (value: number) => `${value}`,
       textToValue: (text?: string) => (text ? Number(text) : undefined),
