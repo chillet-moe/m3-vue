@@ -53,9 +53,13 @@ const {
   upperLimit,
   wheelStep,
   valueIndicator = true,
-  valueIndicatorPlacement = 'top',
+  valueIndicatorPlacement: valueIndicatorPlacementProp,
   stopIndicators,
 } = defineProps<SliderProps>();
+
+const valueIndicatorPlacement = computed(() => {
+  return valueIndicatorPlacementProp ?? (vertical ? 'end' : 'top');
+});
 
 const value = defineModel<number>('value', { required: true });
 
@@ -140,54 +144,20 @@ const isValueIndicatorHovered = ref(false);
 const isValueIndicatorFocused = ref(false);
 const isValueIndicatorDragging = ref(false);
 
-type PhysicalPlacement = 'top' | 'bottom' | 'left' | 'right';
-
-const valueIndicatorPhysicalPlacement = computed<PhysicalPlacement>(() => {
-  if (valueIndicatorPlacement === 'start') {
-    if (vertical) {
-      return 'top';
-    }
-
-    return direction === 'rtl' ? 'right' : 'left';
-  }
-
-  if (valueIndicatorPlacement === 'end') {
-    if (vertical) {
-      return 'bottom';
-    }
-
-    return direction === 'rtl' ? 'left' : 'right';
-  }
-
-  if (valueIndicatorPlacement === 'bottom') {
-    if (vertical) {
-      return direction === 'rtl' ? 'right' : 'left';
-    }
-
-    return 'bottom';
-  }
-
-  if (vertical) {
-    return direction === 'rtl' ? 'left' : 'right';
-  }
-
-  return 'top';
-});
-
 const valueIndicatorStyle = computed(() => {
-  if (valueIndicatorPhysicalPlacement.value === 'top') {
+  if (valueIndicatorPlacement.value === 'top') {
     return {
       transform: `translateY(calc(-1 * var(--offset)))`,
     };
   }
 
-  if (valueIndicatorPhysicalPlacement.value === 'bottom') {
+  if (valueIndicatorPlacement.value === 'bottom') {
     return {
       transform: `translateY(var(--offset))`,
     };
   }
 
-  if (valueIndicatorPhysicalPlacement.value === 'left') {
+  if (valueIndicatorPlacement.value === 'start') {
     return {
       transform: `translateX(calc(-1 * var(--offset)))`,
     };
@@ -207,7 +177,7 @@ const valueIndicatorBinding = computed(() => {
 
   return {
     target,
-    placement: valueIndicatorPlacement,
+    placement: valueIndicatorPlacement.value,
     interactive: false,
     popoverType: 'manual' as const,
     openDelay: 0,
@@ -319,7 +289,7 @@ watch(
 );
 
 watch(
-  [valuePercent, () => valueIndicatorPlacement, () => vertical, () => direction],
+  [valuePercent, valueIndicatorPlacement, () => vertical, () => direction],
   async () => {
     await nextTick();
     valueIndicatorTooltip.value?.reposition();

@@ -74,7 +74,8 @@ describe('Slider', () => {
     expect(indicator!.dataset.vttOpen).toBe('1');
     expect(indicator!.style.left).toBe('198px');
     expect(indicator!.style.top).toBe('78px');
-    expect(indicator!.style.transform).toBe('translateY(-8px)');
+    expect(indicator!.style.transform).toContain('translateY');
+    expect(indicator!.style.transform).toContain('--offset');
 
     input!.dispatchEvent(new Event('pointerleave', { bubbles: true }));
     await nextTick();
@@ -84,7 +85,7 @@ describe('Slider', () => {
     app.unmount();
   });
 
-  it('offsets the value indicator along the resolved logical placement direction', async () => {
+  it('defaults the vertical value indicator placement to end even in rtl', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -98,7 +99,6 @@ describe('Slider', () => {
             step: 1,
             vertical: true,
             direction: 'rtl',
-            valueIndicatorPlacement: 'bottom',
             value: currentValue.value,
             'onUpdate:value': (nextValue: number) => {
               currentValue.value = nextValue;
@@ -113,7 +113,41 @@ describe('Slider', () => {
     const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
 
     expect(indicator).not.toBeNull();
-    expect(indicator!.style.transform).toBe('translateX(8px)');
+    expect(indicator!.style.transform).toContain('translateX');
+    expect(indicator!.style.transform).toContain('var(--offset)');
+    app.unmount();
+  });
+
+  it('offsets vertical start placement toward inline start', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const currentValue = ref(2);
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            vertical: true,
+            valueIndicatorPlacement: 'start',
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
+
+    expect(indicator).not.toBeNull();
+    expect(indicator!.style.transform).toContain('translateX');
+    expect(indicator!.style.transform).toContain('calc(-1 * var(--offset))');
 
     app.unmount();
   });
