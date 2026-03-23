@@ -32,6 +32,9 @@ export type State = {
   tip: HTMLElement;
   cleanup: () => void;
   update: (next: TooltipBindingValue) => void;
+  show: () => void;
+  hide: () => void;
+  reposition: () => void;
 };
 
 export type TooltipDirective = ObjectDirective<HTMLElement, VTooltipBinding>;

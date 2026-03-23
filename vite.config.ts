@@ -5,7 +5,7 @@ import pkg from './package.json';
 import { webTypesFromVueComponentMeta } from './scripts/web-types-gen';
 import path from 'node:path';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import copyFiles from "./scripts/copy-files";
+import copyFiles from './scripts/copy-files';
 
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +33,7 @@ export default defineConfig({
           src: 'src/styles/colors.module.css',
         },
       ],
-    })
+    }),
   ],
   resolve: {
     alias: {
@@ -77,13 +77,19 @@ export default defineConfig({
     projects: [
       {
         extends: true,
+        test: {
+          name: 'unit',
+          include: ['src/**/*.test.ts'],
+          exclude: ['src/**/*.stories.@(js|jsx|mjs|ts|tsx)', 'src/**/*.mdx'],
+        },
+      },
+      {
+        extends: true,
         plugins: [
-          // The plugin will run tests for the stories defined in your Storybook config
-          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
           storybookTest({
             configDir: path.join(dirname, '.storybook'),
           }),
-        ]
+        ],
       },
     ],
   },

@@ -196,30 +196,36 @@
 }
 
 .valueIndicator {
-  background-color: var(--md-comp-slider-inactive-track-color);
-
-  position: absolute;
+  position: fixed;
   z-index: 2;
+  inset: auto;
+  margin: 0;
+  border: none;
 
-  inset-inline-start: calc(
-    var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) + var(--handle-inset) - 1.5rem
-  );
-  inset-block-end: calc(100% + 1rem);
-
-  background: var(--md-comp-slider-value-indicator-background);
+  background-color: var(--md-comp-slider-value-indicator-background);
   color: var(--md-comp-slider-value-indicator-color);
   border-radius: calc(infinity * 1px);
 
-  transition: opacity var(--md-easing-fast);
-  opacity: 0;
-
   pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity var(--md-duration-fast) ease,
+    overlay var(--md-duration-fast) allow-discrete,
+    display var(--md-duration-fast) allow-discrete;
 }
 
-.slider:has(input:not([disabled]):active, input:not([disabled]):focus-visible, input:not([disabled]):hover) {
-  .valueIndicator {
-    opacity: 1;
+.valueIndicator[popover]:popover-open {
+  opacity: 1;
+}
+
+@starting-style {
+  .valueIndicator[popover]:popover-open {
+    opacity: 0;
   }
+}
+
+.valueIndicator[data-vtt-fallback='1'][data-vtt-open='1'] {
+  opacity: 1;
 }
 
 .valueIndicatorText {

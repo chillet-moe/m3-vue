@@ -1,6 +1,7 @@
 import type { NormalizedTooltipOptions, Placement, TooltipBindingValue } from './types';
 
 let uid = 0;
+type PhysicalPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 function isEl(value: unknown): value is HTMLElement {
   return Boolean(value) && typeof value === 'object' && (value as Node).nodeType === 1;
@@ -52,17 +53,49 @@ export function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-export function positionFallback(tip: HTMLElement, trigger: HTMLElement, placement: Placement) {
+export function resolveFallbackPlacement(anchor: HTMLElement, placement: Placement): PhysicalPlacement {
+  if (placement === 'left' || placement === 'right') {
+    return placement;
+  }
+
+  const { direction, writingMode } = window.getComputedStyle(anchor);
+  const isVertical = writingMode.startsWith('vertical') || writingMode.startsWith('sideways');
+
+  if (!isVertical) {
+    const inlineStart = direction === 'rtl' ? 'right' : 'left';
+    const inlineEnd = direction === 'rtl' ? 'left' : 'right';
+
+    if (placement === 'start') return inlineStart;
+    if (placement === 'end') return inlineEnd;
+    if (placement === 'bottom') return 'bottom';
+    return 'top';
+  }
+
+  let blockStart: PhysicalPlacement = writingMode.endsWith('-lr') ? 'left' : 'right';
+  let blockEnd: PhysicalPlacement = writingMode.endsWith('-lr') ? 'right' : 'left';
+
+  if (direction === 'rtl') {
+    [blockStart, blockEnd] = [blockEnd, blockStart];
+  }
+
+  if (placement === 'start') return 'top';
+  if (placement === 'end') return 'bottom';
+  if (placement === 'bottom') return blockEnd;
+  return blockStart;
+}
+
+export function positionFallback(tip: HTMLElement, anchor: HTMLElement, placement: Placement) {
   const gap = 10;
   const pad = 8;
 
-  const r = trigger.getBoundingClientRect();
+  const r = anchor.getBoundingClientRect();
   const tr = tip.getBoundingClientRect();
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
+  const resolvedPlacement = resolveFallbackPlacement(anchor, placement);
 
-  const tryPlace = (p: Placement) => {
+  const tryPlace = (p: PhysicalPlacement) => {
     let x = 0;
     let y = 0;
 
@@ -86,8 +119,7 @@ export function positionFallback(tip: HTMLElement, trigger: HTMLElement, placeme
     };
   };
 
-  // If the preferred side would clip, flip once on the primary axis.
-  let nextPlacement = placement;
+  let nextPlacement = resolvedPlacement;
   if (nextPlacement === 'top' && r.top - tr.height - gap < pad) nextPlacement = 'bottom';
   else if (nextPlacement === 'bottom' && r.bottom + tr.height + gap > vh - pad) nextPlacement = 'top';
   else if (nextPlacement === 'left' && r.left - tr.width - gap < pad) nextPlacement = 'right';
@@ -117,7 +149,6 @@ export function ensureTipElement(opts: NormalizedTooltipOptions, trigger: HTMLEl
 
   tip.classList.add('vtt-popover');
 
-  // Rich / interactive tooltip content behaves more like a lightweight popover than a pure ARIA tooltip.
   if (opts.interactive) {
     tip.setAttribute('role', 'dialog');
     trigger.setAttribute('aria-haspopup', 'dialog');

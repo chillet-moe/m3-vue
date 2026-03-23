@@ -15,17 +15,24 @@ function placementToArea(p: Placement) {
   return 'block-start';
 }
 
-export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue): State {
+export function setupTooltip(
+  trigger: HTMLElement,
+  binding: TooltipBindingValue,
+  options: {
+    anchor?: HTMLElement;
+    manual?: boolean;
+  } = {},
+): State {
   let opts = normalizeBinding(binding);
   let { tip, created } = ensureTipElement(opts, trigger);
 
+  const anchor = options.anchor ?? trigger;
   const canPopover = supportsPopover(tip);
   const canAnchor = supportsAnchorPositioning();
   const anchorName = `--vtt-anchor-${tip.id}`;
   const animMs = opts.animDuration;
 
-  // Anchor Positioning gives us native placement; the fallback path below handles older browsers.
-  trigger.style.setProperty('anchor-name', anchorName);
+  anchor.style.setProperty('anchor-name', anchorName);
   tip.style.setProperty('position-anchor', anchorName);
 
   function applyAnchorCSS() {
@@ -70,7 +77,7 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
 
   const updatePositionIfNeeded = () => {
     if (!isOpen) return;
-    if (!canAnchor) positionFallback(tip, trigger, opts.placement);
+    if (!canAnchor) positionFallback(tip, anchor, opts.placement);
   };
 
   const openNow = () => {
@@ -81,12 +88,10 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
     setExpanded(true);
 
     if (canPopover) {
-      // Keep the element invisible until the browser has applied layout and popover state.
       tip.style.visibility = 'hidden';
       try {
         (tip as HTMLElement & { showPopover: () => void }).showPopover();
       } catch {
-        // Ignore browsers with partially implemented popover APIs.
       }
       requestAnimationFrame(() => {
         updatePositionIfNeeded();
@@ -114,7 +119,6 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
       try {
         (tip as HTMLElement & { hidePopover: () => void }).hidePopover();
       } catch {
-        // Ignore browsers with partially implemented popover APIs.
       }
       return;
     }
@@ -140,7 +144,6 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
     }, delay);
   };
 
-  // Touch devices use long press to open instead of hover, so close when pointerdown happens outside.
   const onDocPointerDown = (ev: Event) => {
     const target = ev.target as Node | null;
     if (!target) return;
@@ -179,7 +182,6 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
 
     cancelLongPress();
     longPressTimer = window.setTimeout(() => {
-      // Ignore the synthetic click that some browsers dispatch after a successful long press.
       suppressClickUntil = Date.now() + 500;
       openNow();
     }, opts.longpressDelay);
@@ -210,29 +212,35 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
   const onScrollOrResize = () => updatePositionIfNeeded();
 
   const ac = new AbortController();
-  const on = (target: EventTarget, type: string, fn: EventListenerOrEventListenerObject, opt?: AddEventListenerOptions) =>
-    target.addEventListener(type, fn, { ...opt, signal: ac.signal });
+  const on = <T extends Event>(
+    target: EventTarget,
+    type: string,
+    fn: (event: T) => void,
+    opt?: AddEventListenerOptions,
+  ) => target.addEventListener(type, fn as EventListener, { ...opt, signal: ac.signal });
 
-  on(trigger, 'pointerenter', onTriggerEnter);
-  on(trigger, 'pointerleave', onTriggerLeave);
-  on(trigger, 'focusin', onFocusIn);
-  on(trigger, 'focusout', onFocusOut);
-  on(trigger, 'keydown', onKeyDown);
-  on(trigger, 'pointerdown', onPointerDown);
-  on(trigger, 'pointermove', onPointerMove);
-  on(trigger, 'pointerup', onPointerUpCancel);
-  on(trigger, 'pointercancel', onPointerUpCancel);
-  on(trigger, 'click', onClick);
-  on(trigger, 'contextmenu', onContextMenu);
+  if (!options.manual) {
+    on(trigger, 'pointerenter', onTriggerEnter);
+    on(trigger, 'pointerleave', onTriggerLeave);
+    on(trigger, 'focusin', onFocusIn);
+    on(trigger, 'focusout', onFocusOut);
+    on(trigger, 'keydown', onKeyDown);
+    on(trigger, 'pointerdown', onPointerDown);
+    on(trigger, 'pointermove', onPointerMove);
+    on(trigger, 'pointerup', onPointerUpCancel);
+    on(trigger, 'pointercancel', onPointerUpCancel);
+    on(trigger, 'click', onClick);
+    on(trigger, 'contextmenu', onContextMenu);
 
-  // Keep the tooltip open while the pointer/focus moves into rich interactive content.
-  on(tip, 'pointerenter', onTipEnter);
-  on(tip, 'pointerleave', onTipLeave);
-  on(tip, 'focusin', onFocusIn);
-  on(tip, 'focusout', onFocusOut);
-  on(tip, 'keydown', onKeyDown);
+    on(tip, 'pointerenter', onTipEnter);
+    on(tip, 'pointerleave', onTipLeave);
+    on(tip, 'focusin', onFocusIn);
+    on(tip, 'focusout', onFocusOut);
+    on(tip, 'keydown', onKeyDown);
 
-  on(document, 'pointerdown', onDocPointerDown, { capture: true });
+    on(document, 'pointerdown', onDocPointerDown, { capture: true });
+  }
+
   on(window, 'scroll', onScrollOrResize, { passive: true });
   on(window, 'resize', onScrollOrResize);
 
@@ -247,7 +255,7 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
     trigger.removeAttribute('aria-controls');
     trigger.removeAttribute('aria-expanded');
     trigger.removeAttribute('aria-haspopup');
-    trigger.style.removeProperty('anchor-name');
+    anchor.style.removeProperty('anchor-name');
 
     tip.style.removeProperty('position-anchor');
     tip.style.removeProperty('position-area');
@@ -272,13 +280,15 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
 
     opts = nextOpts;
 
-    // Rebuild when the host switches between generated content and an external tooltip target.
     if (targetChanged || (created && contentChanged)) {
       cleanup();
-      const rebuilt = setupTooltip(trigger, next);
+      const rebuilt = setupTooltip(trigger, next, options);
       state.tip = rebuilt.tip;
       state.cleanup = rebuilt.cleanup;
       state.update = rebuilt.update;
+      state.show = rebuilt.show;
+      state.hide = rebuilt.hide;
+      state.reposition = rebuilt.reposition;
       return;
     }
 
@@ -306,6 +316,9 @@ export function setupTooltip(trigger: HTMLElement, binding: TooltipBindingValue)
     tip,
     cleanup,
     update,
+    show: openNow,
+    hide: closeNow,
+    reposition: updatePositionIfNeeded,
   };
 
   return state;

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import style from './Slider.module.css';
 import { useKeyModifier } from '@vueuse/core';
+import { setupTooltip } from '@/directives/Tooltip/setup';
 
 export type SliderProps = {
   /** Whether the slider is vertical. */
@@ -32,6 +33,7 @@ export type SliderProps = {
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
   disabled?: boolean;
   valueIndicator?: boolean;
+  valueIndicatorPlacement?: 'top' | 'bottom' | 'start' | 'end';
   formatter?: {
     valueToText: (value: number) => string;
     textToValue: (text?: string) => number | undefined;
@@ -51,6 +53,7 @@ const {
   upperLimit,
   wheelStep,
   valueIndicator = true,
+  valueIndicatorPlacement = 'top',
   stopIndicators,
 } = defineProps<SliderProps>();
 
@@ -127,6 +130,155 @@ const stopIndicatorsFiltered = computed(() => {
   }
   return stopIndicators.filter((stop) => stop >= min && stop <= max);
 });
+
+const inputRef = useTemplateRef<HTMLInputElement>('input');
+const handleRef = useTemplateRef<HTMLDivElement>('handle');
+const valueIndicatorRef = useTemplateRef<HTMLDivElement>('valueIndicator');
+const valueIndicatorTooltip = shallowRef<ReturnType<typeof setupTooltip> | null>(null);
+
+const isValueIndicatorHovered = ref(false);
+const isValueIndicatorFocused = ref(false);
+const isValueIndicatorDragging = ref(false);
+
+const valueIndicatorBinding = computed(() => {
+  const target = valueIndicatorRef.value;
+
+  if (!valueIndicator || !target) {
+    return undefined;
+  }
+
+  return {
+    target,
+    placement: valueIndicatorPlacement,
+    interactive: false,
+    popoverType: 'manual' as const,
+    openDelay: 0,
+    closeDelay: 0,
+    longpressDelay: 0,
+  };
+});
+
+const cleanupValueIndicatorTooltip = () => {
+  valueIndicatorTooltip.value?.cleanup();
+  valueIndicatorTooltip.value = null;
+};
+
+const syncValueIndicatorVisibility = () => {
+  const tooltip = valueIndicatorTooltip.value;
+  if (!tooltip) {
+    return;
+  }
+
+  if (disabled || !valueIndicator) {
+    tooltip.hide();
+    return;
+  }
+
+  if (isValueIndicatorHovered.value || isValueIndicatorFocused.value || isValueIndicatorDragging.value) {
+    tooltip.show();
+    return;
+  }
+
+  tooltip.hide();
+};
+
+const rebuildValueIndicatorTooltip = () => {
+  cleanupValueIndicatorTooltip();
+
+  const trigger = inputRef.value;
+  const anchor = handleRef.value;
+  const binding = valueIndicatorBinding.value;
+
+  if (!trigger || !anchor || !binding) {
+    return;
+  }
+
+  valueIndicatorTooltip.value = setupTooltip(trigger, binding, {
+    anchor,
+    manual: true,
+  });
+
+  syncValueIndicatorVisibility();
+};
+
+const stopValueIndicatorDragging = () => {
+  if (!isValueIndicatorDragging.value) {
+    return;
+  }
+
+  isValueIndicatorDragging.value = false;
+};
+
+const onValueIndicatorPointerEnter = () => {
+  if (disabled) {
+    return;
+  }
+
+  isValueIndicatorHovered.value = true;
+};
+
+const onValueIndicatorPointerLeave = () => {
+  isValueIndicatorHovered.value = false;
+};
+
+const onValueIndicatorFocus = () => {
+  if (disabled) {
+    return;
+  }
+
+  isValueIndicatorFocused.value = true;
+};
+
+const onValueIndicatorBlur = () => {
+  isValueIndicatorFocused.value = false;
+};
+
+const onValueIndicatorPointerDown = () => {
+  if (disabled) {
+    return;
+  }
+
+  isValueIndicatorDragging.value = true;
+};
+
+watch([inputRef, handleRef, valueIndicatorRef, () => valueIndicator], rebuildValueIndicatorTooltip, {
+  immediate: true,
+  flush: 'post',
+});
+
+watch(valueIndicatorBinding, (binding) => {
+  if (!binding || !valueIndicatorTooltip.value) {
+    return;
+  }
+
+  valueIndicatorTooltip.value.update(binding);
+}, { flush: 'post' });
+
+watch(
+  [isValueIndicatorHovered, isValueIndicatorFocused, isValueIndicatorDragging, () => disabled, () => valueIndicator],
+  syncValueIndicatorVisibility,
+  { immediate: true },
+);
+
+watch(
+  [valuePercent, () => valueIndicatorPlacement, () => vertical, () => direction],
+  async () => {
+    await nextTick();
+    valueIndicatorTooltip.value?.reposition();
+  },
+  { flush: 'post' },
+);
+
+onMounted(() => {
+  window.addEventListener('pointerup', stopValueIndicatorDragging);
+  window.addEventListener('pointercancel', stopValueIndicatorDragging);
+});
+
+onBeforeUnmount(() => {
+  cleanupValueIndicatorTooltip();
+  window.removeEventListener('pointerup', stopValueIndicatorDragging);
+  window.removeEventListener('pointercancel', stopValueIndicatorDragging);
+});
 </script>
 
 <template>
@@ -143,6 +295,7 @@ const stopIndicatorsFiltered = computed(() => {
     }"
   >
     <input
+      ref="input"
       type="range"
       :min="min"
       :max="max"
@@ -152,6 +305,11 @@ const stopIndicatorsFiltered = computed(() => {
       @input="onInput"
       @change="onChange"
       @wheel.prevent="onWheel"
+      @pointerenter="onValueIndicatorPointerEnter"
+      @pointerleave="onValueIndicatorPointerLeave"
+      @pointerdown="onValueIndicatorPointerDown"
+      @focus="onValueIndicatorFocus"
+      @blur="onValueIndicatorBlur"
     />
     <div aria-hidden="true" :class="style.trackActive" />
     <div aria-hidden="true" :class="style.trackInactive" />
@@ -180,8 +338,8 @@ const stopIndicatorsFiltered = computed(() => {
       </div>
     </template>
 
-    <div aria-hidden="true" :class="style.handle" />
-    <div v-if="valueIndicator" aria-hidden="true" :class="style.valueIndicator">
+    <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" :class="style.handle" />
+    <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" :class="style.valueIndicator">
       <span :class="style.valueIndicatorText">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}
       </span>

@@ -1,4 +1,4 @@
-import type { Meta, StoryFn, StoryObj } from '@storybook/vue3-vite';
+import type { Meta, StoryFn } from '@storybook/vue3-vite';
 import Slider from './Slider.vue';
 import type { SliderProps } from '@/components/Slider/Slider.vue';
 import { getArgs } from '@/utils/storybook.ts';
@@ -15,6 +15,7 @@ const meta = {
     vertical: false,
     disabled: false,
     valueIndicator: true,
+    valueIndicatorPlacement: 'top',
     formatter: {
       valueToText: (value: number) => `${value}`,
       textToValue: (text?: string) => (text ? Number(text) : undefined),
@@ -23,15 +24,14 @@ const meta = {
 } satisfies Meta<typeof Slider>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 interface SliderArgs extends SliderProps {
   value: number;
-  enum?: 'size' | 'direction';
+  enum?: 'size' | 'direction' | 'valueIndicatorPlacement';
 }
 
 interface SliderEnumArgs extends SliderArgs {
-  enum: 'size' | 'direction';
+  enum: 'size' | 'direction' | 'valueIndicatorPlacement';
 }
 
 const BaseTemplate: StoryFn<SliderArgs> = (args: SliderArgs) => ({
@@ -81,7 +81,7 @@ const VerticalTemplate: StoryFn<SliderEnumArgs> = (args: SliderEnumArgs, { argTy
   `,
 });
 
-export const Default: Story = BaseTemplate.bind({});
+export const Default = BaseTemplate.bind({});
 
 export const Directions = EnumTemplate.bind({});
 Directions.args = { enum: 'direction' };
@@ -91,6 +91,9 @@ Vertical.args = { enum: 'direction', vertical: true };
 
 export const Sizes = EnumTemplate.bind({});
 Sizes.args = { enum: 'size' };
+
+export const ValueIndicatorPlacements = EnumTemplate.bind({});
+ValueIndicatorPlacements.args = { enum: 'valueIndicatorPlacement' };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = { disabled: true };
