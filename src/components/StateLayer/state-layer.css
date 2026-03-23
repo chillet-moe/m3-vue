@@ -30,14 +30,14 @@ label:has(> input:disabled).state-layer::after {
 
 .state-layer:hover::after,
 .state-layer:active::after {
-  opacity: 0.08;
+  opacity: var(--md-sys-state-hover-state-layer-opacity);
 }
 
 :focus-visible.state-layer::after,
 input:focus-visible + .state-layer::after,
 label:has(> input:focus-visible).state-layer::after,
 html:not(.js) :active.state-layer::after {
-  opacity: 0.12;
+  opacity: var(--md-sys-state-focus-state-layer-opacity);
 }
 
 @property --r {
@@ -70,7 +70,7 @@ html:not(.js) :active.state-layer::after {
     var(--md-state-layer-color) var(--r),
     transparent calc(var(--r) + 10%)
   );
-  opacity: 0.08;
+  opacity: var(--md-sys-state-hover-state-layer-opacity);
   transition: opacity var(--md-easing-slow-spatial);
   animation:
     ripple-expand var(--duration) cubic-bezier(0.4, 0, 0.2, 1) forwards,
