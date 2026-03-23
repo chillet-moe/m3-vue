@@ -140,6 +140,64 @@ const isValueIndicatorHovered = ref(false);
 const isValueIndicatorFocused = ref(false);
 const isValueIndicatorDragging = ref(false);
 
+type PhysicalPlacement = 'top' | 'bottom' | 'left' | 'right';
+
+const valueIndicatorPhysicalPlacement = computed<PhysicalPlacement>(() => {
+  if (valueIndicatorPlacement === 'start') {
+    if (vertical) {
+      return 'top';
+    }
+
+    return direction === 'rtl' ? 'right' : 'left';
+  }
+
+  if (valueIndicatorPlacement === 'end') {
+    if (vertical) {
+      return 'bottom';
+    }
+
+    return direction === 'rtl' ? 'left' : 'right';
+  }
+
+  if (valueIndicatorPlacement === 'bottom') {
+    if (vertical) {
+      return direction === 'rtl' ? 'right' : 'left';
+    }
+
+    return 'bottom';
+  }
+
+  if (vertical) {
+    return direction === 'rtl' ? 'left' : 'right';
+  }
+
+  return 'top';
+});
+
+const valueIndicatorStyle = computed(() => {
+  if (valueIndicatorPhysicalPlacement.value === 'top') {
+    return {
+      transform: `translateY(calc(-1 * var(--offset)))`,
+    };
+  }
+
+  if (valueIndicatorPhysicalPlacement.value === 'bottom') {
+    return {
+      transform: `translateY(var(--offset))`,
+    };
+  }
+
+  if (valueIndicatorPhysicalPlacement.value === 'left') {
+    return {
+      transform: `translateX(calc(-1 * var(--offset)))`,
+    };
+  }
+
+  return {
+    transform: `translateX(var(--offset))`,
+  };
+});
+
 const valueIndicatorBinding = computed(() => {
   const target = valueIndicatorRef.value;
 
@@ -339,7 +397,13 @@ onBeforeUnmount(() => {
     </template>
 
     <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" :class="style.handle" />
-    <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" :class="style.valueIndicator">
+    <div
+      v-if="valueIndicator"
+      ref="valueIndicator"
+      data-value-indicator="true"
+      :class="style.valueIndicator"
+      :style="valueIndicatorStyle"
+    >
       <span :class="style.valueIndicatorText">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}
       </span>

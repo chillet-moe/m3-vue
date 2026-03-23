@@ -53,9 +53,9 @@
 }
 
 .slider[aria-disabled='true'] {
-  --md-comp-slider-active-track-color: rgb(from var(--md-sys-color-on-surface) r g b /  0.38);
-  --md-comp-slider-inactive-track-color: rgb(from var(--md-sys-color-on-surface) r g b /  0.12);
-  --md-comp-slider-handle-color: rgb(from var(--md-sys-color-on-surface) r g b /  0.38);
+  --md-comp-slider-active-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
+  --md-comp-slider-inactive-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.12);
+  --md-comp-slider-handle-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
 }
 
 .horizontal {
@@ -212,6 +212,8 @@
     opacity var(--md-duration-fast) ease,
     overlay var(--md-duration-fast) allow-discrete,
     display var(--md-duration-fast) allow-discrete;
+
+  --offset: 0.25rem;
 }
 
 .valueIndicator[popover]:popover-open {

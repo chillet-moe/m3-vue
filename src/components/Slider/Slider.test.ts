@@ -74,11 +74,46 @@ describe('Slider', () => {
     expect(indicator!.dataset.vttOpen).toBe('1');
     expect(indicator!.style.left).toBe('198px');
     expect(indicator!.style.top).toBe('78px');
+    expect(indicator!.style.transform).toBe('translateY(-8px)');
 
     input!.dispatchEvent(new Event('pointerleave', { bubbles: true }));
     await nextTick();
 
     expect(indicator!.dataset.vttOpen).toBe('0');
+
+    app.unmount();
+  });
+
+  it('offsets the value indicator along the resolved logical placement direction', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const currentValue = ref(2);
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            vertical: true,
+            direction: 'rtl',
+            valueIndicatorPlacement: 'bottom',
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
+
+    expect(indicator).not.toBeNull();
+    expect(indicator!.style.transform).toBe('translateX(8px)');
 
     app.unmount();
   });
