@@ -1,0 +1,109 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-split-button) {
+    --md-comp-split-button-xsmall-container-height: 2rem;
+    --md-comp-split-button-xsmall-between-space: 0.125rem;
+    --md-comp-split-button-xsmall-container-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-split-button-xsmall-inner-corner-corner-size: var(
+      --md-sys-shape-corner-value-extra-small
+    );
+    --md-comp-split-button-xsmall-outer-corner-corner-size: 9999rem;
+    --md-comp-split-button-xsmall-leading-button-leading-space: 0.75rem;
+    --md-comp-split-button-xsmall-leading-button-trailing-space: 0.625rem;
+    --md-comp-split-button-xsmall-trailing-button-icon-size: 1.375rem;
+    --md-comp-split-button-xsmall-trailing-button-leading-space: 0.8125rem;
+    --md-comp-split-button-xsmall-trailing-button-trailing-space: 0.8125rem;
+    --md-comp-split-button-xsmall-inner-corner-hovered-corner-size: var(
+      --md-sys-shape-corner-value-small
+    );
+    --md-comp-split-button-xsmall-inner-corner-pressed-corner-size: var(
+      --md-sys-shape-corner-value-small
+    );
+    --md-comp-split-button-xsmall-trailing-button-inner-corner-selected-corner-size: 9999rem;
+    --md-comp-split-button-small-container-height: 2.5rem;
+    --md-comp-split-button-small-between-space: 0.125rem;
+    --md-comp-split-button-small-container-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-split-button-small-inner-corner-corner-size: var(
+      --md-sys-shape-corner-value-extra-small
+    );
+    --md-comp-split-button-small-leading-button-leading-space: 1rem;
+    --md-comp-split-button-small-leading-button-trailing-space: 0.75rem;
+    --md-comp-split-button-small-trailing-button-icon-size: 1.375rem;
+    --md-comp-split-button-small-trailing-button-leading-space: 0.8125rem;
+    --md-comp-split-button-small-trailing-button-trailing-space: 0.8125rem;
+    --md-comp-split-button-small-inner-corner-hovered-corner-size: var(
+      --md-sys-shape-corner-value-medium
+    );
+    --md-comp-split-button-small-inner-corner-pressed-corner-size: var(
+      --md-sys-shape-corner-value-medium
+    );
+    --md-comp-split-button-small-trailing-button-inner-corner-selected-corner-size: 9999rem;
+    --md-comp-split-button-medium-container-height: 3.5rem;
+    --md-comp-split-button-medium-between-space: 0.125rem;
+    --md-comp-split-button-medium-container-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-split-button-medium-inner-corner-corner-size: var(
+      --md-sys-shape-corner-value-extra-small
+    );
+    --md-comp-split-button-medium-leading-button-leading-space: 1.5rem;
+    --md-comp-split-button-medium-leading-button-trailing-space: 1.5rem;
+    --md-comp-split-button-medium-trailing-button-icon-size: 1.625rem;
+    --md-comp-split-button-medium-trailing-button-leading-space: 0.9375rem;
+    --md-comp-split-button-medium-trailing-button-trailing-space: 0.9375rem;
+    --md-comp-split-button-medium-inner-corner-hovered-corner-size: var(
+      --md-sys-shape-corner-value-medium
+    );
+    --md-comp-split-button-medium-inner-corner-pressed-corner-size: var(
+      --md-sys-shape-corner-value-medium
+    );
+    --md-comp-split-button-medium-trailing-button-inner-corner-selected-corner-size: 9999rem;
+    --md-comp-split-button-large-container-height: 6rem;
+    --md-comp-split-button-large-between-space: 0.125rem;
+    --md-comp-split-button-large-container-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-split-button-large-inner-corner-corner-size: var(
+      --md-sys-shape-corner-value-small
+    );
+    --md-comp-split-button-large-leading-button-leading-space: 3rem;
+    --md-comp-split-button-large-leading-button-trailing-space: 3rem;
+    --md-comp-split-button-large-trailing-button-icon-size: 2.375rem;
+    --md-comp-split-button-large-trailing-button-leading-space: 1.8125rem;
+    --md-comp-split-button-large-trailing-button-trailing-space: 1.8125rem;
+    --md-comp-split-button-large-inner-corner-hovered-corner-size: var(
+      --md-sys-shape-corner-value-large-increased
+    );
+    --md-comp-split-button-large-inner-corner-pressed-corner-size: var(
+      --md-sys-shape-corner-value-large-increased
+    );
+    --md-comp-split-button-large-trailing-button-inner-corner-selected-corner-size: 9999rem;
+    --md-comp-split-button-xlarge-container-height: 8.5rem;
+    --md-comp-split-button-xlarge-between-space: 0.125rem;
+    --md-comp-split-button-xlarge-container-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-split-button-xlarge-inner-corner-corner-size: var(
+      --md-sys-shape-corner-value-medium
+    );
+    --md-comp-split-button-xlarge-leading-button-leading-space: 4rem;
+    --md-comp-split-button-xlarge-leading-button-trailing-space: 4rem;
+    --md-comp-split-button-xlarge-trailing-button-icon-size: 3.125rem;
+    --md-comp-split-button-xlarge-trailing-button-leading-space: 2.6875rem;
+    --md-comp-split-button-xlarge-trailing-button-trailing-space: 2.6875rem;
+    --md-comp-split-button-xlarge-inner-corner-hovered-corner-size: var(
+      --md-sys-shape-corner-value-large-increased
+    );
+    --md-comp-split-button-xlarge-inner-corner-pressed-corner-size: var(
+      --md-sys-shape-corner-value-large-increased
+    );
+    --md-comp-split-button-xlarge-trailing-button-inner-corner-selected-corner-size: 9999rem;
+  }
+}

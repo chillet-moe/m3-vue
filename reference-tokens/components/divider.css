@@ -1,0 +1,10 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-divider) {
+    --md-comp-divider-thickness: 0.0625rem;
+    --md-comp-divider-color: var(--md-sys-color-outline-variant);
+  }
+}

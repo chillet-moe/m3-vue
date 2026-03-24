@@ -1,0 +1,31 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-badge) {
+    --md-comp-badge-color: var(--md-sys-color-error);
+    --md-comp-badge-shape: var(--md-sys-shape-corner-full);
+    --md-comp-badge-size: 0.375rem;
+    --md-comp-badge-large-color: var(--md-sys-color-error);
+    --md-comp-badge-large-shape: var(--md-sys-shape-corner-full);
+    --md-comp-badge-large-size: 1rem;
+    --md-comp-badge-large-label-text-color: var(--md-sys-color-on-error);
+    --md-comp-badge-large-label-text-type: var(--md-sys-typescale-label-small);
+    --md-comp-badge-large-label-text-font: var(
+      --md-sys-typescale-label-small-font
+    );
+    --md-comp-badge-large-label-text-line-height: var(
+      --md-sys-typescale-label-small-line-height
+    );
+    --md-comp-badge-large-label-text-size: var(
+      --md-sys-typescale-label-small-size
+    );
+    --md-comp-badge-large-label-text-tracking: var(
+      --md-sys-typescale-label-small-tracking
+    );
+    --md-comp-badge-large-label-text-weight: var(
+      --md-sys-typescale-label-small-weight
+    );
+  }
+}

@@ -1,0 +1,35 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-bottom-sheet) {
+    --md-comp-sheet-bottom-docked-container-color: var(
+      --md-sys-color-surface-container-low
+    );
+    --md-comp-sheet-bottom-docked-modal-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-sheet-bottom-docked-standard-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-sheet-bottom-docked-container-shape: var(
+      --md-sys-shape-corner-extra-large-top
+    );
+    --md-comp-sheet-bottom-docked-minimized-container-shape: var(
+      --md-sys-shape-corner-none
+    );
+    --md-comp-sheet-bottom-docked-drag-handle-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-sheet-bottom-docked-drag-handle-width: 2rem;
+    --md-comp-sheet-bottom-docked-drag-handle-height: 0.25rem;
+    --md-comp-sheet-bottom-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-sheet-bottom-focus-indicator-thickness: var(
+      --md-sys-state-focus-indicator-thickness
+    );
+    --md-comp-sheet-bottom-focus-indicator-outline-offset: var(
+      --md-sys-state-focus-indicator-outer-offset
+    );
+  }
+}

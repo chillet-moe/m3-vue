@@ -1,0 +1,843 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-chip) {
+    --md-comp-assist-chip-container-shape: var(--md-sys-shape-corner-small);
+    --md-comp-assist-chip-container-height: 2rem;
+    --md-comp-assist-chip-flat-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-assist-chip-flat-outline-color: var(
+      --md-sys-color-outline-variant
+    );
+    --md-comp-assist-chip-flat-outline-width: 0.0625rem;
+    --md-comp-assist-chip-elevated-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-assist-chip-elevated-container-color: var(
+      --md-sys-color-surface-container-low
+    );
+    --md-comp-assist-chip-elevated-container-shadow-color: var(
+      --md-sys-color-shadow
+    );
+    --md-comp-assist-chip-label-text-font: var(
+      --md-sys-typescale-label-large-font
+    );
+    --md-comp-assist-chip-label-text-line-height: var(
+      --md-sys-typescale-label-large-line-height
+    );
+    --md-comp-assist-chip-label-text-size: var(
+      --md-sys-typescale-label-large-size
+    );
+    --md-comp-assist-chip-label-text-weight: var(
+      --md-sys-typescale-label-large-weight
+    );
+    --md-comp-assist-chip-label-text-tracking: var(
+      --md-sys-typescale-label-large-tracking
+    );
+    --md-comp-assist-chip-label-text-type: var(--md-sys-typescale-label-large);
+    --md-comp-assist-chip-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-assist-chip-with-icon-icon-size: 1.125rem;
+    --md-comp-assist-chip-with-icon-icon-color: var(--md-sys-color-primary);
+    --md-comp-assist-chip-flat-disabled-outline-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-flat-disabled-outline-opacity: 0.12;
+    --md-comp-assist-chip-elevated-disabled-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-assist-chip-elevated-disabled-container-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-elevated-disabled-container-opacity: 0.12;
+    --md-comp-assist-chip-disabled-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-disabled-label-text-opacity: 0.38;
+    --md-comp-assist-chip-with-icon-disabled-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-with-icon-disabled-icon-opacity: 0.38;
+    --md-comp-chip-assist-elevated-hover-container-elevation: var(
+      --md-sys-elevation-level2
+    );
+    --md-comp-assist-chip-hover-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-hover-state-layer-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-assist-chip-with-icon-hover-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-assist-chip-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-assist-chip-focus-indicator-thickness: var(
+      --md-sys-state-focus-indicator-thickness
+    );
+    --md-comp-assist-chip-focus-indicator-outline-offset: var(
+      --md-sys-state-focus-indicator-outer-offset
+    );
+    --md-comp-assist-chip-flat-focus-outline-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-elevated-focus-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-assist-chip-focus-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-focus-state-layer-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-assist-chip-with-icon-focus-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-chip-assist-elevated-pressed-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-assist-chip-pressed-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-pressed-state-layer-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-assist-chip-with-icon-pressed-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-chip-assist-dragged-container-elevation: var(
+      --md-sys-elevation-level4
+    );
+    --md-comp-assist-chip-dragged-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-dragged-state-layer-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-assist-chip-dragged-state-layer-opacity: var(
+      --md-sys-state-dragged-state-layer-opacity
+    );
+    --md-comp-assist-chip-with-icon-dragged-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-filter-chip-container-shape: var(--md-sys-shape-corner-small);
+    --md-comp-filter-chip-container-height: 2rem;
+    --md-comp-filter-chip-container-shadow-color: var(--md-sys-color-shadow);
+    --md-comp-filter-chip-container-surface-tint-layer-color: var(
+      --md-sys-color-surface-tint
+    );
+    --md-comp-filter-chip-flat-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-filter-chip-flat-unselected-outline-color: var(
+      --md-sys-color-outline-variant
+    );
+    --md-comp-filter-chip-flat-unselected-outline-width: 0.0625rem;
+    --md-comp-filter-chip-flat-selected-container-color: var(
+      --md-sys-color-secondary-container
+    );
+    --md-comp-filter-chip-flat-selected-outline-width: 0;
+    --md-comp-filter-chip-elevated-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-filter-chip-elevated-container-shadow-color: var(
+      --md-sys-color-shadow
+    );
+    --md-comp-filter-chip-elevated-unselected-container-color: var(
+      --md-sys-color-surface-container-low
+    );
+    --md-comp-filter-chip-elevated-selected-container-color: var(
+      --md-sys-color-secondary-container
+    );
+    --md-comp-filter-chip-label-text-font: var(
+      --md-sys-typescale-label-large-font
+    );
+    --md-comp-filter-chip-label-text-line-height: var(
+      --md-sys-typescale-label-large-line-height
+    );
+    --md-comp-filter-chip-label-text-size: var(
+      --md-sys-typescale-label-large-size
+    );
+    --md-comp-filter-chip-label-text-weight: var(
+      --md-sys-typescale-label-large-weight
+    );
+    --md-comp-filter-chip-label-text-tracking: var(
+      --md-sys-typescale-label-large-tracking
+    );
+    --md-comp-filter-chip-label-text-type: var(--md-sys-typescale-label-large);
+    --md-comp-filter-chip-unselected-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-selected-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-icon-icon-size: 1.125rem;
+    --md-comp-filter-chip-with-leading-icon-selected-leading-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-leading-icon-unselected-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-filter-chip-with-trailing-icon-selected-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-trailing-icon-unselected-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-unselected-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-selected-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-trailing-icon-trailing-icon-unselected-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-leading-icon-leading-icon-unselected-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-filter-chip-flat-disabled-unselected-outline-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-filter-chip-flat-disabled-unselected-outline-opacity: 0.12;
+    --md-comp-filter-chip-flat-disabled-selected-container-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-filter-chip-flat-disabled-selected-container-opacity: 0.12;
+    --md-comp-filter-chip-elevated-disabled-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-filter-chip-elevated-disabled-container-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-filter-chip-elevated-disabled-container-opacity: 0.12;
+    --md-comp-filter-chip-disabled-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-filter-chip-disabled-label-text-opacity: 0.38;
+    --md-comp-filter-chip-with-leading-icon-disabled-leading-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-filter-chip-with-leading-icon-disabled-leading-icon-opacity: 0.38;
+    --md-comp-filter-chip-with-trailing-icon-disabled-trailing-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-filter-chip-with-trailing-icon-disabled-trailing-icon-opacity: 0.38;
+    --md-comp-filter-chip-with-icon-disabled-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-filter-chip-with-icon-disabled-icon-opacity: 0.38;
+    --md-comp-filter-chip-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-filter-chip-focus-indicator-thickness: var(
+      --md-sys-state-focus-indicator-thickness
+    );
+    --md-comp-filter-chip-focus-indicator-outline-offset: var(
+      --md-sys-state-focus-indicator-outer-offset
+    );
+    --md-comp-filter-chip-flat-unselected-focus-outline-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-elevated-focus-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-filter-chip-flat-selected-focus-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-filter-chip-flat-unselected-focus-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-filter-chip-unselected-focus-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-selected-focus-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-unselected-focus-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-unselected-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-filter-chip-selected-focus-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-selected-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-filter-chip-with-leading-icon-selected-focus-leading-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-leading-icon-unselected-focus-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-filter-chip-with-trailing-icon-selected-focus-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-trailing-icon-unselected-focus-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-unselected-focus-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-selected-focus-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-elevated-hover-container-elevation: var(
+      --md-sys-elevation-level2
+    );
+    --md-comp-filter-chip-flat-selected-hover-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-filter-chip-flat-unselected-hover-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-filter-chip-unselected-hover-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-selected-hover-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-unselected-hover-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-unselected-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-filter-chip-selected-hover-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-selected-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-filter-chip-with-leading-icon-selected-hover-leading-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-leading-icon-unselected-hover-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-filter-chip-with-trailing-icon-selected-hover-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-trailing-icon-unselected-hover-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-unselected-hover-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-selected-hover-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-elevated-pressed-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-filter-chip-flat-selected-pressed-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-filter-chip-flat-unselected-pressed-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-filter-chip-unselected-pressed-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-selected-pressed-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-unselected-pressed-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-unselected-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-filter-chip-selected-pressed-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-selected-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-filter-chip-with-leading-icon-selected-pressed-leading-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-leading-icon-unselected-pressed-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-filter-chip-with-trailing-icon-selected-pressed-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-trailing-icon-unselected-pressed-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-unselected-pressed-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-selected-pressed-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-chip-filter-dragged-container-elevation: var(
+      --md-sys-elevation-level4
+    );
+    --md-comp-filter-chip-unselected-dragged-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-selected-dragged-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-unselected-dragged-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-unselected-dragged-state-layer-opacity: var(
+      --md-sys-state-dragged-state-layer-opacity
+    );
+    --md-comp-filter-chip-selected-dragged-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-selected-dragged-state-layer-opacity: var(
+      --md-sys-state-dragged-state-layer-opacity
+    );
+    --md-comp-filter-chip-with-leading-icon-selected-dragged-leading-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-leading-icon-unselected-dragged-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-filter-chip-with-trailing-icon-selected-dragged-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-filter-chip-with-trailing-icon-unselected-dragged-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-unselected-dragged-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-filter-chip-with-icon-selected-dragged-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-with-avatar-avatar-size: 1.5rem;
+    --md-comp-input-chip-with-avatar-avatar-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-input-chip-container-shape: var(--md-sys-shape-corner-small);
+    --md-comp-input-chip-container-height: 2rem;
+    --md-comp-input-chip-container-elevation: var(--md-sys-elevation-level0);
+    --md-comp-input-chip-unselected-outline-color: var(
+      --md-sys-color-outline-variant
+    );
+    --md-comp-input-chip-unselected-outline-width: 0.0625rem;
+    --md-comp-input-chip-selected-container-color: var(
+      --md-sys-color-secondary-container
+    );
+    --md-comp-input-chip-selected-outline-width: 0;
+    --md-comp-input-chip-outline-color: var(--md-sys-color-outline);
+    --md-comp-input-chip-outline-width: 0.0625rem;
+    --md-comp-input-chip-label-text-font: var(
+      --md-sys-typescale-label-large-font
+    );
+    --md-comp-input-chip-label-text-line-height: var(
+      --md-sys-typescale-label-large-line-height
+    );
+    --md-comp-input-chip-label-text-size: var(
+      --md-sys-typescale-label-large-size
+    );
+    --md-comp-input-chip-label-text-weight: var(
+      --md-sys-typescale-label-large-weight
+    );
+    --md-comp-input-chip-label-text-tracking: var(
+      --md-sys-typescale-label-large-tracking
+    );
+    --md-comp-input-chip-label-text-type: var(--md-sys-typescale-label-large);
+    --md-comp-input-chip-selected-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-unselected-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-leading-icon-leading-icon-size: 1.125rem;
+    --md-comp-input-chip-with-leading-icon-selected-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-leading-icon-unselected-leading-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-leading-icon-leading-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-trailing-icon-size: 1.125rem;
+    --md-comp-input-chip-with-trailing-icon-selected-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-with-trailing-icon-unselected-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-disabled-unselected-outline-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-input-chip-disabled-unselected-outline-opacity: 0.12;
+    --md-comp-input-chip-disabled-selected-container-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-input-chip-disabled-selected-container-opacity: 0.12;
+    --md-comp-input-chip-disabled-outline-color: var(--md-sys-color-on-surface);
+    --md-comp-input-chip-disabled-outline-opacity: 0.12;
+    --md-comp-input-chip-disabled-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-input-chip-disabled-label-text-opacity: 0.38;
+    --md-comp-input-chip-with-leading-icon-disabled-leading-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-input-chip-with-leading-icon-disabled-leading-icon-opacity: 0.38;
+    --md-comp-input-chip-with-trailing-icon-disabled-trailing-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-input-chip-with-trailing-icon-disabled-trailing-icon-opacity: 0.38;
+    --md-comp-input-chip-with-avatar-disabled-avatar-opacity: 0.38;
+    --md-comp-input-chip-unselected-hover-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-selected-hover-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-hover-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-hover-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-input-chip-selected-hover-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-selected-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-input-chip-hover-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-input-chip-with-leading-icon-unselected-hover-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-leading-icon-selected-hover-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-leading-icon-hover-leading-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-unselected-hover-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-selected-hover-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-with-trailing-icon-hover-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-input-chip-focus-indicator-thickness: var(
+      --md-sys-state-focus-indicator-thickness
+    );
+    --md-comp-input-chip-focus-indicator-outline-offset: var(
+      --md-sys-state-focus-indicator-outer-offset
+    );
+    --md-comp-input-chip-unselected-focus-outline-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-focus-outline-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-focus-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-selected-focus-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-focus-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-focus-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-input-chip-selected-focus-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-selected-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-input-chip-focus-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-input-chip-with-leading-icon-unselected-focus-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-leading-icon-selected-focus-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-leading-icon-focus-leading-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-unselected-focus-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-selected-focus-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-with-trailing-icon-focus-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-pressed-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-selected-pressed-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-pressed-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-pressed-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-input-chip-selected-pressed-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-selected-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-input-chip-pressed-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-input-chip-with-leading-icon-unselected-pressed-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-leading-icon-selected-pressed-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-leading-icon-pressed-leading-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-unselected-pressed-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-selected-pressed-trailing-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-with-trailing-icon-pressed-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-dragged-container-elevation: var(
+      --md-sys-elevation-level4
+    );
+    --md-comp-input-chip-unselected-dragged-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-selected-dragged-label-text-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-dragged-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-dragged-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-unselected-dragged-state-layer-opacity: var(
+      --md-sys-state-dragged-state-layer-opacity
+    );
+    --md-comp-input-chip-selected-dragged-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-selected-dragged-state-layer-opacity: var(
+      --md-sys-state-dragged-state-layer-opacity
+    );
+    --md-comp-input-chip-dragged-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-dragged-state-layer-opacity: var(
+      --md-sys-state-dragged-state-layer-opacity
+    );
+    --md-comp-input-chip-with-leading-icon-unselected-dragged-leading-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-leading-icon-selected-dragged-leading-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-input-chip-with-leading-icon-dragged-leading-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-input-chip-with-trailing-icon-unselected-dragged-trailing-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-trailing-icon-selected-dragged-trailing-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-input-chip-with-trailing-icon-dragged-trailing-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-container-shape: var(--md-sys-shape-corner-small);
+    --md-comp-suggestion-chip-container-height: 2rem;
+    --md-comp-suggestion-chip-flat-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-suggestion-chip-flat-outline-color: var(
+      --md-sys-color-outline-variant
+    );
+    --md-comp-suggestion-chip-flat-outline-width: 0.0625rem;
+    --md-comp-suggestion-chip-elevated-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-suggestion-chip-elevated-container-color: var(
+      --md-sys-color-surface-container-low
+    );
+    --md-comp-suggestion-chip-elevated-container-shadow-color: var(
+      --md-sys-color-shadow
+    );
+    --md-comp-suggestion-chip-container-surface-tint-layer-color: var(
+      --md-sys-color-surface-tint
+    );
+    --md-comp-suggestion-chip-with-leading-icon-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-suggestion-chip-with-leading-icon-leading-icon-size: 1.125rem;
+    --md-comp-suggestion-chip-label-text-font: var(
+      --md-sys-typescale-label-large-font
+    );
+    --md-comp-suggestion-chip-label-text-line-height: var(
+      --md-sys-typescale-label-large-line-height
+    );
+    --md-comp-suggestion-chip-label-text-size: var(
+      --md-sys-typescale-label-large-size
+    );
+    --md-comp-suggestion-chip-label-text-weight: var(
+      --md-sys-typescale-label-large-weight
+    );
+    --md-comp-suggestion-chip-label-text-tracking: var(
+      --md-sys-typescale-label-large-tracking
+    );
+    --md-comp-suggestion-chip-label-text-type: var(
+      --md-sys-typescale-label-large
+    );
+    --md-comp-suggestion-chip-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-flat-disabled-outline-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-suggestion-chip-flat-disabled-outline-opacity: 0.12;
+    --md-comp-suggestion-chip-elevated-disabled-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-suggestion-chip-elevated-disabled-container-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-suggestion-chip-elevated-disabled-container-opacity: 0.12;
+    --md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-opacity: 0.38;
+    --md-comp-suggestion-chip-disabled-label-text-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-suggestion-chip-disabled-label-text-opacity: 0.38;
+    --md-comp-chip-suggestion-elevated-hover-container-elevation: var(
+      --md-sys-elevation-level2
+    );
+    --md-comp-suggestion-chip-with-leading-icon-hover-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-suggestion-chip-hover-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-hover-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-suggestion-chip-focus-indicator-color: var(
+      --md-sys-color-secondary
+    );
+    --md-comp-suggestion-chip-focus-indicator-thickness: var(
+      --md-sys-state-focus-indicator-thickness
+    );
+    --md-comp-suggestion-chip-focus-indicator-outline-offset: var(
+      --md-sys-state-focus-indicator-outer-offset
+    );
+    --md-comp-suggestion-chip-flat-focus-outline-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-elevated-focus-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-suggestion-chip-with-leading-icon-focus-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-suggestion-chip-focus-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-focus-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-chip-suggestion-elevated-pressed-container-elevation: var(
+      --md-sys-elevation-level1
+    );
+    --md-comp-suggestion-chip-with-leading-icon-pressed-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-suggestion-chip-pressed-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-pressed-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-chip-suggestion-dragged-container-elevation: var(
+      --md-sys-elevation-level4
+    );
+    --md-comp-suggestion-chip-with-leading-icon-dragged-leading-icon-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-suggestion-chip-dragged-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-dragged-state-layer-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-suggestion-chip-dragged-state-layer-opacity: var(
+      --md-sys-state-dragged-state-layer-opacity
+    );
+  }
+}

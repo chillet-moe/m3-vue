@@ -1,0 +1,41 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-progress-indicator) {
+    --md-comp-progress-indicator-active-indicator-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-progress-indicator-track-color: var(
+      --md-sys-color-secondary-container
+    );
+    --md-comp-progress-indicator-stop-indicator-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-progress-indicator-active-indicator-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-progress-indicator-track-shape: var(--md-sys-shape-corner-full);
+    --md-comp-progress-indicator-stop-indicator-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-progress-indicator-linear-height: 0.25rem;
+    --md-comp-progress-indicator-linear-with-wave-height: 0.625rem;
+    --md-comp-progress-indicator-linear-active-indicator-thickness: 0.25rem;
+    --md-comp-progress-indicator-linear-track-thickness: 0.25rem;
+    --md-comp-progress-indicator-linear-stop-indicator-size: 0.25rem;
+    --md-comp-progress-indicator-linear-track-active-indicator-space: 0.25rem;
+    --md-comp-progress-indicator-linear-stop-indicator-trailing-space: 0;
+    --md-comp-progress-indicator-linear-active-indicator-wave-amplitude: 0.1875rem;
+    --md-comp-progress-indicator-linear-active-indicator-wave-wavelength: 2.5rem;
+    --md-comp-progress-indicator-linear-indeterminate-active-indicator-wave-wavelength: 1.25rem;
+    --md-comp-progress-indicator-circular-size: 2.5rem;
+    --md-comp-progress-indicator-circular-with-wave-size: 3rem;
+    --md-comp-progress-indicator-circular-active-indicator-thickness: 0.25rem;
+    --md-comp-progress-indicator-circular-track-thickness: 0.25rem;
+    --md-comp-progress-indicator-circular-track-active-indicator-space: 0.25rem;
+    --md-comp-progress-indicator-circular-active-indicator-wave-amplitude: 0.1rem;
+    --md-comp-progress-indicator-circular-active-indicator-wave-wavelength: 0.9375rem;
+  }
+}

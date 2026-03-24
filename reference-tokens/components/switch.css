@@ -1,0 +1,166 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-switch) {
+    --md-comp-switch-selected-icon-color: var(
+      --md-sys-color-on-primary-container
+    );
+    --md-comp-switch-selected-icon-size: 1rem;
+    --md-comp-switch-unselected-icon-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-unselected-icon-size: 1rem;
+    --md-comp-switch-track-height: 2rem;
+    --md-comp-switch-track-width: 3.25rem;
+    --md-comp-switch-unselected-track-outline-color: var(
+      --md-sys-color-outline
+    );
+    --md-comp-switch-track-outline-width: 0.125rem;
+    --md-comp-switch-track-shape: var(--md-sys-shape-corner-full);
+    --md-comp-switch-selected-track-color: var(--md-sys-color-primary);
+    --md-comp-switch-unselected-track-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-unselected-handle-height: 1rem;
+    --md-comp-switch-with-icon-handle-height: 1.5rem;
+    --md-comp-switch-selected-handle-height: 1.5rem;
+    --md-comp-switch-pressed-handle-height: 1.75rem;
+    --md-comp-switch-unselected-handle-width: 1rem;
+    --md-comp-switch-with-icon-handle-width: 1.5rem;
+    --md-comp-switch-selected-handle-width: 1.5rem;
+    --md-comp-switch-pressed-handle-width: 1.75rem;
+    --md-comp-switch-handle-shape: var(--md-sys-shape-corner-full);
+    --md-comp-switch-selected-handle-color: var(--md-sys-color-on-primary);
+    --md-comp-switch-unselected-handle-color: var(--md-sys-color-outline);
+    --md-comp-switch-state-layer-size: 2.5rem;
+    --md-comp-switch-state-layer-shape: var(--md-sys-shape-corner-full);
+    --md-comp-switch-disabled-selected-icon-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-switch-disabled-selected-icon-opacity: 0.38;
+    --md-comp-switch-disabled-unselected-icon-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-disabled-unselected-icon-opacity: 0.38;
+    --md-comp-switch-disabled-track-opacity: 0.12;
+    --md-comp-switch-disabled-selected-track-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-switch-disabled-unselected-track-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-disabled-unselected-track-outline-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-switch-disabled-unselected-handle-opacity: 0.38;
+    --md-comp-switch-disabled-selected-handle-opacity: 1;
+    --md-comp-switch-disabled-selected-handle-color: var(
+      --md-sys-color-surface
+    );
+    --md-comp-switch-disabled-unselected-handle-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-switch-selected-hover-icon-color: var(
+      --md-sys-color-on-primary-container
+    );
+    --md-comp-switch-unselected-hover-icon-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-selected-hover-track-color: var(--md-sys-color-primary);
+    --md-comp-switch-selected-hover-state-layer-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-switch-selected-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-switch-unselected-hover-track-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-unselected-hover-track-outline-color: var(
+      --md-sys-color-outline
+    );
+    --md-comp-switch-unselected-hover-state-layer-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-switch-unselected-hover-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-switch-selected-hover-handle-color: var(
+      --md-sys-color-primary-container
+    );
+    --md-comp-switch-unselected-hover-handle-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-switch-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-switch-focus-indicator-thickness: var(
+      --md-sys-state-focus-indicator-thickness
+    );
+    --md-comp-switch-focus-indicator-offset: var(
+      --md-sys-state-focus-indicator-outer-offset
+    );
+    --md-comp-switch-selected-focus-icon-color: var(
+      --md-sys-color-on-primary-container
+    );
+    --md-comp-switch-unselected-focus-icon-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-selected-focus-track-color: var(--md-sys-color-primary);
+    --md-comp-switch-selected-focus-state-layer-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-switch-selected-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-switch-unselected-focus-track-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-unselected-focus-track-outline-color: var(
+      --md-sys-color-outline
+    );
+    --md-comp-switch-unselected-focus-state-layer-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-switch-unselected-focus-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-switch-selected-focus-handle-color: var(
+      --md-sys-color-primary-container
+    );
+    --md-comp-switch-unselected-focus-handle-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-switch-selected-pressed-icon-color: var(
+      --md-sys-color-on-primary-container
+    );
+    --md-comp-switch-unselected-pressed-icon-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-selected-pressed-track-color: var(--md-sys-color-primary);
+    --md-comp-switch-selected-pressed-state-layer-color: var(
+      --md-sys-color-primary
+    );
+    --md-comp-switch-selected-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-switch-unselected-pressed-track-color: var(
+      --md-sys-color-surface-container-highest
+    );
+    --md-comp-switch-unselected-pressed-track-outline-color: var(
+      --md-sys-color-outline
+    );
+    --md-comp-switch-unselected-pressed-state-layer-color: var(
+      --md-sys-color-on-surface
+    );
+    --md-comp-switch-unselected-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-switch-selected-pressed-handle-color: var(
+      --md-sys-color-primary-container
+    );
+    --md-comp-switch-unselected-pressed-handle-color: var(
+      --md-sys-color-on-surface-variant
+    );
+  }
+}

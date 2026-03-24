@@ -1,0 +1,155 @@
+/* ⚠️ AUTO-GENERATED FILE
+ * DO NOT EDIT — this stylesheet is managed by the CLI.
+ * Put overrides in your own custom stylesheet and import it after these files.
+ */
+@layer tokens {
+  :where(.md-navigation-rail) {
+    --md-comp-nav-rail-item-icon-size: 1.5rem;
+    --md-comp-nav-rail-item-active-indicator-shape: var(
+      --md-sys-shape-corner-full
+    );
+    --md-comp-nav-rail-item-active-indicator-leading-space: 1rem;
+    --md-comp-nav-rail-item-active-indicator-icon-label-space: 0.5rem;
+    --md-comp-nav-rail-item-active-indicator-trailing-space: 1rem;
+    --md-comp-nav-rail-item-container-height: 4rem;
+    --md-comp-nav-rail-item-short-container-height: 3.5rem;
+    --md-comp-nav-rail-item-container-shape: var(--md-sys-shape-corner-none);
+    --md-comp-nav-rail-item-container-vertical-space: 0.375rem;
+    --md-comp-nav-rail-item-header-space-minimum: 2.5rem;
+    --md-comp-nav-rail-item-active-indicator-color: var(
+      --md-sys-color-secondary-container
+    );
+    --md-comp-nav-rail-item-active-label-text-color: var(
+      --md-sys-color-secondary
+    );
+    --md-comp-nav-rail-item-inactive-label-text-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-nav-rail-item-active-icon-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-nav-rail-item-inactive-icon-color: var(
+      --md-sys-color-on-surface-variant
+    );
+    --md-comp-nav-rail-item-active-hovered-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-nav-rail-item-active-hovered-state-layer-opacity: var(
+      --md-sys-state-hover-state-layer-opacity
+    );
+    --md-comp-nav-rail-item-inactive-hovered-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-nav-rail-item-active-focused-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-nav-rail-item-active-focused-state-layer-opacity: var(
+      --md-sys-state-focus-state-layer-opacity
+    );
+    --md-comp-nav-rail-item-inactive-focused-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-nav-rail-item-active-pressed-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-nav-rail-item-active-pressed-state-layer-opacity: var(
+      --md-sys-state-pressed-state-layer-opacity
+    );
+    --md-comp-nav-rail-item-inactive-pressed-state-layer-color: var(
+      --md-sys-color-on-secondary-container
+    );
+    --md-comp-nav-rail-collapsed-container-width: 6rem;
+    --md-comp-nav-rail-collapsed-narrow-container-width: 5rem;
+    --md-comp-nav-rail-collapsed-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-nav-rail-collapsed-container-shape: var(
+      --md-sys-shape-corner-none
+    );
+    --md-comp-nav-rail-collapsed-container-color: var(--md-sys-color-surface);
+    --md-comp-nav-rail-collapsed-item-vertical-space: 0.25rem;
+    --md-comp-nav-rail-collapsed-top-space: 2.75rem;
+    --md-comp-nav-rail-expanded-container-width-minimum: 13.75rem;
+    --md-comp-nav-rail-expanded-container-width-maximum: 22.5rem;
+    --md-comp-nav-rail-expanded-top-space: 2.75rem;
+    --md-comp-nav-rail-expanded-container-elevation: var(
+      --md-sys-elevation-level0
+    );
+    --md-comp-nav-rail-expanded-modal-container-elevation: var(
+      --md-sys-elevation-level2
+    );
+    --md-comp-nav-rail-expanded-container-color: var(--md-sys-color-surface);
+    --md-comp-nav-rail-expanded-modal-container-color: var(
+      --md-sys-color-surface-container
+    );
+    --md-comp-nav-rail-expanded-container-shape: var(
+      --md-sys-shape-corner-none
+    );
+    --md-comp-nav-rail-expanded-modal-container-shape: var(
+      --md-sys-shape-corner-large
+    );
+    --md-comp-nav-rail-item-vertical-active-indicator-height: 2rem;
+    --md-comp-nav-rail-item-vertical-active-indicator-width: 3.5rem;
+    --md-comp-nav-rail-item-vertical-label-text-font: var(
+      --md-sys-typescale-label-medium-font
+    );
+    --md-comp-nav-rail-item-vertical-label-text-line-height: var(
+      --md-sys-typescale-label-medium-line-height
+    );
+    --md-comp-nav-rail-item-vertical-label-text-size: var(
+      --md-sys-typescale-label-medium-size
+    );
+    --md-comp-nav-rail-item-vertical-label-text-tracking: var(
+      --md-sys-typescale-label-medium-tracking
+    );
+    --md-comp-nav-rail-item-vertical-label-text-weight: var(
+      --md-sys-typescale-label-medium-weight
+    );
+    --md-comp-nav-rail-item-vertical-icon-label-space: 0.25rem;
+    --md-comp-nav-rail-item-vertical-leading-space: 1rem;
+    --md-comp-nav-rail-item-vertical-trailing-space: 1rem;
+    --sm-comp-nav-rail-item-vertical-leading-space: 1.25rem;
+    --sm-comp-nav-rail-item-vertical-trailing-space: 1.25rem;
+    --sm-comp-nav-rail-item-vertical-leading-label-space: 1.25rem;
+    --sm-comp-nav-rail-item-vertical-trailing-label-space: 1.25rem;
+    --md-comp-nav-rail-item-horizontal-label-text-font: var(
+      --md-sys-typescale-label-medium-font
+    );
+    --md-comp-nav-rail-item-horizontal-label-text-line-height: var(
+      --md-sys-typescale-label-medium-line-height
+    );
+    --md-comp-nav-rail-item-horizontal-label-text-size: var(
+      --md-sys-typescale-label-medium-size
+    );
+    --md-comp-nav-rail-item-horizontal-label-text-tracking: var(
+      --md-sys-typescale-label-medium-tracking
+    );
+    --md-comp-nav-rail-item-horizontal-label-text-weight: var(
+      --md-sys-typescale-label-medium-weight
+    );
+    --md-comp-nav-rail-item-horizontal-active-indicator-height: 3.5rem;
+    --md-comp-nav-rail-item-horizontal-full-width-leading-space: 1rem;
+    --md-comp-nav-rail-item-horizontal-full-width-trailing-space: 1rem;
+    --md-comp-nav-rail-item-horizontal-icon-label-space: 0.5rem;
+    --sm-comp-nav-rail-item-horizontal-full-width-leading-space: 1.25rem;
+    --sm-comp-nav-rail-item-horizontal-full-width-trailing-space: 1.25rem;
+    --sm-comp-nav-rail-expanded-nav-rail-section-header-top-space: 0.75rem;
+    --sm-comp-nav-rail-expanded-nav-rail-section-header-bottom-space: 0.5rem;
+    --sm-comp-nav-rail-item-horizontal-section-header-text-font: var(
+      --md-sys-typescale-label-medium-font
+    );
+    --sm-comp-nav-rail-item-horizontal-section-header-text-line-height: var(
+      --md-sys-typescale-label-medium-line-height
+    );
+    --sm-comp-nav-rail-item-horizontal-section-header-text-size: var(
+      --md-sys-typescale-label-medium-size
+    );
+    --sm-comp-nav-rail-item-horizontal-section-header-text-tracking: var(
+      --md-sys-typescale-label-medium-tracking
+    );
+    --sm-comp-nav-rail-item-horizontal-section-header-text-weight: var(
+      --md-sys-typescale-label-medium-weight
+    );
+    --sm-comp-nav-rail-container-vertical-space: 1rem;
+  }
+}
