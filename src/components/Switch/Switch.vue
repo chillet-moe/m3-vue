@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import style from './Switch.module.css';
-import {computed} from "vue";
+import { computed } from 'vue';
 
 export type SwitchProps = {
   /** Whether the switch is disabled. */
@@ -22,14 +22,7 @@ export type SwitchProps = {
   ariaLabel?: string;
 };
 
-const {
-  disabled = false,
-  checkedIcon = 'check',
-  uncheckedIcon,
-  name,
-  value,
-  ariaLabel,
-} = defineProps<SwitchProps>();
+const { disabled = false, checkedIcon = 'check', uncheckedIcon, name, value, ariaLabel } = defineProps<SwitchProps>();
 
 const checked = defineModel<boolean>('checked', { required: true });
 
@@ -59,6 +52,7 @@ const slots = defineSlots<{
       <span :class="style.track" />
       <span :class="style.handle">
         <span v-if="withIcon" :class="style.icon">{{ checked ? checkedIcon : uncheckedIcon }}</span>
+        <span class="state-layer" style="position: absolute; width: 2.5rem; height: 2.5rem; border-radius: 1.25rem" />
       </span>
     </span>
 
