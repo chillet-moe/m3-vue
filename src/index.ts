@@ -18,3 +18,5 @@ export * from './components/Slider';
 export * from './components/Icon';
 export * from './components/Tooltip';
 export * from './components/Card';
+
+export * from './components/Switch';
