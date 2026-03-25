@@ -4,6 +4,7 @@ import type { IconButtonProps } from '@/components/IconButton/IconButton.vue';
 import { getArgs } from '@/utils/storybook.ts';
 
 const meta = {
+  title: 'Components/Button/IconButton',
   component: IconButton,
   args: {
     toggleable: false,

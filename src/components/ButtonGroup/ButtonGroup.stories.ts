@@ -5,6 +5,7 @@ import type { ButtonGroupProps } from '@/components/ButtonGroup/ButtonGroup.vue'
 import { getArgs } from '@/utils/storybook.ts';
 
 const meta = {
+  title: 'Components/Button/ButtonGroup',
   component: ButtonGroup,
   args: {
     type: 'standard',

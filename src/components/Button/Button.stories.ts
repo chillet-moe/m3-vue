@@ -4,6 +4,7 @@ import type { ButtonProps } from '@/components/Button/Button.vue';
 import { getArgs } from '@/utils/storybook.ts';
 
 const meta = {
+  title: 'Components/Button/Button',
   component: Button,
   args: {
     toggleable: false,
@@ -89,14 +90,14 @@ Toggleable.args = {
 
 export const LeadingIcons = MultiEnumTemplate.bind({});
 LeadingIcons.args = {
-  outerEnum: "size",
+  outerEnum: 'size',
   enum: 'color',
   leadingIcon: 'settings',
 };
 
 const TrailingIcons = MultiEnumTemplate.bind({});
 TrailingIcons.args = {
-  outerEnum: "size",
+  outerEnum: 'size',
   enum: 'color',
   trailingIcon: 'favorite',
 };
