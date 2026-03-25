@@ -1,8 +1,10 @@
 import type { Meta, StoryFn } from '@storybook/vue3-vite';
+import { ref } from 'vue';
 import { Button } from '@/components/Button';
 import { Icon } from '@/components/Icon';
 import Dialog from './Dialog.vue';
 import type { DialogProps } from './Dialog.vue';
+import { showDialog } from './showDialog';
 
 const meta = {
   title: 'Components/Dialog/Dialog',
@@ -59,3 +61,32 @@ const IconTemplate: StoryFn<DialogArgs> = (args: DialogArgs) => ({
 export const Default = BaseTemplate.bind({});
 
 export const WithIcon = IconTemplate.bind({});
+
+export const Programmatic: StoryFn = () => ({
+  components: { Button },
+  setup: () => {
+    const result = ref('');
+
+    const openDialog = async () => {
+      result.value = await showDialog({
+        headline: 'Delete file?',
+        content: 'This action cannot be undone.',
+        actions: [
+          { label: 'Cancel', value: 'cancel' },
+          { label: 'Delete', value: 'confirm' },
+        ],
+      });
+    };
+
+    return {
+      result,
+      openDialog,
+    };
+  },
+  template: `
+    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+      <Button @click="openDialog">Open with showDialog()</Button>
+      <div v-if="result">Result: {{ result }}</div>
+    </div>
+  `,
+});
