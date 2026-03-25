@@ -37,7 +37,7 @@ const slots = defineSlots<{
 </script>
 
 <template>
-  <label :class="style.root" :aria-disabled="disabled ? 'true' : 'false'">
+  <label :class="style.root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
     <input
       v-model="checked"
       :class="style.input"
@@ -52,7 +52,11 @@ const slots = defineSlots<{
       <span :class="style.track" />
       <span :class="style.handle">
         <span v-if="withIcon" :class="style.icon">{{ checked ? checkedIcon : uncheckedIcon }}</span>
-        <span class="state-layer" style="position: absolute; width: 2.5rem; height: 2.5rem; border-radius: 1.25rem" />
+        <span
+          class="state-layer"
+          data-state-layer-hover-from="target"
+          style="position: absolute; width: 2.5rem; height: 2.5rem; border-radius: 1.25rem"
+        />
       </span>
     </span>
 

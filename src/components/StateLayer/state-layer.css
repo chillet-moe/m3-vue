@@ -40,6 +40,7 @@
 }
 
 .state-layer:hover::after,
+[data-state-layer-hover-target]:hover .state-layer[data-state-layer-hover-from='target']::after,
 .state-layer:active::after {
   opacity: var(--md-sys-state-hover-state-layer-opacity);
 }
