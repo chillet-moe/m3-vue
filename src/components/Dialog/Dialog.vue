@@ -151,22 +151,20 @@ defineExpose({
     @close="onClose"
     @click="onClick"
   >
-    <div :class="style.surface">
-      <div v-if="hasIcon" :class="style.icon">
-        <slot name="icon" />
-      </div>
+    <div v-if="hasIcon" :class="style.icon">
+      <slot name="icon" />
+    </div>
 
-      <h2 v-if="hasHeadline" :id="headlineId" :class="style.headline">
-        <slot name="headline" />
-      </h2>
+    <h2 v-if="hasHeadline" :id="headlineId" :class="style.headline">
+      <slot name="headline" />
+    </h2>
 
-      <div v-if="hasContent" :id="contentId" :class="style.content">
-        <slot />
-      </div>
+    <div v-if="hasContent" :id="contentId" :class="style.content">
+      <slot />
+    </div>
 
-      <div v-if="hasActions" :class="style.actions">
-        <slot name="actions" />
-      </div>
+    <div v-if="hasActions" :class="style.actions">
+      <slot name="actions" />
     </div>
   </dialog>
 </template>

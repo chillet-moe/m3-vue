@@ -36,16 +36,24 @@
   inset: 0;
 
   margin: auto;
-  padding: 0;
   border: none;
 
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 1rem;
+
   inline-size: min(35rem, calc(100vi - 3rem));
+  min-inline-size: min(17.5rem, calc(100vi - 3rem));
   max-inline-size: calc(100vi - 3rem);
   max-block-size: calc(100vb - 3rem);
+  overflow: hidden;
+
+  padding: 1.5rem;
+  border-radius: var(--md-comp-dialog-container-shape);
 
   color: inherit;
-  background: transparent;
-  overflow: visible;
+  background-color: var(--md-comp-dialog-container-color);
+  box-shadow: var(--md-comp-dialog-container-elevation);
 
   opacity: 0;
   visibility: hidden;
@@ -66,46 +74,14 @@
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  animation: dialogOpacity var(--md-easing-fast) backwards;
-}
-
-.surface {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: 1rem;
-
-  min-inline-size: min(17.5rem, calc(100vi - 3rem));
-  max-block-size: calc(100vb - 3rem);
-  overflow: hidden;
-
-  padding: 1.5rem;
-  border-radius: var(--md-comp-dialog-container-shape);
-
-  background-color: var(--md-comp-dialog-container-color);
-  box-shadow: var(--md-comp-dialog-container-elevation);
-
-  opacity: 0;
-  transform: translateY(-3rem) scaleY(0.9);
-  transform-origin: center;
-  clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
-  transition:
-    opacity var(--md-easing-fast),
-    transform var(--md-duration-spatial) var(--md-timing-function-spatial),
-    clip-path var(--md-duration-spatial) var(--md-timing-function-spatial);
+  animation:
+    dialogIn var(--md-timing-function-emphasized-decel) 500ms,
+    dialogOpacity var(--md-timing-function-emphasized-decel) 100ms backwards;
 }
 
 .dialog[open]::backdrop {
   background-color: --translucent(var(--md-sys-color-scrim), 0.3);
   animation: dialogOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
-}
-
-.dialog[open] .surface {
-  opacity: 1;
-  transform: translateY(0) scaleY(1);
-  clip-path: inset(0 0 0 0 round var(--md-comp-dialog-container-shape));
-  animation:
-    dialogIn var(--md-timing-function-emphasized-decel) 500ms,
-    dialogOpacity var(--md-timing-function-emphasized-decel) 100ms backwards;
 }
 
 .icon {
@@ -186,12 +162,8 @@
 @media (width < 40rem) {
   .dialog {
     inline-size: calc(100vi - 2rem);
-    max-inline-size: calc(100vi - 2rem);
-    max-block-size: calc(100vb - 2rem);
-  }
-
-  .surface {
     min-inline-size: min(17.5rem, calc(100vi - 2rem));
+    max-inline-size: calc(100vi - 2rem);
     max-block-size: calc(100vb - 2rem);
     padding: 1.25rem;
   }
@@ -205,12 +177,6 @@
 
   .dialog[open]::backdrop {
     background-color: transparent;
-  }
-
-  .dialog[open] .surface {
-    opacity: 0;
-    transform: translateY(-3rem) scaleY(0.9);
-    clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
   }
 
   .dialog[open] .headline,
@@ -227,7 +193,6 @@
 @media (prefers-reduced-motion: reduce) {
   .dialog,
   .dialog::backdrop,
-  .surface,
   .headline,
   .content,
   .actions {
