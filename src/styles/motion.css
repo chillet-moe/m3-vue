@@ -36,5 +36,8 @@
     --md-sys-motion-spring-slow-spatial-stiffness: 200;
     --md-sys-motion-spring-slow-effects-damping: 1;
     --md-sys-motion-spring-slow-effects-stiffness: 800;
+
+    --md-timing-function-emphasized-accel: cubic-bezier(0.3, 0, 0.8, 0.15);
+    --md-timing-function-emphasized-decel: cubic-bezier(0.05, 0.7, 0.1, 1);
   }
 }

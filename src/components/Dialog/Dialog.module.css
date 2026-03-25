@@ -104,8 +104,8 @@
   transform: translateY(0) scaleY(1);
   clip-path: inset(0 0 0 0 round var(--md-comp-dialog-container-shape));
   animation:
-    dialogIn var(--md-timing-function-spatial) var(--md-duration-spatial),
-    dialogOpacity var(--md-easing-fast) backwards;
+    dialogIn var(--md-timing-function-emphasized-decel) 500ms,
+    dialogOpacity var(--md-timing-function-emphasized-decel) 100ms backwards;
 }
 
 .icon {
