@@ -19,7 +19,7 @@ const { disabled = false, name, value, ariaLabel } = defineProps<RadioProps>();
 
 const checked = defineModel<boolean>('checked', { required: true });
 
-const slots = defineSlots<{
+defineSlots<{
   /** Optional label content rendered next to radio. */
   default(): any;
 }>();
@@ -47,6 +47,6 @@ const slots = defineSlots<{
       />
     </span>
 
-    <span v-if="slots.default()" :class="style.label"><slot /></span>
+    <span v-if="$slots.default" :class="style.label"><slot /></span>
   </label>
 </template>

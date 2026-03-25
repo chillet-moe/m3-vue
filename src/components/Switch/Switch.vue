@@ -30,7 +30,7 @@ const withIcon = computed(() => {
   return uncheckedIcon || checkedIcon;
 });
 
-const slots = defineSlots<{
+defineSlots<{
   /** Optional label content rendered next to switch. */
   default(): any;
 }>();
@@ -60,6 +60,6 @@ const slots = defineSlots<{
       </span>
     </span>
 
-    <span v-if="slots.default()" :class="style.label"><slot /></span>
+    <span v-if="$slots.default" :class="style.label"><slot /></span>
   </label>
 </template>
