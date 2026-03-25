@@ -143,6 +143,7 @@ const valueIndicatorTooltip = shallowRef<ReturnType<typeof setupTooltip> | null>
 const isValueIndicatorHovered = ref(false);
 const isValueIndicatorFocused = ref(false);
 const isValueIndicatorDragging = ref(false);
+let syncValueIndicatorFocusFrame = 0;
 
 const valueIndicatorBinding = computed(() => {
   const target = valueIndicatorRef.value;
@@ -205,12 +206,48 @@ const rebuildValueIndicatorTooltip = () => {
   syncValueIndicatorVisibility();
 };
 
-const stopValueIndicatorDragging = () => {
+const syncValueIndicatorHoveredState = (event?: MouseEvent | PointerEvent) => {
+  const input = inputRef.value;
+  if (!input) {
+    isValueIndicatorHovered.value = false;
+    return;
+  }
+
+  if (event && 'clientX' in event && 'clientY' in event) {
+    const { top, right, bottom, left } = input.getBoundingClientRect();
+    isValueIndicatorHovered.value =
+      event.clientX >= left && event.clientX <= right && event.clientY >= top && event.clientY <= bottom;
+    return;
+  }
+
+  isValueIndicatorHovered.value = input.matches(':hover');
+};
+
+const syncValueIndicatorFocusedState = () => {
+  const input = inputRef.value;
+  isValueIndicatorFocused.value = !disabled && Boolean(input?.matches(':focus-visible'));
+};
+
+const scheduleSyncValueIndicatorFocusedState = () => {
+  if (syncValueIndicatorFocusFrame) {
+    window.cancelAnimationFrame(syncValueIndicatorFocusFrame);
+  }
+
+  syncValueIndicatorFocusFrame = window.requestAnimationFrame(() => {
+    syncValueIndicatorFocusFrame = 0;
+    syncValueIndicatorFocusedState();
+  });
+};
+
+const stopValueIndicatorDragging = (event?: Event) => {
   if (!isValueIndicatorDragging.value) {
     return;
   }
 
   isValueIndicatorDragging.value = false;
+  if (event instanceof PointerEvent || event instanceof MouseEvent) {
+    syncValueIndicatorHoveredState(event);
+  }
 };
 
 const onValueIndicatorPointerEnter = () => {
@@ -230,7 +267,7 @@ const onValueIndicatorFocus = () => {
     return;
   }
 
-  isValueIndicatorFocused.value = true;
+  syncValueIndicatorFocusedState();
 };
 
 const onValueIndicatorBlur = () => {
@@ -242,7 +279,12 @@ const onValueIndicatorPointerDown = () => {
     return;
   }
 
+  isValueIndicatorFocused.value = false;
   isValueIndicatorDragging.value = true;
+};
+
+const onValueIndicatorKeyDown = () => {
+  scheduleSyncValueIndicatorFocusedState();
 };
 
 watch([inputRef, handleRef, valueIndicatorRef, () => valueIndicator], rebuildValueIndicatorTooltip, {
@@ -250,13 +292,17 @@ watch([inputRef, handleRef, valueIndicatorRef, () => valueIndicator], rebuildVal
   flush: 'post',
 });
 
-watch(valueIndicatorBinding, (binding) => {
-  if (!binding || !valueIndicatorTooltip.value) {
-    return;
-  }
+watch(
+  valueIndicatorBinding,
+  (binding) => {
+    if (!binding || !valueIndicatorTooltip.value) {
+      return;
+    }
 
-  valueIndicatorTooltip.value.update(binding);
-}, { flush: 'post' });
+    valueIndicatorTooltip.value.update(binding);
+  },
+  { flush: 'post' },
+);
 
 watch(
   [isValueIndicatorHovered, isValueIndicatorFocused, isValueIndicatorDragging, () => disabled, () => valueIndicator],
@@ -274,12 +320,17 @@ watch(
 );
 
 onMounted(() => {
+  window.addEventListener('pointermove', syncValueIndicatorHoveredState);
   window.addEventListener('pointerup', stopValueIndicatorDragging);
   window.addEventListener('pointercancel', stopValueIndicatorDragging);
 });
 
 onBeforeUnmount(() => {
   cleanupValueIndicatorTooltip();
+  if (syncValueIndicatorFocusFrame) {
+    window.cancelAnimationFrame(syncValueIndicatorFocusFrame);
+  }
+  window.removeEventListener('pointermove', syncValueIndicatorHoveredState);
   window.removeEventListener('pointerup', stopValueIndicatorDragging);
   window.removeEventListener('pointercancel', stopValueIndicatorDragging);
 });
@@ -312,6 +363,7 @@ onBeforeUnmount(() => {
       @pointerenter="onValueIndicatorPointerEnter"
       @pointerleave="onValueIndicatorPointerLeave"
       @pointerdown="onValueIndicatorPointerDown"
+      @keydown="onValueIndicatorKeyDown"
       @focus="onValueIndicatorFocus"
       @blur="onValueIndicatorBlur"
     />
@@ -343,12 +395,7 @@ onBeforeUnmount(() => {
     </template>
 
     <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" :class="style.handle" />
-    <div
-      v-if="valueIndicator"
-      ref="valueIndicator"
-      data-value-indicator="true"
-      :class="style.valueIndicator"
-    >
+    <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" :class="style.valueIndicator">
       <span :class="style.valueIndicatorText">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}
       </span>
