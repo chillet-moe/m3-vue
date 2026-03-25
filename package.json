@@ -1,6 +1,6 @@
 {
   "name": "@chillet/m3-vue",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "type": "module",
   "repository": {
     "url": "git+https://github.com/chillet-moe/m3-vue.git"
