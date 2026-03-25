@@ -604,14 +604,16 @@ html.vl-dark #storybook-root {
 
 /* -------------------- Code block and user markdown -------------------- */
 
-#storybook-docs h2 {
+#storybook-docs .sbdocs .sbdocs-content > h2,
+#storybook-docs .sbdocs .sbdocs-content > .sb-anchor > h2 {
   margin-top: 2rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   font-weight: 700;
 }
 
-.dark h2 {
+.dark .sbdocs .sbdocs-content > h2,
+.dark .sbdocs .sbdocs-content > .sb-anchor > h2 {
   border-bottom-color: var(--neutral-800);
 }
 

@@ -1,0 +1,127 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .dialog {
+    --md-comp-dialog-container-color: var(--md-sys-color-surface-container-high);
+    --md-comp-dialog-container-elevation: var(--md-sys-elevation-level3);
+    --md-comp-dialog-container-shape: var(--md-sys-shape-corner-extra-large);
+    --md-comp-dialog-action-label-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-dialog-action-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-dialog-action-label-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-dialog-action-label-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-dialog-action-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-dialog-action-label-text-type: var(--md-sys-typescale-label-large);
+    --md-comp-dialog-action-label-text-color: var(--md-sys-color-primary);
+    --md-comp-dialog-with-icon-icon-size: 1.5rem;
+    --md-comp-dialog-with-icon-icon-color: var(--md-sys-color-secondary);
+    --md-comp-dialog-headline-font: var(--md-sys-typescale-headline-small-font);
+    --md-comp-dialog-headline-line-height: var(--md-sys-typescale-headline-small-line-height);
+    --md-comp-dialog-headline-size: var(--md-sys-typescale-headline-small-size);
+    --md-comp-dialog-headline-weight: var(--md-sys-typescale-headline-small-weight);
+    --md-comp-dialog-headline-tracking: var(--md-sys-typescale-headline-small-tracking);
+    --md-comp-dialog-headline-type: var(--md-sys-typescale-headline-small);
+    --md-comp-dialog-headline-color: var(--md-sys-color-on-surface);
+    --md-comp-dialog-supporting-text-font: var(--md-sys-typescale-body-medium-font);
+    --md-comp-dialog-supporting-text-line-height: var(--md-sys-typescale-body-medium-line-height);
+    --md-comp-dialog-supporting-text-size: var(--md-sys-typescale-body-medium-size);
+    --md-comp-dialog-supporting-text-weight: var(--md-sys-typescale-body-medium-weight);
+    --md-comp-dialog-supporting-text-tracking: var(--md-sys-typescale-body-medium-tracking);
+    --md-comp-dialog-supporting-text-type: var(--md-sys-typescale-body-medium);
+    --md-comp-dialog-supporting-text-color: var(--md-sys-color-on-surface-variant);
+  }
+}
+
+.dialog {
+  margin: auto;
+  padding: 0;
+  border: none;
+
+  inline-size: min(35rem, calc(100vi - 3rem));
+  max-inline-size: calc(100vi - 3rem);
+  max-block-size: calc(100vb - 3rem);
+
+  color: inherit;
+  background: transparent;
+  overflow: visible;
+}
+
+.dialog::backdrop {
+  background-color: --translucent(var(--md-sys-color-scrim), 0.32);
+}
+
+.surface {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 1rem;
+
+  min-inline-size: min(17.5rem, calc(100vi - 3rem));
+  max-block-size: calc(100vb - 3rem);
+  overflow: hidden;
+
+  padding: 1.5rem;
+  border-radius: var(--md-comp-dialog-container-shape);
+
+  background-color: var(--md-comp-dialog-container-color);
+  box-shadow: var(--md-comp-dialog-container-elevation);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--md-comp-dialog-with-icon-icon-color);
+  font-size: var(--md-comp-dialog-with-icon-icon-size);
+  line-height: 1;
+}
+
+.headline {
+  margin: 0;
+
+  color: var(--md-comp-dialog-headline-color);
+  font-family: var(--md-comp-dialog-headline-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--md-comp-dialog-headline-size);
+  line-height: var(--md-comp-dialog-headline-line-height);
+  font-weight: var(--md-comp-dialog-headline-weight);
+  letter-spacing: var(--md-comp-dialog-headline-tracking);
+}
+
+.content {
+  min-block-size: 0;
+  overflow: auto;
+
+  color: var(--md-comp-dialog-supporting-text-color);
+  font-family: var(--md-comp-dialog-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--md-comp-dialog-supporting-text-size);
+  line-height: var(--md-comp-dialog-supporting-text-line-height);
+  font-weight: var(--md-comp-dialog-supporting-text-weight);
+  letter-spacing: var(--md-comp-dialog-supporting-text-tracking);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.dialog[data-has-icon='true'] {
+  .headline,
+  .content {
+    text-align: center;
+  }
+}
+
+@media (width < 40rem) {
+  .dialog {
+    inline-size: calc(100vi - 2rem);
+    max-inline-size: calc(100vi - 2rem);
+    max-block-size: calc(100vb - 2rem);
+  }
+
+  .surface {
+    min-inline-size: min(17.5rem, calc(100vi - 2rem));
+    max-block-size: calc(100vb - 2rem);
+    padding: 1.25rem;
+  }
+}
