@@ -3,6 +3,8 @@ import {
   normalizeBinding,
   placementToTranslate,
   positionFallback,
+  resolveFallbackPlacement,
+  resolveRenderedPlacement,
   supportsAnchorPositioning,
   supportsPopover,
 } from './helpers';
@@ -32,8 +34,8 @@ export function setupTooltip(
   const canAnchor = supportsAnchorPositioning();
   const anchorName = `--vtt-anchor-${tip.id}`;
   const animMs = opts.animDuration;
-  const applyOffsetCSS = () => {
-    const translate = placementToTranslate(opts.placement, opts.offset);
+  const applyOffsetCSS = (placement = resolveFallbackPlacement(anchor, opts.placement)) => {
+    const translate = placementToTranslate(placement, opts.offset);
 
     if (translate) {
       tip.style.setProperty('translate', translate);
@@ -89,7 +91,14 @@ export function setupTooltip(
 
   const updatePositionIfNeeded = () => {
     if (!isOpen) return;
-    if (!canAnchor) positionFallback(tip, anchor, opts.placement);
+
+    tip.style.removeProperty('translate');
+
+    const effectivePlacement = canAnchor
+      ? resolveRenderedPlacement(tip, anchor, opts.placement)
+      : positionFallback(tip, anchor, opts.placement);
+
+    applyOffsetCSS(effectivePlacement);
   };
 
   const openNow = () => {

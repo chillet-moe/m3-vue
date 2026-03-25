@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import vTooltip, { normalizeBinding } from './vTooltip';
-import { placementToTranslate, positionFallback, resolveFallbackPlacement } from './helpers';
+import { inferPlacementFromRects, placementToTranslate, positionFallback, resolveFallbackPlacement } from './helpers';
+import { setupTooltip } from './setup';
 
 function createTrigger() {
   const el = document.createElement('button');
@@ -50,13 +51,20 @@ describe('normalizeBinding', () => {
 });
 
 describe('vTooltip directive', () => {
+  let requestAnimationFrameSpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
     vi.useFakeTimers();
+    requestAnimationFrameSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
+      callback(0);
+      return 1;
+    });
   });
 
   afterEach(() => {
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
+    requestAnimationFrameSpy.mockRestore();
     document.body.innerHTML = '';
   });
 
@@ -104,6 +112,30 @@ describe('vTooltip directive', () => {
     expect(tip).not.toBeNull();
     expect(tip!.style.getPropertyValue('translate')).toBe('var(--space) 0');
   });
+
+  it('updates offset to match the flipped fallback placement', () => {
+    const el = createTrigger();
+    const state = setupTooltip(el, {
+      content: 'Tooltip content',
+      placement: 'top',
+      offset: 'var(--space)',
+    }, { manual: true });
+
+    Object.defineProperty(el, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => createRect({ top: 4, bottom: 36, left: 120, right: 152, width: 32, height: 32 }),
+    });
+    Object.defineProperty(state.tip, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => createRect({ width: 48, height: 24 }),
+    });
+
+    state.show();
+
+    expect(state.tip.style.getPropertyValue('translate')).toBe('0 var(--space)');
+
+    state.cleanup();
+  });
 });
 
 describe('positionFallback', () => {
@@ -143,6 +175,40 @@ describe('positionFallback', () => {
 
     expect(tip.style.left).toBe('152px');
     expect(tip.style.top).toBe('82px');
+  });
+
+  it('returns the flipped placement when space is insufficient', () => {
+    const anchor = document.createElement('div');
+    const tip = document.createElement('div');
+
+    Object.defineProperty(anchor, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => createRect({ top: 4, bottom: 36, left: 120, right: 152, width: 32, height: 32 }),
+    });
+    Object.defineProperty(tip, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => createRect({ width: 48, height: 24 }),
+    });
+
+    expect(positionFallback(tip, anchor, 'top')).toBe('bottom');
+    expect(tip.style.left).toBe('112px');
+    expect(tip.style.top).toBe('46px');
+  });
+});
+
+describe('inferPlacementFromRects', () => {
+  it('infers the rendered side from actual geometry', () => {
+    const anchorRect = createRect({ top: 40, bottom: 72, left: 100, right: 132, width: 32, height: 32 });
+    const tipRect = createRect({ top: 82, bottom: 106, left: 92, right: 140, width: 48, height: 24 });
+
+    expect(inferPlacementFromRects(tipRect, anchorRect, 'top')).toBe('bottom');
+  });
+
+  it('falls back when the tooltip rect cannot reveal a direction yet', () => {
+    const anchorRect = createRect({ top: 40, bottom: 72, left: 100, right: 132, width: 32, height: 32 });
+    const tipRect = createRect();
+
+    expect(inferPlacementFromRects(tipRect, anchorRect, 'left')).toBe('left');
   });
 });
 

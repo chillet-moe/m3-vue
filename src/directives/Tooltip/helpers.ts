@@ -1,7 +1,7 @@
 import type { NormalizedTooltipOptions, Placement, TooltipBindingValue } from './types';
 
 let uid = 0;
-type PhysicalPlacement = 'top' | 'bottom' | 'left' | 'right';
+export type PhysicalPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 function isEl(value: unknown): value is HTMLElement {
   return Boolean(value) && typeof value === 'object' && (value as Node).nodeType === 1;
@@ -109,7 +109,49 @@ export function resolveFallbackPlacement(anchor: HTMLElement, placement: Placeme
   return blockStart;
 }
 
-export function positionFallback(tip: HTMLElement, anchor: HTMLElement, placement: Placement) {
+export function inferPlacementFromRects(
+  tipRect: DOMRect,
+  anchorRect: DOMRect,
+  fallbackPlacement: PhysicalPlacement,
+): PhysicalPlacement {
+  if (tipRect.width === 0 && tipRect.height === 0) {
+    return fallbackPlacement;
+  }
+
+  const anchorCenterX = anchorRect.left + anchorRect.width / 2;
+  const anchorCenterY = anchorRect.top + anchorRect.height / 2;
+  const tipCenterX = tipRect.left + tipRect.width / 2;
+  const tipCenterY = tipRect.top + tipRect.height / 2;
+  const dx = tipCenterX - anchorCenterX;
+  const dy = tipCenterY - anchorCenterY;
+  const absDx = Math.abs(dx);
+  const absDy = Math.abs(dy);
+
+  if (absDx < 0.5 && absDy < 0.5) {
+    return fallbackPlacement;
+  }
+
+  if (absDy > absDx) {
+    return dy < 0 ? 'top' : 'bottom';
+  }
+
+  if (absDx > absDy) {
+    return dx < 0 ? 'left' : 'right';
+  }
+
+  if (fallbackPlacement === 'top' || fallbackPlacement === 'bottom') {
+    return dy <= 0 ? 'top' : 'bottom';
+  }
+
+  return dx <= 0 ? 'left' : 'right';
+}
+
+export function resolveRenderedPlacement(tip: HTMLElement, anchor: HTMLElement, placement: Placement): PhysicalPlacement {
+  const fallbackPlacement = resolveFallbackPlacement(anchor, placement);
+  return inferPlacementFromRects(tip.getBoundingClientRect(), anchor.getBoundingClientRect(), fallbackPlacement);
+}
+
+export function positionFallback(tip: HTMLElement, anchor: HTMLElement, placement: Placement): PhysicalPlacement {
   const gap = 10;
   const pad = 8;
 
@@ -155,6 +197,8 @@ export function positionFallback(tip: HTMLElement, anchor: HTMLElement, placemen
   tip.style.position = 'fixed';
   tip.style.left = `${x}px`;
   tip.style.top = `${y}px`;
+
+  return nextPlacement;
 }
 
 export function ensureTipElement(opts: NormalizedTooltipOptions, trigger: HTMLElement) {
