@@ -51,7 +51,7 @@ export default defineConfig({
       formats: ['es'],
       fileName: 'index',
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: Object.keys(pkg.peerDependencies),
       output: {
         assetFileNames: '[name][extname]',
