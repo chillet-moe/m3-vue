@@ -1,0 +1,154 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .snackbar {
+    --md-comp-snackbar-container-color: var(--md-sys-color-inverse-surface);
+    --md-comp-snackbar-container-shadow-color: var(--md-sys-color-shadow);
+    --md-comp-snackbar-container-elevation: var(--md-sys-elevation-level3);
+    --md-comp-snackbar-container-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-snackbar-container-padding-inline-start: 1rem;
+    --md-comp-snackbar-container-padding-inline-end: 0.5rem;
+    --md-comp-snackbar-container-padding-block: 1rem;
+    --md-comp-snackbar-with-single-line-container-height: 3rem;
+    --md-comp-snackbar-action-label-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-snackbar-action-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-snackbar-action-label-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-snackbar-action-label-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-snackbar-action-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-snackbar-action-label-text-color: var(--md-sys-color-inverse-primary);
+    --md-comp-snackbar-icon-color: var(--md-sys-color-inverse-on-surface);
+    --md-comp-snackbar-icon-size: 1.25rem;
+    --md-comp-snackbar-supporting-text-font: var(--md-sys-typescale-body-medium-font);
+    --md-comp-snackbar-supporting-text-line-height: var(--md-sys-typescale-body-medium-line-height);
+    --md-comp-snackbar-supporting-text-size: var(--md-sys-typescale-body-medium-size);
+    --md-comp-snackbar-supporting-text-weight: var(--md-sys-typescale-body-medium-weight);
+    --md-comp-snackbar-supporting-text-tracking: var(--md-sys-typescale-body-medium-tracking);
+    --md-comp-snackbar-supporting-text-color: var(--md-sys-color-inverse-on-surface);
+  }
+}
+
+.snackbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'content actions';
+  gap: 0.5rem;
+  align-items: center;
+
+  min-block-size: var(--md-comp-snackbar-with-single-line-container-height);
+  padding-inline: var(--md-comp-snackbar-container-padding-inline-start)
+    var(--md-comp-snackbar-container-padding-inline-end);
+  padding-block: 0;
+  border-radius: var(--md-comp-snackbar-container-shape);
+
+  color: var(--md-comp-snackbar-supporting-text-color);
+  background-color: var(--md-comp-snackbar-container-color);
+  box-shadow: var(--md-comp-snackbar-container-elevation);
+}
+
+.content {
+  grid-area: content;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  padding-block-start: var(--md-comp-snackbar-container-padding-block);
+  padding-block-end: var(--md-comp-snackbar-container-padding-block);
+
+  font-size: var(--md-comp-snackbar-supporting-text-size);
+  line-height: var(--md-comp-snackbar-supporting-text-line-height);
+  font-weight: var(--md-comp-snackbar-supporting-text-weight);
+  letter-spacing: var(--md-comp-snackbar-supporting-text-tracking);
+}
+
+.snackbar[data-action-layout='new-line'] .content {
+  padding-block-end: 0;
+}
+
+.actions {
+  grid-area: actions;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-inline-size: max-content;
+  justify-self: end;
+}
+
+.snackbar[data-action-layout='new-line'] {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'content'
+    'actions';
+  row-gap: 0.5rem;
+  padding-block-end: var(--md-comp-snackbar-container-padding-inline-end);
+}
+
+.snackbar[data-action-layout='new-line'] .actions {
+  justify-self: end;
+}
+
+.actionButton {
+  --md-comp-button-text-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-text-hovered-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-text-focused-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-text-pressed-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-text-disabled-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-text-hovered-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-text-focused-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-text-pressed-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
+  --md-comp-button-focus-indicator-color: var(--md-comp-snackbar-action-label-text-color);
+}
+
+.dismissButton {
+  --md-comp-icon-button-standard-icon-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-standard-hovered-icon-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-standard-focused-icon-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-standard-pressed-icon-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-standard-disabled-icon-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-standard-hovered-state-layer-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-standard-focused-state-layer-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-standard-pressed-state-layer-color: var(--md-comp-snackbar-icon-color);
+  --md-comp-icon-button-focus-indicator-color: var(--md-comp-snackbar-icon-color);
+}
+
+.stackPopover {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  inline-size: min(calc(100vi - 2rem), 36rem);
+}
+
+.stackPopover[data-position='bottom'],
+.stackPopover[data-position='bottom-start'],
+.stackPopover[data-position='bottom-end'] {
+  inset-block-end: 1rem;
+}
+
+.stackPopover[data-position='top'],
+.stackPopover[data-position='top-start'],
+.stackPopover[data-position='top-end'] {
+  inset-block-start: 1rem;
+}
+
+.stackPopover[data-position='top'],
+.stackPopover[data-position='bottom'] {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+.stack {
+  inline-size: 100%;
+}
+
+.stackPopover[data-position='top-start'],
+.stackPopover[data-position='bottom-start'] {
+  inset-inline-start: 1rem;
+}
+
+.stackPopover[data-position='top-end'],
+.stackPopover[data-position='bottom-end'] {
+  inset-inline-end: 1rem;
+}
+
+@media (width < 40rem) {
+  .snackbar {
+    inline-size: min(100%, calc(100vi - 2rem));
+  }
+}

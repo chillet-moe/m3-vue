@@ -5,7 +5,6 @@ import Dialog from './Dialog.vue';
 import type { DialogProps } from './Dialog.vue';
 
 const meta = {
-  title: 'Components/Dialog/Dialog',
   component: Dialog,
   args: {
     open: false,

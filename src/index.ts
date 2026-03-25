@@ -19,6 +19,7 @@ export * from './components/Icon';
 export * from './components/Tooltip';
 export * from './components/Card';
 export * from './components/Dialog';
+export * from './components/Snackbar';
 export * from './components/Switch';
 export * from './components/Radio';
 export * from './components/CheckBox';
