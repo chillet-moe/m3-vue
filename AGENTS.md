@@ -12,3 +12,4 @@
   - 使用 reference-tokens 里的 token css，参考已有组件的整理方式。
   - 如果使用 CSS 修改原生 HTML 元素不可行，则可以采用不可见的原生 HTML 元素负责功能和可访问性，自己的元素作为视觉效果的思路。
 - 优先使用新的平台特性，可以使用 Baseline 2025。如果有兼容性问题，请先询问我。
+- 对于组件的 story，除非是例如 Button/IconButton Button/ButtonGroup 这样的情况，不然不要设定 story 的 title，否则会多一层
