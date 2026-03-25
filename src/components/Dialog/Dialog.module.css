@@ -32,6 +32,9 @@
 }
 
 .dialog {
+  position: fixed;
+  inset: 0;
+
   margin: auto;
   padding: 0;
   border: none;
@@ -43,10 +46,27 @@
   color: inherit;
   background: transparent;
   overflow: visible;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--md-easing-fast),
+    visibility var(--md-easing-fast),
+    overlay var(--md-duration-fast) allow-discrete,
+    display var(--md-duration-fast) allow-discrete;
 }
 
 .dialog::backdrop {
-  background-color: --translucent(var(--md-sys-color-scrim), 0.32);
+  background-color: transparent;
+  transition: background-color var(--md-duration-spatial) var(--md-timing-function-spatial);
+}
+
+.dialog[open] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  animation: dialogOpacity var(--md-easing-fast) backwards;
 }
 
 .surface {
@@ -63,6 +83,29 @@
 
   background-color: var(--md-comp-dialog-container-color);
   box-shadow: var(--md-comp-dialog-container-elevation);
+
+  opacity: 0;
+  transform: translateY(-3rem) scaleY(0.9);
+  transform-origin: center;
+  clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
+  transition:
+    opacity var(--md-easing-fast),
+    transform var(--md-duration-spatial) var(--md-timing-function-spatial),
+    clip-path var(--md-duration-spatial) var(--md-timing-function-spatial);
+}
+
+.dialog[open]::backdrop {
+  background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+  animation: dialogOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
+}
+
+.dialog[open] .surface {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+  clip-path: inset(0 0 0 0 round var(--md-comp-dialog-container-shape));
+  animation:
+    dialogIn var(--md-timing-function-spatial) var(--md-duration-spatial),
+    dialogOpacity var(--md-easing-fast) backwards;
 }
 
 .icon {
@@ -77,6 +120,7 @@
 
 .headline {
   margin: 0;
+  opacity: 0;
 
   color: var(--md-comp-dialog-headline-color);
   font-family: var(--md-comp-dialog-headline-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -84,11 +128,13 @@
   line-height: var(--md-comp-dialog-headline-line-height);
   font-weight: var(--md-comp-dialog-headline-weight);
   letter-spacing: var(--md-comp-dialog-headline-tracking);
+  transition: opacity var(--md-easing-fast);
 }
 
 .content {
   min-block-size: 0;
   overflow: auto;
+  opacity: 0;
 
   color: var(--md-comp-dialog-supporting-text-color);
   font-family: var(--md-comp-dialog-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -96,13 +142,38 @@
   line-height: var(--md-comp-dialog-supporting-text-line-height);
   font-weight: var(--md-comp-dialog-supporting-text-weight);
   letter-spacing: var(--md-comp-dialog-supporting-text-tracking);
+  transition: opacity var(--md-easing-fast);
 }
 
 .actions {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0.5rem;
+  opacity: 0;
+  bottom: 100%;
+  transition:
+    opacity var(--md-easing-fast),
+    bottom var(--md-duration-spatial) var(--md-timing-function-spatial);
+}
+
+.dialog[open] .headline {
+  opacity: 1;
+  animation: dialogOpacity var(--md-easing-fast);
+}
+
+.dialog[open] .content {
+  opacity: 1;
+  animation: dialogOpacity var(--md-easing-fast) 50ms backwards;
+}
+
+.dialog[open] .actions {
+  opacity: 1;
+  bottom: 0;
+  animation:
+    buttonsIn var(--md-timing-function-spatial) var(--md-duration-spatial),
+    dialogOpacity var(--md-easing-fast) backwards;
 }
 
 .dialog[data-has-icon='true'] {
@@ -123,5 +194,76 @@
     min-inline-size: min(17.5rem, calc(100vi - 2rem));
     max-block-size: calc(100vb - 2rem);
     padding: 1.25rem;
+  }
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .dialog[open]::backdrop {
+    background-color: transparent;
+  }
+
+  .dialog[open] .surface {
+    opacity: 0;
+    transform: translateY(-3rem) scaleY(0.9);
+    clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
+  }
+
+  .dialog[open] .headline,
+  .dialog[open] .content {
+    opacity: 0;
+  }
+
+  .dialog[open] .actions {
+    opacity: 0;
+    bottom: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog,
+  .dialog::backdrop,
+  .surface,
+  .headline,
+  .content,
+  .actions {
+    transition-duration: 0ms;
+    animation-duration: 0ms;
+  }
+}
+
+@keyframes dialogIn {
+  0% {
+    transform: translateY(-3rem) scaleY(0.9);
+    clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
+  }
+
+  100% {
+    transform: translateY(0) scaleY(1);
+    clip-path: inset(0 0 0 0 round var(--md-comp-dialog-container-shape));
+  }
+}
+
+@keyframes buttonsIn {
+  0% {
+    bottom: 100%;
+  }
+
+  100% {
+    bottom: 0;
+  }
+}
+
+@keyframes dialogOpacity {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
