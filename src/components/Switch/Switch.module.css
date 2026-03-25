@@ -83,7 +83,7 @@
   --switch-handle-base-height: var(--md-comp-switch-unselected-handle-height);
   --switch-handle-width: var(--switch-handle-base-width);
   --switch-handle-height: var(--switch-handle-base-height);
-  --switch-handle-unchecked-inset: 0.375rem;
+  --switch-handle-unchecked-inset: 0.5rem;
   --switch-handle-center-unchecked: calc(var(--switch-handle-unchecked-inset) + var(--switch-handle-base-width) / 2);
   --switch-handle-center-checked: calc(100% - 0.25rem - var(--md-comp-switch-selected-handle-width) / 2);
   --switch-handle-center: var(--switch-handle-center-unchecked);
