@@ -22,10 +22,21 @@
   }
 }
 
-:disabled.state-layer::after,
-input:disabled + .layer-container.state-layer::after,
-label:has(> input:disabled).state-layer::after {
-  display: none;
+:is(
+  :disabled.state-layer,
+  input:disabled + .layer-container.state-layer,
+  input:disabled + .layer-container .state-layer,
+  label:has(> input:disabled).state-layer,
+  label:has(> input:disabled) .state-layer,
+  [aria-disabled='true'].state-layer,
+  [aria-disabled='true'] .state-layer
+) {
+  pointer-events: none;
+
+  &::after,
+  > .ripple {
+    display: none;
+  }
 }
 
 .state-layer:hover::after,
