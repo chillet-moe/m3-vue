@@ -20,3 +20,6 @@ export * from './components/Tooltip';
 export * from './components/Card';
 
 export * from './components/Switch';
+
+export * from './components/Radio';
+export * from './components/CheckBox';

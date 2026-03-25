@@ -1,0 +1,117 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .root {
+    --md-comp-radio-icon-size: 1.25rem;
+    --md-comp-radio-icon-shape: var(--md-sys-shape-corner-full);
+    --md-comp-radio-unselected-outline-width: 0.125rem;
+    --md-comp-radio-selected-outline-width: 0.125rem;
+    --md-comp-radio-unselected-outline-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-radio-selected-outline-color: var(--md-sys-color-primary);
+    --md-comp-radio-selected-dot-size: 0.625rem;
+    --md-comp-radio-selected-dot-color: var(--md-sys-color-primary);
+    --md-comp-radio-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-radio-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
+    --md-comp-radio-focus-indicator-offset: var(--md-sys-state-focus-indicator-outer-offset);
+    --md-comp-radio-disabled-unselected-outline-color: var(--md-sys-color-on-surface);
+    --md-comp-radio-disabled-selected-outline-color: var(--md-sys-color-on-surface);
+    --md-comp-radio-disabled-selected-dot-color: var(--md-sys-color-on-surface);
+    --md-comp-radio-disabled-outline-opacity: 0.38;
+    --md-comp-radio-disabled-dot-opacity: 0.38;
+  }
+}
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  inline-size: fit-content;
+  cursor: pointer;
+  user-select: none;
+}
+
+.root[aria-disabled='true'] {
+  cursor: default;
+}
+
+.input {
+  position: absolute;
+  margin: 0;
+  opacity: 0;
+  inset: 0;
+  cursor: inherit;
+}
+
+.control {
+  position: relative;
+  inline-size: var(--md-comp-radio-icon-size);
+  block-size: var(--md-comp-radio-icon-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.outer {
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: var(--md-comp-radio-icon-shape);
+  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-comp-radio-unselected-outline-color);
+  transition: box-shadow var(--md-easing-fast);
+}
+
+.inner {
+  position: absolute;
+  inline-size: var(--md-comp-radio-selected-dot-size);
+  block-size: var(--md-comp-radio-selected-dot-size);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-comp-radio-selected-dot-color);
+  transform: scale(0);
+  transition: transform var(--md-easing-fast-spatial);
+}
+
+.input:checked + .control .outer {
+  box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-comp-radio-selected-outline-color);
+}
+
+.input:checked + .control .inner {
+  transform: scale(1);
+}
+
+.root:has(.input:not(:disabled):hover) .outer {
+  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
+}
+
+.root:has(.input:not(:disabled):hover) .input:checked + .control .outer,
+.root:has(.input:not(:disabled):active) .input:checked + .control .outer {
+  box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-sys-color-primary);
+}
+
+.root:has(.input:not(:disabled):active) .outer {
+  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
+}
+
+.input:focus-visible + .control {
+  outline: var(--md-comp-radio-focus-indicator-thickness) solid var(--md-comp-radio-focus-indicator-color);
+  outline-offset: var(--md-comp-radio-focus-indicator-offset);
+  border-radius: var(--md-comp-radio-icon-shape);
+}
+
+.input:disabled + .control .outer {
+  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width)
+    --translucent(var(--md-comp-radio-disabled-unselected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
+}
+
+.input:disabled:checked + .control .outer {
+  box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width)
+    --translucent(var(--md-comp-radio-disabled-selected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
+}
+
+.input:disabled:checked + .control .inner {
+  background-color: --translucent(var(--md-comp-radio-disabled-selected-dot-color), var(--md-comp-radio-disabled-dot-opacity));
+}
+
+.label {
+  @apply body-medium;
+  color: var(--md-sys-color-on-surface);
+}

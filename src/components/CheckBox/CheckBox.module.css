@@ -1,0 +1,126 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .root {
+    --md-comp-checkbox-icon-size: 1.125rem;
+    --md-comp-checkbox-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-checkbox-outline-width: 0.125rem;
+    --md-comp-checkbox-unselected-outline-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-checkbox-selected-container-color: var(--md-sys-color-primary);
+    --md-comp-checkbox-selected-icon-color: var(--md-sys-color-on-primary);
+    --md-comp-checkbox-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-checkbox-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
+    --md-comp-checkbox-focus-indicator-offset: var(--md-sys-state-focus-indicator-outer-offset);
+    --md-comp-checkbox-disabled-unselected-outline-color: var(--md-sys-color-on-surface);
+    --md-comp-checkbox-disabled-selected-container-color: var(--md-sys-color-on-surface);
+    --md-comp-checkbox-disabled-selected-icon-color: var(--md-sys-color-surface);
+    --md-comp-checkbox-disabled-outline-opacity: 0.38;
+    --md-comp-checkbox-disabled-selected-container-opacity: 0.38;
+    --md-comp-checkbox-disabled-selected-icon-opacity: 0.38;
+  }
+}
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  inline-size: fit-content;
+  cursor: pointer;
+  user-select: none;
+}
+
+.root[aria-disabled='true'] {
+  cursor: default;
+}
+
+.input {
+  position: absolute;
+  margin: 0;
+  opacity: 0;
+  inset: 0;
+  cursor: inherit;
+}
+
+.control {
+  position: relative;
+  inline-size: var(--md-comp-checkbox-icon-size);
+  block-size: var(--md-comp-checkbox-icon-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: var(--md-comp-checkbox-shape);
+  box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width) var(--md-comp-checkbox-unselected-outline-color);
+  background-color: transparent;
+  transition:
+    background-color var(--md-easing-fast),
+    box-shadow var(--md-easing-fast);
+}
+
+.icon {
+  position: absolute;
+  inline-size: 0.6rem;
+  block-size: 0.35rem;
+  border-inline-start: 0.125rem solid transparent;
+  border-block-end: 0.125rem solid transparent;
+  transform: translateY(-0.05rem) rotate(-45deg) scale(0.5);
+  opacity: 0;
+  transition: all var(--md-easing-fast-spatial);
+}
+
+.input:checked + .control .box {
+  background-color: var(--md-comp-checkbox-selected-container-color);
+  box-shadow: none;
+}
+
+.input:checked + .control .icon {
+  border-color: var(--md-comp-checkbox-selected-icon-color);
+  opacity: 1;
+  transform: translateY(-0.05rem) rotate(-45deg) scale(1);
+}
+
+.root:has(.input:not(:disabled):hover) .box {
+  box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width) var(--md-sys-color-on-surface);
+}
+
+.root:has(.input:not(:disabled):active) .box,
+.root:has(.input:not(:disabled):hover) .input:checked + .control .box,
+.root:has(.input:not(:disabled):active) .input:checked + .control .box {
+  background-color: var(--md-sys-color-primary);
+}
+
+.input:focus-visible + .control {
+  outline: var(--md-comp-checkbox-focus-indicator-thickness) solid var(--md-comp-checkbox-focus-indicator-color);
+  outline-offset: var(--md-comp-checkbox-focus-indicator-offset);
+  border-radius: var(--md-comp-checkbox-shape);
+}
+
+.input:disabled + .control .box {
+  box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width)
+    --translucent(var(--md-comp-checkbox-disabled-unselected-outline-color), var(--md-comp-checkbox-disabled-outline-opacity));
+}
+
+.input:disabled:checked + .control .box {
+  background-color: --translucent(
+    var(--md-comp-checkbox-disabled-selected-container-color),
+    var(--md-comp-checkbox-disabled-selected-container-opacity)
+  );
+  box-shadow: none;
+}
+
+.input:disabled:checked + .control .icon {
+  border-color: --translucent(
+    var(--md-comp-checkbox-disabled-selected-icon-color),
+    var(--md-comp-checkbox-disabled-selected-icon-opacity)
+  );
+}
+
+.label {
+  @apply body-medium;
+  color: var(--md-sys-color-on-surface);
+}
