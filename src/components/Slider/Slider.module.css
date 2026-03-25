@@ -1,5 +1,11 @@
 @import '../../styles/typography.css';
 
+@property --percent {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 .slider {
   position: relative;
 
@@ -20,6 +26,7 @@
   block-size: var(--handle-height);
 
   print-color-adjust: exact;
+  transition: --percent var(--md-timing-function-emphasized-decel) var(--md-duration-slow);
 
   --md-comp-slider-active-track-color: var(--md-sys-color-primary);
   --md-comp-slider-inactive-track-color: var(--md-sys-color-primary-container);

@@ -135,6 +135,7 @@ const stopIndicatorsFiltered = computed(() => {
   return stopIndicators.filter((stop) => stop >= min && stop <= max);
 });
 
+const sliderRef = useTemplateRef<HTMLDivElement>('slider');
 const inputRef = useTemplateRef<HTMLInputElement>('input');
 const handleRef = useTemplateRef<HTMLDivElement>('handle');
 const valueIndicatorRef = useTemplateRef<HTMLDivElement>('valueIndicator');
@@ -144,6 +145,7 @@ const isValueIndicatorHovered = ref(false);
 const isValueIndicatorFocused = ref(false);
 const isValueIndicatorDragging = ref(false);
 let syncValueIndicatorFocusFrame = 0;
+let syncValueIndicatorPositionFrame = 0;
 
 const valueIndicatorBinding = computed(() => {
   const target = valueIndicatorRef.value;
@@ -166,6 +168,36 @@ const valueIndicatorBinding = computed(() => {
 const cleanupValueIndicatorTooltip = () => {
   valueIndicatorTooltip.value?.cleanup();
   valueIndicatorTooltip.value = null;
+};
+
+const stopSyncValueIndicatorPosition = () => {
+  if (syncValueIndicatorPositionFrame) {
+    window.cancelAnimationFrame(syncValueIndicatorPositionFrame);
+    syncValueIndicatorPositionFrame = 0;
+  }
+};
+
+const syncValueIndicatorPosition = () => {
+  valueIndicatorTooltip.value?.reposition();
+  syncValueIndicatorPositionFrame = window.requestAnimationFrame(syncValueIndicatorPosition);
+};
+
+const startSyncValueIndicatorPosition = (event: TransitionEvent) => {
+  if (event.target !== sliderRef.value || event.propertyName !== '--percent' || !valueIndicatorTooltip.value) {
+    return;
+  }
+
+  stopSyncValueIndicatorPosition();
+  syncValueIndicatorPositionFrame = window.requestAnimationFrame(syncValueIndicatorPosition);
+};
+
+const finishSyncValueIndicatorPosition = (event: TransitionEvent) => {
+  if (event.target !== sliderRef.value || event.propertyName !== '--percent') {
+    return;
+  }
+
+  stopSyncValueIndicatorPosition();
+  valueIndicatorTooltip.value?.reposition();
 };
 
 const syncValueIndicatorVisibility = () => {
@@ -245,8 +277,8 @@ const stopValueIndicatorDragging = (event?: Event) => {
   }
 
   isValueIndicatorDragging.value = false;
-  if (event instanceof PointerEvent || event instanceof MouseEvent) {
-    syncValueIndicatorHoveredState(event);
+  if (event && 'clientX' in event && 'clientY' in event) {
+    syncValueIndicatorHoveredState(event as MouseEvent | PointerEvent);
   }
 };
 
@@ -330,6 +362,7 @@ onBeforeUnmount(() => {
   if (syncValueIndicatorFocusFrame) {
     window.cancelAnimationFrame(syncValueIndicatorFocusFrame);
   }
+  stopSyncValueIndicatorPosition();
   window.removeEventListener('pointermove', syncValueIndicatorHoveredState);
   window.removeEventListener('pointerup', stopValueIndicatorDragging);
   window.removeEventListener('pointercancel', stopValueIndicatorDragging);
@@ -338,6 +371,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
+    ref="slider"
     :aria-disabled="disabled"
     :class="[
       style.slider,
@@ -348,6 +382,9 @@ onBeforeUnmount(() => {
     :style="{
       '--percent': valuePercent,
     }"
+    @transitionstart="startSyncValueIndicatorPosition"
+    @transitionend="finishSyncValueIndicatorPosition"
+    @transitioncancel="finishSyncValueIndicatorPosition"
   >
     <input
       ref="input"

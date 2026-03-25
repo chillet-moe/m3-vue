@@ -357,4 +357,5 @@ describe('Slider', () => {
 
     app.unmount();
   });
+
 });
