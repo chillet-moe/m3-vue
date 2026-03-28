@@ -6,6 +6,8 @@ import { webTypesFromVueComponentMeta } from './scripts/web-types-gen';
 import path from 'node:path';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import copyFiles from './scripts/copy-files';
+import { browserslistToTargets, Features } from 'lightningcss';
+import browserslist from 'browserslist';
 
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -69,8 +71,14 @@ export default defineConfig({
     cssCodeSplit: false,
   },
   css: {
+    transformer: 'lightningcss',
     modules: {
       localsConvention: 'camelCase',
+    },
+    lightningcss: {
+      targets: browserslistToTargets(browserslist('baseline 2025')),
+      // https://github.com/porsche-design-system/porsche-design-system/issues/4257
+      exclude: Features.LightDark,
     },
   },
   test: {
