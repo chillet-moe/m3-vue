@@ -71,7 +71,7 @@ export default defineConfig({
     cssCodeSplit: false,
   },
   css: {
-    transformer: 'lightningcss',
+    transformer: 'postcss',
     modules: {
       localsConvention: 'camelCase',
     },
