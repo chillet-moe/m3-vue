@@ -1,0 +1,296 @@
+<script setup lang="ts">
+import { computed, nextTick, onBeforeUnmount, onMounted, useId, useTemplateRef, watch } from 'vue';
+import style from './Menu.module.css';
+
+export type MenuItem = {
+  label: string;
+  value: string;
+  disabled?: boolean;
+};
+
+export type MenuProps = {
+  /** Menu items rendered inside the popup. */
+  items: MenuItem[];
+
+  /** Accessible label for the trigger button. */
+  triggerLabel?: string;
+
+  /** Whether selecting an item closes the menu. */
+  closeOnSelect?: boolean;
+};
+
+const { items, triggerLabel = 'Open menu', closeOnSelect = true } = defineProps<MenuProps>();
+
+const open = defineModel<boolean>('open', { default: false });
+
+const emit = defineEmits<{
+  /** Fired when a menu item is activated. */
+  select: [item: MenuItem];
+}>();
+
+const triggerRef = useTemplateRef<HTMLButtonElement>('trigger');
+const menuRef = useTemplateRef<HTMLDivElement>('menu');
+
+const menuId = `menu-${useId()}`;
+const anchorName = `--menu-anchor-${menuId}`;
+
+const enabledItems = computed(() => items.filter((item) => !item.disabled));
+
+function showMenu() {
+  const menu = menuRef.value;
+
+  if (!menu) {
+    return;
+  }
+
+  try {
+    menu.showPopover();
+  } catch {
+  }
+}
+
+function hideMenu() {
+  const menu = menuRef.value;
+
+  if (!menu) {
+    return;
+  }
+
+  try {
+    menu.hidePopover();
+  } catch {
+  }
+}
+
+function getMenuItemElements() {
+  const menu = menuRef.value;
+
+  if (!menu) {
+    return [] as HTMLButtonElement[];
+  }
+
+  return Array.from(menu.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]:not(:disabled)'));
+}
+
+function focusItem(index: number) {
+  const menuItems = getMenuItemElements();
+
+  if (!menuItems.length) {
+    return;
+  }
+
+  const normalized = (index + menuItems.length) % menuItems.length;
+  menuItems[normalized]?.focus();
+}
+
+async function openMenuAndFocus(index = 0) {
+  if (!enabledItems.value.length) {
+    open.value = true;
+    showMenu();
+    return;
+  }
+
+  open.value = true;
+  showMenu();
+  await nextTick();
+  focusItem(index);
+}
+
+function closeMenuAndFocusTrigger() {
+  open.value = false;
+  hideMenu();
+  triggerRef.value?.focus();
+}
+
+function toggleMenu() {
+  open.value = !open.value;
+}
+
+function onTriggerClick() {
+  toggleMenu();
+}
+
+function onTriggerKeydown(event: KeyboardEvent) {
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    void openMenuAndFocus(0);
+    return;
+  }
+
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    void openMenuAndFocus(-1);
+  }
+}
+
+function onMenuKeydown(event: KeyboardEvent) {
+  const menuItems = getMenuItemElements();
+
+  if (!menuItems.length) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeMenuAndFocusTrigger();
+    }
+    return;
+  }
+
+  const currentIndex = menuItems.findIndex((item) => item === document.activeElement);
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    focusItem(currentIndex + 1);
+    return;
+  }
+
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    focusItem(currentIndex - 1);
+    return;
+  }
+
+  if (event.key === 'Home') {
+    event.preventDefault();
+    focusItem(0);
+    return;
+  }
+
+  if (event.key === 'End') {
+    event.preventDefault();
+    focusItem(menuItems.length - 1);
+    return;
+  }
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeMenuAndFocusTrigger();
+  }
+}
+
+function onSelect(item: MenuItem) {
+  if (item.disabled) {
+    return;
+  }
+
+  emit('select', item);
+
+  if (closeOnSelect) {
+    closeMenuAndFocusTrigger();
+  }
+}
+
+function onDocumentPointerDown(event: Event) {
+  const target = event.target as Node | null;
+
+  if (!target) {
+    return;
+  }
+
+  if (triggerRef.value?.contains(target) || menuRef.value?.contains(target)) {
+    return;
+  }
+
+  open.value = false;
+  hideMenu();
+}
+
+watch(
+  [menuRef, open],
+  async ([menu, nextOpen]) => {
+    if (!menu) {
+      return;
+    }
+
+    if (nextOpen) {
+      showMenu();
+      await nextTick();
+      if (document.activeElement === triggerRef.value) {
+        focusItem(0);
+      }
+      return;
+    }
+
+    hideMenu();
+  },
+  {
+    immediate: true,
+    flush: 'post',
+  },
+);
+
+watch(
+  triggerRef,
+  (trigger) => {
+    if (!trigger) {
+      return;
+    }
+
+    trigger.style.setProperty('anchor-name', anchorName);
+  },
+  {
+    immediate: true,
+    flush: 'post',
+  },
+);
+
+watch(
+  menuRef,
+  (menu) => {
+    if (!menu) {
+      return;
+    }
+
+    menu.style.setProperty('position-anchor', anchorName);
+  },
+  {
+    immediate: true,
+    flush: 'post',
+  },
+);
+
+onMounted(() => {
+  document.addEventListener('pointerdown', onDocumentPointerDown, true);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('pointerdown', onDocumentPointerDown, true);
+});
+</script>
+
+<template>
+  <div :class="style.root">
+    <button
+      ref="trigger"
+      type="button"
+      :class="style.trigger"
+      :aria-label="triggerLabel"
+      aria-haspopup="menu"
+      :aria-controls="menuId"
+      :aria-expanded="open ? 'true' : 'false'"
+      @click="onTriggerClick"
+      @keydown="onTriggerKeydown"
+    >
+      <slot name="trigger">{{ triggerLabel }}</slot>
+    </button>
+
+    <div
+      :id="menuId"
+      ref="menu"
+      popover="manual"
+      role="menu"
+      :class="style.menu"
+      @keydown="onMenuKeydown"
+    >
+      <button
+        v-for="item in items"
+        :key="item.value"
+        type="button"
+        role="menuitem"
+        :disabled="item.disabled"
+        :class="style.item"
+        @click="onSelect(item)"
+      >
+        {{ item.label }}
+      </button>
+    </div>
+  </div>
+</template>

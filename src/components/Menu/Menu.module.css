@@ -1,0 +1,124 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .menu {
+    --md-comp-menu-container-color: var(--md-sys-color-surface-container);
+    --md-comp-menu-container-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-menu-container-elevation: var(--md-sys-elevation-level2);
+
+    --md-comp-menus-menu-item-label-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-menus-menu-item-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-menus-menu-item-label-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-menus-menu-item-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-menus-menu-item-label-text-weight: var(--md-sys-typescale-label-large-weight);
+
+    --md-comp-menus-standard-menu-item-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-disabled-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-disabled-label-text-opacity: 0.38;
+
+    --md-comp-menus-standard-menu-item-hovered-state-layer-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-hovered-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+    --md-comp-menus-standard-menu-item-focused-state-layer-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-focused-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+
+    --md-comp-menus-menu-item-height: 2.75rem;
+    --md-comp-menus-menu-item-leading-space: 1rem;
+    --md-comp-menus-menu-item-trailing-space: 1rem;
+  }
+}
+
+.root {
+  display: inline-flex;
+}
+
+.trigger {
+  font: inherit;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.menu[popover] {
+  margin: 0;
+  padding-block: 0.25rem;
+  padding-inline: 0.25rem;
+  min-inline-size: 10rem;
+  max-inline-size: min(22rem, calc(100vw - 2rem));
+
+  border: none;
+  border-radius: var(--md-comp-menu-container-shape);
+  background: var(--md-comp-menu-container-color);
+  box-shadow: var(--md-comp-menu-container-elevation);
+
+  position: fixed;
+  position-area: block-end span-inline-end;
+  inset: auto;
+
+  opacity: 0;
+  transform: scale(0.98);
+  transform-origin: top center;
+
+  transition:
+    opacity var(--md-duration-fast) ease,
+    transform var(--md-duration-fast) ease,
+    overlay var(--md-duration-fast) allow-discrete,
+    display var(--md-duration-fast) allow-discrete;
+}
+
+.menu[popover]:popover-open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@starting-style {
+  .menu[popover]:popover-open {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+.item {
+  all: unset;
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  box-sizing: border-box;
+
+  min-block-size: var(--md-comp-menus-menu-item-height);
+  padding-inline: var(--md-comp-menus-menu-item-leading-space) var(--md-comp-menus-menu-item-trailing-space);
+
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  cursor: pointer;
+
+  color: var(--md-comp-menus-standard-menu-item-label-text-color);
+  font-family: var(--md-comp-menus-menu-item-label-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--md-comp-menus-menu-item-label-text-size);
+  line-height: var(--md-comp-menus-menu-item-label-text-line-height);
+  font-weight: var(--md-comp-menus-menu-item-label-text-weight);
+  letter-spacing: var(--md-comp-menus-menu-item-label-text-tracking);
+}
+
+.item:hover {
+  background-color: --translucent(
+    var(--md-comp-menus-standard-menu-item-hovered-state-layer-color),
+    var(--md-comp-menus-standard-menu-item-hovered-state-layer-opacity)
+  );
+}
+
+.item:focus-visible {
+  outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+  outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
+  background-color: --translucent(
+    var(--md-comp-menus-standard-menu-item-focused-state-layer-color),
+    var(--md-comp-menus-standard-menu-item-focused-state-layer-opacity)
+  );
+}
+
+.item:disabled {
+  cursor: default;
+  color: --translucent(
+    var(--md-comp-menus-standard-menu-item-disabled-label-text-color),
+    var(--md-comp-menus-standard-menu-item-disabled-label-text-opacity)
+  );
+}

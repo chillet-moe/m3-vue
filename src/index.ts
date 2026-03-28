@@ -23,6 +23,7 @@ export * from './components/Snackbar';
 export * from './components/Switch';
 export * from './components/Radio';
 export * from './components/CheckBox';
+export * from './components/Menu';
 
 // Resolver
 export { M3VueResolver } from './resolver';
