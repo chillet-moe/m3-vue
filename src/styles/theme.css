@@ -5,6 +5,8 @@
 @import './elevation.css';
 @import './typography.css';
 
+@layer base, tokens;
+
 @layer tokens {
   :root {
     --md-sys-color-primary: light-dark(var(--md-sys-color-primary-light), var(--md-sys-color-primary-dark));
