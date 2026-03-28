@@ -39,7 +39,11 @@
     "typecheck": "vue-tsc --noEmit",
     "story:dev": "storybook dev -p 6006 --no-open",
     "story:build": "storybook build",
-    "story:preview": "vite preview --host --outDir=storybook-static"
+    "story:preview": "vite preview --host --outDir=storybook-static",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
   "peerDependencies": {
     "@vueuse/core": "^14.1.0",
