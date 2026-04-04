@@ -2,6 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Slider from './Slider.vue';
+import sliderStyles from './Slider.module.css';
 
 function createRect(rect: Partial<DOMRect> = {}): DOMRect {
   return {
@@ -17,11 +18,15 @@ function createRect(rect: Partial<DOMRect> = {}): DOMRect {
   } as DOMRect;
 }
 
-function createPointerEvent(type: string, init: EventInit & { clientX?: number; clientY?: number } = {}): Event {
+function createPointerEvent(
+  type: string,
+  init: EventInit & { clientX?: number; clientY?: number; pointerId?: number } = {},
+): Event {
   const event = new Event(type, init);
   Object.defineProperties(event, {
     clientX: { configurable: true, value: init.clientX ?? 0 },
     clientY: { configurable: true, value: init.clientY ?? 0 },
+    pointerId: { configurable: true, value: init.pointerId ?? 1 },
   });
   return event;
 }
@@ -138,7 +143,7 @@ describe('Slider', () => {
     });
 
     input!.dispatchEvent(new Event('pointerenter', { bubbles: true }));
-    input!.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    input!.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120 }));
     await nextTick();
     await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
@@ -197,7 +202,7 @@ describe('Slider', () => {
     });
 
     input!.dispatchEvent(new Event('pointerenter', { bubbles: true }));
-    input!.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    input!.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120 }));
     await nextTick();
     await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
@@ -280,7 +285,7 @@ describe('Slider', () => {
 
     focusVisible = false;
     input!.dispatchEvent(new Event('pointerenter', { bubbles: true }));
-    input!.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    input!.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120 }));
     await nextTick();
     await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
@@ -322,6 +327,53 @@ describe('Slider', () => {
 
     expect(indicator).not.toBeNull();
     expect(indicator!.style.getPropertyValue('translate')).toBe('0.25rem 0');
+    app.unmount();
+  });
+
+  it('disables the percent transition only after pointer dragging starts', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const currentValue = ref(2);
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    const input = container.querySelector('input');
+
+    expect(slider).not.toBeNull();
+    expect(input).not.toBeNull();
+
+    input!.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120, pointerId: 7 }));
+    await nextTick();
+
+    expect(slider!.classList.contains(sliderStyles.valueDragging)).toBe(false);
+
+    window.dispatchEvent(createPointerEvent('pointermove', { clientX: 186, clientY: 120, pointerId: 7 }));
+    await nextTick();
+
+    expect(slider!.classList.contains(sliderStyles.valueDragging)).toBe(true);
+
+    window.dispatchEvent(createPointerEvent('pointerup', { clientX: 186, clientY: 120, pointerId: 7 }));
+    await nextTick();
+
+    expect(slider!.classList.contains(sliderStyles.valueDragging)).toBe(false);
+
     app.unmount();
   });
 

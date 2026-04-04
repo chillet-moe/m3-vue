@@ -92,6 +92,10 @@
   overflow: visible;
 }
 
+.valueDragging {
+  transition: none;
+}
+
 .slider[aria-disabled='true'] {
   --md-comp-slider-active-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
   --md-comp-slider-inactive-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.12);
