@@ -28,3 +28,21 @@ These projects for inspiration and reference:
 - https://github.com/KTibow/m3-svelte -- Some implementation ideas
 - https://github.com/makmn1/material-design-token-gen -- MD3 Tokens (`/reference-tokens`)
 - https://github.com/vuelessjs/vueless -- Usage of Storybook
+
+## Auto Import (unplugin-vue-components)
+
+```ts
+// vite.config.ts
+import Components from 'unplugin-vue-components/vite';
+import { M3VueResolver } from '@chillet/m3-vue';
+
+export default defineConfig({
+  plugins: [
+    Components({
+      resolvers: [M3VueResolver()],
+    }),
+  ],
+});
+```
+
+If you add a new component in `src/components`, also update `src/resolver.ts`.

@@ -1,14 +1,21 @@
 {
   "name": "@chillet/m3-vue",
   "version": "0.8.3",
-  "type": "module",
   "repository": {
     "url": "git+https://github.com/chillet-moe/m3-vue.git"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
+  "files": [
+    "dist",
+    "web-types.json"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "**/*.css",
+    "**/state-layer.ts",
+    "**/index.ts"
+  ],
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -19,18 +26,10 @@
     "./typography.module.css": "./dist/typography.module.css",
     "./colors.module.css": "./dist/colors.module.css"
   },
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "web-types.json"
-  ],
-  "sideEffects": [
-    "**/*.css",
-    "**/state-layer.ts",
-    "**/index.ts"
-  ],
-  "web-types": "./web-types.json",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "vite build",
     "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
@@ -44,10 +43,6 @@
     "fmt:check": "oxfmt --check",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix"
-  },
-  "peerDependencies": {
-    "@vueuse/core": "^14.1.0",
-    "vue": "^3.5.0"
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
@@ -77,11 +72,16 @@
     "tsdown": "0.21.4",
     "tsx": "^4.21.0",
     "typescript": "~6.0.2",
+    "unplugin-vue-components": "^32.0.0",
     "vite": "^8.0.2",
     "vitest": "^4.1.1",
     "vue-component-meta": "^3.2.6",
     "vue-tsc": "^3.2.6",
     "wrangler": "^4.77.0"
+  },
+  "peerDependencies": {
+    "@vueuse/core": "^14.1.0",
+    "vue": "^3.5.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -89,5 +89,6 @@
       "sharp",
       "workerd"
     ]
-  }
+  },
+  "web-types": "./web-types.json"
 }
