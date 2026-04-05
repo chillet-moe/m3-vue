@@ -100,12 +100,14 @@ function closeMenuAndFocusTrigger() {
   triggerRef.value?.focus();
 }
 
-function toggleMenu() {
-  open.value = !open.value;
-}
-
 function onTriggerClick() {
-  toggleMenu();
+  if (open.value) {
+    open.value = false;
+    hideMenu();
+    return;
+  }
+
+  void openMenuAndFocus(0);
 }
 
 function onTriggerKeydown(event: KeyboardEvent) {
