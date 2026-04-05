@@ -2,6 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Menu from './Menu.vue';
+import MenuItem from './MenuItem.vue';
 
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
@@ -44,16 +45,21 @@ describe('Menu', () => {
         const open = ref(false);
 
         return () =>
-          h(Menu, {
-            open: open.value,
-            'onUpdate:open': (nextOpen: boolean) => {
-              open.value = nextOpen;
+          h(
+            Menu,
+            {
+              open: open.value,
+              'onUpdate:open': (nextOpen: boolean) => {
+                open.value = nextOpen;
+              },
             },
-            items: [
-              { label: 'Edit', value: 'edit' },
-              { label: 'Share', value: 'share' },
-            ],
-          });
+            {
+              default: () => [
+                h(MenuItem, null, { default: () => 'Edit' }),
+                h(MenuItem, null, { default: () => 'Share' }),
+              ],
+            },
+          );
       },
     });
 
@@ -82,7 +88,7 @@ describe('Menu', () => {
     app.unmount();
   });
 
-  it('emits select and closes when selecting enabled item', async () => {
+  it('emits select and closes when selecting enabled menu item component', async () => {
     installPopoverPolyfill();
 
     const selectedValues: string[] = [];
@@ -95,19 +101,24 @@ describe('Menu', () => {
         const open = ref(true);
 
         return () =>
-          h(Menu, {
-            open: open.value,
-            'onUpdate:open': (nextOpen: boolean) => {
-              open.value = nextOpen;
+          h(
+            Menu,
+            {
+              open: open.value,
+              'onUpdate:open': (nextOpen: boolean) => {
+                open.value = nextOpen;
+              },
+              onSelect: (_event: MouseEvent, itemElement: HTMLElement) => {
+                selectedValues.push(itemElement.textContent?.trim() ?? '');
+              },
             },
-            items: [
-              { label: 'Edit', value: 'edit' },
-              { label: 'Delete', value: 'delete', disabled: true },
-            ],
-            onSelect: (item: { value: string }) => {
-              selectedValues.push(item.value);
+            {
+              default: () => [
+                h(MenuItem, null, { default: () => 'Edit' }),
+                h(MenuItem, { disabled: true }, { default: () => 'Delete' }),
+              ],
             },
-          });
+          );
       },
     });
 
@@ -121,7 +132,7 @@ describe('Menu', () => {
     menuItems[0]?.click();
     await nextTick();
 
-    expect(selectedValues).toEqual(['edit']);
+    expect(selectedValues).toEqual(['Edit']);
 
     const trigger = container.querySelector('button[aria-haspopup="menu"]');
     expect(trigger?.getAttribute('aria-expanded')).toBe('false');
@@ -129,25 +140,28 @@ describe('Menu', () => {
     menuItems[1]?.click();
     await nextTick();
 
-    expect(selectedValues).toEqual(['edit']);
+    expect(selectedValues).toEqual(['Edit']);
 
     app.unmount();
   });
 
-  it('supports vibrant color option', async () => {
+  it('supports vibrant color option with slotted menu items', async () => {
     installPopoverPolyfill();
 
     const container = document.createElement('div');
     document.body.appendChild(container);
 
     const app = createApp(() =>
-      h(Menu, {
-        color: 'vibrant',
-        open: true,
-        items: [
-          { label: 'Edit', value: 'edit' },
-        ],
-      }),
+      h(
+        Menu,
+        {
+          color: 'vibrant',
+          open: true,
+        },
+        {
+          default: () => [h(MenuItem, null, { default: () => 'Edit' })],
+        },
+      ),
     );
 
     app.mount(container);

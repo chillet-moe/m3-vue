@@ -1,19 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, useId, useTemplateRef, watch } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, useId, useTemplateRef, watch } from 'vue';
 import style from './Menu.module.css';
-
-export type MenuItem = {
-  label: string;
-  value: string;
-  disabled?: boolean;
-};
 
 export type MenuColor = 'standard' | 'vibrant';
 
 export type MenuProps = {
-  /** Menu items rendered inside the popup. */
-  items: MenuItem[];
-
   /** Visual color style of the menu surface. */
   color?: MenuColor;
 
@@ -24,13 +15,21 @@ export type MenuProps = {
   closeOnSelect?: boolean;
 };
 
-const { items, color = 'standard', triggerLabel = 'Open menu', closeOnSelect = true } = defineProps<MenuProps>();
+const { color = 'standard', triggerLabel = 'Open menu', closeOnSelect = true } = defineProps<MenuProps>();
 
 const open = defineModel<boolean>('open', { default: false });
 
 const emit = defineEmits<{
   /** Fired when a menu item is activated. */
-  select: [item: MenuItem];
+  select: [event: MouseEvent, itemElement: HTMLElement];
+}>();
+
+defineSlots<{
+  /** Optional trigger content. */
+  trigger(): any;
+
+  /** Menu content; usually MenuItem, Divider, gap blocks, etc. */
+  default(): any;
 }>();
 
 const triggerRef = useTemplateRef<HTMLButtonElement>('trigger');
@@ -38,8 +37,6 @@ const menuRef = useTemplateRef<HTMLDivElement>('menu');
 
 const menuId = `menu-${useId()}`;
 const anchorName = `--menu-anchor-${menuId}`;
-
-const enabledItems = computed(() => items.filter((item) => !item.disabled));
 
 function showMenu() {
   const menu = menuRef.value;
@@ -71,10 +68,12 @@ function getMenuItemElements() {
   const menu = menuRef.value;
 
   if (!menu) {
-    return [] as HTMLButtonElement[];
+    return [] as HTMLElement[];
   }
 
-  return Array.from(menu.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]:not(:disabled)'));
+  return Array.from(menu.querySelectorAll<HTMLElement>(
+    '[role="menuitem"]:not([disabled]):not([aria-disabled="true"])',
+  ));
 }
 
 function focusItem(index: number) {
@@ -89,12 +88,6 @@ function focusItem(index: number) {
 }
 
 async function openMenuAndFocus(index = 0) {
-  if (!enabledItems.value.length) {
-    open.value = true;
-    showMenu();
-    return;
-  }
-
   open.value = true;
   showMenu();
   await nextTick();
@@ -171,12 +164,20 @@ function onMenuKeydown(event: KeyboardEvent) {
   }
 }
 
-function onSelect(item: MenuItem) {
-  if (item.disabled) {
+function onMenuClick(event: MouseEvent) {
+  const target = event.target as HTMLElement | null;
+
+  if (!target) {
     return;
   }
 
-  emit('select', item);
+  const item = target.closest<HTMLElement>('[role="menuitem"]');
+
+  if (!item || item.matches('[disabled], [aria-disabled="true"]')) {
+    return;
+  }
+
+  emit('select', event, item);
 
   if (closeOnSelect) {
     closeMenuAndFocusTrigger();
@@ -285,18 +286,9 @@ onBeforeUnmount(() => {
       :class="style.menu"
       :data-color="color"
       @keydown="onMenuKeydown"
+      @click="onMenuClick"
     >
-      <button
-        v-for="item in items"
-        :key="item.value"
-        type="button"
-        role="menuitem"
-        :disabled="item.disabled"
-        :class="['state-layer', style.item]"
-        @click="onSelect(item)"
-      >
-        {{ item.label }}
-      </button>
+      <slot />
     </div>
   </div>
 </template>

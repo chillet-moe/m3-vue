@@ -1,0 +1,39 @@
+@import '../../styles/typography.css';
+
+.item {
+  all: unset;
+  position: relative;
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  box-sizing: border-box;
+
+  min-block-size: var(--md-comp-menus-menu-item-height, 2.75rem);
+  padding-inline: var(--md-comp-menus-menu-item-leading-space, 1rem) var(--md-comp-menus-menu-item-trailing-space, 1rem);
+
+  border-radius: var(--md-sys-shape-corner-large);
+  cursor: pointer;
+
+  color: var(--_menu-item-label-color, var(--md-sys-color-on-surface));
+  --md-state-layer-color: var(--_menu-item-state-layer-color, var(--md-sys-color-on-surface));
+
+  font-family: var(--md-comp-menus-menu-item-label-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--md-comp-menus-menu-item-label-text-size);
+  line-height: var(--md-comp-menus-menu-item-label-text-line-height);
+  font-weight: var(--md-comp-menus-menu-item-label-text-weight);
+  letter-spacing: var(--md-comp-menus-menu-item-label-text-tracking);
+}
+
+.item[data-selected='true'] {
+  background-color: --translucent(var(--md-sys-color-primary), 0.24);
+}
+
+.item:focus-visible {
+  outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+  outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
+}
+
+.item:disabled {
+  cursor: default;
+  color: --translucent(var(--_menu-item-disabled-label-color), var(--_menu-item-disabled-opacity));
+}

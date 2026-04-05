@@ -64,6 +64,10 @@
   min-inline-size: 10rem;
   max-inline-size: min(22rem, calc(100vw - 2rem));
 
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
   border: none;
   border-radius: var(--md-comp-menu-container-shape);
   background: var(--_menu-container-color);
@@ -96,35 +100,13 @@
   }
 }
 
-.item {
-  all: unset;
-  display: flex;
-  align-items: center;
-  inline-size: 100%;
-  box-sizing: border-box;
-
-  min-block-size: var(--md-comp-menus-menu-item-height);
-  padding-inline: var(--md-comp-menus-menu-item-leading-space) var(--md-comp-menus-menu-item-trailing-space);
-
-  border-radius: var(--md-sys-shape-corner-extra-small);
-  cursor: pointer;
-
-  color: var(--_menu-item-label-color);
-  --md-state-layer-color: var(--_menu-item-state-layer-color);
-
-  font-family: var(--md-comp-menus-menu-item-label-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  font-size: var(--md-comp-menus-menu-item-label-text-size);
-  line-height: var(--md-comp-menus-menu-item-label-text-line-height);
-  font-weight: var(--md-comp-menus-menu-item-label-text-weight);
-  letter-spacing: var(--md-comp-menus-menu-item-label-text-tracking);
+.divider {
+  block-size: 1px;
+  border: none;
+  margin: 0.25rem 0;
+  background: --translucent(var(--md-sys-color-on-surface), 0.12);
 }
 
-.item:focus-visible {
-  outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
-  outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
-}
-
-.item:disabled {
-  cursor: default;
-  color: --translucent(var(--_menu-item-disabled-label-color), var(--_menu-item-disabled-opacity));
+.gap {
+  block-size: 0.5rem;
 }
