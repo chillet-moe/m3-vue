@@ -13,6 +13,7 @@ export function usePressedState(minDuration = 200) {
   let minTimeElapsed = false;
   let isActive = false;
   let activePointerId: number | null = null;
+  let hasWindowListeners = false;
 
   const clearTimer = () => {
     if (timeoutId) {
@@ -21,28 +22,54 @@ export function usePressedState(minDuration = 200) {
     }
   };
 
-  const trySetCapture = (event: PointerEvent) => {
-    const target = event.currentTarget as HTMLElement | null;
-    if (!target?.setPointerCapture) return;
-    try {
-      target.setPointerCapture(event.pointerId);
-    } catch {
-      // Ignore capture failures; we still handle timers and state.
-    }
-  };
-
-  const tryReleaseCapture = (event: PointerEvent) => {
-    const target = event.currentTarget as HTMLElement | null;
-    if (!target?.releasePointerCapture) return;
-    try {
-      target.releasePointerCapture(event.pointerId);
-    } catch {
-      // Ignore release failures.
-    }
-  };
-
   const shouldHandle = (event: PointerEvent) => {
-    return activePointerId === null || event.pointerId === activePointerId;
+    return activePointerId !== null && event.pointerId === activePointerId;
+  };
+
+  const removeWindowListeners = () => {
+    if (!hasWindowListeners || typeof window === 'undefined') {
+      return;
+    }
+
+    window.removeEventListener('pointerup', onWindowPointerUp);
+    window.removeEventListener('pointercancel', onWindowPointerCancel);
+    window.removeEventListener('blur', onWindowBlur);
+    hasWindowListeners = false;
+  };
+
+  const finishInteraction = () => {
+    isActive = false;
+    activePointerId = null;
+    removeWindowListeners();
+
+    if (minTimeElapsed) {
+      pressed.value = false;
+      clearTimer();
+    }
+  };
+
+  function onWindowPointerUp(event: PointerEvent) {
+    onPointerUp(event);
+  }
+
+  function onWindowPointerCancel(event: PointerEvent) {
+    onPointerCancel(event);
+  }
+
+  function onWindowBlur() {
+    if (!isActive) return;
+    finishInteraction();
+  }
+
+  const addWindowListeners = () => {
+    if (hasWindowListeners || typeof window === 'undefined') {
+      return;
+    }
+
+    window.addEventListener('pointerup', onWindowPointerUp);
+    window.addEventListener('pointercancel', onWindowPointerCancel);
+    window.addEventListener('blur', onWindowBlur);
+    hasWindowListeners = true;
   };
 
   const onPointerDown = (event: PointerEvent) => {
@@ -56,7 +83,7 @@ export function usePressedState(minDuration = 200) {
     activePointerId = event.pointerId;
 
     clearTimer();
-    trySetCapture(event);
+    addWindowListeners();
 
     timeoutId = window.setTimeout(() => {
       minTimeElapsed = true;
@@ -71,36 +98,19 @@ export function usePressedState(minDuration = 200) {
   const onPointerUp = (event: PointerEvent) => {
     if (!shouldHandle(event)) return;
 
-    isActive = false;
-    activePointerId = null;
-    tryReleaseCapture(event);
-
-    if (minTimeElapsed) {
-      pressed.value = false;
-      clearTimer();
-    }
+    finishInteraction();
   };
 
   const onPointerCancel = (event: PointerEvent) => {
     if (!shouldHandle(event)) return;
 
-    isActive = false;
-    activePointerId = null;
-    tryReleaseCapture(event);
-
-    if (minTimeElapsed) {
-      pressed.value = false;
-      clearTimer();
-    }
-  };
-
-  const onLostPointerCapture = (event: PointerEvent) => {
-    onPointerCancel(event);
+    finishInteraction();
   };
 
   // Cleanup on unmount
   onUnmounted(() => {
     clearTimer();
+    removeWindowListeners();
   });
 
   return {
@@ -108,6 +118,5 @@ export function usePressedState(minDuration = 200) {
     onPointerDown,
     onPointerUp,
     onPointerCancel,
-    onLostPointerCapture,
   };
 }

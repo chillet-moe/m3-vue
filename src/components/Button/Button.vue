@@ -65,7 +65,7 @@ const href = computed(() => (disabled.value && isAnchor.value ? undefined : prop
 const tabIndex = computed(() => (disabled.value && isAnchor.value ? -1 : undefined));
 const type = computed(() => (tag.value === 'button' ? 'button' : undefined));
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCapture } = usePressedState();
+const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
 
 const guardDisabledInteraction = (event: Event) => {
   if (!disabled.value) {
@@ -91,11 +91,6 @@ const handlePointerUp = (event: PointerEvent) => {
 const handlePointerCancel = (event: PointerEvent) => {
   if (guardDisabledInteraction(event)) return;
   onPointerCancel(event);
-};
-
-const handleLostPointerCapture = (event: PointerEvent) => {
-  if (disabled.value) return;
-  onLostPointerCapture(event);
 };
 
 const handleClick = (event: MouseEvent) => {
@@ -136,7 +131,6 @@ const slots = defineSlots<{
     @pointerdown="handlePointerDown"
     @pointerup="handlePointerUp"
     @pointercancel="handlePointerCancel"
-    @lostpointercapture="handleLostPointerCapture"
   >
     <Icon
       v-if="props.leadingIcon"
