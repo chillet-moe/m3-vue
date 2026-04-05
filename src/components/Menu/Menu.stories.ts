@@ -27,18 +27,13 @@ export default meta;
 const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   components: { Menu, MenuItem },
   setup: () => {
-    const open = ref(false);
+    const open = ref(true);
     const selected = ref('None');
 
     return { args, open, selected, menuStyles };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
-      <div style="display: flex; gap: 0.5rem;">
-        <button @click="open = !open">Toggle menu</button>
-        <button @click="open = false">Close</button>
-      </div>
-
       <Menu
         v-bind="args"
         v-model:open="open"
@@ -47,7 +42,7 @@ const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
         ${baseItems}
       </Menu>
 
-      <div>Open: {{ open }}</div>
+      <div>Open (always true in this story): {{ open }}</div>
       <div>Selected: {{ selected }}</div>
     </div>
   `,
