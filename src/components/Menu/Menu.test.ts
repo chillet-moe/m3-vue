@@ -133,4 +133,32 @@ describe('Menu', () => {
 
     app.unmount();
   });
+
+  it('supports vibrant color option', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(Menu, {
+        color: 'vibrant',
+        open: true,
+        items: [
+          { label: 'Edit', value: 'edit' },
+        ],
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
+    const menuItem = container.querySelector('button[role="menuitem"]') as HTMLButtonElement | null;
+
+    expect(menu?.dataset.color).toBe('vibrant');
+    expect(menuItem?.classList.contains('state-layer')).toBe(true);
+
+    app.unmount();
+  });
 });

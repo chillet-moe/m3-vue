@@ -8,9 +8,14 @@ export type MenuItem = {
   disabled?: boolean;
 };
 
+export type MenuColor = 'standard' | 'vibrant';
+
 export type MenuProps = {
   /** Menu items rendered inside the popup. */
   items: MenuItem[];
+
+  /** Visual color style of the menu surface. */
+  color?: MenuColor;
 
   /** Accessible label for the trigger button. */
   triggerLabel?: string;
@@ -19,7 +24,7 @@ export type MenuProps = {
   closeOnSelect?: boolean;
 };
 
-const { items, triggerLabel = 'Open menu', closeOnSelect = true } = defineProps<MenuProps>();
+const { items, color = 'standard', triggerLabel = 'Open menu', closeOnSelect = true } = defineProps<MenuProps>();
 
 const open = defineModel<boolean>('open', { default: false });
 
@@ -278,6 +283,7 @@ onBeforeUnmount(() => {
       popover="manual"
       role="menu"
       :class="style.menu"
+      :data-color="color"
       @keydown="onMenuKeydown"
     >
       <button
@@ -286,7 +292,7 @@ onBeforeUnmount(() => {
         type="button"
         role="menuitem"
         :disabled="item.disabled"
-        :class="style.item"
+        :class="['state-layer', style.item]"
         @click="onSelect(item)"
       >
         {{ item.label }}

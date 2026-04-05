@@ -7,6 +7,7 @@ const meta = {
   component: Menu,
   args: {
     triggerLabel: 'Actions',
+    color: 'standard',
     closeOnSelect: true,
     items: [
       { label: 'Edit', value: 'edit' },
