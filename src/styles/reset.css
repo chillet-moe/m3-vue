@@ -100,12 +100,6 @@
     display: list-item;
   }
 
-  ol,
-  ul,
-  menu {
-    list-style: none;
-  }
-
   img,
   svg,
   video,
