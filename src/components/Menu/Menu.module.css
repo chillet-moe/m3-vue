@@ -29,22 +29,6 @@
   }
 }
 
-.root {
-  display: inline-flex;
-}
-
-.trigger {
-  display: inline-flex;
-}
-
-.triggerButton {
-  font: inherit;
-  border: none;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-}
-
 .menu {
   --_menu-container-color: var(--md-comp-menus-standard-container-color);
   --_menu-item-label-color: var(--md-comp-menus-standard-menu-item-label-text-color);

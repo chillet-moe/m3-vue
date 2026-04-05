@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, useId, useTemplateRef, watch } from 'vue';
+import { nextTick, useTemplateRef, watch } from 'vue';
 import style from './Menu.module.css';
 
 export type MenuColor = 'standard' | 'vibrant';
@@ -7,15 +7,9 @@ export type MenuColor = 'standard' | 'vibrant';
 export type MenuProps = {
   /** Visual color style of the menu surface. */
   color?: MenuColor;
-
-  /** Accessible label for the trigger button. */
-  triggerLabel?: string;
-
-  /** Whether selecting an item closes the menu. */
-  closeOnSelect?: boolean;
 };
 
-const { color = 'standard', triggerLabel = 'Open menu', closeOnSelect = true } = defineProps<MenuProps>();
+const { color = 'standard' } = defineProps<MenuProps>();
 
 const open = defineModel<boolean>('open', { default: false });
 
@@ -25,18 +19,11 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
-  /** Optional trigger content. */
-  trigger(): any;
-
   /** Menu content; usually MenuItem, Divider, gap blocks, etc. */
   default(): any;
 }>();
 
-const triggerRef = useTemplateRef<HTMLDivElement>('trigger');
 const menuRef = useTemplateRef<HTMLDivElement>('menu');
-
-const menuId = `menu-${useId()}`;
-const anchorName = `--menu-anchor-${menuId}`;
 
 function showMenu() {
   const menu = menuRef.value;
@@ -93,40 +80,28 @@ function focusItem(index: number) {
   menuItems[normalized]?.focus();
 }
 
-async function openMenuAndFocus(index = 0) {
+async function show(focusFirst = false) {
   open.value = true;
   showMenu();
-  await nextTick();
-  focusItem(index);
+
+  if (focusFirst) {
+    await nextTick();
+    focusItem(0);
+  }
 }
 
-function closeMenuAndFocusTrigger() {
+function hide() {
   open.value = false;
   hideMenu();
-  triggerRef.value?.focus();
 }
 
-function onTriggerClick() {
+function toggle() {
   if (open.value) {
-    open.value = false;
-    hideMenu();
+    hide();
     return;
   }
 
-  void openMenuAndFocus(0);
-}
-
-function onTriggerKeydown(event: KeyboardEvent) {
-  if (event.key === 'ArrowDown') {
-    event.preventDefault();
-    void openMenuAndFocus(0);
-    return;
-  }
-
-  if (event.key === 'ArrowUp') {
-    event.preventDefault();
-    void openMenuAndFocus(-1);
-  }
+  void show();
 }
 
 function onMenuKeydown(event: KeyboardEvent) {
@@ -135,7 +110,7 @@ function onMenuKeydown(event: KeyboardEvent) {
   if (!menuItems.length) {
     if (event.key === 'Escape') {
       event.preventDefault();
-      closeMenuAndFocusTrigger();
+      hide();
     }
     return;
   }
@@ -168,7 +143,7 @@ function onMenuKeydown(event: KeyboardEvent) {
 
   if (event.key === 'Escape') {
     event.preventDefault();
-    closeMenuAndFocusTrigger();
+    hide();
   }
 }
 
@@ -186,40 +161,17 @@ function onMenuClick(event: MouseEvent) {
   }
 
   emit('select', event, item);
-
-  if (closeOnSelect) {
-    closeMenuAndFocusTrigger();
-  }
-}
-
-function onDocumentPointerDown(event: Event) {
-  const target = event.target as Node | null;
-
-  if (!target) {
-    return;
-  }
-
-  if (triggerRef.value?.contains(target) || menuRef.value?.contains(target)) {
-    return;
-  }
-
-  open.value = false;
-  hideMenu();
 }
 
 watch(
   [menuRef, open],
-  async ([menu, nextOpen]) => {
+  ([menu, nextOpen]) => {
     if (!menu) {
       return;
     }
 
     if (nextOpen) {
       showMenu();
-      await nextTick();
-      if (document.activeElement === triggerRef.value) {
-        focusItem(0);
-      }
       return;
     }
 
@@ -231,74 +183,25 @@ watch(
   },
 );
 
-watch(
-  triggerRef,
-  (trigger) => {
-    if (!trigger) {
-      return;
-    }
-
-    trigger.style.setProperty('anchor-name', anchorName);
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
-
-watch(
+defineExpose({
   menuRef,
-  (menu) => {
-    if (!menu) {
-      return;
-    }
-
-    menu.style.setProperty('position-anchor', anchorName);
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
-
-onMounted(() => {
-  document.addEventListener('pointerdown', onDocumentPointerDown, true);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('pointerdown', onDocumentPointerDown, true);
+  show,
+  hide,
+  toggle,
 });
 </script>
 
 <template>
-  <div :class="style.root">
-    <div ref="trigger" :class="style.trigger" @click="onTriggerClick" @keydown="onTriggerKeydown">
-      <slot name="trigger">
-        <button
-          type="button"
-          :class="style.triggerButton"
-          :aria-label="triggerLabel"
-          aria-haspopup="menu"
-          :aria-controls="menuId"
-          :aria-expanded="open ? 'true' : 'false'"
-        >
-          {{ triggerLabel }}
-        </button>
-      </slot>
-    </div>
-
-    <div
-      :id="menuId"
-      ref="menu"
-      popover="manual"
-      role="menu"
-      :class="style.menu"
-:data-color="color"
-      :hidden="open ? undefined : true"
-      @keydown="onMenuKeydown"
-      @click="onMenuClick"
-    >
-      <slot />
-    </div>
+  <div
+    ref="menu"
+    popover="manual"
+    role="menu"
+    :class="style.menu"
+    :data-color="color"
+    :hidden="open ? undefined : true"
+    @keydown="onMenuKeydown"
+    @click="onMenuClick"
+  >
+    <slot />
   </div>
 </template>

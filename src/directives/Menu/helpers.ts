@@ -1,0 +1,60 @@
+import type { DirectiveBinding } from 'vue';
+
+export type MenuTargetBinding =
+  | string
+  | HTMLElement
+  | {
+      target: string | HTMLElement;
+      closeOnOutsideClick?: boolean;
+    };
+
+export function resolveMenuTarget(binding: DirectiveBinding<MenuTargetBinding>): HTMLElement | null {
+  const value = binding.value;
+
+  if (!value) {
+    return null;
+  }
+
+  const target = typeof value === 'object' && 'target' in value ? value.target : value;
+
+  if (typeof target === 'string') {
+    return document.querySelector<HTMLElement>(target);
+  }
+
+  return target;
+}
+
+export function shouldCloseOnOutsideClick(binding: DirectiveBinding<MenuTargetBinding>) {
+  return typeof binding.value === 'object' && binding.value !== null && 'closeOnOutsideClick' in binding.value
+    ? binding.value.closeOnOutsideClick !== false
+    : true;
+}
+
+export function showMenuElement(menu: HTMLElement) {
+  menu.hidden = false;
+  menu.dataset.popoverOpen = 'true';
+
+  try {
+    menu.showPopover();
+  } catch {
+  }
+}
+
+export function hideMenuElement(menu: HTMLElement) {
+  delete menu.dataset.popoverOpen;
+  menu.hidden = true;
+
+  try {
+    menu.hidePopover();
+  } catch {
+  }
+}
+
+export function toggleMenuElement(menu: HTMLElement) {
+  if (menu.dataset.popoverOpen === 'true') {
+    hideMenuElement(menu);
+    return;
+  }
+
+  showMenuElement(menu);
+}
