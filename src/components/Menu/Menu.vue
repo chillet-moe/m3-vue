@@ -32,7 +32,7 @@ defineSlots<{
   default(): any;
 }>();
 
-const triggerRef = useTemplateRef<HTMLButtonElement>('trigger');
+const triggerRef = useTemplateRef<HTMLDivElement>('trigger');
 const menuRef = useTemplateRef<HTMLDivElement>('menu');
 
 const menuId = `menu-${useId()}`;
@@ -266,19 +266,20 @@ onBeforeUnmount(() => {
 
 <template>
   <div :class="style.root">
-    <button
-      ref="trigger"
-      type="button"
-      :class="style.trigger"
-      :aria-label="triggerLabel"
-      aria-haspopup="menu"
-      :aria-controls="menuId"
-      :aria-expanded="open ? 'true' : 'false'"
-      @click="onTriggerClick"
-      @keydown="onTriggerKeydown"
-    >
-      <slot name="trigger">{{ triggerLabel }}</slot>
-    </button>
+    <div ref="trigger" :class="style.trigger" @click="onTriggerClick" @keydown="onTriggerKeydown">
+      <slot name="trigger">
+        <button
+          type="button"
+          :class="style.triggerButton"
+          :aria-label="triggerLabel"
+          aria-haspopup="menu"
+          :aria-controls="menuId"
+          :aria-expanded="open ? 'true' : 'false'"
+        >
+          {{ triggerLabel }}
+        </button>
+      </slot>
+    </div>
 
     <div
       :id="menuId"

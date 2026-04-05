@@ -34,6 +34,10 @@
 }
 
 .trigger {
+  display: inline-flex;
+}
+
+.triggerButton {
   font: inherit;
   border: none;
   background: transparent;
