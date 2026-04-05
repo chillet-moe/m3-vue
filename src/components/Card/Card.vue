@@ -18,7 +18,7 @@ const context = inject(cardContextKey, undefined);
 
 const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel, onLostPointerCapture } = usePressedState();
+const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
 
 const slots = defineSlots<{
   /** Default slot for the main content of the card. */
@@ -38,7 +38,6 @@ const slots = defineSlots<{
     @pointerdown="onPointerDown"
     @pointerup="onPointerUp"
     @pointercancel="onPointerCancel"
-    @lostpointercapture="onLostPointerCapture"
   >
     <slot />
   </button>
