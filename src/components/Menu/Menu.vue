@@ -45,6 +45,9 @@ function showMenu() {
     return;
   }
 
+  menu.hidden = false;
+  menu.dataset.popoverOpen = 'true';
+
   try {
     menu.showPopover();
   } catch {
@@ -57,6 +60,9 @@ function hideMenu() {
   if (!menu) {
     return;
   }
+
+  delete menu.dataset.popoverOpen;
+  menu.hidden = true;
 
   try {
     menu.hidePopover();
@@ -287,7 +293,8 @@ onBeforeUnmount(() => {
       popover="manual"
       role="menu"
       :class="style.menu"
-      :data-color="color"
+:data-color="color"
+      :hidden="open ? undefined : true"
       @keydown="onMenuKeydown"
       @click="onMenuClick"
     >

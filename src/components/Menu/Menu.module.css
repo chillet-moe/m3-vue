@@ -92,7 +92,8 @@
     display var(--md-duration-medium2) allow-discrete;
 }
 
-.menu[popover]:popover-open {
+.menu[popover]:popover-open,
+.menu[data-popover-open='true'] {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
