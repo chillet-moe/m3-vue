@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import style from './MenuItem.module.css';
-
 export type MenuItemProps = {
   /** Disables item interaction. */
   disabled?: boolean;
@@ -18,8 +16,10 @@ const { disabled = false, selected = false } = defineProps<MenuItemProps>();
     role="menuitem"
     :disabled="disabled"
     :data-selected="selected ? 'true' : undefined"
-    :class="['state-layer', style.item]"
+    :class="['state-layer', 'm3-menu-item']"
   >
     <slot />
   </button>
 </template>
+
+<style src="./MenuItem.css"></style>

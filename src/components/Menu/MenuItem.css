@@ -1,6 +1,6 @@
 @import '../../styles/typography.css';
 
-.item {
+.m3-menu-item {
   all: unset;
   position: relative;
   display: flex;
@@ -24,16 +24,16 @@
   letter-spacing: var(--md-comp-menus-menu-item-label-text-tracking);
 }
 
-.item[data-selected='true'] {
+.m3-menu-item[data-selected='true'] {
   background-color: --translucent(var(--md-sys-color-primary), 0.24);
 }
 
-.item:focus-visible {
+.m3-menu-item:focus-visible {
   outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
   outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
 }
 
-.item:disabled {
+.m3-menu-item:disabled {
   cursor: default;
   color: --translucent(var(--_menu-item-disabled-label-color), var(--_menu-item-disabled-opacity));
 }

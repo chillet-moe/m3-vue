@@ -2,7 +2,6 @@ import type { Meta, StoryFn } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import Menu from './Menu.vue';
 import MenuItem from './MenuItem.vue';
-import { menuStyles } from './index';
 import { vDropdownMenu, vContextMenu } from '@/directives/Menu';
 import type { MenuProps } from './Menu.vue';
 
@@ -10,8 +9,8 @@ const baseItems = `
   <MenuItem>Item 1</MenuItem>
   <MenuItem selected>Item 2</MenuItem>
   <MenuItem>Item 3</MenuItem>
-  <hr :class="menuStyles.divider" />
-  <div :class="menuStyles.gap" aria-hidden="true" />
+  <hr class="m3-menu-divider" />
+  <div class="m3-menu-gap" aria-hidden="true" />
   <MenuItem>Item 4</MenuItem>
 `;
 
@@ -30,7 +29,7 @@ const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
     const open = ref(true);
     const selected = ref('None');
 
-    return { args, open, selected, menuStyles };
+    return { args, open, selected };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
@@ -54,7 +53,7 @@ const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   setup: () => {
     const selected = ref('None');
 
-    return { args, selected, menuStyles };
+    return { args, selected };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { nextTick, useTemplateRef, watch } from 'vue';
-import style from './Menu.module.css';
 
 export type MenuColor = 'standard' | 'vibrant';
 
@@ -196,7 +195,7 @@ defineExpose({
     ref="menu"
     popover="manual"
     role="menu"
-    :class="style.menu"
+    class="m3-menu"
     :data-color="color"
     :hidden="open ? undefined : true"
     @keydown="onMenuKeydown"
@@ -205,3 +204,5 @@ defineExpose({
     <slot />
   </div>
 </template>
+
+<style src="./Menu.css"></style>
