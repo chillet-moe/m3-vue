@@ -2,64 +2,216 @@
 
 @layer tokens {
   .m3-menu {
-    --md-comp-menu-container-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-menus-container-shape: var(--md-sys-shape-corner-large);
     --md-comp-menu-container-elevation: var(--md-sys-elevation-level2);
+    --md-comp-menu-container-shadow-color: var(--md-sys-color-shadow);
 
     --md-comp-menus-menu-item-label-text-font: var(--md-sys-typescale-label-large-font);
     --md-comp-menus-menu-item-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
     --md-comp-menus-menu-item-label-text-size: var(--md-sys-typescale-label-large-size);
     --md-comp-menus-menu-item-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
     --md-comp-menus-menu-item-label-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-menus-menu-item-supporting-text-font: var(--md-sys-typescale-body-small-font);
+    --md-comp-menus-menu-item-supporting-text-line-height: var(--md-sys-typescale-body-small-line-height);
+    --md-comp-menus-menu-item-supporting-text-size: var(--md-sys-typescale-body-small-size);
+    --md-comp-menus-menu-item-supporting-text-tracking: var(--md-sys-typescale-body-small-tracking);
+    --md-comp-menus-menu-item-supporting-text-weight: var(--md-sys-typescale-body-small-weight);
+    --md-comp-menus-menu-item-trailing-supporting-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-menus-menu-item-trailing-supporting-text-line-height: var(
+      --md-sys-typescale-label-large-line-height
+    );
+    --md-comp-menus-menu-item-trailing-supporting-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-menus-menu-item-trailing-supporting-text-tracking: var(
+      --md-sys-typescale-label-large-tracking
+    );
+    --md-comp-menus-menu-item-trailing-supporting-text-weight: var(--md-sys-typescale-label-large-weight);
 
     --md-comp-menus-menu-item-height: 2.75rem;
+    --md-comp-menus-menu-item-top-space: 0.5rem;
+    --md-comp-menus-menu-item-bottom-space: 0.5rem;
     --md-comp-menus-menu-item-leading-space: 1rem;
     --md-comp-menus-menu-item-trailing-space: 1rem;
+    --md-comp-menus-menu-item-between-space: 0.75rem;
+    --md-comp-menus-menu-item-leading-icon-size: 1.25rem;
+    --md-comp-menus-menu-item-trailing-icon-size: 1.25rem;
+    --md-comp-menus-menu-item-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-menus-gap: 0.125rem;
+    --md-comp-menus-group-padding: 0.125rem;
 
     --md-comp-menus-standard-container-color: var(--md-sys-color-surface-container-low);
+    --md-comp-menus-standard-section-label-text-color: var(--md-sys-color-on-surface-variant);
     --md-comp-menus-standard-menu-item-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-menus-standard-menu-item-leading-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-menus-standard-menu-item-trailing-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-menus-standard-menu-item-trailing-supporting-text-color: var(--md-sys-color-on-surface-variant);
     --md-comp-menus-standard-menu-item-disabled-label-text-color: var(--md-sys-color-on-surface);
     --md-comp-menus-standard-menu-item-disabled-label-text-opacity: 0.38;
+    --md-comp-menus-standard-menu-item-disabled-supporting-text-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-disabled-supporting-text-opacity: 0.38;
+    --md-comp-menus-standard-menu-item-disabled-leading-icon-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-disabled-leading-icon-opacity: 0.38;
+    --md-comp-menus-standard-menu-item-disabled-trailing-icon-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-disabled-trailing-icon-opacity: 0.38;
+    --md-comp-menus-standard-menu-item-disabled-trailing-supporting-text-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-disabled-trailing-supporting-text-opacity: 0.38;
     --md-comp-menus-standard-menu-item-hovered-state-layer-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-standard-menu-item-selected-container-color: var(--md-sys-color-tertiary-container);
+    --md-comp-menus-standard-menu-item-selected-label-text-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-standard-menu-item-selected-supporting-text-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-standard-menu-item-selected-leading-icon-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-standard-menu-item-selected-trailing-icon-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-standard-menu-item-selected-trailing-supporting-text-color: var(
+      --md-sys-color-on-tertiary-container
+    );
+    --md-comp-menus-standard-menu-item-selected-hovered-state-layer-color: var(--md-sys-color-on-tertiary-container);
 
-    --md-comp-menus-vibrant-container-color: var(--md-sys-color-surface-container-high);
-    --md-comp-menus-vibrant-menu-item-label-text-color: var(--md-sys-color-on-surface);
-    --md-comp-menus-vibrant-menu-item-disabled-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-menus-vibrant-container-color: var(--md-sys-color-tertiary-container);
+    --md-comp-menus-vibrant-section-label-text-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-label-text-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-leading-icon-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-trailing-icon-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-trailing-supporting-text-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-disabled-label-text-color: var(--md-sys-color-on-tertiary-container);
     --md-comp-menus-vibrant-menu-item-disabled-label-text-opacity: 0.38;
-    --md-comp-menus-vibrant-menu-item-hovered-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-menus-vibrant-menu-item-disabled-supporting-text-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-disabled-supporting-text-opacity: 0.38;
+    --md-comp-menus-vibrant-menu-item-disabled-leading-icon-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-disabled-leading-icon-opacity: 0.38;
+    --md-comp-menus-vibrant-menu-item-disabled-trailing-icon-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-disabled-trailing-icon-opacity: 0.38;
+    --md-comp-menus-vibrant-menu-item-disabled-trailing-supporting-text-color: var(
+      --md-sys-color-on-tertiary-container
+    );
+    --md-comp-menus-vibrant-menu-item-disabled-trailing-supporting-text-opacity: 0.38;
+    --md-comp-menus-vibrant-menu-item-hovered-state-layer-color: var(--md-sys-color-on-tertiary-container);
+    --md-comp-menus-vibrant-menu-item-selected-container-color: var(--md-sys-color-tertiary);
+    --md-comp-menus-vibrant-menu-item-selected-label-text-color: var(--md-sys-color-on-tertiary);
+    --md-comp-menus-vibrant-menu-item-selected-supporting-text-color: var(--md-sys-color-on-tertiary);
+    --md-comp-menus-vibrant-menu-item-selected-leading-icon-color: var(--md-sys-color-on-tertiary);
+    --md-comp-menus-vibrant-menu-item-selected-trailing-icon-color: var(--md-sys-color-on-tertiary);
+    --md-comp-menus-vibrant-menu-item-selected-trailing-supporting-text-color: var(--md-sys-color-on-tertiary);
+    --md-comp-menus-vibrant-menu-item-selected-hovered-state-layer-color: var(--md-sys-color-on-tertiary);
   }
 }
 
 .m3-menu {
   --_menu-container-color: var(--md-comp-menus-standard-container-color);
+  --_menu-section-label-color: var(--md-comp-menus-standard-section-label-text-color);
   --_menu-item-label-color: var(--md-comp-menus-standard-menu-item-label-text-color);
+  --_menu-item-supporting-color: var(--md-comp-menus-standard-menu-item-supporting-text-color);
+  --_menu-item-leading-icon-color: var(--md-comp-menus-standard-menu-item-leading-icon-color);
+  --_menu-item-trailing-icon-color: var(--md-comp-menus-standard-menu-item-trailing-icon-color);
+  --_menu-item-trailing-supporting-color: var(--md-comp-menus-standard-menu-item-trailing-supporting-text-color);
   --_menu-item-disabled-label-color: var(--md-comp-menus-standard-menu-item-disabled-label-text-color);
   --_menu-item-disabled-opacity: var(--md-comp-menus-standard-menu-item-disabled-label-text-opacity);
+  --_menu-item-disabled-supporting-color: var(--md-comp-menus-standard-menu-item-disabled-supporting-text-color);
+  --_menu-item-disabled-supporting-opacity: var(--md-comp-menus-standard-menu-item-disabled-supporting-text-opacity);
+  --_menu-item-disabled-leading-icon-color: var(--md-comp-menus-standard-menu-item-disabled-leading-icon-color);
+  --_menu-item-disabled-leading-icon-opacity: var(--md-comp-menus-standard-menu-item-disabled-leading-icon-opacity);
+  --_menu-item-disabled-trailing-icon-color: var(--md-comp-menus-standard-menu-item-disabled-trailing-icon-color);
+  --_menu-item-disabled-trailing-icon-opacity: var(--md-comp-menus-standard-menu-item-disabled-trailing-icon-opacity);
+  --_menu-item-disabled-trailing-supporting-color: var(
+    --md-comp-menus-standard-menu-item-disabled-trailing-supporting-text-color
+  );
+  --_menu-item-disabled-trailing-supporting-opacity: var(
+    --md-comp-menus-standard-menu-item-disabled-trailing-supporting-text-opacity
+  );
   --_menu-item-state-layer-color: var(--md-comp-menus-standard-menu-item-hovered-state-layer-color);
+  --_menu-item-selected-container-color: var(--md-comp-menus-standard-menu-item-selected-container-color);
+  --_menu-item-selected-label-color: var(--md-comp-menus-standard-menu-item-selected-label-text-color);
+  --_menu-item-selected-supporting-color: var(--md-comp-menus-standard-menu-item-selected-supporting-text-color);
+  --_menu-item-selected-leading-icon-color: var(--md-comp-menus-standard-menu-item-selected-leading-icon-color);
+  --_menu-item-selected-trailing-icon-color: var(--md-comp-menus-standard-menu-item-selected-trailing-icon-color);
+  --_menu-item-selected-trailing-supporting-color: var(
+    --md-comp-menus-standard-menu-item-selected-trailing-supporting-text-color
+  );
+  --_menu-item-selected-state-layer-color: var(--md-comp-menus-standard-menu-item-selected-hovered-state-layer-color);
+  --_menu-item-selected-disabled-container-color: var(--md-comp-menus-standard-menu-item-selected-container-color);
+  --_menu-item-selected-disabled-container-opacity: 0.38;
+  --_menu-item-selected-disabled-label-color: var(--md-comp-menus-standard-menu-item-selected-label-text-color);
+  --_menu-item-selected-disabled-label-opacity: 0.38;
+  --_menu-item-selected-disabled-supporting-color: var(--md-comp-menus-standard-menu-item-selected-supporting-text-color);
+  --_menu-item-selected-disabled-supporting-opacity: 0.38;
+  --_menu-item-selected-disabled-leading-icon-color: var(
+    --md-comp-menus-standard-menu-item-selected-leading-icon-color
+  );
+  --_menu-item-selected-disabled-leading-icon-opacity: 0.38;
+  --_menu-item-selected-disabled-trailing-icon-color: var(
+    --md-comp-menus-standard-menu-item-selected-trailing-icon-color
+  );
+  --_menu-item-selected-disabled-trailing-icon-opacity: 0.38;
+  --_menu-item-selected-disabled-trailing-supporting-color: var(
+    --md-comp-menus-standard-menu-item-selected-trailing-supporting-text-color
+  );
+  --_menu-item-selected-disabled-trailing-supporting-opacity: 0.38;
 }
 
 .m3-menu[data-color='vibrant'] {
   --_menu-container-color: var(--md-comp-menus-vibrant-container-color);
+  --_menu-section-label-color: var(--md-comp-menus-vibrant-section-label-text-color);
   --_menu-item-label-color: var(--md-comp-menus-vibrant-menu-item-label-text-color);
+  --_menu-item-supporting-color: var(--md-comp-menus-vibrant-menu-item-supporting-text-color);
+  --_menu-item-leading-icon-color: var(--md-comp-menus-vibrant-menu-item-leading-icon-color);
+  --_menu-item-trailing-icon-color: var(--md-comp-menus-vibrant-menu-item-trailing-icon-color);
+  --_menu-item-trailing-supporting-color: var(--md-comp-menus-vibrant-menu-item-trailing-supporting-text-color);
   --_menu-item-disabled-label-color: var(--md-comp-menus-vibrant-menu-item-disabled-label-text-color);
   --_menu-item-disabled-opacity: var(--md-comp-menus-vibrant-menu-item-disabled-label-text-opacity);
+  --_menu-item-disabled-supporting-color: var(--md-comp-menus-vibrant-menu-item-disabled-supporting-text-color);
+  --_menu-item-disabled-supporting-opacity: var(--md-comp-menus-vibrant-menu-item-disabled-supporting-text-opacity);
+  --_menu-item-disabled-leading-icon-color: var(--md-comp-menus-vibrant-menu-item-disabled-leading-icon-color);
+  --_menu-item-disabled-leading-icon-opacity: var(--md-comp-menus-vibrant-menu-item-disabled-leading-icon-opacity);
+  --_menu-item-disabled-trailing-icon-color: var(--md-comp-menus-vibrant-menu-item-disabled-trailing-icon-color);
+  --_menu-item-disabled-trailing-icon-opacity: var(--md-comp-menus-vibrant-menu-item-disabled-trailing-icon-opacity);
+  --_menu-item-disabled-trailing-supporting-color: var(
+    --md-comp-menus-vibrant-menu-item-disabled-trailing-supporting-text-color
+  );
+  --_menu-item-disabled-trailing-supporting-opacity: var(
+    --md-comp-menus-vibrant-menu-item-disabled-trailing-supporting-text-opacity
+  );
   --_menu-item-state-layer-color: var(--md-comp-menus-vibrant-menu-item-hovered-state-layer-color);
+  --_menu-item-selected-container-color: var(--md-comp-menus-vibrant-menu-item-selected-container-color);
+  --_menu-item-selected-label-color: var(--md-comp-menus-vibrant-menu-item-selected-label-text-color);
+  --_menu-item-selected-supporting-color: var(--md-comp-menus-vibrant-menu-item-selected-supporting-text-color);
+  --_menu-item-selected-leading-icon-color: var(--md-comp-menus-vibrant-menu-item-selected-leading-icon-color);
+  --_menu-item-selected-trailing-icon-color: var(--md-comp-menus-vibrant-menu-item-selected-trailing-icon-color);
+  --_menu-item-selected-trailing-supporting-color: var(
+    --md-comp-menus-vibrant-menu-item-selected-trailing-supporting-text-color
+  );
+  --_menu-item-selected-state-layer-color: var(--md-comp-menus-vibrant-menu-item-selected-hovered-state-layer-color);
+  --_menu-item-selected-disabled-container-color: var(--md-comp-menus-vibrant-menu-item-selected-container-color);
+  --_menu-item-selected-disabled-container-opacity: 0.38;
+  --_menu-item-selected-disabled-label-color: var(--md-comp-menus-vibrant-menu-item-selected-label-text-color);
+  --_menu-item-selected-disabled-label-opacity: 0.38;
+  --_menu-item-selected-disabled-supporting-color: var(--md-comp-menus-vibrant-menu-item-selected-supporting-text-color);
+  --_menu-item-selected-disabled-supporting-opacity: 0.38;
+  --_menu-item-selected-disabled-leading-icon-color: var(
+    --md-comp-menus-vibrant-menu-item-selected-leading-icon-color
+  );
+  --_menu-item-selected-disabled-leading-icon-opacity: 0.38;
+  --_menu-item-selected-disabled-trailing-icon-color: var(
+    --md-comp-menus-vibrant-menu-item-selected-trailing-icon-color
+  );
+  --_menu-item-selected-disabled-trailing-icon-opacity: 0.38;
+  --_menu-item-selected-disabled-trailing-supporting-color: var(
+    --md-comp-menus-vibrant-menu-item-selected-trailing-supporting-text-color
+  );
+  --_menu-item-selected-disabled-trailing-supporting-opacity: 0.38;
 }
 
 .m3-menu[popover] {
   margin: 0;
-  padding-block: 0.25rem;
-  padding-inline: 0.25rem;
-  min-inline-size: 10rem;
-  max-inline-size: min(22rem, calc(100vw - 2rem));
+  padding: 0;
 
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--md-comp-menus-gap);
 
   border: none;
-  border-radius: var(--md-comp-menu-container-shape);
-  background: var(--_menu-container-color);
-  box-shadow: var(--md-comp-menu-container-elevation);
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
 
   position: fixed;
   position-area: block-end span-inline-end;
@@ -89,6 +241,28 @@
   }
 }
 
+.m3-menu-container {
+  padding: var(--md-comp-menus-group-padding);
+  min-inline-size: 10rem;
+  max-inline-size: min(22rem, calc(100vw - 2rem));
+
+  display: flex;
+  flex-direction: column;
+
+  border-radius: var(--md-comp-menus-container-shape);
+  background: var(--_menu-container-color);
+  box-shadow: var(--md-comp-menu-container-elevation);
+}
+
+.m3-menu-label {
+  @apply title-small;
+
+  padding-block: 0.5rem 0.25rem;
+  padding-inline: var(--md-comp-menus-menu-item-leading-space) var(--md-comp-menus-menu-item-trailing-space);
+
+  color: var(--_menu-section-label-color);
+}
+
 .m3-menu-divider {
   block-size: 1px;
   border: none;
@@ -97,5 +271,5 @@
 }
 
 .m3-menu-gap {
-  block-size: 0.5rem;
+  block-size: var(--md-comp-menus-gap);
 }

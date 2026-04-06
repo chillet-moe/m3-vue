@@ -2,7 +2,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Menu from './Menu.vue';
+import MenuContainer from './MenuContainer.vue';
+import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
+import MenuLabel from './MenuLabel.vue';
 
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
@@ -53,7 +56,11 @@ describe('Menu', () => {
               },
             },
             {
-              default: () => [h(MenuItem, null, { default: () => 'Edit' })],
+              default: () => [
+                h(MenuContainer, null, {
+                  default: () => [h(MenuItem, null, { default: () => 'Edit' })],
+                }),
+              ],
             },
           );
       },
@@ -89,8 +96,12 @@ describe('Menu', () => {
         },
         {
           default: () => [
-            h(MenuItem, null, { default: () => 'Edit' }),
-            h(MenuItem, { disabled: true }, { default: () => 'Delete' }),
+            h(MenuContainer, null, {
+              default: () => [
+                h(MenuItem, null, { default: () => 'Edit' }),
+                h(MenuItem, { disabled: true }, { default: () => 'Delete' }),
+              ],
+            }),
           ],
         },
       ),
@@ -123,7 +134,11 @@ describe('Menu', () => {
           open: true,
         },
         {
-          default: () => [h(MenuItem, null, { default: () => 'Edit' })],
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [h(MenuItem, null, { default: () => 'Edit' })],
+            }),
+          ],
         },
       ),
     );
@@ -133,6 +148,54 @@ describe('Menu', () => {
 
     const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
     expect(menu?.dataset.color).toBe('vibrant');
+
+    app.unmount();
+  });
+
+  it('navigates across items rendered in multiple containers', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [h(MenuItem, null, { default: () => 'First' })],
+            }),
+            h(MenuGap),
+            h(MenuContainer, null, {
+              default: () => [
+                h(MenuLabel, null, { default: () => 'Edit' }),
+                h(MenuItem, null, { default: () => 'Second' }),
+                h(MenuItem, null, { default: () => 'Third' }),
+              ],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector('[role="menu"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]');
+
+    menuItems[0]?.focus();
+    menu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
+
+    expect(document.activeElement).toBe(menuItems[1]);
+
+    menu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'End' }));
+
+    expect(document.activeElement).toBe(menuItems[2]);
 
     app.unmount();
   });

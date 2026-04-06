@@ -1,4 +1,5 @@
 import fg from 'fast-glob';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -38,7 +39,13 @@ describe('M3VueResolver', () => {
       onlyFiles: true,
     });
 
-    const componentNames = componentEntryFiles.map((entryFile) => path.basename(path.dirname(entryFile))).sort();
+    const componentNames = (
+      await Promise.all(componentEntryFiles.map(async (entryFile) => fs.readFile(path.join(repoRoot, entryFile), 'utf8')))
+    )
+      .flatMap((entrySource) =>
+        Array.from(entrySource.matchAll(/export \{ default as (\w+) \} from '\.\/[^']+\.vue';/g), (match) => match[1]),
+      )
+      .sort();
 
     expect([...m3VueComponentNames].sort()).toEqual(componentNames);
   });

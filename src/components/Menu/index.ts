@@ -1,4 +1,12 @@
 export * from './Menu.vue';
+export * from './MenuContainer.vue';
+export * from './MenuDivider.vue';
+export * from './MenuGap.vue';
 export * from './MenuItem.vue';
+export * from './MenuLabel.vue';
 export { default as Menu } from './Menu.vue';
+export { default as MenuContainer } from './MenuContainer.vue';
+export { default as MenuDivider } from './MenuDivider.vue';
+export { default as MenuGap } from './MenuGap.vue';
 export { default as MenuItem } from './MenuItem.vue';
+export { default as MenuLabel } from './MenuLabel.vue';

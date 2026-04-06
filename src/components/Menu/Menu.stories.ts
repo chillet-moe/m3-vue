@@ -1,17 +1,55 @@
 import type { Meta, StoryFn } from '@storybook/vue3-vite';
 import { ref } from 'vue';
-import Menu from './Menu.vue';
-import MenuItem from './MenuItem.vue';
 import { vDropdownMenu, vContextMenu } from '@/directives/Menu';
+import Icon from '@/components/Icon/Icon.vue';
+import Menu from './Menu.vue';
+import MenuContainer from './MenuContainer.vue';
+import MenuDivider from './MenuDivider.vue';
+import MenuGap from './MenuGap.vue';
+import MenuItem from './MenuItem.vue';
+import MenuLabel from './MenuLabel.vue';
 import type { MenuProps } from './Menu.vue';
 
 const baseItems = `
-  <MenuItem>Item 1</MenuItem>
-  <MenuItem selected>Item 2</MenuItem>
-  <MenuItem>Item 3</MenuItem>
-  <hr class="m3-menu-divider" />
-  <div class="m3-menu-gap" aria-hidden="true" />
-  <MenuItem>Item 4</MenuItem>
+  <MenuContainer>
+    <MenuItem>
+      <template #leading><Icon name="visibility" /></template>
+      Item 1
+    </MenuItem>
+
+    <MenuItem submenu>
+      <template #leading><Icon name="content_copy" /></template>
+      Item 2
+      <template #trailing><Icon name="chevron_right" /></template>
+    </MenuItem>
+
+    <MenuDivider />
+
+    <MenuItem selected>
+      <template #leading><Icon name="edit" /></template>
+      Item 3
+      <template #badge>
+        <span
+          style="padding: 0.125rem 0.5rem; border-radius: 999px; background: --translucent(var(--md-sys-color-primary), 0.16); color: var(--md-sys-color-primary);"
+        >
+          New
+        </span>
+      </template>
+    </MenuItem>
+  </MenuContainer>
+
+  <MenuGap />
+
+  <MenuContainer>
+    <MenuLabel>Label text</MenuLabel>
+
+    <MenuItem>
+      <template #leading><Icon name="cloud_queue" /></template>
+      Item 4
+      <template #supporting>Supporting text</template>
+      <template #trailingText>Ctrl+C</template>
+    </MenuItem>
+  </MenuContainer>
 `;
 
 const meta = {
@@ -24,31 +62,48 @@ const meta = {
 export default meta;
 
 const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Menu, MenuItem },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel },
   setup: () => {
-    const open = ref(true);
     const selected = ref('None');
 
-    return { args, open, selected };
+    const onStaticMenuClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+
+      if (!target) {
+        return;
+      }
+
+      const item = target.closest<HTMLElement>('[role="menuitem"]');
+
+      if (!item || item.matches('[disabled], [aria-disabled="true"]')) {
+        return;
+      }
+
+      selected.value = item.textContent?.trim() ?? 'None';
+    };
+
+    return { args, onStaticMenuClick, selected };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
-      <Menu
-        v-bind="args"
-        v-model:open="open"
-        @select="(_, item) => { selected = item.textContent?.trim() ?? 'None'; }"
+      <div
+        role="menu"
+        aria-orientation="vertical"
+        class="m3-menu"
+        :data-color="args.color"
+        style="display: flex; flex-direction: column; gap: var(--md-comp-menus-gap);"
+        @click="onStaticMenuClick"
       >
         ${baseItems}
-      </Menu>
+      </div>
 
-      <div>Open (always true in this story): {{ open }}</div>
       <div>Selected: {{ selected }}</div>
     </div>
   `,
 });
 
 const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Menu, MenuItem },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel },
   directives: { dropdownMenu: vDropdownMenu },
   setup: () => {
     const selected = ref('None');
@@ -73,7 +128,7 @@ const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
 });
 
 const ContextDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Menu, MenuItem },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel },
   directives: { contextMenu: vContextMenu },
   setup: () => {
     const selected = ref('None');
@@ -94,9 +149,20 @@ const ContextDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
         v-bind="args"
         @select="(_, item) => { selected = item.textContent?.trim() ?? 'None'; }"
       >
-        <MenuItem>Cut</MenuItem>
-        <MenuItem>Copy</MenuItem>
-        <MenuItem>Paste</MenuItem>
+        <MenuContainer>
+          <MenuItem>
+            <template #leading><Icon name="content_cut" /></template>
+            Cut
+          </MenuItem>
+          <MenuItem>
+            <template #leading><Icon name="content_copy" /></template>
+            Copy
+          </MenuItem>
+          <MenuItem>
+            <template #leading><Icon name="content_paste" /></template>
+            Paste
+          </MenuItem>
+        </MenuContainer>
       </Menu>
 
       <div>Selected: {{ selected }}</div>

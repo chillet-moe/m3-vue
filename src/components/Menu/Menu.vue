@@ -18,7 +18,7 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
-  /** Menu content; usually MenuItem, Divider, gap blocks, etc. */
+  /** Menu content; usually MenuContainer and MenuGap. */
   default(): any;
 }>();
 
@@ -195,6 +195,7 @@ defineExpose({
     ref="menu"
     popover="manual"
     role="menu"
+    aria-orientation="vertical"
     class="m3-menu"
     :data-color="color"
     :hidden="open ? undefined : true"
