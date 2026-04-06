@@ -35,6 +35,10 @@ export function setupTooltip(
   const canAnchor = supportsAnchorPositioning();
   const anchorName = `--vtt-anchor-${tip.id}`;
   const animMs = opts.animDuration;
+  type DeferredOffsetHandle =
+    | { kind: 'idle'; id: number }
+    | { kind: 'timeout'; id: number }
+    | null;
   const fallbackPlacements = new Map<Placement, ReturnType<typeof resolveFallbackPlacement>>();
   const getFallbackPlacement = (placement = opts.placement) => {
     const cached = fallbackPlacements.get(placement);
@@ -59,10 +63,60 @@ export function setupTooltip(
 
     tip.style.removeProperty('translate');
   };
+  let deferredOffsetHandle: DeferredOffsetHandle = null;
+  const cancelDeferredOffset = () => {
+    if (!deferredOffsetHandle) {
+      return;
+    }
+
+    if (deferredOffsetHandle.kind === 'idle') {
+      (
+        window as Window & typeof globalThis & {
+          cancelIdleCallback?: (handle: number) => void;
+        }
+      ).cancelIdleCallback?.(deferredOffsetHandle.id);
+    } else {
+      window.clearTimeout(deferredOffsetHandle.id);
+    }
+
+    deferredOffsetHandle = null;
+  };
+  const scheduleDeferredOffset = () => {
+    cancelDeferredOffset();
+    if (isOpen) {
+      return;
+    }
+
+    const run = () => {
+      deferredOffsetHandle = null;
+      if (isOpen) {
+        return;
+      }
+      applyOffsetCSS(opts.placement);
+    };
+
+    const idleApi = window as Window & typeof globalThis & {
+      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+    };
+
+    if (idleApi.requestIdleCallback) {
+      deferredOffsetHandle = {
+        kind: 'idle',
+        id: idleApi.requestIdleCallback(() => {
+          run();
+        }, { timeout: 200 }),
+      };
+      return;
+    }
+
+    deferredOffsetHandle = {
+      kind: 'timeout',
+      id: window.setTimeout(run, 0),
+    };
+  };
 
   anchor.style.setProperty('anchor-name', anchorName);
   tip.style.setProperty('position-anchor', anchorName);
-  applyOffsetCSS(opts.placement);
 
   function applyAnchorCSS() {
     tip.style.setProperty('position', 'fixed');
@@ -119,6 +173,7 @@ export function setupTooltip(
 
   const openNow = () => {
     clearTimers();
+    cancelDeferredOffset();
     if (isOpen) return;
 
     isOpen = true;
@@ -157,6 +212,7 @@ export function setupTooltip(
         (tip as HTMLElement & { hidePopover: () => void }).hidePopover();
       } catch {
       }
+      scheduleDeferredOffset();
       return;
     }
 
@@ -164,6 +220,7 @@ export function setupTooltip(
     window.setTimeout(() => {
       if (tip.dataset.vttOpen === '1') return;
       tip.hidden = true;
+      scheduleDeferredOffset();
     }, animMs);
   };
 
@@ -283,9 +340,11 @@ export function setupTooltip(
 
   setExpanded(false);
   if (!canPopover) tip.hidden = true;
+  scheduleDeferredOffset();
 
   const cleanup = () => {
     clearTimers();
+    cancelDeferredOffset();
     ac.abort();
 
     trigger.classList.remove('vtt-trigger');
@@ -350,9 +409,12 @@ export function setupTooltip(
       tip.style.setProperty('position-area', placementToArea(opts.placement));
     }
 
-    applyOffsetCSS();
+    if (isOpen) {
+      updatePositionIfNeeded();
+      return;
+    }
 
-    updatePositionIfNeeded();
+    scheduleDeferredOffset();
   };
 
   state = {

@@ -109,7 +109,7 @@ describe('vTooltip directive', () => {
     state.cleanup();
   });
 
-  it('applies placement-based offset as translate', () => {
+  it('applies placement-based offset as translate during idle time while closed', () => {
     const el = createTrigger();
 
     vTooltip.mounted?.(el, {
@@ -123,6 +123,10 @@ describe('vTooltip directive', () => {
     const tip = document.body.querySelector('.vtt-popover') as HTMLElement | null;
 
     expect(tip).not.toBeNull();
+    expect(tip!.style.getPropertyValue('translate')).toBe('');
+
+    vi.runOnlyPendingTimers();
+
     expect(tip!.style.getPropertyValue('translate')).toBe('var(--space) 0');
   });
 
@@ -135,6 +139,8 @@ describe('vTooltip directive', () => {
       offset: 'var(--space)',
     }, { manual: true });
 
+    expect(getComputedStyleSpy).not.toHaveBeenCalled();
+    vi.runOnlyPendingTimers();
     expect(getComputedStyleSpy).not.toHaveBeenCalled();
 
     state.cleanup();
