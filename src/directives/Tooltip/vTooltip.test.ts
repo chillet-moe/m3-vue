@@ -96,6 +96,19 @@ describe('vTooltip directive', () => {
     expect(tip?.textContent).toBe('New content');
   });
 
+  it('updates generated tooltip content without rebuilding the element', () => {
+    const el = createTrigger();
+    const state = setupTooltip(el, 'Old content', { manual: true });
+    const tip = state.tip;
+
+    state.update('New content');
+
+    expect(state.tip).toBe(tip);
+    expect(tip.textContent).toBe('New content');
+
+    state.cleanup();
+  });
+
   it('applies placement-based offset as translate', () => {
     const el = createTrigger();
 
@@ -111,6 +124,40 @@ describe('vTooltip directive', () => {
 
     expect(tip).not.toBeNull();
     expect(tip!.style.getPropertyValue('translate')).toBe('var(--space) 0');
+  });
+
+  it('does not resolve fallback placement while the tooltip is closed', () => {
+    const el = createTrigger();
+    const getComputedStyleSpy = vi.spyOn(window, 'getComputedStyle');
+    const state = setupTooltip(el, {
+      content: 'Tooltip content',
+      placement: 'end',
+      offset: 'var(--space)',
+    }, { manual: true });
+
+    expect(getComputedStyleSpy).not.toHaveBeenCalled();
+
+    state.cleanup();
+    getComputedStyleSpy.mockRestore();
+  });
+
+  it('skips semantically identical updates', () => {
+    const el = createTrigger();
+    const state = setupTooltip(el, {
+      content: 'Tooltip content',
+      placement: 'top',
+    }, { manual: true });
+    const setAttributeSpy = vi.spyOn(state.tip, 'setAttribute');
+
+    state.update({
+      content: 'Tooltip content',
+      placement: 'top',
+    });
+
+    expect(setAttributeSpy).not.toHaveBeenCalled();
+
+    setAttributeSpy.mockRestore();
+    state.cleanup();
   });
 
   it('updates offset to match the flipped fallback placement', () => {

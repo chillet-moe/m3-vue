@@ -35,6 +35,29 @@ export function normalizeBinding(binding: TooltipBindingValue): NormalizedToolti
   return { ...defaults, ...binding };
 }
 
+function isSameTarget(
+  a: NormalizedTooltipOptions['target'],
+  b: NormalizedTooltipOptions['target'],
+) {
+  return a === b;
+}
+
+export function areNormalizedTooltipOptionsEqual(
+  a: NormalizedTooltipOptions,
+  b: NormalizedTooltipOptions,
+) {
+  return isSameTarget(a.target, b.target)
+    && a.content === b.content
+    && a.placement === b.placement
+    && a.offset === b.offset
+    && a.interactive === b.interactive
+    && a.popoverType === b.popoverType
+    && a.openDelay === b.openDelay
+    && a.closeDelay === b.closeDelay
+    && a.longpressDelay === b.longpressDelay
+    && a.animDuration === b.animDuration;
+}
+
 function isZeroOffset(offset: string) {
   return /^0(?:\.0+)?(?:[a-z%]+)?$/i.test(offset.trim());
 }
@@ -146,12 +169,21 @@ export function inferPlacementFromRects(
   return dx <= 0 ? 'left' : 'right';
 }
 
-export function resolveRenderedPlacement(tip: HTMLElement, anchor: HTMLElement, placement: Placement): PhysicalPlacement {
-  const fallbackPlacement = resolveFallbackPlacement(anchor, placement);
+export function resolveRenderedPlacement(
+  tip: HTMLElement,
+  anchor: HTMLElement,
+  placement: Placement,
+  fallbackPlacement = resolveFallbackPlacement(anchor, placement),
+): PhysicalPlacement {
   return inferPlacementFromRects(tip.getBoundingClientRect(), anchor.getBoundingClientRect(), fallbackPlacement);
 }
 
-export function positionFallback(tip: HTMLElement, anchor: HTMLElement, placement: Placement): PhysicalPlacement {
+export function positionFallback(
+  tip: HTMLElement,
+  anchor: HTMLElement,
+  placement: Placement,
+  resolvedPlacement = resolveFallbackPlacement(anchor, placement),
+): PhysicalPlacement {
   const gap = 10;
   const pad = 8;
 
@@ -160,7 +192,6 @@ export function positionFallback(tip: HTMLElement, anchor: HTMLElement, placemen
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const resolvedPlacement = resolveFallbackPlacement(anchor, placement);
 
   const tryPlace = (p: PhysicalPlacement) => {
     let x = 0;

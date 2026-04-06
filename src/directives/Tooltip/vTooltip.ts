@@ -31,6 +31,10 @@ export default {
       return;
     }
 
+    if (binding.value === binding.oldValue) {
+      return;
+    }
+
     state.update(binding.value);
   },
   unmounted(el) {

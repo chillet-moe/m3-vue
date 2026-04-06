@@ -1,4 +1,5 @@
 import {
+  areNormalizedTooltipOptionsEqual,
   ensureTipElement,
   normalizeBinding,
   placementToTranslate,
@@ -34,7 +35,21 @@ export function setupTooltip(
   const canAnchor = supportsAnchorPositioning();
   const anchorName = `--vtt-anchor-${tip.id}`;
   const animMs = opts.animDuration;
-  const applyOffsetCSS = (placement = resolveFallbackPlacement(anchor, opts.placement)) => {
+  const fallbackPlacements = new Map<Placement, ReturnType<typeof resolveFallbackPlacement>>();
+  const getFallbackPlacement = (placement = opts.placement) => {
+    const cached = fallbackPlacements.get(placement);
+    if (cached) {
+      return cached;
+    }
+
+    const resolvedPlacement = resolveFallbackPlacement(anchor, placement);
+    fallbackPlacements.set(placement, resolvedPlacement);
+    return resolvedPlacement;
+  };
+  const invalidateFallbackPlacements = () => {
+    fallbackPlacements.clear();
+  };
+  const applyOffsetCSS = (placement: Placement | ReturnType<typeof resolveFallbackPlacement> = opts.placement) => {
     const translate = placementToTranslate(placement, opts.offset);
 
     if (translate) {
@@ -47,7 +62,7 @@ export function setupTooltip(
 
   anchor.style.setProperty('anchor-name', anchorName);
   tip.style.setProperty('position-anchor', anchorName);
-  applyOffsetCSS();
+  applyOffsetCSS(opts.placement);
 
   function applyAnchorCSS() {
     tip.style.setProperty('position', 'fixed');
@@ -94,9 +109,10 @@ export function setupTooltip(
 
     tip.style.removeProperty('translate');
 
+    const fallbackPlacement = getFallbackPlacement(opts.placement);
     const effectivePlacement = canAnchor
-      ? resolveRenderedPlacement(tip, anchor, opts.placement)
-      : positionFallback(tip, anchor, opts.placement);
+      ? resolveRenderedPlacement(tip, anchor, opts.placement, fallbackPlacement)
+      : positionFallback(tip, anchor, opts.placement, fallbackPlacement);
 
     applyOffsetCSS(effectivePlacement);
   };
@@ -295,14 +311,17 @@ export function setupTooltip(
 
   const update = (next: TooltipBindingValue) => {
     const nextOpts = normalizeBinding(next);
-    const targetChanged =
-      (typeof opts.target === 'string' ? opts.target : opts.target?.id) !==
-      (typeof nextOpts.target === 'string' ? nextOpts.target : nextOpts.target?.id);
+    if (areNormalizedTooltipOptionsEqual(opts, nextOpts)) {
+      return;
+    }
+
+    const targetChanged = opts.target !== nextOpts.target;
     const contentChanged = opts.content !== nextOpts.content;
 
     opts = nextOpts;
+    invalidateFallbackPlacements();
 
-    if (targetChanged || (created && contentChanged)) {
+    if (targetChanged) {
       cleanup();
       const rebuilt = setupTooltip(trigger, next, options);
       state.tip = rebuilt.tip;
@@ -323,8 +342,8 @@ export function setupTooltip(
       trigger.setAttribute('aria-haspopup', 'true');
     }
 
-    if (opts.content !== undefined && created) {
-      tip.textContent = opts.content;
+    if (created) {
+      tip.textContent = opts.content ?? '';
     }
 
     if (canAnchor) {
