@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import style from './IconButton.module.css';
 import { usePressedState } from '@/composables/pressedState.ts';
 import { computed, inject, unref } from 'vue';
 import { Icon } from '@/components/Icon';
@@ -105,7 +104,7 @@ const slots = defineSlots<{
 <template>
   <component
     :is="tag"
-    :class="['state-layer', style.iconButton]"
+    :class="['state-layer', 'm3-icon-button']"
     :data-color="color"
     :data-size="size"
     :data-shape="shape"
@@ -122,7 +121,9 @@ const slots = defineSlots<{
     @pointerup="handlePointerUp"
     @pointercancel="handlePointerCancel"
   >
-    <Icon v-if="props.icon" :name="props.icon" :class="[style.icon]" :disabled="disabled" />
+    <Icon v-if="props.icon" :name="props.icon" :class="['m3-icon-button-icon']" :disabled="disabled" />
     <slot name="default" :disabled="disabled" />
   </component>
 </template>
+
+<style src="./IconButton.css"></style>

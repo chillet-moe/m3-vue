@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import styles from './Icon.module.css';
 
 type IconProps = {
   /** The name of the Material Symbols Outlined icon to display. */
@@ -10,5 +9,7 @@ defineProps<IconProps>();
 </script>
 
 <template>
-  <span :class="styles.icon">{{ name }}</span>
+  <span :class="'m3-icon'">{{ name }}</span>
 </template>
+
+<style src="./Icon.css"></style>

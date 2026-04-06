@@ -23,6 +23,8 @@
       "import": "./dist/index.mjs"
     },
     "./style.css": "./dist/index.css",
+    "./typography-classes.css": "./dist/typography-classes.css",
+    "./color-classes.css": "./dist/color-classes.css",
     "./typography.module.css": "./dist/typography.module.css",
     "./colors.module.css": "./dist/colors.module.css"
   },

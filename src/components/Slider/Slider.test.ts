@@ -2,7 +2,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Slider from './Slider.vue';
-import sliderStyles from './Slider.module.css';
 
 function createRect(rect: Partial<DOMRect> = {}): DOMRect {
   return {
@@ -362,17 +361,17 @@ describe('Slider', () => {
     input!.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120, pointerId: 7 }));
     await nextTick();
 
-    expect(slider!.classList.contains(sliderStyles.valueDragging)).toBe(false);
+    expect(slider!.classList.contains('m3-slider-value-dragging')).toBe(false);
 
     window.dispatchEvent(createPointerEvent('pointermove', { clientX: 186, clientY: 120, pointerId: 7 }));
     await nextTick();
 
-    expect(slider!.classList.contains(sliderStyles.valueDragging)).toBe(true);
+    expect(slider!.classList.contains('m3-slider-value-dragging')).toBe(true);
 
     window.dispatchEvent(createPointerEvent('pointerup', { clientX: 186, clientY: 120, pointerId: 7 }));
     await nextTick();
 
-    expect(slider!.classList.contains(sliderStyles.valueDragging)).toBe(false);
+    expect(slider!.classList.contains('m3-slider-value-dragging')).toBe(false);
 
     app.unmount();
   });

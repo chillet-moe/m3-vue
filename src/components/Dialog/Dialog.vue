@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, useId, useSlots, useTemplateRef, watch } from 'vue';
-import style from './Dialog.module.css';
 
 export type DialogProps = {
   /** Whether clicking the backdrop closes the dialog. */
@@ -141,7 +140,7 @@ defineExpose({
 <template>
   <dialog
     ref="dialog"
-    :class="style.dialog"
+    :class="'m3-dialog'"
     :data-has-icon="hasIcon ? 'true' : 'false'"
     :data-has-headline="hasHeadline ? 'true' : 'false'"
     :data-has-actions="hasActions ? 'true' : 'false'"
@@ -151,20 +150,22 @@ defineExpose({
     @close="onClose"
     @click="onClick"
   >
-    <div v-if="hasIcon" :class="style.icon">
+    <div v-if="hasIcon" :class="'m3-dialog-icon'">
       <slot name="icon" />
     </div>
 
-    <h2 v-if="hasHeadline" :id="headlineId" :class="style.headline">
+    <h2 v-if="hasHeadline" :id="headlineId" :class="'m3-dialog-headline'">
       <slot name="headline" />
     </h2>
 
-    <div v-if="hasContent" :id="contentId" :class="style.content">
+    <div v-if="hasContent" :id="contentId" :class="'m3-dialog-content'">
       <slot />
     </div>
 
-    <div v-if="hasActions" :class="style.actions">
+    <div v-if="hasActions" :class="'m3-dialog-actions'">
       <slot name="actions" />
     </div>
   </dialog>
 </template>
+
+<style src="./Dialog.css"></style>

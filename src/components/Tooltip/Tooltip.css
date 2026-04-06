@@ -1,7 +1,7 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
-  .tooltip {
+  .m3-tooltip {
     --md-comp-plain-tooltip-container-color: var(--md-sys-color-inverse-surface);
     --md-comp-plain-tooltip-container-shape: var(--md-sys-shape-corner-extra-small);
     --md-comp-plain-tooltip-supporting-text-font: var(--md-sys-typescale-body-small-font);
@@ -49,7 +49,7 @@
   }
 }
 
-.tooltip[data-variant='plain'] {
+.m3-tooltip[data-variant='plain'] {
   background-color: var(--md-comp-plain-tooltip-container-color);
   color: var(--md-comp-plain-tooltip-supporting-text-color);
   border-radius: var(--md-comp-plain-tooltip-container-shape);
@@ -61,7 +61,7 @@
   letter-spacing: var(--md-comp-plain-tooltip-supporting-text-tracking);
 }
 
-.tooltip[data-variant='rich'] {
+.m3-tooltip[data-variant='rich'] {
   background-color: var(--md-comp-rich-tooltip-container-color);
   box-shadow: var(--md-comp-rich-tooltip-container-elevation);
   color: var(--md-comp-rich-tooltip-supporting-text-color);
@@ -74,8 +74,8 @@
   letter-spacing: var(--md-comp-rich-tooltip-supporting-text-tracking);
 }
 
-.tooltip,
-.tooltip[data-vtt-fallback='1'] {
+.m3-tooltip,
+.m3-tooltip[data-vtt-fallback='1'] {
   margin: 0;
   inset: auto;
   border: none;
@@ -91,7 +91,7 @@
 
 /* 有 Anchor Positioning 就走 CSS 锚定 */
 @supports (position-anchor: --a) and (position-area: block-start) {
-  .tooltip[popover] {
+  .m3-tooltip[popover] {
     position: fixed;
     /* position-anchor / position-area / position-try-fallbacks / position-visibility
        由 directive 通过 style.setProperty 写入，避免你在 CSS 里写死 anchor-name */
@@ -99,7 +99,7 @@
 }
 
 /* 进/出场动画：fade（可选加一点点位移） */
-.tooltip[popover] {
+.m3-tooltip[popover] {
   opacity: 0;
   transform: translateY(4px); /* 不需要位移就删掉这一行 */
   pointer-events: none;
@@ -113,7 +113,7 @@
 }
 
 /* 显示态 */
-.tooltip[popover]:popover-open {
+.m3-tooltip[popover]:popover-open {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
@@ -121,14 +121,14 @@
 
 /* 关键：popover 从 display:none 进入时需要一个“起始样式” */
 @starting-style {
-  .tooltip[popover]:popover-open {
+  .m3-tooltip[popover]:popover-open {
     opacity: 0;
     transform: translateY(4px);
   }
 }
 
 /* fallback 也复用同样的动画逻辑 */
-.tooltip[data-vtt-fallback='1'] {
+.m3-tooltip[data-vtt-fallback='1'] {
   opacity: 0;
   transform: translateY(4px);
   pointer-events: none;
@@ -137,7 +137,7 @@
     transform var(--md-duration-fast) ease;
 }
 
-.tooltip[data-vtt-fallback='1'][data-vtt-open='1'] {
+.m3-tooltip[data-vtt-fallback='1'][data-vtt-open='1'] {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;

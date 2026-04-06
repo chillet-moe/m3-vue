@@ -1,7 +1,7 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
-  .root {
+  .m3-checkbox {
     --md-comp-checkbox-icon-size: 1.125rem;
     --md-comp-checkbox-shape: var(--md-sys-shape-corner-extra-small);
     --md-comp-checkbox-outline-width: 0.125rem;
@@ -20,7 +20,7 @@
   }
 }
 
-.root {
+.m3-checkbox {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -30,11 +30,11 @@
   user-select: none;
 }
 
-.root[aria-disabled='true'] {
+.m3-checkbox[aria-disabled='true'] {
   cursor: default;
 }
 
-.input {
+.m3-checkbox-input {
   position: absolute;
   margin: 0;
   opacity: 0;
@@ -42,7 +42,7 @@
   cursor: inherit;
 }
 
-.control {
+.m3-checkbox-control {
   position: relative;
   inline-size: var(--md-comp-checkbox-icon-size);
   block-size: var(--md-comp-checkbox-icon-size);
@@ -51,7 +51,7 @@
   justify-content: center;
 }
 
-.box {
+.m3-checkbox-box {
   inline-size: 100%;
   block-size: 100%;
   border-radius: var(--md-comp-checkbox-shape);
@@ -62,7 +62,7 @@
     box-shadow var(--md-easing-fast);
 }
 
-.icon {
+.m3-checkbox-icon {
   position: absolute;
   inline-size: 0.6rem;
   block-size: 0.35rem;
@@ -73,39 +73,39 @@
   transition: all var(--md-easing-fast-spatial);
 }
 
-.input:checked + .control .box {
+.m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box {
   background-color: var(--md-comp-checkbox-selected-container-color);
   box-shadow: none;
 }
 
-.input:checked + .control .icon {
+.m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-icon {
   border-color: var(--md-comp-checkbox-selected-icon-color);
   opacity: 1;
   transform: translateY(-0.05rem) rotate(-45deg) scale(1);
 }
 
-.root:has(.input:not(:disabled):hover) .box {
+.m3-checkbox:has(.m3-checkbox-input:not(:disabled):hover) .m3-checkbox-box {
   box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width) var(--md-sys-color-on-surface);
 }
 
-.root:has(.input:not(:disabled):active) .box,
-.root:has(.input:not(:disabled):hover) .input:checked + .control .box,
-.root:has(.input:not(:disabled):active) .input:checked + .control .box {
+.m3-checkbox:has(.m3-checkbox-input:not(:disabled):active) .m3-checkbox-box,
+.m3-checkbox:has(.m3-checkbox-input:not(:disabled):hover) .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box,
+.m3-checkbox:has(.m3-checkbox-input:not(:disabled):active) .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box {
   background-color: var(--md-sys-color-primary);
 }
 
-.input:focus-visible + .control {
+.m3-checkbox-input:focus-visible + .m3-checkbox-control {
   outline: var(--md-comp-checkbox-focus-indicator-thickness) solid var(--md-comp-checkbox-focus-indicator-color);
   outline-offset: var(--md-comp-checkbox-focus-indicator-offset);
   border-radius: var(--md-comp-checkbox-shape);
 }
 
-.input:disabled + .control .box {
+.m3-checkbox-input:disabled + .m3-checkbox-control .m3-checkbox-box {
   box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width)
     --translucent(var(--md-comp-checkbox-disabled-unselected-outline-color), var(--md-comp-checkbox-disabled-outline-opacity));
 }
 
-.input:disabled:checked + .control .box {
+.m3-checkbox-input:disabled:checked + .m3-checkbox-control .m3-checkbox-box {
   background-color: --translucent(
     var(--md-comp-checkbox-disabled-selected-container-color),
     var(--md-comp-checkbox-disabled-selected-container-opacity)
@@ -113,14 +113,14 @@
   box-shadow: none;
 }
 
-.input:disabled:checked + .control .icon {
+.m3-checkbox-input:disabled:checked + .m3-checkbox-control .m3-checkbox-icon {
   border-color: --translucent(
     var(--md-comp-checkbox-disabled-selected-icon-color),
     var(--md-comp-checkbox-disabled-selected-icon-opacity)
   );
 }
 
-.label {
+.m3-checkbox-label {
   @apply body-medium;
   color: var(--md-sys-color-on-surface);
 }

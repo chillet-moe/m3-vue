@@ -2,7 +2,7 @@ import { h, shallowRef } from 'vue';
 import Snackbar from './Snackbar.vue';
 import type { SnackbarProps } from './Snackbar.vue';
 import { showPopoverStackItem } from '@/internal/popoverStack/popoverStack';
-import styles from './Snackbar.module.css';
+import './SnackbarStack.css';
 
 export type SnackbarAction = {
   /** Label shown in the action area. */
@@ -96,8 +96,8 @@ export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string>
 
     const handle = showPopoverStackItem({
       stackId: `snackbar:${position}`,
-      popoverClass: styles.stackPopover,
-      stackClass: styles.stack,
+      popoverClass: 'm3-snackbar-stack-popover',
+      stackClass: 'm3-snackbar-stack',
       dataAttributes: {
         'data-position': position,
       },

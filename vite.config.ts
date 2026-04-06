@@ -29,6 +29,12 @@ export default defineConfig({
     copyFiles({
       targets: [
         {
+          src: 'src/styles/typography-classes.css',
+        },
+        {
+          src: 'src/styles/color-classes.css',
+        },
+        {
           src: 'src/styles/typography.module.css',
         },
         {

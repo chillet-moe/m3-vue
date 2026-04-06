@@ -1,7 +1,7 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
-  .root {
+  .m3-radio {
     --md-comp-radio-icon-size: 1.25rem;
     --md-comp-radio-icon-shape: var(--md-sys-shape-corner-full);
     --md-comp-radio-unselected-outline-width: 0.125rem;
@@ -21,7 +21,7 @@
   }
 }
 
-.root {
+.m3-radio {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -31,11 +31,11 @@
   user-select: none;
 }
 
-.root[aria-disabled='true'] {
+.m3-radio[aria-disabled='true'] {
   cursor: default;
 }
 
-.input {
+.m3-radio-input {
   position: absolute;
   margin: 0;
   opacity: 0;
@@ -43,7 +43,7 @@
   cursor: inherit;
 }
 
-.control {
+.m3-radio-control {
   position: relative;
   inline-size: var(--md-comp-radio-icon-size);
   block-size: var(--md-comp-radio-icon-size);
@@ -52,7 +52,7 @@
   justify-content: center;
 }
 
-.outer {
+.m3-radio-outer {
   inline-size: 100%;
   block-size: 100%;
   border-radius: var(--md-comp-radio-icon-shape);
@@ -60,7 +60,7 @@
   transition: box-shadow var(--md-easing-fast);
 }
 
-.inner {
+.m3-radio-inner {
   position: absolute;
   inline-size: var(--md-comp-radio-selected-dot-size);
   block-size: var(--md-comp-radio-selected-dot-size);
@@ -70,48 +70,48 @@
   transition: transform var(--md-easing-fast-spatial);
 }
 
-.input:checked + .control .outer {
+.m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
   box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-comp-radio-selected-outline-color);
 }
 
-.input:checked + .control .inner {
+.m3-radio-input:checked + .m3-radio-control .m3-radio-inner {
   transform: scale(1);
 }
 
-.root:has(.input:not(:disabled):hover) .outer {
+.m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-outer {
   box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
 }
 
-.root:has(.input:not(:disabled):hover) .input:checked + .control .outer,
-.root:has(.input:not(:disabled):active) .input:checked + .control .outer {
+.m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer,
+.m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
   box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-sys-color-primary);
 }
 
-.root:has(.input:not(:disabled):active) .outer {
+.m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-outer {
   box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
 }
 
-.input:focus-visible + .control {
+.m3-radio-input:focus-visible + .m3-radio-control {
   outline: var(--md-comp-radio-focus-indicator-thickness) solid var(--md-comp-radio-focus-indicator-color);
   outline-offset: var(--md-comp-radio-focus-indicator-offset);
   border-radius: var(--md-comp-radio-icon-shape);
 }
 
-.input:disabled + .control .outer {
+.m3-radio-input:disabled + .m3-radio-control .m3-radio-outer {
   box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width)
     --translucent(var(--md-comp-radio-disabled-unselected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
 }
 
-.input:disabled:checked + .control .outer {
+.m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-outer {
   box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width)
     --translucent(var(--md-comp-radio-disabled-selected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
 }
 
-.input:disabled:checked + .control .inner {
+.m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-inner {
   background-color: --translucent(var(--md-comp-radio-disabled-selected-dot-color), var(--md-comp-radio-disabled-dot-opacity));
 }
 
-.label {
+.m3-radio-label {
   @apply body-medium;
   color: var(--md-sys-color-on-surface);
 }

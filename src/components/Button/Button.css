@@ -1,7 +1,7 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
-  .button {
+  .m3-button {
     --md-comp-button-container-color: var(--md-sys-color-primary);
     --md-comp-button-unselected-container-color: var(--md-sys-color-surface-container);
     --md-comp-button-selected-container-color: var(--md-sys-color-primary);
@@ -361,7 +361,7 @@
   }
 }
 
-.button {
+.m3-button {
   border: none;
   user-select: none;
 
@@ -393,19 +393,19 @@
   padding-inline-end: var(--md-comp-button-trailing-space);
 }
 
-.button:not(:disabled):not(:has(input:disabled)) {
+.m3-button:not(:disabled):not(:has(input:disabled)) {
   cursor: pointer;
 }
 
-.button:hover {
+.m3-button:hover {
   --md-color-on-container: var(--md-comp-button-hovered-label-text-color);
   box-shadow:
     var(--md-comp-button-hovered-container-elevation, var(--md-comp-button-container-elevation)),
     inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
 }
 
-.button:focus-visible,
-.button:has(input:focus-visible) {
+.m3-button:focus-visible,
+.m3-button:has(input:focus-visible) {
   --md-color-on-container: var(--md-comp-button-focused-label-text-color);
   box-shadow:
     var(--md-comp-button-focused-container-elevation),
@@ -415,15 +415,15 @@
   outline: var(--md-comp-button-focus-indicator-color) solid var(--md-comp-button-focus-indicator-thickness);
 }
 
-.button[data-pressed='true'] {
+.m3-button[data-pressed='true'] {
   --md-color-on-container: var(--md-comp-button-pressed-label-text-color);
   box-shadow:
     var(--md-comp-button-pressed-container-elevation),
     inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
 }
 
-.button:disabled,
-label.button:has(input:disabled) {
+.m3-button:disabled,
+label.m3-button:has(input:disabled) {
   background-color: rgb(
     from var(--md-comp-button-disabled-container-color) r g b / var(--md-comp-button-disabled-container-opacity)
   );
@@ -436,7 +436,7 @@ label.button:has(input:disabled) {
 }
 
 /* elevated */
-.button[data-color='elevated'] {
+.m3-button[data-color='elevated'] {
   --md-comp-button-container-color: var(--md-comp-button-elevated-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-elevated-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-elevated-label-text-color);
@@ -457,7 +457,7 @@ label.button:has(input:disabled) {
 }
 
 /* filled */
-.button[data-color='filled'] {
+.m3-button[data-color='filled'] {
   --md-comp-button-container-color: var(--md-comp-button-filled-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-filled-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-filled-label-text-color);
@@ -478,7 +478,7 @@ label.button:has(input:disabled) {
 }
 
 /* tonal */
-.button[data-color='tonal'] {
+.m3-button[data-color='tonal'] {
   --md-comp-button-container-color: var(--md-comp-button-tonal-container-color);
   --md-comp-button-container-elevation: var(--md-comp-button-tonal-container-elevation);
   --md-comp-button-label-text-color: var(--md-comp-button-tonal-label-text-color);
@@ -499,7 +499,7 @@ label.button:has(input:disabled) {
 }
 
 /* outlined */
-.button[data-color='outlined'] {
+.m3-button[data-color='outlined'] {
   --md-comp-button-container-color: transparent;
   --md-comp-button-label-text-color: var(--md-comp-button-outlined-label-text-color);
   --button-outline-color: var(--md-comp-button-outlined-outline-color);
@@ -515,7 +515,7 @@ label.button:has(input:disabled) {
 }
 
 /* text */
-.button[data-color='text'] {
+.m3-button[data-color='text'] {
   --md-comp-button-container-color: transparent;
   --md-comp-button-label-text-color: var(--md-comp-button-text-label-text-color);
   --md-comp-button-hovered-label-text-color: var(--md-comp-button-text-hovered-label-text-color);
@@ -530,7 +530,7 @@ label.button:has(input:disabled) {
 }
 
 /* Size Variants */
-.button[data-size='extra-small'] {
+.m3-button[data-size='extra-small'] {
   @apply label-large;
 
   --md-comp-button-container-height: var(--md-comp-button-xsmall-container-height);
@@ -546,7 +546,7 @@ label.button:has(input:disabled) {
   --md-comp-button-icon-label-space: var(--md-comp-button-xsmall-icon-label-space);
 }
 
-.button[data-size='small'] {
+.m3-button[data-size='small'] {
   @apply label-large;
 
   --md-comp-button-container-height: var(--md-comp-button-small-container-height);
@@ -562,7 +562,7 @@ label.button:has(input:disabled) {
   --md-comp-button-icon-label-space: var(--md-comp-button-small-icon-label-space);
 }
 
-.button[data-size='medium'] {
+.m3-button[data-size='medium'] {
   @apply title-medium;
 
   --md-comp-button-container-height: var(--md-comp-button-medium-container-height);
@@ -578,7 +578,7 @@ label.button:has(input:disabled) {
   --md-comp-button-icon-label-space: var(--md-comp-button-medium-icon-label-space);
 }
 
-.button[data-size='large'] {
+.m3-button[data-size='large'] {
   @apply headline-small;
 
   --md-comp-button-container-height: var(--md-comp-button-large-container-height);
@@ -594,7 +594,7 @@ label.button:has(input:disabled) {
   --md-comp-button-icon-label-space: var(--md-comp-button-large-icon-label-space);
 }
 
-.button[data-size='extra-large'] {
+.m3-button[data-size='extra-large'] {
   @apply headline-large;
 
   --md-comp-button-container-height: var(--md-comp-button-xlarge-container-height);
@@ -610,7 +610,7 @@ label.button:has(input:disabled) {
   --md-comp-button-icon-label-space: var(--md-comp-button-xlarge-icon-label-space);
 }
 
-.button[data-color='outlined'] {
+.m3-button[data-color='outlined'] {
   &[data-size='extra-small'] {
     --button-outline-width: var(--md-comp-button-xsmall-outlined-outline-width);
   }
@@ -633,7 +633,7 @@ label.button:has(input:disabled) {
 }
 
 /* Shape Variants */
-.button[data-shape='rounded'] {
+.m3-button[data-shape='rounded'] {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
 
   &[data-pressed='true'] {
@@ -641,7 +641,7 @@ label.button:has(input:disabled) {
   }
 }
 
-.button[data-shape='square'] {
+.m3-button[data-shape='square'] {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-square);
 
   &[data-pressed='true'] {
@@ -649,7 +649,7 @@ label.button:has(input:disabled) {
   }
 }
 
-.button[data-toggleable='true'] {
+.m3-button[data-toggleable='true'] {
   input[type='checkbox'],
   input[type='radio'] {
     all: unset;
@@ -686,7 +686,7 @@ label.button:has(input:disabled) {
   }
 }
 
-[data-type='connected'] .button {
+[data-type='connected'] .m3-button {
   border-start-start-radius: var(--md-comp-button-group-connected-container-shape);
   border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
   border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
@@ -784,15 +784,15 @@ label.button:has(input:disabled) {
   }
 }
 
-.leading {
+.m3-button-leading {
   margin-inline-end: var(--md-comp-button-icon-label-space);
 }
 
-.trailing {
+.m3-button-trailing {
   margin-inline-start: var(--md-comp-button-icon-label-space);
 }
 
-.icon {
+.m3-button-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;

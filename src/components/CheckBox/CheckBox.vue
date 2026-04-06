@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import style from './CheckBox.module.css';
 
 export type CheckBoxProps = {
   /** Whether the checkbox is disabled. */
@@ -26,10 +25,10 @@ defineSlots<{
 </script>
 
 <template>
-  <label :class="style.root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
+  <label :class="'m3-checkbox'" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
     <input
       v-model="checked"
-      :class="style.input"
+      :class="'m3-checkbox-input'"
       type="checkbox"
       :disabled="disabled"
       :name="name"
@@ -37,9 +36,9 @@ defineSlots<{
       :aria-label="ariaLabel"
     />
 
-    <span :class="style.control" aria-hidden="true">
-      <span :class="style.box" />
-      <span :class="style.icon" />
+    <span :class="'m3-checkbox-control'" aria-hidden="true">
+      <span :class="'m3-checkbox-box'" />
+      <span :class="'m3-checkbox-icon'" />
       <span
         class="state-layer"
         data-state-layer-hover-from="target"
@@ -47,6 +46,8 @@ defineSlots<{
       />
     </span>
 
-    <span v-if="$slots.default" :class="style.label"><slot /></span>
+    <span v-if="$slots.default" :class="'m3-checkbox-label'"><slot /></span>
   </label>
 </template>
+
+<style src="./CheckBox.css"></style>

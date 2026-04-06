@@ -1,7 +1,7 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
-  .dialog {
+  .m3-dialog {
     --md-comp-dialog-container-color: var(--md-sys-color-surface-container-high);
     --md-comp-dialog-container-elevation: var(--md-sys-elevation-level3);
     --md-comp-dialog-container-shape: var(--md-sys-shape-corner-extra-large);
@@ -31,7 +31,7 @@
   }
 }
 
-.dialog {
+.m3-dialog {
   position: fixed;
   inset: 0;
 
@@ -65,12 +65,12 @@
     display var(--md-duration-fast) allow-discrete;
 }
 
-.dialog::backdrop {
+.m3-dialog::backdrop {
   background-color: transparent;
   transition: background-color var(--md-duration-spatial) var(--md-timing-function-spatial);
 }
 
-.dialog[open] {
+.m3-dialog[open] {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -79,12 +79,12 @@
     dialogOpacity var(--md-timing-function-emphasized-decel) 100ms backwards;
 }
 
-.dialog[open]::backdrop {
+.m3-dialog[open]::backdrop {
   background-color: --translucent(var(--md-sys-color-scrim), 0.3);
   animation: dialogOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
 }
 
-.icon {
+.m3-dialog-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,7 +94,7 @@
   line-height: 1;
 }
 
-.headline {
+.m3-dialog-headline {
   margin: 0;
   opacity: 0;
 
@@ -107,7 +107,7 @@
   transition: opacity var(--md-easing-fast);
 }
 
-.content {
+.m3-dialog-content {
   min-block-size: 0;
   overflow: auto;
   opacity: 0;
@@ -121,7 +121,7 @@
   transition: opacity var(--md-easing-fast);
 }
 
-.actions {
+.m3-dialog-actions {
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -134,17 +134,17 @@
     bottom var(--md-duration-spatial) var(--md-timing-function-spatial);
 }
 
-.dialog[open] .headline {
+.m3-dialog[open] .m3-dialog-headline {
   opacity: 1;
   animation: dialogOpacity var(--md-easing-fast);
 }
 
-.dialog[open] .content {
+.m3-dialog[open] .m3-dialog-content {
   opacity: 1;
   animation: dialogOpacity var(--md-easing-fast) 50ms backwards;
 }
 
-.dialog[open] .actions {
+.m3-dialog[open] .m3-dialog-actions {
   opacity: 1;
   bottom: 0;
   animation:
@@ -152,15 +152,15 @@
     dialogOpacity var(--md-easing-fast) backwards;
 }
 
-.dialog[data-has-icon='true'] {
-  .headline,
-  .content {
+.m3-dialog[data-has-icon='true'] {
+  .m3-dialog-headline,
+  .m3-dialog-content {
     text-align: center;
   }
 }
 
 @media (width < 40rem) {
-  .dialog {
+  .m3-dialog {
     inline-size: calc(100vi - 2rem);
     min-inline-size: min(17.5rem, calc(100vi - 2rem));
     max-inline-size: calc(100vi - 2rem);
@@ -170,32 +170,32 @@
 }
 
 @starting-style {
-  .dialog[open] {
+  .m3-dialog[open] {
     opacity: 0;
     visibility: hidden;
   }
 
-  .dialog[open]::backdrop {
+  .m3-dialog[open]::backdrop {
     background-color: transparent;
   }
 
-  .dialog[open] .headline,
-  .dialog[open] .content {
+  .m3-dialog[open] .m3-dialog-headline,
+  .m3-dialog[open] .m3-dialog-content {
     opacity: 0;
   }
 
-  .dialog[open] .actions {
+  .m3-dialog[open] .m3-dialog-actions {
     opacity: 0;
     bottom: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dialog,
-  .dialog::backdrop,
-  .headline,
-  .content,
-  .actions {
+  .m3-dialog,
+  .m3-dialog::backdrop,
+  .m3-dialog-headline,
+  .m3-dialog-content,
+  .m3-dialog-actions {
     transition-duration: 0ms;
     animation-duration: 0ms;
   }

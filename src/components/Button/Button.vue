@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import style from './Button.module.css';
 import { usePressedState } from '@/composables/pressedState';
 import { computed, inject, unref } from 'vue';
 
@@ -116,7 +115,7 @@ const slots = defineSlots<{
 <template>
   <component
     :is="tag"
-    :class="['state-layer', style.button]"
+    :class="['state-layer', 'm3-button']"
     :data-color="color"
     :data-size="size"
     :data-shape="shape"
@@ -135,7 +134,7 @@ const slots = defineSlots<{
     <Icon
       v-if="props.leadingIcon"
       :name="props.leadingIcon"
-      :class="[style.leading, style.icon]"
+      :class="['m3-button-leading', 'm3-button-icon']"
       :disabled="disabled"
     />
     <slot v-else name="leading" :disabled="disabled" />
@@ -145,9 +144,11 @@ const slots = defineSlots<{
     <Icon
       v-if="props.trailingIcon"
       :name="props.trailingIcon"
-      :class="[style.trailing, style.icon]"
+      :class="['m3-button-trailing', 'm3-button-icon']"
       :disabled="disabled"
     />
     <slot v-else name="trailing" :disabled="disabled" />
   </component>
 </template>
+
+<style src="./Button.css"></style>

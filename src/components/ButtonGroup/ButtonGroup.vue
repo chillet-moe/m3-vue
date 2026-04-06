@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import style from './ButtonGroup.module.css';
 import { provide, toRef } from 'vue';
 import type { ButtonProps } from '@/components/Button/Button.vue';
 
@@ -28,9 +27,9 @@ provide(buttonContextKey, {
 </script>
 
 <template>
-  <fieldset :class="style.buttonGroup" :data-type="type" :data-size="size">
+  <fieldset :class="'m3-button-group'" :data-type="type" :data-size="size">
     <slot />
   </fieldset>
 </template>
 
-<style scoped></style>
+<style src="./ButtonGroup.css"></style>

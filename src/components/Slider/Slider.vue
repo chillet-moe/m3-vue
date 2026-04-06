@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
-import style from './Slider.module.css';
 import { useKeyModifier } from '@vueuse/core';
 import { setupTooltip } from '@/directives/Tooltip/setup';
 
@@ -426,11 +425,11 @@ onBeforeUnmount(() => {
     ref="slider"
     :aria-disabled="disabled"
     :class="[
-      style.slider,
-      style[size],
-      vertical ? style.vertical : style.horizontal,
-      direction === 'rtl' ? style.rtl : style.lrt,
-      isValueDragging && style.valueDragging,
+      'm3-slider',
+      `m3-slider-${size}`,
+      vertical ? 'm3-slider-vertical' : 'm3-slider-horizontal',
+      direction === 'rtl' ? 'm3-slider-rtl' : 'm3-slider-lrt',
+      isValueDragging && 'm3-slider-value-dragging',
     ]"
     :style="{
       '--percent': valuePercent,
@@ -457,26 +456,26 @@ onBeforeUnmount(() => {
       @focus="onValueIndicatorFocus"
       @blur="onValueIndicatorBlur"
     />
-    <div aria-hidden="true" :class="style.trackActive" />
-    <div aria-hidden="true" :class="style.trackInactive" />
+    <div aria-hidden="true" class="m3-slider-track m3-slider-track-active" />
+    <div aria-hidden="true" class="m3-slider-track m3-slider-track-inactive" />
     <template v-if="stopIndicatorsFiltered && stopIndicatorsFiltered.length > 0">
-      <div aria-hidden="true" :class="style.stopIndicatorActiveContainer">
+      <div aria-hidden="true" class="m3-slider-stop-indicator-container m3-slider-stop-indicator-active-container">
         <div
           v-for="(stop, index) in stopIndicatorsFiltered"
           :key="index"
           aria-hidden="true"
-          :class="style.stopIndicatorActive"
+          class="m3-slider-stop-indicator m3-slider-stop-indicator-active"
           :style="{
             '--percent': (stop - min) / (max - min),
           }"
         />
       </div>
-      <div aria-hidden="true" :class="style.stopIndicatorInactiveContainer">
+      <div aria-hidden="true" class="m3-slider-stop-indicator-container m3-slider-stop-indicator-inactive-container">
         <div
           v-for="(stop, index) in stopIndicatorsFiltered"
           :key="index"
           aria-hidden="true"
-          :class="style.stopIndicatorInactive"
+          class="m3-slider-stop-indicator m3-slider-stop-indicator-inactive"
           :style="{
             '--percent': (stop - min) / (max - min),
           }"
@@ -484,11 +483,13 @@ onBeforeUnmount(() => {
       </div>
     </template>
 
-    <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" :class="style.handle" />
-    <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" :class="style.valueIndicator">
-      <span :class="style.valueIndicatorText">
+    <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" class="m3-slider-handle" />
+    <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" class="m3-slider-value-indicator">
+      <span class="m3-slider-value-indicator-text">
         {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}
       </span>
     </div>
   </div>
 </template>
+
+<style src="./Slider.css"></style>

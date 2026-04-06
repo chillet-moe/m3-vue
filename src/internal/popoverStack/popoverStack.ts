@@ -13,7 +13,7 @@ import {
   type ShallowRef,
   type VNodeChild,
 } from 'vue';
-import styles from './PopoverStackHost.module.css';
+import './PopoverStackHost.css';
 
 type PopoverStackItemRecord = {
   id: number;
@@ -169,7 +169,7 @@ const PopoverStackHost = defineComponent({
           ref: 'popover',
           popover: 'manual',
           hidden: hasVisibleContent.value ? undefined : true,
-          class: [styles.popover, props.state.config.popoverClass],
+          class: ['m3-popover-stack-popover', props.state.config.popoverClass],
           role: props.state.config.role,
           'aria-live': props.state.config.ariaLive,
           'aria-atomic': props.state.config.ariaAtomic,
@@ -179,7 +179,7 @@ const PopoverStackHost = defineComponent({
           h(
             'div',
             {
-              class: [styles.stack, props.state.config.stackClass],
+              class: ['m3-popover-stack', props.state.config.stackClass],
             },
             props.state.items.value.map((item) =>
               h(
@@ -188,7 +188,7 @@ const PopoverStackHost = defineComponent({
                   key: item.id,
                   'data-stack-item-id': item.id,
                   'data-state': item.closing ? 'closing' : 'open',
-                  class: [styles.item, props.state.config.itemClass],
+                  class: ['m3-popover-stack-item', props.state.config.itemClass],
                 },
                 [item.render()],
               ),

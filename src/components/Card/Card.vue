@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import style from './Card.module.css';
 import { computed, inject, unref } from 'vue';
 import { cardContextKey } from '@/components/Card/CardContext.ts';
 import { usePressedState } from '@/composables/pressedState.ts';
@@ -27,12 +26,12 @@ const slots = defineSlots<{
 </script>
 
 <template>
-  <div v-if="!clickable" :class="[style.card]" :data-color="color">
+  <div v-if="!clickable" :class="['m3-card']" :data-color="color">
     <slot />
   </div>
   <button
     v-else
-    :class="[style.card, 'state-layer']"
+    :class="['m3-card', 'state-layer']"
     :data-color="color"
     :data-pressed="pressed"
     @pointerdown="onPointerDown"
@@ -42,3 +41,5 @@ const slots = defineSlots<{
     <slot />
   </button>
 </template>
+
+<style src="./Card.css"></style>

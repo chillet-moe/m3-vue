@@ -2,7 +2,6 @@
 import { computed, useId, useSlots } from 'vue';
 import { Button } from '@/components/Button';
 import { IconButton } from '@/components/IconButton';
-import styles from './Snackbar.module.css';
 
 export type SnackbarProps = {
   /** Label for the optional action button. */
@@ -61,21 +60,21 @@ const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-l
 
 <template>
   <section
-    :class="styles.snackbar"
+    :class="'m3-snackbar'"
     :data-action-layout="actionLayout"
     role="status"
     aria-live="polite"
     aria-atomic="true"
     :aria-labelledby="contentId"
   >
-    <div :id="contentId" :class="styles.content">
+    <div :id="contentId" :class="'m3-snackbar-content'">
       <slot />
     </div>
 
-    <div v-if="hasAction || hasDismiss" :class="styles.actions">
+    <div v-if="hasAction || hasDismiss" :class="'m3-snackbar-actions'">
       <Button
         v-if="hasAction"
-        :class="styles.actionButton"
+        :class="'m3-snackbar-action-button'"
         color="text"
         size="small"
         :disabled="actionDisabled"
@@ -89,7 +88,7 @@ const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-l
 
       <IconButton
         v-if="hasDismiss"
-        :class="styles.dismissButton"
+        :class="'m3-snackbar-dismiss-button'"
         color="standard"
         size="small"
         :aria-label="dismissButtonLabel"
@@ -101,3 +100,5 @@ const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-l
     </div>
   </section>
 </template>
+
+<style src="./Snackbar.css"></style>

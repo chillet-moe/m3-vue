@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import style from './Switch.module.css';
 import { computed } from 'vue';
 
 export type SwitchProps = {
@@ -37,10 +36,10 @@ defineSlots<{
 </script>
 
 <template>
-  <label :class="style.root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
+  <label :class="'m3-switch'" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
     <input
       v-model="checked"
-      :class="style.input"
+      :class="'m3-switch-input'"
       type="checkbox"
       :disabled="disabled"
       :name="name"
@@ -48,10 +47,10 @@ defineSlots<{
       :aria-label="ariaLabel"
     />
 
-    <span :class="style.control" :data-with-icon="uncheckedIcon ? 'true' : 'false'" aria-hidden="true">
-      <span :class="style.track" />
-      <span :class="style.handle">
-        <span v-if="withIcon" :class="style.icon">{{ checked ? checkedIcon : uncheckedIcon }}</span>
+    <span :class="'m3-switch-control'" :data-with-icon="uncheckedIcon ? 'true' : 'false'" aria-hidden="true">
+      <span :class="'m3-switch-track'" />
+      <span :class="'m3-switch-handle'">
+        <span v-if="withIcon" :class="'m3-switch-icon'">{{ checked ? checkedIcon : uncheckedIcon }}</span>
         <span
           class="state-layer"
           data-state-layer-hover-from="target"
@@ -60,6 +59,8 @@ defineSlots<{
       </span>
     </span>
 
-    <span v-if="$slots.default" :class="style.label"><slot /></span>
+    <span v-if="$slots.default" :class="'m3-switch-label'"><slot /></span>
   </label>
 </template>
+
+<style src="./Switch.css"></style>

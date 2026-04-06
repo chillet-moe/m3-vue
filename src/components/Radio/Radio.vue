@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import style from './Radio.module.css';
 
 export type RadioProps = {
   /** Whether the radio is disabled. */
@@ -26,10 +25,10 @@ defineSlots<{
 </script>
 
 <template>
-  <label :class="style.root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
+  <label :class="'m3-radio'" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
     <input
       v-model="checked"
-      :class="style.input"
+      :class="'m3-radio-input'"
       type="radio"
       :disabled="disabled"
       :name="name"
@@ -37,9 +36,9 @@ defineSlots<{
       :aria-label="ariaLabel"
     />
 
-    <span :class="style.control" aria-hidden="true">
-      <span :class="style.outer" />
-      <span :class="style.inner" />
+    <span :class="'m3-radio-control'" aria-hidden="true">
+      <span :class="'m3-radio-outer'" />
+      <span :class="'m3-radio-inner'" />
       <span
         class="state-layer"
         data-state-layer-hover-from="target"
@@ -47,6 +46,8 @@ defineSlots<{
       />
     </span>
 
-    <span v-if="$slots.default" :class="style.label"><slot /></span>
+    <span v-if="$slots.default" :class="'m3-radio-label'"><slot /></span>
   </label>
 </template>
+
+<style src="./Radio.css"></style>

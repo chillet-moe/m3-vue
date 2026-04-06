@@ -6,7 +6,7 @@
   initial-value: 0;
 }
 
-.slider {
+.m3-slider {
   position: relative;
 
   --percent: 0;
@@ -92,68 +92,68 @@
   overflow: visible;
 }
 
-.valueDragging {
+.m3-slider-value-dragging {
   transition: none;
 }
 
-.slider[aria-disabled='true'] {
+.m3-slider[aria-disabled='true'] {
   --md-comp-slider-active-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
   --md-comp-slider-inactive-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.12);
   --md-comp-slider-handle-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
 }
 
-.horizontal {
+.m3-slider-horizontal {
   writing-mode: horizontal-tb;
 }
 
-.vertical {
+.m3-slider-vertical {
   writing-mode: vertical-rl;
 }
 
-.lrt {
+.m3-slider-lrt {
   direction: ltr;
 }
 
-.rtl {
+.m3-slider-rtl {
   direction: rtl;
 }
 
-.extra-small {
+.m3-slider-extra-small {
   --track-height: 1rem;
   --handle-height: 2.75rem;
   --track-shape: 0.5rem;
   --icon-size: 0;
 }
 
-.small {
+.m3-slider-small {
   --track-height: 1.5rem;
   --handle-height: 2.75rem;
   --track-shape: 0.5rem;
   --icon-size: 0;
 }
 
-.medium {
+.m3-slider-medium {
   --track-height: 2.5rem;
   --handle-height: 3.25rem;
   --track-shape: 0.75rem;
   --icon-size: 1.5rem;
 }
 
-.large {
+.m3-slider-large {
   --track-height: 3.5rem;
   --handle-height: 4.25rem;
   --track-shape: 1rem;
   --icon-size: 1.5rem;
 }
 
-.extra-large {
+.m3-slider-extra-large {
   --track-height: 6rem;
   --handle-height: 6.75rem;
   --track-shape: 1rem;
   --icon-size: 2rem;
 }
 
-.handle {
+.m3-slider-handle {
   position: absolute;
   pointer-events: none;
 
@@ -176,25 +176,25 @@
   outline-offset: 0.25rem;
 }
 
-.slider:has(input:not([disabled]):hover) {
-  .handle {
+.m3-slider:has(input:not([disabled]):hover) {
+  .m3-slider-handle {
     --handle-width: 0.375rem;
   }
 }
 
-.slider:has(input:not([disabled]):active) {
-  .handle {
+.m3-slider:has(input:not([disabled]):active) {
+  .m3-slider-handle {
     --handle-width: 0.125rem;
   }
 }
 
-.slider:has(input:focus-visible) {
-  .handle {
+.m3-slider:has(input:focus-visible) {
+  .m3-slider-handle {
     outline-width: 0.25rem;
   }
 }
 
-.track {
+.m3-slider-track {
   position: absolute;
   pointer-events: none;
 
@@ -210,8 +210,7 @@
   --inactive-length: calc(var(--valid-length) * (1 - var(--percent)));
 }
 
-.trackActive {
-  composes: track;
+.m3-slider-track-active {
 
   background-color: var(--md-comp-slider-active-track-color);
 
@@ -224,8 +223,7 @@
   border-end-start-radius: var(--track-shape);
 }
 
-.trackInactive {
-  composes: track;
+.m3-slider-track-inactive {
 
   background-color: var(--md-comp-slider-inactive-track-color);
 
@@ -238,7 +236,7 @@
   border-end-end-radius: var(--track-shape);
 }
 
-.valueIndicator {
+.m3-slider-value-indicator {
   position: fixed;
   inset: auto;
   margin: 0;
@@ -256,21 +254,21 @@
     display var(--md-duration-fast) allow-discrete;
 }
 
-.valueIndicator[popover]:popover-open {
+.m3-slider-value-indicator[popover]:popover-open {
   opacity: 1;
 }
 
 @starting-style {
-  .valueIndicator[popover]:popover-open {
+  .m3-slider-value-indicator[popover]:popover-open {
     opacity: 0;
   }
 }
 
-.valueIndicator[data-vtt-fallback='1'][data-vtt-open='1'] {
+.m3-slider-value-indicator[data-vtt-fallback='1'][data-vtt-open='1'] {
   opacity: 1;
 }
 
-.valueIndicatorText {
+.m3-slider-value-indicator-text {
   @apply label-large;
 
   writing-mode: horizontal-tb;
@@ -282,7 +280,7 @@
   justify-content: center;
 }
 
-.stopIndicator {
+.m3-slider-stop-indicator {
   position: absolute;
   inline-size: var(--stop-indicator-size);
   block-size: var(--stop-indicator-size);
@@ -295,17 +293,15 @@
   pointer-events: none;
 }
 
-.stopIndicatorActive {
-  composes: stopIndicator;
+.m3-slider-stop-indicator-active {
   background-color: var(--md-comp-slider-inactive-track-color);
 }
 
-.stopIndicatorInactive {
-  composes: stopIndicator;
+.m3-slider-stop-indicator-inactive {
   background-color: var(--md-comp-slider-active-track-color);
 }
 
-.stopIndicatorContainer {
+.m3-slider-stop-indicator-container {
   position: absolute;
   inline-size: calc(100% - var(--track-inset) * 2 - var(--stop-indicator-size) * 2);
   inset-block: calc((var(--handle-height) - var(--track-height)) / 2);
@@ -316,7 +312,7 @@
   --valid-length: calc(100% - var(--track-inset) * 2);
 }
 
-.stopIndicatorContainer {
+.m3-slider-stop-indicator-container {
   --clip-active-start: calc(-1 * var(--stop-indicator-size) / 2);
   --clip-active-end: calc(100% - (var(--valid-length) * var(--percent)) + var(--handle-inset) + var(--handle-width));
 
@@ -327,42 +323,40 @@
   --clip-inactive-end: calc(-1 * var(--stop-indicator-size) / 2);
 }
 
-.stopIndicatorActiveContainer {
-  composes: stopIndicatorContainer;
+.m3-slider-stop-indicator-active-container {
 }
 
 /* clip-path: top right bottom left */
-.lrt.vertical .stopIndicatorActiveContainer {
+.m3-slider-lrt.m3-slider-vertical .m3-slider-stop-indicator-active-container {
   clip-path: inset(var(--clip-active-start) 0 var(--clip-active-end) 0);
 }
 
-.rtl.vertical .stopIndicatorActiveContainer {
+.m3-slider-rtl.m3-slider-vertical .m3-slider-stop-indicator-active-container {
   clip-path: inset(var(--clip-active-end) 0 var(--clip-active-start) 0);
 }
 
-.lrt.horizontal .stopIndicatorActiveContainer {
+.m3-slider-lrt.m3-slider-horizontal .m3-slider-stop-indicator-active-container {
   clip-path: inset(0 var(--clip-active-end) 0 var(--clip-active-start));
 }
 
-.rtl.horizontal .stopIndicatorActiveContainer {
+.m3-slider-rtl.m3-slider-horizontal .m3-slider-stop-indicator-active-container {
   clip-path: inset(0 var(--clip-active-start) 0 var(--clip-active-end));
 }
 
-.stopIndicatorInactiveContainer {
-  composes: stopIndicatorContainer;
+.m3-slider-stop-indicator-inactive-container {
 }
 
-.lrt.vertical .stopIndicatorInactiveContainer {
+.m3-slider-lrt.m3-slider-vertical .m3-slider-stop-indicator-inactive-container {
   clip-path: inset(var(--clip-inactive-start) 0 var(--clip-inactive-end) 0);
 }
 
-.rtl.vertical .stopIndicatorInactiveContainer {
+.m3-slider-rtl.m3-slider-vertical .m3-slider-stop-indicator-inactive-container {
   clip-path: inset(var(--clip-inactive-end) 0 var(--clip-inactive-start) 0);
 }
 
-.lrt.horizontal .stopIndicatorInactiveContainer {
+.m3-slider-lrt.m3-slider-horizontal .m3-slider-stop-indicator-inactive-container {
   clip-path: inset(0 var(--clip-inactive-end) 0 var(--clip-inactive-start));
 }
-.rtl.horizontal .stopIndicatorInactiveContainer {
+.m3-slider-rtl.m3-slider-horizontal .m3-slider-stop-indicator-inactive-container {
   clip-path: inset(0 var(--clip-inactive-start) 0 var(--clip-inactive-end));
 }
