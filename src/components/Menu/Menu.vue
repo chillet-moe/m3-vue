@@ -153,6 +153,7 @@ function onMenuKeydown(event: KeyboardEvent) {
   if (!menuItems.length) {
     if (event.key === 'Escape') {
       event.preventDefault();
+      event.stopPropagation();
       hide();
     }
     return;
@@ -162,6 +163,7 @@ function onMenuKeydown(event: KeyboardEvent) {
 
   if (event.key === 'ArrowDown') {
     event.preventDefault();
+    event.stopPropagation();
     closeSubmenus();
     focusItem(currentIndex + 1);
     return;
@@ -169,6 +171,7 @@ function onMenuKeydown(event: KeyboardEvent) {
 
   if (event.key === 'ArrowUp') {
     event.preventDefault();
+    event.stopPropagation();
     closeSubmenus();
     focusItem(currentIndex - 1);
     return;
@@ -176,6 +179,7 @@ function onMenuKeydown(event: KeyboardEvent) {
 
   if (event.key === 'Home') {
     event.preventDefault();
+    event.stopPropagation();
     closeSubmenus();
     focusItem(0);
     return;
@@ -183,6 +187,7 @@ function onMenuKeydown(event: KeyboardEvent) {
 
   if (event.key === 'End') {
     event.preventDefault();
+    event.stopPropagation();
     closeSubmenus();
     focusItem(menuItems.length - 1);
     return;
@@ -190,12 +195,14 @@ function onMenuKeydown(event: KeyboardEvent) {
 
   if (event.key === 'ArrowLeft' && parentSubmenu) {
     event.preventDefault();
+    event.stopPropagation();
     parentSubmenu.closeAndFocusTrigger();
     return;
   }
 
   if (event.key === 'Escape') {
     event.preventDefault();
+    event.stopPropagation();
 
     if (parentSubmenu) {
       parentSubmenu.closeAndFocusTrigger();

@@ -466,6 +466,11 @@ describe('Menu', () => {
     expect(submenu?.dataset.popoverOpen).toBe('true');
     expect(document.activeElement).toBe(nestedItems[0]);
 
+    nestedItems[0]?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
+    await nextTick();
+
+    expect(document.activeElement).toBe(nestedItems[1]);
+
     submenu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowLeft' }));
     await nextTick();
 
