@@ -50,12 +50,7 @@ const showDialog = () => {
     return;
   }
 
-  if (typeof dialog.showModal === 'function') {
-    dialog.showModal();
-    return;
-  }
-
-  dialog.setAttribute('open', '');
+  dialog.showModal();
 };
 
 const closeDialog = (returnValue?: string) => {
@@ -65,17 +60,7 @@ const closeDialog = (returnValue?: string) => {
     return;
   }
 
-  if (typeof dialog.close === 'function') {
-    dialog.close(returnValue);
-    return;
-  }
-
-  if (returnValue !== undefined) {
-    dialog.returnValue = returnValue;
-  }
-
-  dialog.removeAttribute('open');
-  dialog.dispatchEvent(new Event('close'));
+  dialog.close(returnValue);
 };
 
 watch(
@@ -150,20 +135,22 @@ defineExpose({
     @close="onClose"
     @click="onClick"
   >
-    <div v-if="hasIcon" :class="'m3-dialog-icon'">
-      <slot name="icon" />
-    </div>
+    <div class="m3-dialog-surface">
+      <div v-if="hasIcon" :class="'m3-dialog-icon'">
+        <slot name="icon" />
+      </div>
 
-    <h2 v-if="hasHeadline" :id="headlineId" :class="'m3-dialog-headline'">
-      <slot name="headline" />
-    </h2>
+      <h2 v-if="hasHeadline" :id="headlineId" :class="'m3-dialog-headline'">
+        <slot name="headline" />
+      </h2>
 
-    <div v-if="hasContent" :id="contentId" :class="'m3-dialog-content'">
-      <slot />
-    </div>
+      <div v-if="hasContent" :id="contentId" :class="'m3-dialog-content'">
+        <slot />
+      </div>
 
-    <div v-if="hasActions" :class="'m3-dialog-actions'">
-      <slot name="actions" />
+      <div v-if="hasActions" :class="'m3-dialog-actions'">
+        <slot name="actions" />
+      </div>
     </div>
   </dialog>
 </template>

@@ -139,7 +139,8 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
 
     const cleanupAfterExit = () => {
       const dialog = queryDialog();
-      const exitDuration = getExitDuration(dialog);
+      const surface = dialog?.querySelector('.m3-dialog-surface') as HTMLElement | null;
+      const exitDuration = Math.max(getExitDuration(dialog), getExitDuration(surface));
 
       if (!dialog || exitDuration === 0) {
         queueMicrotask(cleanup);
@@ -160,7 +161,7 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
       };
 
       const onTransitionEnd = (event: TransitionEvent) => {
-        if (event.target === dialog && event.propertyName === 'opacity') {
+        if (event.target === surface && event.propertyName === 'opacity') {
           finish();
         }
       };

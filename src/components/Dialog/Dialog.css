@@ -35,9 +35,47 @@
   position: fixed;
   inset: 0;
 
-  margin: auto;
+  margin: 0;
   border: none;
+  padding: 0;
 
+  display: grid;
+  place-items: center;
+
+  inline-size: 100%;
+  block-size: 100%;
+  max-inline-size: none;
+  max-block-size: none;
+  overflow: hidden;
+
+  color: inherit;
+  background: transparent;
+  box-shadow: none;
+
+  pointer-events: none;
+  transition:
+    overlay var(--md-duration-fast) allow-discrete,
+    display var(--md-duration-fast) allow-discrete;
+}
+
+.m3-dialog[open] {
+  pointer-events: auto;
+}
+
+.m3-dialog::backdrop {
+  background-color: transparent;
+  transition:
+    background-color var(--md-duration-spatial) var(--md-timing-function-spatial),
+    display var(--md-duration-spatial) allow-discrete,
+    overlay var(--md-duration-spatial) allow-discrete;
+}
+
+.m3-dialog[open]::backdrop {
+  background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+  animation: dialogOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
+}
+
+.m3-dialog-surface {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   /* Safari stretches auto grid rows when the dialog resolves extra block-size. */
@@ -53,37 +91,22 @@
   padding: 1.5rem;
   border-radius: var(--md-comp-dialog-container-shape);
 
-  color: inherit;
   background-color: var(--md-comp-dialog-container-color);
   box-shadow: var(--md-comp-dialog-container-elevation);
 
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
   transition:
     opacity var(--md-easing-fast),
-    visibility var(--md-easing-fast),
-    overlay var(--md-duration-fast) allow-discrete,
-    display var(--md-duration-fast) allow-discrete;
+    visibility var(--md-easing-fast);
 }
 
-.m3-dialog::backdrop {
-  background-color: transparent;
-  transition: background-color var(--md-duration-spatial) var(--md-timing-function-spatial);
-}
-
-.m3-dialog[open] {
+.m3-dialog[open] .m3-dialog-surface {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto;
   animation:
     dialogIn var(--md-timing-function-emphasized-decel) 500ms,
     dialogOpacity var(--md-timing-function-emphasized-decel) 100ms backwards;
-}
-
-.m3-dialog[open]::backdrop {
-  background-color: --translucent(var(--md-sys-color-scrim), 0.3);
-  animation: dialogOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
 }
 
 .m3-dialog-icon {
@@ -127,13 +150,13 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: end;
   gap: 0.5rem;
   opacity: 0;
-  bottom: 100%;
+  inset-block-end: 100%;
   transition:
     opacity var(--md-easing-fast),
-    bottom var(--md-duration-spatial) var(--md-timing-function-spatial);
+    inset-block-end var(--md-duration-spatial) var(--md-timing-function-spatial);
 }
 
 .m3-dialog[open] .m3-dialog-headline {
@@ -148,7 +171,7 @@
 
 .m3-dialog[open] .m3-dialog-actions {
   opacity: 1;
-  bottom: 0;
+  inset-block-end: 0;
   animation:
     buttonsIn var(--md-timing-function-spatial) var(--md-duration-spatial),
     dialogOpacity var(--md-easing-fast) backwards;
@@ -162,7 +185,7 @@
 }
 
 @media (width < 40rem) {
-  .m3-dialog {
+  .m3-dialog-surface {
     inline-size: calc(100vi - 2rem);
     min-inline-size: min(17.5rem, calc(100vi - 2rem));
     max-inline-size: calc(100vi - 2rem);
@@ -172,7 +195,7 @@
 }
 
 @starting-style {
-  .m3-dialog[open] {
+  .m3-dialog[open] .m3-dialog-surface {
     opacity: 0;
     visibility: hidden;
   }
@@ -188,13 +211,14 @@
 
   .m3-dialog[open] .m3-dialog-actions {
     opacity: 0;
-    bottom: 100%;
+    inset-block-end: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .m3-dialog,
   .m3-dialog::backdrop,
+  .m3-dialog-surface,
   .m3-dialog-headline,
   .m3-dialog-content,
   .m3-dialog-actions {
@@ -217,11 +241,11 @@
 
 @keyframes buttonsIn {
   0% {
-    bottom: 100%;
+    inset-block-end: 100%;
   }
 
   100% {
-    bottom: 0;
+    inset-block-end: 0;
   }
 }
 
