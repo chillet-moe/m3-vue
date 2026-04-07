@@ -25,6 +25,9 @@ export * from './components/Switch';
 export * from './components/Radio';
 export * from './components/CheckBox';
 export * from './components/Menu';
+export * from './components/Form';
+export * from './components/FormField';
+export * from './components/TextField';
 
 // Resolver
 export { M3VueResolver } from './resolver';

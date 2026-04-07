@@ -1,0 +1,33 @@
+@import '../../styles/typography.css';
+
+.m3-form-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.m3-form-field-label {
+  @apply body-small;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3-form-field-required {
+  color: var(--md-sys-color-error);
+  margin-inline-start: 0.125rem;
+}
+
+.m3-form-field-control {
+  min-inline-size: 0;
+}
+
+.m3-form-field-supporting {
+  @apply body-small;
+  color: var(--md-sys-color-on-surface-variant);
+  padding-inline: 1rem;
+}
+
+.m3-form-field[data-invalid='true'] {
+  .m3-form-field-label,
+  .m3-form-field-supporting {
+    color: var(--md-sys-color-error);
+  }
+}

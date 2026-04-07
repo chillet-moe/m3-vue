@@ -12,6 +12,8 @@ export const m3VueComponentNames = [
   'Card',
   'CheckBox',
   'Dialog',
+  'Form',
+  'FormField',
   'Icon',
   'IconButton',
   'Menu',
@@ -25,6 +27,7 @@ export const m3VueComponentNames = [
   'Slider',
   'Snackbar',
   'Switch',
+  'TextField',
   'Tooltip',
 ] as const;
 

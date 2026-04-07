@@ -1,0 +1,332 @@
+@layer tokens {
+  :where(.m3-text-field) {
+    --md-comp-outlined-text-field-container-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-outlined-text-field-outline-width: 0.0625rem;
+    --md-comp-outlined-text-field-outline-color: var(--md-sys-color-outline);
+    --md-comp-outlined-text-field-label-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-outlined-text-field-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-outlined-text-field-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-outlined-text-field-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-outlined-text-field-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-outlined-text-field-label-text-populated-line-height: var(--md-sys-typescale-body-small-line-height);
+    --md-comp-outlined-text-field-label-text-populated-size: var(--md-sys-typescale-body-small-size);
+    --md-comp-outlined-text-field-leading-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-leading-icon-size: 1.5rem;
+    --md-comp-outlined-text-field-trailing-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-trailing-icon-size: 1.5rem;
+    --md-comp-outlined-text-field-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-supporting-text-font: var(--md-sys-typescale-body-small-font);
+    --md-comp-outlined-text-field-supporting-text-line-height: var(--md-sys-typescale-body-small-line-height);
+    --md-comp-outlined-text-field-supporting-text-size: var(--md-sys-typescale-body-small-size);
+    --md-comp-outlined-text-field-supporting-text-weight: var(--md-sys-typescale-body-small-weight);
+    --md-comp-outlined-text-field-supporting-text-tracking: var(--md-sys-typescale-body-small-tracking);
+    --md-comp-outlined-text-field-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-input-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-outlined-text-field-input-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-outlined-text-field-input-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-outlined-text-field-input-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-outlined-text-field-input-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-outlined-text-field-input-text-prefix-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-input-text-suffix-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-input-text-placeholder-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-caret-color: var(--md-sys-color-primary);
+    --md-comp-outlined-text-field-disabled-outline-width: 0.0625rem;
+    --md-comp-outlined-text-field-disabled-outline-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-disabled-outline-opacity: 0.12;
+    --md-comp-outlined-text-field-disabled-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-disabled-label-text-opacity: 0.38;
+    --md-comp-outlined-text-field-disabled-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-disabled-input-text-opacity: 0.38;
+    --md-comp-outlined-text-field-disabled-supporting-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-disabled-supporting-text-opacity: 0.38;
+    --md-comp-outlined-text-field-hover-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-hover-leading-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-hover-trailing-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-hover-outline-width: 0.0625rem;
+    --md-comp-outlined-text-field-hover-outline-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-hover-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-hover-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-focus-label-text-color: var(--md-sys-color-primary);
+    --md-comp-outlined-text-field-focus-leading-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-focus-trailing-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-focus-outline-width: 0.1875rem;
+    --md-comp-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
+    --md-comp-outlined-text-field-focus-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-focus-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-error-outline-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-label-text-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-error-supporting-text-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-leading-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-error-trailing-icon-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-focus-outline-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-focus-label-text-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-focus-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-error-focus-supporting-text-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-focus-leading-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-error-focus-trailing-icon-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-focus-caret-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-hover-outline-color: var(--md-sys-color-on-error-container);
+    --md-comp-outlined-text-field-error-hover-label-text-color: var(--md-sys-color-on-error-container);
+    --md-comp-outlined-text-field-error-hover-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-error-hover-supporting-text-color: var(--md-sys-color-error);
+    --md-comp-outlined-text-field-error-hover-leading-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-outlined-text-field-error-hover-trailing-icon-color: var(--md-sys-color-on-error-container);
+    --md-comp-outlined-text-field-disabled-leading-icon-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-disabled-leading-icon-opacity: 0.38;
+    --md-comp-outlined-text-field-disabled-trailing-icon-color: var(--md-sys-color-on-surface);
+    --md-comp-outlined-text-field-disabled-trailing-icon-opacity: 0.38;
+  }
+}
+
+.m3-text-field {
+  --_outline-color: var(--md-comp-outlined-text-field-outline-color);
+  --_outline-width: var(--md-comp-outlined-text-field-outline-width);
+  --_label-color: var(--md-comp-outlined-text-field-label-text-color);
+  --_input-color: var(--md-comp-outlined-text-field-input-text-color);
+  --_supporting-color: var(--md-comp-outlined-text-field-supporting-text-color);
+  --_leading-icon-color: var(--md-comp-outlined-text-field-leading-icon-color);
+  --_trailing-icon-color: var(--md-comp-outlined-text-field-trailing-icon-color);
+  --_caret-color: var(--md-comp-outlined-text-field-caret-color);
+
+  display: grid;
+  gap: 0.25rem;
+}
+
+.m3-text-field-container {
+  position: relative;
+  display: flex;
+
+  min-block-size: 3.5rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+
+  border-radius: var(--md-comp-outlined-text-field-container-shape);
+  background: transparent;
+}
+
+.m3-text-field-outline {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding-inline: 0.5rem;
+  padding-block: 0;
+  border: var(--_outline-width) solid var(--_outline-color);
+  box-sizing: border-box;
+  border-radius: inherit;
+  pointer-events: none;
+  min-inline-size: 0;
+  transition:
+    border-color var(--md-duration-fast) var(--md-timing-function-fast),
+    border-width var(--md-duration-fast) var(--md-timing-function-fast);
+}
+
+.m3-text-field-outline legend {
+  box-sizing: border-box;
+  visibility: hidden;
+  max-inline-size: 0.01px;
+  block-size: 0;
+  padding: 0;
+  margin-inline-start: 0.25rem;
+  transition: max-inline-size var(--md-duration) var(--md-timing-function);
+}
+
+.m3-text-field-outline legend > span {
+  padding-inline: 0.25rem;
+  font-family: var(--md-comp-outlined-text-field-label-text-font), sans-serif;
+  font-size: var(--md-comp-outlined-text-field-label-text-populated-size);
+  line-height: var(--md-comp-outlined-text-field-label-text-populated-line-height);
+  font-weight: var(--md-comp-outlined-text-field-label-text-weight);
+  letter-spacing: var(--md-comp-outlined-text-field-label-text-tracking);
+}
+
+.m3-text-field-label {
+  position: absolute;
+  inset-inline-start: 1rem;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  padding-inline: 0;
+  background: transparent;
+
+  color: var(--_label-color);
+  font-family: var(--md-comp-outlined-text-field-label-text-font), sans-serif;
+  font-size: var(--md-comp-outlined-text-field-label-text-size);
+  line-height: var(--md-comp-outlined-text-field-label-text-line-height);
+  font-weight: var(--md-comp-outlined-text-field-label-text-weight);
+  letter-spacing: var(--md-comp-outlined-text-field-label-text-tracking);
+  pointer-events: none;
+  transition:
+    inset-block-start var(--md-duration) var(--md-timing-function),
+    translate var(--md-duration) var(--md-timing-function),
+    font-size var(--md-duration) var(--md-timing-function),
+    line-height var(--md-duration) var(--md-timing-function),
+    color var(--md-duration-fast) var(--md-timing-function-fast);
+}
+
+.m3-text-field:focus-within .m3-text-field-label,
+.m3-text-field[data-populated='true'] .m3-text-field-label,
+.m3-text-field[data-has-placeholder='true'] .m3-text-field-label {
+  inset-block-start: 0;
+  translate: 0 calc(-0.5 * var(--md-comp-outlined-text-field-label-text-populated-line-height));
+  padding-inline: 0.25rem;
+  background: transparent;
+
+  font-size: var(--md-comp-outlined-text-field-label-text-populated-size);
+  line-height: var(--md-comp-outlined-text-field-label-text-populated-line-height);
+}
+
+.m3-text-field:focus-within .m3-text-field-outline legend,
+.m3-text-field[data-populated='true'] .m3-text-field-outline legend,
+.m3-text-field[data-has-placeholder='true'] .m3-text-field-outline legend {
+  max-inline-size: 100%;
+}
+
+.m3-text-field[data-has-leading-icon='true'][data-populated='false'][data-has-placeholder='false']:not(:focus-within)
+  .m3-text-field-label {
+  inset-inline-start: 3rem;
+}
+
+.m3-text-field-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: 100%;
+}
+
+.m3-text-field-input {
+  flex: 1;
+  min-inline-size: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  padding: 0;
+
+  color: var(--_input-color);
+  caret-color: var(--_caret-color);
+
+  font-family: var(--md-comp-outlined-text-field-input-text-font), sans-serif;
+  font-size: var(--md-comp-outlined-text-field-input-text-size);
+  line-height: var(--md-comp-outlined-text-field-input-text-line-height);
+  font-weight: var(--md-comp-outlined-text-field-input-text-weight);
+  letter-spacing: var(--md-comp-outlined-text-field-input-text-tracking);
+}
+
+.m3-text-field-textarea {
+  resize: vertical;
+}
+
+.m3-text-field-input::placeholder {
+  color: var(--md-comp-outlined-text-field-input-text-placeholder-color);
+}
+
+.m3-text-field-prefix,
+.m3-text-field-suffix {
+  color: var(--md-comp-outlined-text-field-input-text-prefix-color);
+  opacity: 0;
+  transition: opacity var(--md-duration-fast) var(--md-timing-function-fast);
+}
+
+.m3-text-field:focus-within .m3-text-field-prefix,
+.m3-text-field:focus-within .m3-text-field-suffix,
+.m3-text-field[data-populated='true'] .m3-text-field-prefix,
+.m3-text-field[data-populated='true'] .m3-text-field-suffix {
+  opacity: 1;
+}
+
+.m3-text-field-icon {
+  font-size: var(--md-comp-outlined-text-field-leading-icon-size);
+}
+
+.m3-text-field-leading-icon {
+  color: var(--_leading-icon-color);
+}
+
+.m3-text-field-trailing-icon {
+  color: var(--_trailing-icon-color);
+}
+
+.m3-text-field-supporting {
+  padding-inline: 1rem;
+  color: var(--_supporting-color);
+  font-family: var(--md-comp-outlined-text-field-supporting-text-font), sans-serif;
+  font-size: var(--md-comp-outlined-text-field-supporting-text-size);
+  line-height: var(--md-comp-outlined-text-field-supporting-text-line-height);
+  font-weight: var(--md-comp-outlined-text-field-supporting-text-weight);
+  letter-spacing: var(--md-comp-outlined-text-field-supporting-text-tracking);
+}
+
+.m3-text-field:where(:has(.m3-text-field-input:not(:disabled):hover)) {
+  --_outline-width: var(--md-comp-outlined-text-field-hover-outline-width);
+  --_outline-color: var(--md-comp-outlined-text-field-hover-outline-color);
+  --_label-color: var(--md-comp-outlined-text-field-hover-label-text-color);
+}
+
+.m3-text-field:focus-within {
+  --_outline-width: var(--md-comp-outlined-text-field-focus-outline-width);
+  --_outline-color: var(--md-comp-outlined-text-field-focus-outline-color);
+  --_label-color: var(--md-comp-outlined-text-field-focus-label-text-color);
+}
+
+.m3-text-field[data-invalid='true'] {
+  --_outline-color: var(--md-comp-outlined-text-field-error-outline-color);
+  --_label-color: var(--md-comp-outlined-text-field-error-label-text-color);
+  --_supporting-color: var(--md-comp-outlined-text-field-error-supporting-text-color);
+  --_trailing-icon-color: var(--md-comp-outlined-text-field-error-trailing-icon-color);
+}
+
+.m3-text-field[data-invalid='true']:where(:has(.m3-text-field-input:not(:disabled):hover)) {
+  --_outline-color: var(--md-comp-outlined-text-field-error-hover-outline-color);
+  --_label-color: var(--md-comp-outlined-text-field-error-hover-label-text-color);
+  --_trailing-icon-color: var(--md-comp-outlined-text-field-error-hover-trailing-icon-color);
+}
+
+.m3-text-field[data-invalid='true']:focus-within {
+  --_outline-color: var(--md-comp-outlined-text-field-error-focus-outline-color);
+  --_label-color: var(--md-comp-outlined-text-field-error-focus-label-text-color);
+  --_supporting-color: var(--md-comp-outlined-text-field-error-focus-supporting-text-color);
+  --_trailing-icon-color: var(--md-comp-outlined-text-field-error-focus-trailing-icon-color);
+  --_caret-color: var(--md-comp-outlined-text-field-error-focus-caret-color);
+}
+
+.m3-text-field[data-disabled='true'] {
+  --_outline-width: var(--md-comp-outlined-text-field-disabled-outline-width);
+  --_outline-color: --translucent(
+    var(--md-comp-outlined-text-field-disabled-outline-color),
+    var(--md-comp-outlined-text-field-disabled-outline-opacity)
+  );
+  --_label-color: --translucent(
+    var(--md-comp-outlined-text-field-disabled-label-text-color),
+    var(--md-comp-outlined-text-field-disabled-label-text-opacity)
+  );
+  --_input-color: --translucent(
+    var(--md-comp-outlined-text-field-disabled-input-text-color),
+    var(--md-comp-outlined-text-field-disabled-input-text-opacity)
+  );
+  --_supporting-color: --translucent(
+    var(--md-comp-outlined-text-field-disabled-supporting-text-color),
+    var(--md-comp-outlined-text-field-disabled-supporting-text-opacity)
+  );
+  --_leading-icon-color: --translucent(
+    var(--md-comp-outlined-text-field-disabled-leading-icon-color),
+    var(--md-comp-outlined-text-field-disabled-leading-icon-opacity)
+  );
+  --_trailing-icon-color: --translucent(
+    var(--md-comp-outlined-text-field-disabled-trailing-icon-color),
+    var(--md-comp-outlined-text-field-disabled-trailing-icon-opacity)
+  );
+}
+
+/* Use :where() for lower specificity so focus/populated rules naturally win */
+:where(.m3-text-field:has(.m3-text-field-textarea)) .m3-text-field-label {
+  inset-block-start: 1rem;
+  translate: 0;
+}
+
+.m3-text-field:has(.m3-text-field-textarea) .m3-text-field-container {
+  padding-block: 1rem;
+}
+
+.m3-text-field:has(.m3-text-field-textarea) .m3-text-field-content {
+  align-items: flex-start;
+}
