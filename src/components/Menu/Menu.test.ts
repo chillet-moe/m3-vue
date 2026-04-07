@@ -31,10 +31,22 @@ function createPointerEvent(
   return event;
 }
 
+const popoverOpenElements = new WeakSet<HTMLElement>();
+
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
     showPopover?: (options?: { source?: HTMLElement }) => void;
     hidePopover?: () => void;
+  };
+
+  const originalMatches = Element.prototype.matches;
+
+  Element.prototype.matches = function (this: Element, selector: string) {
+    if (selector === ':popover-open') {
+      return popoverOpenElements.has(this as HTMLElement);
+    }
+
+    return originalMatches.call(this, selector);
   };
 
   if (typeof prototype.showPopover !== 'function') {
@@ -46,7 +58,7 @@ function installPopoverPolyfill() {
             options.source.id || options.source.textContent?.trim() || options.source.getAttribute('aria-label') || 'source';
         }
 
-        this.dataset.popoverOpen = 'true';
+        popoverOpenElements.add(this);
         const toggleEvent = new Event('toggle');
         Object.defineProperty(toggleEvent, 'newState', {
           configurable: true,
@@ -61,7 +73,7 @@ function installPopoverPolyfill() {
     Object.defineProperty(prototype, 'hidePopover', {
       configurable: true,
       value(this: HTMLElement) {
-        delete this.dataset.popoverOpen;
+        popoverOpenElements.delete(this);
         delete this.dataset.popoverSourceId;
         const toggleEvent = new Event('toggle');
         Object.defineProperty(toggleEvent, 'newState', {
@@ -72,6 +84,10 @@ function installPopoverPolyfill() {
       },
     });
   }
+}
+
+function isPopoverOpen(element: HTMLElement | null) {
+  return element ? popoverOpenElements.has(element) : false;
 }
 
 async function flushMicrotasks() {
@@ -118,7 +134,7 @@ describe('Menu', () => {
     const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
 
     expect(menu).not.toBeNull();
-    expect(menu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(menu)).toBe(false);
 
     app.unmount();
   });
@@ -164,7 +180,7 @@ describe('Menu', () => {
     menuItems[1]?.click();
 
     expect(selectedValues).toEqual(['Edit']);
-    expect(menu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(menu)).toBe(false);
 
     app.unmount();
   });
@@ -206,7 +222,7 @@ describe('Menu', () => {
     await nextTick();
 
     expect(selectedValues).toEqual(['Keep open']);
-    expect(menu?.dataset.popoverOpen).toBe('true');
+    expect(isPopoverOpen(menu)).toBe(true);
 
     app.unmount();
   });
@@ -350,7 +366,7 @@ describe('Menu', () => {
     expect(selectedValues).toEqual([]);
 
     const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
-    expect(submenu?.dataset.popoverOpen).toBe('true');
+    expect(isPopoverOpen(submenu)).toBe(true);
     expect(submenu?.dataset.popoverSourceId).toBe('More');
 
     app.unmount();
@@ -412,12 +428,12 @@ describe('Menu', () => {
     trigger?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     await nextTick();
 
-    expect(submenu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(submenu)).toBe(false);
 
     trigger?.click();
     await nextTick();
 
-    expect(submenu?.dataset.popoverOpen).toBe('true');
+    expect(isPopoverOpen(submenu)).toBe(true);
 
     app.unmount();
   });
@@ -480,7 +496,7 @@ describe('Menu', () => {
     const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
     const nestedItems = submenu?.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]') ?? [];
 
-    expect(submenu?.dataset.popoverOpen).toBe('true');
+    expect(isPopoverOpen(submenu)).toBe(true);
     expect(document.activeElement).toBe(nestedItems[0]);
 
     nestedItems[0]?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
@@ -491,7 +507,7 @@ describe('Menu', () => {
     submenu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowLeft' }));
     await nextTick();
 
-    expect(submenu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(submenu)).toBe(false);
     expect(document.activeElement).toBe(trigger);
 
     app.unmount();
@@ -562,8 +578,8 @@ describe('Menu', () => {
     await nextTick();
 
     expect(selectedValues).toEqual(['Rename']);
-    expect(rootMenu?.dataset.popoverOpen).toBeUndefined();
-    expect(submenu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(rootMenu)).toBe(false);
+    expect(isPopoverOpen(submenu)).toBe(false);
 
     app.unmount();
   });
@@ -659,7 +675,7 @@ describe('Menu', () => {
     );
     await nextTick();
 
-    expect(submenu?.dataset.popoverOpen).toBe('true');
+    expect(isPopoverOpen(submenu)).toBe(true);
 
     document.dispatchEvent(
       new pointerEventConstructor('pointermove', {
@@ -670,7 +686,7 @@ describe('Menu', () => {
     );
     await nextTick();
 
-    expect(submenu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(submenu)).toBe(false);
 
     app.unmount();
   });
@@ -773,7 +789,7 @@ describe('Menu', () => {
     await nextTick();
     await flushMicrotasks();
 
-    expect(menu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(menu)).toBe(false);
     expect(document.activeElement).toBe(trigger);
 
     trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
@@ -782,7 +798,7 @@ describe('Menu', () => {
     await nextTick();
     await flushMicrotasks();
 
-    expect(menu?.dataset.popoverOpen).toBeUndefined();
+    expect(isPopoverOpen(menu)).toBe(false);
     expect(document.activeElement).toBe(trigger);
 
     app.unmount();

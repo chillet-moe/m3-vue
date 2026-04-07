@@ -58,11 +58,7 @@ function closeMenuChain() {
 }
 
 function isMenuOpen(menu: HTMLElement) {
-  try {
-    return menu.matches(':popover-open') || menu.dataset.popoverOpen === 'true';
-  } catch {
-    return menu.dataset.popoverOpen === 'true';
-  }
+  return menu.matches(':popover-open');
 }
 
 provide(menuContextKey, {
@@ -84,21 +80,19 @@ function showMenu(source?: HTMLElement) {
   }
 
   if (isMenuOpen(menu)) {
-    menu.dataset.popoverOpen = 'true';
     return;
   }
 
-  menu.dataset.popoverOpen = 'true';
-
-  try {
-    if (source) {
+  if (source) {
+    try {
       menu.showPopover({ source });
-      return;
+    } catch {
+      menu.showPopover();
     }
-
-    menu.showPopover();
-  } catch {
+    return;
   }
+
+  menu.showPopover();
 }
 
 function hideMenu() {
@@ -109,16 +103,10 @@ function hideMenu() {
   }
 
   if (!isMenuOpen(menu)) {
-    delete menu.dataset.popoverOpen;
     return;
   }
 
-  delete menu.dataset.popoverOpen;
-
-  try {
-    menu.hidePopover();
-  } catch {
-  }
+  menu.hidePopover();
 }
 
 function getMenuItemElements() {
@@ -286,7 +274,7 @@ function onMenuToggle(event: Event) {
   }
 
   const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
-  let isOpen = menu.dataset.popoverOpen === 'true';
+  let isOpen: boolean;
 
   if (nextState === 'open') {
     isOpen = true;
@@ -297,8 +285,6 @@ function onMenuToggle(event: Event) {
   }
 
   if (isOpen) {
-    menu.dataset.popoverOpen = 'true';
-
     if (!open.value) {
       open.value = true;
     }
@@ -306,7 +292,6 @@ function onMenuToggle(event: Event) {
     return;
   }
 
-  delete menu.dataset.popoverOpen;
   closeSubmenus();
 
   if (open.value) {

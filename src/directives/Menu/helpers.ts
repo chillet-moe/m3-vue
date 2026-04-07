@@ -36,46 +36,35 @@ export type MenuShowOptions = {
 };
 
 function isMenuOpen(menu: HTMLElement) {
-  try {
-    return menu.matches(':popover-open') || menu.dataset.popoverOpen === 'true';
-  } catch {
-    return menu.dataset.popoverOpen === 'true';
-  }
+  return menu.matches(':popover-open');
 }
 
 export function showMenuElement(menu: HTMLElement, options: MenuShowOptions = {}) {
   if (isMenuOpen(menu)) {
-    menu.dataset.popoverOpen = 'true';
     return;
   }
 
   menu.dispatchEvent(new CustomEvent('m3-menu:show', { detail: options }));
-  menu.dataset.popoverOpen = 'true';
 
-  try {
-    if (options.source) {
+  if (options.source) {
+    try {
       menu.showPopover({ source: options.source });
-      return;
+    } catch {
+      menu.showPopover();
     }
-
-    menu.showPopover();
-  } catch {
+    return;
   }
+
+  menu.showPopover();
 }
 
 export function hideMenuElement(menu: HTMLElement) {
   if (!isMenuOpen(menu)) {
-    delete menu.dataset.popoverOpen;
     return;
   }
 
   menu.dispatchEvent(new CustomEvent('m3-menu:hide'));
-  delete menu.dataset.popoverOpen;
-
-  try {
-    menu.hidePopover();
-  } catch {
-  }
+  menu.hidePopover();
 }
 
 export function toggleMenuElement(menu: HTMLElement, options: MenuShowOptions = {}) {

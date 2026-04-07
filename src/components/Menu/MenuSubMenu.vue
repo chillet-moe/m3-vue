@@ -178,7 +178,7 @@ function isPointInsideTriangle(point: Point, triangle: Triangle) {
 function createSafeTriangle(origin: Point) {
   const submenuMenu = submenuMenuRef.value?.menuRef;
 
-  if (!submenuMenu || submenuMenu.dataset.popoverOpen !== 'true') {
+  if (!submenuMenu || !submenuMenu.matches(':popover-open')) {
     return null;
   }
 

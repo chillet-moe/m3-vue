@@ -31,7 +31,7 @@ const vDropdownMenu: Directive<HTMLElement, MenuTargetBinding> = {
 
     const restoreTriggerFocusIfMenuClosed = () => {
       void Promise.resolve().then(() => {
-        if (menu.dataset.popoverOpen === 'true') {
+        if (menu.matches(':popover-open')) {
           return;
         }
 
