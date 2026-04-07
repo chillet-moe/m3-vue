@@ -1,6 +1,7 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/vue3-vite';
+import { ref } from 'vue';
 import ButtonGroup from './ButtonGroup.vue';
-import Button from '@/components/Button/Button.vue';
+import ButtonGroupItem from '@/components/ButtonGroup/ButtonGroupItem.vue';
 import type { ButtonGroupProps } from '@/components/ButtonGroup/ButtonGroup.vue';
 import { getArgs } from '@/utils/storybook.ts';
 
@@ -12,6 +13,8 @@ const meta = {
     size: 'small',
     color: 'tonal',
     disabled: false,
+    selectionMode: 'single',
+    name: 'button-group',
   },
 } satisfies Meta<typeof ButtonGroup>;
 
@@ -20,50 +23,38 @@ type Story = StoryObj<typeof meta>;
 
 interface ButtonGroupArgs extends ButtonGroupProps {
   enum?: 'type' | 'size' | 'color';
-  inputType?: 'radio' | 'checkbox';
 }
 
 const BaseTemplate: StoryFn<ButtonGroupArgs> = (args: ButtonGroupArgs) => ({
-  components: { ButtonGroup, Button },
-  setup: () => ({ args }),
+  components: { ButtonGroup, ButtonGroupItem },
+  setup: () => ({
+    args,
+    modelValue: ref(args.selectionMode === 'multiple' ? ['option-1'] : 'option-1'),
+  }),
   template: `
-    <ButtonGroup v-bind="args">
-      <Button v-slot="{ disabled }">
-        <input :type="args.inputType || 'radio'" name="button-group" :disabled="disabled"/>
-        Option 1
-      </Button>
-      <Button v-slot="{ disabled }">
-        <input :type="args.inputType || 'radio'" name="button-group" :disabled="disabled"/>
-        Option 2
-      </Button>
-      <Button v-slot="{ disabled }">
-        <input :type="args.inputType || 'radio'" name="button-group" :disabled="disabled"/>
-        Option 3
-      </Button>
+    <ButtonGroup v-bind="args" v-model="modelValue">
+      <ButtonGroupItem value="option-1">Option 1</ButtonGroupItem>
+      <ButtonGroupItem value="option-2">Option 2</ButtonGroupItem>
+      <ButtonGroupItem value="option-3">Option 3</ButtonGroupItem>
     </ButtonGroup>
   `,
 });
 
 const EnumTemplate: StoryFn<ButtonGroupArgs> = (args: ButtonGroupArgs, { argTypes }) => ({
-  components: { ButtonGroup, Button },
-  setup: () => ({ args, argTypes, getArgs }),
+  components: { ButtonGroup, ButtonGroupItem },
+  setup: () => ({
+    args,
+    argTypes,
+    getArgs,
+  }),
   template: `
     <div style="display: flex; flex-direction: column; gap: 1rem;">
       <div v-for="option in argTypes?.[args.enum]?.options" :key="option">
         <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.25rem;">{{ option }}</div>
-        <ButtonGroup v-bind="getArgs(args, option)">
-          <Button v-slot="{ disabled }">
-            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" :disabled="disabled" />
-            Option 1
-          </Button>
-          <Button v-slot="{ disabled }">
-            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" :disabled="disabled" />
-            Option 2
-          </Button>
-          <Button v-slot="{ disabled }">
-            <input :type="args.inputType || 'radio'" :name="'button-group-' + option" :disabled="disabled" />
-            Option 3
-          </Button>
+        <ButtonGroup v-bind="getArgs(args, option)" :model-value="args.selectionMode === 'multiple' ? ['option-1'] : 'option-1'">
+          <ButtonGroupItem value="option-1">Option 1</ButtonGroupItem>
+          <ButtonGroupItem value="option-2">Option 2</ButtonGroupItem>
+          <ButtonGroupItem value="option-3">Option 3</ButtonGroupItem>
         </ButtonGroup>
       </div>
     </div>
@@ -84,5 +75,5 @@ Colors.args = { enum: 'color' };
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = { disabled: true };
 
-export const Multiple = BaseTemplate.bind({});
-Multiple.args = { inputType: 'checkbox' };
+export const Multiple: Story = BaseTemplate.bind({});
+Multiple.args = { selectionMode: 'multiple' };

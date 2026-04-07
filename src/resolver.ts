@@ -8,6 +8,7 @@ import type { ComponentResolver } from 'unplugin-vue-components/types';
 export const m3VueComponentNames = [
   'Button',
   'ButtonGroup',
+  'ButtonGroupItem',
   'Card',
   'CheckBox',
   'Dialog',
