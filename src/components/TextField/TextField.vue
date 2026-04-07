@@ -1,50 +1,32 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue';
+import { computed, ref, useAttrs, useId, useSlots } from 'vue';
 
 export type TextFieldProps = {
-  /** Text field label displayed inside container. */
-  label: string;
+  /** Visible label. If omitted, provide aria-label via attrs. */
+  label?: string;
 
-  /** Optional explicit id for native input element. */
+  /** Optional explicit id for native control element. */
   id?: string;
 
-  /** Native input type for single-line mode. */
-  type?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url';
+  /** Render either a single-line input or multiline textarea. */
+  as?: 'input' | 'textarea';
 
-  /** Whether to use a multiline textarea. */
-  multiline?: boolean;
-
-  /** Rows for multiline textarea. */
+  /** Rows when rendered as textarea. */
   rows?: number;
 
-  /** Leading icon name. */
-  leadingIcon?: string;
+  /** Supporting text shown below the field when not in error state. */
+  description?: string;
 
-  /** Trailing icon name. */
-  trailingIcon?: string;
+  /** Error text shown below the field. When provided, field is invalid. */
+  error?: string;
 
-  /** Prefix text before the input value. */
-  prefixText?: string;
-
-  /** Suffix text after the input value. */
-  suffixText?: string;
-
-  /** Supporting text shown below the field. */
-  supportingText?: string;
-
-  /** Error text shown below the field when invalid. */
-  errorText?: string;
-
-  /** Whether the input is disabled. */
+  /** Whether the control is disabled. */
   disabled?: boolean;
 
-  /** Whether the field is in error state. */
-  invalid?: boolean;
-
-  /** Whether the input is required. */
+  /** Whether the control is required. */
   required?: boolean;
 
-  /** Whether the input is readonly. */
+  /** Whether the control is readonly. */
   readonly?: boolean;
 
   /** Name attribute for form submissions. */
@@ -52,72 +34,136 @@ export type TextFieldProps = {
 
   /** Placeholder shown when value is empty. */
   placeholder?: string;
-
-  /** ARIA label for cases without visible label. */
-  ariaLabel?: string;
 };
 
 const generatedId = useId();
+const attrs = useAttrs();
+const slots = useSlots();
 
 const props = withDefaults(defineProps<TextFieldProps>(), {
+  label: undefined,
   id: undefined,
-  type: 'text',
-  multiline: false,
+  as: 'input',
   rows: 3,
-  leadingIcon: undefined,
-  trailingIcon: undefined,
-  prefixText: undefined,
-  suffixText: undefined,
-  supportingText: undefined,
-  errorText: undefined,
+  description: undefined,
+  error: undefined,
   disabled: false,
-  invalid: false,
   required: false,
   readonly: false,
   name: undefined,
   placeholder: undefined,
-  ariaLabel: undefined,
 });
 
-const value = defineModel<string>({ required: true });
+const emit = defineEmits<{
+  input: [event: Event];
+  change: [event: Event];
+  focus: [event: FocusEvent];
+  blur: [event: FocusEvent];
+  keydown: [event: KeyboardEvent];
+}>();
+
+const modelValue = defineModel<string>({ required: true });
 
 const inputId = computed(() => {
   return props.id ?? `m3-text-field-${generatedId}`;
 });
 
 const hasValue = computed(() => {
-  return value.value.length > 0;
+  return modelValue.value.length > 0;
 });
 
 const supportingMessage = computed(() => {
-  return props.invalid ? props.errorText : props.supportingText;
+  return props.error ?? props.description;
 });
 
 const supportingId = computed(() => {
   return supportingMessage.value ? `${inputId.value}-supporting` : undefined;
+});
+
+const invalid = computed(() => {
+  return Boolean(props.error);
+});
+
+const hasLeading = computed(() => {
+  return Boolean(slots.leading);
+});
+
+const controlRef = ref<HTMLInputElement | HTMLTextAreaElement>();
+
+const controlAttrs = computed(() => {
+  const forwarded = { ...attrs };
+  delete forwarded.class;
+  delete forwarded.style;
+  return forwarded;
+});
+
+const handleInput = (event: Event) => {
+  emit('input', event);
+};
+
+const handleChange = (event: Event) => {
+  emit('change', event);
+};
+
+const handleFocus = (event: FocusEvent) => {
+  emit('focus', event);
+};
+
+const handleBlur = (event: FocusEvent) => {
+  emit('blur', event);
+};
+
+const handleKeydown = (event: KeyboardEvent) => {
+  emit('keydown', event);
+};
+
+const focus = () => {
+  controlRef.value?.focus();
+};
+
+const blur = () => {
+  controlRef.value?.blur();
+};
+
+const select = () => {
+  if (controlRef.value instanceof HTMLInputElement || controlRef.value instanceof HTMLTextAreaElement) {
+    controlRef.value.select();
+  }
+};
+
+defineExpose({
+  el: controlRef,
+  focus,
+  blur,
+  select,
 });
 </script>
 
 <template>
   <div
     :class="'m3-text-field'"
-    :data-invalid="props.invalid ? 'true' : 'false'"
+    :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
-    :data-has-leading-icon="props.leadingIcon ? 'true' : 'false'"
+    :data-has-leading="hasLeading ? 'true' : 'false'"
   >
-    <label :class="'m3-text-field-container'" :for="inputId">
-      <span :class="'m3-text-field-label'">{{ props.label }}</span>
+    <div :class="'m3-text-field-container'">
+      <label v-if="props.label" :class="'m3-text-field-label'" :for="inputId">{{ props.label }}</label>
 
       <span :class="'m3-text-field-content'">
-        <span v-if="props.leadingIcon" :class="['m3-icon', 'm3-text-field-icon', 'm3-text-field-leading-icon']">{{ props.leadingIcon }}</span>
-        <span v-if="props.prefixText" :class="'m3-text-field-prefix'">{{ props.prefixText }}</span>
+        <span v-if="slots.leading" :class="'m3-text-field-leading-slot'">
+          <slot name="leading" />
+        </span>
+        <span v-if="slots.prefix" :class="'m3-text-field-prefix-slot'">
+          <slot name="prefix" />
+        </span>
 
         <textarea
-          v-if="props.multiline"
+          v-if="props.as === 'textarea'"
           :id="inputId"
-          v-model="value"
+          ref="controlRef"
+          v-model="modelValue"
           :class="['m3-text-field-input', 'm3-text-field-textarea']"
           :name="props.name"
           :rows="props.rows"
@@ -125,28 +171,42 @@ const supportingId = computed(() => {
           :disabled="props.disabled"
           :required="props.required"
           :readonly="props.readonly"
-          :aria-invalid="props.invalid ? 'true' : undefined"
+          :aria-invalid="invalid ? 'true' : undefined"
           :aria-describedby="supportingId"
-          :aria-label="props.ariaLabel"
+          v-bind="controlAttrs"
+          @input="handleInput"
+          @change="handleChange"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          @keydown="handleKeydown"
         />
         <input
           v-else
           :id="inputId"
-          v-model="value"
+          ref="controlRef"
+          v-model="modelValue"
           :class="'m3-text-field-input'"
-          :type="props.type"
           :name="props.name"
           :placeholder="props.placeholder"
           :disabled="props.disabled"
           :required="props.required"
           :readonly="props.readonly"
-          :aria-invalid="props.invalid ? 'true' : undefined"
+          :aria-invalid="invalid ? 'true' : undefined"
           :aria-describedby="supportingId"
-          :aria-label="props.ariaLabel"
+          v-bind="controlAttrs"
+          @input="handleInput"
+          @change="handleChange"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          @keydown="handleKeydown"
         />
 
-        <span v-if="props.suffixText" :class="'m3-text-field-suffix'">{{ props.suffixText }}</span>
-        <span v-if="props.trailingIcon" :class="['m3-icon', 'm3-text-field-icon', 'm3-text-field-trailing-icon']">{{ props.trailingIcon }}</span>
+        <span v-if="slots.suffix" :class="'m3-text-field-suffix-slot'">
+          <slot name="suffix" />
+        </span>
+        <span v-if="slots.trailing" :class="'m3-text-field-trailing-slot'">
+          <slot name="trailing" />
+        </span>
       </span>
 
       <fieldset :class="'m3-text-field-outline'" aria-hidden="true">
@@ -154,7 +214,7 @@ const supportingId = computed(() => {
           <span>{{ props.label }}</span>
         </legend>
       </fieldset>
-    </label>
+    </div>
 
     <div v-if="supportingMessage" :id="supportingId" :class="'m3-text-field-supporting'" aria-live="polite">
       {{ supportingMessage }}

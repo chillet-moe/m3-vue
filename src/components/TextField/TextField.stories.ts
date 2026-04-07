@@ -4,10 +4,16 @@ import type { TextFieldProps } from './TextField.vue';
 
 const meta = {
   component: TextField,
+  parameters: {
+    docs: {
+      description: {
+        component: 'Uses :has() for parent-state styling. Baseline 2025+ browsers are required.',
+      },
+    },
+  },
   args: {
     label: 'Label',
     disabled: false,
-    invalid: false,
     required: false,
   },
 } satisfies Meta<typeof TextField>;
@@ -15,7 +21,7 @@ const meta = {
 export default meta;
 
 interface TextFieldArgs extends TextFieldProps {
-  value: string;
+  modelValue: string;
 }
 
 const BaseTemplate: StoryFn<TextFieldArgs> = (args: TextFieldArgs) => ({
@@ -23,37 +29,44 @@ const BaseTemplate: StoryFn<TextFieldArgs> = (args: TextFieldArgs) => ({
   setup: () => ({ args }),
   template: `
     <div style="max-inline-size: 22rem;">
-      <TextField v-bind="args" v-model="args.value" />
+      <TextField v-bind="args" v-model="args.modelValue" />
     </div>
   `,
 });
 
-const OutlinedConfigurationsTemplate: StoryFn<TextFieldArgs> = () => ({
+const ConfigurationsTemplate: StoryFn<TextFieldArgs> = () => ({
   components: { TextField },
   setup: () => ({
     empty: '',
     input: 'Input',
     amount: '1.43',
-    weight: '25',
     multiline: 'This is a long input in a multi-line text field that wraps overflow text onto a new line',
   }),
   template: `
     <div style="display: grid; gap: 1rem; max-inline-size: 24rem;">
-      <TextField label="Label" v-model="empty" supporting-text="Supporting text" />
-      <TextField label="Label" v-model="input" supporting-text="Supporting text" />
-      <TextField label="Label" v-model="empty" leading-icon="search" />
-      <TextField label="Label" v-model="input" leading-icon="search" trailing-icon="cancel" />
-      <TextField label="Label" v-model="amount" prefix-text="$" />
-      <TextField label="Label" v-model="weight" suffix-text="lbs" />
-      <TextField label="Label" v-model="multiline" multiline :rows="4" />
+      <TextField label="Label" v-model="empty" description="Supporting text" />
+      <TextField label="Label" v-model="input" error="Error text" />
+      <TextField label="Label" v-model="empty" placeholder="Search keyword">
+        <template #leading>
+          <span class="m3-icon">search</span>
+        </template>
+      </TextField>
+      <TextField label="Amount" v-model="amount">
+        <template #prefix>$</template>
+        <template #suffix>USD</template>
+        <template #trailing>
+          <button type="button" style="all: unset; cursor: pointer;">Clear</button>
+        </template>
+      </TextField>
+      <TextField label="Label" v-model="multiline" as="textarea" :rows="4" />
     </div>
   `,
 });
 
 export const Default = BaseTemplate.bind({});
 Default.args = {
-  value: '',
-  supportingText: 'Supporting text',
+  modelValue: '',
+  description: 'Supporting text',
 };
 
-export const OutlinedConfigurations = OutlinedConfigurationsTemplate.bind({});
+export const Configurations = ConfigurationsTemplate.bind({});

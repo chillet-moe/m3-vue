@@ -29,9 +29,9 @@ export const Playground: Story = {
     }),
     template: `
       <Form aria-label="Account form" style="max-inline-size: 28rem; padding: 1.5rem; border-radius: 1rem; background: var(--md-sys-color-surface-container-low);">
-        <TextField label="Email" id="form-email" v-model="email" type="email" placeholder="name@example.com" supporting-text="We'll use this address to contact you." />
+        <TextField label="Email" id="form-email" v-model="email" type="email" placeholder="name@example.com" description="We'll use this address to contact you." />
 
-        <TextField label="Password" id="form-password" v-model="password" type="password" placeholder="Enter password" supporting-text="At least 8 characters." />
+        <TextField label="Password" id="form-password" v-model="password" type="password" placeholder="Enter password" description="At least 8 characters." />
 
         <FormField error-text="You must accept terms before submitting.">
           <CheckBox v-model:checked="agree">I agree to the terms</CheckBox>

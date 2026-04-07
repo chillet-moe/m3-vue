@@ -182,7 +182,7 @@
   max-inline-size: 100%;
 }
 
-.m3-text-field[data-has-leading-icon='true'][data-populated='false'][data-has-placeholder='false']:not(:focus-within)
+.m3-text-field[data-has-leading='true'][data-populated='false'][data-has-placeholder='false']:not(:focus-within)
   .m3-text-field-label {
   inset-inline-start: 3rem;
 }
@@ -220,30 +220,28 @@
   color: var(--md-comp-outlined-text-field-input-text-placeholder-color);
 }
 
-.m3-text-field-prefix,
-.m3-text-field-suffix {
+.m3-text-field-prefix-slot,
+.m3-text-field-suffix-slot {
   color: var(--md-comp-outlined-text-field-input-text-prefix-color);
   opacity: 0;
   transition: opacity var(--md-duration-fast) var(--md-timing-function-fast);
 }
 
-.m3-text-field:focus-within .m3-text-field-prefix,
-.m3-text-field:focus-within .m3-text-field-suffix,
-.m3-text-field[data-populated='true'] .m3-text-field-prefix,
-.m3-text-field[data-populated='true'] .m3-text-field-suffix {
-  opacity: 1;
-}
-
-.m3-text-field-icon {
+.m3-text-field-leading-slot {
+  color: var(--_leading-icon-color);
   font-size: var(--md-comp-outlined-text-field-leading-icon-size);
 }
 
-.m3-text-field-leading-icon {
-  color: var(--_leading-icon-color);
+.m3-text-field-trailing-slot {
+  color: var(--_trailing-icon-color);
+  font-size: var(--md-comp-outlined-text-field-trailing-icon-size);
 }
 
-.m3-text-field-trailing-icon {
-  color: var(--_trailing-icon-color);
+.m3-text-field:focus-within .m3-text-field-prefix-slot,
+.m3-text-field:focus-within .m3-text-field-suffix-slot,
+.m3-text-field[data-populated='true'] .m3-text-field-prefix-slot,
+.m3-text-field[data-populated='true'] .m3-text-field-suffix-slot {
+  opacity: 1;
 }
 
 .m3-text-field-supporting {
@@ -256,6 +254,7 @@
   letter-spacing: var(--md-comp-outlined-text-field-supporting-text-tracking);
 }
 
+/* Baseline 2025: :has is required for parent-state styling without JS. */
 .m3-text-field:where(:has(.m3-text-field-input:not(:disabled):hover)) {
   --_outline-width: var(--md-comp-outlined-text-field-hover-outline-width);
   --_outline-color: var(--md-comp-outlined-text-field-hover-outline-color);
@@ -317,7 +316,7 @@
   );
 }
 
-/* Use :where() for lower specificity so focus/populated rules naturally win */
+/* Use :where() for lower specificity so focus/populated rules naturally win. */
 :where(.m3-text-field:has(.m3-text-field-textarea)) .m3-text-field-label {
   inset-block-start: 1rem;
   translate: 0;
