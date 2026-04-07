@@ -1,3 +1,4 @@
+@import '../../directives/Dropdown/vDropdown.css';
 @import '../../styles/typography.css';
 
 @layer tokens {
@@ -234,7 +235,11 @@
   position: fixed;
   inset: auto;
   padding-block: var(--md-comp-menus-popover-padding);
-  position-try-fallbacks: --m3-menu-inline-safe, flip-block, flip-inline, flip-block flip-inline;
+  position-try-fallbacks:
+    --m3-menu-inline-safe,
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
   position-visibility: anchors-visible;
 
   transition:
@@ -250,7 +255,11 @@
 .m3-menu[data-submenu='true'][popover] {
   margin-inline-start: var(--md-comp-menus-gap);
   position-area: inline-end span-block-end;
-  position-try-fallbacks: --m3-submenu-inline-safe, flip-block, flip-inline, flip-block flip-inline;
+  position-try-fallbacks:
+    --m3-submenu-inline-safe,
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
 }
 
 @position-try --m3-menu-inline-safe {

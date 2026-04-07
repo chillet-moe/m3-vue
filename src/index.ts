@@ -9,7 +9,7 @@ export { usePressedState } from './composables/pressedState.ts';
 
 // Directives
 export { default as vTooltip } from './directives/Tooltip/vTooltip.ts';
-export { vDropdownMenu, vContextMenu } from './directives/Menu';
+export { vDropdown, vDropdownMenu, vContextMenu } from './directives/Menu';
 
 // Components
 export * from './components/Button';

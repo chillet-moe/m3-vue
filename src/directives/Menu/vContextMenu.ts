@@ -17,6 +17,8 @@ const vContextMenu: Directive<HTMLElement, MenuTargetBinding> = {
       return;
     }
 
+    menu.classList.add('m3-dropdown');
+
     const onContextMenu = (event: MouseEvent) => {
       event.preventDefault();
 

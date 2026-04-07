@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/vue3-vite';
 import { ref } from 'vue';
-import { vContextMenu, vDropdownMenu } from '@/directives/Menu';
+import { vContextMenu, vDropdown } from '@/directives/Menu';
 import Icon from '@/components/Icon/Icon.vue';
 import type { MenuProps } from './Menu.vue';
 import Menu from './Menu.vue';
@@ -171,7 +171,7 @@ export default meta;
 
 const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu, Button },
-  directives: { dropdownMenu: vDropdownMenu },
+  directives: { dropdown: vDropdown },
   setup: () => {
     const selected = ref('None');
     const submenuOpen = ref(false);
@@ -181,7 +181,7 @@ const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
-      <Button v-dropdown-menu="'#dropdown-menu'">Open dropdown menu</Button>
+      <Button v-dropdown="'#dropdown-menu'">Open dropdown menu</Button>
 
       <Menu
         id="dropdown-menu"
@@ -243,7 +243,7 @@ const ContextDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
 
 const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu, Button },
-  directives: { dropdownMenu: vDropdownMenu },
+  directives: { dropdown: vDropdown },
   setup: () => {
     const submenuOpen = ref(false);
 
@@ -256,7 +256,7 @@ const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
         safe triangle that keeps the submenu open during mouse travel.
       </div>
 
-      <Button v-dropdown-menu="'#safe-triangle-menu'">Open safe triangle demo</Button>
+      <Button v-dropdown="'#safe-triangle-menu'">Open safe triangle demo</Button>
 
       <Menu id="safe-triangle-menu" v-bind="args">
         ${safeTriangleItems}

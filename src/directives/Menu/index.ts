@@ -1,3 +1,4 @@
+export { default as vDropdown } from '../Dropdown/vDropdown';
 export { default as vDropdownMenu } from './vDropdownMenu';
 export { default as vContextMenu } from './vContextMenu';
-export type { MenuTargetBinding } from './helpers';
+export type { DropdownTargetBinding as MenuTargetBinding } from '../Dropdown/helpers';

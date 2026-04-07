@@ -299,7 +299,7 @@ function onMenuToggle(event: Event) {
   }
 }
 
-function onExternalMenuShowWithFocus(event: Event) {
+function onExternalDropdownShowWithFocus(event: Event) {
   const detail = event instanceof CustomEvent ? (event.detail as ExternalMenuShowDetail | undefined) : undefined;
   const focusTarget = detail?.focus;
   const source = detail?.source;
@@ -327,7 +327,7 @@ function onExternalMenuShowWithFocus(event: Event) {
   });
 }
 
-function onExternalMenuHide() {
+function onExternalDropdownHide() {
   hide();
 }
 
@@ -354,15 +354,15 @@ watch(
 watch(
   menuRef,
   (menu, previousMenu) => {
-    previousMenu?.removeEventListener('m3-menu:show', onExternalMenuShowWithFocus);
-    previousMenu?.removeEventListener('m3-menu:hide', onExternalMenuHide);
+    previousMenu?.removeEventListener('m3-dropdown:show', onExternalDropdownShowWithFocus);
+    previousMenu?.removeEventListener('m3-dropdown:hide', onExternalDropdownHide);
 
     if (!menu) {
       return;
     }
 
-    menu.addEventListener('m3-menu:show', onExternalMenuShowWithFocus);
-    menu.addEventListener('m3-menu:hide', onExternalMenuHide);
+    menu.addEventListener('m3-dropdown:show', onExternalDropdownShowWithFocus);
+    menu.addEventListener('m3-dropdown:hide', onExternalDropdownHide);
   },
   {
     immediate: true,
@@ -372,8 +372,8 @@ watch(
 
 onUnmounted(() => {
   closeSubmenus();
-  menuRef.value?.removeEventListener('m3-menu:show', onExternalMenuShowWithFocus);
-  menuRef.value?.removeEventListener('m3-menu:hide', onExternalMenuHide);
+  menuRef.value?.removeEventListener('m3-dropdown:show', onExternalDropdownShowWithFocus);
+  menuRef.value?.removeEventListener('m3-dropdown:hide', onExternalDropdownHide);
 });
 
 defineExpose({
@@ -390,7 +390,7 @@ defineExpose({
     popover="auto"
     role="menu"
     aria-orientation="vertical"
-    class="m3-menu"
+    class="m3-menu m3-dropdown"
     :data-color="color"
     :data-menu-id="menuId"
     @toggle="onMenuToggle"

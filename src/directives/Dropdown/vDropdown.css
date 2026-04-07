@@ -1,0 +1,19 @@
+.m3-dropdown[popover] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-0.25rem) scale(0.96);
+  transform-origin: top center;
+  will-change: transform;
+
+  transition:
+    opacity 100ms var(--md-timing-function-emphasized-decel),
+    transform var(--md-duration-fast) var(--md-timing-function-emphasized-decel),
+    overlay var(--md-duration-fast) allow-discrete,
+    display var(--md-duration-fast) allow-discrete;
+}
+
+.m3-dropdown[popover]:popover-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}

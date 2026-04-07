@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref, withDirectives } from 'vue';
-import { vDropdownMenu } from '@/directives/Menu';
+import { vDropdown } from '@/directives/Menu';
 import Menu from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuGap from './MenuGap.vue';
@@ -55,7 +55,10 @@ function installPopoverPolyfill() {
       value(this: HTMLElement, options?: { source?: HTMLElement }) {
         if (options?.source) {
           this.dataset.popoverSourceId =
-            options.source.id || options.source.textContent?.trim() || options.source.getAttribute('aria-label') || 'source';
+            options.source.id ||
+            options.source.textContent?.trim() ||
+            options.source.getAttribute('aria-label') ||
+            'source';
         }
 
         popoverOpenElements.add(this);
@@ -328,27 +331,23 @@ describe('Menu', () => {
           default: () => [
             h(MenuContainer, null, {
               default: () => [
-                h(
-                  MenuSubMenu,
-                  null,
-                  {
-                    trigger: ({ open }: { open: boolean }) =>
-                      h(
-                        MenuItem,
-                        {
-                          submenu: true,
-                          submenuOpen: open,
-                        },
-                        {
-                          default: () => 'More',
-                        },
-                      ),
-                    default: () =>
-                      h(MenuContainer, null, {
-                        default: () => [h(MenuItem, null, { default: () => 'Rename' })],
-                      }),
-                  },
-                ),
+                h(MenuSubMenu, null, {
+                  trigger: ({ open }: { open: boolean }) =>
+                    h(
+                      MenuItem,
+                      {
+                        submenu: true,
+                        submenuOpen: open,
+                      },
+                      {
+                        default: () => 'More',
+                      },
+                    ),
+                  default: () =>
+                    h(MenuContainer, null, {
+                      default: () => [h(MenuItem, null, { default: () => 'Rename' })],
+                    }),
+                }),
               ],
             }),
           ],
@@ -388,27 +387,23 @@ describe('Menu', () => {
           default: () => [
             h(MenuContainer, null, {
               default: () => [
-                h(
-                  MenuSubMenu,
-                  null,
-                  {
-                    trigger: ({ open }: { open: boolean }) =>
-                      h(
-                        MenuItem,
-                        {
-                          submenu: true,
-                          submenuOpen: open,
-                        },
-                        {
-                          default: () => 'More',
-                        },
-                      ),
-                    default: () =>
-                      h(MenuContainer, null, {
-                        default: () => [h(MenuItem, null, { default: () => 'Rename' })],
-                      }),
-                  },
-                ),
+                h(MenuSubMenu, null, {
+                  trigger: ({ open }: { open: boolean }) =>
+                    h(
+                      MenuItem,
+                      {
+                        submenu: true,
+                        submenuOpen: open,
+                      },
+                      {
+                        default: () => 'More',
+                      },
+                    ),
+                  default: () =>
+                    h(MenuContainer, null, {
+                      default: () => [h(MenuItem, null, { default: () => 'Rename' })],
+                    }),
+                }),
               ],
             }),
           ],
@@ -454,30 +449,26 @@ describe('Menu', () => {
           default: () => [
             h(MenuContainer, null, {
               default: () => [
-                h(
-                  MenuSubMenu,
-                  null,
-                  {
-                    trigger: ({ open }: { open: boolean }) =>
-                      h(
-                        MenuItem,
-                        {
-                          submenu: true,
-                          submenuOpen: open,
-                        },
-                        {
-                          default: () => 'More',
-                        },
-                      ),
-                    default: () =>
-                      h(MenuContainer, null, {
-                        default: () => [
-                          h(MenuItem, null, { default: () => 'Child 1' }),
-                          h(MenuItem, null, { default: () => 'Child 2' }),
-                        ],
-                      }),
-                  },
-                ),
+                h(MenuSubMenu, null, {
+                  trigger: ({ open }: { open: boolean }) =>
+                    h(
+                      MenuItem,
+                      {
+                        submenu: true,
+                        submenuOpen: open,
+                      },
+                      {
+                        default: () => 'More',
+                      },
+                    ),
+                  default: () =>
+                    h(MenuContainer, null, {
+                      default: () => [
+                        h(MenuItem, null, { default: () => 'Child 1' }),
+                        h(MenuItem, null, { default: () => 'Child 2' }),
+                      ],
+                    }),
+                }),
               ],
             }),
           ],
@@ -534,27 +525,23 @@ describe('Menu', () => {
           default: () => [
             h(MenuContainer, null, {
               default: () => [
-                h(
-                  MenuSubMenu,
-                  null,
-                  {
-                    trigger: ({ open }: { open: boolean }) =>
-                      h(
-                        MenuItem,
-                        {
-                          submenu: true,
-                          submenuOpen: open,
-                        },
-                        {
-                          default: () => 'More',
-                        },
-                      ),
-                    default: () =>
-                      h(MenuContainer, null, {
-                        default: () => [h(MenuItem, null, { default: () => 'Rename' })],
-                      }),
-                  },
-                ),
+                h(MenuSubMenu, null, {
+                  trigger: ({ open }: { open: boolean }) =>
+                    h(
+                      MenuItem,
+                      {
+                        submenu: true,
+                        submenuOpen: open,
+                      },
+                      {
+                        default: () => 'More',
+                      },
+                    ),
+                  default: () =>
+                    h(MenuContainer, null, {
+                      default: () => [h(MenuItem, null, { default: () => 'Rename' })],
+                    }),
+                }),
               ],
             }),
           ],
@@ -600,30 +587,26 @@ describe('Menu', () => {
           default: () => [
             h(MenuContainer, null, {
               default: () => [
-                h(
-                  MenuSubMenu,
-                  null,
-                  {
-                    trigger: ({ open }: { open: boolean }) =>
-                      h(
-                        MenuItem,
-                        {
-                          submenu: true,
-                          submenuOpen: open,
-                        },
-                        {
-                          default: () => 'More',
-                        },
-                      ),
-                    default: () =>
-                      h(MenuContainer, null, {
-                        default: () => [
-                          h(MenuItem, null, { default: () => 'Child 1' }),
-                          h(MenuItem, null, { default: () => 'Child 2' }),
-                        ],
-                      }),
-                  },
-                ),
+                h(MenuSubMenu, null, {
+                  trigger: ({ open }: { open: boolean }) =>
+                    h(
+                      MenuItem,
+                      {
+                        submenu: true,
+                        submenuOpen: open,
+                      },
+                      {
+                        default: () => 'More',
+                      },
+                    ),
+                  default: () =>
+                    h(MenuContainer, null, {
+                      default: () => [
+                        h(MenuItem, null, { default: () => 'Child 1' }),
+                        h(MenuItem, null, { default: () => 'Child 2' }),
+                      ],
+                    }),
+                }),
               ],
             }),
           ],
@@ -697,7 +680,7 @@ describe('Menu', () => {
     const createDropdownApp = () =>
       createApp(() =>
         h('div', [
-          withDirectives(h('button', { type: 'button' }, 'Open dropdown menu'), [[vDropdownMenu, '#dropdown-menu']]),
+          withDirectives(h('button', { type: 'button' }, 'Open dropdown menu'), [[vDropdown, '#dropdown-menu']]),
           h(
             Menu,
             {
@@ -715,7 +698,8 @@ describe('Menu', () => {
               ],
             },
           ),
-        ]));
+        ]),
+      );
 
     for (const [key, expectedIndex] of [
       ['Enter', 0],
@@ -755,7 +739,7 @@ describe('Menu', () => {
 
     const app = createApp(() =>
       h('div', [
-        withDirectives(h('button', { type: 'button' }, 'Open dropdown menu'), [[vDropdownMenu, '#dropdown-menu']]),
+        withDirectives(h('button', { type: 'button' }, 'Open dropdown menu'), [[vDropdown, '#dropdown-menu']]),
         h(
           Menu,
           {
@@ -772,7 +756,8 @@ describe('Menu', () => {
             ],
           },
         ),
-      ]));
+      ]),
+    );
 
     app.mount(container);
     await nextTick();
