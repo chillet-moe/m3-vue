@@ -33,15 +33,26 @@ function createPointerEvent(
 
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
-    showPopover?: () => void;
+    showPopover?: (options?: { source?: HTMLElement }) => void;
     hidePopover?: () => void;
   };
 
   if (typeof prototype.showPopover !== 'function') {
     Object.defineProperty(prototype, 'showPopover', {
       configurable: true,
-      value(this: HTMLElement) {
+      value(this: HTMLElement, options?: { source?: HTMLElement }) {
+        if (options?.source) {
+          this.dataset.popoverSourceId =
+            options.source.id || options.source.textContent?.trim() || options.source.getAttribute('aria-label') || 'source';
+        }
+
         this.dataset.popoverOpen = 'true';
+        const toggleEvent = new Event('toggle');
+        Object.defineProperty(toggleEvent, 'newState', {
+          configurable: true,
+          value: 'open',
+        });
+        this.dispatchEvent(toggleEvent);
       },
     });
   }
@@ -51,6 +62,13 @@ function installPopoverPolyfill() {
       configurable: true,
       value(this: HTMLElement) {
         delete this.dataset.popoverOpen;
+        delete this.dataset.popoverSourceId;
+        const toggleEvent = new Event('toggle');
+        Object.defineProperty(toggleEvent, 'newState', {
+          configurable: true,
+          value: 'closed',
+        });
+        this.dispatchEvent(toggleEvent);
       },
     });
   }
@@ -333,6 +351,7 @@ describe('Menu', () => {
 
     const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
     expect(submenu?.dataset.popoverOpen).toBe('true');
+    expect(submenu?.dataset.popoverSourceId).toBe('More');
 
     app.unmount();
   });
@@ -704,7 +723,9 @@ describe('Menu', () => {
       trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key }));
       await nextTick();
 
+      const menu = container.querySelector<HTMLElement>('[role="menu"]');
       expect(document.activeElement).toBe(menuItems[expectedIndex]);
+      expect(menu?.dataset.popoverSourceId).toBe('Open dropdown menu');
 
       app.unmount();
     }

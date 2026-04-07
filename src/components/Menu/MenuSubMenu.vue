@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, nextTick, onUnmounted, provide, ref, useId, useTemplateRef, watch } from 'vue';
+import { computed, inject, nextTick, onUnmounted, provide, ref, useTemplateRef, watch } from 'vue';
 import Menu, { type MenuColor } from './Menu.vue';
 import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
 
@@ -23,7 +23,7 @@ type MenuSubMenuProps = {
 };
 
 type MenuExposed = {
-  show: (focusFirst?: boolean) => Promise<void>;
+  show: (focusFirst?: boolean, source?: HTMLElement) => Promise<void>;
   hide: () => void;
   menuRef: HTMLDivElement | null;
 };
@@ -46,7 +46,6 @@ const wrapperRef = useTemplateRef<HTMLDivElement>('wrapper');
 const triggerRef = useTemplateRef<HTMLDivElement>('trigger');
 const submenuMenuRef = useTemplateRef<MenuExposed>('submenuMenu');
 
-const anchorName = `--menu-submenu-anchor-${useId()}`;
 const resolvedColor = computed(() => props.color ?? parentMenu?.getColor() ?? 'standard');
 const safeTriangle = ref<Triangle | null>(null);
 
@@ -96,19 +95,6 @@ function onTriggerPointerDown() {
   suppressFocusOpenUntil = performance.now() + 500;
 }
 
-function syncAnchor() {
-  const trigger = triggerRef.value;
-  const submenuMenu = submenuMenuRef.value?.menuRef;
-
-  if (trigger) {
-    trigger.style.setProperty('anchor-name', anchorName);
-  }
-
-  if (submenuMenu) {
-    submenuMenu.style.setProperty('position-anchor', anchorName);
-  }
-}
-
 function clearSafeTriangle() {
   safeTriangle.value = null;
 
@@ -153,9 +139,10 @@ const closeSubmenuSelf = () => {
 
 async function openSubmenu(focusFirst = false) {
   parentMenu?.closeSubmenus(closeSubmenuSelf);
+  const source = triggerRef.value?.querySelector<HTMLElement>('[role="menuitem"]') ?? undefined;
 
   if (submenuMenuRef.value) {
-    await submenuMenuRef.value.show(focusFirst);
+    await submenuMenuRef.value.show(focusFirst, source);
     return;
   }
 
@@ -357,11 +344,6 @@ function onTriggerKeydown(event: KeyboardEvent) {
   void openSubmenu(true);
 }
 
-watch([triggerRef, submenuMenuRef], syncAnchor, {
-  immediate: true,
-  flush: 'post',
-});
-
 watch(
   open,
   (nextOpen) => {
@@ -413,8 +395,6 @@ provide(menuSubmenuContextKey, {
 onUnmounted(() => {
   clearSafeTriangle();
   unregisterSubmenu?.();
-  triggerRef.value?.style.removeProperty('anchor-name');
-  submenuMenuRef.value?.menuRef?.style.removeProperty('position-anchor');
 });
 </script>
 

@@ -27,10 +27,6 @@ const vDropdownMenu: Directive<HTMLElement, MenuTargetBinding> = {
       return;
     }
 
-    const anchorName = `--dropdown-anchor-${Math.random().toString(36).slice(2)}`;
-    trigger.style.setProperty('anchor-name', anchorName);
-    menu.style.setProperty('position-anchor', anchorName);
-
     let ignoreSyntheticClickUntil = 0;
 
     const restoreTriggerFocusIfMenuClosed = () => {
@@ -50,7 +46,7 @@ const vDropdownMenu: Directive<HTMLElement, MenuTargetBinding> = {
       }
 
       event.preventDefault();
-      toggleMenuElement(menu);
+      toggleMenuElement(menu, { source: trigger });
     };
 
     const onKeydown = (event: KeyboardEvent) => {
@@ -63,6 +59,7 @@ const vDropdownMenu: Directive<HTMLElement, MenuTargetBinding> = {
 
       showMenuElement(menu, {
         focus: event.key === 'ArrowUp' ? 'last' : 'first',
+        source: trigger,
       });
     };
 

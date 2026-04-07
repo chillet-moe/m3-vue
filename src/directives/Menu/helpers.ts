@@ -32,19 +32,43 @@ export function shouldCloseOnOutsideClick(binding: DirectiveBinding<MenuTargetBi
 
 export type MenuShowOptions = {
   focus?: 'first' | 'last';
+  source?: HTMLElement;
 };
 
+function isMenuOpen(menu: HTMLElement) {
+  try {
+    return menu.matches(':popover-open') || menu.dataset.popoverOpen === 'true';
+  } catch {
+    return menu.dataset.popoverOpen === 'true';
+  }
+}
+
 export function showMenuElement(menu: HTMLElement, options: MenuShowOptions = {}) {
+  if (isMenuOpen(menu)) {
+    menu.dataset.popoverOpen = 'true';
+    return;
+  }
+
   menu.dispatchEvent(new CustomEvent('m3-menu:show', { detail: options }));
   menu.dataset.popoverOpen = 'true';
 
   try {
+    if (options.source) {
+      menu.showPopover({ source: options.source });
+      return;
+    }
+
     menu.showPopover();
   } catch {
   }
 }
 
 export function hideMenuElement(menu: HTMLElement) {
+  if (!isMenuOpen(menu)) {
+    delete menu.dataset.popoverOpen;
+    return;
+  }
+
   menu.dispatchEvent(new CustomEvent('m3-menu:hide'));
   delete menu.dataset.popoverOpen;
 
@@ -55,7 +79,7 @@ export function hideMenuElement(menu: HTMLElement) {
 }
 
 export function toggleMenuElement(menu: HTMLElement, options: MenuShowOptions = {}) {
-  if (menu.dataset.popoverOpen === 'true') {
+  if (isMenuOpen(menu)) {
     hideMenuElement(menu);
     return;
   }

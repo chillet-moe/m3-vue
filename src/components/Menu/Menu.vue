@@ -31,6 +31,7 @@ const submenuClosers = new Set<() => void>();
 
 type ExternalMenuShowDetail = {
   focus?: 'first' | 'last';
+  source?: HTMLElement;
 };
 
 function registerSubmenu(close: () => void) {
@@ -56,6 +57,14 @@ function closeMenuChain() {
   parentMenu?.closeAll() ?? hide();
 }
 
+function isMenuOpen(menu: HTMLElement) {
+  try {
+    return menu.matches(':popover-open') || menu.dataset.popoverOpen === 'true';
+  } catch {
+    return menu.dataset.popoverOpen === 'true';
+  }
+}
+
 provide(menuContextKey, {
   id: menuId,
   getColor: () => color,
@@ -67,16 +76,26 @@ provide(menuContextKey, {
   closeSubmenus,
 });
 
-function showMenu() {
+function showMenu(source?: HTMLElement) {
   const menu = menuRef.value;
 
   if (!menu) {
     return;
   }
 
+  if (isMenuOpen(menu)) {
+    menu.dataset.popoverOpen = 'true';
+    return;
+  }
+
   menu.dataset.popoverOpen = 'true';
 
   try {
+    if (source) {
+      menu.showPopover({ source });
+      return;
+    }
+
     menu.showPopover();
   } catch {
   }
@@ -86,6 +105,11 @@ function hideMenu() {
   const menu = menuRef.value;
 
   if (!menu) {
+    return;
+  }
+
+  if (!isMenuOpen(menu)) {
+    delete menu.dataset.popoverOpen;
     return;
   }
 
@@ -120,9 +144,9 @@ function focusItem(index: number) {
   menuItems[normalized]?.focus();
 }
 
-async function show(focusFirst = false) {
+async function show(focusFirst = false, source?: HTMLElement) {
   open.value = true;
-  showMenu();
+  showMenu(source);
 
   if (focusFirst) {
     await nextTick();
@@ -254,11 +278,49 @@ function onMenuFocusIn(event: FocusEvent) {
   closeSubmenus();
 }
 
+function onMenuToggle(event: Event) {
+  const menu = event.currentTarget as HTMLElement | null;
+
+  if (!menu) {
+    return;
+  }
+
+  const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
+  let isOpen = menu.dataset.popoverOpen === 'true';
+
+  if (nextState === 'open') {
+    isOpen = true;
+  } else if (nextState === 'closed') {
+    isOpen = false;
+  } else {
+    isOpen = isMenuOpen(menu);
+  }
+
+  if (isOpen) {
+    menu.dataset.popoverOpen = 'true';
+
+    if (!open.value) {
+      open.value = true;
+    }
+
+    return;
+  }
+
+  delete menu.dataset.popoverOpen;
+  closeSubmenus();
+
+  if (open.value) {
+    open.value = false;
+  }
+}
+
 function onExternalMenuShowWithFocus(event: Event) {
-  const focusTarget = event instanceof CustomEvent ? (event.detail as ExternalMenuShowDetail | undefined)?.focus : undefined;
+  const detail = event instanceof CustomEvent ? (event.detail as ExternalMenuShowDetail | undefined) : undefined;
+  const focusTarget = detail?.focus;
+  const source = detail?.source;
 
   open.value = true;
-  showMenu();
+  showMenu(source);
 
   if (!focusTarget) {
     return;
@@ -340,17 +402,20 @@ defineExpose({
 <template>
   <div
     ref="menu"
-    popover="manual"
+    popover="auto"
     role="menu"
     aria-orientation="vertical"
     class="m3-menu"
     :data-color="color"
     :data-menu-id="menuId"
+    @toggle="onMenuToggle"
     @keydown="onMenuKeydown"
     @click="onMenuClick"
     @focusin="onMenuFocusIn"
   >
-    <slot />
+    <div class="m3-menu-surface">
+      <slot />
+    </div>
   </div>
 </template>
 
