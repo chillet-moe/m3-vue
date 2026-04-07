@@ -14,3 +14,6 @@
 - 优先使用新的平台特性，可以使用 Baseline 2025。如果有兼容性问题，请先询问我。
 - 对于组件的 story，除非是例如 Button/IconButton Button/ButtonGroup 这样的情况，不然不要设定 story 的 title，否则会多一层。
 - 作出修改后，运行 prepublishOnly 任务，确保没有错误。
+- 涉及 CSS 的用法，可以到 https://web.dev/learn/css/ 和 [MDN](https://developer.mozilla.org/) 搜索相关页面，保证使用的是推荐的用法。
+- 对于各种效果，尽可能用 CSS 实现，避免 JS。
+- 偏好使用逻辑属性与逻辑值（https://developer.mozilla.org/zh-CN/docs/Web/CSS/Guides/Logical_properties_and_values）
