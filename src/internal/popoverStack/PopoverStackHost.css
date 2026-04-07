@@ -25,8 +25,8 @@
   opacity: 0;
   transform: translateY(1rem) scale(0.98);
   transition:
-    opacity var(--md-duration-medium2, 200ms) var(--md-timing-function-emphasized, ease),
-    transform var(--md-duration-medium2, 200ms) var(--md-timing-function-emphasized, ease);
+    opacity var(--md-easing),
+    transform var(--md-easing);
 }
 
 .m3-popover-stack-item[data-state='open'] {

@@ -223,9 +223,9 @@
 
   transition:
     opacity var(--md-duration-fast) ease,
-    transform var(--md-duration-medium2) var(--md-easing-emphasized),
-    overlay var(--md-duration-medium2) allow-discrete,
-    display var(--md-duration-medium2) allow-discrete;
+    transform var(--md-easing),
+    overlay var(--md-duration) allow-discrete,
+    display var(--md-duration) allow-discrete;
 }
 
 .m3-menu[popover]:popover-open,
