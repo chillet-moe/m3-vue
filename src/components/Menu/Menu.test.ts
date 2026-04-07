@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
-import { createApp, h, nextTick, ref } from 'vue';
+import { createApp, h, nextTick, ref, withDirectives } from 'vue';
+import { vDropdownMenu } from '@/directives/Menu';
 import Menu from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuGap from './MenuGap.vue';
@@ -53,6 +54,10 @@ function installPopoverPolyfill() {
       },
     });
   }
+}
+
+async function flushMicrotasks() {
+  await Promise.resolve();
 }
 
 describe('Menu', () => {
@@ -644,6 +649,117 @@ describe('Menu', () => {
     await nextTick();
 
     expect(submenu?.hidden).toBe(true);
+
+    app.unmount();
+  });
+
+  it('moves focus into a dropdown menu when opened from the keyboard', async () => {
+    installPopoverPolyfill();
+
+    const createDropdownApp = () =>
+      createApp(() =>
+        h('div', [
+          withDirectives(h('button', { type: 'button' }, 'Open dropdown menu'), [[vDropdownMenu, '#dropdown-menu']]),
+          h(
+            Menu,
+            {
+              id: 'dropdown-menu',
+            },
+            {
+              default: () => [
+                h(MenuContainer, null, {
+                  default: () => [
+                    h(MenuItem, null, { default: () => 'First' }),
+                    h(MenuItem, null, { default: () => 'Second' }),
+                    h(MenuItem, null, { default: () => 'Third' }),
+                  ],
+                }),
+              ],
+            },
+          ),
+        ]));
+
+    for (const [key, expectedIndex] of [
+      ['Enter', 0],
+      [' ', 0],
+      ['ArrowDown', 0],
+      ['ArrowUp', 2],
+    ] as const) {
+      document.body.innerHTML = '';
+
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const app = createDropdownApp();
+      app.mount(container);
+      await nextTick();
+
+      const trigger = container.querySelector<HTMLButtonElement>('button');
+      const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]');
+
+      trigger?.focus();
+      trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key }));
+      await nextTick();
+
+      expect(document.activeElement).toBe(menuItems[expectedIndex]);
+
+      app.unmount();
+    }
+  });
+
+  it('restores focus to the dropdown trigger when the menu closes from keyboard or selection', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h('div', [
+        withDirectives(h('button', { type: 'button' }, 'Open dropdown menu'), [[vDropdownMenu, '#dropdown-menu']]),
+        h(
+          Menu,
+          {
+            id: 'dropdown-menu',
+          },
+          {
+            default: () => [
+              h(MenuContainer, null, {
+                default: () => [
+                  h(MenuItem, null, { default: () => 'First' }),
+                  h(MenuItem, null, { default: () => 'Second' }),
+                ],
+              }),
+            ],
+          },
+        ),
+      ]));
+
+    app.mount(container);
+    await nextTick();
+
+    const trigger = container.querySelector<HTMLButtonElement>('button');
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]');
+
+    trigger?.focus();
+    trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
+    await nextTick();
+
+    menu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'Escape' }));
+    await nextTick();
+    await flushMicrotasks();
+
+    expect(menu?.hidden).toBe(true);
+    expect(document.activeElement).toBe(trigger);
+
+    trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
+    await nextTick();
+    menuItems[0]?.click();
+    await nextTick();
+    await flushMicrotasks();
+
+    expect(menu?.hidden).toBe(true);
+    expect(document.activeElement).toBe(trigger);
 
     app.unmount();
   });

@@ -30,8 +30,12 @@ export function shouldCloseOnOutsideClick(binding: DirectiveBinding<MenuTargetBi
     : true;
 }
 
-export function showMenuElement(menu: HTMLElement) {
-  menu.dispatchEvent(new CustomEvent('m3-menu:show'));
+export type MenuShowOptions = {
+  focus?: 'first' | 'last';
+};
+
+export function showMenuElement(menu: HTMLElement, options: MenuShowOptions = {}) {
+  menu.dispatchEvent(new CustomEvent('m3-menu:show', { detail: options }));
   menu.hidden = false;
   menu.dataset.popoverOpen = 'true';
 
@@ -52,11 +56,11 @@ export function hideMenuElement(menu: HTMLElement) {
   }
 }
 
-export function toggleMenuElement(menu: HTMLElement) {
+export function toggleMenuElement(menu: HTMLElement, options: MenuShowOptions = {}) {
   if (menu.dataset.popoverOpen === 'true') {
     hideMenuElement(menu);
     return;
   }
 
-  showMenuElement(menu);
+  showMenuElement(menu, options);
 }

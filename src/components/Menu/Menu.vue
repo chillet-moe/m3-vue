@@ -29,6 +29,10 @@ const parentSubmenu = inject(menuSubmenuContextKey, null);
 const menuId = `menu-${useId()}`;
 const submenuClosers = new Set<() => void>();
 
+type ExternalMenuShowDetail = {
+  focus?: 'first' | 'last';
+};
+
 function registerSubmenu(close: () => void) {
   submenuClosers.add(close);
 
@@ -245,9 +249,30 @@ function onMenuFocusIn(event: FocusEvent) {
   closeSubmenus();
 }
 
-function onExternalMenuShow() {
+function onExternalMenuShowWithFocus(event: Event) {
+  const focusTarget = event instanceof CustomEvent ? (event.detail as ExternalMenuShowDetail | undefined)?.focus : undefined;
+
   open.value = true;
   showMenu();
+
+  if (!focusTarget) {
+    return;
+  }
+
+  void nextTick(() => {
+    if (focusTarget === 'last') {
+      const menuItems = getMenuItemElements();
+
+      if (!menuItems.length) {
+        return;
+      }
+
+      focusItem(menuItems.length - 1);
+      return;
+    }
+
+    focusItem(0);
+  });
 }
 
 function onExternalMenuHide() {
@@ -277,14 +302,14 @@ watch(
 watch(
   menuRef,
   (menu, previousMenu) => {
-    previousMenu?.removeEventListener('m3-menu:show', onExternalMenuShow);
+    previousMenu?.removeEventListener('m3-menu:show', onExternalMenuShowWithFocus);
     previousMenu?.removeEventListener('m3-menu:hide', onExternalMenuHide);
 
     if (!menu) {
       return;
     }
 
-    menu.addEventListener('m3-menu:show', onExternalMenuShow);
+    menu.addEventListener('m3-menu:show', onExternalMenuShowWithFocus);
     menu.addEventListener('m3-menu:hide', onExternalMenuHide);
   },
   {
@@ -295,7 +320,7 @@ watch(
 
 onUnmounted(() => {
   closeSubmenus();
-  menuRef.value?.removeEventListener('m3-menu:show', onExternalMenuShow);
+  menuRef.value?.removeEventListener('m3-menu:show', onExternalMenuShowWithFocus);
   menuRef.value?.removeEventListener('m3-menu:hide', onExternalMenuHide);
 });
 
