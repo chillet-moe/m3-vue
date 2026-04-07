@@ -29,15 +29,16 @@ describe('normalizeBinding', () => {
     document.body.innerHTML = '';
   });
 
-  it('treats plain strings as content', () => {
-    expect(normalizeBinding('Hello')).toMatchObject({ content: 'Hello', placement: 'top', interactive: true });
+  it('treats plain strings as targets', () => {
+    expect(normalizeBinding('Hello')).toMatchObject({
+      target: 'Hello',
+      placement: 'top',
+      interactive: true,
+      popoverType: 'hint',
+    });
   });
 
-  it('treats matching selectors as targets', () => {
-    const tip = document.createElement('div');
-    tip.id = 'tip';
-    document.body.appendChild(tip);
-
+  it('treats selector strings as targets without resolving them eagerly', () => {
     expect(normalizeBinding('#tip')).toMatchObject({ target: '#tip' });
   });
 
@@ -46,7 +47,7 @@ describe('normalizeBinding', () => {
   });
 
   it('uses 0.25rem as the default offset', () => {
-    expect(normalizeBinding('Hello')).toMatchObject({ offset: '0.25rem' });
+    expect(normalizeBinding({ content: 'Hello' })).toMatchObject({ offset: '0.25rem' });
   });
 });
 
@@ -71,7 +72,7 @@ describe('vTooltip directive', () => {
   it('creates and cleans up a generated tooltip element', () => {
     const el = createTrigger();
 
-    vTooltip.mounted?.(el, { value: 'Tooltip content' } as never);
+    vTooltip.mounted?.(el, { value: { content: 'Tooltip content' } } as never);
 
     const tip = document.body.querySelector('.vtt-popover');
     expect(tip).not.toBeNull();
@@ -86,11 +87,14 @@ describe('vTooltip directive', () => {
   it('rebuilds generated tooltip content on update', () => {
     const el = createTrigger();
 
-    vTooltip.mounted?.(el, { value: 'Old content' } as never);
+    vTooltip.mounted?.(el, { value: { content: 'Old content' } } as never);
     let tip = document.body.querySelector('.vtt-popover');
     expect(tip?.textContent).toBe('Old content');
 
-    vTooltip.updated?.(el, { value: 'New content', oldValue: 'Old content' } as never);
+    vTooltip.updated?.(el, {
+      value: { content: 'New content' },
+      oldValue: { content: 'Old content' },
+    } as never);
     tip = document.body.querySelector('.vtt-popover');
 
     expect(tip?.textContent).toBe('New content');
@@ -98,10 +102,10 @@ describe('vTooltip directive', () => {
 
   it('updates generated tooltip content without rebuilding the element', () => {
     const el = createTrigger();
-    const state = setupTooltip(el, 'Old content', { manual: true });
+    const state = setupTooltip(el, { content: 'Old content' }, { manual: true });
     const tip = state.tip;
 
-    state.update('New content');
+    state.update({ content: 'New content' });
 
     expect(state.tip).toBe(tip);
     expect(tip.textContent).toBe('New content');

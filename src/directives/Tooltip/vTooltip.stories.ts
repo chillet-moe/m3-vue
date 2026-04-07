@@ -12,25 +12,19 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => ({
     components: { Button, Tooltip },
-    setup: () => ({ args }),
+    setup: () => ({
+      args,
+      tooltipTarget: '#tooltip',
+      richTooltipTarget: '#tooltip2',
+    }),
     template: `
       <Button
-          v-tooltip="{
-            target: '#tooltip',
-            placement: 'bottom',
-            interactive: true,
-            popoverType: 'hint',
-          }"
+          v-tooltip="tooltipTarget"
       >
         Button
       </Button>
       <Button
-          v-tooltip="{
-            target: '#tooltip2',
-            placement: 'bottom',
-            interactive: true,
-            popoverType: 'hint',
-          }"
+          v-tooltip="richTooltipTarget"
       >
         Button
       </Button>

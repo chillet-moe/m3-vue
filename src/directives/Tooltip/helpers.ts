@@ -20,12 +20,7 @@ export function normalizeBinding(binding: TooltipBindingValue): NormalizedToolti
   };
 
   if (typeof binding === 'string') {
-    const maybe = binding.trim();
-    // Allow a short string binding to target an existing tooltip element when it looks like a selector.
-    if ((maybe.startsWith('#') || maybe.startsWith('.')) && document.querySelector(maybe)) {
-      return { ...defaults, target: maybe };
-    }
-    return { ...defaults, content: binding };
+    return { ...defaults, target: binding };
   }
 
   if (isEl(binding)) {
