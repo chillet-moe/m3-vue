@@ -35,6 +35,7 @@
     --md-comp-menus-menu-item-shape: var(--md-sys-shape-corner-extra-small);
     --md-comp-menus-gap: 0.125rem;
     --md-comp-menus-group-padding: --dp(4);
+    --md-comp-menus-popover-padding: 0.25rem;
 
     --md-comp-menus-standard-container-color: var(--md-sys-color-surface-container-low);
     --md-comp-menus-standard-section-label-text-color: var(--md-sys-color-on-surface-variant);
@@ -232,6 +233,9 @@
 .m3-menu[popover] {
   position: fixed;
   inset: auto;
+  padding-block: var(--md-comp-menus-popover-padding);
+  position-try-fallbacks: --m3-menu-inline-safe, flip-block, flip-inline, flip-block flip-inline;
+  position-visibility: anchors-visible;
 
   transition:
     opacity 100ms var(--md-timing-function-emphasized-decel),
@@ -246,6 +250,16 @@
 .m3-menu[data-submenu='true'][popover] {
   margin-inline-start: var(--md-comp-menus-gap);
   position-area: inline-end span-block-end;
+  position-try-fallbacks: --m3-submenu-inline-safe, flip-block, flip-inline, flip-block flip-inline;
+}
+
+@position-try --m3-menu-inline-safe {
+  margin-inline: var(--md-comp-menus-popover-padding);
+}
+
+@position-try --m3-submenu-inline-safe {
+  margin-inline-start: calc(var(--md-comp-menus-gap) + var(--md-comp-menus-popover-padding));
+  margin-inline-end: var(--md-comp-menus-popover-padding);
 }
 
 .m3-menu[popover]:popover-open,
