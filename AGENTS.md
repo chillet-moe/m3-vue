@@ -1,3 +1,4 @@
+- 使用 pnpm。
 - 对于 CSS，需要给颜色加上透明度时，可以使用 --translucent 函数（项目中有 postcss 插件提供 polyfill）：
 
   ```css
