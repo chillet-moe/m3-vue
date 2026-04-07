@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, useId, useSlots } from 'vue';
+import { computed, inject, useId, useSlots } from 'vue';
+import { menuContextKey } from './MenuContext';
 
 export type MenuItemProps = {
   /** Disables item interaction. */
@@ -18,6 +19,7 @@ export type MenuItemProps = {
 const { disabled = false, selected = false, submenu = false, submenuOpen = false } = defineProps<MenuItemProps>();
 
 const slots = useSlots();
+const menuContext = inject(menuContextKey, null);
 
 defineSlots<{
   /** Optional leading content, such as an icon. */
@@ -61,6 +63,7 @@ const hasSuffix = computed(() => hasTrailing.value || hasBadge.value || hasTrail
     role="menuitem"
     :disabled="disabled"
     :data-selected="selected ? 'true' : undefined"
+    :data-menu-owner="menuContext?.id"
     :data-has-supporting="hasSupporting ? 'true' : undefined"
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"

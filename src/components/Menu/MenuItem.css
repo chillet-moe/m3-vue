@@ -177,12 +177,22 @@
   letter-spacing: var(--md-comp-menus-menu-item-trailing-supporting-text-tracking);
 }
 
-.m3-menu-container > .m3-menu-item:first-of-type {
+.m3-menu-container > .m3-menu-item:first-child {
   border-start-start-radius: var(--_menu-item-first-start-radius);
   border-start-end-radius: var(--_menu-item-first-end-radius);
 }
 
-.m3-menu-container > .m3-menu-item:last-of-type {
+.m3-menu-container > .m3-menu-submenu:first-child > .m3-menu-submenu-trigger > .m3-menu-item {
+  border-start-start-radius: var(--_menu-item-first-start-radius);
+  border-start-end-radius: var(--_menu-item-first-end-radius);
+}
+
+.m3-menu-container > .m3-menu-item:last-child {
+  border-end-start-radius: var(--_menu-item-last-start-radius);
+  border-end-end-radius: var(--_menu-item-last-end-radius);
+}
+
+.m3-menu-container > .m3-menu-submenu:last-child > .m3-menu-submenu-trigger > .m3-menu-item {
   border-end-start-radius: var(--_menu-item-last-start-radius);
   border-end-end-radius: var(--_menu-item-last-end-radius);
 }

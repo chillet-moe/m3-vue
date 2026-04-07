@@ -6,6 +6,7 @@ import MenuContainer from './MenuContainer.vue';
 import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
 import MenuLabel from './MenuLabel.vue';
+import MenuSubMenu from './MenuSubMenu.vue';
 
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
@@ -196,6 +197,140 @@ describe('Menu', () => {
     menu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'End' }));
 
     expect(document.activeElement).toBe(menuItems[2]);
+
+    app.unmount();
+  });
+
+  it('opens a submenu trigger without emitting select', async () => {
+    installPopoverPolyfill();
+
+    const selectedValues: string[] = [];
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+          onSelect: (_event: MouseEvent, itemElement: HTMLElement) => {
+            selectedValues.push(itemElement.textContent?.trim() ?? '');
+          },
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [
+                h(
+                  MenuSubMenu,
+                  null,
+                  {
+                    trigger: ({ open }: { open: boolean }) =>
+                      h(
+                        MenuItem,
+                        {
+                          submenu: true,
+                          submenuOpen: open,
+                        },
+                        {
+                          default: () => 'More',
+                        },
+                      ),
+                    default: () =>
+                      h(MenuContainer, null, {
+                        default: () => [h(MenuItem, null, { default: () => 'Rename' })],
+                      }),
+                  },
+                ),
+              ],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const trigger = container.querySelector<HTMLButtonElement>('button[role="menuitem"][data-submenu="true"]');
+    trigger?.click();
+    await nextTick();
+
+    expect(selectedValues).toEqual([]);
+
+    const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
+    expect(submenu?.dataset.popoverOpen).toBe('true');
+
+    app.unmount();
+  });
+
+  it('supports keyboard open and close for submenu items', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [
+                h(
+                  MenuSubMenu,
+                  null,
+                  {
+                    trigger: ({ open }: { open: boolean }) =>
+                      h(
+                        MenuItem,
+                        {
+                          submenu: true,
+                          submenuOpen: open,
+                        },
+                        {
+                          default: () => 'More',
+                        },
+                      ),
+                    default: () =>
+                      h(MenuContainer, null, {
+                        default: () => [
+                          h(MenuItem, null, { default: () => 'Child 1' }),
+                          h(MenuItem, null, { default: () => 'Child 2' }),
+                        ],
+                      }),
+                  },
+                ),
+              ],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const trigger = container.querySelector<HTMLButtonElement>('button[role="menuitem"][data-submenu="true"]');
+    trigger?.focus();
+    trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowRight' }));
+    await nextTick();
+
+    const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
+    const nestedItems = submenu?.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]') ?? [];
+
+    expect(submenu?.dataset.popoverOpen).toBe('true');
+    expect(document.activeElement).toBe(nestedItems[0]);
+
+    submenu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowLeft' }));
+    await nextTick();
+
+    expect(submenu?.hidden).toBe(true);
+    expect(document.activeElement).toBe(trigger);
 
     app.unmount();
   });

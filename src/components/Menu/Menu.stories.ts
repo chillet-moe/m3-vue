@@ -8,6 +8,7 @@ import MenuDivider from './MenuDivider.vue';
 import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
 import MenuLabel from './MenuLabel.vue';
+import MenuSubMenu from './MenuSubMenu.vue';
 import type { MenuProps } from './Menu.vue';
 
 const baseItems = `
@@ -17,11 +18,37 @@ const baseItems = `
       Item 1
     </MenuItem>
 
-    <MenuItem submenu>
-      <template #leading><Icon name="content_copy" /></template>
-      Item 2
-      <template #trailing><Icon name="chevron_right" /></template>
-    </MenuItem>
+    <MenuSubMenu v-model:open="submenuOpen">
+      <template #trigger="{ open }">
+        <MenuItem submenu :submenu-open="open">
+          <template #leading><Icon name="content_copy" /></template>
+          Item 2
+          <template #trailing><Icon name="chevron_right" /></template>
+        </MenuItem>
+      </template>
+
+      <MenuContainer>
+        <MenuItem>
+          <template #leading><Icon name="drive_file_rename_outline" /></template>
+          Rename
+        </MenuItem>
+
+        <MenuSubMenu v-model:open="nestedSubmenuOpen">
+          <template #trigger="{ open }">
+            <MenuItem submenu :submenu-open="open">
+              <template #leading><Icon name="share" /></template>
+              Share
+              <template #trailing><Icon name="chevron_right" /></template>
+            </MenuItem>
+          </template>
+
+          <MenuContainer>
+            <MenuItem>Copy link</MenuItem>
+            <MenuItem>Invite user</MenuItem>
+          </MenuContainer>
+        </MenuSubMenu>
+      </MenuContainer>
+    </MenuSubMenu>
 
     <MenuDivider />
 
@@ -52,6 +79,47 @@ const baseItems = `
   </MenuContainer>
 `;
 
+const pureBaseItems = `
+  <MenuContainer>
+    <MenuItem>
+      <template #leading><Icon name="visibility" /></template>
+      Item 1
+    </MenuItem>
+
+    <MenuItem>
+      <template #leading><Icon name="content_copy" /></template>
+      Item 2
+      <template #trailingText>Ctrl+C</template>
+    </MenuItem>
+
+    <MenuDivider />
+
+    <MenuItem selected>
+      <template #leading><Icon name="edit" /></template>
+      Item 3
+      <template #badge>
+        <span
+          style="padding: 0.125rem 0.5rem; border-radius: 999px; background: --translucent(var(--md-sys-color-primary), 0.16); color: var(--md-sys-color-primary);"
+        >
+          New
+        </span>
+      </template>
+    </MenuItem>
+  </MenuContainer>
+
+  <MenuGap />
+
+  <MenuContainer>
+    <MenuLabel>Label text</MenuLabel>
+
+    <MenuItem>
+      <template #leading><Icon name="cloud_queue" /></template>
+      Item 4
+      <template #supporting>Supporting text</template>
+    </MenuItem>
+  </MenuContainer>
+`;
+
 const meta = {
   component: Menu,
   args: {
@@ -62,7 +130,7 @@ const meta = {
 export default meta;
 
 const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
   setup: () => {
     const selected = ref('None');
 
@@ -94,7 +162,7 @@ const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
         style="display: flex; flex-direction: column; gap: var(--md-comp-menus-gap);"
         @click="onStaticMenuClick"
       >
-        ${baseItems}
+        ${pureBaseItems}
       </div>
 
       <div>Selected: {{ selected }}</div>
@@ -103,12 +171,14 @@ const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
 });
 
 const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
   directives: { dropdownMenu: vDropdownMenu },
   setup: () => {
     const selected = ref('None');
+    const submenuOpen = ref(false);
+    const nestedSubmenuOpen = ref(false);
 
-    return { args, selected };
+    return { args, nestedSubmenuOpen, selected, submenuOpen };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
@@ -128,12 +198,14 @@ const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
 });
 
 const ContextDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
   directives: { contextMenu: vContextMenu },
   setup: () => {
     const selected = ref('None');
+    const submenuOpen = ref(false);
+    const nestedSubmenuOpen = ref(false);
 
-    return { args, selected };
+    return { args, nestedSubmenuOpen, selected, submenuOpen };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">

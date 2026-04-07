@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { nextTick, useTemplateRef, watch } from 'vue';
+import { inject, nextTick, onUnmounted, provide, useId, useTemplateRef, watch } from 'vue';
+import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
 
 export type MenuColor = 'standard' | 'vibrant';
 
@@ -23,6 +24,38 @@ defineSlots<{
 }>();
 
 const menuRef = useTemplateRef<HTMLDivElement>('menu');
+const parentMenu = inject(menuContextKey, null);
+const parentSubmenu = inject(menuSubmenuContextKey, null);
+const menuId = `menu-${useId()}`;
+const submenuClosers = new Set<() => void>();
+
+function registerSubmenu(close: () => void) {
+  submenuClosers.add(close);
+
+  return () => {
+    submenuClosers.delete(close);
+  };
+}
+
+function closeSubmenus(except?: () => void) {
+  for (const close of submenuClosers) {
+    if (close === except) {
+      continue;
+    }
+
+    close();
+  }
+}
+
+provide(menuContextKey, {
+  id: menuId,
+  getColor: () => color,
+  notifySelect: (event, itemElement) => {
+    parentMenu?.notifySelect(event, itemElement) ?? emit('select', event, itemElement);
+  },
+  registerSubmenu,
+  closeSubmenus,
+});
 
 function showMenu() {
   const menu = menuRef.value;
@@ -63,9 +96,9 @@ function getMenuItemElements() {
     return [] as HTMLElement[];
   }
 
-  return Array.from(menu.querySelectorAll<HTMLElement>(
-    '[role="menuitem"]:not([disabled]):not([aria-disabled="true"])',
-  ));
+  return Array.from(
+    menu.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled]):not([aria-disabled="true"])'),
+  ).filter((item) => item.dataset.menuOwner === menuId);
 }
 
 function focusItem(index: number) {
@@ -90,6 +123,7 @@ async function show(focusFirst = false) {
 }
 
 function hide() {
+  closeSubmenus();
   open.value = false;
   hideMenu();
 }
@@ -118,30 +152,46 @@ function onMenuKeydown(event: KeyboardEvent) {
 
   if (event.key === 'ArrowDown') {
     event.preventDefault();
+    closeSubmenus();
     focusItem(currentIndex + 1);
     return;
   }
 
   if (event.key === 'ArrowUp') {
     event.preventDefault();
+    closeSubmenus();
     focusItem(currentIndex - 1);
     return;
   }
 
   if (event.key === 'Home') {
     event.preventDefault();
+    closeSubmenus();
     focusItem(0);
     return;
   }
 
   if (event.key === 'End') {
     event.preventDefault();
+    closeSubmenus();
     focusItem(menuItems.length - 1);
+    return;
+  }
+
+  if (event.key === 'ArrowLeft' && parentSubmenu) {
+    event.preventDefault();
+    parentSubmenu.closeAndFocusTrigger();
     return;
   }
 
   if (event.key === 'Escape') {
     event.preventDefault();
+
+    if (parentSubmenu) {
+      parentSubmenu.closeAndFocusTrigger();
+      return;
+    }
+
     hide();
   }
 }
@@ -155,11 +205,41 @@ function onMenuClick(event: MouseEvent) {
 
   const item = target.closest<HTMLElement>('[role="menuitem"]');
 
-  if (!item || item.matches('[disabled], [aria-disabled="true"]')) {
+  if (!item || item.dataset.menuOwner !== menuId || item.matches('[disabled], [aria-disabled="true"]')) {
     return;
   }
 
-  emit('select', event, item);
+  if (item.dataset.submenu === 'true') {
+    return;
+  }
+
+  closeSubmenus();
+  parentMenu?.notifySelect(event, item) ?? emit('select', event, item);
+}
+
+function onMenuFocusIn(event: FocusEvent) {
+  const target = event.target as HTMLElement | null;
+
+  if (!target) {
+    return;
+  }
+
+  const item = target.closest<HTMLElement>('[role="menuitem"]');
+
+  if (!item || item.dataset.menuOwner !== menuId || item.dataset.submenu === 'true') {
+    return;
+  }
+
+  closeSubmenus();
+}
+
+function onExternalMenuShow() {
+  open.value = true;
+  showMenu();
+}
+
+function onExternalMenuHide() {
+  hide();
 }
 
 watch(
@@ -182,6 +262,31 @@ watch(
   },
 );
 
+watch(
+  menuRef,
+  (menu, previousMenu) => {
+    previousMenu?.removeEventListener('m3-menu:show', onExternalMenuShow);
+    previousMenu?.removeEventListener('m3-menu:hide', onExternalMenuHide);
+
+    if (!menu) {
+      return;
+    }
+
+    menu.addEventListener('m3-menu:show', onExternalMenuShow);
+    menu.addEventListener('m3-menu:hide', onExternalMenuHide);
+  },
+  {
+    immediate: true,
+    flush: 'post',
+  },
+);
+
+onUnmounted(() => {
+  closeSubmenus();
+  menuRef.value?.removeEventListener('m3-menu:show', onExternalMenuShow);
+  menuRef.value?.removeEventListener('m3-menu:hide', onExternalMenuHide);
+});
+
 defineExpose({
   menuRef,
   show,
@@ -198,9 +303,11 @@ defineExpose({
     aria-orientation="vertical"
     class="m3-menu"
     :data-color="color"
+    :data-menu-id="menuId"
     :hidden="open ? undefined : true"
     @keydown="onMenuKeydown"
     @click="onMenuClick"
+    @focusin="onMenuFocusIn"
   >
     <slot />
   </div>

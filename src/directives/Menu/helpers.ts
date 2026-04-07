@@ -31,6 +31,7 @@ export function shouldCloseOnOutsideClick(binding: DirectiveBinding<MenuTargetBi
 }
 
 export function showMenuElement(menu: HTMLElement) {
+  menu.dispatchEvent(new CustomEvent('m3-menu:show'));
   menu.hidden = false;
   menu.dataset.popoverOpen = 'true';
 
@@ -41,6 +42,7 @@ export function showMenuElement(menu: HTMLElement) {
 }
 
 export function hideMenuElement(menu: HTMLElement) {
+  menu.dispatchEvent(new CustomEvent('m3-menu:hide'));
   delete menu.dataset.popoverOpen;
   menu.hidden = true;
 

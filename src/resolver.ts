@@ -19,6 +19,7 @@ export const m3VueComponentNames = [
   'MenuGap',
   'MenuItem',
   'MenuLabel',
+  'MenuSubMenu',
   'Radio',
   'Slider',
   'Snackbar',
