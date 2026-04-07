@@ -40,6 +40,8 @@
 
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  /* Safari stretches auto grid rows when the dialog resolves extra block-size. */
+  align-content: start;
   row-gap: 1rem;
 
   inline-size: min(35rem, calc(100vi - 3rem));
