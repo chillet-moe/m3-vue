@@ -3,6 +3,8 @@
 @layer tokens {
   .m3-menu {
     --md-comp-menus-container-shape: var(--md-sys-shape-corner-large);
+    --md-comp-menus-active-container-shape: var(--md-sys-shape-corner-large);
+    --md-comp-menus-inactive-container-shape: var(--md-sys-shape-corner-small);
     --md-comp-menu-container-elevation: var(--md-sys-elevation-level2);
     --md-comp-menu-container-shadow-color: var(--md-sys-color-shadow);
 
@@ -17,26 +19,22 @@
     --md-comp-menus-menu-item-supporting-text-tracking: var(--md-sys-typescale-body-small-tracking);
     --md-comp-menus-menu-item-supporting-text-weight: var(--md-sys-typescale-body-small-weight);
     --md-comp-menus-menu-item-trailing-supporting-text-font: var(--md-sys-typescale-label-large-font);
-    --md-comp-menus-menu-item-trailing-supporting-text-line-height: var(
-      --md-sys-typescale-label-large-line-height
-    );
+    --md-comp-menus-menu-item-trailing-supporting-text-line-height: var(--md-sys-typescale-label-large-line-height);
     --md-comp-menus-menu-item-trailing-supporting-text-size: var(--md-sys-typescale-label-large-size);
-    --md-comp-menus-menu-item-trailing-supporting-text-tracking: var(
-      --md-sys-typescale-label-large-tracking
-    );
+    --md-comp-menus-menu-item-trailing-supporting-text-tracking: var(--md-sys-typescale-label-large-tracking);
     --md-comp-menus-menu-item-trailing-supporting-text-weight: var(--md-sys-typescale-label-large-weight);
 
-    --md-comp-menus-menu-item-height: 2.75rem;
-    --md-comp-menus-menu-item-top-space: 0.5rem;
-    --md-comp-menus-menu-item-bottom-space: 0.5rem;
-    --md-comp-menus-menu-item-leading-space: 1rem;
-    --md-comp-menus-menu-item-trailing-space: 1rem;
-    --md-comp-menus-menu-item-between-space: 0.75rem;
-    --md-comp-menus-menu-item-leading-icon-size: 1.25rem;
-    --md-comp-menus-menu-item-trailing-icon-size: 1.25rem;
+    --md-comp-menus-menu-item-height: --dp(48);
+    --md-comp-menus-menu-item-top-space: --dp(12);
+    --md-comp-menus-menu-item-bottom-space: --dp(12);
+    --md-comp-menus-menu-item-leading-space: --dp(12);
+    --md-comp-menus-menu-item-trailing-space: --dp(12);
+    --md-comp-menus-menu-item-between-space: --dp(12);
+    --md-comp-menus-menu-item-leading-icon-size: --dp(20);
+    --md-comp-menus-menu-item-trailing-icon-size: --dp(20);
     --md-comp-menus-menu-item-shape: var(--md-sys-shape-corner-extra-small);
     --md-comp-menus-gap: 0.125rem;
-    --md-comp-menus-group-padding: 0.125rem;
+    --md-comp-menus-group-padding: --dp(4);
 
     --md-comp-menus-standard-container-color: var(--md-sys-color-surface-container-low);
     --md-comp-menus-standard-section-label-text-color: var(--md-sys-color-on-surface-variant);
@@ -132,7 +130,9 @@
   --_menu-item-selected-disabled-container-opacity: 0.38;
   --_menu-item-selected-disabled-label-color: var(--md-comp-menus-standard-menu-item-selected-label-text-color);
   --_menu-item-selected-disabled-label-opacity: 0.38;
-  --_menu-item-selected-disabled-supporting-color: var(--md-comp-menus-standard-menu-item-selected-supporting-text-color);
+  --_menu-item-selected-disabled-supporting-color: var(
+    --md-comp-menus-standard-menu-item-selected-supporting-text-color
+  );
   --_menu-item-selected-disabled-supporting-opacity: 0.38;
   --_menu-item-selected-disabled-leading-icon-color: var(
     --md-comp-menus-standard-menu-item-selected-leading-icon-color
@@ -184,11 +184,11 @@
   --_menu-item-selected-disabled-container-opacity: 0.38;
   --_menu-item-selected-disabled-label-color: var(--md-comp-menus-vibrant-menu-item-selected-label-text-color);
   --_menu-item-selected-disabled-label-opacity: 0.38;
-  --_menu-item-selected-disabled-supporting-color: var(--md-comp-menus-vibrant-menu-item-selected-supporting-text-color);
-  --_menu-item-selected-disabled-supporting-opacity: 0.38;
-  --_menu-item-selected-disabled-leading-icon-color: var(
-    --md-comp-menus-vibrant-menu-item-selected-leading-icon-color
+  --_menu-item-selected-disabled-supporting-color: var(
+    --md-comp-menus-vibrant-menu-item-selected-supporting-text-color
   );
+  --_menu-item-selected-disabled-supporting-opacity: 0.38;
+  --_menu-item-selected-disabled-leading-icon-color: var(--md-comp-menus-vibrant-menu-item-selected-leading-icon-color);
   --_menu-item-selected-disabled-leading-icon-opacity: 0.38;
   --_menu-item-selected-disabled-trailing-icon-color: var(
     --md-comp-menus-vibrant-menu-item-selected-trailing-icon-color
@@ -242,6 +242,11 @@
 }
 
 .m3-menu-container {
+  --_menu-item-first-start-radius: var(--md-comp-menus-inactive-container-shape);
+  --_menu-item-first-end-radius: var(--md-comp-menus-inactive-container-shape);
+  --_menu-item-last-start-radius: var(--md-comp-menus-inactive-container-shape);
+  --_menu-item-last-end-radius: var(--md-comp-menus-inactive-container-shape);
+
   padding: var(--md-comp-menus-group-padding);
   min-inline-size: 10rem;
   max-inline-size: min(22rem, calc(100vw - 2rem));
@@ -249,9 +254,23 @@
   display: flex;
   flex-direction: column;
 
-  border-radius: var(--md-comp-menus-container-shape);
+  border-radius: var(--md-comp-menus-inactive-container-shape);
   background: var(--_menu-container-color);
   box-shadow: var(--md-comp-menu-container-elevation);
+}
+
+.m3-menu-container:first-of-type {
+  --_menu-item-first-start-radius: var(--md-comp-menus-active-container-shape);
+  --_menu-item-first-end-radius: var(--md-comp-menus-active-container-shape);
+  border-start-start-radius: var(--md-comp-menus-active-container-shape);
+  border-start-end-radius: var(--md-comp-menus-active-container-shape);
+}
+
+.m3-menu-container:last-of-type {
+  --_menu-item-last-start-radius: var(--md-comp-menus-active-container-shape);
+  --_menu-item-last-end-radius: var(--md-comp-menus-active-container-shape);
+  border-end-start-radius: var(--md-comp-menus-active-container-shape);
+  border-end-end-radius: var(--md-comp-menus-active-container-shape);
 }
 
 .m3-menu-label {

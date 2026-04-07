@@ -255,6 +255,7 @@
 
     --md-sys-state-focus-indicator-thickness: --dp(3);
     --md-sys-state-focus-indicator-outer-offset: --dp(2);
+    --md-sys-state-focus-indicator-inner-offset: --dp(-3);
 
     --md-sys-state-hover-state-layer-opacity: 0.08;
     --md-sys-state-focus-state-layer-opacity: 0.1;

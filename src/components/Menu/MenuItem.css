@@ -15,7 +15,7 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  column-gap: var(--md-comp-menus-menu-item-between-space, 0.75rem);
+  column-gap: var(--md-comp-menus-menu-item-between-space);
   inline-size: 100%;
   box-sizing: border-box;
 
@@ -116,8 +116,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-inline-size: var(--md-comp-menus-menu-item-leading-icon-size, 1.25rem);
-  min-block-size: var(--md-comp-menus-menu-item-leading-icon-size, 1.25rem);
+  min-inline-size: var(--md-comp-menus-menu-item-leading-icon-size);
+  min-block-size: var(--md-comp-menus-menu-item-leading-icon-size);
+  font-size: var(--md-comp-menus-menu-item-leading-icon-size);
 }
 
 .m3-menu-item-leading {
@@ -177,11 +178,11 @@
 }
 
 .m3-menu-container > .m3-menu-item:first-of-type {
-  border-start-start-radius: var(--md-sys-shape-corner-medium);
-  border-start-end-radius: var(--md-sys-shape-corner-medium);
+  border-start-start-radius: var(--_menu-item-first-start-radius);
+  border-start-end-radius: var(--_menu-item-first-end-radius);
 }
 
 .m3-menu-container > .m3-menu-item:last-of-type {
-  border-end-start-radius: var(--md-sys-shape-corner-medium);
-  border-end-end-radius: var(--md-sys-shape-corner-medium);
+  border-end-start-radius: var(--_menu-item-last-start-radius);
+  border-end-end-radius: var(--_menu-item-last-end-radius);
 }
