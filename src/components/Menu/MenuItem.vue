@@ -77,7 +77,7 @@ const hasSuffix = computed(() => hasTrailing.value || hasBadge.value || hasTrail
     :data-close-on-select="closeOnSelect ? undefined : 'false'"
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"
-    :aria-expanded="submenu ? String(submenuOpen) : undefined"
+    :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
     :aria-describedby="hasSupporting ? supportingId : undefined"
     :class="['state-layer', 'm3-menu-item']"
   >
