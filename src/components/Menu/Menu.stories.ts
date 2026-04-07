@@ -1,7 +1,8 @@
 import type { Meta, StoryFn } from '@storybook/vue3-vite';
 import { ref } from 'vue';
-import { vDropdownMenu, vContextMenu } from '@/directives/Menu';
+import { vContextMenu, vDropdownMenu } from '@/directives/Menu';
 import Icon from '@/components/Icon/Icon.vue';
+import type { MenuProps } from './Menu.vue';
 import Menu from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuDivider from './MenuDivider.vue';
@@ -9,7 +10,7 @@ import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
 import MenuLabel from './MenuLabel.vue';
 import MenuSubMenu from './MenuSubMenu.vue';
-import type { MenuProps } from './Menu.vue';
+import { Button } from '@/components/Button';
 
 const baseItems = `
   <MenuContainer>
@@ -168,49 +169,8 @@ const meta = {
 
 export default meta;
 
-const PureComponentTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
-  setup: () => {
-    const selected = ref('None');
-
-    const onStaticMenuClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement | null;
-
-      if (!target) {
-        return;
-      }
-
-      const item = target.closest<HTMLElement>('[role="menuitem"]');
-
-      if (!item || item.matches('[disabled], [aria-disabled="true"]')) {
-        return;
-      }
-
-      selected.value = item.textContent?.trim() ?? 'None';
-    };
-
-    return { args, onStaticMenuClick, selected };
-  },
-  template: `
-    <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
-      <div
-        role="menu"
-        aria-orientation="vertical"
-        class="m3-menu"
-        :data-color="args.color"
-        style="display: flex; flex-direction: column; gap: var(--md-comp-menus-gap);"
-        @click="onStaticMenuClick"
-      >
-        ${pureBaseItems}
-      </div>
-
-      <div>Selected: {{ selected }}</div>
-    </div>
-  `,
-});
-
 const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu, Button },
   directives: { dropdownMenu: vDropdownMenu },
   setup: () => {
     const selected = ref('None');
@@ -221,7 +181,7 @@ const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
-      <button v-dropdown-menu="'#dropdown-menu'">Open dropdown menu</button>
+      <Button v-dropdown-menu="'#dropdown-menu'">Open dropdown menu</Button>
 
       <Menu
         id="dropdown-menu"
@@ -282,7 +242,7 @@ const ContextDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
 });
 
 const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
-  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu, Button },
   directives: { dropdownMenu: vDropdownMenu },
   setup: () => {
     const submenuOpen = ref(false);
@@ -292,10 +252,11 @@ const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
       <div style="max-inline-size: 28rem; color: var(--md-sys-color-on-surface-variant);">
-        Open the menu, hover "Move toward submenu", then move diagonally into the child menu. The colored cone is the safe triangle that keeps the submenu open during mouse travel.
+        Open the menu, hover "Move toward submenu", then move diagonally into the child menu. The colored cone is the
+        safe triangle that keeps the submenu open during mouse travel.
       </div>
 
-      <button v-dropdown-menu="'#safe-triangle-menu'">Open safe triangle demo</button>
+      <Button v-dropdown-menu="'#safe-triangle-menu'">Open safe triangle demo</Button>
 
       <Menu id="safe-triangle-menu" v-bind="args">
         ${safeTriangleItems}
@@ -304,7 +265,6 @@ const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   `,
 });
 
-export const PureComponent = PureComponentTemplate.bind({});
 export const DropdownDirective = DropdownDirectiveTemplate.bind({});
 export const ContextDirective = ContextDirectiveTemplate.bind({});
 export const SafeTriangle = SafeTriangleTemplate.bind({});
