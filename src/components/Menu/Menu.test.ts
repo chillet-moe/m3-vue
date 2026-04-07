@@ -78,7 +78,7 @@ describe('Menu', () => {
     app.unmount();
   });
 
-  it('emits select from slotted MenuItem and ignores disabled item', async () => {
+  it('emits select from slotted MenuItem, closes by default, and ignores disabled item', async () => {
     installPopoverPolyfill();
 
     const selectedValues: string[] = [];
@@ -111,12 +111,58 @@ describe('Menu', () => {
     app.mount(container);
     await nextTick();
 
+    const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
     const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]');
 
     menuItems[0]?.click();
+    await nextTick();
     menuItems[1]?.click();
 
     expect(selectedValues).toEqual(['Edit']);
+    expect(menu?.hidden).toBe(true);
+
+    app.unmount();
+  });
+
+  it('keeps the menu open when MenuItem closeOnSelect is false', async () => {
+    installPopoverPolyfill();
+
+    const selectedValues: string[] = [];
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+          onSelect: (_event: MouseEvent, itemElement: HTMLElement) => {
+            selectedValues.push(itemElement.textContent?.trim() ?? '');
+          },
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [h(MenuItem, { closeOnSelect: false }, { default: () => 'Keep open' })],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
+    const menuItem = container.querySelector<HTMLButtonElement>('button[role="menuitem"]');
+
+    menuItem?.click();
+    await nextTick();
+
+    expect(selectedValues).toEqual(['Keep open']);
+    expect(menu?.hidden).toBe(false);
+    expect(menu?.dataset.popoverOpen).toBe('true');
 
     app.unmount();
   });
@@ -331,6 +377,77 @@ describe('Menu', () => {
 
     expect(submenu?.hidden).toBe(true);
     expect(document.activeElement).toBe(trigger);
+
+    app.unmount();
+  });
+
+  it('closes the full menu chain when selecting a submenu item', async () => {
+    installPopoverPolyfill();
+
+    const selectedValues: string[] = [];
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+          onSelect: (_event: MouseEvent, itemElement: HTMLElement) => {
+            selectedValues.push(itemElement.textContent?.trim() ?? '');
+          },
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [
+                h(
+                  MenuSubMenu,
+                  null,
+                  {
+                    trigger: ({ open }: { open: boolean }) =>
+                      h(
+                        MenuItem,
+                        {
+                          submenu: true,
+                          submenuOpen: open,
+                        },
+                        {
+                          default: () => 'More',
+                        },
+                      ),
+                    default: () =>
+                      h(MenuContainer, null, {
+                        default: () => [h(MenuItem, null, { default: () => 'Rename' })],
+                      }),
+                  },
+                ),
+              ],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const rootMenu = container.querySelector<HTMLElement>('.m3-menu:not([data-submenu="true"])');
+    const trigger = container.querySelector<HTMLButtonElement>('button[role="menuitem"][data-submenu="true"]');
+
+    trigger?.click();
+    await nextTick();
+
+    const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
+    const submenuItem = submenu?.querySelector<HTMLButtonElement>('button[role="menuitem"]');
+
+    submenuItem?.click();
+    await nextTick();
+
+    expect(selectedValues).toEqual(['Rename']);
+    expect(rootMenu?.hidden).toBe(true);
+    expect(submenu?.hidden).toBe(true);
 
     app.unmount();
   });

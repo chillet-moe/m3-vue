@@ -47,12 +47,18 @@ function closeSubmenus(except?: () => void) {
   }
 }
 
+function closeMenuChain() {
+  parentSubmenu?.close();
+  parentMenu?.closeAll() ?? hide();
+}
+
 provide(menuContextKey, {
   id: menuId,
   getColor: () => color,
   notifySelect: (event, itemElement) => {
     parentMenu?.notifySelect(event, itemElement) ?? emit('select', event, itemElement);
   },
+  closeAll: closeMenuChain,
   registerSubmenu,
   closeSubmenus,
 });
@@ -213,8 +219,14 @@ function onMenuClick(event: MouseEvent) {
     return;
   }
 
+  const shouldCloseOnSelect = item.dataset.closeOnSelect !== 'false';
+
   closeSubmenus();
   parentMenu?.notifySelect(event, item) ?? emit('select', event, item);
+
+  if (shouldCloseOnSelect) {
+    closeMenuChain();
+  }
 }
 
 function onMenuFocusIn(event: FocusEvent) {

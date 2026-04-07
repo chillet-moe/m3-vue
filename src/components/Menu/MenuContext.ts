@@ -5,6 +5,7 @@ export type MenuContext = {
   id: string;
   getColor: () => MenuColor;
   notifySelect: (event: MouseEvent, itemElement: HTMLElement) => void;
+  closeAll: () => void;
   registerSubmenu: (close: () => void) => () => void;
   closeSubmenus: (except?: () => void) => void;
 };

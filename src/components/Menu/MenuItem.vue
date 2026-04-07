@@ -6,6 +6,9 @@ export type MenuItemProps = {
   /** Disables item interaction. */
   disabled?: boolean;
 
+  /** Whether selecting this item should close the menu chain. Ignored for submenu triggers. */
+  closeOnSelect?: boolean;
+
   /** Marks item as selected/active. */
   selected?: boolean;
 
@@ -16,7 +19,13 @@ export type MenuItemProps = {
   submenuOpen?: boolean;
 };
 
-const { disabled = false, selected = false, submenu = false, submenuOpen = false } = defineProps<MenuItemProps>();
+const {
+  disabled = false,
+  closeOnSelect = true,
+  selected = false,
+  submenu = false,
+  submenuOpen = false,
+} = defineProps<MenuItemProps>();
 
 const slots = useSlots();
 const menuContext = inject(menuContextKey, null);
@@ -65,6 +74,7 @@ const hasSuffix = computed(() => hasTrailing.value || hasBadge.value || hasTrail
     :data-selected="selected ? 'true' : undefined"
     :data-menu-owner="menuContext?.id"
     :data-has-supporting="hasSupporting ? 'true' : undefined"
+    :data-close-on-select="closeOnSelect ? undefined : 'false'"
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"
     :aria-expanded="submenu ? String(submenuOpen) : undefined"
