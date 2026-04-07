@@ -11,26 +11,32 @@ const repoRoot = path.resolve(__dirname, '..');
 describe('M3VueResolver', () => {
   it('resolves known components to @chillet/m3-vue', () => {
     const resolver = M3VueResolver();
+    const resolve = typeof resolver === 'function'
+      ? resolver
+      : resolver.resolve;
 
-    expect(resolver.resolve?.('Button')).toEqual({
+    expect(resolve('Button')).toEqual({
       name: 'Button',
       from: '@chillet/m3-vue',
     });
-    expect(resolver.resolve?.('Tooltip')).toEqual({
+    expect(resolve('Tooltip')).toEqual({
       name: 'Tooltip',
       from: '@chillet/m3-vue',
     });
-    expect(resolver.resolve?.('Unknown')).toBeUndefined();
+    expect(resolve('Unknown')).toBeUndefined();
   });
 
   it('supports prefixed component names', () => {
     const resolver = M3VueResolver({ prefix: 'M3' });
+    const resolve = typeof resolver === 'function'
+      ? resolver
+      : resolver.resolve;
 
-    expect(resolver.resolve?.('M3Button')).toEqual({
+    expect(resolve('M3Button')).toEqual({
       name: 'Button',
       from: '@chillet/m3-vue',
     });
-    expect(resolver.resolve?.('Button')).toBeUndefined();
+    expect(resolve('Button')).toBeUndefined();
   });
 
   it('keeps resolver components in sync with src/components', async () => {

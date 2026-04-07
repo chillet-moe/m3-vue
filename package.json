@@ -37,7 +37,7 @@
     "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
     "prepublishOnly": "pnpm run build && pnpm run build:types",
     "test": "vitest run",
-    "typecheck": "vue-tsc --noEmit",
+    "typecheck": "vue-tsc -b",
     "story:dev": "storybook dev -p 6006 --no-open",
     "story:build": "storybook build",
     "story:preview": "vite preview --host --outDir=storybook-static",

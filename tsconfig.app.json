@@ -6,7 +6,7 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "tsBuildInfoFile": "./.tsconfig.app.tsbuildinfo",
     "types": [
       "vite/client"
     ],
@@ -22,13 +22,10 @@
         "./src/*"
       ]
     },
-    "outDir": "./dist/",
     "isolatedModules": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
-    "noEmit": false,
-    "declaration": true,
-    "declarationMap": true
+    "noEmit": true
   },
   "include": [
     "env.d.ts",

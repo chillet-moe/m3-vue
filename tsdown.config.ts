@@ -26,10 +26,6 @@ export default defineConfig({
 
   inputOptions: {
     preserveEntrySignatures: 'allow-extension',
-    experimental: {
-      // Causes major issues with advancedChunks. Not really important here anyway.
-      strictExecutionOrder: false,
-    },
   },
 
   outputOptions: {
