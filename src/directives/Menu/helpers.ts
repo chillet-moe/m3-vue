@@ -36,7 +36,6 @@ export type MenuShowOptions = {
 
 export function showMenuElement(menu: HTMLElement, options: MenuShowOptions = {}) {
   menu.dispatchEvent(new CustomEvent('m3-menu:show', { detail: options }));
-  menu.hidden = false;
   menu.dataset.popoverOpen = 'true';
 
   try {
@@ -48,7 +47,6 @@ export function showMenuElement(menu: HTMLElement, options: MenuShowOptions = {}
 export function hideMenuElement(menu: HTMLElement) {
   menu.dispatchEvent(new CustomEvent('m3-menu:hide'));
   delete menu.dataset.popoverOpen;
-  menu.hidden = true;
 
   try {
     menu.hidePopover();

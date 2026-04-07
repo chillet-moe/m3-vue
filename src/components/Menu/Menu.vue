@@ -74,7 +74,6 @@ function showMenu() {
     return;
   }
 
-  menu.hidden = false;
   menu.dataset.popoverOpen = 'true';
 
   try {
@@ -91,7 +90,6 @@ function hideMenu() {
   }
 
   delete menu.dataset.popoverOpen;
-  menu.hidden = true;
 
   try {
     menu.hidePopover();
@@ -348,7 +346,6 @@ defineExpose({
     class="m3-menu"
     :data-color="color"
     :data-menu-id="menuId"
-    :hidden="open ? undefined : true"
     @keydown="onMenuKeydown"
     @click="onMenuClick"
     @focusin="onMenuFocusIn"

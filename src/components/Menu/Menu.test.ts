@@ -100,7 +100,7 @@ describe('Menu', () => {
     const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
 
     expect(menu).not.toBeNull();
-    expect(menu?.hidden).toBe(true);
+    expect(menu?.dataset.popoverOpen).toBeUndefined();
 
     app.unmount();
   });
@@ -146,7 +146,7 @@ describe('Menu', () => {
     menuItems[1]?.click();
 
     expect(selectedValues).toEqual(['Edit']);
-    expect(menu?.hidden).toBe(true);
+    expect(menu?.dataset.popoverOpen).toBeUndefined();
 
     app.unmount();
   });
@@ -188,7 +188,6 @@ describe('Menu', () => {
     await nextTick();
 
     expect(selectedValues).toEqual(['Keep open']);
-    expect(menu?.hidden).toBe(false);
     expect(menu?.dataset.popoverOpen).toBe('true');
 
     app.unmount();
@@ -394,7 +393,6 @@ describe('Menu', () => {
     trigger?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     await nextTick();
 
-    expect(submenu?.hidden).toBe(true);
     expect(submenu?.dataset.popoverOpen).toBeUndefined();
 
     trigger?.click();
@@ -474,7 +472,7 @@ describe('Menu', () => {
     submenu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowLeft' }));
     await nextTick();
 
-    expect(submenu?.hidden).toBe(true);
+    expect(submenu?.dataset.popoverOpen).toBeUndefined();
     expect(document.activeElement).toBe(trigger);
 
     app.unmount();
@@ -545,8 +543,8 @@ describe('Menu', () => {
     await nextTick();
 
     expect(selectedValues).toEqual(['Rename']);
-    expect(rootMenu?.hidden).toBe(true);
-    expect(submenu?.hidden).toBe(true);
+    expect(rootMenu?.dataset.popoverOpen).toBeUndefined();
+    expect(submenu?.dataset.popoverOpen).toBeUndefined();
 
     app.unmount();
   });
@@ -653,7 +651,7 @@ describe('Menu', () => {
     );
     await nextTick();
 
-    expect(submenu?.hidden).toBe(true);
+    expect(submenu?.dataset.popoverOpen).toBeUndefined();
 
     app.unmount();
   });
@@ -754,7 +752,7 @@ describe('Menu', () => {
     await nextTick();
     await flushMicrotasks();
 
-    expect(menu?.hidden).toBe(true);
+    expect(menu?.dataset.popoverOpen).toBeUndefined();
     expect(document.activeElement).toBe(trigger);
 
     trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
@@ -763,7 +761,7 @@ describe('Menu', () => {
     await nextTick();
     await flushMicrotasks();
 
-    expect(menu?.hidden).toBe(true);
+    expect(menu?.dataset.popoverOpen).toBeUndefined();
     expect(document.activeElement).toBe(trigger);
 
     app.unmount();
