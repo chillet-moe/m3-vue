@@ -7,6 +7,14 @@
   /* 它会被转化为 color: rgba(from #ff0000 r g b / 0.5)) */
   /* CSS 变量也是可以的 */
   ```
+- 如果你看到使用 dp 为单位的样式，dp 是 Android 上的单位，需要转换为 rem。我们规定 1rem = 16，可以使用 --dp 函数（项目中有 postcss 插件提供 polyfill）：
+
+  ```css
+  .element {
+    width: --dp(16);
+  }
+  /* 它会被转化为 width: 1rem; */
+  ```
 - 添加新组件时的注意事项：
   - 参照已有组件。
   - 使用 reference-tokens 里的 token css，参考已有组件的整理方式。
