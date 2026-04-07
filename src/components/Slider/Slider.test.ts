@@ -30,6 +30,23 @@ function createPointerEvent(
   return event;
 }
 
+function setSliderClientSize(slider: HTMLDivElement, { width, height }: { width: number; height: number }) {
+  Object.defineProperties(slider, {
+    clientWidth: { configurable: true, value: width },
+    clientHeight: { configurable: true, value: height },
+  });
+}
+
+async function setSliderInputValue(input: HTMLInputElement, value: number) {
+  input.value = `${value}`;
+  Object.defineProperty(input, 'valueAsNumber', {
+    configurable: true,
+    value,
+  });
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  await nextTick();
+}
+
 describe('Slider', () => {
   afterEach(() => {
     document.body.innerHTML = '';
@@ -321,6 +338,7 @@ describe('Slider', () => {
 
     app.mount(container);
     await nextTick();
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 0));
 
     const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
 
@@ -400,11 +418,124 @@ describe('Slider', () => {
 
     app.mount(container);
     await nextTick();
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 0));
 
     const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
 
     expect(indicator).not.toBeNull();
     expect(indicator!.style.getPropertyValue('translate')).toBe('calc(-1 * 0.25rem) 0');
+
+    app.unmount();
+  });
+
+  it('only renders inset icons for medium and larger sliders', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const currentValue = ref(2);
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            size: 'small',
+            startIcon: 'radio_button_unchecked',
+            endIcon: 'square',
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector('[data-inset-icon="start"]')).toBeNull();
+    expect(container.querySelector('[data-inset-icon="end"]')).toBeNull();
+
+    app.unmount();
+  });
+
+  it('moves the start inset icon to the opposite side when the active segment is too short', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const currentValue = ref(2);
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            startIcon: 'radio_button_unchecked',
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    const input = container.querySelector('input') as HTMLInputElement | null;
+
+    expect(slider).not.toBeNull();
+    expect(input).not.toBeNull();
+
+    setSliderClientSize(slider!, { width: 120, height: 52 });
+    await setSliderInputValue(input!, 3);
+
+    const startInsetIcon = container.querySelector('[data-inset-icon="start"]') as HTMLElement | null;
+    expect(startInsetIcon).not.toBeNull();
+    expect(startInsetIcon!.classList.contains('m3-slider-inset-icon-flipped')).toBe(true);
+    expect(startInsetIcon!.classList.contains('m3-slider-inset-icon-on-inactive')).toBe(true);
+
+    app.unmount();
+  });
+
+  it('moves the end inset icon to the active side when the inactive segment is too short', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const currentValue = ref(6);
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            endIcon: 'square',
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    const input = container.querySelector('input') as HTMLInputElement | null;
+
+    expect(slider).not.toBeNull();
+    expect(input).not.toBeNull();
+
+    setSliderClientSize(slider!, { width: 120, height: 52 });
+    await setSliderInputValue(input!, 7);
+
+    const endInsetIcon = container.querySelector('[data-inset-icon="end"]') as HTMLElement | null;
+    expect(endInsetIcon).not.toBeNull();
+    expect(endInsetIcon!.classList.contains('m3-slider-inset-icon-flipped')).toBe(true);
+    expect(endInsetIcon!.classList.contains('m3-slider-inset-icon-on-active')).toBe(true);
 
     app.unmount();
   });

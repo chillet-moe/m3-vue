@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useKeyModifier } from '@vueuse/core';
 import { setupTooltip } from '@/directives/Tooltip/setup';
+import { Icon } from '@/components/Icon';
 
 export type SliderProps = {
   /** Whether the slider is vertical. */
@@ -30,6 +31,13 @@ export type SliderProps = {
 
   /** The size of the slider. */
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
+
+  /** Name of the inset icon shown at the start side of the track. */
+  startIcon?: string;
+
+  /** Name of the inset icon shown at the end side of the track. */
+  endIcon?: string;
+
   disabled?: boolean;
   valueIndicator?: boolean;
   valueIndicatorPlacement?: 'top' | 'bottom' | 'start' | 'end';
@@ -51,6 +59,8 @@ const {
   lowerLimit,
   upperLimit,
   wheelStep,
+  startIcon,
+  endIcon,
   valueIndicator = true,
   valueIndicatorPlacement: valueIndicatorPlacementProp,
   stopIndicators,
@@ -73,6 +83,23 @@ const valuePercent = computed(() => {
     return percent;
   }
 });
+
+const supportsInsetIcon = computed(() => size === 'medium' || size === 'large' || size === 'extra-large');
+const hasStartInsetIcon = computed(() => supportsInsetIcon.value && Boolean(startIcon));
+const hasEndInsetIcon = computed(() => supportsInsetIcon.value && Boolean(endIcon));
+const hasInsetIcon = computed(() => hasStartInsetIcon.value || hasEndInsetIcon.value);
+const insetIconPopThreshold = computed(() => {
+  switch (size) {
+    default:
+    case 'large':
+    case 'medium':
+      return 40;
+    case 'extra-large':
+      return 56;
+  }
+});
+const startInsetIconName = computed(() => startIcon ?? '');
+const endInsetIconName = computed(() => endIcon ?? '');
 
 watch(value, (newVal) => {
   valueDisplayed.value = newVal;
@@ -139,6 +166,8 @@ const inputRef = useTemplateRef<HTMLInputElement>('input');
 const handleRef = useTemplateRef<HTMLDivElement>('handle');
 const valueIndicatorRef = useTemplateRef<HTMLDivElement>('valueIndicator');
 const valueIndicatorTooltip = shallowRef<ReturnType<typeof setupTooltip> | null>(null);
+const isStartInsetIconFlipped = ref(false);
+const isEndInsetIconFlipped = ref(false);
 
 const isValueIndicatorHovered = ref(false);
 const isValueIndicatorFocused = ref(false);
@@ -146,8 +175,10 @@ const isValueIndicatorDragging = ref(false);
 const isValueDragging = ref(false);
 let syncValueIndicatorFocusFrame = 0;
 let syncValueIndicatorPositionFrame = 0;
+let syncInsetIconPlacementFrame = 0;
 let activePointerId: number | null = null;
 let pointerDownPosition: { x: number; y: number } | null = null;
+let insetIconResizeObserver: ResizeObserver | null = null;
 
 const pointerDragStartDistance = 3;
 
@@ -193,6 +224,47 @@ const stopSyncValueIndicatorPosition = () => {
   }
 };
 
+const stopSyncInsetIconPlacement = () => {
+  if (syncInsetIconPlacementFrame) {
+    window.cancelAnimationFrame(syncInsetIconPlacementFrame);
+    syncInsetIconPlacementFrame = 0;
+  }
+};
+
+const syncInsetIconPlacement = () => {
+  const slider = sliderRef.value;
+
+  if (!slider || !hasInsetIcon.value) {
+    isStartInsetIconFlipped.value = false;
+    isEndInsetIconFlipped.value = false;
+    return;
+  }
+
+  const inlineSize = vertical ? slider.clientHeight : slider.clientWidth;
+  if (inlineSize <= 0) {
+    isStartInsetIconFlipped.value = false;
+    isEndInsetIconFlipped.value = false;
+    return;
+  }
+
+  if (hasStartInsetIcon.value) {
+    isStartInsetIconFlipped.value = inlineSize * valuePercent.value < insetIconPopThreshold.value;
+  } else {
+    isStartInsetIconFlipped.value = false;
+  }
+
+  if (hasEndInsetIcon.value) {
+    isEndInsetIconFlipped.value = inlineSize * (1 - valuePercent.value) < insetIconPopThreshold.value;
+  } else {
+    isEndInsetIconFlipped.value = false;
+  }
+};
+
+const syncInsetIconPlacementLoop = () => {
+  syncInsetIconPlacement();
+  syncInsetIconPlacementFrame = window.requestAnimationFrame(syncInsetIconPlacementLoop);
+};
+
 const syncValueIndicatorPosition = () => {
   valueIndicatorTooltip.value?.reposition();
   syncValueIndicatorPositionFrame = window.requestAnimationFrame(syncValueIndicatorPosition);
@@ -207,6 +279,15 @@ const startSyncValueIndicatorPosition = (event: TransitionEvent) => {
   syncValueIndicatorPositionFrame = window.requestAnimationFrame(syncValueIndicatorPosition);
 };
 
+const startSyncInsetIconPlacement = (event: TransitionEvent) => {
+  if (event.target !== sliderRef.value || event.propertyName !== '--percent' || !hasInsetIcon.value) {
+    return;
+  }
+
+  stopSyncInsetIconPlacement();
+  syncInsetIconPlacementFrame = window.requestAnimationFrame(syncInsetIconPlacementLoop);
+};
+
 const finishSyncValueIndicatorPosition = (event: TransitionEvent) => {
   if (event.target !== sliderRef.value || event.propertyName !== '--percent') {
     return;
@@ -214,6 +295,25 @@ const finishSyncValueIndicatorPosition = (event: TransitionEvent) => {
 
   stopSyncValueIndicatorPosition();
   valueIndicatorTooltip.value?.reposition();
+};
+
+const finishSyncInsetIconPlacement = (event: TransitionEvent) => {
+  if (event.target !== sliderRef.value || event.propertyName !== '--percent') {
+    return;
+  }
+
+  stopSyncInsetIconPlacement();
+  syncInsetIconPlacement();
+};
+
+const onPercentTransitionStart = (event: TransitionEvent) => {
+  startSyncValueIndicatorPosition(event);
+  startSyncInsetIconPlacement(event);
+};
+
+const onPercentTransitionFinish = (event: TransitionEvent) => {
+  finishSyncValueIndicatorPosition(event);
+  finishSyncInsetIconPlacement(event);
 };
 
 const syncValueIndicatorVisibility = () => {
@@ -370,10 +470,37 @@ const onValueIndicatorKeyDown = () => {
   scheduleSyncValueIndicatorFocusedState();
 };
 
+const syncInsetIconResizeObserver = () => {
+  insetIconResizeObserver?.disconnect();
+  insetIconResizeObserver = null;
+
+  if (!hasInsetIcon.value || typeof ResizeObserver === 'undefined' || !sliderRef.value) {
+    return;
+  }
+
+  insetIconResizeObserver = new ResizeObserver(() => {
+    syncInsetIconPlacement();
+  });
+  insetIconResizeObserver.observe(sliderRef.value);
+};
+
 watch([inputRef, handleRef, valueIndicatorRef, () => valueIndicator], rebuildValueIndicatorTooltip, {
   immediate: true,
   flush: 'post',
 });
+
+watch(
+  [sliderRef, hasStartInsetIcon, hasEndInsetIcon],
+  async () => {
+    syncInsetIconResizeObserver();
+    await nextTick();
+    syncInsetIconPlacement();
+  },
+  {
+    immediate: true,
+    flush: 'post',
+  },
+);
 
 watch(
   valueIndicatorBinding,
@@ -402,10 +529,20 @@ watch(
   { flush: 'post' },
 );
 
+watch(
+  [valuePercent, () => vertical, () => direction, () => size],
+  async () => {
+    await nextTick();
+    syncInsetIconPlacement();
+  },
+  { flush: 'post' },
+);
+
 onMounted(() => {
   window.addEventListener('pointermove', onWindowPointerMove);
   window.addEventListener('pointerup', stopValueIndicatorDragging);
   window.addEventListener('pointercancel', stopValueIndicatorDragging);
+  syncInsetIconPlacement();
 });
 
 onBeforeUnmount(() => {
@@ -414,6 +551,8 @@ onBeforeUnmount(() => {
     window.cancelAnimationFrame(syncValueIndicatorFocusFrame);
   }
   stopSyncValueIndicatorPosition();
+  stopSyncInsetIconPlacement();
+  insetIconResizeObserver?.disconnect();
   window.removeEventListener('pointermove', onWindowPointerMove);
   window.removeEventListener('pointerup', stopValueIndicatorDragging);
   window.removeEventListener('pointercancel', stopValueIndicatorDragging);
@@ -434,9 +573,9 @@ onBeforeUnmount(() => {
     :style="{
       '--percent': valuePercent,
     }"
-    @transitionstart="startSyncValueIndicatorPosition"
-    @transitionend="finishSyncValueIndicatorPosition"
-    @transitioncancel="finishSyncValueIndicatorPosition"
+    @transitionstart="onPercentTransitionStart"
+    @transitionend="onPercentTransitionFinish"
+    @transitioncancel="onPercentTransitionFinish"
   >
     <input
       ref="input"
@@ -456,8 +595,8 @@ onBeforeUnmount(() => {
       @focus="onValueIndicatorFocus"
       @blur="onValueIndicatorBlur"
     />
-    <div aria-hidden="true" class="m3-slider-track m3-slider-track-active" />
-    <div aria-hidden="true" class="m3-slider-track m3-slider-track-inactive" />
+    <div data-track="active" aria-hidden="true" class="m3-slider-track m3-slider-track-active" />
+    <div data-track="inactive" aria-hidden="true" class="m3-slider-track m3-slider-track-inactive" />
     <template v-if="stopIndicatorsFiltered && stopIndicatorsFiltered.length > 0">
       <div aria-hidden="true" class="m3-slider-stop-indicator-container m3-slider-stop-indicator-active-container">
         <div
@@ -482,6 +621,30 @@ onBeforeUnmount(() => {
         />
       </div>
     </template>
+    <Icon
+      v-if="hasStartInsetIcon"
+      data-inset-icon="start"
+      aria-hidden="true"
+      :name="startInsetIconName"
+      :class="[
+        'm3-slider-inset-icon',
+        'm3-slider-inset-icon-start',
+        isStartInsetIconFlipped ? 'm3-slider-inset-icon-flipped' : 'm3-slider-inset-icon-default',
+        isStartInsetIconFlipped ? 'm3-slider-inset-icon-on-inactive' : 'm3-slider-inset-icon-on-active',
+      ]"
+    />
+    <Icon
+      v-if="hasEndInsetIcon"
+      data-inset-icon="end"
+      aria-hidden="true"
+      :name="endInsetIconName"
+      :class="[
+        'm3-slider-inset-icon',
+        'm3-slider-inset-icon-end',
+        isEndInsetIconFlipped ? 'm3-slider-inset-icon-flipped' : 'm3-slider-inset-icon-default',
+        isEndInsetIconFlipped ? 'm3-slider-inset-icon-on-active' : 'm3-slider-inset-icon-on-inactive',
+      ]"
+    />
 
     <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" class="m3-slider-handle" />
     <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" class="m3-slider-value-indicator">

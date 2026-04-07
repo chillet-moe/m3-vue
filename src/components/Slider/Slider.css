@@ -22,6 +22,9 @@
   /* 必须是 var(--handle-width) / 2 + var(--handle-inset) */
   --track-inset: calc((var(--handle-width) / 2 + var(--handle-inset)));
   --track-inset-total: calc(var(--track-inset) * 2);
+  --handle-inline-start: calc(
+    var(--track-inset-total) + (100% - var(--track-inset-total) * 2) * var(--percent) - var(--handle-width) / 2
+  );
 
   block-size: var(--handle-height);
 
@@ -31,6 +34,8 @@
   --md-comp-slider-active-track-color: var(--md-sys-color-primary);
   --md-comp-slider-inactive-track-color: var(--md-sys-color-primary-container);
   --md-comp-slider-handle-color: var(--md-sys-color-primary);
+  --md-comp-slider-active-icon-color: var(--md-sys-color-on-primary);
+  --md-comp-slider-inactive-icon-color: var(--md-sys-color-primary);
   --md-comp-slider-value-indicator-background: var(--md-sys-color-inverse-surface);
   --md-comp-slider-value-indicator-color: var(--md-sys-color-inverse-on-surface);
 
@@ -100,6 +105,8 @@
   --md-comp-slider-active-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
   --md-comp-slider-inactive-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.12);
   --md-comp-slider-handle-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
+  --md-comp-slider-active-icon-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
+  --md-comp-slider-inactive-icon-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
 }
 
 .m3-slider-horizontal {
@@ -136,21 +143,21 @@
   --track-height: 2.5rem;
   --handle-height: 3.25rem;
   --track-shape: 0.75rem;
-  --icon-size: 1.5rem;
+  --icon-size: --dp(24);
 }
 
 .m3-slider-large {
   --track-height: 3.5rem;
   --handle-height: 4.25rem;
   --track-shape: 1rem;
-  --icon-size: 1.5rem;
+  --icon-size: --dp(24);
 }
 
 .m3-slider-extra-large {
   --track-height: 6rem;
   --handle-height: 6.75rem;
   --track-shape: 1rem;
-  --icon-size: 2rem;
+  --icon-size: --dp(32);
 }
 
 .m3-slider-handle {
@@ -211,7 +218,6 @@
 }
 
 .m3-slider-track-active {
-
   background-color: var(--md-comp-slider-active-track-color);
 
   inline-size: var(--active-length);
@@ -224,7 +230,6 @@
 }
 
 .m3-slider-track-inactive {
-
   background-color: var(--md-comp-slider-inactive-track-color);
 
   inline-size: var(--inactive-length);
@@ -234,6 +239,51 @@
   border-end-start-radius: var(--track-shape-inner);
   border-start-start-radius: var(--track-shape-inner);
   border-end-end-radius: var(--track-shape);
+}
+
+.m3-slider-inset-icon {
+  position: absolute;
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  inset-block-start: calc((100% - var(--track-height)) / 2);
+  inline-size: calc(var(--icon-size) + 1rem);
+  block-size: var(--track-height);
+
+  writing-mode: horizontal-tb;
+  font-size: var(--icon-size);
+  line-height: 1;
+}
+
+.m3-slider-inset-icon-start {
+  inset-inline-start: calc(var(--track-inset));
+}
+
+.m3-slider-inset-icon-start.m3-slider-inset-icon-flipped {
+  inset-inline-start: calc(var(--handle-inline-start) + var(--handle-width) + var(--handle-inset) + 0.5rem);
+}
+
+.m3-slider-inset-icon-end {
+  inset-inline-start: calc(100% - var(--track-inset) - var(--icon-size) - 1rem);
+}
+
+.m3-slider-inset-icon-end.m3-slider-inset-icon-flipped {
+  inset-inline-start: calc(var(--handle-inline-start) - var(--handle-inset) - var(--icon-size) - 1.5rem);
+}
+
+.m3-slider-inset-icon-on-active {
+  color: var(--md-comp-slider-active-icon-color);
+}
+
+.m3-slider-inset-icon-on-inactive {
+  color: var(--md-comp-slider-inactive-icon-color);
+}
+
+.m3-slider-inset-icon .m3-icon {
+  font-size: inherit;
 }
 
 .m3-slider-value-indicator {

@@ -13,6 +13,8 @@ const meta = {
     size: 'medium',
     direction: 'ltr',
     vertical: false,
+    startIcon: undefined,
+    endIcon: undefined,
     disabled: false,
     valueIndicator: true,
     formatter: {
@@ -80,6 +82,22 @@ const VerticalTemplate: StoryFn<SliderEnumArgs> = (args: SliderEnumArgs, { argTy
   `,
 });
 
+const IconTemplate: StoryFn<SliderEnumArgs> = (args: SliderEnumArgs, { argTypes }) => ({
+  components: { Slider },
+  setup: () => ({ args, argTypes, getArgs }),
+  template: `
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div v-for="option in argTypes?.[args.enum]?.options" :key="option">
+        <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.25rem;">{{ option }}</div>
+        <Slider
+          v-bind="getArgs(args, option)"
+          v-model:value="args.value"
+        />
+      </div>
+    </div>
+  `,
+});
+
 export const Default = BaseTemplate.bind({});
 
 export const Directions = EnumTemplate.bind({});
@@ -93,6 +111,16 @@ Sizes.args = { enum: 'size' };
 
 export const ValueIndicatorPlacements = EnumTemplate.bind({});
 ValueIndicatorPlacements.args = { enum: 'valueIndicatorPlacement' };
+
+export const InsetIcons = IconTemplate.bind({});
+InsetIcons.args = {
+  enum: 'size',
+  startIcon: 'brightness_6',
+  endIcon: 'brightness_7',
+  max: 100,
+  min: 0,
+  stopIndicators: undefined,
+};
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = { disabled: true };
