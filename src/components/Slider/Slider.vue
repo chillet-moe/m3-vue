@@ -63,6 +63,7 @@ const {
   endIcon,
   valueIndicator = true,
   valueIndicatorPlacement: valueIndicatorPlacementProp,
+  formatter,
   stopIndicators,
 } = defineProps<SliderProps>();
 
@@ -72,9 +73,8 @@ const valueIndicatorPlacement = computed(() => {
 
 const value = defineModel<number>('value', { required: true });
 
-const valueDisplayed = ref(value.value);
-const valuePercent = computed(() => {
-  const percent = (valueDisplayed.value - min) / (max - min);
+const getValuePercent = (currentValue: number) => {
+  const percent = (currentValue - min) / (max - min);
   if (percent < 0) {
     return 0;
   } else if (percent > 1) {
@@ -82,6 +82,12 @@ const valuePercent = computed(() => {
   } else {
     return percent;
   }
+};
+
+const valueCurrent = ref(value.value);
+const valueDisplayed = ref(getValuePercent(value.value));
+const valueText = computed(() => {
+  return formatter ? formatter.valueToText(valueCurrent.value) : valueCurrent.value;
 });
 
 const supportsInsetIcon = computed(() => size === 'medium' || size === 'large' || size === 'extra-large');
@@ -101,56 +107,51 @@ const insetIconPopThreshold = computed(() => {
 const startInsetIconName = computed(() => startIcon ?? '');
 const endInsetIconName = computed(() => endIcon ?? '');
 
-watch(value, (newVal) => {
-  valueDisplayed.value = newVal;
-});
-
-const clampValue = (v: number) => {
-  if (lowerLimit !== undefined && v < lowerLimit) {
+const clampValue = (nextValue: number) => {
+  if (lowerLimit !== undefined && nextValue < lowerLimit) {
     return [true, lowerLimit] as const;
-  } else if (upperLimit !== undefined && v > upperLimit) {
+  } else if (upperLimit !== undefined && nextValue > upperLimit) {
     return [true, upperLimit] as const;
-  } else if (v < min) {
+  } else if (nextValue < min) {
     return [true, min] as const;
-  } else if (v > max) {
+  } else if (nextValue > max) {
     return [true, max] as const;
   }
-  return [false, v] as const;
+  return [false, nextValue] as const;
 };
 
-const onInput = (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  const valueAsNumber = target.valueAsNumber;
+const onInput = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const [clamped, clampedValue] = clampValue(target.valueAsNumber);
 
-  const [clamped, clampedValue] = clampValue(valueAsNumber);
+  valueCurrent.value = clampedValue;
   if (clamped) {
-    e.preventDefault();
-    e.stopPropagation();
-    valueDisplayed.value = clampedValue;
+    event.preventDefault();
+    event.stopPropagation();
+    target.value = `${clampedValue}`;
   }
 };
 
-const onChange = (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  value.value = target.valueAsNumber;
+const onChange = () => {
+  value.value = valueCurrent.value;
 };
 
 const altState = useKeyModifier('Alt');
 
-const onWheel = (e: WheelEvent) => {
+const onWheel = (event: WheelEvent) => {
   if (disabled) {
     return;
   }
 
-  const dir = e.deltaY < 0 ? 1 : -1;
-
+  const dir = event.deltaY < 0 ? 1 : -1;
   let targetStep = wheelStep ?? step;
   if (altState.value) {
     targetStep = step;
   }
 
-  const newValue = valueDisplayed.value + dir * targetStep;
+  const newValue = valueCurrent.value + dir * targetStep;
   const [, clampedValue] = clampValue(newValue);
+  valueCurrent.value = clampedValue;
   value.value = clampedValue;
 };
 
@@ -174,13 +175,16 @@ const isValueIndicatorFocused = ref(false);
 const isValueIndicatorDragging = ref(false);
 const isValueDragging = ref(false);
 let syncValueIndicatorFocusFrame = 0;
-let syncValueIndicatorPositionFrame = 0;
-let syncInsetIconPlacementFrame = 0;
+let syncValueDisplayedFrame = 0;
+let syncValueDisplayedTime = 0;
+let valueDisplayedVelocity = 0;
 let activePointerId: number | null = null;
 let pointerDownPosition: { x: number; y: number } | null = null;
 let insetIconResizeObserver: ResizeObserver | null = null;
 
 const pointerDragStartDistance = 3;
+const valueDisplaySettleDistance = 0.0005;
+const valueDisplaySettleVelocity = 0.0005;
 
 const isCurrentPointerEvent = (event?: Event) => {
   if (!event) {
@@ -217,22 +221,9 @@ const cleanupValueIndicatorTooltip = () => {
   valueIndicatorTooltip.value = null;
 };
 
-const stopSyncValueIndicatorPosition = () => {
-  if (syncValueIndicatorPositionFrame) {
-    window.cancelAnimationFrame(syncValueIndicatorPositionFrame);
-    syncValueIndicatorPositionFrame = 0;
-  }
-};
-
-const stopSyncInsetIconPlacement = () => {
-  if (syncInsetIconPlacementFrame) {
-    window.cancelAnimationFrame(syncInsetIconPlacementFrame);
-    syncInsetIconPlacementFrame = 0;
-  }
-};
-
 const syncInsetIconPlacement = () => {
   const slider = sliderRef.value;
+  const targetPercent = getValuePercent(valueCurrent.value);
 
   if (!slider || !hasInsetIcon.value) {
     isStartInsetIconFlipped.value = false;
@@ -248,72 +239,82 @@ const syncInsetIconPlacement = () => {
   }
 
   if (hasStartInsetIcon.value) {
-    isStartInsetIconFlipped.value = inlineSize * valuePercent.value < insetIconPopThreshold.value;
+    isStartInsetIconFlipped.value = inlineSize * targetPercent < insetIconPopThreshold.value;
   } else {
     isStartInsetIconFlipped.value = false;
   }
 
   if (hasEndInsetIcon.value) {
-    isEndInsetIconFlipped.value = inlineSize * (1 - valuePercent.value) < insetIconPopThreshold.value;
+    isEndInsetIconFlipped.value = inlineSize * (1 - targetPercent) < insetIconPopThreshold.value;
   } else {
     isEndInsetIconFlipped.value = false;
   }
 };
 
-const syncInsetIconPlacementLoop = () => {
-  syncInsetIconPlacement();
-  syncInsetIconPlacementFrame = window.requestAnimationFrame(syncInsetIconPlacementLoop);
-};
-
-const syncValueIndicatorPosition = () => {
+const syncValuePresentation = () => {
   valueIndicatorTooltip.value?.reposition();
-  syncValueIndicatorPositionFrame = window.requestAnimationFrame(syncValueIndicatorPosition);
-};
-
-const startSyncValueIndicatorPosition = (event: TransitionEvent) => {
-  if (event.target !== sliderRef.value || event.propertyName !== '--percent' || !valueIndicatorTooltip.value) {
-    return;
-  }
-
-  stopSyncValueIndicatorPosition();
-  syncValueIndicatorPositionFrame = window.requestAnimationFrame(syncValueIndicatorPosition);
-};
-
-const startSyncInsetIconPlacement = (event: TransitionEvent) => {
-  if (event.target !== sliderRef.value || event.propertyName !== '--percent' || !hasInsetIcon.value) {
-    return;
-  }
-
-  stopSyncInsetIconPlacement();
-  syncInsetIconPlacementFrame = window.requestAnimationFrame(syncInsetIconPlacementLoop);
-};
-
-const finishSyncValueIndicatorPosition = (event: TransitionEvent) => {
-  if (event.target !== sliderRef.value || event.propertyName !== '--percent') {
-    return;
-  }
-
-  stopSyncValueIndicatorPosition();
-  valueIndicatorTooltip.value?.reposition();
-};
-
-const finishSyncInsetIconPlacement = (event: TransitionEvent) => {
-  if (event.target !== sliderRef.value || event.propertyName !== '--percent') {
-    return;
-  }
-
-  stopSyncInsetIconPlacement();
   syncInsetIconPlacement();
 };
 
-const onPercentTransitionStart = (event: TransitionEvent) => {
-  startSyncValueIndicatorPosition(event);
-  startSyncInsetIconPlacement(event);
+const stopSyncValueDisplayed = () => {
+  if (syncValueDisplayedFrame) {
+    window.cancelAnimationFrame(syncValueDisplayedFrame);
+    syncValueDisplayedFrame = 0;
+  }
+  syncValueDisplayedTime = 0;
 };
 
-const onPercentTransitionFinish = (event: TransitionEvent) => {
-  finishSyncValueIndicatorPosition(event);
-  finishSyncInsetIconPlacement(event);
+const finishSyncValueDisplayed = () => {
+  stopSyncValueDisplayed();
+  valueDisplayed.value = getValuePercent(valueCurrent.value);
+  valueDisplayedVelocity = 0;
+  syncValuePresentation();
+};
+
+const syncValueDisplayedFrameStep = (timestamp: number) => {
+  if (!syncValueDisplayedTime) {
+    syncValueDisplayedTime = timestamp;
+    syncValuePresentation();
+    syncValueDisplayedFrame = window.requestAnimationFrame(syncValueDisplayedFrameStep);
+    return;
+  }
+
+  const deltaSeconds = Math.min((timestamp - syncValueDisplayedTime) / 1000, 0.05);
+  syncValueDisplayedTime = timestamp;
+
+  const targetPercent = getValuePercent(valueCurrent.value);
+  const stiffness = isValueDragging.value ? 900 : 420;
+  const damping = isValueDragging.value ? 60 : 36;
+  const distance = targetPercent - valueDisplayed.value;
+  const acceleration = distance * stiffness - valueDisplayedVelocity * damping;
+
+  valueDisplayedVelocity += acceleration * deltaSeconds;
+  valueDisplayed.value += valueDisplayedVelocity * deltaSeconds;
+  syncValuePresentation();
+
+  if (
+    Math.abs(targetPercent - valueDisplayed.value) <= valueDisplaySettleDistance &&
+    Math.abs(valueDisplayedVelocity) <= valueDisplaySettleVelocity
+  ) {
+    finishSyncValueDisplayed();
+    return;
+  }
+
+  syncValueDisplayedFrame = window.requestAnimationFrame(syncValueDisplayedFrameStep);
+};
+
+const startSyncValueDisplayed = () => {
+  const targetPercent = getValuePercent(valueCurrent.value);
+  if (Math.abs(targetPercent - valueDisplayed.value) <= valueDisplaySettleDistance && valueDisplayedVelocity === 0) {
+    valueDisplayed.value = targetPercent;
+    syncValuePresentation();
+    return;
+  }
+
+  if (!syncValueDisplayedFrame) {
+    syncValueDisplayedTime = 0;
+    syncValueDisplayedFrame = window.requestAnimationFrame(syncValueDisplayedFrameStep);
+  }
 };
 
 const syncValueIndicatorVisibility = () => {
@@ -388,13 +389,7 @@ const scheduleSyncValueIndicatorFocusedState = () => {
 };
 
 const stopValueIndicatorDragging = (event?: Event) => {
-  if (!isValueIndicatorDragging.value) {
-    if (isCurrentPointerEvent(event)) {
-      isValueDragging.value = false;
-      activePointerId = null;
-      pointerDownPosition = null;
-    }
-  } else {
+  if (isValueIndicatorDragging.value) {
     isValueIndicatorDragging.value = false;
     if (event && 'clientX' in event && 'clientY' in event) {
       syncValueIndicatorHoveredState(event as MouseEvent | PointerEvent);
@@ -489,6 +484,18 @@ watch([inputRef, handleRef, valueIndicatorRef, () => valueIndicator], rebuildVal
   flush: 'post',
 });
 
+watch(value, (newValue) => {
+  valueCurrent.value = newValue;
+});
+
+watch(
+  valueCurrent,
+  () => {
+    startSyncValueDisplayed();
+  },
+  { flush: 'sync' },
+);
+
 watch(
   [sliderRef, hasStartInsetIcon, hasEndInsetIcon],
   async () => {
@@ -521,7 +528,7 @@ watch(
 );
 
 watch(
-  [valuePercent, valueIndicatorPlacement, () => vertical, () => direction],
+  [valueIndicatorPlacement, () => vertical, () => direction],
   async () => {
     await nextTick();
     valueIndicatorTooltip.value?.reposition();
@@ -530,7 +537,7 @@ watch(
 );
 
 watch(
-  [valuePercent, () => vertical, () => direction, () => size],
+  [() => vertical, () => direction, () => size],
   async () => {
     await nextTick();
     syncInsetIconPlacement();
@@ -550,8 +557,7 @@ onBeforeUnmount(() => {
   if (syncValueIndicatorFocusFrame) {
     window.cancelAnimationFrame(syncValueIndicatorFocusFrame);
   }
-  stopSyncValueIndicatorPosition();
-  stopSyncInsetIconPlacement();
+  stopSyncValueDisplayed();
   insetIconResizeObserver?.disconnect();
   window.removeEventListener('pointermove', onWindowPointerMove);
   window.removeEventListener('pointerup', stopValueIndicatorDragging);
@@ -571,11 +577,8 @@ onBeforeUnmount(() => {
       isValueDragging && 'm3-slider-value-dragging',
     ]"
     :style="{
-      '--percent': valuePercent,
+      '--percent': valueDisplayed,
     }"
-    @transitionstart="onPercentTransitionStart"
-    @transitionend="onPercentTransitionFinish"
-    @transitioncancel="onPercentTransitionFinish"
   >
     <input
       ref="input"
@@ -584,7 +587,7 @@ onBeforeUnmount(() => {
       :max="max"
       :step="step"
       :disabled="disabled"
-      v-model.number="valueDisplayed"
+      :value="valueCurrent"
       @input="onInput"
       @change="onChange"
       @wheel.prevent="onWheel"
@@ -649,7 +652,7 @@ onBeforeUnmount(() => {
     <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" class="m3-slider-handle" />
     <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" class="m3-slider-value-indicator">
       <span class="m3-slider-value-indicator-text">
-        {{ formatter ? formatter.valueToText(valueDisplayed) : valueDisplayed }}
+        {{ valueText }}
       </span>
     </div>
   </div>

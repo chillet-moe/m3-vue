@@ -29,7 +29,6 @@
   block-size: var(--handle-height);
 
   print-color-adjust: exact;
-  transition: --percent var(--md-timing-function-emphasized-decel) var(--md-duration-slow);
 
   --md-comp-slider-active-track-color: var(--md-sys-color-primary);
   --md-comp-slider-inactive-track-color: var(--md-sys-color-primary-container);
@@ -95,10 +94,6 @@
   }
 
   overflow: visible;
-}
-
-.m3-slider-value-dragging {
-  transition: none;
 }
 
 .m3-slider[aria-disabled='true'] {

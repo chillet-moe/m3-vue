@@ -347,7 +347,7 @@ describe('Slider', () => {
     app.unmount();
   });
 
-  it('disables the percent transition only after pointer dragging starts', async () => {
+  it('marks the slider as value dragging only after pointer dragging starts', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
