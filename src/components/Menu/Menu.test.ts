@@ -8,6 +8,28 @@ import MenuItem from './MenuItem.vue';
 import MenuLabel from './MenuLabel.vue';
 import MenuSubMenu from './MenuSubMenu.vue';
 
+function createPointerEvent(
+  type: string,
+  init: EventInit & { clientX?: number; clientY?: number; pointerId?: number; pointerType?: string } = {},
+) {
+  const EventConstructor = window.PointerEvent ?? MouseEvent;
+  const event = new EventConstructor(type, init);
+
+  Object.defineProperty(event, 'pointerType', {
+    configurable: true,
+    value: init.pointerType ?? 'mouse',
+  });
+
+  if (typeof init.pointerId === 'number') {
+    Object.defineProperty(event, 'pointerId', {
+      configurable: true,
+      value: init.pointerId,
+    });
+  }
+
+  return event;
+}
+
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
     showPopover?: () => void;
@@ -306,6 +328,73 @@ describe('Menu', () => {
     expect(selectedValues).toEqual([]);
 
     const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
+    expect(submenu?.dataset.popoverOpen).toBe('true');
+
+    app.unmount();
+  });
+
+  it('does not open a submenu from touch hover or focus before click', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [
+                h(
+                  MenuSubMenu,
+                  null,
+                  {
+                    trigger: ({ open }: { open: boolean }) =>
+                      h(
+                        MenuItem,
+                        {
+                          submenu: true,
+                          submenuOpen: open,
+                        },
+                        {
+                          default: () => 'More',
+                        },
+                      ),
+                    default: () =>
+                      h(MenuContainer, null, {
+                        default: () => [h(MenuItem, null, { default: () => 'Rename' })],
+                      }),
+                  },
+                ),
+              ],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const submenuWrapper = container.querySelector<HTMLElement>('.m3-menu-submenu');
+    const trigger = container.querySelector<HTMLButtonElement>('button[role="menuitem"][data-submenu="true"]');
+    const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
+
+    submenuWrapper?.dispatchEvent(createPointerEvent('pointerenter', { bubbles: true, pointerType: 'touch' }));
+    trigger?.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, pointerType: 'touch' }));
+    trigger?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    await nextTick();
+
+    expect(submenu?.hidden).toBe(true);
+    expect(submenu?.dataset.popoverOpen).toBeUndefined();
+
+    trigger?.click();
+    await nextTick();
+
     expect(submenu?.dataset.popoverOpen).toBe('true');
 
     app.unmount();

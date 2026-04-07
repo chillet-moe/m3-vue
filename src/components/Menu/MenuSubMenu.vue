@@ -53,6 +53,7 @@ const safeTriangle = ref<Triangle | null>(null);
 let shouldRestoreTriggerFocus = false;
 let ignoreNextFocusIn = false;
 let trackingSafeTriangle = false;
+let suppressFocusOpenUntil = 0;
 
 const safeTriangleStyle = computed(() => {
   const wrapper = wrapperRef.value;
@@ -85,6 +86,14 @@ const safeTriangleStyle = computed(() => {
 function focusTrigger() {
   const triggerItem = triggerRef.value?.querySelector<HTMLElement>('[role="menuitem"]');
   triggerItem?.focus();
+}
+
+function isHoverPointer(event: PointerEvent) {
+  return (event.pointerType || 'mouse') === 'mouse';
+}
+
+function onTriggerPointerDown() {
+  suppressFocusOpenUntil = performance.now() + 500;
 }
 
 function syncAnchor() {
@@ -276,12 +285,20 @@ function activateSafeTriangle(origin: Point) {
   return true;
 }
 
-function onPointerEnter() {
+function onPointerEnter(event: PointerEvent) {
+  if (!isHoverPointer(event)) {
+    return;
+  }
+
   clearSafeTriangle();
   void openSubmenu();
 }
 
 function onPointerLeave(event: PointerEvent) {
+  if (!isHoverPointer(event)) {
+    return;
+  }
+
   if (isWithinWrapper(event.relatedTarget)) {
     return;
   }
@@ -302,6 +319,10 @@ function onPointerLeave(event: PointerEvent) {
 function onFocusIn() {
   if (ignoreNextFocusIn) {
     ignoreNextFocusIn = false;
+    return;
+  }
+
+  if (performance.now() < suppressFocusOpenUntil) {
     return;
   }
 
@@ -408,7 +429,14 @@ onUnmounted(() => {
     @focusin="onFocusIn"
     @focusout="onFocusOut"
   >
-    <div ref="trigger" role="none" class="m3-menu-submenu-trigger" @click="onTriggerClick" @keydown="onTriggerKeydown">
+    <div
+      ref="trigger"
+      role="none"
+      class="m3-menu-submenu-trigger"
+      @pointerdown="onTriggerPointerDown"
+      @click="onTriggerClick"
+      @keydown="onTriggerKeydown"
+    >
       <slot name="trigger" :open="open" />
     </div>
 
