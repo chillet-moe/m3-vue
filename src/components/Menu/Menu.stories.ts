@@ -120,6 +120,45 @@ const pureBaseItems = `
   </MenuContainer>
 `;
 
+const safeTriangleItems = `
+  <MenuContainer>
+    <MenuItem>
+      <template #leading><Icon name="visibility" /></template>
+      Inspect
+    </MenuItem>
+
+    <MenuSubMenu v-model:open="submenuOpen" debug-safe-triangle>
+      <template #trigger="{ open }">
+        <MenuItem submenu :submenu-open="open">
+          <template #leading><Icon name="folder_open" /></template>
+          Move toward submenu
+          <template #trailing><Icon name="chevron_right" /></template>
+        </MenuItem>
+      </template>
+
+      <MenuContainer>
+        <MenuItem>
+          <template #leading><Icon name="drive_file_move" /></template>
+          Move
+        </MenuItem>
+        <MenuItem>
+          <template #leading><Icon name="content_copy" /></template>
+          Duplicate
+        </MenuItem>
+        <MenuItem>
+          <template #leading><Icon name="archive" /></template>
+          Archive
+        </MenuItem>
+      </MenuContainer>
+    </MenuSubMenu>
+
+    <MenuItem>
+      <template #leading><Icon name="delete" /></template>
+      Delete
+    </MenuItem>
+  </MenuContainer>
+`;
+
 const meta = {
   component: Menu,
   args: {
@@ -242,6 +281,30 @@ const ContextDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   `,
 });
 
+const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
+  components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
+  directives: { dropdownMenu: vDropdownMenu },
+  setup: () => {
+    const submenuOpen = ref(false);
+
+    return { args, submenuOpen };
+  },
+  template: `
+    <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+      <div style="max-inline-size: 28rem; color: var(--md-sys-color-on-surface-variant);">
+        Open the menu, hover "Move toward submenu", then move diagonally into the child menu. The colored cone is the safe triangle that keeps the submenu open during mouse travel.
+      </div>
+
+      <button v-dropdown-menu="'#safe-triangle-menu'">Open safe triangle demo</button>
+
+      <Menu id="safe-triangle-menu" v-bind="args">
+        ${safeTriangleItems}
+      </Menu>
+    </div>
+  `,
+});
+
 export const PureComponent = PureComponentTemplate.bind({});
 export const DropdownDirective = DropdownDirectiveTemplate.bind({});
 export const ContextDirective = ContextDirectiveTemplate.bind({});
+export const SafeTriangle = SafeTriangleTemplate.bind({});

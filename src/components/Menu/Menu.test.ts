@@ -334,4 +334,111 @@ describe('Menu', () => {
 
     app.unmount();
   });
+
+  it('keeps submenu open while the pointer stays inside the safe triangle', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [
+                h(
+                  MenuSubMenu,
+                  null,
+                  {
+                    trigger: ({ open }: { open: boolean }) =>
+                      h(
+                        MenuItem,
+                        {
+                          submenu: true,
+                          submenuOpen: open,
+                        },
+                        {
+                          default: () => 'More',
+                        },
+                      ),
+                    default: () =>
+                      h(MenuContainer, null, {
+                        default: () => [
+                          h(MenuItem, null, { default: () => 'Child 1' }),
+                          h(MenuItem, null, { default: () => 'Child 2' }),
+                        ],
+                      }),
+                  },
+                ),
+              ],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const pointerEventConstructor = window.PointerEvent ?? MouseEvent;
+    const submenuWrapper = container.querySelector<HTMLElement>('.m3-menu-submenu');
+    const trigger = container.querySelector<HTMLButtonElement>('button[role="menuitem"][data-submenu="true"]');
+
+    trigger?.click();
+    await nextTick();
+
+    const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
+
+    Object.defineProperty(submenu as HTMLElement, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({
+        x: 160,
+        y: 48,
+        top: 48,
+        right: 280,
+        bottom: 176,
+        left: 160,
+        width: 120,
+        height: 128,
+        toJSON: () => null,
+      }),
+    });
+
+    submenuWrapper?.dispatchEvent(
+      new pointerEventConstructor('pointerleave', {
+        bubbles: true,
+        clientX: 120,
+        clientY: 112,
+      }),
+    );
+
+    document.dispatchEvent(
+      new pointerEventConstructor('pointermove', {
+        bubbles: true,
+        clientX: 144,
+        clientY: 112,
+      }),
+    );
+    await nextTick();
+
+    expect(submenu?.dataset.popoverOpen).toBe('true');
+
+    document.dispatchEvent(
+      new pointerEventConstructor('pointermove', {
+        bubbles: true,
+        clientX: 144,
+        clientY: 220,
+      }),
+    );
+    await nextTick();
+
+    expect(submenu?.hidden).toBe(true);
+
+    app.unmount();
+  });
 });

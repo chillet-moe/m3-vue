@@ -312,3 +312,12 @@
 .m3-menu-submenu-trigger {
   display: block;
 }
+
+.m3-menu-submenu-safe-triangle {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+
+  background: --translucent(var(--md-sys-color-tertiary), 0.18);
+  border: 1px solid --translucent(var(--md-sys-color-tertiary), 0.48);
+}
