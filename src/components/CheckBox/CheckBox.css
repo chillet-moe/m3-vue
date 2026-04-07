@@ -2,9 +2,13 @@
 
 @layer tokens {
   .m3-checkbox {
-    --md-comp-checkbox-icon-size: 1.125rem;
-    --md-comp-checkbox-shape: var(--md-sys-shape-corner-extra-small);
-    --md-comp-checkbox-outline-width: 0.125rem;
+    --md-comp-checkbox-container-size: --dp(18);
+    --md-comp-checkbox-icon-size: --dp(18);
+    --md-comp-checkbox-target-size: --dp(40);
+    --md-comp-checkbox-state-layer-size: --dp(40);
+    --md-comp-checkbox-state-layer-shape: var(--md-sys-shape-corner-full);
+    --md-comp-checkbox-shape: --dp(2);
+    --md-comp-checkbox-outline-width: --dp(2);
     --md-comp-checkbox-unselected-outline-color: var(--md-sys-color-on-surface-variant);
     --md-comp-checkbox-selected-container-color: var(--md-sys-color-primary);
     --md-comp-checkbox-selected-icon-color: var(--md-sys-color-on-primary);
@@ -23,7 +27,7 @@
 .m3-checkbox {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: --dp(4);
   position: relative;
   inline-size: fit-content;
   cursor: pointer;
@@ -44,16 +48,21 @@
 
 .m3-checkbox-control {
   position: relative;
-  inline-size: var(--md-comp-checkbox-icon-size);
-  block-size: var(--md-comp-checkbox-icon-size);
+  inline-size: var(--md-comp-checkbox-target-size);
+  block-size: var(--md-comp-checkbox-target-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: none;
 }
 
 .m3-checkbox-box {
-  inline-size: 100%;
-  block-size: 100%;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--md-comp-checkbox-container-size);
+  block-size: var(--md-comp-checkbox-container-size);
+  transform: translate(-50%, -50%);
   border-radius: var(--md-comp-checkbox-shape);
   box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width) var(--md-comp-checkbox-unselected-outline-color);
   background-color: transparent;
@@ -64,13 +73,25 @@
 
 .m3-checkbox-icon {
   position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
   inline-size: 0.6rem;
   block-size: 0.35rem;
-  border-inline-start: 0.125rem solid transparent;
-  border-block-end: 0.125rem solid transparent;
-  transform: translateY(-0.05rem) rotate(-45deg) scale(0.5);
+  border-inline-start: --dp(2) solid transparent;
+  border-block-end: --dp(2) solid transparent;
+  transform: translate(-50%, calc(-50% - --dp(1))) rotate(-45deg) scale(0.5);
   opacity: 0;
   transition: all var(--md-easing-fast-spatial);
+}
+
+.m3-checkbox-control > .state-layer {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--md-comp-checkbox-state-layer-size);
+  block-size: var(--md-comp-checkbox-state-layer-size);
+  border-radius: var(--md-comp-checkbox-state-layer-shape);
+  transform: translate(-50%, -50%);
 }
 
 .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box {
@@ -81,7 +102,7 @@
 .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-icon {
   border-color: var(--md-comp-checkbox-selected-icon-color);
   opacity: 1;
-  transform: translateY(-0.05rem) rotate(-45deg) scale(1);
+  transform: translate(-50%, calc(-50% - --dp(1))) rotate(-45deg) scale(1);
 }
 
 .m3-checkbox:has(.m3-checkbox-input:not(:disabled):hover) .m3-checkbox-box {
@@ -97,7 +118,7 @@
 .m3-checkbox-input:focus-visible + .m3-checkbox-control {
   outline: var(--md-comp-checkbox-focus-indicator-thickness) solid var(--md-comp-checkbox-focus-indicator-color);
   outline-offset: var(--md-comp-checkbox-focus-indicator-offset);
-  border-radius: var(--md-comp-checkbox-shape);
+  border-radius: var(--md-comp-checkbox-state-layer-shape);
 }
 
 .m3-checkbox-input:disabled + .m3-checkbox-control .m3-checkbox-box {

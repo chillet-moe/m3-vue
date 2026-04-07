@@ -39,11 +39,7 @@ defineSlots<{
     <span :class="'m3-checkbox-control'" aria-hidden="true">
       <span :class="'m3-checkbox-box'" />
       <span :class="'m3-checkbox-icon'" />
-      <span
-        class="state-layer"
-        data-state-layer-hover-from="target"
-        style="position: absolute; width: 2.5rem; height: 2.5rem; border-radius: 1.25rem"
-      />
+      <span class="state-layer" data-state-layer-hover-from="target" />
     </span>
 
     <span v-if="$slots.default" :class="'m3-checkbox-label'"><slot /></span>
