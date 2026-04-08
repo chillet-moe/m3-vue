@@ -4,9 +4,12 @@ export type DropdownTargetBinding =
   | string
   | HTMLElement
   | {
-      target: string | HTMLElement;
+      anchor?: HTMLElement | null;
       closeOnOutsideClick?: boolean;
-    };
+      target: string | HTMLElement | null;
+    }
+  | null
+  | undefined;
 
 export function resolveDropdownTarget(binding: DirectiveBinding<DropdownTargetBinding>): HTMLElement | null {
   const value = binding.value;
@@ -28,6 +31,16 @@ export function shouldCloseOnOutsideClick(binding: DirectiveBinding<DropdownTarg
   return typeof binding.value === 'object' && binding.value !== null && 'closeOnOutsideClick' in binding.value
     ? binding.value.closeOnOutsideClick !== false
     : true;
+}
+
+export function resolveDropdownAnchor(binding: DirectiveBinding<DropdownTargetBinding>, trigger: HTMLElement) {
+  const value = binding.value;
+
+  if (!value || typeof value !== 'object' || !('anchor' in value)) {
+    return trigger;
+  }
+
+  return value.anchor ?? trigger;
 }
 
 export type DropdownShowOptions = {

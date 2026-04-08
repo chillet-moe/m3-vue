@@ -117,7 +117,9 @@ function getMenuItemElements() {
   }
 
   return Array.from(
-    menu.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled]):not([aria-disabled="true"])'),
+    menu.querySelectorAll<HTMLElement>(
+      '[role="menuitem"]:not([disabled]):not([aria-disabled="true"]), [role="menuitemradio"]:not([disabled]):not([aria-disabled="true"]), [role="menuitemcheckbox"]:not([disabled]):not([aria-disabled="true"])',
+    ),
   ).filter((item) => item.dataset.menuOwner === menuId);
 }
 
@@ -230,7 +232,7 @@ function onMenuClick(event: MouseEvent) {
     return;
   }
 
-  const item = target.closest<HTMLElement>('[role="menuitem"]');
+  const item = target.closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]');
 
   if (!item || item.dataset.menuOwner !== menuId || item.matches('[disabled], [aria-disabled="true"]')) {
     return;
@@ -257,7 +259,7 @@ function onMenuFocusIn(event: FocusEvent) {
     return;
   }
 
-  const item = target.closest<HTMLElement>('[role="menuitem"]');
+  const item = target.closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]');
 
   if (!item || item.dataset.menuOwner !== menuId || item.dataset.submenu === 'true') {
     return;

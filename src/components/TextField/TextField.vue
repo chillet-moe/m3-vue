@@ -34,6 +34,9 @@ export type TextFieldProps = {
 
   /** Placeholder shown when value is empty. */
   placeholder?: string;
+
+  /** Forces the visual focused state without requiring DOM focus. */
+  visuallyFocused?: boolean;
 };
 
 const generatedId = useId();
@@ -52,6 +55,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   readonly: false,
   name: undefined,
   placeholder: undefined,
+  visuallyFocused: false,
 });
 
 const emit = defineEmits<{
@@ -88,6 +92,8 @@ const hasLeading = computed(() => {
   return Boolean(slots.leading);
 });
 
+const rootRef = ref<HTMLDivElement>();
+const containerRef = ref<HTMLDivElement>();
 const controlRef = ref<HTMLInputElement | HTMLTextAreaElement>();
 
 const controlAttrs = computed(() => {
@@ -132,6 +138,8 @@ const select = () => {
 };
 
 defineExpose({
+  rootEl: rootRef,
+  containerEl: containerRef,
   el: controlRef,
   focus,
   blur,
@@ -141,14 +149,16 @@ defineExpose({
 
 <template>
   <div
+    ref="rootRef"
     :class="'m3-text-field'"
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
+    :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
   >
-    <div :class="'m3-text-field-container'">
+    <div ref="containerRef" :class="'m3-text-field-container'">
       <label v-if="props.label" :class="'m3-text-field-label'" :for="inputId">{{ props.label }}</label>
 
       <span :class="'m3-text-field-content'">

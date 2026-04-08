@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/vue3-vite';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { vContextMenu, vDropdown } from '@/directives/Menu';
 import Icon from '@/components/Icon/Icon.vue';
 import type { MenuProps } from './Menu.vue';
@@ -173,18 +173,20 @@ const DropdownDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu, Button },
   directives: { dropdown: vDropdown },
   setup: () => {
+    const dropdownMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
+    const dropdownBinding = computed(() => dropdownMenu.value?.menuRef ?? null);
     const selected = ref('None');
     const submenuOpen = ref(false);
     const nestedSubmenuOpen = ref(false);
 
-    return { args, nestedSubmenuOpen, selected, submenuOpen };
+    return { args, dropdownBinding, dropdownMenu, nestedSubmenuOpen, selected, submenuOpen };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
-      <Button v-dropdown="'#dropdown-menu'">Open dropdown menu</Button>
+      <Button v-dropdown="dropdownBinding">Open dropdown menu</Button>
 
       <Menu
-        id="dropdown-menu"
+        ref="dropdownMenu"
         v-bind="args"
         @select="(_, item) => { selected = item.textContent?.trim() ?? 'None'; }"
       >
@@ -200,23 +202,25 @@ const ContextDirectiveTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu },
   directives: { contextMenu: vContextMenu },
   setup: () => {
+    const contextMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
+    const contextMenuBinding = computed(() => contextMenu.value?.menuRef ?? null);
     const selected = ref('None');
     const submenuOpen = ref(false);
     const nestedSubmenuOpen = ref(false);
 
-    return { args, nestedSubmenuOpen, selected, submenuOpen };
+    return { args, contextMenu, contextMenuBinding, nestedSubmenuOpen, selected, submenuOpen };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
       <div
-        v-context-menu="'#context-menu'"
+        v-context-menu="contextMenuBinding"
         style="inline-size: 20rem; block-size: 8rem; border: 1px dashed #999; display: grid; place-items: center;"
       >
         Right click here for context menu
       </div>
 
       <Menu
-        id="context-menu"
+        ref="contextMenu"
         v-bind="args"
         @select="(_, item) => { selected = item.textContent?.trim() ?? 'None'; }"
       >
@@ -245,9 +249,11 @@ const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   components: { Icon, Menu, MenuContainer, MenuDivider, MenuGap, MenuItem, MenuLabel, MenuSubMenu, Button },
   directives: { dropdown: vDropdown },
   setup: () => {
+    const safeTriangleMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
+    const safeTriangleBinding = computed(() => safeTriangleMenu.value?.menuRef ?? null);
     const submenuOpen = ref(false);
 
-    return { args, submenuOpen };
+    return { args, safeTriangleBinding, safeTriangleMenu, submenuOpen };
   },
   template: `
     <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
@@ -256,9 +262,9 @@ const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
         safe triangle that keeps the submenu open during mouse travel.
       </div>
 
-      <Button v-dropdown="'#safe-triangle-menu'">Open safe triangle demo</Button>
+      <Button v-dropdown="safeTriangleBinding">Open safe triangle demo</Button>
 
-      <Menu id="safe-triangle-menu" v-bind="args">
+      <Menu ref="safeTriangleMenu" v-bind="args">
         ${safeTriangleItems}
       </Menu>
     </div>

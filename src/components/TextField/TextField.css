@@ -165,6 +165,7 @@
 }
 
 .m3-text-field:focus-within .m3-text-field-label,
+.m3-text-field[data-visually-focused='true'] .m3-text-field-label,
 .m3-text-field[data-populated='true'] .m3-text-field-label,
 .m3-text-field[data-has-placeholder='true'] .m3-text-field-label {
   inset-block-start: 0;
@@ -177,12 +178,15 @@
 }
 
 .m3-text-field:focus-within .m3-text-field-outline legend,
+.m3-text-field[data-visually-focused='true'] .m3-text-field-outline legend,
 .m3-text-field[data-populated='true'] .m3-text-field-outline legend,
 .m3-text-field[data-has-placeholder='true'] .m3-text-field-outline legend {
   max-inline-size: 100%;
 }
 
-.m3-text-field[data-has-leading='true'][data-populated='false'][data-has-placeholder='false']:not(:focus-within)
+.m3-text-field[data-has-leading='true'][data-populated='false'][data-has-placeholder='false'][data-visually-focused='false']:not(
+    :focus-within
+  )
   .m3-text-field-label {
   inset-inline-start: 3rem;
 }
@@ -238,7 +242,9 @@
 }
 
 .m3-text-field:focus-within .m3-text-field-prefix-slot,
+.m3-text-field[data-visually-focused='true'] .m3-text-field-prefix-slot,
 .m3-text-field:focus-within .m3-text-field-suffix-slot,
+.m3-text-field[data-visually-focused='true'] .m3-text-field-suffix-slot,
 .m3-text-field[data-populated='true'] .m3-text-field-prefix-slot,
 .m3-text-field[data-populated='true'] .m3-text-field-suffix-slot {
   opacity: 1;
@@ -261,7 +267,8 @@
   --_label-color: var(--md-comp-outlined-text-field-hover-label-text-color);
 }
 
-.m3-text-field:focus-within {
+.m3-text-field:focus-within,
+.m3-text-field[data-visually-focused='true'] {
   --_outline-width: var(--md-comp-outlined-text-field-focus-outline-width);
   --_outline-color: var(--md-comp-outlined-text-field-focus-outline-color);
   --_label-color: var(--md-comp-outlined-text-field-focus-label-text-color);
@@ -280,7 +287,8 @@
   --_trailing-icon-color: var(--md-comp-outlined-text-field-error-hover-trailing-icon-color);
 }
 
-.m3-text-field[data-invalid='true']:focus-within {
+.m3-text-field[data-invalid='true']:focus-within,
+.m3-text-field[data-invalid='true'][data-visually-focused='true'] {
   --_outline-color: var(--md-comp-outlined-text-field-error-focus-outline-color);
   --_label-color: var(--md-comp-outlined-text-field-error-focus-label-text-color);
   --_supporting-color: var(--md-comp-outlined-text-field-error-focus-supporting-text-color);

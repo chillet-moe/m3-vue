@@ -731,7 +731,7 @@ describe('Menu', () => {
     }
   });
 
-  it('restores focus to the dropdown trigger when the menu closes from keyboard or selection', async () => {
+  it('restores focus to the dropdown trigger when the menu closes from keyboard or keyboard selection, but not mouse selection', async () => {
     installPopoverPolyfill();
 
     const container = document.createElement('div');
@@ -779,12 +779,23 @@ describe('Menu', () => {
 
     trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
     await nextTick();
-    menuItems[0]?.click();
+
+    menuItems[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 0 }));
     await nextTick();
     await flushMicrotasks();
 
     expect(isPopoverOpen(menu)).toBe(false);
     expect(document.activeElement).toBe(trigger);
+
+    trigger?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
+    await nextTick();
+
+    menuItems[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
+    await nextTick();
+    await flushMicrotasks();
+
+    expect(isPopoverOpen(menu)).toBe(false);
+    expect(document.activeElement).not.toBe(trigger);
 
     app.unmount();
   });

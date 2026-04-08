@@ -26,6 +26,7 @@ export const m3VueComponentNames = [
   'Radio',
   'Slider',
   'Snackbar',
+  'Select',
   'Switch',
   'TextField',
   'Tooltip',
