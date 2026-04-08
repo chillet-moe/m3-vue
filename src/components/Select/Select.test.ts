@@ -271,6 +271,27 @@ describe('Select', () => {
     app.unmount();
   });
 
+  it('does not render an outline notch when no label is provided', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(Select, {
+        options,
+        'aria-label': 'Coffee',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector('.m3-select-field .m3-text-field-outline legend')).toBeNull();
+
+    app.unmount();
+  });
+
   it('uses the outer select container as the dropdown anchor', async () => {
     installPopoverPolyfill();
 
