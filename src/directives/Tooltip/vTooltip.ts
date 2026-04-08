@@ -7,12 +7,6 @@ const STATE = Symbol('vtt_state');
 export type { Placement, TooltipConfig, TooltipDirective, VTooltipBinding } from './types';
 export { normalizeBinding } from './helpers';
 
-declare module 'vue' {
-  export interface GlobalDirectives {
-    vTooltip: TooltipDirective;
-  }
-}
-
 export default {
   mounted(el, binding) {
     if (binding.value === undefined) return;

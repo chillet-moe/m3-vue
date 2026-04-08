@@ -8,8 +8,8 @@ import './styles/theme.css';
 export { usePressedState } from './composables/pressedState.ts';
 
 // Directives
-export { default as vTooltip } from './directives/Tooltip/vTooltip.ts';
-export { vDropdown, vDropdownMenu, vContextMenu } from './directives/Menu';
+export * from './directives';
+export * from './plugin';
 
 // Components
 export * from './components/Button';

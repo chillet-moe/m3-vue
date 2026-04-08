@@ -46,3 +46,18 @@ export default defineConfig({
 ```
 
 If you add a new component in `src/components`, also update `src/resolver.ts`.
+
+## Plugin
+
+```ts
+import { createApp } from 'vue';
+import { M3VuePlugin } from '@chillet/m3-vue';
+import App from './App.vue';
+
+const app = createApp(App);
+
+app.use(M3VuePlugin);
+app.mount('#app');
+```
+
+After registration, you can use `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` directly in templates.
