@@ -10,6 +10,7 @@ import { browserslistToTargets, Features } from 'lightningcss';
 import browserslist from 'browserslist';
 
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+const externalPackages = [...new Set([...Object.keys(pkg.peerDependencies), '@nuxt/kit'])];
 
 export default defineConfig({
   plugins: [
@@ -54,13 +55,17 @@ export default defineConfig({
     sourcemap: true,
     emptyOutDir: true,
     lib: {
-      entry: 'src/index.ts',
+      entry: {
+        index: 'src/index.ts',
+        nuxt: 'src/nuxt.ts',
+      },
       name: 'm3-vue',
       formats: ['es'],
-      fileName: 'index',
+      fileName: (_format, entryName) => entryName,
+      cssFileName: 'style',
     },
     rolldownOptions: {
-      external: Object.keys(pkg.peerDependencies),
+      external: externalPackages,
       output: {
         assetFileNames: '[name][extname]',
         entryFileNames: (chunkInfo) => {

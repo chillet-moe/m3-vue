@@ -22,7 +22,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
     },
-    "./style.css": "./dist/index.css",
+    "./nuxt": {
+      "types": "./dist/nuxt.d.ts",
+      "import": "./dist/nuxt.mjs"
+    },
+    "./style.css": "./dist/style.css",
     "./typography-classes.css": "./dist/typography-classes.css",
     "./color-classes.css": "./dist/color-classes.css",
     "./typography.module.css": "./dist/typography.module.css",
@@ -47,6 +51,7 @@
     "lint:fix": "oxlint --fix"
   },
   "dependencies": {
+    "@nuxt/kit": "^4.1.2",
     "@vueuse/core": "^14.2.1",
     "vue": "^3.5.30"
   },
