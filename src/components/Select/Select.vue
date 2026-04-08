@@ -158,10 +158,6 @@ const hasLeading = computed(() => {
   return Boolean(slots.leading);
 });
 
-const hasOptionLeading = computed(() => {
-  return Boolean(slots.optionLeading) || props.options.some((option) => option.leadingIcon);
-});
-
 const textFieldPlaceholder = computed(() => {
   if (props.filterable && open.value) {
     return props.filterPlaceholder;
@@ -561,18 +557,31 @@ defineExpose({
           <MenuItem
             v-for="{ option, index } in filteredOptionEntries"
             :key="`${index}-${option.value}`"
+            class="m3-select-option"
             :data-option-index="index"
+            :data-has-option-leading="option.leadingIcon || slots.optionLeading ? 'true' : undefined"
             :disabled="option.disabled"
             :role="props.multiple ? 'menuitemcheckbox' : 'menuitemradio'"
             :checked="isOptionSelected(option)"
             :selected="isOptionSelected(option)"
             :close-on-select="!props.multiple"
           >
-            <template v-if="hasOptionLeading || isOptionSelected(option)" #leading>
-              <Icon v-if="isOptionSelected(option)" name="check" />
-              <slot v-else name="optionLeading" :option="option" :selected="false">
-                <Icon v-if="option.leadingIcon" :name="option.leadingIcon" />
-              </slot>
+            <template #leading>
+              <span class="m3-select-option-leading-content">
+                <span class="m3-select-option-check" aria-hidden="true">
+                  <Icon name="check" />
+                </span>
+
+                <span
+                  v-if="option.leadingIcon || slots.optionLeading"
+                  class="m3-select-option-icon"
+                  aria-hidden="true"
+                >
+                  <slot name="optionLeading" :option="option" :selected="false">
+                    <Icon v-if="option.leadingIcon" :name="option.leadingIcon" />
+                  </slot>
+                </span>
+              </span>
             </template>
 
             {{ option.label }}

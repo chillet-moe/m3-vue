@@ -320,7 +320,7 @@ describe('Select', () => {
     await nextTick();
 
     const selectedItemLeading = container.querySelector<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-leading',
+      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
     );
 
     expect(selectedItemLeading?.textContent?.trim()).toBe('check');
@@ -396,15 +396,15 @@ describe('Select', () => {
     await nextTick();
 
     const selectedLeadings = container.querySelectorAll<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-leading',
+      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
     );
-    const unselectedLeadings = container.querySelectorAll<HTMLElement>(
-      'button[role="menuitemradio"]:not([data-selected=\"true\"]) .m3-menu-item-leading',
+    const selectedLabels = container.querySelectorAll<HTMLElement>(
+      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-label',
     );
 
     expect(selectedLeadings).toHaveLength(1);
     expect(selectedLeadings[0]?.textContent?.trim()).toBe('check');
-    expect(Array.from(unselectedLeadings).every((leading) => leading.textContent?.trim() !== 'check')).toBe(true);
+    expect(selectedLabels[0]?.textContent?.trim()).toBe('Cold brew');
 
     app.unmount();
   });
