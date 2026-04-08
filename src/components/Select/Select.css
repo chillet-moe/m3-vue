@@ -134,6 +134,16 @@
   flex-direction: column;
 }
 
+.m3-select-options > .m3-menu-item:first-child {
+  border-start-start-radius: var(--md-comp-menus-active-container-shape);
+  border-start-end-radius: var(--md-comp-menus-active-container-shape);
+}
+
+.m3-select-options > .m3-menu-item:last-child {
+  border-end-start-radius: var(--md-comp-menus-active-container-shape);
+  border-end-end-radius: var(--md-comp-menus-active-container-shape);
+}
+
 .m3-select-options-move,
 .m3-select-options-enter-active,
 .m3-select-options-leave-active {
