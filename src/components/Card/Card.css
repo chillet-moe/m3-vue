@@ -85,6 +85,9 @@
   border: none;
 
   display: inline-flex;
+  align-items: start;
+  justify-content: flex-start;
+  text-align: start;
 
   transition:
     border-radius var(--md-easing-fast-spatial),
