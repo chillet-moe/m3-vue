@@ -1,7 +1,7 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/vue3-vite';
 import Card from './Card.vue';
 import { getArgs } from '@/utils/storybook.ts';
-import type { CardProps } from "@/components/Card/Card.vue";
+import type { CardProps } from '@/components/Card/Card.vue';
 
 const meta = {
   component: Card,
@@ -38,8 +38,8 @@ const EnumTemplate: StoryFn<CardArgs> = (args: CardArgs, { argTypes }) => ({
   `,
 });
 
-export const Default: Story = {
-};
+export const Default: Story = {};
+Default.args = {};
 
 export const Colors = EnumTemplate.bind({});
-Colors.args = { enum: 'color' };
+Colors.args = { enum: 'color', slotTemplate: '{{ option }}' };

@@ -83,11 +83,8 @@
 
 .m3-card {
   border: none;
-  user-select: none;
 
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
 
   transition:
     border-radius var(--md-easing-fast-spatial),
@@ -96,32 +93,26 @@
     color var(--md-easing-fast);
 
   background-color: var(--md-color-container);
-  color: var(--md-color-on-container);
-  box-shadow: inset 0 0 0 var(--button-outline-width, 0) var(--outline-color, #000000);
 }
 
 .m3-card[data-pressed] {
   cursor: pointer;
 }
 
-.m3-card[data-color="elevated"] {
+.m3-card[data-color='elevated'] {
   --md-color-container: var(--md-comp-elevated-card-container-color);
-  --md-color-on-container: var(--md-comp-elevated-card-icon-color);
   box-shadow: var(--md-comp-elevated-card-container-elevation);
   border-radius: var(--md-comp-elevated-card-container-shape);
 }
 
-.m3-card[data-color="filled"] {
+.m3-card[data-color='filled'] {
   --md-color-container: var(--md-comp-filled-card-container-color);
-  --md-color-on-container: var(--md-comp-filled-card-icon-color);
   box-shadow: var(--md-comp-filled-card-container-elevation);
   border-radius: var(--md-comp-filled-card-container-shape);
 }
 
-.m3-card[data-color="outlined"] {
+.m3-card[data-color='outlined'] {
   --md-color-container: var(--md-comp-outlined-card-container-color);
-  --md-color-on-container: var(--md-comp-outlined-card-icon-color);
   border-radius: var(--md-comp-outlined-card-container-shape);
-  --button-outline-width: var(--md-comp-outlined-card-outline-width);
-  --outline-color: var(--md-comp-outlined-card-outline-color);
+  box-shadow: inset 0 0 0 var(--md-comp-outlined-card-outline-width) var(--md-comp-outlined-card-outline-color);
 }
