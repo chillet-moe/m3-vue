@@ -33,3 +33,6 @@ export * from './components/Combobox';
 
 // Resolver
 export { M3VueResolver } from './resolver';
+
+// Plugin
+export { M3VuePlugin } from './plugin';

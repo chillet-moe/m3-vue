@@ -1,9 +1,10 @@
 import type { App, Directive, Plugin } from 'vue';
-import type { DropdownTargetBinding } from './directives/Dropdown/helpers';
+import type { DropdownTargetBinding } from '@/directives/Dropdown';
 import { vContextMenu, vDropdown, vDropdownMenu } from './directives/Menu';
 import type { MenuTargetBinding } from './directives/Menu/helpers';
 import type { TooltipDirective } from './directives/Tooltip/types';
 import vTooltip from './directives/Tooltip/vTooltip';
+import { initStateLayer } from '@/components/StateLayer/state-layer.ts';
 
 export const m3VueDirectives = {
   tooltip: vTooltip,
@@ -21,6 +22,8 @@ export const M3VuePlugin = {
     for (const name of m3VueDirectiveNames) {
       app.directive(name, m3VueDirectives[name] as Directive);
     }
+
+    initStateLayer();
   },
 } satisfies Plugin;
 
