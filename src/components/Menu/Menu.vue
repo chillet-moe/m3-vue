@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import { inject, nextTick, onUnmounted, provide, useId, useTemplateRef, watch } from 'vue';
+import MenuContentRenderer from './MenuContentRenderer.vue';
 import { menuContextKey, menuSelectionContextKey, menuSubmenuContextKey } from './MenuContext';
-import type { MenuColor, MenuItemValue, MenuModelValue } from './MenuTypes';
+import type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue } from './MenuTypes';
 
-export type { MenuColor, MenuItemValue, MenuModelValue };
+export type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue };
 
 export type MenuProps = {
   /** Visual color style of the menu surface. */
   color?: MenuColor;
 
+  /** Optional declarative menu content rendered from plain objects. */
+  items?: MenuContentItem[];
+
   /** Enables checkbox semantics and array-based model values for items with `value`. */
   multiple?: boolean;
 };
 
-const { color = 'standard', multiple = false } = defineProps<MenuProps>();
+const { color = 'standard', items = undefined, multiple = false } = defineProps<MenuProps>();
 
 const open = defineModel<boolean>('open', { default: false });
 const modelValue = defineModel<MenuModelValue>();
@@ -438,6 +442,7 @@ defineExpose({
     @focusin="onMenuFocusIn"
   >
     <div class="m3-menu-surface">
+      <MenuContentRenderer v-if="items?.length" :items="items" />
       <slot />
     </div>
   </div>

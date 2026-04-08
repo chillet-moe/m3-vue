@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref, withDirectives } from 'vue';
 import { vDropdown } from '@/directives/Menu';
-import Menu, { type MenuModelValue } from './Menu.vue';
+import Menu, { type MenuContentItem, type MenuModelValue } from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
@@ -98,6 +98,52 @@ async function flushMicrotasks() {
 }
 
 describe('Menu', () => {
+  const objectItems: MenuContentItem[] = [
+    {
+      type: 'group',
+      items: [
+        {
+          label: 'Cut',
+          value: 'cut',
+          leadingIcon: 'content_cut',
+        },
+        {
+          label: 'Copy',
+          value: 'copy',
+          leadingIcon: 'content_copy',
+          supportingText: 'Recommended',
+        },
+        {
+          type: 'submenu',
+          label: 'More',
+          leadingIcon: 'more_horiz',
+          items: [
+            {
+              label: 'Rename',
+              value: 'rename',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'gap',
+    },
+    {
+      type: 'group',
+      items: [
+        {
+          type: 'label',
+          label: 'Danger zone',
+        },
+        {
+          label: 'Delete',
+          trailingText: 'Del',
+        },
+      ],
+    },
+  ];
+
   afterEach(() => {
     document.body.innerHTML = '';
   });
@@ -312,6 +358,111 @@ describe('Menu', () => {
     expect(updates).toEqual([['copy', 'cut'], ['cut']]);
     expect(menuItems[0]?.dataset.selected).toBe('true');
     expect(menuItems[1]?.dataset.selected).toBeUndefined();
+
+    app.unmount();
+  });
+
+  it('renders declarative object content and keeps selection semantics', async () => {
+    installPopoverPolyfill();
+
+    const updates: MenuModelValue[] = [];
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const modelValue = ref<MenuModelValue>('copy');
+
+        return () =>
+          h(Menu, {
+            open: true,
+            items: objectItems,
+            modelValue: modelValue.value,
+            'onUpdate:modelValue': (nextValue: MenuModelValue) => {
+              updates.push(nextValue);
+              modelValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button');
+    const label = container.querySelector('.m3-menu-label');
+    const gaps = container.querySelectorAll('.m3-menu-gap');
+
+    expect(menuItems).toHaveLength(5);
+    expect(menuItems[0]?.textContent).toContain('Cut');
+    expect(menuItems[1]?.textContent).toContain('Copy');
+    expect(menuItems[1]?.dataset.selected).toBe('true');
+    expect(menuItems[1]?.getAttribute('role')).toBe('menuitemradio');
+    expect(label?.textContent?.trim()).toBe('Danger zone');
+    expect(gaps).toHaveLength(1);
+
+    menuItems[2]?.click();
+    await nextTick();
+
+    const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
+    expect(isPopoverOpen(menu)).toBe(true);
+    expect(isPopoverOpen(submenu)).toBe(true);
+
+    menuItems[0]?.click();
+    await nextTick();
+
+    expect(updates).toEqual(['cut']);
+    expect(menuItems[0]?.dataset.selected).toBe('true');
+    expect(menuItems[1]?.dataset.selected).toBeUndefined();
+
+    app.unmount();
+  });
+
+  it('renders declarative items together with slotted content', async () => {
+    installPopoverPolyfill();
+
+    const selectedValues: string[] = [];
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+          items: [
+            {
+              label: 'Generated',
+            },
+          ] satisfies MenuContentItem[],
+          onSelect: (_event: MouseEvent, itemElement: HTMLElement) => {
+            selectedValues.push(itemElement.textContent?.trim() ?? '');
+          },
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [h(MenuItem, null, { default: () => 'Slotted' })],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]');
+
+    expect(menuItems).toHaveLength(2);
+    expect(menuItems[0]?.textContent?.trim()).toBe('Generated');
+    expect(menuItems[1]?.textContent?.trim()).toBe('Slotted');
+
+    menuItems[1]?.click();
+    await nextTick();
+
+    expect(selectedValues).toEqual(['Slotted']);
 
     app.unmount();
   });

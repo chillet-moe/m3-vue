@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from '@storybook/vue3-vite';
 import { computed, ref } from 'vue';
 import { vContextMenu, vDropdown } from '@/directives/Menu';
 import Icon from '@/components/Icon/Icon.vue';
-import type { MenuModelValue, MenuProps } from './Menu.vue';
+import type { MenuContentItem, MenuModelValue, MenuProps } from './Menu.vue';
 import Menu from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuDivider from './MenuDivider.vue';
@@ -166,6 +166,56 @@ const meta = {
     color: 'standard',
   },
 } satisfies Meta<typeof Menu>;
+
+const declarativeItems: MenuContentItem[] = [
+  {
+    type: 'group',
+    items: [
+      {
+        label: 'Cut',
+        value: 'cut',
+        leadingIcon: 'content_cut',
+      },
+      {
+        label: 'Copy',
+        value: 'copy',
+        leadingIcon: 'content_copy',
+        supportingText: 'Recommended',
+      },
+      {
+        type: 'submenu',
+        label: 'More actions',
+        leadingIcon: 'more_horiz',
+        items: [
+          {
+            label: 'Archive',
+            value: 'archive',
+          },
+          {
+            label: 'Favorite',
+            value: 'favorite',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'gap',
+  },
+  {
+    type: 'group',
+    items: [
+      {
+        type: 'label',
+        label: 'Danger zone',
+      },
+      {
+        label: 'Delete',
+        trailingText: 'Del',
+      },
+    ],
+  },
+];
 
 export default meta;
 
@@ -345,3 +395,30 @@ export const DropdownDirective = DropdownDirectiveTemplate.bind({});
 export const ContextDirective = ContextDirectiveTemplate.bind({});
 export const SafeTriangle = SafeTriangleTemplate.bind({});
 export const SelectableValues = SelectableValuesTemplate.bind({});
+
+export const DeclarativeItems: StoryFn<MenuProps> = (args: MenuProps) => ({
+  components: { Menu, MenuContainer, MenuItem, Button },
+  directives: { dropdown: vDropdown },
+  setup: () => {
+    const objectMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
+    const objectBinding = computed(() => objectMenu.value?.menuRef ?? null);
+    const value = ref<MenuModelValue>('copy');
+
+    return { args, objectBinding, objectMenu, value, declarativeItems };
+  },
+  template: `
+    <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+      <Button v-dropdown="objectBinding">Open object-driven menu</Button>
+
+      <Menu ref="objectMenu" v-bind="args" v-model="value" :items="declarativeItems">
+        <MenuContainer>
+          <MenuItem selected>
+            Extra slotted item
+          </MenuItem>
+        </MenuContainer>
+      </Menu>
+
+      <div>Current value: {{ value ?? 'None' }}</div>
+    </div>
+  `,
+});
