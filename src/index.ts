@@ -29,6 +29,7 @@ export * from './components/Form';
 export * from './components/FormField';
 export * from './components/TextField';
 export * from './components/Select';
+export * from './components/Combobox';
 
 // Resolver
 export { M3VueResolver } from './resolver';
