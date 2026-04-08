@@ -1,6 +1,6 @@
 @layer tokens {
   :where(.m3-text-field) {
-    --md-comp-outlined-text-field-container-shape: var(--md-sys-shape-corner-extra-small);
+    --md-comp-outlined-text-field-container-shape: var(--md-sys-shape-corner-medium);
     --md-comp-outlined-text-field-outline-width: 0.0625rem;
     --md-comp-outlined-text-field-outline-color: var(--md-sys-color-outline);
     --md-comp-outlined-text-field-label-text-color: var(--md-sys-color-on-surface-variant);
