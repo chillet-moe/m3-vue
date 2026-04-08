@@ -2,17 +2,17 @@
 import { computed, inject, unref } from 'vue';
 
 import Button from '@/components/Button/Button.vue';
-import { buttonGroupContextKey, type ButtonGroupValue } from '@/components/ButtonGroup/ButtonGroupContext';
+import { selectionGroupContextKey, type SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
 
 export type ButtonGroupItemProps = {
-  value: ButtonGroupValue;
+  value: SelectionGroupValue;
   disabled?: boolean;
   ariaLabel?: string;
 };
 
 const { value, disabled = false, ariaLabel } = defineProps<ButtonGroupItemProps>();
 
-const context = inject(buttonGroupContextKey, undefined);
+const context = inject(selectionGroupContextKey, undefined);
 
 const isChecked = computed(() => {
   const currentValue = unref(context?.modelValue);

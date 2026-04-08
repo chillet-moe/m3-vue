@@ -14,11 +14,14 @@ export * from './plugin';
 // Components
 export * from './components/Button';
 export * from './components/ButtonGroup';
+export * from './components/SelectionGroup';
 export * from './components/IconButton';
 export * from './components/Slider';
 export * from './components/Icon';
 export * from './components/Tooltip';
 export * from './components/Card';
+export * from './components/Chip';
+export * from './components/ChipGroup';
 export * from './components/Dialog';
 export * from './components/Snackbar';
 export * from './components/Switch';
