@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref, withDirectives } from 'vue';
 import { vDropdown } from '@/directives/Menu';
-import Menu from './Menu.vue';
+import Menu, { type MenuModelValue } from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
@@ -184,6 +184,134 @@ describe('Menu', () => {
 
     expect(selectedValues).toEqual(['Edit']);
     expect(isPopoverOpen(menu)).toBe(false);
+
+    app.unmount();
+  });
+
+  it('supports single model values for slotted MenuItem entries while preserving manual items', async () => {
+    installPopoverPolyfill();
+
+    const updates: MenuModelValue[] = [];
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const modelValue = ref<MenuModelValue>('copy');
+
+        return () =>
+          h(
+            Menu,
+            {
+              open: true,
+              modelValue: modelValue.value,
+              'onUpdate:modelValue': (nextValue: MenuModelValue) => {
+                updates.push(nextValue);
+                modelValue.value = nextValue;
+              },
+            },
+            {
+              default: () => [
+                h(MenuContainer, null, {
+                  default: () => [
+                    h(MenuItem, { value: 'cut' }, { default: () => 'Cut' }),
+                    h(MenuItem, { value: 'copy' }, { default: () => 'Copy' }),
+                    h(MenuItem, { selected: true }, { default: () => 'Pinned' }),
+                  ],
+                }),
+              ],
+            },
+          );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button');
+
+    expect(menuItems[0]?.getAttribute('role')).toBe('menuitemradio');
+    expect(menuItems[1]?.getAttribute('role')).toBe('menuitemradio');
+    expect(menuItems[2]?.getAttribute('role')).toBe('menuitem');
+    expect(menuItems[0]?.dataset.selected).toBeUndefined();
+    expect(menuItems[1]?.dataset.selected).toBe('true');
+    expect(menuItems[2]?.dataset.selected).toBe('true');
+
+    menuItems[0]?.click();
+    await nextTick();
+
+    expect(updates).toEqual(['cut']);
+    expect(menuItems[0]?.dataset.selected).toBe('true');
+    expect(menuItems[0]?.getAttribute('aria-checked')).toBe('true');
+    expect(menuItems[1]?.dataset.selected).toBeUndefined();
+    expect(menuItems[1]?.getAttribute('aria-checked')).toBe('false');
+    expect(menuItems[2]?.dataset.selected).toBe('true');
+
+    app.unmount();
+  });
+
+  it('supports multiple model values for slotted MenuItem entries', async () => {
+    installPopoverPolyfill();
+
+    const updates: MenuModelValue[] = [];
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const modelValue = ref<MenuModelValue>(['copy']);
+
+        return () =>
+          h(
+            Menu,
+            {
+              open: true,
+              multiple: true,
+              modelValue: modelValue.value,
+              'onUpdate:modelValue': (nextValue: MenuModelValue) => {
+                updates.push(nextValue);
+                modelValue.value = nextValue;
+              },
+            },
+            {
+              default: () => [
+                h(MenuContainer, null, {
+                  default: () => [
+                    h(MenuItem, { value: 'cut', closeOnSelect: false }, { default: () => 'Cut' }),
+                    h(MenuItem, { value: 'copy', closeOnSelect: false }, { default: () => 'Copy' }),
+                  ],
+                }),
+              ],
+            },
+          );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button');
+
+    expect(menuItems[0]?.getAttribute('role')).toBe('menuitemcheckbox');
+    expect(menuItems[1]?.getAttribute('role')).toBe('menuitemcheckbox');
+    expect(menuItems[0]?.dataset.selected).toBeUndefined();
+    expect(menuItems[1]?.dataset.selected).toBe('true');
+
+    menuItems[0]?.click();
+    await nextTick();
+
+    expect(updates).toEqual([['copy', 'cut']]);
+    expect(menuItems[0]?.dataset.selected).toBe('true');
+    expect(menuItems[1]?.dataset.selected).toBe('true');
+    expect(isPopoverOpen(menu)).toBe(true);
+
+    menuItems[1]?.click();
+    await nextTick();
+
+    expect(updates).toEqual([['copy', 'cut'], ['cut']]);
+    expect(menuItems[0]?.dataset.selected).toBe('true');
+    expect(menuItems[1]?.dataset.selected).toBeUndefined();
 
     app.unmount();
   });

@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, useId, useSlots } from 'vue';
-import { menuContextKey } from './MenuContext';
+import { menuContextKey, menuSelectionContextKey } from './MenuContext';
+import type { MenuItemValue } from './MenuTypes';
 
 export type MenuItemProps = {
+  /** Optional value that participates in Menu selection state. */
+  value?: MenuItemValue;
+
   /** Disables item interaction. */
   disabled?: boolean;
 
@@ -26,10 +30,11 @@ export type MenuItemProps = {
 };
 
 const {
+  value = undefined,
   disabled = false,
   closeOnSelect = true,
   selected = false,
-  role = 'menuitem',
+  role = undefined,
   checked = false,
   submenu = false,
   submenuOpen = false,
@@ -37,6 +42,7 @@ const {
 
 const slots = useSlots();
 const menuContext = inject(menuContextKey, null);
+const menuSelection = inject(menuSelectionContextKey, null);
 
 defineSlots<{
   /** Optional leading content, such as an icon. */
@@ -60,12 +66,52 @@ defineSlots<{
 
 const supportingId = `menu-item-supporting-${useId()}`;
 
+const usesMenuSelection = computed(() => {
+  return value !== undefined && !submenu;
+});
+
+const resolvedSelected = computed(() => {
+  if (!usesMenuSelection.value || !menuSelection || value === undefined) {
+    return selected;
+  }
+
+  return menuSelection.isSelected(value);
+});
+
+const resolvedChecked = computed(() => {
+  if (!usesMenuSelection.value || !menuSelection || value === undefined) {
+    return checked;
+  }
+
+  return menuSelection.isSelected(value);
+});
+
+const resolvedRole = computed(() => {
+  if (role) {
+    return role;
+  }
+
+  if (!usesMenuSelection.value || !menuSelection) {
+    return 'menuitem';
+  }
+
+  return menuSelection.multiple() ? 'menuitemcheckbox' : 'menuitemradio';
+});
+
 const slotProps = computed(() => ({
-  checked,
+  checked: resolvedChecked.value,
   disabled,
-  selected,
+  selected: resolvedSelected.value,
   submenu,
 }));
+
+function handleClick() {
+  if (!usesMenuSelection.value || !menuSelection || value === undefined) {
+    return;
+  }
+
+  menuSelection.toggle(value);
+}
 
 function hasLeading() {
   return Boolean(slots.leading);
@@ -95,18 +141,19 @@ function hasSuffix() {
 <template>
   <button
     type="button"
-    :role="role"
+    :role="resolvedRole"
     :disabled="disabled"
-    :data-selected="selected ? 'true' : undefined"
+    :data-selected="resolvedSelected ? 'true' : undefined"
     :data-menu-owner="menuContext?.id"
     :data-has-supporting="hasSupporting() ? 'true' : undefined"
     :data-close-on-select="closeOnSelect ? undefined : 'false'"
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"
     :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
-    :aria-checked="role === 'menuitem' ? undefined : (checked ? 'true' : 'false')"
+    :aria-checked="resolvedRole === 'menuitem' ? undefined : (resolvedChecked ? 'true' : 'false')"
     :aria-describedby="hasSupporting() ? supportingId : undefined"
     :class="['state-layer', 'm3-menu-item']"
+    @click="handleClick"
   >
     <span v-if="hasLeading()" class="m3-menu-item-leading">
       <slot name="leading" v-bind="slotProps" />

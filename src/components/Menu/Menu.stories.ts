@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from '@storybook/vue3-vite';
 import { computed, ref } from 'vue';
 import { vContextMenu, vDropdown } from '@/directives/Menu';
 import Icon from '@/components/Icon/Icon.vue';
-import type { MenuProps } from './Menu.vue';
+import type { MenuModelValue, MenuProps } from './Menu.vue';
 import Menu from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuDivider from './MenuDivider.vue';
@@ -271,6 +271,77 @@ const SafeTriangleTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
   `,
 });
 
+const SelectableValuesTemplate: StoryFn<MenuProps> = (args: MenuProps) => ({
+  components: { Icon, Menu, MenuContainer, MenuItem, Button },
+  directives: { dropdown: vDropdown },
+  setup: () => {
+    const singleMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
+    const multipleMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
+    const singleBinding = computed(() => singleMenu.value?.menuRef ?? null);
+    const multipleBinding = computed(() => multipleMenu.value?.menuRef ?? null);
+    const single = ref<MenuModelValue>('copy');
+    const multiple = ref<MenuModelValue>(['archive']);
+
+    return { args, multiple, multipleBinding, multipleMenu, single, singleBinding, singleMenu };
+  },
+  template: `
+    <div style="padding: 3rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <Button v-dropdown="singleBinding">Open single-select menu</Button>
+        <Button v-dropdown="multipleBinding">Open multi-select menu</Button>
+      </div>
+
+      <Menu ref="singleMenu" v-bind="args" v-model="single">
+        <MenuContainer>
+          <MenuItem value="cut">
+            <template #leading="{ selected }">
+              <Icon :name="selected ? 'check' : 'content_cut'" />
+            </template>
+            Cut
+          </MenuItem>
+          <MenuItem value="copy">
+            <template #leading="{ selected }">
+              <Icon :name="selected ? 'check' : 'content_copy'" />
+            </template>
+            Copy
+          </MenuItem>
+          <MenuItem value="paste">
+            <template #leading="{ selected }">
+              <Icon :name="selected ? 'check' : 'content_paste'" />
+            </template>
+            Paste
+          </MenuItem>
+        </MenuContainer>
+      </Menu>
+
+      <Menu ref="multipleMenu" v-bind="args" v-model="multiple" multiple>
+        <MenuContainer>
+          <MenuItem value="archive" :close-on-select="false">
+            <template #leading="{ selected }">
+              <Icon :name="selected ? 'check_box' : 'check_box_outline_blank'" />
+            </template>
+            Archive
+          </MenuItem>
+          <MenuItem value="favorite" :close-on-select="false">
+            <template #leading="{ selected }">
+              <Icon :name="selected ? 'check_box' : 'check_box_outline_blank'" />
+            </template>
+            Favorite
+          </MenuItem>
+          <MenuItem selected>
+            <template #leading><Icon name="push_pin" /></template>
+            Manual item without value
+          </MenuItem>
+        </MenuContainer>
+      </Menu>
+
+      <div>Single value: {{ single ?? 'None' }}</div>
+      <div>Multiple values: {{ Array.isArray(multiple) ? multiple.join(', ') : 'None' }}</div>
+    </div>
+  `,
+});
+
 export const DropdownDirective = DropdownDirectiveTemplate.bind({});
 export const ContextDirective = ContextDirectiveTemplate.bind({});
 export const SafeTriangle = SafeTriangleTemplate.bind({});
+export const SelectableValues = SelectableValuesTemplate.bind({});

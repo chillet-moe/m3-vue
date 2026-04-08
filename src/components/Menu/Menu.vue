@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { inject, nextTick, onUnmounted, provide, useId, useTemplateRef, watch } from 'vue';
-import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
+import { menuContextKey, menuSelectionContextKey, menuSubmenuContextKey } from './MenuContext';
+import type { MenuColor, MenuItemValue, MenuModelValue } from './MenuTypes';
 
-export type MenuColor = 'standard' | 'vibrant';
+export type { MenuColor, MenuItemValue, MenuModelValue };
 
 export type MenuProps = {
   /** Visual color style of the menu surface. */
   color?: MenuColor;
+
+  /** Enables checkbox semantics and array-based model values for items with `value`. */
+  multiple?: boolean;
 };
 
-const { color = 'standard' } = defineProps<MenuProps>();
+const { color = 'standard', multiple = false } = defineProps<MenuProps>();
 
 const open = defineModel<boolean>('open', { default: false });
+const modelValue = defineModel<MenuModelValue>();
 
 const emit = defineEmits<{
   /** Fired when a menu item is activated. */
@@ -57,6 +62,32 @@ function closeMenuChain() {
   parentMenu?.closeAll() ?? hide();
 }
 
+function isValueSelected(value: MenuItemValue) {
+  if (multiple) {
+    return Array.isArray(modelValue.value) ? modelValue.value.includes(value) : false;
+  }
+
+  return modelValue.value === value;
+}
+
+function toggleValue(value: MenuItemValue) {
+  if (multiple) {
+    const currentValues = Array.isArray(modelValue.value) ? [...modelValue.value] : [];
+    const currentIndex = currentValues.findIndex((item) => item === value);
+
+    if (currentIndex >= 0) {
+      currentValues.splice(currentIndex, 1);
+    } else {
+      currentValues.push(value);
+    }
+
+    modelValue.value = currentValues;
+    return;
+  }
+
+  modelValue.value = value;
+}
+
 function isMenuOpen(menu: HTMLElement) {
   return menu.matches(':popover-open');
 }
@@ -70,6 +101,12 @@ provide(menuContextKey, {
   closeAll: closeMenuChain,
   registerSubmenu,
   closeSubmenus,
+});
+
+provide(menuSelectionContextKey, {
+  multiple: () => multiple,
+  isSelected: isValueSelected,
+  toggle: toggleValue,
 });
 
 function showMenu(source?: HTMLElement) {

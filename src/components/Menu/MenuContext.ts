@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue';
-import type { MenuColor } from './Menu.vue';
+import type { MenuColor, MenuItemValue } from './MenuTypes';
 
 export type MenuContext = {
   id: string;
@@ -11,6 +11,14 @@ export type MenuContext = {
 };
 
 export const menuContextKey: InjectionKey<MenuContext> = Symbol('MenuContext');
+
+export type MenuSelectionContext = {
+  multiple: () => boolean;
+  isSelected: (value: MenuItemValue) => boolean;
+  toggle: (value: MenuItemValue) => void;
+};
+
+export const menuSelectionContextKey: InjectionKey<MenuSelectionContext> = Symbol('MenuSelectionContext');
 
 export type MenuSubmenuContext = {
   close: () => void;
