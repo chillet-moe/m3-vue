@@ -1,10 +1,11 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/vue3-vite';
-import Tooltip, { type TooltipProps } from "@/components/Tooltip/Tooltip.vue";
-import { getArgs } from "@/utils/storybook.ts";
+import Tooltip, { type TooltipProps } from '@/components/Tooltip/Tooltip.vue';
+import { getArgs } from '@/utils/storybook.ts';
 
 const meta = {
   component: Tooltip,
   args: {
+    popover: 'hint',
     variant: 'plain',
     default: 'Tooltip',
   },
@@ -14,7 +15,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 interface TooltipArgs extends TooltipProps {
-  enum: 'variant';
+  enum: 'popover' | 'variant';
   slotTemplate?: string;
 }
 
@@ -31,7 +32,10 @@ const EnumTemplate: StoryFn<TooltipArgs> = (args: TooltipArgs, { argTypes }) => 
   `,
 });
 
-export const Default: Story = {}
+export const Default: Story = {};
 
 export const Variants = EnumTemplate.bind({});
 Variants.args = { enum: 'variant' };
+
+export const PopoverTypes = EnumTemplate.bind({});
+PopoverTypes.args = { enum: 'popover' };

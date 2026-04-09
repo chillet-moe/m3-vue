@@ -1,13 +1,12 @@
 <script setup lang="ts">
-
 export type TooltipProps = {
   /** The variant of the tooltip. */
   variant?: 'plain' | 'rich';
-}
+  /** The popover behavior of the tooltip. */
+  popover?: 'auto' | 'hint' | 'manual';
+};
 
-const {
-  variant = 'plain',
-} = defineProps<TooltipProps>();
+const { variant = 'plain', popover = 'hint' } = defineProps<TooltipProps>();
 
 const slots = defineSlots<{
   /**
@@ -18,7 +17,7 @@ const slots = defineSlots<{
 </script>
 
 <template>
-  <div :class="'m3-tooltip'" :data-variant="variant">
+  <div :class="'m3-tooltip'" :data-variant="variant" :popover="popover">
     <slot name="default"></slot>
   </div>
 </template>
