@@ -5,6 +5,8 @@
     --md-comp-menus-container-shape: var(--md-sys-shape-corner-large);
     --md-comp-menus-active-container-shape: var(--md-sys-shape-corner-large);
     --md-comp-menus-inactive-container-shape: var(--md-sys-shape-corner-small);
+    --md-comp-menus-menu-item-first-child-shape: calc(var(--md-comp-menus-container-shape) - --dp(4));
+    --md-comp-menus-menu-item-last-child-shape: calc(var(--md-comp-menus-container-shape) - --dp(4));
     --md-comp-menu-container-elevation: var(--md-sys-elevation-level2);
     --md-comp-menu-container-shadow-color: var(--md-sys-color-shadow);
 
@@ -313,15 +315,15 @@
 }
 
 .m3-menu-container:first-of-type {
-  --_menu-item-first-start-radius: var(--md-comp-menus-active-container-shape);
-  --_menu-item-first-end-radius: var(--md-comp-menus-active-container-shape);
+  --_menu-item-first-start-radius: var(--md-comp-menus-menu-item-first-child-shape);
+  --_menu-item-first-end-radius: var(--md-comp-menus-menu-item-first-child-shape);
   border-start-start-radius: var(--md-comp-menus-active-container-shape);
   border-start-end-radius: var(--md-comp-menus-active-container-shape);
 }
 
 .m3-menu-container:last-of-type {
-  --_menu-item-last-start-radius: var(--md-comp-menus-active-container-shape);
-  --_menu-item-last-end-radius: var(--md-comp-menus-active-container-shape);
+  --_menu-item-last-start-radius: var(--md-comp-menus-menu-item-last-child-shape);
+  --_menu-item-last-end-radius: var(--md-comp-menus-menu-item-last-child-shape);
   border-end-start-radius: var(--md-comp-menus-active-container-shape);
   border-end-end-radius: var(--md-comp-menus-active-container-shape);
 }
