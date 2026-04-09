@@ -150,7 +150,7 @@ function hasSuffix() {
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"
     :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
-    :aria-checked="resolvedRole === 'menuitem' ? undefined : (resolvedChecked ? 'true' : 'false')"
+    :aria-checked="resolvedRole === 'menuitem' ? undefined : resolvedChecked ? 'true' : 'false'"
     :aria-describedby="hasSupporting() ? supportingId : undefined"
     :class="['state-layer', 'm3-menu-item']"
     @click="handleClick"

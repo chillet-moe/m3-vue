@@ -7,4 +7,4 @@ export const storyDarkModeDecorator = withThemeByClassName<Renderer>({
     dark: 'story-dark',
   },
   defaultTheme: 'light',
-})
+});

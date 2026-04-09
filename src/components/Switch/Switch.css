@@ -170,7 +170,10 @@
   background-color: var(--md-comp-switch-selected-pressed-handle-color);
 }
 
-.m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-input:not(:checked) + .m3-switch-control .m3-switch-handle {
+.m3-switch:has(.m3-switch-input:not(:disabled):active)
+  .m3-switch-input:not(:checked)
+  + .m3-switch-control
+  .m3-switch-handle {
   background-color: var(--md-comp-switch-unselected-pressed-handle-color);
 }
 

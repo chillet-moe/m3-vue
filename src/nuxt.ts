@@ -52,7 +52,8 @@ export default defineNuxtModule<M3VueNuxtOptions>({
     if (options.directives) {
       addPluginTemplate({
         filename: DEFAULT_PLUGIN_FILENAME,
-        getContents: () => `
+        getContents: () =>
+          `
 import { defineNuxtPlugin } from '#app/nuxt';
 import { M3VuePlugin } from '${PACKAGE_NAME}';
 

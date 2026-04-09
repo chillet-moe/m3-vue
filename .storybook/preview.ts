@@ -7,7 +7,7 @@ import '../src';
 import './theme/preview.css';
 import './theme/manager.css';
 import './lib.css';
-import { initStateLayer, vTooltip } from "@/index.ts";
+import { initStateLayer, vTooltip } from '@/index.ts';
 
 export default {
   decorators: [storyDarkModeDecorator],
@@ -39,13 +39,13 @@ export default {
 } as Preview;
 
 /* Reload the page on the error "Failed to fetch dynamically imported module..." */
-window.addEventListener("error", (ev) => onFailedToFetchModule(ev.message));
-window.addEventListener("unhandledrejection", (ev) => onFailedToFetchModule(ev?.reason?.message));
+window.addEventListener('error', (ev) => onFailedToFetchModule(ev.message));
+window.addEventListener('unhandledrejection', (ev) => onFailedToFetchModule(ev?.reason?.message));
 
 function onFailedToFetchModule(message: string) {
-  const isProd = import.meta.env.MODE === "production";
+  const isProd = import.meta.env.MODE === 'production';
 
-  if (isProd && message?.includes("Failed to fetch dynamically imported module")) {
+  if (isProd && message?.includes('Failed to fetch dynamically imported module')) {
     window.location.reload();
   }
 }
@@ -53,7 +53,7 @@ function onFailedToFetchModule(message: string) {
 let stateLayerInitialized = false;
 
 setup((app) => {
-  app.directive("tooltip", vTooltip);
+  app.directive('tooltip', vTooltip);
   if (!stateLayerInitialized) {
     stateLayerInitialized = true;
     initStateLayer();

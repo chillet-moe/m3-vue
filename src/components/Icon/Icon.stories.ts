@@ -20,6 +20,6 @@ export const Default: Story = {
     In the example, only 'favorite', 'home', 'search', 'settings' icons are available.
     <br/>
     For more icons, please refer to <a href="https://developers.google.com/fonts/docs/material_symbols">Material Symbols guide</a>.
-    `
+    `,
   }),
 };

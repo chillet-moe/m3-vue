@@ -30,27 +30,23 @@ export function normalizeBinding(binding: TooltipBindingValue): NormalizedToolti
   return { ...defaults, ...binding };
 }
 
-function isSameTarget(
-  a: NormalizedTooltipOptions['target'],
-  b: NormalizedTooltipOptions['target'],
-) {
+function isSameTarget(a: NormalizedTooltipOptions['target'], b: NormalizedTooltipOptions['target']) {
   return a === b;
 }
 
-export function areNormalizedTooltipOptionsEqual(
-  a: NormalizedTooltipOptions,
-  b: NormalizedTooltipOptions,
-) {
-  return isSameTarget(a.target, b.target)
-    && a.content === b.content
-    && a.placement === b.placement
-    && a.offset === b.offset
-    && a.interactive === b.interactive
-    && a.popoverType === b.popoverType
-    && a.openDelay === b.openDelay
-    && a.closeDelay === b.closeDelay
-    && a.longpressDelay === b.longpressDelay
-    && a.animDuration === b.animDuration;
+export function areNormalizedTooltipOptionsEqual(a: NormalizedTooltipOptions, b: NormalizedTooltipOptions) {
+  return (
+    isSameTarget(a.target, b.target) &&
+    a.content === b.content &&
+    a.placement === b.placement &&
+    a.offset === b.offset &&
+    a.interactive === b.interactive &&
+    a.popoverType === b.popoverType &&
+    a.openDelay === b.openDelay &&
+    a.closeDelay === b.closeDelay &&
+    a.longpressDelay === b.longpressDelay &&
+    a.animDuration === b.animDuration
+  );
 }
 
 function isZeroOffset(offset: string) {
@@ -78,12 +74,16 @@ export function placementToTranslate(placement: Placement, offset: string) {
 }
 
 export function supportsAnchorPositioning() {
-  return typeof CSS !== 'undefined' && CSS.supports?.('position-anchor: --a') && CSS.supports?.('position-area: block-start');
+  return (
+    typeof CSS !== 'undefined' && CSS.supports?.('position-anchor: --a') && CSS.supports?.('position-area: block-start')
+  );
 }
 
 export function supportsPopover(el: HTMLElement) {
-  return typeof (el as HTMLElement & { showPopover?: unknown }).showPopover === 'function'
-    && typeof (el as HTMLElement & { hidePopover?: unknown }).hidePopover === 'function';
+  return (
+    typeof (el as HTMLElement & { showPopover?: unknown }).showPopover === 'function' &&
+    typeof (el as HTMLElement & { hidePopover?: unknown }).hidePopover === 'function'
+  );
 }
 
 export function getTipFromTarget(target: string | HTMLElement | undefined): HTMLElement | null {

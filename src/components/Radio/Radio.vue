@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 export type RadioProps = {
   /** Whether the radio is disabled. */
   disabled?: boolean;

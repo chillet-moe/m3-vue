@@ -110,8 +110,8 @@ html.vl-dark #storybook-root {
 .sbdocs .sbdocs-content > table th,
 .sbdocs .sbdocs-content > table td {
   border-left-width: 0; /* border-l-0 */
-  border-top-width: 0;  /* border-t-0 */
-  text-align: left;       /* text-left */
+  border-top-width: 0; /* border-t-0 */
+  text-align: left; /* text-left */
 }
 
 .sbdocs .sbdocs-content > table th:last-child,
@@ -182,7 +182,9 @@ html.vl-dark #storybook-root {
 
 .light .sb-argstableBlock-body {
   border-radius: var(--rounded-sm);
-  box-shadow: rgb(0 0 0 / 5%) 0 1px 3px 1px, rgb(0 0 0 / 4%) 0 0 0 1px;
+  box-shadow:
+    rgb(0 0 0 / 5%) 0 1px 3px 1px,
+    rgb(0 0 0 / 4%) 0 0 0 1px;
 }
 
 .light .sb-argstableBlock-body td {
@@ -226,7 +228,9 @@ html.vl-dark #storybook-root {
 
 .dark .sb-argstableBlock-body {
   border-radius: var(--rounded-sm);
-  box-shadow: rgb(255 255 255 / 10%) 0 1px 3px 1px, rgb(255 255 255 / 7%) 0 0 0 1px;
+  box-shadow:
+    rgb(255 255 255 / 10%) 0 1px 3px 1px,
+    rgb(255 255 255 / 7%) 0 0 0 1px;
 }
 
 .dark .sb-argstableBlock-body td {
@@ -347,12 +351,12 @@ html.vl-dark #storybook-root {
 }
 
 /*.light .sbdocs.sbdocs-preview > div:first-child,*/
-.story-light .sbdocs.sbdocs-preview > [role="toolbar"] {
+.story-light .sbdocs.sbdocs-preview > [role='toolbar'] {
   border-bottom: 1px solid var(--neutral-200) !important;
 }
 
 /*.dark .sbdocs.sbdocs-preview > div:first-child,*/
-.story-dark .sbdocs.sbdocs-preview > [role="toolbar"] {
+.story-dark .sbdocs.sbdocs-preview > [role='toolbar'] {
   border-bottom: 1px solid var(--neutral-800) !important;
 }
 
@@ -499,7 +503,7 @@ html.vl-dark #storybook-root {
 }
 
 .dark .docblock-argstable-body tr > td .rejt-edit-form,
-.dark .docblock-argstable-body tr > td input:not([type="checkbox"]),
+.dark .docblock-argstable-body tr > td input:not([type='checkbox']),
 .dark .docblock-argstable-body tr > td textarea,
 .dark .docblock-argstable-body tr > td select,
 .dark .docblock-argstable-body tr > td:nth-child(4) button {
@@ -535,12 +539,12 @@ html.vl-dark #storybook-root {
   line-height: 1;
 }
 
-.light .docblock-argstable-body tr > td .rejt-add-value-node button[type="submit"] {
+.light .docblock-argstable-body tr > td .rejt-add-value-node button[type='submit'] {
   background-color: var(--white);
 }
 
 .light .docblock-argstable-body tr > td .rejt-edit-form,
-.light .docblock-argstable-body tr > td input:not([type="checkbox"]),
+.light .docblock-argstable-body tr > td input:not([type='checkbox']),
 .light .docblock-argstable-body tr > td textarea,
 .light .docblock-argstable-body tr > td select,
 .light .docblock-argstable-body tr > td:nth-child(4) button {

@@ -7,7 +7,13 @@ import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
 import MenuLabel from './MenuLabel.vue';
 import MenuSubMenu from './MenuSubMenu.vue';
-import type { MenuActionContent, MenuContentItem, MenuContentKey, MenuGroupContent, MenuSubmenuContent } from './MenuTypes';
+import type {
+  MenuActionContent,
+  MenuContentItem,
+  MenuContentKey,
+  MenuGroupContent,
+  MenuSubmenuContent,
+} from './MenuTypes';
 
 defineOptions({
   name: 'MenuContentRenderer',
@@ -105,7 +111,10 @@ function contentKey(item: MenuContentItem, index: number) {
 </script>
 
 <template>
-  <template v-for="(segment, segmentIndex) in segments" :key="segment.type === 'gap' ? gapKey(segment, segmentIndex) : groupKey(segment, segmentIndex)">
+  <template
+    v-for="(segment, segmentIndex) in segments"
+    :key="segment.type === 'gap' ? gapKey(segment, segmentIndex) : groupKey(segment, segmentIndex)"
+  >
     <MenuGap v-if="segment.type === 'gap'" />
 
     <MenuContainer v-else>
@@ -116,11 +125,7 @@ function contentKey(item: MenuContentItem, index: number) {
 
         <MenuDivider v-else-if="item.type === 'divider'" />
 
-        <MenuSubMenu
-          v-else-if="isSubmenuItem(item)"
-          :color="item.color"
-          :debug-safe-triangle="item.debugSafeTriangle"
-        >
+        <MenuSubMenu v-else-if="isSubmenuItem(item)" :color="item.color" :debug-safe-triangle="item.debugSafeTriangle">
           <template #trigger="{ open }">
             <MenuItem submenu :submenu-open="open" :disabled="item.disabled">
               <template v-if="item.leadingIcon" #leading>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 export type CheckBoxProps = {
   /** Whether the checkbox is disabled. */
   disabled?: boolean;

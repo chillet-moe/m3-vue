@@ -13,9 +13,7 @@ export const m3VueDirectives = {
   contextMenu: vContextMenu,
 } as const satisfies Record<string, Directive>;
 
-export const m3VueDirectiveNames = Object.freeze(
-  Object.keys(m3VueDirectives) as Array<keyof typeof m3VueDirectives>,
-);
+export const m3VueDirectiveNames = Object.freeze(Object.keys(m3VueDirectives) as Array<keyof typeof m3VueDirectives>);
 
 export const M3VuePlugin = {
   install(app: App) {

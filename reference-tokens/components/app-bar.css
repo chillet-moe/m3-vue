@@ -5,28 +5,16 @@
 @layer tokens {
   :where(.md-app-bar) {
     --md-comp-app-bar-container-color: var(--md-sys-color-surface);
-    --md-comp-app-bar-search-container-color: var(
-      --md-sys-color-surface-container
-    );
-    --md-comp-app-bar-search-label-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-app-bar-on-scroll-container-color: var(
-      --md-sys-color-surface-container
-    );
-    --md-comp-app-bar-search-on-scroll-container-color: var(
-      --md-sys-color-surface-container-highest
-    );
+    --md-comp-app-bar-search-container-color: var(--md-sys-color-surface-container);
+    --md-comp-app-bar-search-label-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-app-bar-on-scroll-container-color: var(--md-sys-color-surface-container);
+    --md-comp-app-bar-search-on-scroll-container-color: var(--md-sys-color-surface-container-highest);
     --md-comp-app-bar-container-elevation: var(--md-sys-elevation-level0);
-    --md-comp-app-bar-on-scroll-container-elevation: var(
-      --md-sys-elevation-level2
-    );
+    --md-comp-app-bar-on-scroll-container-elevation: var(--md-sys-elevation-level2);
     --md-comp-app-bar-title-color: var(--md-sys-color-on-surface);
     --md-comp-app-bar-subtitle-color: var(--md-sys-color-on-surface-variant);
     --md-comp-app-bar-leading-icon-color: var(--md-sys-color-on-surface);
-    --md-comp-app-bar-trailing-icon-color: var(
-      --md-sys-color-on-surface-variant
-    );
+    --md-comp-app-bar-trailing-icon-color: var(--md-sys-color-on-surface-variant);
     --md-comp-app-bar-leading-space: 0.25rem;
     --md-comp-app-bar-trailing-space: 0.25rem;
     --md-comp-app-bar-icon-button-space: 0;
@@ -37,131 +25,51 @@
     --md-comp-app-bar-icon-size: 1.5rem;
     --md-comp-app-bar-small-container-height: 4rem;
     --md-comp-app-bar-small-title: var(--md-sys-typescale-title-large);
-    --md-comp-app-bar-small-title-font: var(
-      --md-sys-typescale-title-large-font
-    );
-    --md-comp-app-bar-small-title-weight: var(
-      --md-sys-typescale-title-large-weight
-    );
-    --md-comp-app-bar-small-title-size: var(
-      --md-sys-typescale-title-large-size
-    );
-    --md-comp-app-bar-small-title-line-height: var(
-      --md-sys-typescale-title-large-line-height
-    );
-    --md-comp-app-bar-small-title-tracking: var(
-      --md-sys-typescale-title-large-tracking
-    );
+    --md-comp-app-bar-small-title-font: var(--md-sys-typescale-title-large-font);
+    --md-comp-app-bar-small-title-weight: var(--md-sys-typescale-title-large-weight);
+    --md-comp-app-bar-small-title-size: var(--md-sys-typescale-title-large-size);
+    --md-comp-app-bar-small-title-line-height: var(--md-sys-typescale-title-large-line-height);
+    --md-comp-app-bar-small-title-tracking: var(--md-sys-typescale-title-large-tracking);
     --md-comp-app-bar-small-subtitle: var(--md-sys-typescale-body-small);
-    --md-comp-app-bar-small-subtitle-font: var(
-      --md-sys-typescale-body-small-font
-    );
-    --md-comp-app-bar-small-subtitle-weight: var(
-      --md-sys-typescale-body-small-weight
-    );
-    --md-comp-app-bar-small-subtitle-size: var(
-      --md-sys-typescale-body-small-size
-    );
-    --md-comp-app-bar-small-subtitle-line-height: var(
-      --md-sys-typescale-body-small-line-height
-    );
-    --md-comp-app-bar-small-subtitle-tracking: var(
-      --md-sys-typescale-body-small-tracking
-    );
+    --md-comp-app-bar-small-subtitle-font: var(--md-sys-typescale-body-small-font);
+    --md-comp-app-bar-small-subtitle-weight: var(--md-sys-typescale-body-small-weight);
+    --md-comp-app-bar-small-subtitle-size: var(--md-sys-typescale-body-small-size);
+    --md-comp-app-bar-small-subtitle-line-height: var(--md-sys-typescale-body-small-line-height);
+    --md-comp-app-bar-small-subtitle-tracking: var(--md-sys-typescale-body-small-tracking);
     --md-comp-app-bar-small-search-container-height: 3.5rem;
-    --md-comp-app-bar-small-search-container-shape: var(
-      --md-sys-shape-corner-full
-    );
-    --md-comp-app-bar-small-search-label-text: var(
-      --md-sys-typescale-body-large
-    );
-    --md-comp-app-bar-small-search-label-text-font: var(
-      --md-sys-typescale-body-large-font
-    );
-    --md-comp-app-bar-small-search-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-app-bar-small-search-label-text-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-app-bar-small-search-label-text-line-height: var(
-      --md-sys-typescale-body-large-line-height
-    );
-    --md-comp-app-bar-small-search-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
+    --md-comp-app-bar-small-search-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-app-bar-small-search-label-text: var(--md-sys-typescale-body-large);
+    --md-comp-app-bar-small-search-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-app-bar-small-search-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-app-bar-small-search-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-app-bar-small-search-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-app-bar-small-search-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
     --md-comp-app-bar-medium-flexible-container-height: 7rem;
     --md-comp-app-bar-medium-flexible-with-subtitle-container-height: 8.5rem;
-    --md-comp-app-bar-medium-flexible-title: var(
-      --md-sys-typescale-headline-medium
-    );
-    --md-comp-app-bar-medium-flexible-title-font: var(
-      --md-sys-typescale-headline-medium-font
-    );
-    --md-comp-app-bar-medium-flexible-title-weight: var(
-      --md-sys-typescale-headline-medium-weight
-    );
-    --md-comp-app-bar-medium-flexible-title-size: var(
-      --md-sys-typescale-headline-medium-size
-    );
-    --md-comp-app-bar-medium-flexible-title-line-height: var(
-      --md-sys-typescale-headline-medium-line-height
-    );
-    --md-comp-app-bar-medium-flexible-title-tracking: var(
-      --md-sys-typescale-headline-medium-tracking
-    );
-    --md-comp-app-bar-medium-flexible-subtitle: var(
-      --md-sys-typescale-body-medium-font
-    );
-    --md-comp-app-bar-medium-flexible-subtitle-font: var(
-      --md-sys-typescale-body-medium-font
-    );
-    --md-comp-app-bar-medium-flexible-subtitle-weight: var(
-      --md-sys-typescale-body-medium-weight
-    );
-    --md-comp-app-bar-medium-flexible-subtitle-size: var(
-      --md-sys-typescale-body-medium-size
-    );
-    --md-comp-app-bar-medium-flexible-subtitle-line-height: var(
-      --md-sys-typescale-body-medium-line-height
-    );
-    --md-comp-app-bar-medium-flexible-subtitle-tracking: var(
-      --md-sys-typescale-body-medium-tracking
-    );
+    --md-comp-app-bar-medium-flexible-title: var(--md-sys-typescale-headline-medium);
+    --md-comp-app-bar-medium-flexible-title-font: var(--md-sys-typescale-headline-medium-font);
+    --md-comp-app-bar-medium-flexible-title-weight: var(--md-sys-typescale-headline-medium-weight);
+    --md-comp-app-bar-medium-flexible-title-size: var(--md-sys-typescale-headline-medium-size);
+    --md-comp-app-bar-medium-flexible-title-line-height: var(--md-sys-typescale-headline-medium-line-height);
+    --md-comp-app-bar-medium-flexible-title-tracking: var(--md-sys-typescale-headline-medium-tracking);
+    --md-comp-app-bar-medium-flexible-subtitle: var(--md-sys-typescale-body-medium-font);
+    --md-comp-app-bar-medium-flexible-subtitle-font: var(--md-sys-typescale-body-medium-font);
+    --md-comp-app-bar-medium-flexible-subtitle-weight: var(--md-sys-typescale-body-medium-weight);
+    --md-comp-app-bar-medium-flexible-subtitle-size: var(--md-sys-typescale-body-medium-size);
+    --md-comp-app-bar-medium-flexible-subtitle-line-height: var(--md-sys-typescale-body-medium-line-height);
+    --md-comp-app-bar-medium-flexible-subtitle-tracking: var(--md-sys-typescale-body-medium-tracking);
     --md-comp-app-bar-large-flexible-container-height: 7.5rem;
     --md-comp-app-bar-large-flexible-with-subtitle-container-height: 9.5rem;
-    --md-comp-app-bar-large-flexible-title: var(
-      --md-sys-typescale-display-small
-    );
-    --md-comp-app-bar-large-flexible-title-font: var(
-      --md-sys-typescale-display-small-font
-    );
-    --md-comp-app-bar-large-flexible-title-weight: var(
-      --md-sys-typescale-display-small-weight
-    );
-    --md-comp-app-bar-large-flexible-title-size: var(
-      --md-sys-typescale-display-small-size
-    );
-    --md-comp-app-bar-large-flexible-title-line-height: var(
-      --md-sys-typescale-display-small-line-height
-    );
-    --md-comp-app-bar-large-flexible-title-tracking: var(
-      --md-sys-typescale-display-small-tracking
-    );
-    --md-comp-app-bar-large-flexible-subtitle-font: var(
-      --md-sys-typescale-body-large-font
-    );
-    --md-comp-app-bar-large-flexible-subtitle-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-app-bar-large-flexible-subtitle-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-app-bar-large-flexible-subtitle-line-height: var(
-      --md-sys-typescale-body-large-line-height
-    );
-    --md-comp-app-bar-large-flexible-subtitle-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
+    --md-comp-app-bar-large-flexible-title: var(--md-sys-typescale-display-small);
+    --md-comp-app-bar-large-flexible-title-font: var(--md-sys-typescale-display-small-font);
+    --md-comp-app-bar-large-flexible-title-weight: var(--md-sys-typescale-display-small-weight);
+    --md-comp-app-bar-large-flexible-title-size: var(--md-sys-typescale-display-small-size);
+    --md-comp-app-bar-large-flexible-title-line-height: var(--md-sys-typescale-display-small-line-height);
+    --md-comp-app-bar-large-flexible-title-tracking: var(--md-sys-typescale-display-small-tracking);
+    --md-comp-app-bar-large-flexible-subtitle-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-app-bar-large-flexible-subtitle-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-app-bar-large-flexible-subtitle-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-app-bar-large-flexible-subtitle-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-app-bar-large-flexible-subtitle-tracking: var(--md-sys-typescale-body-large-tracking);
   }
 }

@@ -35,10 +35,7 @@ export function setupTooltip(
   const canAnchor = supportsAnchorPositioning();
   const anchorName = `--vtt-anchor-${tip.id}`;
   const animMs = opts.animDuration;
-  type DeferredOffsetHandle =
-    | { kind: 'idle'; id: number }
-    | { kind: 'timeout'; id: number }
-    | null;
+  type DeferredOffsetHandle = { kind: 'idle'; id: number } | { kind: 'timeout'; id: number } | null;
   const fallbackPlacements = new Map<Placement, ReturnType<typeof resolveFallbackPlacement>>();
   const getFallbackPlacement = (placement = opts.placement) => {
     const cached = fallbackPlacements.get(placement);
@@ -71,9 +68,10 @@ export function setupTooltip(
 
     if (deferredOffsetHandle.kind === 'idle') {
       (
-        window as Window & typeof globalThis & {
-          cancelIdleCallback?: (handle: number) => void;
-        }
+        window as Window &
+          typeof globalThis & {
+            cancelIdleCallback?: (handle: number) => void;
+          }
       ).cancelIdleCallback?.(deferredOffsetHandle.id);
     } else {
       window.clearTimeout(deferredOffsetHandle.id);
@@ -95,16 +93,20 @@ export function setupTooltip(
       applyOffsetCSS(opts.placement);
     };
 
-    const idleApi = window as Window & typeof globalThis & {
-      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
-    };
+    const idleApi = window as Window &
+      typeof globalThis & {
+        requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+      };
 
     if (idleApi.requestIdleCallback) {
       deferredOffsetHandle = {
         kind: 'idle',
-        id: idleApi.requestIdleCallback(() => {
-          run();
-        }, { timeout: 200 }),
+        id: idleApi.requestIdleCallback(
+          () => {
+            run();
+          },
+          { timeout: 200 },
+        ),
       };
       return;
     }
@@ -183,8 +185,7 @@ export function setupTooltip(
       tip.style.visibility = 'hidden';
       try {
         (tip as HTMLElement & { showPopover: () => void }).showPopover();
-      } catch {
-      }
+      } catch {}
       requestAnimationFrame(() => {
         updatePositionIfNeeded();
         tip.style.visibility = '';
@@ -210,8 +211,7 @@ export function setupTooltip(
     if (canPopover) {
       try {
         (tip as HTMLElement & { hidePopover: () => void }).hidePopover();
-      } catch {
-      }
+      } catch {}
       scheduleDeferredOffset();
       return;
     }

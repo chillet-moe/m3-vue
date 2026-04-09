@@ -12,7 +12,7 @@ function installDialogPolyfill() {
   if (typeof prototype.showModal !== 'function') {
     Object.defineProperty(prototype, 'showModal', {
       configurable: true,
-      value: function(this: HTMLDialogElement) {
+      value: function (this: HTMLDialogElement) {
         if (this.open) {
           return;
         }
@@ -25,7 +25,7 @@ function installDialogPolyfill() {
   if (typeof prototype.close !== 'function') {
     Object.defineProperty(prototype, 'close', {
       configurable: true,
-      value: function(this: HTMLDialogElement, returnValue = '') {
+      value: function (this: HTMLDialogElement, returnValue = '') {
         if (!this.open) {
           return;
         }

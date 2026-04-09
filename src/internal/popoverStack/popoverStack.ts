@@ -113,16 +113,14 @@ function showPopoverElement(element: HTMLElement) {
 
   try {
     (element as HTMLElement & { showPopover: () => void }).showPopover();
-  } catch {
-  }
+  } catch {}
 }
 
 function hidePopoverElement(element: HTMLElement) {
   if (typeof (element as HTMLElement & { hidePopover?: () => void }).hidePopover === 'function') {
     try {
       (element as HTMLElement & { hidePopover: () => void }).hidePopover();
-    } catch {
-    }
+    } catch {}
   }
 
   updatePopoverState(element, false);

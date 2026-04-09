@@ -167,8 +167,7 @@ function isPointInsideTriangle(point: Point, triangle: Triangle) {
     ((sideStart.y - sideEnd.y) * (point.x - sideEnd.x) + (sideEnd.x - sideStart.x) * (point.y - sideEnd.y)) /
     denominator;
   const second =
-    ((sideEnd.y - origin.y) * (point.x - sideEnd.x) + (origin.x - sideEnd.x) * (point.y - sideEnd.y)) /
-    denominator;
+    ((sideEnd.y - origin.y) * (point.x - sideEnd.x) + (origin.x - sideEnd.x) * (point.y - sideEnd.y)) / denominator;
   const third = 1 - first - second;
   const tolerance = 0.001;
 
@@ -189,7 +188,9 @@ function createSafeTriangle(origin: Point) {
   }
 
   const submenuNearEdgeX =
-    Math.abs(origin.x - submenuRect.left) <= Math.abs(origin.x - submenuRect.right) ? submenuRect.left : submenuRect.right;
+    Math.abs(origin.x - submenuRect.left) <= Math.abs(origin.x - submenuRect.right)
+      ? submenuRect.left
+      : submenuRect.right;
   const expansion = 12;
 
   if (submenuNearEdgeX === submenuRect.left && origin.x > submenuNearEdgeX) {
@@ -420,12 +421,7 @@ onUnmounted(() => {
       <slot name="trigger" :open="open" />
     </div>
 
-    <div
-      v-if="safeTriangleStyle"
-      aria-hidden="true"
-      class="m3-menu-submenu-safe-triangle"
-      :style="safeTriangleStyle"
-    />
+    <div v-if="safeTriangleStyle" aria-hidden="true" class="m3-menu-submenu-safe-triangle" :style="safeTriangleStyle" />
 
     <Menu ref="submenuMenu" v-model:open="open" :color="resolvedColor" data-submenu="true">
       <slot />

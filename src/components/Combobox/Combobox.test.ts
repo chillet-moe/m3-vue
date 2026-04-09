@@ -65,9 +65,7 @@ function installPopoverPolyfill() {
 
 function getCurrentMenuItems(container: HTMLElement) {
   return Array.from(
-    container.querySelectorAll<HTMLButtonElement>(
-      'button[role="menuitemradio"], button[role="menuitemcheckbox"]',
-    ),
+    container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]'),
   ).filter(
     (item) =>
       !item.classList.contains('m3-select-options-leave-active') &&

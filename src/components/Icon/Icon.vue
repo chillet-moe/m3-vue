@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 type IconProps = {
   /** The name of the Material Symbols Outlined icon to display. */
   name: string;

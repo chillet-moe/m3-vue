@@ -124,7 +124,13 @@
   opacity: 0;
 
   color: var(--md-comp-dialog-headline-color);
-  font-family: var(--md-comp-dialog-headline-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    var(--md-comp-dialog-headline-font),
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   font-size: var(--md-comp-dialog-headline-size);
   line-height: var(--md-comp-dialog-headline-line-height);
   font-weight: var(--md-comp-dialog-headline-weight);
@@ -138,7 +144,13 @@
   opacity: 0;
 
   color: var(--md-comp-dialog-supporting-text-color);
-  font-family: var(--md-comp-dialog-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    var(--md-comp-dialog-supporting-text-font),
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   font-size: var(--md-comp-dialog-supporting-text-size);
   line-height: var(--md-comp-dialog-supporting-text-line-height);
   font-weight: var(--md-comp-dialog-supporting-text-weight);

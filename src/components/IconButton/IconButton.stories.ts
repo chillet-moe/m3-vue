@@ -44,8 +44,7 @@ const EnumTemplate: StoryFn<IconButtonArgs> = (args: IconButtonArgs, { argTypes 
   `,
 });
 
-export const Default: Story = {
-};
+export const Default: Story = {};
 
 export const Colors = EnumTemplate.bind({});
 Colors.args = { enum: 'color' };
@@ -70,4 +69,3 @@ Toggleable.args = {
     <input type="checkbox" />
   `,
 };
-

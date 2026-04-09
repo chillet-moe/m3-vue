@@ -11,9 +11,7 @@ const repoRoot = path.resolve(__dirname, '..');
 describe('M3VueResolver', () => {
   it('resolves known components to @chillet/m3-vue', () => {
     const resolver = M3VueResolver();
-    const resolve = typeof resolver === 'function'
-      ? resolver
-      : resolver.resolve;
+    const resolve = typeof resolver === 'function' ? resolver : resolver.resolve;
 
     expect(resolve('Button')).toEqual({
       name: 'Button',
@@ -28,9 +26,7 @@ describe('M3VueResolver', () => {
 
   it('supports prefixed component names', () => {
     const resolver = M3VueResolver({ prefix: 'M3' });
-    const resolve = typeof resolver === 'function'
-      ? resolver
-      : resolver.resolve;
+    const resolve = typeof resolver === 'function' ? resolver : resolver.resolve;
 
     expect(resolve('M3Button')).toEqual({
       name: 'Button',
@@ -46,7 +42,9 @@ describe('M3VueResolver', () => {
     });
 
     const componentNames = (
-      await Promise.all(componentEntryFiles.map(async (entryFile) => fs.readFile(path.join(repoRoot, entryFile), 'utf8')))
+      await Promise.all(
+        componentEntryFiles.map(async (entryFile) => fs.readFile(path.join(repoRoot, entryFile), 'utf8')),
+      )
     )
       .flatMap((entrySource) =>
         Array.from(entrySource.matchAll(/export \{ default as (\w+) \} from '\.\/[^']+\.vue';/g), (match) => match[1]),

@@ -4,295 +4,129 @@
  */
 @layer tokens {
   :where(.md-date-picker) {
-    --md-comp-date-picker-docked-container-color: var(
-      --md-sys-color-surface-container-high
-    );
-    --md-comp-date-picker-docked-container-elevation: var(
-      --md-sys-elevation-level3
-    );
-    --md-comp-date-picker-docked-container-shape: var(
-      --md-sys-shape-corner-large
-    );
-    --md-comp-date-picker-docked-date-container-shape: var(
-      --md-sys-shape-corner-full
-    );
-    --md-comp-date-picker-docked-date-today-container-outline-color: var(
-      --md-sys-color-primary
-    );
+    --md-comp-date-picker-docked-container-color: var(--md-sys-color-surface-container-high);
+    --md-comp-date-picker-docked-container-elevation: var(--md-sys-elevation-level3);
+    --md-comp-date-picker-docked-container-shape: var(--md-sys-shape-corner-large);
+    --md-comp-date-picker-docked-date-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-date-picker-docked-date-today-container-outline-color: var(--md-sys-color-primary);
     --md-comp-date-picker-docked-date-today-container-outline-width: 0.0625rem;
-    --md-comp-date-picker-docked-date-selected-container-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-docked-menu-button-container-shape: var(
-      --md-sys-shape-corner-full
-    );
-    --md-comp-date-picker-docked-menu-list-item-selected-container-color: var(
-      --md-sys-color-surface-variant
-    );
+    --md-comp-date-picker-docked-date-selected-container-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-menu-button-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-date-picker-docked-menu-list-item-selected-container-color: var(--md-sys-color-surface-variant);
     --md-comp-date-picker-docked-container-width: 22.5rem;
     --md-comp-date-picker-docked-container-height: 28.5rem;
     --md-comp-date-picker-docked-date-container-width: 3rem;
     --md-comp-date-picker-docked-date-container-height: 3rem;
     --md-comp-date-picker-docked-menu-button-container-height: 2.5rem;
     --md-comp-date-picker-docked-menu-list-item-container-height: 3rem;
-    --md-comp-date-picker-docked-weekdays-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-docked-weekdays-label-text-font: var(
-      --md-sys-typescale-body-large-font
-    );
-    --md-comp-date-picker-docked-weekdays-label-text-line-height: var(
-      --md-sys-typescale-body-large-line-height
-    );
-    --md-comp-date-picker-docked-weekdays-label-text-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-date-picker-docked-weekdays-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-date-picker-docked-weekdays-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
-    --md-comp-date-picker-docked-weekdays-label-text-type: var(
-      --md-sys-typescale-body-large
-    );
-    --md-comp-date-picker-docked-date-label-text-font: var(
-      --md-sys-typescale-body-large-font
-    );
-    --md-comp-date-picker-docked-date-label-text-line-height: var(
-      --md-sys-typescale-body-large-line-height
-    );
-    --md-comp-date-picker-docked-date-label-text-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-date-picker-docked-date-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-date-picker-docked-date-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
-    --md-comp-date-picker-docked-date-label-text-type: var(
-      --md-sys-typescale-body-large
-    );
-    --md-comp-date-picker-docked-date-unselected-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-docked-date-unselected-outside-month-label-text-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-date-picker-docked-weekdays-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-weekdays-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-docked-weekdays-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-docked-weekdays-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-docked-weekdays-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-docked-weekdays-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-docked-weekdays-label-text-type: var(--md-sys-typescale-body-large);
+    --md-comp-date-picker-docked-date-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-docked-date-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-docked-date-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-docked-date-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-docked-date-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-docked-date-label-text-type: var(--md-sys-typescale-body-large);
+    --md-comp-date-picker-docked-date-unselected-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-date-unselected-outside-month-label-text-color: var(--md-sys-color-on-surface);
     --md-comp-date-picker-docked-date-unselected-outside-month-label-text-opacity: 0.38;
-    --md-comp-date-picker-docked-date-today-label-text-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-docked-date-selected-label-text-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-docked-menu-button-label-text-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-menu-button-label-text-font: var(
-      --md-sys-typescale-label-large-font
-    );
-    --md-comp-date-picker-docked-menu-button-label-text-line-height: var(
-      --md-sys-typescale-label-large-line-height
-    );
-    --md-comp-date-picker-docked-menu-button-label-text-size: var(
-      --md-sys-typescale-label-large-size
-    );
-    --md-comp-date-picker-docked-menu-button-label-text-weight: var(
-      --md-sys-typescale-label-large-weight
-    );
-    --md-comp-date-picker-docked-menu-button-label-text-tracking: var(
-      --md-sys-typescale-label-large-tracking
-    );
-    --md-comp-date-picker-docked-menu-button-label-text-type: var(
-      --md-sys-typescale-label-large
-    );
-    --md-comp-date-picker-docked-menu-list-item-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-docked-menu-list-item-label-text-font: var(
-      --md-sys-typescale-body-large-font
-    );
-    --md-comp-date-picker-docked-menu-list-item-label-text-line-height: var(
-      --md-sys-typescale-body-large-line-height
-    );
-    --md-comp-date-picker-docked-menu-list-item-label-text-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-date-picker-docked-menu-list-item-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
-    --md-comp-date-picker-docked-menu-list-item-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-date-picker-docked-menu-list-item-label-text-type: var(
-      --md-sys-typescale-body-large
-    );
-    --md-comp-date-picker-docked-menu-button-icon-color: var(
-      --md-sys-color-on-surface-variant
-    );
+    --md-comp-date-picker-docked-date-today-label-text-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-date-selected-label-text-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-docked-menu-button-label-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-menu-button-label-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-date-picker-docked-menu-button-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-date-picker-docked-menu-button-label-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-date-picker-docked-menu-button-label-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-date-picker-docked-menu-button-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-date-picker-docked-menu-button-label-text-type: var(--md-sys-typescale-label-large);
+    --md-comp-date-picker-docked-menu-list-item-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-menu-list-item-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-docked-menu-list-item-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-docked-menu-list-item-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-docked-menu-list-item-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-docked-menu-list-item-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-docked-menu-list-item-label-text-type: var(--md-sys-typescale-body-large);
+    --md-comp-date-picker-docked-menu-button-icon-color: var(--md-sys-color-on-surface-variant);
     --md-comp-date-picker-docked-menu-button-icon-size: 1.125rem;
-    --md-comp-date-picker-docked-menu-list-item-selected-leading-icon-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-date-picker-docked-menu-list-item-selected-leading-icon-color: var(--md-sys-color-on-surface);
     --md-comp-date-picker-docked-menu-list-item-selected-leading-icon-size: 1.5rem;
-    --md-comp-date-picker-docked-date-state-layer-shape: var(
-      --md-sys-shape-corner-full
-    );
+    --md-comp-date-picker-docked-date-state-layer-shape: var(--md-sys-shape-corner-full);
     --md-comp-date-picker-docked-date-state-layer-width: 2.5rem;
     --md-comp-date-picker-docked-date-state-layer-height: 2.5rem;
     --md-comp-date-picker-docker-header-height: 4rem;
-    --md-comp-date-picker-docked-menu-button-disabled-label-text-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-date-picker-docked-menu-button-disabled-label-text-color: var(--md-sys-color-on-surface);
     --md-comp-date-picker-docked-menu-button-disabled-label-text-opacity: 0.38;
-    --md-comp-date-picker-docked-menu-button-disabled-icon-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-date-picker-docked-menu-button-disabled-icon-color: var(--md-sys-color-on-surface);
     --md-comp-date-picker-docked-menu-button-disabled-icon-opacity: 0.38;
-    --md-comp-date-picker-docked-menu-button-hover-label-text-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-menu-list-item-hover-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-docked-date-unselected-hover-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-date-selected-hover-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-docked-date-today-hover-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-docked-date-hover-state-layer-opacity: var(
-      --md-sys-state-hover-state-layer-opacity
-    );
-    --md-comp-date-picker-docked-menu-button-hover-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-menu-button-hover-state-layer-opacity: var(
-      --md-sys-state-hover-state-layer-opacity
-    );
-    --md-comp-date-picker-docked-menu-list-item-hover-state-layer-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-date-picker-docked-menu-button-hover-label-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-menu-list-item-hover-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-date-unselected-hover-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-date-selected-hover-state-layer-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-docked-date-today-hover-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-date-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+    --md-comp-date-picker-docked-menu-button-hover-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-menu-button-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+    --md-comp-date-picker-docked-menu-list-item-hover-state-layer-color: var(--md-sys-color-on-surface);
     --md-comp-date-picker-docked-menu-list-item-hover-state-layer-opacity: var(
       --md-sys-state-hover-state-layer-opacity
     );
-    --md-comp-date-picker-docked-menu-button-hover-icon-color: var(
-      --md-sys-color-on-surface-variant
-    );
+    --md-comp-date-picker-docked-menu-button-hover-icon-color: var(--md-sys-color-on-surface-variant);
     --md-comp-date-picker-docked-menu-list-item-selected-hover-leading-icon-color: var(
       --md-sys-color-on-surface-variant
     );
-    --md-comp-date-picker-docked-menu-button-focus-label-text-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-menu-list-item-focus-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-docked-date-unselected-focus-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-date-selected-focus-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-docked-date-today-focus-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-docked-date-focus-state-layer-opacity: var(
-      --md-sys-state-focus-state-layer-opacity
-    );
-    --md-comp-date-picker-docked-menu-button-focus-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-menu-button-focus-state-layer-opacity: var(
-      --md-sys-state-focus-state-layer-opacity
-    );
-    --md-comp-date-picker-docked-menu-list-item-focus-state-layer-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-date-picker-docked-menu-button-focus-label-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-menu-list-item-focus-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-date-unselected-focus-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-date-selected-focus-state-layer-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-docked-date-today-focus-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-date-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+    --md-comp-date-picker-docked-menu-button-focus-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-menu-button-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+    --md-comp-date-picker-docked-menu-list-item-focus-state-layer-color: var(--md-sys-color-on-surface);
     --md-comp-date-picker-docked-menu-list-item-focus-state-layer-opacity: var(
       --md-sys-state-focus-state-layer-opacity
     );
-    --md-comp-date-picker-docked-menu-button-focus-icon-color: var(
-      --md-sys-color-on-surface-variant
-    );
+    --md-comp-date-picker-docked-menu-button-focus-icon-color: var(--md-sys-color-on-surface-variant);
     --md-comp-date-picker-docked-menu-list-item-selected-focus-leading-icon-color: var(
       --md-sys-color-on-surface-variant
     );
-    --md-comp-date-picker-docked-menu-button-pressed-label-text-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-menu-list-item-pressed-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-docked-date-unselected-pressed-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-docked-date-selected-pressed-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-docked-date-today-pressed-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-docked-date-pressed-state-layer-opacity: var(
-      --md-sys-state-pressed-state-layer-opacity
-    );
-    --md-comp-date-picker-docked-menu-button-pressed-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
+    --md-comp-date-picker-docked-menu-button-pressed-label-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-menu-list-item-pressed-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-date-unselected-pressed-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-date-selected-pressed-state-layer-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-docked-date-today-pressed-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-date-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
+    --md-comp-date-picker-docked-menu-button-pressed-state-layer-color: var(--md-sys-color-on-surface-variant);
     --md-comp-date-picker-docked-menu-button-pressed-state-layer-opacity: var(
       --md-sys-state-pressed-state-layer-opacity
     );
-    --md-comp-date-picker-docked-menu-list-item-pressed-state-layer-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-date-picker-docked-menu-list-item-pressed-state-layer-color: var(--md-sys-color-on-surface);
     --md-comp-date-picker-docked-menu-list-item-pressed-state-layer-opacity: var(
       --md-sys-state-pressed-state-layer-opacity
     );
-    --md-comp-date-picker-docked-menu-button-pressed-icon-color: var(
-      --md-sys-color-on-surface-variant
-    );
+    --md-comp-date-picker-docked-menu-button-pressed-icon-color: var(--md-sys-color-on-surface-variant);
     --md-comp-date-picker-docked-menu-list-item-selected-pressed-leading-icon-color: var(
       --md-sys-color-on-surface-variant
     );
-    --md-comp-date-picker-modal-container-color: var(
-      --md-sys-color-surface-container-high
-    );
-    --md-comp-date-picker-modal-container-elevation: var(
-      --md-sys-elevation-level3
-    );
-    --md-comp-date-picker-modal-container-shape: var(
-      --md-sys-shape-corner-extra-large
-    );
-    --md-comp-date-picker-modal-range-selection-container-elevation: var(
-      --md-sys-elevation-level0
-    );
-    --md-comp-date-picker-modal-range-selection-container-shape: var(
-      --md-sys-shape-corner-none
-    );
-    --md-comp-date-picker-modal-date-container-shape: var(
-      --md-sys-shape-corner-full
-    );
-    --md-comp-date-picker-modal-date-today-container-outline-color: var(
-      --md-sys-color-primary
-    );
+    --md-comp-date-picker-modal-container-color: var(--md-sys-color-surface-container-high);
+    --md-comp-date-picker-modal-container-elevation: var(--md-sys-elevation-level3);
+    --md-comp-date-picker-modal-container-shape: var(--md-sys-shape-corner-extra-large);
+    --md-comp-date-picker-modal-range-selection-container-elevation: var(--md-sys-elevation-level0);
+    --md-comp-date-picker-modal-range-selection-container-shape: var(--md-sys-shape-corner-none);
+    --md-comp-date-picker-modal-date-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-date-picker-modal-date-today-container-outline-color: var(--md-sys-color-primary);
     --md-comp-date-picker-modal-date-today-container-outline-width: 0.0625rem;
-    --md-comp-date-picker-modal-date-selected-container-color: var(
-      --md-sys-color-primary
-    );
+    --md-comp-date-picker-modal-date-selected-container-color: var(--md-sys-color-primary);
     --md-comp-date-picker-modal-range-selection-active-indicator-container-color: var(
       --md-sys-color-secondary-container
     );
-    --md-comp-date-picker-modal-range-selection-active-indicator-container-shape: var(
-      --md-sys-shape-corner-full
-    );
-    --md-comp-date-picker-modal-year-selection-year-selected-container-color: var(
-      --md-sys-color-primary
-    );
+    --md-comp-date-picker-modal-range-selection-active-indicator-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-date-picker-modal-year-selection-year-selected-container-color: var(--md-sys-color-primary);
     --md-comp-date-picker-modal-container-width: 22.5rem;
     --md-comp-date-picker-modal-container-height: 32.75rem;
     --md-comp-date-picker-modal-header-container-width: 22.5rem;
@@ -303,184 +137,76 @@
     --md-comp-date-picker-modal-year-selection-year-container-width: 4.5rem;
     --md-comp-date-picker-modal-year-selection-year-container-height: 2.25rem;
     --md-comp-date-picker-modal-range-selection-active-indicator-container-height: 2.5rem;
-    --md-comp-date-picker-modal-weekdays-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-modal-weekdays-label-text-font: var(
-      --md-sys-typescale-body-large-font
-    );
-    --md-comp-date-picker-modal-weekdays-label-text-line-height: var(
-      --md-sys-typescale-body-large-line-height
-    );
-    --md-comp-date-picker-modal-weekdays-label-text-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-date-picker-modal-weekdays-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-date-picker-modal-weekdays-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
-    --md-comp-date-picker-modal-weekdays-label-text-type: var(
-      --md-sys-typescale-body-large
-    );
-    --md-comp-date-picker-modal-date-label-text-font: var(
-      --md-sys-typescale-body-large-font
-    );
-    --md-comp-date-picker-modal-date-label-text-line-height: var(
-      --md-sys-typescale-body-large-line-height
-    );
-    --md-comp-date-picker-modal-date-label-text-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-date-picker-modal-date-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-date-picker-modal-date-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
-    --md-comp-date-picker-modal-date-label-text-type: var(
-      --md-sys-typescale-body-large
-    );
-    --md-comp-date-picker-modal-date-unselected-label-text-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-date-picker-modal-date-today-label-text-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-modal-date-selected-label-text-color: var(
-      --md-sys-color-on-primary
-    );
+    --md-comp-date-picker-modal-weekdays-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-modal-weekdays-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-modal-weekdays-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-modal-weekdays-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-modal-weekdays-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-modal-weekdays-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-modal-weekdays-label-text-type: var(--md-sys-typescale-body-large);
+    --md-comp-date-picker-modal-date-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-modal-date-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-modal-date-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-modal-date-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-modal-date-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-modal-date-label-text-type: var(--md-sys-typescale-body-large);
+    --md-comp-date-picker-modal-date-unselected-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-modal-date-today-label-text-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-modal-date-selected-label-text-color: var(--md-sys-color-on-primary);
     --md-comp-date-picker-modal-range-selection-date-in-range-label-text-color: var(
       --md-sys-color-on-secondary-container
     );
-    --md-comp-date-picker-modal-year-selection-year-label-text-font: var(
-      --md-sys-typescale-body-large-font
-    );
+    --md-comp-date-picker-modal-year-selection-year-label-text-font: var(--md-sys-typescale-body-large-font);
     --md-comp-date-picker-modal-year-selection-year-label-text-line-height: var(
       --md-sys-typescale-body-large-line-height
     );
-    --md-comp-date-picker-modal-year-selection-year-label-text-size: var(
-      --md-sys-typescale-body-large-size
-    );
-    --md-comp-date-picker-modal-year-selection-year-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
-    --md-comp-date-picker-modal-year-selection-year-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
-    --md-comp-date-picker-modal-year-selection-year-label-text-type: var(
-      --md-sys-typescale-body-large
-    );
-    --md-comp-date-picker-modal-year-selection-year-selected-label-text-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-modal-year-selection-year-unselected-label-text-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-modal-range-selection-month-subhead-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-modal-range-selection-month-subhead-font: var(
-      --md-sys-typescale-title-small-font
-    );
+    --md-comp-date-picker-modal-year-selection-year-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-modal-year-selection-year-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-modal-year-selection-year-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-modal-year-selection-year-label-text-type: var(--md-sys-typescale-body-large);
+    --md-comp-date-picker-modal-year-selection-year-selected-label-text-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-modal-year-selection-year-unselected-label-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-modal-range-selection-month-subhead-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-modal-range-selection-month-subhead-font: var(--md-sys-typescale-title-small-font);
     --md-comp-date-picker-modal-range-selection-month-subhead-line-height: var(
       --md-sys-typescale-title-small-line-height
     );
-    --md-comp-date-picker-modal-range-selection-month-subhead-size: var(
-      --md-sys-typescale-title-small-size
-    );
-    --md-comp-date-picker-modal-range-selection-month-subhead-weight: var(
-      --md-sys-typescale-title-small-weight
-    );
-    --md-comp-date-picker-modal-range-selection-month-subhead-tracking: var(
-      --md-sys-typescale-title-small-tracking
-    );
-    --md-comp-date-picker-modal-range-selection-month-subhead-type: var(
-      --md-sys-typescale-title-small
-    );
-    --md-comp-date-picker-modal-header-headline-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-modal-header-headline-font: var(
-      --md-sys-typescale-headline-large-font
-    );
-    --md-comp-date-picker-modal-header-headline-line-height: var(
-      --md-sys-typescale-headline-large-line-height
-    );
-    --md-comp-date-picker-modal-header-headline-size: var(
-      --md-sys-typescale-headline-large-size
-    );
-    --md-comp-date-picker-modal-header-headline-weight: var(
-      --md-sys-typescale-headline-large-weight
-    );
-    --md-comp-date-picker-modal-header-headline-tracking: var(
-      --md-sys-typescale-headline-large-tracking
-    );
-    --md-comp-date-picker-modal-header-headline-type: var(
-      --md-sys-typescale-headline-large
-    );
-    --md-comp-date-picker-modal-range-selection-header-headline-font: var(
-      --md-sys-typescale-title-large-font
-    );
+    --md-comp-date-picker-modal-range-selection-month-subhead-size: var(--md-sys-typescale-title-small-size);
+    --md-comp-date-picker-modal-range-selection-month-subhead-weight: var(--md-sys-typescale-title-small-weight);
+    --md-comp-date-picker-modal-range-selection-month-subhead-tracking: var(--md-sys-typescale-title-small-tracking);
+    --md-comp-date-picker-modal-range-selection-month-subhead-type: var(--md-sys-typescale-title-small);
+    --md-comp-date-picker-modal-header-headline-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-modal-header-headline-font: var(--md-sys-typescale-headline-large-font);
+    --md-comp-date-picker-modal-header-headline-line-height: var(--md-sys-typescale-headline-large-line-height);
+    --md-comp-date-picker-modal-header-headline-size: var(--md-sys-typescale-headline-large-size);
+    --md-comp-date-picker-modal-header-headline-weight: var(--md-sys-typescale-headline-large-weight);
+    --md-comp-date-picker-modal-header-headline-tracking: var(--md-sys-typescale-headline-large-tracking);
+    --md-comp-date-picker-modal-header-headline-type: var(--md-sys-typescale-headline-large);
+    --md-comp-date-picker-modal-range-selection-header-headline-font: var(--md-sys-typescale-title-large-font);
     --md-comp-date-picker-modal-range-selection-header-headline-line-height: var(
       --md-sys-typescale-title-large-line-height
     );
-    --md-comp-date-picker-modal-range-selection-header-headline-size: var(
-      --md-sys-typescale-title-large-size
-    );
-    --md-comp-date-picker-modal-range-selection-header-headline-weight: var(
-      --md-sys-typescale-title-large-weight
-    );
-    --md-comp-date-picker-modal-range-selection-header-headline-tracking: var(
-      --md-sys-typescale-title-large-tracking
-    );
-    --md-comp-date-picker-modal-range-selection-header-headline-type: var(
-      --md-sys-typescale-title-large
-    );
-    --md-comp-date-picker-modal-header-supporting-text-type: var(
-      --md-sys-typescale-label-large
-    );
-    --md-comp-date-picker-modal-date-state-layer-shape: var(
-      --md-sys-shape-corner-full
-    );
-    --md-comp-date-picker-modal-year-selection-year-state-layer-shape: var(
-      --md-sys-shape-corner-full
-    );
+    --md-comp-date-picker-modal-range-selection-header-headline-size: var(--md-sys-typescale-title-large-size);
+    --md-comp-date-picker-modal-range-selection-header-headline-weight: var(--md-sys-typescale-title-large-weight);
+    --md-comp-date-picker-modal-range-selection-header-headline-tracking: var(--md-sys-typescale-title-large-tracking);
+    --md-comp-date-picker-modal-range-selection-header-headline-type: var(--md-sys-typescale-title-large);
+    --md-comp-date-picker-modal-header-supporting-text-type: var(--md-sys-typescale-label-large);
+    --md-comp-date-picker-modal-date-state-layer-shape: var(--md-sys-shape-corner-full);
+    --md-comp-date-picker-modal-year-selection-year-state-layer-shape: var(--md-sys-shape-corner-full);
     --md-comp-date-picker-modal-date-state-layer-width: 2.5rem;
     --md-comp-date-picker-modal-date-state-layer-height: 2.5rem;
     --md-comp-date-picker-modal-year-selection-year-state-layer-width: 4.5rem;
     --md-comp-date-picker-modal-year-selection-year-state-layer-height: 2.25rem;
-    --md-comp-date-picker-modal-header-supporting-text-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-modal-header-supporting-text-font: var(
-      --md-sys-typescale-label-large-font
-    );
-    --md-comp-date-picker-modal-header-supporting-text-line-height: var(
-      --md-sys-typescale-label-large-line-height
-    );
-    --md-comp-date-picker-modal-header-supporting-text-size: var(
-      --md-sys-typescale-label-large-size
-    );
-    --md-comp-date-picker-modal-header-supporting-text-weight: var(
-      --md-sys-typescale-label-large-weight
-    );
-    --md-comp-date-picker-modal-header-supporting-text-tracking: var(
-      --md-sys-typescale-label-large-tracking
-    );
-    --md-comp-date-picker-modal-date-unselected-hover-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-modal-date-selected-hover-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-modal-date-today-hover-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-modal-date-hover-state-layer-opacity: var(
-      --md-sys-state-hover-state-layer-opacity
-    );
+    --md-comp-date-picker-modal-header-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-modal-header-supporting-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-date-picker-modal-header-supporting-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-date-picker-modal-header-supporting-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-date-picker-modal-header-supporting-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-date-picker-modal-header-supporting-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-date-picker-modal-date-unselected-hover-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-modal-date-selected-hover-state-layer-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-modal-date-today-hover-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-modal-date-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
     --md-comp-date-picker-modal-range-selection-date-in-range-hover-state-layer-color: var(
       --md-sys-color-on-primary-container
     );
@@ -490,120 +216,64 @@
     --md-comp-date-picker-modal-year-selection-year-unselected-hover-state-layer-color: var(
       --md-sys-color-on-surface-variant
     );
-    --md-comp-date-picker-modal-year-selection-year-selected-hover-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
+    --md-comp-date-picker-modal-year-selection-year-selected-hover-state-layer-color: var(--md-sys-color-on-primary);
     --md-comp-date-picker-modal-year-selection-year-hover-state-layer-opacity: var(
       --md-sys-state-hover-state-layer-opacity
     );
     --md-comp-date-picker-modal-range-selection-date-in-range-focus-state-layer-opacity: var(
       --md-sys-state-focus-state-layer-opacity
     );
-    --md-comp-date-picker-modal-date-unselected-focus-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-modal-date-selected-focus-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-modal-date-today-focus-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-modal-date-focus-state-layer-opacity: var(
-      --md-sys-state-focus-state-layer-opacity
-    );
+    --md-comp-date-picker-modal-date-unselected-focus-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-modal-date-selected-focus-state-layer-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-modal-date-today-focus-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-modal-date-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
     --md-comp-date-picker-modal-range-selection-date-in-range-focus-state-layer-color: var(
       --md-sys-color-on-primary-container
     );
     --md-comp-date-picker-modal-year-selection-year-unselected-focus-state-layer-color: var(
       --md-sys-color-on-surface-variant
     );
-    --md-comp-date-picker-modal-year-selection-year-selected-focus-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
+    --md-comp-date-picker-modal-year-selection-year-selected-focus-state-layer-color: var(--md-sys-color-on-primary);
     --md-comp-date-picker-modal-year-selection-year-focus-state-layer-opacity: var(
       --md-sys-state-focus-state-layer-opacity
     );
     --md-comp-date-picker-modal-range-selection-date-in-range-pressed-state-layer-opacity: var(
       --md-sys-state-pressed-state-layer-opacity
     );
-    --md-comp-date-picker-modal-date-unselected-pressed-state-layer-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-picker-modal-date-selected-pressed-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-date-picker-modal-date-today-pressed-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-date-picker-modal-date-pressed-state-layer-opacity: var(
-      --md-sys-state-pressed-state-layer-opacity
-    );
+    --md-comp-date-picker-modal-date-unselected-pressed-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-modal-date-selected-pressed-state-layer-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-modal-date-today-pressed-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-modal-date-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
     --md-comp-date-picker-modal-range-selection-date-in-range-pressed-state-layer-color: var(
       --md-sys-color-on-primary-container
     );
     --md-comp-date-picker-modal-year-selection-year-unselected-pressed-state-layer-color: var(
       --md-sys-color-on-surface-variant
     );
-    --md-comp-date-picker-modal-year-selection-year-selected-pressed-state-layer-color: var(
-      --md-sys-color-on-primary
-    );
+    --md-comp-date-picker-modal-year-selection-year-selected-pressed-state-layer-color: var(--md-sys-color-on-primary);
     --md-comp-date-picker-modal-year-selection-year-pressed-state-layer-opacity: var(
       --md-sys-state-pressed-state-layer-opacity
     );
-    --md-comp-date-input-modal-container-color: var(
-      --md-sys-color-surface-container-high
-    );
-    --md-comp-date-input-modal-container-elevation: var(
-      --md-sys-elevation-level3
-    );
-    --md-comp-date-input-modal-container-shape: var(
-      --md-sys-shape-corner-extra-large
-    );
+    --md-comp-date-input-modal-container-color: var(--md-sys-color-surface-container-high);
+    --md-comp-date-input-modal-container-elevation: var(--md-sys-elevation-level3);
+    --md-comp-date-input-modal-container-shape: var(--md-sys-shape-corner-extra-large);
     --md-comp-date-input-modal-container-width: 20.5rem;
     --md-comp-date-input-modal-container-height: 32rem;
     --md-comp-date-input-modal-header-container-width: 20.5rem;
     --md-comp-date-input-modal-header-container-height: 7.5rem;
-    --md-comp-date-input-modal-header-headline-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-input-modal-header-headline-font: var(
-      --md-sys-typescale-headline-large-font
-    );
-    --md-comp-date-input-modal-header-headline-line-height: var(
-      --md-sys-typescale-headline-large-line-height
-    );
-    --md-comp-date-input-modal-header-headline-size: var(
-      --md-sys-typescale-headline-large-size
-    );
-    --md-comp-date-input-modal-header-headline-weight: var(
-      --md-sys-typescale-headline-large-weight
-    );
-    --md-comp-date-input-modal-header-headline-tracking: var(
-      --md-sys-typescale-headline-large-tracking
-    );
-    --md-comp-date-input-modal-header-headline-type: var(
-      --md-sys-typescale-headline-large
-    );
-    --md-comp-date-input-modal-header-supporting-text-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-date-input-modal-header-supporting-text-font: var(
-      --md-sys-typescale-label-large-font
-    );
-    --md-comp-date-input-modal-header-supporting-text-line-height: var(
-      --md-sys-typescale-label-large-line-height
-    );
-    --md-comp-date-input-modal-header-supporting-text-size: var(
-      --md-sys-typescale-label-large-size
-    );
-    --md-comp-date-input-modal-header-supporting-text-weight: var(
-      --md-sys-typescale-label-large-weight
-    );
-    --md-comp-date-input-modal-header-supporting-text-tracking: var(
-      --md-sys-typescale-label-large-tracking
-    );
-    --md-comp-date-input-modal-header-supporting-text-type: var(
-      --md-sys-typescale-label-large
-    );
+    --md-comp-date-input-modal-header-headline-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-input-modal-header-headline-font: var(--md-sys-typescale-headline-large-font);
+    --md-comp-date-input-modal-header-headline-line-height: var(--md-sys-typescale-headline-large-line-height);
+    --md-comp-date-input-modal-header-headline-size: var(--md-sys-typescale-headline-large-size);
+    --md-comp-date-input-modal-header-headline-weight: var(--md-sys-typescale-headline-large-weight);
+    --md-comp-date-input-modal-header-headline-tracking: var(--md-sys-typescale-headline-large-tracking);
+    --md-comp-date-input-modal-header-headline-type: var(--md-sys-typescale-headline-large);
+    --md-comp-date-input-modal-header-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-input-modal-header-supporting-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-date-input-modal-header-supporting-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-date-input-modal-header-supporting-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-date-input-modal-header-supporting-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-date-input-modal-header-supporting-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-date-input-modal-header-supporting-text-type: var(--md-sys-typescale-label-large);
   }
 }

@@ -1,5 +1,5 @@
 import type { InjectionKey, MaybeRef } from 'vue';
-import type { IconButtonProps } from "@/components/IconButton/IconButton.vue";
+import type { IconButtonProps } from '@/components/IconButton/IconButton.vue';
 
 export interface IconButtonContext {
   toggleable?: MaybeRef<IconButtonProps['toggleable'] | undefined>;

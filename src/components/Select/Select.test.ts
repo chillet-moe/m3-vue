@@ -103,7 +103,9 @@ function isPopoverOpen(element: HTMLElement | null) {
 }
 
 function getCurrentMenuItems(container: HTMLElement) {
-  return Array.from(container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]')).filter(
+  return Array.from(
+    container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]'),
+  ).filter(
     (item) =>
       !item.classList.contains('m3-select-options-leave-active') &&
       !item.classList.contains('m3-select-options-leave-to'),

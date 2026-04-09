@@ -56,10 +56,12 @@ describe('vTooltip directive', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
-    requestAnimationFrameSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
-      callback(0);
-      return 1;
-    });
+    requestAnimationFrameSpy = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback: FrameRequestCallback) => {
+        callback(0);
+        return 1;
+      });
   });
 
   afterEach(() => {
@@ -137,11 +139,15 @@ describe('vTooltip directive', () => {
   it('does not resolve fallback placement while the tooltip is closed', () => {
     const el = createTrigger();
     const getComputedStyleSpy = vi.spyOn(window, 'getComputedStyle');
-    const state = setupTooltip(el, {
-      content: 'Tooltip content',
-      placement: 'end',
-      offset: 'var(--space)',
-    }, { manual: true });
+    const state = setupTooltip(
+      el,
+      {
+        content: 'Tooltip content',
+        placement: 'end',
+        offset: 'var(--space)',
+      },
+      { manual: true },
+    );
 
     expect(getComputedStyleSpy).not.toHaveBeenCalled();
     vi.runOnlyPendingTimers();
@@ -153,10 +159,14 @@ describe('vTooltip directive', () => {
 
   it('skips semantically identical updates', () => {
     const el = createTrigger();
-    const state = setupTooltip(el, {
-      content: 'Tooltip content',
-      placement: 'top',
-    }, { manual: true });
+    const state = setupTooltip(
+      el,
+      {
+        content: 'Tooltip content',
+        placement: 'top',
+      },
+      { manual: true },
+    );
     const setAttributeSpy = vi.spyOn(state.tip, 'setAttribute');
 
     state.update({
@@ -172,11 +182,15 @@ describe('vTooltip directive', () => {
 
   it('updates offset to match the flipped fallback placement', () => {
     const el = createTrigger();
-    const state = setupTooltip(el, {
-      content: 'Tooltip content',
-      placement: 'top',
-      offset: 'var(--space)',
-    }, { manual: true });
+    const state = setupTooltip(
+      el,
+      {
+        content: 'Tooltip content',
+        placement: 'top',
+        offset: 'var(--space)',
+      },
+      { manual: true },
+    );
 
     Object.defineProperty(el, 'getBoundingClientRect', {
       configurable: true,

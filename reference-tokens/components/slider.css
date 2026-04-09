@@ -7,31 +7,17 @@
     --md-comp-slider-stop-indicator-size: 0.25rem;
     --md-comp-slider-stop-indicator-shape: var(--md-sys-shape-corner-full);
     --md-comp-slider-stop-indicator-trailing-space: 0.25rem;
-    --md-comp-slider-stop-indicator-color: var(
-      --md-sys-color-on-secondary-container
-    );
-    --md-comp-slider-stop-indicator-color-selected: var(
-      --md-sys-color-on-primary
-    );
-    --md-comp-slider-active-stop-indicator-container-color: var(
-      --md-sys-color-on-primary
-    );
+    --md-comp-slider-stop-indicator-color: var(--md-sys-color-on-secondary-container);
+    --md-comp-slider-stop-indicator-color-selected: var(--md-sys-color-on-primary);
+    --md-comp-slider-active-stop-indicator-container-color: var(--md-sys-color-on-primary);
     --md-comp-slider-active-stop-indicator-container-opacity: 1;
-    --md-comp-slider-inactive-stop-indicator-container-color: var(
-      --md-sys-color-on-secondary-container
-    );
+    --md-comp-slider-inactive-stop-indicator-container-color: var(--md-sys-color-on-secondary-container);
     --md-comp-slider-inactive-stop-indicator-container-opacity: 1;
     --md-comp-slider-with-tick-marks-container-size: 0.125rem;
-    --md-comp-slider-with-tick-marks-container-shape: var(
-      --md-sys-shape-corner-full
-    );
-    --md-comp-slider-with-tick-marks-active-container-color: var(
-      --md-sys-color-on-primary
-    );
+    --md-comp-slider-with-tick-marks-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-slider-with-tick-marks-active-container-color: var(--md-sys-color-on-primary);
     --md-comp-slider-with-tick-marks-active-container-opacity: 0.38;
-    --md-comp-slider-with-tick-marks-inactive-container-color: var(
-      --md-sys-color-on-surface-variant
-    );
+    --md-comp-slider-with-tick-marks-inactive-container-color: var(--md-sys-color-on-surface-variant);
     --md-comp-slider-with-tick-marks-inactive-container-opacity: 0.38;
     --md-comp-slider-label-container-height: 1.75rem;
     --md-comp-slider-label-container-color: var(--md-sys-color-primary);
@@ -41,16 +27,12 @@
     --md-comp-slider-active-track-height: 1rem;
     --md-comp-slider-inactive-track-height: 1rem;
     --md-comp-slider-active-track-shape: var(--md-sys-shape-corner-full);
-    --md-comp-slider-active-track-outer-corner-corner-size: var(
-      --md-sys-shape-corner-full
-    );
+    --md-comp-slider-active-track-outer-corner-corner-size: var(--md-sys-shape-corner-full);
     --md-comp-slider-active-track-inner-corner-corner-size: 0.125rem 0.125rem;
     --md-comp-slider-inactive-track-shape: var(--md-sys-shape-corner-full);
     --md-comp-slider-track-elevation: var(--md-sys-elevation-level0);
     --md-comp-slider-active-track-color: var(--md-sys-color-primary);
-    --md-comp-slider-inactive-track-color: var(
-      --md-sys-color-secondary-container
-    );
+    --md-comp-slider-inactive-track-color: var(--md-sys-color-secondary-container);
     --md-comp-slider-handle-height: 2.75rem;
     --md-comp-slider-handle-width: 0.25rem;
     --md-comp-slider-handle-shape: var(--md-sys-shape-corner-full);
@@ -61,32 +43,18 @@
     --md-comp-slider-active-handle-height: 2.75rem;
     --md-comp-slider-active-handle-width: 0.25rem;
     --md-comp-slider-active-handle-shape: var(--md-sys-shape-corner-full);
-    --md-comp-slider-with-overlap-handle-outline-color: var(
-      --md-sys-color-on-primary
-    );
+    --md-comp-slider-with-overlap-handle-outline-color: var(--md-sys-color-on-primary);
     --md-comp-slider-with-overlap-handle-outline-width: 0.0625rem;
     --md-comp-slider-active-handle-leading-space: 0.375rem;
     --md-comp-slider-active-handle-trailing-space: 0.375rem;
     --md-comp-slider-active-handle-padding: 0.375rem;
-    --md-comp-slider-disabled-stop-indicator-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-slider-disabled-stop-indicator-color-selected: var(
-      --md-sys-color-inverse-on-surface
-    );
-    --md-comp-slider-disabled-active-stop-indicator-container-color: var(
-      --md-sys-color-inverse-on-surface
-    );
-    --md-comp-slider-disabled-inactive-stop-indicator-container-color: var(
-      --md-sys-color-on-surface
-    );
-    --md-comp-slider-disabled-active-track-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-slider-disabled-stop-indicator-color: var(--md-sys-color-on-surface);
+    --md-comp-slider-disabled-stop-indicator-color-selected: var(--md-sys-color-inverse-on-surface);
+    --md-comp-slider-disabled-active-stop-indicator-container-color: var(--md-sys-color-inverse-on-surface);
+    --md-comp-slider-disabled-inactive-stop-indicator-container-color: var(--md-sys-color-on-surface);
+    --md-comp-slider-disabled-active-track-color: var(--md-sys-color-on-surface);
     --md-comp-slider-disabled-active-track-opacity: 0.38;
-    --md-comp-slider-disabled-inactive-track-color: var(
-      --md-sys-color-on-surface
-    );
+    --md-comp-slider-disabled-inactive-track-color: var(--md-sys-color-on-surface);
     --md-comp-slider-disabled-inactive-track-opacity: 0.12;
     --md-comp-slider-disabled-handle-color: var(--md-sys-color-on-surface);
     --md-comp-slider-disabled-handle-elevation: var(--md-sys-elevation-level0);
@@ -95,38 +63,20 @@
     --md-comp-slider-hover-handle-color: var(--md-sys-color-primary);
     --md-comp-slider-hover-handle-width: 0.25rem;
     --md-comp-slider-focus-active-track-color: var(--md-sys-color-primary);
-    --md-comp-slider-focus-inactive-track-color: var(
-      --md-sys-color-secondary-container
-    );
+    --md-comp-slider-focus-inactive-track-color: var(--md-sys-color-secondary-container);
     --md-comp-slider-focus-handle-color: var(--md-sys-color-primary);
     --md-comp-slider-focus-handle-width: 0.125rem;
     --md-comp-slider-pressed-handle-color: var(--md-sys-color-primary);
     --md-comp-slider-pressed-handle-width: 0.125rem;
     --md-comp-slider-pressed-active-track-color: var(--md-sys-color-primary);
-    --md-comp-slider-pressed-inactive-track-color: var(
-      --md-sys-color-secondary-container
-    );
-    --md-comp-slider-value-indicator-container-color: var(
-      --md-sys-color-inverse-surface
-    );
-    --md-comp-slider-value-indicator-label-label-text-font: var(
-      --md-sys-typescale-label-large-font
-    );
-    --md-comp-slider-value-indicator-label-label-text-color: var(
-      --md-sys-color-inverse-on-surface
-    );
-    --md-comp-slider-value-indicator-label-label-text-line-height: var(
-      --md-sys-typescale-label-large-line-height
-    );
-    --md-comp-slider-value-indicator-label-label-text-size: var(
-      --md-sys-typescale-label-large-size
-    );
-    --md-comp-slider-value-indicator-label-label-text-tracking: var(
-      --md-sys-typescale-body-large-tracking
-    );
-    --md-comp-slider-value-indicator-label-label-text-weight: var(
-      --md-sys-typescale-body-large-weight
-    );
+    --md-comp-slider-pressed-inactive-track-color: var(--md-sys-color-secondary-container);
+    --md-comp-slider-value-indicator-container-color: var(--md-sys-color-inverse-surface);
+    --md-comp-slider-value-indicator-label-label-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-slider-value-indicator-label-label-text-color: var(--md-sys-color-inverse-on-surface);
+    --md-comp-slider-value-indicator-label-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-slider-value-indicator-label-label-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-slider-value-indicator-label-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-slider-value-indicator-label-label-text-weight: var(--md-sys-typescale-body-large-weight);
     --md-comp-slider-value-indicator-active-bottom-space: 0.75rem;
     --md-comp-slider-xsmall-active-track-height: 1rem;
     --md-comp-slider-xsmall-active-track-shape-leading: 0.5rem;

@@ -4,86 +4,34 @@
  */
 @layer tokens {
   :where(.md-side-sheet) {
-    --md-comp-sheet-side-docked-modal-container-color: var(
-      --md-sys-color-surface-container-low
-    );
-    --md-comp-sheet-side-docked-standard-container-color: var(
-      --md-sys-color-surface
-    );
-    --md-comp-sheet-side-docked-modal-container-elevation: var(
-      --md-sys-elevation-level1
-    );
-    --md-comp-sheet-side-docked-standard-container-elevation: var(
-      --md-sys-elevation-level0
-    );
+    --md-comp-sheet-side-docked-modal-container-color: var(--md-sys-color-surface-container-low);
+    --md-comp-sheet-side-docked-standard-container-color: var(--md-sys-color-surface);
+    --md-comp-sheet-side-docked-modal-container-elevation: var(--md-sys-elevation-level1);
+    --md-comp-sheet-side-docked-standard-container-elevation: var(--md-sys-elevation-level0);
     --md-comp-sheet-side-docked-container-height: 100%;
-    --md-comp-sheet-side-docked-container-shape: var(
-      --md-sys-shape-corner-none
-    );
-    --md-comp-sheet-side-detached-container-shape: var(
-      --md-sys-shape-corner-large
-    );
+    --md-comp-sheet-side-docked-container-shape: var(--md-sys-shape-corner-none);
+    --md-comp-sheet-side-detached-container-shape: var(--md-sys-shape-corner-large);
     --md-comp-sheet-side-docked-container-width: 16rem;
-    --md-comp-sheet-side-docked-modal-container-shape: var(
-      --md-sys-shape-corner-large-start
-    );
-    --md-comp-sheet-side-docked-headline-color: var(
-      --md-sys-color-on-surface-variant
-    );
-    --md-comp-sheet-side-docked-headline-font: var(
-      --md-sys-typescale-title-large-font
-    );
-    --md-comp-sheet-side-docked-headline-line-height: var(
-      --md-sys-typescale-title-large-line-height
-    );
-    --md-comp-sheet-side-docked-headline-size: var(
-      --md-sys-typescale-title-large-size
-    );
-    --md-comp-sheet-side-docked-headline-tracking: var(
-      --md-sys-typescale-title-large-tracking
-    );
-    --md-comp-sheet-side-docked-headline-weight: var(
-      --md-sys-typescale-title-large-weight
-    );
-    --md-comp-sheet-side-docked-headline-type: var(
-      --md-sys-typescale-title-large
-    );
+    --md-comp-sheet-side-docked-modal-container-shape: var(--md-sys-shape-corner-large-start);
+    --md-comp-sheet-side-docked-headline-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-sheet-side-docked-headline-font: var(--md-sys-typescale-title-large-font);
+    --md-comp-sheet-side-docked-headline-line-height: var(--md-sys-typescale-title-large-line-height);
+    --md-comp-sheet-side-docked-headline-size: var(--md-sys-typescale-title-large-size);
+    --md-comp-sheet-side-docked-headline-tracking: var(--md-sys-typescale-title-large-tracking);
+    --md-comp-sheet-side-docked-headline-weight: var(--md-sys-typescale-title-large-weight);
+    --md-comp-sheet-side-docked-headline-type: var(--md-sys-typescale-title-large);
     --md-comp-sheet-side-docked-divider-color: var(--md-sys-color-outline);
-    --md-comp-sheet-side-docked-action-hover-label-text-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-sheet-side-docked-action-hover-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-sheet-side-docked-action-hover-state-layer-opacity: var(
-      --md-sys-state-hover-state-layer-opacity
-    );
-    --md-comp-sheet-side-docked-focus-indicator-color: var(
-      --md-sys-color-secondary
-    );
-    --md-comp-sheet-side-docked-focus-indicator-thickness: var(
-      --md-sys-state-focus-indicator-thickness
-    );
-    --md-comp-sheet-side-docked-focus-indicator-outline-offset: var(
-      --md-sys-state-focus-indicator-outer-offset
-    );
-    --md-comp-sheet-side-docked-action-focus-label-text-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-sheet-side-docked-action-focus-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-sheet-side-docked-action-focus-state-layer-opacity: var(
-      --md-sys-state-focus-state-layer-opacity
-    );
-    --md-comp-sheet-side-docked-action-pressed-label-text-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-sheet-side-docked-action-pressed-state-layer-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-sheet-side-docked-action-pressed-state-layer-opacity: var(
-      --md-sys-state-pressed-state-layer-opacity
-    );
+    --md-comp-sheet-side-docked-action-hover-label-text-color: var(--md-sys-color-primary);
+    --md-comp-sheet-side-docked-action-hover-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-sheet-side-docked-action-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+    --md-comp-sheet-side-docked-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-sheet-side-docked-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
+    --md-comp-sheet-side-docked-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
+    --md-comp-sheet-side-docked-action-focus-label-text-color: var(--md-sys-color-primary);
+    --md-comp-sheet-side-docked-action-focus-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-sheet-side-docked-action-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+    --md-comp-sheet-side-docked-action-pressed-label-text-color: var(--md-sys-color-primary);
+    --md-comp-sheet-side-docked-action-pressed-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-sheet-side-docked-action-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
   }
 }

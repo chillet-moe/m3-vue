@@ -9,7 +9,8 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: 'Programmatic convenience API for showing snackbars without manually rendering the Snackbar component.',
+        component:
+          'Programmatic convenience API for showing snackbars without manually rendering the Snackbar component.',
       },
     },
   },

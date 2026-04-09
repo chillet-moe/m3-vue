@@ -4,20 +4,12 @@
  */
 @layer tokens {
   :where(.md-loading-indicator) {
-    --md-comp-loading-indicator-active-indicator-color: var(
-      --md-sys-color-primary
-    );
-    --md-comp-loading-indicator-contained-container-color: var(
-      --md-sys-color-primary-container
-    );
-    --md-comp-loading-indicator-contained-active-indicator-color: var(
-      --md-sys-color-on-primary-container
-    );
+    --md-comp-loading-indicator-active-indicator-color: var(--md-sys-color-primary);
+    --md-comp-loading-indicator-contained-container-color: var(--md-sys-color-primary-container);
+    --md-comp-loading-indicator-contained-active-indicator-color: var(--md-sys-color-on-primary-container);
     --md-comp-loading-indicator-active-indicator-size: 2.375rem;
     --md-comp-loading-indicator-container-height: 3rem;
     --md-comp-loading-indicator-container-width: 3rem;
-    --md-comp-loading-indicator-container-shape: var(
-      --md-sys-shape-corner-full
-    );
+    --md-comp-loading-indicator-container-shape: var(--md-sys-shape-corner-full);
   }
 }

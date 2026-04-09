@@ -572,11 +572,7 @@ defineExpose({
                   <Icon name="check" />
                 </span>
 
-                <span
-                  v-if="option.leadingIcon || slots.optionLeading"
-                  class="m3-select-option-icon"
-                  aria-hidden="true"
-                >
+                <span v-if="option.leadingIcon || slots.optionLeading" class="m3-select-option-icon" aria-hidden="true">
                   <slot name="optionLeading" :option="option" :selected="false">
                     <Icon v-if="option.leadingIcon" :name="option.leadingIcon" />
                   </slot>
@@ -599,7 +595,12 @@ defineExpose({
             </template>
           </MenuItem>
 
-          <div v-if="props.filterable && !hasFilteredOptions" key="no-results" class="m3-select-empty" aria-live="polite">
+          <div
+            v-if="props.filterable && !hasFilteredOptions"
+            key="no-results"
+            class="m3-select-empty"
+            aria-live="polite"
+          >
             {{ props.filterNoResultsText }}
           </div>
         </TransitionGroup>

@@ -22,9 +22,9 @@
   --primary-900: #14532d;
   --primary-950: #052e16;
   --white: #ffffff;
-  --rounded-sm: .25rem;
-  --rounded-md: .375rem;
-  --rounded-lg: .5rem;
+  --rounded-sm: 0.25rem;
+  --rounded-md: 0.375rem;
+  --rounded-lg: 0.5rem;
 }
 
 /* -------------------- Storybook sidebar -------------------- */
@@ -72,54 +72,54 @@
   background: var(--neutral-100) !important;
 }
 
-.light .sidebar-item[data-selected="true"],
-.light .sidebar-item[data-selected="true"]:hover {
+.light .sidebar-item[data-selected='true'],
+.light .sidebar-item[data-selected='true']:hover {
   background: var(--neutral-200) !important;
   color: var(--neutral-800) !important;
 }
 
-.dark .sidebar-item[data-selected="true"],
-.dark .sidebar-item[data-selected="true"]:hover {
+.dark .sidebar-item[data-selected='true'],
+.dark .sidebar-item[data-selected='true']:hover {
   background: var(--neutral-800) !important;
 }
 
-button[data-testid="context-menu"] {
+button[data-testid='context-menu'] {
   box-shadow: none !important;
 }
 
-.dark button[data-testid="context-menu"] {
+.dark button[data-testid='context-menu'] {
   background: var(--neutral-900);
 }
 
-.dark button[data-testid="context-menu"]:hover {
+.dark button[data-testid='context-menu']:hover {
   background: var(--neutral-800);
 }
 
-.dark div[data-selected="true"] button[data-testid="context-menu"] {
+.dark div[data-selected='true'] button[data-testid='context-menu'] {
   background: var(--neutral-800);
 }
 
-.dark div[data-selected="true"] button[data-testid="context-menu"]:hover {
+.dark div[data-selected='true'] button[data-testid='context-menu']:hover {
   background: var(--neutral-700);
 }
 
-.light div[data-selected="true"] button[data-testid="context-menu"] > svg {
+.light div[data-selected='true'] button[data-testid='context-menu'] > svg {
   color: var(--neutral-800);
 }
 
-.light button[data-testid="context-menu"] {
+.light button[data-testid='context-menu'] {
   background: var(--neutral-100);
 }
 
-.light button[data-testid="context-menu"]:hover {
+.light button[data-testid='context-menu']:hover {
   background: var(--neutral-200);
 }
 
-.light div[data-selected="true"] button[data-testid="context-menu"] {
+.light div[data-selected='true'] button[data-testid='context-menu'] {
   background: var(--neutral-200);
 }
 
-.light div[data-selected="true"] button[data-testid="context-menu"]:hover {
+.light div[data-selected='true'] button[data-testid='context-menu']:hover {
   background: var(--neutral-300);
 }
 
@@ -133,33 +133,33 @@ button[data-testid="context-menu"] {
   text-transform: capitalize;
 }
 
-.light .sidebar-item svg[type="document"],
-.light .sidebar-item svg[type="component"],
-.light .search-result-item svg[type="document"],
-.light .search-result-item svg[type="component"],
+.light .sidebar-item svg[type='document'],
+.light .sidebar-item svg[type='component'],
+.light .search-result-item svg[type='document'],
+.light .search-result-item svg[type='component'],
 .dark .search-result-item mark {
   color: var(--primary-500);
   font-weight: 600;
 }
 
-.dark .sidebar-item svg[type="document"],
-.dark .sidebar-item svg[type="component"],
-.dark .search-result-item svg[type="document"],
-.dark .search-result-item svg[type="component"],
+.dark .sidebar-item svg[type='document'],
+.dark .sidebar-item svg[type='component'],
+.dark .search-result-item svg[type='document'],
+.dark .search-result-item svg[type='component'],
 .light .search-result-item mark {
   color: var(--primary-600);
   font-weight: 600;
 }
 
-.light .sidebar-item svg[type="story"],
-.light .search-result-item svg[type="document"],
-.light .search-result-item svg[type="story"] {
+.light .sidebar-item svg[type='story'],
+.light .search-result-item svg[type='document'],
+.light .search-result-item svg[type='story'] {
   color: var(--neutral-400);
 }
 
-.dark .sidebar-item svg[type="story"],
-.dark .search-result-item svg[type="document"],
-.dark .search-result-item svg[type="story"] {
+.dark .sidebar-item svg[type='story'],
+.dark .search-result-item svg[type='document'],
+.dark .search-result-item svg[type='story'] {
   color: var(--neutral-600);
 }
 
@@ -212,22 +212,22 @@ button[data-testid="context-menu"] {
 
 .dark .docblock-argstable-body tr > td textarea,
 .dark .docblock-argstable-body tr > td select,
-.dark .docblock-argstable-body tr > td:last-child button:not([tabindex="-1"]) {
+.dark .docblock-argstable-body tr > td:last-child button:not([tabindex='-1']) {
   background: var(--neutral-900);
   border: solid 1px var(--neutral-800);
   box-shadow: none;
 }
 
-.light .docblock-argstable-body tr > td:last-child button:not([tabindex="-1"]) {
+.light .docblock-argstable-body tr > td:last-child button:not([tabindex='-1']) {
   background: var(--white);
 }
 
 /* -------------------- Storybook content -------------------- */
 
-.dark [role="tabpanel"] [data-radix-scroll-area-content] > div {
+.dark [role='tabpanel'] [data-radix-scroll-area-content] > div {
   background: var(--neutral-950) !important;
 }
 
-.light [role="tabpanel"] [data-radix-scroll-area-content] > div {
+.light [role='tabpanel'] [data-radix-scroll-area-content] > div {
   background: var(--white) !important;
 }

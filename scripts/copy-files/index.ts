@@ -66,11 +66,7 @@ export function copyFiles(options: CopyFilesOptions): Plugin {
         } else {
           // 复制单个文件
           const fileName = target.rename ?? path.basename(target.src);
-          destPath = path.resolve(
-            root,
-            outDir,
-            target.dest ? path.join(target.dest, fileName) : fileName
-          );
+          destPath = path.resolve(root, outDir, target.dest ? path.join(target.dest, fileName) : fileName);
 
           // 确保目标目录存在
           const destDir = path.dirname(destPath);
@@ -114,4 +110,3 @@ async function copyDir(src: string, dest: string): Promise<void> {
 }
 
 export default copyFiles;
-

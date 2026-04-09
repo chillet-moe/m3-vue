@@ -4,7 +4,10 @@
   --_menu-item-current-label-color: var(--_menu-item-label-color, var(--md-sys-color-on-surface));
   --_menu-item-current-supporting-color: var(--_menu-item-supporting-color, var(--md-sys-color-on-surface-variant));
   --_menu-item-current-leading-icon-color: var(--_menu-item-leading-icon-color, var(--md-sys-color-on-surface-variant));
-  --_menu-item-current-trailing-icon-color: var(--_menu-item-trailing-icon-color, var(--md-sys-color-on-surface-variant));
+  --_menu-item-current-trailing-icon-color: var(
+    --_menu-item-trailing-icon-color,
+    var(--md-sys-color-on-surface-variant)
+  );
   --_menu-item-current-trailing-supporting-color: var(
     --_menu-item-trailing-supporting-color,
     var(--md-sys-color-on-surface-variant)
@@ -32,7 +35,13 @@
   --md-state-layer-color: var(--_menu-item-state-layer-color, var(--md-sys-color-on-surface));
   transition: color 120ms var(--md-timing-function-fast);
 
-  font-family: var(--md-comp-menus-menu-item-label-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    var(--md-comp-menus-menu-item-label-text-font),
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   font-size: var(--md-comp-menus-menu-item-label-text-size);
   line-height: var(--md-comp-menus-menu-item-label-text-line-height);
   font-weight: var(--md-comp-menus-menu-item-label-text-weight);
@@ -60,7 +69,10 @@
 }
 
 .m3-menu-item[data-selected='true'] {
-  --_menu-item-current-container-color: var(--_menu-item-selected-container-color, var(--md-sys-color-tertiary-container));
+  --_menu-item-current-container-color: var(
+    --_menu-item-selected-container-color,
+    var(--md-sys-color-tertiary-container)
+  );
   --_menu-item-current-label-color: var(--_menu-item-selected-label-color, var(--md-sys-color-on-tertiary-container));
   --_menu-item-current-supporting-color: var(
     --_menu-item-selected-supporting-color,
@@ -94,7 +106,10 @@
 
 .m3-menu-item:disabled {
   cursor: default;
-  --_menu-item-current-label-color: --translucent(var(--_menu-item-disabled-label-color), var(--_menu-item-disabled-opacity));
+  --_menu-item-current-label-color: --translucent(
+    var(--_menu-item-disabled-label-color),
+    var(--_menu-item-disabled-opacity)
+  );
   --_menu-item-current-supporting-color: --translucent(
     var(--_menu-item-disabled-supporting-color),
     var(--_menu-item-disabled-supporting-opacity)
@@ -182,7 +197,13 @@
 
 .m3-menu-item-supporting {
   color: var(--_menu-item-current-supporting-color);
-  font-family: var(--md-comp-menus-menu-item-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    var(--md-comp-menus-menu-item-supporting-text-font),
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   font-size: var(--md-comp-menus-menu-item-supporting-text-size);
   line-height: var(--md-comp-menus-menu-item-supporting-text-line-height);
   font-weight: var(--md-comp-menus-menu-item-supporting-text-weight);
@@ -210,7 +231,13 @@
 
 .m3-menu-item-trailing-text {
   color: var(--_menu-item-current-trailing-supporting-color);
-  font-family: var(--md-comp-menus-menu-item-trailing-supporting-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    var(--md-comp-menus-menu-item-trailing-supporting-text-font),
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   font-size: var(--md-comp-menus-menu-item-trailing-supporting-text-size);
   line-height: var(--md-comp-menus-menu-item-trailing-supporting-text-line-height);
   font-weight: var(--md-comp-menus-menu-item-trailing-supporting-text-weight);

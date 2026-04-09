@@ -376,7 +376,9 @@ describe('Slider', () => {
     expect(slider).not.toBeNull();
     expect(input).not.toBeNull();
 
-    input!.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120, pointerId: 7 }));
+    input!.dispatchEvent(
+      createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120, pointerId: 7 }),
+    );
     await nextTick();
 
     expect(slider!.classList.contains('m3-slider-value-dragging')).toBe(false);
@@ -539,5 +541,4 @@ describe('Slider', () => {
 
     app.unmount();
   });
-
 });

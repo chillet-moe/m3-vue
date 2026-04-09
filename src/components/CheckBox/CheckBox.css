@@ -110,8 +110,14 @@
 }
 
 .m3-checkbox:has(.m3-checkbox-input:not(:disabled):active) .m3-checkbox-box,
-.m3-checkbox:has(.m3-checkbox-input:not(:disabled):hover) .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box,
-.m3-checkbox:has(.m3-checkbox-input:not(:disabled):active) .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box {
+.m3-checkbox:has(.m3-checkbox-input:not(:disabled):hover)
+  .m3-checkbox-input:checked
+  + .m3-checkbox-control
+  .m3-checkbox-box,
+.m3-checkbox:has(.m3-checkbox-input:not(:disabled):active)
+  .m3-checkbox-input:checked
+  + .m3-checkbox-control
+  .m3-checkbox-box {
   background-color: var(--md-sys-color-primary);
 }
 
@@ -123,7 +129,10 @@
 
 .m3-checkbox-input:disabled + .m3-checkbox-control .m3-checkbox-box {
   box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width)
-    --translucent(var(--md-comp-checkbox-disabled-unselected-outline-color), var(--md-comp-checkbox-disabled-outline-opacity));
+    --translucent(
+      var(--md-comp-checkbox-disabled-unselected-outline-color),
+      var(--md-comp-checkbox-disabled-outline-opacity)
+    );
 }
 
 .m3-checkbox-input:disabled:checked + .m3-checkbox-control .m3-checkbox-box {

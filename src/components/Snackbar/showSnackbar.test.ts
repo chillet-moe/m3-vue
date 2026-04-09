@@ -12,7 +12,7 @@ function installPopoverPolyfill() {
   if (typeof prototype.showPopover !== 'function') {
     Object.defineProperty(prototype, 'showPopover', {
       configurable: true,
-      value: function(this: HTMLElement) {
+      value: function (this: HTMLElement) {
         this.hidden = false;
         this.dataset.popoverOpen = 'true';
       },
@@ -22,7 +22,7 @@ function installPopoverPolyfill() {
   if (typeof prototype.hidePopover !== 'function') {
     Object.defineProperty(prototype, 'hidePopover', {
       configurable: true,
-      value: function(this: HTMLElement) {
+      value: function (this: HTMLElement) {
         delete this.dataset.popoverOpen;
         this.hidden = true;
       },

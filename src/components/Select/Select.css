@@ -125,7 +125,9 @@
 
 .m3-select-option:not([data-has-option-leading='true'])[data-selected='true'] .m3-menu-item-content,
 .m3-select-option:not([data-has-option-leading='true'])[data-selected='true'] .m3-menu-item-suffix {
-  transform: translateX(calc(var(--md-comp-menus-menu-item-leading-icon-size) + var(--md-comp-menus-menu-item-between-space)));
+  transform: translateX(
+    calc(var(--md-comp-menus-menu-item-leading-icon-size) + var(--md-comp-menus-menu-item-between-space))
+  );
 }
 
 .m3-select-options {
@@ -169,7 +171,13 @@
   padding-block: 0.75rem;
   padding-inline: var(--md-comp-menus-menu-item-leading-space, 1rem);
   color: var(--md-sys-color-on-surface-variant);
-  font-family: var(--md-comp-menus-menu-item-label-text-font), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    var(--md-comp-menus-menu-item-label-text-font),
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
   font-size: var(--md-comp-menus-menu-item-label-text-size);
   line-height: var(--md-comp-menus-menu-item-label-text-line-height);
   font-weight: var(--md-comp-menus-menu-item-label-text-weight);
