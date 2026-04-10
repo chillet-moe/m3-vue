@@ -28,10 +28,6 @@ const modelValue = ref<SelectModelValue>(undefined);
 
 Combobox combines free-form text entry with option picking, making it useful for searchable single- and multi-select flows.
 
-## Demo
-
-### Interactive
-
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <Combobox v-bind="props" v-model="modelValue" :options="stateOptions" />

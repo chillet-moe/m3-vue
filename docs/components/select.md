@@ -33,10 +33,6 @@ const modelValue = ref<SelectModelValue>(undefined);
 
 Select provides an anchored menu for choosing one or many options, with optional icons, filtering, and validation text.
 
-## Demo
-
-### Interactive
-
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <Select v-bind="props" v-model="modelValue" :options="coffeeOptions" />

@@ -27,10 +27,6 @@ const modelValue = ref('');
 
 Text fields cover baseline Material 3 input cases including supporting text, validation, adornments, and multiline entry.
 
-## Demo
-
-### Interactive
-
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <TextField v-bind="props" v-model="modelValue" />

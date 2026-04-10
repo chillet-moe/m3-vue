@@ -59,10 +59,6 @@ watch(
 
 Slider handles horizontal and vertical range input, inset icons, value indicators, and directional layouts with keyboard-friendly behavior.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 1rem;">
     <Slider v-bind="props" v-model:value="value" :formatter="numericFormatter" :stop-indicators="stopIndicators" />

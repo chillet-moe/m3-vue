@@ -20,10 +20,6 @@ const props = ref({
 
 The icon component renders Material Symbols names directly, making it easy to reuse the same icon tokens across the library and docs.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <div style="display: grid; justify-items: center; gap: 0.75rem;">
     <Icon v-bind="props" />

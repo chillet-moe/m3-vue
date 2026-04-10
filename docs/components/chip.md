@@ -36,10 +36,6 @@ const selected = ref(false);
 
 Chips cover assist, suggestion, filter, and input patterns with shared selection, icon, and avatar support.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <Chip v-bind="props" v-model="selected">Chip</Chip>
 </DemoContainer>

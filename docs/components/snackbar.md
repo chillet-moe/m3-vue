@@ -29,10 +29,6 @@ const lastEvent = ref('');
 
 Snackbar presents transient status updates with optional action and dismiss affordances built from the same button primitives as the library.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <div style="display: flex; flex-direction: column; gap: 1rem; inline-size: min(36rem, 100%);">
     <Snackbar v-bind="props" @action="lastEvent = 'action'" @dismiss="lastEvent = 'dismiss'">

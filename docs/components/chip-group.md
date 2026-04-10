@@ -32,10 +32,6 @@ watch(
 
 Chip groups coordinate single or multiple chip selection while keeping the chips themselves fully reusable.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <ChipGroup v-bind="props" v-model="modelValue" name="chip-group-docs" aria-label="Suggested filters">
     <Chip variant="filter" value="selected">Selected</Chip>

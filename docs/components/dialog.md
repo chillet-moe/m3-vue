@@ -23,10 +23,6 @@ const open = ref(false);
 
 Dialog provides a modal surface with headline, body, icon, and action slots built on the native `<dialog>` element.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <Button @click="open = true">Open dialog</Button>
 

@@ -42,10 +42,6 @@ watch(
 
 Button groups keep a related set of options visually connected while preserving single- or multi-selection behavior.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <ButtonGroup v-bind="props" v-model="modelValue" name="button-group-docs">
     <ButtonGroupItem value="option-1">Option 1</ButtonGroupItem>

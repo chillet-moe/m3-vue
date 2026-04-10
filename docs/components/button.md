@@ -39,10 +39,6 @@ const props = ref({
 
 Buttons let people trigger primary, secondary, or low-emphasis actions with Material 3 visual treatments.
 
-## Demo
-
-### Interactive
-
 <DemoContainer>
   <Button v-bind="props">
     <input v-if="props.toggleable" type="checkbox" />

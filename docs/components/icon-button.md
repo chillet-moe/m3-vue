@@ -37,10 +37,6 @@ const props = ref({
 
 Icon buttons expose compact, icon-first actions with the same Material 3 shape, color, and size variants as the library component.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <IconButton v-bind="props">
     <input v-if="props.toggleable" type="checkbox" />

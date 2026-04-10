@@ -23,10 +23,6 @@ const props = ref({
 
 Cards provide a flexible surface for grouped content, with elevated, filled, outlined, and interactive treatments.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <Card
     v-bind="props"

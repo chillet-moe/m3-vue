@@ -25,10 +25,6 @@ const content = ref('Tooltip');
 
 Tooltip exposes the shared tooltip surface for plain and rich treatments, with control over the underlying popover behavior.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <Tooltip v-bind="props">{{ content }}</Tooltip>
 </DemoContainer>

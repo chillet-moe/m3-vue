@@ -26,10 +26,6 @@ const checked = ref(false);
 
 Switches communicate an immediate on or off state and support optional checked and unchecked icon affordances.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">
     <Switch v-bind="props" v-model:checked="checked">Airplane mode</Switch>

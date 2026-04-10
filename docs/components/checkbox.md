@@ -22,10 +22,6 @@ const checked = ref(false);
 
 Checkboxes let people confirm independent selections while preserving clear unchecked, checked, and disabled states.
 
-## Demo
-
-### Interactive
-
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">
     <CheckBox v-bind="props" v-model:checked="checked">Receive notifications</CheckBox>
