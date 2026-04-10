@@ -77,6 +77,7 @@ export default defineConfig({
         {
           text: 'Functions',
           items: [
+            { text: 'showDialog', link: '/functions/show-dialog' },
             { text: 'showSnackbar', link: '/functions/show-snackbar' },
           ],
         },
@@ -84,6 +85,7 @@ export default defineConfig({
           text: 'Utilities',
           items: [
             { text: 'Elevation', link: '/utilities/elevation' },
+            { text: 'State Layer', link: '/utilities/state-layer' },
           ],
         },
       ],

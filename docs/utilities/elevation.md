@@ -2,9 +2,16 @@
 title: Elevation
 ---
 
+<script setup lang="ts">
+import ElevationLevels from '../demos/elevation/ElevationLevels.vue';
+import ElevationLevelsSrc from '../demos/elevation/ElevationLevels.vue?raw';
+</script>
+
 # Elevation
 
 The library exports Material 3 elevation tokens as CSS custom properties. Use them for custom surfaces, and prefer the component-specific elevation tokens when you are styling one of the provided components.
+
+<DemoContainer :src="ElevationLevelsSrc" :viewport="false"><ElevationLevels /></DemoContainer>
 
 ## Available Tokens
 
