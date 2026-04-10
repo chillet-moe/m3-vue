@@ -1,16 +1,42 @@
 import { useData, useRoute } from 'vitepress';
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
 
-import { flattenOutlineItems } from '../utils';
+import type { ThemeOutlineLink } from '../utils';
+
+const ignoreRE = /\b(?:header-anchor|ignore-header)\b/;
+
+function serializeHeader(el: Element): string {
+  let ret = '';
+  for (const node of el.childNodes) {
+    if (node.nodeType === 1) {
+      if (ignoreRE.test((node as Element).className)) continue;
+      ret += node.textContent;
+    } else if (node.nodeType === 3) {
+      ret += node.textContent;
+    }
+  }
+  return ret.trim();
+}
+
+function getHeadersFromDom(): ThemeOutlineLink[] {
+  const elements = document.querySelectorAll('.vp-doc :is(h2, h3, h4, h5, h6)');
+  return [...elements]
+    .filter((el) => el.id && el.hasChildNodes())
+    .map((el) => ({
+      title: serializeHeader(el),
+      link: '#' + el.id,
+      depth: Number(el.tagName[1]) - 2,
+      element: el as HTMLHeadElement,
+    }));
+}
 
 export function useOutline() {
-  const { page, theme } = useData();
+  const { theme } = useData();
   const route = useRoute();
 
   const activeHeadingId = ref('');
+  const items = shallowRef<ThemeOutlineLink[]>([]);
   let observer: IntersectionObserver | null = null;
-
-  const items = computed(() => flattenOutlineItems(page.value.headers ?? []));
 
   const label = computed(() => {
     const outline = theme.value.outline;
@@ -25,6 +51,11 @@ export function useOutline() {
 
     return 'On This Page';
   });
+
+  function update() {
+    items.value = getHeadersFromDom();
+    setupScrollSpy();
+  }
 
   function setupScrollSpy() {
     cleanupScrollSpy();
@@ -56,14 +87,14 @@ export function useOutline() {
     observer = null;
   }
 
-  onMounted(() => void nextTick(setupScrollSpy));
+  onMounted(() => void nextTick(update));
   onUnmounted(cleanupScrollSpy);
 
   watch(
     () => route.path,
     () => {
       activeHeadingId.value = '';
-      void nextTick(setupScrollSpy);
+      void nextTick(update);
     },
   );
 

@@ -11,7 +11,7 @@ function isActiveOutlineLink(link: string) {
 
 <template>
   <aside v-if="items.length" class="docs-outline">
-    <Card color="outlined" class="docs-outline-card">
+    <div class="docs-outline-card">
       <h2 class="docs-outline-title">{{ label }}</h2>
 
       <nav class="docs-outline-links" aria-label="On this page">
@@ -28,30 +28,28 @@ function isActiveOutlineLink(link: string) {
           {{ item.title }}
         </Button>
       </nav>
-    </Card>
+    </div>
   </aside>
 </template>
 
 <style scoped>
 .docs-outline {
   position: sticky;
-  inset-block-start: calc(1rem + 4.5rem);
+  inset-block-start: calc(1.25rem + 4.5rem);
   align-self: start;
   max-block-size: calc(100vh - 6rem);
-  padding: 1.25rem 1rem 1.5rem 0;
+  margin-inline-end: 2rem;
 }
 
 .docs-outline-card {
   display: grid;
   gap: 0.75rem;
   max-block-size: 100%;
-  padding: 1.25rem;
-  border-radius: 1.75rem;
   overflow: auto;
 }
 
 .docs-outline-title {
-  margin: 0;
+  margin-inline-start: 1.5rem;
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
   font-weight: 700;
@@ -64,16 +62,16 @@ function isActiveOutlineLink(link: string) {
   gap: 0.375rem;
 }
 
-.docs-outline-link[data-active='true']:deep(.m3-button),
-.docs-outline-link:deep(.m3-button:hover) {
+.docs-outline-link[data-active='true'],
+.docs-outline-link:hover {
   color: var(--md-sys-color-primary);
 }
 
-.docs-outline-link[data-active='true']:deep(.m3-button) {
+.docs-outline-link[data-active='true'].m3-button {
   background: --translucent(var(--md-sys-color-primary), 0.12);
 }
 
-.docs-outline-link:deep(.m3-button) {
+.docs-outline-link.m3-button {
   justify-content: flex-start;
   inline-size: 100%;
   padding-inline-start: calc(0.75rem + var(--outline-depth) * 0.75rem);
