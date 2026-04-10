@@ -17,6 +17,6 @@ const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as cons
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 </style>

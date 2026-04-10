@@ -22,33 +22,33 @@ import { Button, Card } from '@/index';
   display: grid;
   place-items: center;
   min-block-size: 60vh;
-  padding: --dp(24);
+  padding: 1.5rem;
 }
 
 .docs-not-found-card {
   display: grid;
-  gap: --dp(16);
+  gap: 1rem;
   justify-items: center;
   text-align: center;
-  padding: --dp(48);
-  border-radius: --dp(28);
+  padding: 3rem;
+  border-radius: 1.75rem;
   overflow: clip;
 }
 
 .docs-not-found-icon {
-  font-size: --dp(64);
+  font-size: 4rem;
   color: var(--md-sys-color-error);
 }
 
 .docs-not-found-title {
   margin: 0;
-  font-size: --dp(28);
+  font-size: 1.75rem;
 }
 
 .docs-not-found-text {
   margin: 0;
   max-inline-size: 28rem;
   color: var(--vp-c-text-2);
-  font-size: --dp(16);
+  font-size: 1rem;
 }
 </style>

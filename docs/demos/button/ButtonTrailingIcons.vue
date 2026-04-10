@@ -18,13 +18,13 @@ const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as cons
 <style scoped>
 .button-demo-grid {
   display: grid;
-  gap: --dp(12);
+  gap: 0.75rem;
 }
 
 .button-demo-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 </style>

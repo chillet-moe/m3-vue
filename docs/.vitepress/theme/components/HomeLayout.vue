@@ -1,30 +1,22 @@
 <script setup lang="ts">
-import { withBase } from 'vitepress';
+import { useData, withBase } from 'vitepress';
 import { VPNavBarSearch } from 'vitepress/theme';
 
 import { Button, Card, IconButton } from '@/index';
-import { mapHeroActionColor, resolveSocialLabel, type HeroAction, type ThemeNavItem, type ThemeSocialLink } from '../utils';
+import { useHero, useNav, useSiteInfo } from '../composables/nav';
+import { mapHeroActionColor, resolveSocialLabel } from '../utils';
 
-const props = defineProps<{
-  hero?: {
-    name?: string;
-    text?: string;
-    tagline?: string;
-    actions?: HeroAction[];
-  } | null;
-  isDark: boolean;
-  navItems: ThemeNavItem[];
-  siteLogo?: string;
-  siteTitle: string;
-  socialLinks: ThemeSocialLink[];
-}>();
-
-const emit = defineEmits<{
-  toggleAppearance: [];
-}>();
+const { isDark } = useData();
+const { navItems, socialLinks } = useNav();
+const { siteLogo, siteTitle } = useSiteInfo();
+const { hero } = useHero();
 
 function resolveLink(path: string) {
   return withBase(path);
+}
+
+function toggleAppearance() {
+  isDark.value = !isDark.value;
 }
 </script>
 
@@ -71,7 +63,7 @@ function resolveLink(path: string) {
             width="default"
             :icon="isDark ? 'light_mode' : 'dark_mode'"
             :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-            @click="emit('toggleAppearance')"
+            @click="toggleAppearance"
           />
         </div>
       </div>
@@ -117,7 +109,7 @@ function resolveLink(path: string) {
   position: sticky;
   inset-block-start: 0;
   z-index: 20;
-  padding: --dp(16);
+  padding: 1rem;
   backdrop-filter: blur(20px);
 }
 
@@ -130,26 +122,26 @@ function resolveLink(path: string) {
 .home-header-inner {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: --dp(12);
+  gap: 0.75rem;
   align-items: center;
   border: 1px solid --translucent(var(--vp-c-divider), 0.7);
-  border-radius: --dp(28);
-  padding-block: --dp(10);
-  padding-inline: --dp(12);
+  border-radius: 1.75rem;
+  padding-block: 0.625rem;
+  padding-inline: 0.75rem;
   background: --translucent(var(--vp-c-bg), 0.78);
 }
 
 .home-brand:deep(.m3-button) {
-  gap: --dp(10);
+  gap: 0.625rem;
 }
 
 .home-brand-logo {
-  inline-size: --dp(24);
-  block-size: --dp(24);
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
 }
 
 .home-brand-text {
-  font-size: --dp(16);
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -157,7 +149,7 @@ function resolveLink(path: string) {
 .home-actions {
   display: flex;
   align-items: center;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 
 .home-nav {
@@ -169,28 +161,28 @@ function resolveLink(path: string) {
   border: 1px solid --translucent(var(--vp-c-divider), 0.7);
   border-radius: 999px;
   background: --translucent(var(--vp-c-bg-alt), 0.5);
-  block-size: --dp(36);
-  padding-inline: --dp(12);
+  block-size: 2.25rem;
+  padding-inline: 0.75rem;
   font-family: inherit;
-  font-size: --dp(14);
+  font-size: 0.875rem;
   color: var(--vp-c-text-2);
 }
 
 .home-main {
   display: grid;
-  gap: --dp(24);
-  padding: 0 --dp(16) --dp(32);
+  gap: 1.5rem;
+  padding: 0 1rem 2rem;
 }
 
 .home-hero {
-  border-radius: --dp(28);
+  border-radius: 1.75rem;
   overflow: clip;
 }
 
 .home-hero-content {
   display: grid;
-  gap: --dp(16);
-  padding: --dp(32);
+  gap: 1rem;
+  padding: 2rem;
 }
 
 .home-hero-eyebrow,
@@ -201,7 +193,7 @@ function resolveLink(path: string) {
 
 .home-hero-eyebrow {
   color: var(--vp-c-text-2);
-  font-size: --dp(14);
+  font-size: 0.875rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -215,19 +207,19 @@ function resolveLink(path: string) {
 .home-hero-tagline {
   max-inline-size: 40rem;
   color: var(--vp-c-text-2);
-  font-size: --dp(18);
+  font-size: 1.125rem;
   line-height: 1.6;
 }
 
 .home-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: --dp(12);
+  gap: 0.75rem;
 }
 
 .home-content {
   display: grid;
-  gap: --dp(16);
+  gap: 1rem;
 }
 
 @media (max-width: 80rem) {
@@ -238,7 +230,7 @@ function resolveLink(path: string) {
 
 @media (max-width: 64rem) {
   .home-header {
-    padding-inline: --dp(12);
+    padding-inline: 0.75rem;
   }
 
   .home-header-inner {

@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { Button, Card } from '@/index';
-import type { ThemeOutlineLink } from '../utils';
+import { useOutline } from '../composables/outline';
 
-const props = defineProps<{
-  activeHeadingId: string;
-  items: ThemeOutlineLink[];
-  title: string;
-}>();
+const { items, label, activeHeadingId } = useOutline();
 
 function isActiveOutlineLink(link: string) {
-  return link === `#${props.activeHeadingId}`;
+  return link === `#${activeHeadingId.value}`;
 }
 </script>
 
 <template>
-  <aside class="docs-outline">
+  <aside v-if="items.length" class="docs-outline">
     <Card color="outlined" class="docs-outline-card">
-      <h2 class="docs-outline-title">{{ title }}</h2>
+      <h2 class="docs-outline-title">{{ label }}</h2>
 
       <nav class="docs-outline-links" aria-label="On this page">
         <Button
@@ -39,25 +35,25 @@ function isActiveOutlineLink(link: string) {
 <style scoped>
 .docs-outline {
   position: sticky;
-  inset-block-start: calc(--dp(16) + --dp(72));
+  inset-block-start: calc(1rem + 4.5rem);
   align-self: start;
-  max-block-size: calc(100vh - --dp(96));
-  padding: --dp(20) --dp(16) --dp(24) 0;
+  max-block-size: calc(100vh - 6rem);
+  padding: 1.25rem 1rem 1.5rem 0;
 }
 
 .docs-outline-card {
   display: grid;
-  gap: --dp(12);
+  gap: 0.75rem;
   max-block-size: 100%;
-  padding: --dp(20);
-  border-radius: --dp(28);
+  padding: 1.25rem;
+  border-radius: 1.75rem;
   overflow: auto;
 }
 
 .docs-outline-title {
   margin: 0;
   color: var(--vp-c-text-2);
-  font-size: --dp(13);
+  font-size: 0.8125rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -65,7 +61,7 @@ function isActiveOutlineLink(link: string) {
 
 .docs-outline-links {
   display: grid;
-  gap: --dp(6);
+  gap: 0.375rem;
 }
 
 .docs-outline-link[data-active='true']:deep(.m3-button),
@@ -80,7 +76,7 @@ function isActiveOutlineLink(link: string) {
 .docs-outline-link:deep(.m3-button) {
   justify-content: flex-start;
   inline-size: 100%;
-  padding-inline-start: calc(--dp(12) + var(--outline-depth) * --dp(12));
+  padding-inline-start: calc(0.75rem + var(--outline-depth) * 0.75rem);
 }
 
 @media (max-width: 80rem) {

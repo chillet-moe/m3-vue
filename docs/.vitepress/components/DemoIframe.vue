@@ -172,10 +172,10 @@ onBeforeUnmount(() => {
 .demo-iframe-stage {
   display: grid;
   place-items: center;
-  gap: --dp(16);
-  min-block-size: --dp(160);
-  border-radius: --dp(20);
-  padding: --dp(24);
+  gap: 1rem;
+  min-block-size: 10rem;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
   background:
     linear-gradient(135deg, --translucent(var(--vp-c-brand-1), 0.08), transparent 60%),
     linear-gradient(0deg, var(--vp-c-bg), var(--vp-c-bg));

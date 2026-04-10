@@ -16,6 +16,6 @@ const shapes = ['rounded', 'square'] as const;
 .button-demo-row {
   display: flex;
   flex-wrap: wrap;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 </style>

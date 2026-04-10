@@ -1,32 +1,22 @@
 <script setup lang="ts">
-import type { DefaultTheme } from 'vitepress';
 import { withBase } from 'vitepress';
 
 import { Button, Card } from '@/index';
+import { useNav, useSiteInfo } from '../composables/nav';
+import { useSidebar, useSidebarControl } from '../composables/sidebar';
 import { normalizePath } from '../utils';
 
-const props = defineProps<{
-  currentPath: string;
-  isOpen: boolean;
-  sidebarItems: DefaultTheme.SidebarItem[];
-  siteLogo?: string;
-  siteTitle: string;
-}>();
-
-const emit = defineEmits<{
-  close: [];
-}>();
+const { isOpen, close } = useSidebarControl();
+const { currentPath, sidebarItems } = useSidebar();
+const { siteLogo, siteTitle } = useSiteInfo();
 
 function resolveLink(path: string) {
   return withBase(path);
 }
 
 function isActiveLink(path?: string) {
-  if (!path) {
-    return false;
-  }
-
-  return normalizePath(path) === props.currentPath;
+  if (!path) return false;
+  return normalizePath(path) === currentPath.value;
 }
 </script>
 
@@ -34,7 +24,7 @@ function isActiveLink(path?: string) {
   <aside class="docs-sidebar" :data-open="isOpen ? 'true' : 'false'">
     <Card color="filled" class="docs-sidebar-surface">
       <div class="docs-sidebar-brand">
-        <Button class="docs-brand" color="text" size="medium" :href="resolveLink('/')" @click="emit('close')">
+        <Button class="docs-brand" color="text" size="medium" :href="resolveLink('/')" @click="close()">
           <img v-if="siteLogo" class="docs-brand-logo" :src="siteLogo" alt="" />
           <span class="docs-brand-text">{{ siteTitle }}</span>
         </Button>
@@ -53,7 +43,7 @@ function isActiveLink(path?: string) {
                 size="medium"
                 :href="child.link ? resolveLink(child.link) : undefined"
                 :data-active="isActiveLink(child.link) ? 'true' : 'false'"
-                @click="emit('close')"
+                @click="close()"
               >
                 {{ child.text }}
               </Button>
@@ -67,7 +57,7 @@ function isActiveLink(path?: string) {
             size="medium"
             :href="resolveLink(item.link)"
             :data-active="isActiveLink(item.link) ? 'true' : 'false'"
-            @click="emit('close')"
+            @click="close()"
           >
             {{ item.text }}
           </Button>
@@ -94,48 +84,48 @@ function isActiveLink(path?: string) {
 }
 
 .docs-sidebar-brand {
-  padding-inline: --dp(16);
+  padding-inline: 1rem;
 }
 
 .docs-sidebar-brand {
-  padding-block: --dp(18) --dp(12);
+  padding-block: 1.125rem 0.75rem;
   border-block-end: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .docs-brand:deep(.m3-button) {
   justify-content: flex-start;
-  gap: --dp(10);
+  gap: 0.625rem;
   inline-size: 100%;
 }
 
 .docs-brand-logo {
-  inline-size: --dp(24);
-  block-size: --dp(24);
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
 }
 
 .docs-brand-text {
-  font-size: --dp(16);
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .docs-sidebar-nav {
   overflow: auto;
-  padding: --dp(16);
+  padding: 1rem;
 }
 
 .docs-sidebar-group {
   display: grid;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 
 .docs-sidebar-group + .docs-sidebar-group {
-  margin-block-start: --dp(18);
+  margin-block-start: 1.125rem;
 }
 
 .docs-sidebar-title {
   margin: 0;
   color: var(--vp-c-text-2);
-  font-size: --dp(13);
+  font-size: 0.8125rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -143,7 +133,7 @@ function isActiveLink(path?: string) {
 
 .docs-sidebar-links {
   display: grid;
-  gap: --dp(6);
+  gap: 0.375rem;
 }
 
 .docs-sidebar-link[data-active='true']:deep(.m3-button) {

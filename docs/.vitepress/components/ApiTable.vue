@@ -182,27 +182,27 @@ function isControlVisible(prop: PropMeta) {
 <style scoped>
 .api-table {
   display: grid;
-  gap: --dp(24);
+  gap: 1.5rem;
 }
 
 .api-table-section {
   display: grid;
-  gap: --dp(12);
+  gap: 0.75rem;
 }
 
 .api-table-title {
   margin: 0;
   color: var(--vp-c-text-1);
-  font-size: --dp(20);
+  font-size: 1.25rem;
   line-height: 1.4;
 }
 
 .api-table-empty {
   margin: 0;
   border: 1px solid var(--vp-c-divider);
-  border-radius: --dp(20);
-  padding-block: --dp(16);
-  padding-inline: --dp(18);
+  border-radius: 1.25rem;
+  padding-block: 1rem;
+  padding-inline: 1.125rem;
   color: var(--vp-c-text-2);
   background: var(--vp-c-bg-soft);
 }
@@ -210,7 +210,7 @@ function isControlVisible(prop: PropMeta) {
 .api-table-scroll {
   overflow: auto;
   border: 1px solid var(--vp-c-divider);
-  border-radius: --dp(20);
+  border-radius: 1.25rem;
   background: var(--vp-c-bg-soft);
 }
 
@@ -221,8 +221,8 @@ function isControlVisible(prop: PropMeta) {
 
 .api-table-grid th,
 .api-table-grid td {
-  padding-block: --dp(14);
-  padding-inline: --dp(16);
+  padding-block: 0.875rem;
+  padding-inline: 1rem;
   border-block-end: 1px solid var(--vp-c-divider);
   text-align: start;
   vertical-align: start;
@@ -234,7 +234,7 @@ function isControlVisible(prop: PropMeta) {
 
 .api-table-grid th {
   color: var(--vp-c-text-2);
-  font-size: --dp(13);
+  font-size: 0.8125rem;
   font-weight: 600;
   background: --translucent(var(--vp-c-default-soft), 0.5);
 }
@@ -244,7 +244,7 @@ function isControlVisible(prop: PropMeta) {
 }
 
 .api-table-grid code {
-  font-size: --dp(13);
+  font-size: 0.8125rem;
   white-space: nowrap;
 }
 
@@ -252,13 +252,13 @@ function isControlVisible(prop: PropMeta) {
 .api-table-description,
 .api-table-control {
   display: grid;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 
 .api-table-type {
   display: flex;
   flex-wrap: wrap;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 
 .api-table-copy {
@@ -270,9 +270,9 @@ function isControlVisible(prop: PropMeta) {
   align-items: center;
   inline-size: fit-content;
   border-radius: 999px;
-  padding-block: --dp(4);
-  padding-inline: --dp(10);
-  font-size: --dp(12);
+  padding-block: 0.25rem;
+  padding-inline: 0.625rem;
+  font-size: 0.75rem;
   line-height: 1;
 }
 

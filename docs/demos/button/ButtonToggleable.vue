@@ -17,6 +17,6 @@ const colors = ['elevated', 'filled', 'tonal', 'outlined', 'text'] as const;
 .button-demo-row {
   display: flex;
   flex-wrap: wrap;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 </style>

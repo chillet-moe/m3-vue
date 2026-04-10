@@ -140,15 +140,15 @@ function selectPreset(preset: ViewportPreset) {
 .demo-container {
   display: grid;
   gap: 0;
-  margin-block: --dp(20);
+  margin-block: 1.25rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: --dp(24);
+  border-radius: 1.5rem;
   overflow: clip;
   background: var(--vp-c-bg-soft);
 }
 
 .demo-preview {
-  padding: --dp(20);
+  padding: 1.25rem;
 }
 
 .demo-preview-shell {
@@ -169,10 +169,10 @@ function selectPreset(preset: ViewportPreset) {
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-  gap: --dp(10);
+  gap: 0.625rem;
   border-block-start: 1px solid var(--vp-c-divider);
-  padding-block: --dp(12);
-  padding-inline: --dp(16);
+  padding-block: 0.75rem;
+  padding-inline: 1rem;
   background: --translucent(var(--vp-c-bg), 0.72);
   backdrop-filter: blur(16px);
 }
@@ -180,16 +180,16 @@ function selectPreset(preset: ViewportPreset) {
 .demo-viewport-presets {
   display: flex;
   flex-wrap: wrap;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 
 .demo-dimension-field {
   display: inline-flex;
   align-items: center;
-  gap: --dp(8);
+  gap: 0.5rem;
   margin-inline-start: auto;
   color: var(--vp-c-text-2);
-  font-size: --dp(13);
+  font-size: 0.8125rem;
 }
 
 .demo-dimension-label,
@@ -198,11 +198,11 @@ function selectPreset(preset: ViewportPreset) {
 }
 
 .demo-dimension-input {
-  inline-size: --dp(72);
+  inline-size: 4.5rem;
   border: 1px solid --translucent(var(--vp-c-divider), 0.9);
   border-radius: 999px;
-  padding-block: --dp(8);
-  padding-inline: --dp(12);
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg);
   font: inherit;
@@ -212,8 +212,8 @@ function selectPreset(preset: ViewportPreset) {
 .demo-toolbar-button {
   border: 1px solid --translucent(var(--vp-c-divider), 0.9);
   border-radius: 999px;
-  padding-block: --dp(8);
-  padding-inline: --dp(12);
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
   color: var(--vp-c-text-2);
   background: transparent;
   font: inherit;
@@ -237,7 +237,7 @@ function selectPreset(preset: ViewportPreset) {
 }
 
 .demo-source :deep(code) {
-  font-size: --dp(13);
+  font-size: 0.8125rem;
 }
 
 @media (max-width: 40rem) {

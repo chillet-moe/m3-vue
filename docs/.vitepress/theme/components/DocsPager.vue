@@ -2,23 +2,21 @@
 import { withBase } from 'vitepress';
 
 import { Button } from '@/index';
+import { useSidebar } from '../composables/sidebar';
 
-const props = defineProps<{
-  nextItem: { text: string; link: string } | null;
-  previousItem: { text: string; link: string } | null;
-}>();
+const { prevItem, nextItem } = useSidebar();
 </script>
 
 <template>
-  <nav v-if="previousItem || nextItem" class="docs-pager" aria-label="Page navigation">
+  <nav v-if="prevItem || nextItem" class="docs-pager" aria-label="Page navigation">
     <Button
-      v-if="previousItem"
+      v-if="prevItem"
       color="outlined"
       size="medium"
-      :href="withBase(previousItem.link)"
+      :href="withBase(prevItem.link)"
       leading-icon="arrow_back"
     >
-      {{ previousItem.text }}
+      {{ prevItem.text }}
     </Button>
 
     <span v-else class="docs-pager-spacer" />
@@ -39,7 +37,7 @@ const props = defineProps<{
 .docs-pager {
   display: flex;
   justify-content: space-between;
-  gap: --dp(12);
+  gap: 0.75rem;
 }
 
 .docs-pager-spacer {

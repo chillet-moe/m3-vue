@@ -122,15 +122,15 @@ const inputLabel = computed(() => {
   inline-size: 100%;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: --dp(8);
+  gap: 0.5rem;
 }
 
 .control-item-field {
-  inline-size: min(100%, --dp(280));
+  inline-size: min(100%, 17.5rem);
 }
 
 .control-item-unsupported {
   color: var(--vp-c-text-3);
-  font-size: --dp(14);
+  font-size: 0.875rem;
 }
 </style>
