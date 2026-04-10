@@ -51,7 +51,6 @@
     "lint:fix": "oxlint --fix"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.4.2",
     "@vueuse/core": "^14.2.1",
     "vue": "^3.5.32"
   },
@@ -88,8 +87,14 @@
     "wrangler": "^4.81.1"
   },
   "peerDependencies": {
+    "@nuxt/kit": "^4.4.2",
     "@vueuse/core": "^14.1.0",
     "vue": "^3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "@nuxt/kit": {
+      "optional": true
+    }
   },
   "pnpm": {
     "onlyBuiltDependencies": [
