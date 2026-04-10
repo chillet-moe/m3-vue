@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 
 const props = defineProps<{
+  height?: string;
   title?: string;
 }>();
 
@@ -9,6 +10,9 @@ const frameRef = useTemplateRef<HTMLIFrameElement>('frame');
 
 const target = ref<HTMLElement | null>(null);
 const frameHeight = ref('160px');
+const resolvedFrameHeight = computed(() => {
+  return props.height ?? frameHeight.value;
+});
 
 let resizeObserver: ResizeObserver | null = null;
 let headObserver: MutationObserver | null = null;
@@ -53,6 +57,9 @@ function bindFrame() {
       </body>
     </html>`);
   frameDocument.close();
+  frameDocument.documentElement.style.blockSize = '100%';
+  frameDocument.body.style.blockSize = '100%';
+  frameDocument.body.style.margin = '0';
 
   syncHeadStyles(frameDocument);
   syncTheme(frameDocument);
@@ -64,14 +71,20 @@ function bindFrame() {
     return;
   }
 
+  nextTarget.style.blockSize = '100%';
+
   resizeObserver?.disconnect();
-  resizeObserver = new ResizeObserver(() => {
-    frameHeight.value = `${Math.max(Math.ceil(nextTarget.scrollHeight), 160)}px`;
-  });
-  resizeObserver.observe(nextTarget);
+  if (!props.height) {
+    resizeObserver = new ResizeObserver(() => {
+      frameHeight.value = `${Math.max(Math.ceil(nextTarget.scrollHeight), 160)}px`;
+    });
+    resizeObserver.observe(nextTarget);
+  }
 
   void nextTick(() => {
-    frameHeight.value = `${Math.max(Math.ceil(nextTarget.scrollHeight), 160)}px`;
+    if (!props.height) {
+      frameHeight.value = `${Math.max(Math.ceil(nextTarget.scrollHeight), 160)}px`;
+    }
   });
 
   headObserver?.disconnect();
@@ -107,6 +120,19 @@ watch(frameRef, (frame) => {
   bindFrame();
 });
 
+watch(
+  () => props.height,
+  () => {
+    const nextTarget = target.value;
+
+    if (!nextTarget || props.height) {
+      return;
+    }
+
+    frameHeight.value = `${Math.max(Math.ceil(nextTarget.scrollHeight), 160)}px`;
+  },
+);
+
 onBeforeUnmount(() => {
   resizeObserver?.disconnect();
   headObserver?.disconnect();
@@ -120,10 +146,10 @@ onBeforeUnmount(() => {
       ref="frame"
       class="demo-iframe"
       :title="title ?? 'Component demo preview'"
-      :style="{ blockSize: frameHeight }"
+      :style="{ blockSize: resolvedFrameHeight }"
     />
     <Teleport v-if="target" :to="target">
-      <div class="demo-iframe-stage">
+      <div class="demo-iframe-stage" :style="{ minBlockSize: height ? '100%' : undefined }">
         <slot />
       </div>
     </Teleport>
