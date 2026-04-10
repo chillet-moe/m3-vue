@@ -11,7 +11,7 @@
 3. **交互式 Controls 面板**（基于 prop 类型自动生成控件，实时调整组件状态）
 4. **暗色模式切换**
 5. **Viewport 大小调整**
-6. **自定义主题**（使用组件库自身的 M3 design token）
+6. **自定义主题**（文档站骨架尽量直接使用组件库自身组件，而不是只给 VitePress 默认主题换色）
 
 **不需要**：a11y 测试集成。
 
@@ -61,6 +61,13 @@
 - 所有这些在迁移后**不再需要**
 - 字体加载在 `.storybook/lib.css`：Google Fonts（Roboto Flex、Material Symbols Outlined、Noto Sans 等）
 
+### 主题实现原则
+
+- **不要把方案理解为“给 VitePress 默认主题改颜色”**。VitePress 主要负责路由、Markdown 渲染、静态构建、站点数据与搜索等基础设施。
+- **文档站的站点骨架应尽量直接使用组件库组件实现**，包括但不限于：顶部导航、侧边导航、页面内操作区、分页/返回入口、暗色模式切换按钮、信息卡片、分组容器。
+- `themeConfig.nav`、`themeConfig.sidebar`、`themeConfig.socialLinks` 等配置继续保留，但它们主要作为 **站点数据源**，由 `docs/.vitepress/theme/Layout.vue` 读取并用组件库组件渲染，而不是直接依赖 VitePress 默认主题 UI。
+- `style.css` 主要承担 **布局胶水、排版协调、VitePress 内容区适配** 的职责；少量覆盖 VitePress 变量是允许的，但这不是主题实现的核心。
+
 ---
 
 ## 文件结构规划
@@ -71,8 +78,8 @@ docs/                              # VitePress 文档站根目录
 │   ├── config.ts                  # VitePress 配置
 │   ├── theme/
 │   │   ├── index.ts               # 自定义主题入口
-│   │   ├── Layout.vue             # 自定义 Layout（含暗色模式、viewport 工具栏）
-│   │   └── style.css              # 文档站全局样式（使用 M3 token）
+│   │   ├── Layout.vue             # 自定义 Layout（顶部导航、侧边栏、暗色模式、分页等，尽量复用组件库组件）
+│   │   └── style.css              # 文档站全局样式（布局胶水 + 内容区适配，不以“改默认主题变量”作为主要手段）
 │   ├── components/
 │   │   ├── ApiTable.vue           # 组件 API 表格（Props / Slots / Events）
 │   │   ├── DemoContainer.vue      # Demo 预览 + 源码展示容器
@@ -293,14 +300,17 @@ export default defineConfig({
 - `resolve.alias` 复用 `@/` 别名，使 Demo 文件可以直接 import 组件库源码
 - `componentMetaPlugin` 是下文第 2 阶段要实现的 Vite 插件
 - PostCSS 配置（`--dp`、`--translucent`）会被 VitePress 的 Vite 实例自动读取（因为 `postcss.config.mts` 在项目根目录）
+- `themeConfig` 中的导航、侧边栏、社交链接等配置项仍然保留，但后续应作为 `Layout.vue` 的数据源，由我们自己的组件进行渲染
 
 #### 1.2 创建 `docs/.vitepress/theme/index.ts`
 
 ```ts
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
+import { h } from 'vue';
 
 import { initStateLayer, vTooltip } from '@/index';
+import Layout from './Layout.vue';
 
 import './style.css';
 
@@ -314,6 +324,7 @@ import Controls from '../components/Controls.vue';
 
 export default {
   extends: DefaultTheme,
+  Layout: () => h(Layout),
   enhanceApp({ app }) {
     // 注册组件库需要的指令和初始化
     app.directive('tooltip', vTooltip);
@@ -327,6 +338,27 @@ export default {
 } satisfies Theme;
 ```
 
+**要点**：
+- `DefaultTheme` 只保留 VitePress 的基础能力与默认内容组件，不直接使用其站点壳子 UI
+- 通过 `Layout: () => h(Layout)` 替换默认站点布局，顶部导航、侧边栏、暗色模式入口、页面底部导航等由 `Layout.vue` 和组件库组件实现
+- `enhanceApp` 继续负责注册文档站全局组件与组件库初始化逻辑
+
+#### 1.2.1 创建 `docs/.vitepress/theme/Layout.vue`
+
+此文件是主题实现的核心。目标不是“把默认主题包一层”，而是**直接用组件库组件搭出文档站壳子**。
+
+**职责**：
+- 渲染站点顶部栏、品牌区、主要导航、移动端导航入口
+- 渲染侧边栏目录、页面容器、底部上一页/下一页导航
+- 提供暗色模式切换入口
+- 在合适位置承载 VitePress 的内容区域（如 `VPContent` 或默认 Layout 的内容槽位）
+
+**实现原则**：
+- 顶部导航、操作按钮优先复用 `Button`、`IconButton`、`Tooltip`、`Card` 等现有组件
+- 侧边栏列表优先使用组件库现有的列表/菜单能力；如果现有组件不完全适配，可在 `docs/.vitepress/theme/` 内编写很薄的包装层，但视觉与交互仍以组件库组件为主
+- 不要求把 VitePress 默认主题的每个细节都 1:1 复刻，但信息架构要完整：导航、sidebar、outline、pager、social links、dark mode
+- `themeConfig` 只负责提供结构化数据，不负责最终 UI
+
 #### 1.3 创建 `docs/.vitepress/theme/style.css`
 
 ```css
@@ -335,12 +367,11 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 /* 
- * 覆盖 VitePress 默认主题的 CSS 变量，映射到 M3 design token。
- * 参考：https://vitepress.dev/reference/default-theme-config#css
- * VitePress CSS 变量列表：https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
+ * 文档站样式主要服务于自定义 Layout 与 Markdown 内容区的衔接。
+ * 可以少量覆盖 VitePress 默认变量来协调内容区，但不要把“改变量”当成主题实现主体。
  */
 :root {
-  /* 主色调映射到 M3 primary */
+  /* 可保留少量变量映射，用于 VitePress 内容区、代码块、链接色协调 */
   --vp-c-brand-1: var(--md-sys-color-primary);
   --vp-c-brand-2: var(--md-sys-color-primary-container);
   --vp-c-brand-3: var(--md-sys-color-on-primary-container);
@@ -834,7 +865,8 @@ const currentWidth = ref<string>('100%');
 VitePress 默认主题已内置暗色模式切换（导航栏右上角的太阳/月亮按钮）。
 
 **需要处理**：
-- VitePress 的暗色模式通过在 `<html>` 上添加 `.dark` class 来切换
+- 暗色模式入口应放在自定义 `Layout.vue` 中，使用组件库自己的按钮/开关组件，而不是依赖 VitePress 默认主题的右上角按钮
+- VitePress 的暗色模式仍可继续通过在 `<html>` 上添加 `.dark` class 来驱动
 - 组件库使用 `light-dark()` CSS 函数，依赖 `color-scheme` 属性
 - 需要在 `style.css` 中同步：
 
@@ -849,7 +881,7 @@ html:not(.dark) {
 }
 ```
 
-组件库的 `theme.css` 已经使用 `light-dark()` 来选择颜色值。只要设置了正确的 `color-scheme`，组件的暗色/亮色模式会自动生效。
+组件库的 `theme.css` 已经使用 `light-dark()` 来选择颜色值。只要设置了正确的 `color-scheme`，自定义 Layout 和文档中的组件都会自动切换暗色/亮色。
 
 **在 Demo 预览区域**也需要响应暗色模式。由于 Demo 组件直接渲染在 VitePress 页面中（非 iframe），它们会自然继承 `color-scheme`，无需额外处理。
 
@@ -1035,7 +1067,7 @@ const colors = ['elevated', 'filled', 'tonal', 'outlined', 'text'] as const;
 
 ```
 1. 安装依赖（pnpm add -D vitepress）
-2. 创建基础文件结构（config.ts、theme/index.ts、theme/style.css）
+2. 创建基础文件结构（config.ts、theme/index.ts、theme/Layout.vue、theme/style.css）
 3. 实现 component-meta Vite 插件
 4. 实现 ApiTable 组件
 5. 实现 DemoContainer 组件（含 Viewport 工具栏和源码展示）
