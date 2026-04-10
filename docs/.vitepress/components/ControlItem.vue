@@ -120,9 +120,9 @@ const inputLabel = computed(() => {
 <style scoped>
 .control-item-chip-group {
   inline-size: 100%;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .control-item-field {

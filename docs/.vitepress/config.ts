@@ -34,15 +34,13 @@ export default defineConfig({
       provider: 'local',
     },
     nav: [
-      { text: 'Components', link: '/components/button' },
-      { text: 'Directives', link: '/directives/tooltip' },
+      { text: 'Docs', link: '/components/button' },
     ],
     sidebar: {
       '/': [
         {
           text: 'Getting Started',
           items: [
-            { text: 'Introduction', link: '/' },
             { text: 'Installation', link: '/getting-started' },
           ],
         },
