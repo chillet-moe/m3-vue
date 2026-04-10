@@ -12,15 +12,6 @@ pnpm add @chillet/m3-vue
 yarn add @chillet/m3-vue
 ```
 
-## Deploy (Cloudflare Workers)
-
-Build and deploy the static site from `storybook-static`.
-
-```bash
-pnpm run story:build
-wrangler deploy
-```
-
 ## Credits
 
 These projects for inspiration and reference:
