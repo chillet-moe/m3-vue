@@ -74,7 +74,7 @@ function isControlVisible(prop: PropMeta) {
 </script>
 
 <template>
-  <div class="api-table">
+  <div class="vp-raw api-table">
     <p v-if="!meta" class="api-table-empty">No API metadata found for {{ component }}.</p>
 
     <template v-else>

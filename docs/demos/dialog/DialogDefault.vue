@@ -9,7 +9,7 @@ const open = ref(false);
 <template>
   <Button @click="open = true">Open dialog</Button>
 
-  <Dialog v-model:open="open">
+  <Dialog class="vp-raw" v-model:open="open">
     <template #headline>Delete file?</template>
     The file will be permanently removed from your workspace.
 

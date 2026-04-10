@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { codeToHtml } from 'shiki';
 
 type ViewportPreset = {
@@ -48,19 +48,21 @@ watchEffect((onCleanup) => {
     highlightedSource.value = html;
   });
 });
+
+const hasToolbar = computed(() => {
+  return !!props.src;
+});
 </script>
 
 <template>
-  <section class="demo-container">
+  <section class="vp-raw demo-container">
     <div class="demo-preview">
-      <div class="demo-preview-shell" :data-viewport-enabled="viewport ? 'true' : 'false'">
         <div>
           <slot />
         </div>
-      </div>
     </div>
 
-    <div class="demo-toolbar">
+    <div class="demo-toolbar" v-if="hasToolbar">
       <button
         v-if="src"
         class="demo-toolbar-button"
@@ -90,19 +92,6 @@ watchEffect((onCleanup) => {
 
 .demo-preview {
   padding: 1.25rem;
-}
-
-.demo-preview-shell {
-  margin-inline: auto;
-  max-inline-size: 100%;
-  overflow: auto;
-  resize: both;
-}
-
-.demo-preview-shell[data-viewport-enabled='false'] {
-  inline-size: 100% !important;
-  block-size: auto !important;
-  resize: none;
 }
 
 .demo-toolbar {

@@ -26,10 +26,9 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
 <DemoContainer :viewport="false">
   <Button @click="open = true">Open dialog</Button>
 
-  <Dialog v-bind="props" v-model:open="open">
+  <Dialog class="vp-raw" v-bind="props" v-model:open="open">
     <template #headline>Delete file?</template>
     The file will be permanently removed from your workspace.
-
     <template #actions>
       <Button color="text" @click="open = false">Cancel</Button>
       <Button color="text" @click="open = false">Delete</Button>
