@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from 'vue';
 import { codeToHtml } from 'shiki';
+import DemoIframe from './DemoIframe.vue';
 
 type ViewportPreset = {
   label: string;
@@ -72,9 +73,9 @@ watchEffect((onCleanup) => {
         :style="{ inlineSize: previewInlineSize }"
         :data-viewport-enabled="viewport ? 'true' : 'false'"
       >
-        <div class="demo-preview-stage">
+        <DemoIframe>
           <slot />
-        </div>
+        </DemoIframe>
       </div>
     </div>
 
@@ -133,18 +134,6 @@ watchEffect((onCleanup) => {
 .demo-preview-shell[data-viewport-enabled='false'] {
   inline-size: 100% !important;
   resize: none;
-}
-
-.demo-preview-stage {
-  display: grid;
-  place-items: center;
-  gap: --dp(16);
-  min-block-size: --dp(160);
-  border-radius: --dp(20);
-  padding: --dp(24);
-  background:
-    linear-gradient(135deg, --translucent(var(--vp-c-brand-1), 0.08), transparent 60%),
-    linear-gradient(0deg, var(--vp-c-bg), var(--vp-c-bg));
 }
 
 .demo-toolbar {

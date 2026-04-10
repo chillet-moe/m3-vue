@@ -70,7 +70,7 @@ Slider handles horizontal and vertical range input, inset icons, value indicator
   </div>
 </DemoContainer>
 
-<Controls component="Slider" v-model="props" :exclude="['formatter', 'stopIndicators', 'lowerLimit', 'upperLimit', 'wheelStep']" />
+<ApiTable component="Slider" v-model="props" :exclude="['formatter', 'stopIndicators', 'lowerLimit', 'upperLimit', 'wheelStep']" />
 
 ### Default
 
@@ -113,7 +113,3 @@ Slider handles horizontal and vertical range input, inset icons, value indicator
 <DemoContainer :src="SliderDisabledSrc" :viewport="false">
   <SliderDisabled />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Slider" />

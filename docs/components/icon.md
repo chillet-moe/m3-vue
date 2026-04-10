@@ -31,7 +31,7 @@ The icon component renders Material Symbols names directly, making it easy to re
   </div>
 </DemoContainer>
 
-<Controls component="Icon" v-model="props" />
+<ApiTable component="Icon" v-model="props" />
 
 ### Default
 
@@ -46,7 +46,3 @@ The icon component renders Material Symbols names directly, making it easy to re
 </DemoContainer>
 
 In this project’s examples, `favorite`, `home`, `search`, and `settings` are the icons used most often. For a broader catalog, refer to the Material Symbols guide.
-
-## API
-
-<ApiTable component="Icon" />

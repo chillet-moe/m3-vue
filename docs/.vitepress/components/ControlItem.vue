@@ -3,8 +3,7 @@ import { computed } from 'vue';
 
 import { Chip, ChipGroup, Switch, TextField } from '@/index';
 import type { PropMeta } from '../plugins/component-meta';
-
-export type ControlType = 'switch' | 'select' | 'text' | 'number' | 'none';
+import { getControlType } from './control-meta';
 
 const props = defineProps<{
   prop: PropMeta;
@@ -15,26 +14,8 @@ const emit = defineEmits<{
   'update:modelValue': [value: unknown];
 }>();
 
-const controlType = computed<ControlType>(() => {
-  const type = props.prop.type.toLowerCase();
-
-  if (type === 'boolean' || type === 'boolean | undefined') {
-    return 'switch';
-  }
-
-  if (props.prop.options?.length) {
-    return 'select';
-  }
-
-  if (type === 'string' || type === 'string | undefined') {
-    return 'text';
-  }
-
-  if (type === 'number' || type === 'number | undefined') {
-    return 'number';
-  }
-
-  return 'none';
+const controlType = computed(() => {
+  return getControlType(props.prop);
 });
 
 const booleanValue = computed({

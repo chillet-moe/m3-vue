@@ -36,7 +36,7 @@ Cards provide a flexible surface for grouped content, with elevated, filled, out
   </Card>
 </DemoContainer>
 
-<Controls component="Card" v-model="props" />
+<ApiTable component="Card" v-model="props" />
 
 ### Default
 
@@ -55,7 +55,3 @@ Cards provide a flexible surface for grouped content, with elevated, filled, out
 <DemoContainer :src="CardClickableSrc" :viewport="false">
   <CardClickable />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Card" />

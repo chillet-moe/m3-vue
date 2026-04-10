@@ -41,7 +41,7 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
   </Dialog>
 </DemoContainer>
 
-<Controls component="Dialog" v-model="props" />
+<ApiTable component="Dialog" v-model="props" />
 
 ### Default
 
@@ -54,7 +54,3 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
 <DemoContainer :src="DialogWithIconSrc" :viewport="false">
   <DialogWithIcon />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Dialog" />

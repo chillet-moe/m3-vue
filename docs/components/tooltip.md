@@ -33,7 +33,7 @@ Tooltip exposes the shared tooltip surface for plain and rich treatments, with c
   <Tooltip v-bind="props">{{ content }}</Tooltip>
 </DemoContainer>
 
-<Controls component="Tooltip" v-model="props" />
+<ApiTable component="Tooltip" v-model="props" />
 
 ### Default
 
@@ -52,7 +52,3 @@ Tooltip exposes the shared tooltip surface for plain and rich treatments, with c
 <DemoContainer :src="TooltipPopoverTypesSrc" :viewport="false">
   <TooltipPopoverTypes />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Tooltip" />

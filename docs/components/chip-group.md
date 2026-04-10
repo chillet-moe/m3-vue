@@ -44,7 +44,7 @@ Chip groups coordinate single or multiple chip selection while keeping the chips
   </ChipGroup>
 </DemoContainer>
 
-<Controls component="ChipGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
+<ApiTable component="ChipGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
 
 ### Default
 
@@ -57,7 +57,3 @@ Chip groups coordinate single or multiple chip selection while keeping the chips
 <DemoContainer :src="ChipGroupMultipleSrc" :viewport="false">
   <ChipGroupMultiple />
 </DemoContainer>
-
-## API
-
-<ApiTable component="ChipGroup" />

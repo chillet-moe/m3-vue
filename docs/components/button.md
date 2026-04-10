@@ -24,10 +24,12 @@ import ButtonTrailingIcons from '../demos/button/ButtonTrailingIcons.vue';
 import ButtonTrailingIconsSrc from '../demos/button/ButtonTrailingIcons.vue?raw';
 
 const props = ref({
+  toggleable: false,
   color: 'filled',
   size: 'medium',
   shape: 'rounded',
   disabled: false,
+  href: undefined,
   leadingIcon: 'favorite',
   trailingIcon: undefined,
 });
@@ -42,10 +44,13 @@ Buttons let people trigger primary, secondary, or low-emphasis actions with Mate
 ### Interactive
 
 <DemoContainer>
-  <Button v-bind="props">Button</Button>
+  <Button v-bind="props">
+    <input v-if="props.toggleable" type="checkbox" />
+    Button
+  </Button>
 </DemoContainer>
 
-<Controls component="Button" v-model="props" :exclude="['toggleable', 'href']" />
+<ApiTable component="Button" v-model="props" />
 
 ### Default
 
@@ -94,7 +99,3 @@ Buttons let people trigger primary, secondary, or low-emphasis actions with Mate
 <DemoContainer :src="ButtonTrailingIconsSrc">
   <ButtonTrailingIcons />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Button" />

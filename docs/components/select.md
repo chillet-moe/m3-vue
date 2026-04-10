@@ -43,7 +43,7 @@ Select provides an anchored menu for choosing one or many options, with optional
   </div>
 </DemoContainer>
 
-<Controls component="Select" v-model="props" :exclude="['options', 'multiple']" />
+<ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
 ### Default
 
@@ -68,7 +68,3 @@ Select provides an anchored menu for choosing one or many options, with optional
 <DemoContainer :src="SelectConfigurationsSrc">
   <SelectConfigurations />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Select" />

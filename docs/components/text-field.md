@@ -37,7 +37,7 @@ Text fields cover baseline Material 3 input cases including supporting text, val
   </div>
 </DemoContainer>
 
-<Controls component="TextField" v-model="props" :exclude="['as', 'rows']" />
+<ApiTable component="TextField" v-model="props" :exclude="['as', 'rows']" />
 
 ### Default
 
@@ -50,7 +50,3 @@ Text fields cover baseline Material 3 input cases including supporting text, val
 <DemoContainer :src="TextFieldConfigurationsSrc">
   <TextFieldConfigurations />
 </DemoContainer>
-
-## API
-
-<ApiTable component="TextField" />

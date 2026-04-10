@@ -2,12 +2,32 @@
 import { computed } from 'vue';
 import allMeta from 'virtual:component-meta';
 
-const props = defineProps<{
-  component: string;
+import ControlItem from './ControlItem.vue';
+import { getControlType } from './control-meta';
+import type { PropMeta } from '../plugins/component-meta';
+
+const props = withDefaults(
+  defineProps<{
+    component: string;
+    modelValue?: Record<string, unknown>;
+    exclude?: string[];
+  }>(),
+  {
+    modelValue: undefined,
+    exclude: () => [],
+  },
+);
+
+const emit = defineEmits<{
+  'update:modelValue': [value: Record<string, unknown>];
 }>();
 
 const meta = computed(() => {
   return allMeta[props.component] ?? null;
+});
+
+const controlsEnabled = computed(() => {
+  return props.modelValue !== undefined;
 });
 
 const sections = computed(() => {
@@ -36,6 +56,21 @@ const sections = computed(() => {
     },
   ] as const;
 });
+
+function updatePropValue(name: string, value: unknown) {
+  if (!props.modelValue) {
+    return;
+  }
+
+  emit('update:modelValue', {
+    ...props.modelValue,
+    [name]: value,
+  });
+}
+
+function isControlVisible(prop: PropMeta) {
+  return !props.exclude.includes(prop.name) && getControlType(prop) !== 'none';
+}
 </script>
 
 <template>
@@ -55,10 +90,9 @@ const sections = computed(() => {
             <thead>
               <tr v-if="section.key === 'props'">
                 <th>Name</th>
-                <th>Type</th>
-                <th>Default</th>
-                <th>Required</th>
                 <th>Description</th>
+                <th>Default</th>
+                <th v-if="controlsEnabled">Control</th>
               </tr>
               <tr v-else-if="section.key === 'events'">
                 <th>Name</th>
@@ -75,26 +109,40 @@ const sections = computed(() => {
               <template v-if="section.key === 'props'">
                 <tr v-for="prop in meta.props" :key="prop.name">
                   <td>
-                    <code>{{ prop.name }}</code>
+                    <div class="api-table-name-cell">
+                      <code>{{ prop.name }}</code>
+                      <span class="api-table-badge" :data-required="prop.required ? 'true' : 'false'">
+                        {{ prop.required ? 'Required' : 'Optional' }}
+                      </span>
+                    </div>
                   </td>
                   <td>
-                    <div class="api-table-type">
-                      <template v-if="prop.options?.length">
-                        <code v-for="option in prop.options" :key="option">{{ option }}</code>
-                      </template>
-                      <code v-else>{{ prop.type }}</code>
+                    <div class="api-table-description">
+                      <p v-if="prop.description" class="api-table-copy">{{ prop.description }}</p>
+                      <p v-else class="api-table-copy api-table-muted">-</p>
+                      <div class="api-table-type">
+                        <template v-if="prop.options?.length">
+                          <code v-for="option in prop.options" :key="option">{{ option }}</code>
+                        </template>
+                        <code v-else>{{ prop.type }}</code>
+                      </div>
                     </div>
                   </td>
                   <td>
                     <code v-if="prop.default">{{ prop.default }}</code>
                     <span v-else class="api-table-muted">-</span>
                   </td>
-                  <td>
-                    <span class="api-table-badge" :data-required="prop.required ? 'true' : 'false'">
-                      {{ prop.required ? 'Yes' : 'No' }}
-                    </span>
+                  <td v-if="controlsEnabled">
+                    <div class="api-table-control">
+                      <ControlItem
+                        v-if="isControlVisible(prop)"
+                        :prop="prop"
+                        :model-value="modelValue?.[prop.name]"
+                        @update:model-value="updatePropValue(prop.name, $event)"
+                      />
+                      <span v-else class="api-table-muted">-</span>
+                    </div>
                   </td>
-                  <td>{{ prop.description || '-' }}</td>
                 </tr>
               </template>
 
@@ -200,15 +248,27 @@ const sections = computed(() => {
   white-space: nowrap;
 }
 
+.api-table-name-cell,
+.api-table-description,
+.api-table-control {
+  display: grid;
+  gap: --dp(8);
+}
+
 .api-table-type {
   display: flex;
   flex-wrap: wrap;
   gap: --dp(8);
 }
 
+.api-table-copy {
+  margin: 0;
+}
+
 .api-table-badge {
   display: inline-flex;
   align-items: center;
+  inline-size: fit-content;
   border-radius: 999px;
   padding-block: --dp(4);
   padding-inline: --dp(10);

@@ -38,12 +38,26 @@ export interface ComponentMeta {
   slots: SlotMeta[];
 }
 
-/** 从类型字符串提取字面量联合选项，如 `"filled" | "tonal" | "outlined"` → `['filled', 'tonal', 'outlined']` */
+/** 从类型字符串提取字面量联合选项，如 `"filled" | "tonal" | undefined` → `['filled', 'tonal']` */
 function parseUnionOptions(type: string): string[] | undefined {
-  // 匹配引号包裹的字符串字面量联合
-  const matches = type.match(/^"[^"]*"(\s*\|\s*"[^"]*")*$/);
-  if (!matches) return undefined;
-  return type.split('|').map((s) => s.trim().replace(/^"|"$/g, ''));
+  const parts = type
+    .split('|')
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  const optionParts = parts.filter((part) => {
+    return part !== 'undefined' && part !== 'null';
+  });
+
+  if (!optionParts.length) {
+    return undefined;
+  }
+
+  if (optionParts.some((part) => !/^"[^"]*"|'[^']*'$/.test(part))) {
+    return undefined;
+  }
+
+  return [...new Set(optionParts.map((part) => part.slice(1, -1)))];
 }
 
 export function componentMetaPlugin(options: ComponentMetaPluginOptions) {

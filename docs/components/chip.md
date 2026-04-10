@@ -44,7 +44,7 @@ Chips cover assist, suggestion, filter, and input patterns with shared selection
   <Chip v-bind="props" v-model="selected">Chip</Chip>
 </DemoContainer>
 
-<Controls component="Chip" v-model="props" :exclude="['value', 'name', 'ariaLabel']" />
+<ApiTable component="Chip" v-model="props" :exclude="['value', 'name', 'ariaLabel']" />
 
 ### Default
 
@@ -81,7 +81,3 @@ Chips cover assist, suggestion, filter, and input patterns with shared selection
 <DemoContainer :src="ChipDisabledSrc" :viewport="false">
   <ChipDisabled />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Chip" />

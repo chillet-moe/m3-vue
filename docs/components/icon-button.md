@@ -22,10 +22,12 @@ import IconButtonToggleable from '../demos/icon-button/IconButtonToggleable.vue'
 import IconButtonToggleableSrc from '../demos/icon-button/IconButtonToggleable.vue?raw';
 
 const props = ref({
+  toggleable: false,
   color: 'filled',
   size: 'small',
   shape: 'rounded',
   width: 'default',
+  href: undefined,
   icon: 'favorite',
   disabled: false,
 });
@@ -40,10 +42,12 @@ Icon buttons expose compact, icon-first actions with the same Material 3 shape, 
 ### Interactive
 
 <DemoContainer :viewport="false">
-  <IconButton v-bind="props" />
+  <IconButton v-bind="props">
+    <input v-if="props.toggleable" type="checkbox" />
+  </IconButton>
 </DemoContainer>
 
-<Controls component="IconButton" v-model="props" :exclude="['toggleable', 'href']" />
+<ApiTable component="IconButton" v-model="props" />
 
 ### Default
 
@@ -86,7 +90,3 @@ Icon buttons expose compact, icon-first actions with the same Material 3 shape, 
 <DemoContainer :src="IconButtonToggleableSrc" :viewport="false">
   <IconButtonToggleable />
 </DemoContainer>
-
-## API
-
-<ApiTable component="IconButton" />

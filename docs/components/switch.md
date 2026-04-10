@@ -37,7 +37,7 @@ Switches communicate an immediate on or off state and support optional checked a
   </div>
 </DemoContainer>
 
-<Controls component="Switch" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
+<ApiTable component="Switch" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
 ### Default
 
@@ -56,7 +56,3 @@ Switches communicate an immediate on or off state and support optional checked a
 <DemoContainer :src="SwitchStatesSrc" :viewport="false">
   <SwitchStates />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Switch" />

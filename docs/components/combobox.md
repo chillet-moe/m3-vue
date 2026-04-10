@@ -38,7 +38,7 @@ Combobox combines free-form text entry with option picking, making it useful for
   </div>
 </DemoContainer>
 
-<Controls component="Combobox" v-model="props" :exclude="['options', 'multiple']" />
+<ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />
 
 ### Default
 
@@ -51,7 +51,3 @@ Combobox combines free-form text entry with option picking, making it useful for
 <DemoContainer :src="ComboboxMultiSelectSrc">
   <ComboboxMultiSelect />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Combobox" />

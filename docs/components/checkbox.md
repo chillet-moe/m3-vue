@@ -33,7 +33,7 @@ Checkboxes let people confirm independent selections while preserving clear unch
   </div>
 </DemoContainer>
 
-<Controls component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
+<ApiTable component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
 ### Default
 
@@ -46,7 +46,3 @@ Checkboxes let people confirm independent selections while preserving clear unch
 <DemoContainer :src="CheckBoxStatesSrc" :viewport="false">
   <CheckBoxStates />
 </DemoContainer>
-
-## API
-
-<ApiTable component="CheckBox" />

@@ -54,7 +54,7 @@ Button groups keep a related set of options visually connected while preserving 
   </ButtonGroup>
 </DemoContainer>
 
-<Controls component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
+<ApiTable component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
 
 ### Default
 
@@ -93,10 +93,6 @@ Button groups keep a related set of options visually connected while preserving 
 </DemoContainer>
 
 ## API
-
-### ButtonGroup
-
-<ApiTable component="ButtonGroup" />
 
 ### ButtonGroupItem
 

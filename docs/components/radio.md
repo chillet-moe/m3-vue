@@ -33,7 +33,7 @@ Radio buttons present mutually exclusive choices with Material 3 state styling a
   </div>
 </DemoContainer>
 
-<Controls component="Radio" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
+<ApiTable component="Radio" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
 ### Default
 
@@ -46,7 +46,3 @@ Radio buttons present mutually exclusive choices with Material 3 state styling a
 <DemoContainer :src="RadioStatesSrc" :viewport="false">
   <RadioStates />
 </DemoContainer>
-
-## API
-
-<ApiTable component="Radio" />
