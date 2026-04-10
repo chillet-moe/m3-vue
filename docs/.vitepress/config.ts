@@ -5,6 +5,7 @@ import { componentMetaPlugin } from './plugins/component-meta';
 export default defineConfig({
   title: 'M3 Vue',
   description: 'Material Design 3 components for Vue',
+  appearance: true,
 
   // 构建输出目录（默认就是 .vitepress/dist）
   // 保持默认即可
