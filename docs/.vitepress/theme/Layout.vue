@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Content, useData, useRoute, withBase } from 'vitepress';
-import { computed, ref, watch } from 'vue';
+import { VPNavBarSearch } from 'vitepress/theme';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import { Button, Card, IconButton } from '@/index';
 
@@ -197,6 +198,62 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
 
   return 'text';
 }
+
+// Scroll spy for outline
+const activeHeadingId = ref('');
+let observer: IntersectionObserver | null = null;
+
+function setupScrollSpy() {
+  cleanupScrollSpy();
+
+  const headings = document.querySelectorAll('.docs-main :is(h1, h2, h3, h4, h5, h6)[id]');
+  if (headings.length === 0) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          activeHeadingId.value = entry.target.id;
+        }
+      }
+    },
+    {
+      rootMargin: '-80px 0px -70% 0px',
+    },
+  );
+
+  for (const heading of headings) {
+    observer.observe(heading);
+  }
+}
+
+function cleanupScrollSpy() {
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+}
+
+onMounted(() => {
+  void nextTick(() => setupScrollSpy());
+});
+
+onUnmounted(() => {
+  cleanupScrollSpy();
+});
+
+watch(
+  () => route.path,
+  () => {
+    activeHeadingId.value = '';
+    void nextTick(() => setupScrollSpy());
+  },
+);
+
+function isActiveOutlineLink(link: string) {
+  // link is like "#some-id"
+  return link === `#${activeHeadingId.value}`;
+}
 </script>
 
 <template>
@@ -229,6 +286,8 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
         </nav>
 
         <div class="docs-header-actions">
+          <VPNavBarSearch class="docs-search" />
+
           <Button
             v-for="link in socialLinks"
             :key="link.link"
@@ -267,6 +326,45 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
     <div class="docs-shell">
       <aside class="docs-sidebar" :data-open="isSidebarOpen ? 'true' : 'false'">
         <Card color="filled" class="docs-sidebar-card">
+          <div class="docs-sidebar-mobile-nav">
+            <div class="docs-sidebar-mobile-links">
+              <Button
+                v-for="item in navItems"
+                :key="item.link"
+                class="docs-sidebar-link"
+                color="text"
+                size="medium"
+                :href="resolveLink(item.link)"
+                :data-active="isActiveLink(item.link) ? 'true' : 'false'"
+              >
+                {{ item.text }}
+              </Button>
+            </div>
+
+            <div class="docs-sidebar-mobile-actions">
+              <Button
+                v-for="link in socialLinks"
+                :key="link.link"
+                class="docs-sidebar-link"
+                color="text"
+                size="small"
+                :href="link.link"
+                trailing-icon="open_in_new"
+              >
+                {{ resolveSocialLabel(link.link) }}
+              </Button>
+
+              <IconButton
+                color="standard"
+                size="small"
+                width="default"
+                :icon="isDark ? 'light_mode' : 'dark_mode'"
+                :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+                @click="toggleAppearance"
+              />
+            </div>
+          </div>
+
           <nav class="docs-sidebar-nav" aria-label="Sidebar">
             <section v-for="group in sidebarGroups" :key="group.text || 'group'" class="docs-sidebar-group">
               <h2 v-if="group.text" class="docs-sidebar-title">{{ group.text }}</h2>
@@ -290,7 +388,20 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
       </aside>
 
       <main class="docs-main">
-        <template v-if="showHomeLayout && hero">
+        <template v-if="page.isNotFound">
+          <div class="docs-not-found">
+            <Card color="filled" class="docs-not-found-card">
+              <span class="docs-not-found-icon material-symbols-outlined" aria-hidden="true">search_off</span>
+              <h1 class="docs-not-found-title">Page Not Found</h1>
+              <p class="docs-not-found-text">The page you're looking for doesn't exist or has been moved.</p>
+              <Button color="filled" size="medium" :href="resolveLink('/')" leading-icon="home">
+                Back to Home
+              </Button>
+            </Card>
+          </div>
+        </template>
+
+        <template v-else-if="showHomeLayout && hero">
           <Card color="filled" class="docs-hero">
             <div class="docs-hero-content">
               <p class="docs-hero-eyebrow">{{ hero.name || siteTitle }}</p>
@@ -364,6 +475,7 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
               size="small"
               :href="item.link"
               :style="{ '--outline-depth': item.depth }"
+              :data-active="isActiveOutlineLink(item.link) ? 'true' : 'false'"
             >
               {{ item.title }}
             </Button>
@@ -445,12 +557,14 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
 
 .docs-nav-link[data-active='true']:deep(.m3-button),
 .docs-sidebar-link[data-active='true']:deep(.m3-button),
+.docs-outline-link[data-active='true']:deep(.m3-button),
 .docs-outline-link:deep(.m3-button:hover) {
   color: var(--md-sys-color-primary);
 }
 
 .docs-nav-link[data-active='true']:deep(.m3-button),
-.docs-sidebar-link[data-active='true']:deep(.m3-button) {
+.docs-sidebar-link[data-active='true']:deep(.m3-button),
+.docs-outline-link[data-active='true']:deep(.m3-button) {
   background: --translucent(var(--md-sys-color-primary), 0.12);
 }
 
@@ -462,6 +576,84 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
 
 .docs-menu-toggle {
   display: none;
+}
+
+/* Search */
+.docs-search {
+  flex-grow: 1;
+}
+
+.docs-search :deep(.VPNavBarSearchButton) {
+  border: 1px solid --translucent(var(--vp-c-divider), 0.7);
+  border-radius: 999px;
+  background: --translucent(var(--vp-c-bg-alt), 0.5);
+  block-size: --dp(36);
+  padding-inline: --dp(12);
+  font-family: inherit;
+  font-size: --dp(14);
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.docs-search :deep(.VPNavBarSearchButton:hover) {
+  border-color: var(--md-sys-color-primary);
+  background: --translucent(var(--md-sys-color-primary), 0.06);
+}
+
+.docs-search :deep(.VPNavBarSearchButton .vpi-search) {
+  font-size: --dp(18);
+}
+
+/* Mobile sidebar nav */
+.docs-sidebar-mobile-nav {
+  display: none;
+}
+
+.docs-sidebar-mobile-links {
+  display: grid;
+  gap: --dp(6);
+}
+
+.docs-sidebar-mobile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: --dp(8);
+}
+
+/* 404 page */
+.docs-not-found {
+  display: grid;
+  place-items: center;
+  min-block-size: 60vh;
+}
+
+.docs-not-found-card {
+  display: grid;
+  gap: --dp(16);
+  justify-items: center;
+  text-align: center;
+  padding: --dp(48);
+  border-radius: --dp(28);
+  overflow: clip;
+}
+
+.docs-not-found-icon {
+  font-size: --dp(64);
+  color: var(--md-sys-color-error);
+}
+
+.docs-not-found-title {
+  margin: 0;
+  font-size: --dp(28);
+}
+
+.docs-not-found-text {
+  margin: 0;
+  color: var(--vp-c-text-2);
+  font-size: --dp(16);
+  max-inline-size: 28rem;
 }
 
 .docs-shell {
@@ -478,25 +670,32 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
 .docs-outline {
   position: sticky;
   inset-block-start: 6rem;
-  block-size: fit-content;
+  max-block-size: calc(100vh - 6rem - --dp(24));
 }
 
 .docs-sidebar-card,
-.docs-outline-card,
-.docs-hero,
-.docs-page-card {
-  display: block;
-}
-
-.docs-sidebar-card:deep(.m3-card),
-.docs-outline-card:deep(.m3-card),
-.docs-hero:deep(.m3-card),
-.docs-page-card:deep(.m3-card) {
+.docs-outline-card {
+  display: flex;
+  flex-direction: column;
+  max-block-size: 100%;
   border-radius: --dp(28);
   overflow: clip;
 }
 
-.docs-sidebar-nav,
+.docs-hero,
+.docs-page-card {
+  display: block;
+  border-radius: --dp(28);
+  overflow: clip;
+}
+
+.docs-sidebar-nav {
+  width: 100%;
+  padding: --dp(20);
+  overflow-y: auto;
+  min-block-size: 0;
+}
+
 .docs-outline-card,
 .docs-hero,
 .docs-page-card {
@@ -628,6 +827,19 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
     display: inline-flex;
   }
 
+  .docs-search :deep(.VPNavBarSearchButton .text),
+  .docs-search :deep(.VPNavBarSearchButton .keys) {
+    display: none;
+  }
+
+  .docs-sidebar-mobile-nav {
+    display: grid;
+    gap: --dp(12);
+    padding: --dp(20) --dp(20) --dp(16);
+    border-block-end: 1px solid var(--md-sys-color-outline-variant);
+    flex-shrink: 0;
+  }
+
   .docs-shell {
     grid-template-columns: 1fr;
   }
@@ -641,6 +853,11 @@ function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
     padding: --dp(16);
     transform: translateX(-100%);
     transition: transform 180ms ease;
+    max-block-size: none;
+  }
+
+  .docs-sidebar-card {
+    block-size: 100%;
   }
 
   .docs-sidebar[data-open='true'] {

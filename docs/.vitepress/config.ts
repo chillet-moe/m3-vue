@@ -30,6 +30,9 @@ export default defineConfig({
 
   themeConfig: {
     logo: '/logo.svg',
+    search: {
+      provider: 'local',
+    },
     nav: [
       { text: 'Components', link: '/components/button' },
       { text: 'Directives', link: '/directives/tooltip' },
