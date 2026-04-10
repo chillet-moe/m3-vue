@@ -26,12 +26,9 @@ function selectAction(name: string, event: MouseEvent) {
 
 `v-dropdown` is the low-level directive for toggling a popover surface from a trigger. It is a good fit for menus and custom anchored popovers when you want the library to handle trigger events, anchor wiring, and focus restoration.
 
-## Demo
-
 <DemoContainer :viewport="false">
   <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; padding-block: 2rem;">
     <Button v-dropdown="dropdownBinding">Open custom dropdown</Button>
-
     <Card
       id="docs-dropdown-card"
       popover="auto"
@@ -47,7 +44,6 @@ function selectAction(name: string, event: MouseEvent) {
         Delete
       </button>
     </Card>
-
     <div>Selected: {{ selected }}</div>
   </div>
 </DemoContainer>

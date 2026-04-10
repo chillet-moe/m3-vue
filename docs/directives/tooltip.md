@@ -6,26 +6,21 @@ title: v-tooltip
 import { Button } from '@/components/Button';
 import { Tooltip } from '@/components/Tooltip';
 
-const generatedBinding = {
-  content: 'Saved changes are synced automatically.',
-  placement: 'bottom' as const,
-  interactive: false,
-};
 </script>
 
 # v-tooltip
 
 `v-tooltip` wires hover, focus, keyboard, and touch interactions to a tooltip surface. Use it when you want directive-driven behavior on an existing trigger without manually managing open and close state.
 
-## Demo
-
 <DemoContainer :viewport="false">
   <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; padding-block: 2rem;">
-    <Button v-tooltip="generatedBinding">Generated tooltip</Button>
+    <Button v-tooltip="'#tooltip-directive'">Generated tooltip</Button>
     <Button v-tooltip="'#tooltip-directive-rich'">Referenced tooltip</Button>
-
-    <Tooltip id="tooltip-directive-rich" variant="rich" popover="hint">
-      Rich tooltip content can be authored separately and reused across triggers.
+    <Tooltip id="tooltip-directive">
+      Content
+    </Tooltip>
+    <Tooltip id="tooltip-directive-rich" variant="rich">
+      Content
     </Tooltip>
   </div>
 </DemoContainer>

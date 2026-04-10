@@ -25,8 +25,6 @@ async function openSnackbar() {
 
 `showSnackbar()` is the programmatic entry point for transient notifications. It renders a snackbar into the shared stack, waits for it to close, and resolves with the outcome.
 
-## Demo
-
 <DemoContainer :viewport="false">
   <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; padding-block: 2rem;">
     <Button @click="openSnackbar">Open snackbar</Button>

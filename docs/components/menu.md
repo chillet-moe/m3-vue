@@ -17,8 +17,6 @@ import MenuDeclarativeSrc from '../demos/menu/MenuDeclarative.vue?raw';
 
 Menu supports dropdown, context, submenu, and object-driven item rendering while keeping keyboard and selection behavior inside the component set.
 
-## Demo
-
 ### Dropdown
 
 <DemoContainer :src="MenuDropdownSrc" :viewport="false">
