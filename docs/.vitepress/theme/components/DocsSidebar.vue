@@ -22,7 +22,7 @@ function isActiveLink(path?: string) {
 
 <template>
   <aside class="docs-sidebar" :data-open="isOpen ? 'true' : 'false'">
-    <Card color="filled" class="docs-sidebar-surface">
+    <div class="docs-sidebar-surface">
       <div class="docs-sidebar-brand">
         <Button class="docs-brand" color="text" size="medium" :href="resolveLink('/')" @click="close()">
           <img v-if="siteLogo" class="docs-brand-logo" :src="siteLogo" alt="" />
@@ -63,7 +63,7 @@ function isActiveLink(path?: string) {
           </Button>
         </section>
       </nav>
-    </Card>
+    </div>
   </aside>
 </template>
 
@@ -109,6 +109,7 @@ function isActiveLink(path?: string) {
 }
 
 .docs-sidebar-nav {
+  min-block-size: 0;
   overflow: auto;
   padding: 1rem;
 }
@@ -136,9 +137,14 @@ function isActiveLink(path?: string) {
   gap: 0.375rem;
 }
 
-.docs-sidebar-link[data-active='true']:deep(.m3-button) {
-  color: var(--md-sys-color-primary);
+.docs-sidebar-link[data-active='true'] {
   background: --translucent(var(--md-sys-color-primary), 0.12);
+}
+
+.docs-sidebar-link {
+  text-align: start;
+  justify-content: flex-start;
+  color: var(--md-sys-color-on-surface);
 }
 
 @media (max-width: 64rem) {

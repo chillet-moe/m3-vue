@@ -28,8 +28,8 @@ import DocsPager from './DocsPager.vue';
 
 .docs-main {
   display: grid;
-  gap: 1.25rem;
-  padding: 1.25rem 1.5rem 2rem;
+  gap: 1rem;
+  padding: 1rem 1rem 1rem;
 }
 
 .docs-page-card {

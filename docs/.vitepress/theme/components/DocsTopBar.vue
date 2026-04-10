@@ -43,7 +43,7 @@ function toggleAppearance() {
           aria-label="Toggle sidebar"
           @click="toggleSidebar()"
         />
-        <h1 class="docs-page-title">{{ pageTitle }}</h1>
+        <VPNavBarSearch class="docs-search" />
       </div>
 
       <nav v-if="navItems.length" class="docs-nav" aria-label="Primary">
@@ -61,8 +61,6 @@ function toggleAppearance() {
       </nav>
 
       <div class="docs-topbar-actions">
-        <VPNavBarSearch class="docs-search" />
-
         <Button
           v-for="link in socialLinks"
           :key="link.link"
@@ -93,7 +91,6 @@ function toggleAppearance() {
   position: sticky;
   inset-block-start: 0;
   z-index: 20;
-  padding: 1rem 1.5rem 0;
   backdrop-filter: blur(20px);
 }
 
@@ -102,11 +99,8 @@ function toggleAppearance() {
   grid-template-columns: auto 1fr auto;
   gap: 0.75rem;
   align-items: center;
-  border: 1px solid --translucent(var(--vp-c-divider), 0.7);
-  border-radius: 1.75rem;
   padding-block: 0.625rem;
   padding-inline: 0.75rem;
-  background: --translucent(var(--vp-c-bg), 0.78);
 }
 
 .docs-topbar-leading {
@@ -132,7 +126,7 @@ function toggleAppearance() {
 .docs-nav {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 0.5rem;
 }
 
@@ -193,6 +187,14 @@ function toggleAppearance() {
   .docs-search :deep(.VPNavBarSearchButton .text),
   .docs-search :deep(.VPNavBarSearchButton .keys) {
     display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .VPNavBarSearch {
+    gap: 8px;
+    flex-grow: 1;
+    padding-left: 0.5rem;
   }
 }
 </style>
