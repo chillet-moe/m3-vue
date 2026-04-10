@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { codeToHtml } from 'shiki';
-import DemoIframe from './DemoIframe.vue';
 
 type ViewportPreset = {
   height: number;
@@ -21,32 +20,8 @@ const props = withDefaults(
   },
 );
 
-const presets: ViewportPreset[] = [
-  { key: 'mobile', label: 'Mobile', width: 360, height: 640 },
-  { key: 'tablet', label: 'Tablet', width: 768, height: 960 },
-  { key: 'desktop', label: 'Desktop', width: 1024, height: 720 },
-  { key: 'full', label: 'Full', width: 'full', height: 720 },
-];
-
-const currentPreset = ref<ViewportPreset>(presets[3]);
-const currentHeight = ref<number>(presets[3].height);
 const sourceOpen = ref(false);
 const highlightedSource = ref('');
-const hasFixedViewport = computed(() => {
-  return props.viewport && currentPreset.value.width !== 'full';
-});
-
-const previewInlineSize = computed(() => {
-  if (currentPreset.value.width === 'full') {
-    return '100%';
-  }
-
-  return `min(100%, ${currentPreset.value.width}px)`;
-});
-
-const previewBlockSize = computed(() => {
-  return `${currentHeight.value}px`;
-});
 
 watchEffect((onCleanup) => {
   if (!props.src) {
@@ -73,53 +48,19 @@ watchEffect((onCleanup) => {
     highlightedSource.value = html;
   });
 });
-
-function selectPreset(preset: ViewportPreset) {
-  currentPreset.value = preset;
-  currentHeight.value = preset.height;
-}
 </script>
 
 <template>
   <section class="demo-container">
     <div class="demo-preview">
-      <div
-        class="demo-preview-shell"
-        :style="{ inlineSize: previewInlineSize, blockSize: hasFixedViewport ? previewBlockSize : undefined }"
-        :data-viewport-enabled="viewport ? 'true' : 'false'"
-      >
-        <DemoIframe :height="hasFixedViewport ? previewBlockSize : undefined">
+      <div class="demo-preview-shell" :data-viewport-enabled="viewport ? 'true' : 'false'">
+        <div>
           <slot />
-        </DemoIframe>
+        </div>
       </div>
     </div>
 
     <div class="demo-toolbar">
-      <div v-if="viewport" class="demo-viewport-presets" role="toolbar" aria-label="Demo viewport presets">
-        <button
-          v-for="preset in presets"
-          :key="preset.key"
-          class="demo-toolbar-button"
-          :data-selected="currentPreset.key === preset.key ? 'true' : 'false'"
-          type="button"
-          @click="selectPreset(preset)"
-        >
-          {{ preset.label }}
-        </button>
-      </div>
-
-      <label v-if="hasFixedViewport" class="demo-dimension-field">
-        <span class="demo-dimension-label">Height</span>
-        <input
-          v-model.number="currentHeight"
-          class="demo-dimension-input"
-          type="number"
-          min="160"
-          step="20"
-        />
-        <span class="demo-dimension-unit">px</span>
-      </label>
-
       <button
         v-if="src"
         class="demo-toolbar-button"
@@ -177,38 +118,6 @@ function selectPreset(preset: ViewportPreset) {
   backdrop-filter: blur(16px);
 }
 
-.demo-viewport-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.demo-dimension-field {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-inline-start: auto;
-  color: var(--vp-c-text-2);
-  font-size: 0.8125rem;
-}
-
-.demo-dimension-label,
-.demo-dimension-unit {
-  white-space: nowrap;
-}
-
-.demo-dimension-input {
-  inline-size: 4.5rem;
-  border: 1px solid --translucent(var(--vp-c-divider), 0.9);
-  border-radius: 999px;
-  padding-block: 0.5rem;
-  padding-inline: 0.75rem;
-  color: var(--vp-c-text-1);
-  background: var(--vp-c-bg);
-  font: inherit;
-  line-height: 1;
-}
-
 .demo-toolbar-button {
   border: 1px solid --translucent(var(--vp-c-divider), 0.9);
   border-radius: 999px;
@@ -232,6 +141,7 @@ function selectPreset(preset: ViewportPreset) {
 }
 
 .demo-source :deep(pre) {
+  padding: 1.25rem;
   margin: 0;
   border-radius: 0;
 }
@@ -244,10 +154,6 @@ function selectPreset(preset: ViewportPreset) {
   .demo-toolbar {
     align-items: stretch;
     justify-content: flex-start;
-  }
-
-  .demo-dimension-field {
-    margin-inline-start: 0;
   }
 }
 </style>
