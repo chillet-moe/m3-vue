@@ -24,10 +24,10 @@ function isActiveLink(path?: string) {
   <aside class="docs-sidebar" :data-open="isOpen ? 'true' : 'false'">
     <div class="docs-sidebar-surface">
       <div class="docs-sidebar-brand">
-        <Button class="docs-brand" color="text" size="medium" :href="resolveLink('/')" @click="close()">
+        <a class="docs-brand" :href="resolveLink('/')" @click="close()">
           <img v-if="siteLogo" class="docs-brand-logo" :src="siteLogo" alt="" />
           <span class="docs-brand-text">{{ siteTitle }}</span>
-        </Button>
+        </a>
       </div>
 
       <nav class="docs-sidebar-nav" aria-label="Sidebar">
@@ -85,17 +85,21 @@ function isActiveLink(path?: string) {
 
 .docs-sidebar-brand {
   padding-inline: 1rem;
+  min-block-size: 4.75rem;
 }
 
 .docs-sidebar-brand {
   padding-block: 1.125rem 0.75rem;
-  border-block-end: 1px solid var(--md-sys-color-outline-variant);
 }
 
-.docs-brand:deep(.m3-button) {
+.docs-brand {
+  display: flex;
+  flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
   gap: 0.625rem;
   inline-size: 100%;
+  block-size: 100%;
 }
 
 .docs-brand-logo {
@@ -130,6 +134,7 @@ function isActiveLink(path?: string) {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  line-height: 1.25;
 }
 
 .docs-sidebar-links {

@@ -35,7 +35,7 @@ function isActiveOutlineLink(link: string) {
 <style scoped>
 .docs-outline {
   position: sticky;
-  inset-block-start: calc(1.25rem + 4.5rem);
+  inset-block-start: calc(0.25rem + 4.5rem);
   align-self: start;
   max-block-size: calc(100vh - 6rem);
   margin-inline-end: 2rem;

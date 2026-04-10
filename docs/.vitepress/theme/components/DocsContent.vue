@@ -29,7 +29,8 @@ import DocsPager from './DocsPager.vue';
 .docs-main {
   display: grid;
   gap: 1rem;
-  padding: 1rem 1rem 1rem;
+  padding-inline: 1rem;
+  padding-block-end: 1.5rem;
 }
 
 .docs-page-card {

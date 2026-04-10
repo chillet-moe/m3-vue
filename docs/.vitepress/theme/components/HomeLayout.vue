@@ -153,7 +153,7 @@ function toggleAppearance() {
 }
 
 .home-nav {
-  justify-content: center;
+  justify-content: end;
   flex-wrap: wrap;
 }
 
