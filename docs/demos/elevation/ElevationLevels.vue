@@ -1,12 +1,5 @@
 <template>
-  <div
-    style="
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 1rem;
-      padding: 0.5rem 0;
-    "
-  >
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; padding: 0.5rem 0">
     <div
       v-for="level in 6"
       :key="level"

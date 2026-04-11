@@ -1,5 +1,5 @@
 import type { App } from 'vue';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vite-plus/test';
 import { M3VuePlugin, m3VueDirectiveNames, m3VueDirectives } from './plugin';
 
 describe('M3VuePlugin', () => {

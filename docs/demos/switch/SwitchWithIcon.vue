@@ -6,7 +6,5 @@ const checked = ref(true);
 </script>
 
 <template>
-  <Switch v-model:checked="checked" checked-icon="check" unchecked-icon="close">
-    Airplane mode
-  </Switch>
+  <Switch v-model:checked="checked" checked-icon="check" unchecked-icon="close"> Airplane mode </Switch>
 </template>

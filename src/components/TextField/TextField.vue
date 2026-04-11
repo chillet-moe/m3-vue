@@ -161,7 +161,14 @@ defineExpose({
     :data-has-leading="hasLeading ? 'true' : 'false'"
   >
     <div ref="containerRef" :class="'m3-text-field-container'" data-scope="text-field" data-part="container">
-      <label v-if="props.label" :class="'m3-text-field-label'" data-scope="text-field" data-part="label" :for="inputId">{{ props.label }}</label>
+      <label
+        v-if="props.label"
+        :class="'m3-text-field-label'"
+        data-scope="text-field"
+        data-part="label"
+        :for="inputId"
+        >{{ props.label }}</label
+      >
 
       <span :class="'m3-text-field-content'" data-scope="text-field" data-part="content">
         <span v-if="slots.leading" :class="'m3-text-field-leading-slot'" data-scope="text-field" data-part="leading">
@@ -232,7 +239,14 @@ defineExpose({
       </fieldset>
     </div>
 
-    <div v-if="supportingMessage" :id="supportingId" :class="'m3-text-field-supporting'" data-scope="text-field" data-part="supporting" aria-live="polite">
+    <div
+      v-if="supportingMessage"
+      :id="supportingId"
+      :class="'m3-text-field-supporting'"
+      data-scope="text-field"
+      data-part="supporting"
+      aria-live="polite"
+    >
       {{ supportingMessage }}
     </div>
   </div>

@@ -132,7 +132,9 @@
   --_item-current-container-color: var(--md-comp-item-hovered-container-color);
 }
 
-.m3-item[data-clickable='true'][data-pressed='true']:not(:disabled):not([aria-disabled='true']):not([data-disabled='true']) {
+.m3-item[data-clickable='true'][data-pressed='true']:not(:disabled):not([aria-disabled='true']):not(
+    [data-disabled='true']
+  ) {
   --_item-current-container-color: var(--md-comp-item-pressed-container-color);
 }
 
@@ -146,11 +148,15 @@
   border-color: var(--md-comp-item-outline-color);
 }
 
-.m3-item[data-variant='outline'][data-clickable='true']:not(:disabled):not([aria-disabled='true']):not([data-disabled='true']):hover {
+.m3-item[data-variant='outline'][data-clickable='true']:not(:disabled):not([aria-disabled='true']):not(
+    [data-disabled='true']
+  ):hover {
   --_item-current-container-color: --translucent(var(--md-sys-color-surface), 0.2);
 }
 
-.m3-item[data-variant='outline'][data-clickable='true'][data-pressed='true']:not(:disabled):not([aria-disabled='true']):not([data-disabled='true']) {
+.m3-item[data-variant='outline'][data-clickable='true'][data-pressed='true']:not(:disabled):not(
+    [aria-disabled='true']
+  ):not([data-disabled='true']) {
   --_item-current-container-color: --translucent(var(--md-sys-color-surface), 0.36);
 }
 

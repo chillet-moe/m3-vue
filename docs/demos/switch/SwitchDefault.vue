@@ -6,7 +6,7 @@ const checked = ref(false);
 </script>
 
 <template>
-  <div style="display: grid; gap: 0.75rem;">
+  <div style="display: grid; gap: 0.75rem">
     <Switch v-model:checked="checked">Airplane mode</Switch>
     <div>Checked: {{ checked ? 'true' : 'false' }}</div>
   </div>

@@ -8,9 +8,9 @@ const value = ref(2);
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-    <div v-for="size in sizes" :key="size" style="display: grid; gap: 0.25rem;">
-      <div style="font-size: 0.75rem; opacity: 0.72;">{{ size }}</div>
+  <div style="display: flex; flex-direction: column; gap: 1.5rem">
+    <div v-for="size in sizes" :key="size" style="display: grid; gap: 0.25rem">
+      <div style="font-size: 0.75rem; opacity: 0.72">{{ size }}</div>
       <Slider
         v-model:value="value"
         :min="0"

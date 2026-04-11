@@ -166,7 +166,13 @@ function hasSuffix() {
         <slot v-bind="slotProps" />
       </span>
 
-      <span v-if="hasSupporting()" :id="supportingId" class="m3-menu-item-supporting" data-scope="menu-item" data-part="supporting">
+      <span
+        v-if="hasSupporting()"
+        :id="supportingId"
+        class="m3-menu-item-supporting"
+        data-scope="menu-item"
+        data-part="supporting"
+      >
         <slot name="supporting" v-bind="slotProps" />
       </span>
     </span>
@@ -180,7 +186,12 @@ function hasSuffix() {
         <slot name="badge" v-bind="slotProps" />
       </span>
 
-      <span v-if="hasTrailingText()" class="m3-menu-item-trailing-text" data-scope="menu-item" data-part="trailing-text">
+      <span
+        v-if="hasTrailingText()"
+        class="m3-menu-item-trailing-text"
+        data-scope="menu-item"
+        data-part="trailing-text"
+      >
         <slot name="trailingText" v-bind="slotProps" />
       </span>
     </span>

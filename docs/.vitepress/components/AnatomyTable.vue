@@ -62,15 +62,17 @@ async function onCopyPartSelector(text: string) {
   } catch (err) {
     void showSnackbar({
       message: `Failed to copy ${text} to clipboard`,
-    })
+    });
   }
 }
 
 const anatomyData = computed(() => {
-  return anatomy.value?.parts.map((part: AnatomyPart) => ({
-    ...part,
-    selector: `[data-scope="${props.scope}"][data-part="${part.part}"]`,
-  })) ?? [];
+  return (
+    anatomy.value?.parts.map((part: AnatomyPart) => ({
+      ...part,
+      selector: `[data-scope="${props.scope}"][data-part="${part.part}"]`,
+    })) ?? []
+  );
 });
 </script>
 
@@ -95,8 +97,15 @@ const anatomyData = computed(() => {
         <code class="anatomy-part-element">&lt;{{ part.element }}&gt;</code>
         <span class="anatomy-part-name">{{ part.part }}</span>
         <span v-if="part.conditional" class="anatomy-part-conditional">conditional</span>
-        <code class="anatomy-part-selector" v-tooltip="`#${part.part}-${partSelectorId}`" @click.prevent="onCopyPartSelector(part.selector)">{{ part.selector }}</code>
-        <Tooltip :id="`${part.part}-${partSelectorId}`"><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip>
+        <code
+          class="anatomy-part-selector"
+          v-tooltip="`#${part.part}-${partSelectorId}`"
+          @click.prevent="onCopyPartSelector(part.selector)"
+          >{{ part.selector }}</code
+        >
+        <Tooltip :id="`${part.part}-${partSelectorId}`"
+          ><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip
+        >
       </div>
     </div>
   </div>

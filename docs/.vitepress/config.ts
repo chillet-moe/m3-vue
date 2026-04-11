@@ -37,22 +37,16 @@ export default defineConfig({
     search: {
       provider: 'local',
     },
-    nav: [
-      { text: 'Docs', link: '/components/button' },
-    ],
+    nav: [{ text: 'Docs', link: '/components/button' }],
     sidebar: {
       '/': [
         {
           text: 'Getting Started',
-          items: [
-            { text: 'Installation', link: '/getting-started' },
-          ],
+          items: [{ text: 'Installation', link: '/getting-started' }],
         },
         {
           text: 'Guides',
-          items: [
-            { text: 'Styling', link: '/guides/styling' },
-          ],
+          items: [{ text: 'Styling', link: '/guides/styling' }],
         },
         {
           text: 'Components',
@@ -100,8 +94,6 @@ export default defineConfig({
         },
       ],
     },
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/chillet-moe/m3-vue' },
-    ],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/chillet-moe/m3-vue' }],
   },
 });

@@ -13,12 +13,16 @@ const nestedSubmenuOpen = ref(false);
 </script>
 
 <template>
-  <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+  <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start">
     <Button v-dropdown="dropdownBinding">Open dropdown menu</Button>
 
     <Menu
       ref="dropdownMenu"
-      @select="(_, item) => { selected = item.textContent?.trim() ?? 'None'; }"
+      @select="
+        (_, item) => {
+          selected = item.textContent?.trim() ?? 'None';
+        }
+      "
     >
       <MenuContainer>
         <MenuItem>
@@ -65,7 +69,12 @@ const nestedSubmenuOpen = ref(false);
           Edit
           <template #badge>
             <span
-              style="padding: 0.125rem 0.5rem; border-radius: 999px; background: --translucent(var(--md-sys-color-primary), 0.16); color: var(--md-sys-color-primary);"
+              style="
+                padding: 0.125rem 0.5rem;
+                border-radius: 999px;
+                background: --translucent(var(--md-sys-color-primary), 0.16);
+                color: var(--md-sys-color-primary);
+              "
             >
               New
             </span>

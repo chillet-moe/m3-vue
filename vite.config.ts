@@ -1,15 +1,33 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite-plus';
 import vue from '@vitejs/plugin-vue';
 import { fileURLToPath } from 'url';
-import pkg from './package.json';
-import { webTypesFromVueComponentMeta } from './scripts/web-types-gen';
-import copyFiles from './scripts/copy-files';
+import pkg from './package.json' with { type: 'json' };
+import { webTypesFromVueComponentMeta } from './scripts/web-types-gen/index.ts';
+import copyFiles from './scripts/copy-files/index.ts';
 import { browserslistToTargets, Features } from 'lightningcss';
 import browserslist from 'browserslist';
 
 const externalPackages = [...new Set([...Object.keys(pkg.peerDependencies), '@nuxt/kit'])];
 
 export default defineConfig({
+  staged: {
+    '*': 'vp check --fix',
+  },
+  fmt: {
+    tabWidth: 2,
+    singleQuote: true,
+    printWidth: 120,
+  },
+  lint: {
+    plugins: ['typescript', 'unicorn', 'oxc'],
+    categories: {
+      correctness: 'error',
+    },
+    rules: {},
+    env: {
+      builtin: true,
+    },
+  },
   plugins: [
     vue(),
     webTypesFromVueComponentMeta({
@@ -88,5 +106,51 @@ export default defineConfig({
       // https://github.com/porsche-design-system/porsche-design-system/issues/4257
       exclude: Features.LightDark,
     },
-  }
+  },
+  pack: {
+    entry: {
+      index: './src/index.ts',
+    },
+    plugins: [vue({ isProduction: true })],
+    platform: 'neutral',
+    format: ['esm'],
+    tsconfig: './tsconfig.app.json',
+    dts: { vue: true },
+    sourcemap: true,
+    hash: false,
+
+    css: {
+      splitting: false,
+      fileName: 'style.css',
+    },
+
+    treeshake: {
+      moduleSideEffects: [
+        { test: /\.css$/, sideEffects: true }, // 官方示例就提到 CSS 这么配 :contentReference[oaicite:6]{index=6}
+      ],
+    },
+
+    inputOptions: {
+      preserveEntrySignatures: 'allow-extension',
+    },
+
+    outputOptions: {
+      minifyInternalExports: false,
+      codeSplitting: {
+        groups: [
+          {
+            test: /(?<!\.d\.c?ts)$/,
+            name: (id) => {
+              const [namespace, file] = id.split('?')[0].split(/[\\/]/g).slice(-2);
+              return file
+                ? namespace === 'src'
+                  ? file.slice(0, file.lastIndexOf('.'))
+                  : `${namespace}/${file.slice(0, file.lastIndexOf('.'))}`
+                : namespace;
+            },
+          },
+        ],
+      },
+    },
+  },
 });

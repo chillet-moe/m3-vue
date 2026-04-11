@@ -89,11 +89,11 @@ Use the object form when you want to override the anchor or outside-click behavi
 
 Binding fields:
 
-| Field | Type | Default | Notes |
-| --- | --- | --- | --- |
-| `target` | `string \| HTMLElement \| null` | - | Required popover surface |
-| `anchor` | `HTMLElement \| null` | Trigger element | Element used as the position anchor |
-| `closeOnOutsideClick` | `boolean` | `true` | Closes when a pointer event happens outside trigger and dropdown |
+| Field                 | Type                            | Default         | Notes                                                            |
+| --------------------- | ------------------------------- | --------------- | ---------------------------------------------------------------- |
+| `target`              | `string \| HTMLElement \| null` | -               | Required popover surface                                         |
+| `anchor`              | `HTMLElement \| null`           | Trigger element | Element used as the position anchor                              |
+| `closeOnOutsideClick` | `boolean`                       | `true`          | Closes when a pointer event happens outside trigger and dropdown |
 
 ## Keyboard And Events
 

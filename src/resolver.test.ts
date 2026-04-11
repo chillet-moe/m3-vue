@@ -2,7 +2,7 @@ import fg from 'fast-glob';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 import { M3VueResolver, m3VueComponentNames } from './resolver';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

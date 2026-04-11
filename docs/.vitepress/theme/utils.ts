@@ -99,7 +99,7 @@ export function flattenOutlineItems(
       'element' in item && item.element instanceof HTMLElement
         ? (item.element as HTMLHeadElement)
         : link.startsWith('#')
-          ? (document.getElementById(link.slice(1)) as HTMLHeadElement | null) ?? undefined
+          ? ((document.getElementById(link.slice(1)) as HTMLHeadElement | null) ?? undefined)
           : undefined;
 
     return [

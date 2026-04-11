@@ -15,8 +15,5 @@
     "docs/**/*.tsx",
     "docs/**/*.vue"
   ],
-  "exclude": [
-    "src/**/*.stories.ts",
-    "src/**/*.test.ts"
-  ]
+  "exclude": ["src/**/*.stories.ts", "src/**/*.test.ts"]
 }

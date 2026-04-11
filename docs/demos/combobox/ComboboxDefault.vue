@@ -8,7 +8,7 @@ const modelValue = ref<SelectModelValue>(undefined);
 </script>
 
 <template>
-  <div style="max-inline-size: 22rem;">
+  <div style="max-inline-size: 22rem">
     <Combobox
       v-model="modelValue"
       label="State"

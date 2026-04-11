@@ -8,7 +8,7 @@ const multipleValue = ref(['updates']);
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; gap: 1rem;">
+  <div style="display: flex; flex-direction: column; gap: 1rem">
     <ChipGroup v-model="singleValue" name="chip-group-single">
       <Chip value="updates">Updates</Chip>
       <Chip value="alerts">Alerts</Chip>

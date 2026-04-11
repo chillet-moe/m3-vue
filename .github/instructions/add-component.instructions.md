@@ -1,6 +1,6 @@
 ---
-description: "Use when: adding a new component, creating a new UI component, implementing a new Material Design 3 component. Covers all files that need to be created or modified."
-applyTo: "src/components/**"
+description: 'Use when: adding a new component, creating a new UI component, implementing a new Material Design 3 component. Covers all files that need to be created or modified.'
+applyTo: 'src/components/**'
 ---
 
 # 添加新组件
@@ -108,7 +108,7 @@ defineSlots<{
 @import '../../styles/typography.css';
 
 @layer tokens {
-  .m3-<name> {
+  .m3-<name > {
     /* 使用 Material Design 3 system token */
     --md-comp-<name>-container-color: var(--md-sys-color-surface);
     --md-comp-<name>-label-text-color: var(--md-sys-color-on-surface);
@@ -116,11 +116,11 @@ defineSlots<{
 }
 
 /* 使用 data 属性选择器而非 CSS 类名来区分变体 */
-.m3-<name>[data-variant="filled"] {
+.m3-<name > [data-variant='filled'] {
   background: var(--md-comp-<name>-container-color);
 }
 
-.m3-<name>[data-disabled="true"] {
+.m3-<name > [data-disabled='true'] {
   opacity: 0.38;
   pointer-events: none;
 }

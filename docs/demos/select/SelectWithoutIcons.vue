@@ -8,7 +8,7 @@ const modelValue = ref<SelectModelValue>('pour-over');
 </script>
 
 <template>
-  <div style="max-inline-size: 22rem;">
+  <div style="max-inline-size: 22rem">
     <Select v-model="modelValue" label="Coffee" :options="coffeeOptionsWithoutIcons" placeholder="Choose an option" />
   </div>
 </template>

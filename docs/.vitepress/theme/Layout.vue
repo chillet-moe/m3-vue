@@ -37,11 +37,7 @@ const isHome = computed(() => frontmatter.value.layout === 'home');
     </template>
 
     <template v-else>
-      <div
-        class="docs-backdrop"
-        :data-open="isSidebarOpen ? 'true' : 'false'"
-        @click="closeSidebar"
-      />
+      <div class="docs-backdrop" :data-open="isSidebarOpen ? 'true' : 'false'" @click="closeSidebar" />
 
       <div class="docs-layout">
         <DocsSidebar />

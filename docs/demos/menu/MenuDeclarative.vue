@@ -61,7 +61,7 @@ const value = ref<MenuModelValue>('copy');
 </script>
 
 <template>
-  <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+  <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start">
     <Button v-dropdown="objectBinding">Open object-driven menu</Button>
 
     <Menu ref="objectMenu" v-model="value" :items="items">

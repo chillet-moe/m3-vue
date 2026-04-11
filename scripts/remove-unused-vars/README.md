@@ -16,11 +16,13 @@
 ### 命令行使用
 
 #### 基础用法
+
 ```bash
 pnpm remove-unused-vars <css-file-path>
 ```
 
 #### 示例
+
 ```bash
 # 处理 Button 组件的 CSS 文件
 pnpm remove-unused-vars src/components/Button/Button.css
@@ -64,12 +66,12 @@ if (result.success) {
 
 ```typescript
 interface CleanupResult {
-  success: boolean;        // 操作是否成功
-  removed: number;         // 删除的变量数
-  defined: number;         // 定义的变量总数
-  used: number;            // 使用的变量总数
-  message: string;         // 结果消息
-  unusedVars?: string[];   // 未使用的变量列表（可选）
+  success: boolean; // 操作是否成功
+  removed: number; // 删除的变量数
+  defined: number; // 定义的变量总数
+  used: number; // 使用的变量总数
+  message: string; // 结果消息
+  unusedVars?: string[]; // 未使用的变量列表（可选）
 }
 ```
 
@@ -111,11 +113,13 @@ interface CleanupResult {
 ## 故障排除
 
 ### "文件不存在" 错误
+
 检查提供的文件路径是否正确
 
 ### 变量未被识别
+
 确保变量定义在 `@layer tokens { ... }` 块中，并且使用 `var(--variable-name)` 格式
 
 ### 权限错误
-确保脚本有读写文件的权限
 
+确保脚本有读写文件的权限

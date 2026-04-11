@@ -54,28 +54,28 @@ The promise rejects if the function is called outside a browser environment, or 
 
 ## Options
 
-| Field | Type | Default | Notes |
-| --- | --- | --- | --- |
-| `message` | `string` | `''` | Snackbar text content |
-| `action` | `SnackbarAction` | - | Optional action button |
-| `duration` | `number \| null` | `4000` | Auto-close delay in milliseconds, or `null` to disable it |
-| `timeoutValue` | `string` | `'timeout'` | Value resolved on auto close |
-| `dismissValue` | `string` | `'dismiss'` | Value resolved on dismiss button click |
-| `position` | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end'` | `'bottom'` | Snackbar stack placement |
-| `actionOnNewLine` | `boolean` | `false` | Passed through to the `Snackbar` component |
-| `dismissible` | `boolean` | `false` | Shows the dismiss button |
-| `dismissButtonLabel` | `string` | `'Dismiss notification'` | Accessible label for the dismiss button |
+| Field                | Type                                                                              | Default                  | Notes                                                     |
+| -------------------- | --------------------------------------------------------------------------------- | ------------------------ | --------------------------------------------------------- |
+| `message`            | `string`                                                                          | `''`                     | Snackbar text content                                     |
+| `action`             | `SnackbarAction`                                                                  | -                        | Optional action button                                    |
+| `duration`           | `number \| null`                                                                  | `4000`                   | Auto-close delay in milliseconds, or `null` to disable it |
+| `timeoutValue`       | `string`                                                                          | `'timeout'`              | Value resolved on auto close                              |
+| `dismissValue`       | `string`                                                                          | `'dismiss'`              | Value resolved on dismiss button click                    |
+| `position`           | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end'` | `'bottom'`               | Snackbar stack placement                                  |
+| `actionOnNewLine`    | `boolean`                                                                         | `false`                  | Passed through to the `Snackbar` component                |
+| `dismissible`        | `boolean`                                                                         | `false`                  | Shows the dismiss button                                  |
+| `dismissButtonLabel` | `string`                                                                          | `'Dismiss notification'` | Accessible label for the dismiss button                   |
 
 `SnackbarAction` fields:
 
-| Field | Type | Default | Notes |
-| --- | --- | --- | --- |
-| `label` | `string` | - | Visible label |
-| `value` | `string` | `'action'` | Resolution value when the action closes the snackbar |
-| `disabled` | `boolean` | `false` | Disables the action button |
-| `autofocus` | `boolean` | `false` | Autofocuses the action button |
-| `closeOnClick` | `boolean` | `true` | Keep the snackbar open by setting this to `false` |
-| `onClick` | `() => void \| boolean \| Promise<void \| boolean>` | - | Return `false` to keep the snackbar open |
+| Field          | Type                                                | Default    | Notes                                                |
+| -------------- | --------------------------------------------------- | ---------- | ---------------------------------------------------- |
+| `label`        | `string`                                            | -          | Visible label                                        |
+| `value`        | `string`                                            | `'action'` | Resolution value when the action closes the snackbar |
+| `disabled`     | `boolean`                                           | `false`    | Disables the action button                           |
+| `autofocus`    | `boolean`                                           | `false`    | Autofocuses the action button                        |
+| `closeOnClick` | `boolean`                                           | `true`     | Keep the snackbar open by setting this to `false`    |
+| `onClick`      | `() => void \| boolean \| Promise<void \| boolean>` | -          | Return `false` to keep the snackbar open             |
 
 ## Behavior Notes
 

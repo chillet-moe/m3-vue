@@ -557,7 +557,13 @@ defineExpose({
       @select="handleMenuSelect"
     >
       <MenuContainer>
-        <TransitionGroup tag="div" name="m3-select-options" class="m3-select-options" data-scope="select" data-part="options">
+        <TransitionGroup
+          tag="div"
+          name="m3-select-options"
+          class="m3-select-options"
+          data-scope="select"
+          data-part="options"
+        >
           <MenuItem
             v-for="{ option, index } in filteredOptionEntries"
             :key="`${index}-${option.value}`"
@@ -578,7 +584,13 @@ defineExpose({
                   <Icon name="check" />
                 </span>
 
-                <span v-if="option.leadingIcon || slots.optionLeading" class="m3-select-option-icon" data-scope="select" data-part="option-icon" aria-hidden="true">
+                <span
+                  v-if="option.leadingIcon || slots.optionLeading"
+                  class="m3-select-option-icon"
+                  data-scope="select"
+                  data-part="option-icon"
+                  aria-hidden="true"
+                >
                   <slot name="optionLeading" :option="option" :selected="false">
                     <Icon v-if="option.leadingIcon" :name="option.leadingIcon" />
                   </slot>

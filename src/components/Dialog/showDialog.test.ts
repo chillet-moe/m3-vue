@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vite-plus/test';
 import { nextTick } from 'vue';
 import { showDialog } from './showDialog';
 

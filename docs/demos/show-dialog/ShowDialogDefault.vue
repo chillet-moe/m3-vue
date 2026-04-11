@@ -18,7 +18,7 @@ async function openDialog() {
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+  <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem">
     <Button @click="openDialog">Open with showDialog()</Button>
     <div v-if="result">Result: {{ result }}</div>
   </div>

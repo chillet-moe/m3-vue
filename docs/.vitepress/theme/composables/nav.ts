@@ -34,7 +34,7 @@ export function useSiteInfo() {
     if (theme.value.logo && typeof theme.value.logo === 'object') {
       const lightLogo = 'light' in theme.value.logo ? theme.value.logo.light : undefined;
       const darkLogo = 'dark' in theme.value.logo ? theme.value.logo.dark : undefined;
-      const resolvedLogo = isDark.value ? darkLogo ?? lightLogo : lightLogo ?? darkLogo;
+      const resolvedLogo = isDark.value ? (darkLogo ?? lightLogo) : (lightLogo ?? darkLogo);
       return typeof resolvedLogo === 'string' ? withBase(resolvedLogo) : undefined;
     }
 

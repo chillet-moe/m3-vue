@@ -46,13 +46,13 @@ The function is idempotent, so calling it more than once is safe.
 
 ## Styling Hooks
 
-| Token | Default | Notes |
-| --- | --- | --- |
-| `--md-state-layer-color` | `currentColor` | Base overlay and ripple color |
-| `--md-sys-state-hover-state-layer-opacity` | `0.08` | Hover opacity token |
-| `--md-sys-state-focus-state-layer-opacity` | `0.1` | Focus opacity token |
-| `--md-sys-state-pressed-state-layer-opacity` | `0.1` | Pressed opacity token |
-| `--md-sys-state-dragged-state-layer-opacity` | `0.16` | Dragged opacity token |
+| Token                                        | Default        | Notes                         |
+| -------------------------------------------- | -------------- | ----------------------------- |
+| `--md-state-layer-color`                     | `currentColor` | Base overlay and ripple color |
+| `--md-sys-state-hover-state-layer-opacity`   | `0.08`         | Hover opacity token           |
+| `--md-sys-state-focus-state-layer-opacity`   | `0.1`          | Focus opacity token           |
+| `--md-sys-state-pressed-state-layer-opacity` | `0.1`          | Pressed opacity token         |
+| `--md-sys-state-dragged-state-layer-opacity` | `0.16`         | Dragged opacity token         |
 
 ## Behavior Notes
 

@@ -59,9 +59,7 @@ function getStaticAttrValue(node: any, name: string): string | undefined {
 
 function isConditional(node: any): boolean {
   return node.props.some(
-    (prop: any) =>
-      prop.type === NodeTypes.DIRECTIVE &&
-      (prop.name === 'if' || prop.name === 'show'),
+    (prop: any) => prop.type === NodeTypes.DIRECTIVE && (prop.name === 'if' || prop.name === 'show'),
   );
 }
 

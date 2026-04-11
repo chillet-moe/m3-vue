@@ -8,7 +8,7 @@ const modelValue = ref<SelectModelValue>(['california', 'colorado']);
 </script>
 
 <template>
-  <div style="max-inline-size: 22rem;">
+  <div style="max-inline-size: 22rem">
     <Combobox
       v-model="modelValue"
       label="States"

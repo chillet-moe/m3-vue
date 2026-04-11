@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import fg from 'fast-glob';
 import { createChecker, type MetaCheckerOptions } from 'vue-component-meta';
 import ts from 'typescript';
-import type { Plugin } from 'vite';
+import type { Plugin } from 'vite-plus';
 
 type WebTypesValue = {
   type?: string;

@@ -57,9 +57,9 @@ const hasToolbar = computed(() => {
 <template>
   <section class="vp-raw demo-container">
     <div class="demo-preview">
-        <div>
-          <slot />
-        </div>
+      <div>
+        <slot />
+      </div>
     </div>
 
     <div class="demo-toolbar" v-if="hasToolbar">

@@ -23,14 +23,8 @@ export interface CleanupResult {
  * @param options 配置选项
  * @returns 清理结果
  */
-export async function removeUnusedCssVariables(
-  options: RemoveUnusedVarsOptions
-): Promise<CleanupResult> {
-  const {
-    filePath,
-    verbose = true,
-    varPrefix = '--',
-  } = options;
+export async function removeUnusedCssVariables(options: RemoveUnusedVarsOptions): Promise<CleanupResult> {
+  const { filePath, verbose = true, varPrefix = '--' } = options;
 
   try {
     // 检查文件是否存在
@@ -75,9 +69,7 @@ export async function removeUnusedCssVariables(
     const usedVars = [...new Set(usedVarsMatch)].sort();
 
     // 找出未使用的变量
-    const unusedVars = definedVars.filter(
-      (variable) => !usedVars.includes(variable)
-    );
+    const unusedVars = definedVars.filter((variable) => !usedVars.includes(variable));
 
     if (unusedVars.length === 0) {
       if (verbose) {
@@ -135,8 +127,7 @@ export async function removeUnusedCssVariables(
       unusedVars,
     };
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return {
       success: false,
       removed: 0,
@@ -178,9 +169,7 @@ async function main() {
   console.log(result.message);
 
   if (result.success && result.removed > 0) {
-    const reduction = Math.round(
-      ((result.removed) / result.defined) * 100
-    );
+    const reduction = Math.round((result.removed / result.defined) * 100);
     console.log(`📊 变量减少比例: ${reduction}%`);
   }
 
@@ -194,4 +183,3 @@ if (process.argv[1].endsWith('index.ts') || process.argv[1].endsWith('scripts/re
     process.exit(1);
   });
 }
-

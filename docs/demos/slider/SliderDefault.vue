@@ -7,7 +7,7 @@ const value = ref(2);
 </script>
 
 <template>
-  <div style="display: grid; gap: 1rem;">
+  <div style="display: grid; gap: 1rem">
     <Slider
       v-model:value="value"
       :min="0"

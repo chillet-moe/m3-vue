@@ -10,7 +10,7 @@ const empty = ref<SelectModelValue>(undefined);
 </script>
 
 <template>
-  <div style="display: grid; gap: 1rem; max-inline-size: 24rem;">
+  <div style="display: grid; gap: 1rem; max-inline-size: 24rem">
     <Select v-model="single" label="Coffee" :options="coffeeOptions" description="Single selection" />
     <Select
       v-model="multiple"

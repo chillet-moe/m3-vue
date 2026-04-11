@@ -72,11 +72,7 @@ const inputLabel = computed(() => {
 </script>
 
 <template>
-  <Switch
-    v-if="controlType === 'switch'"
-    v-model:checked="booleanValue"
-    :aria-label="inputLabel"
-  />
+  <Switch v-if="controlType === 'switch'" v-model:checked="booleanValue" :aria-label="inputLabel" />
 
   <ChipGroup
     v-else-if="controlType === 'select'"
@@ -85,12 +81,7 @@ const inputLabel = computed(() => {
     selection-mode="single"
     :aria-label="inputLabel"
   >
-    <Chip
-      v-for="option in prop.options"
-      :key="option"
-      variant="filter"
-      :value="option"
-    >
+    <Chip v-for="option in prop.options" :key="option" variant="filter" :value="option">
       {{ option }}
     </Chip>
   </ChipGroup>

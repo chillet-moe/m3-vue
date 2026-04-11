@@ -46,14 +46,14 @@ Apply a token directly to `box-shadow` on custom surfaces.
 
 ## Suggested Meanings
 
-| Token | Typical use |
-| --- | --- |
-| `--md-sys-elevation-level0` | Flat and resting surfaces |
-| `--md-sys-elevation-level1` | Slightly raised controls and cards |
-| `--md-sys-elevation-level2` | Hovered surfaces, menus, rich tooltips |
-| `--md-sys-elevation-level3` | Dialogs and snackbars |
+| Token                       | Typical use                             |
+| --------------------------- | --------------------------------------- |
+| `--md-sys-elevation-level0` | Flat and resting surfaces               |
+| `--md-sys-elevation-level1` | Slightly raised controls and cards      |
+| `--md-sys-elevation-level2` | Hovered surfaces, menus, rich tooltips  |
+| `--md-sys-elevation-level3` | Dialogs and snackbars                   |
 | `--md-sys-elevation-level4` | Dragged or strongly emphasized surfaces |
-| `--md-sys-elevation-level5` | Highest emphasis surfaces |
+| `--md-sys-elevation-level5` | Highest emphasis surfaces               |
 
 ## Prefer Semantic Tokens When Available
 

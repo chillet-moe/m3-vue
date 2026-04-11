@@ -1,6 +1,6 @@
 /**
  * 使用 remove-unused-vars 脚本的示例
- * 
+ *
  * 这个示例展示了如何在其他脚本中使用 removeUnusedCssVariables 函数
  */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -85,4 +85,3 @@ if (import.meta.main) {
   // 取消注释以运行
   // await cleanupWithDetails();
 }
-

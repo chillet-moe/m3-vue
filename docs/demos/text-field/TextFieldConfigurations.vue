@@ -9,7 +9,7 @@ const multiline = ref('This is a long input in a multi-line text field that wrap
 </script>
 
 <template>
-  <div style="display: grid; gap: 1rem; max-inline-size: 24rem;">
+  <div style="display: grid; gap: 1rem; max-inline-size: 24rem">
     <TextField label="Label" v-model="empty" description="Supporting text" />
     <TextField label="Label" v-model="input" error="Error text" />
     <TextField label="Label" v-model="empty" placeholder="Search keyword">
@@ -21,7 +21,7 @@ const multiline = ref('This is a long input in a multi-line text field that wrap
       <template #prefix>$</template>
       <template #suffix>USD</template>
       <template #trailing>
-        <button type="button" style="all: unset; cursor: pointer;">Clear</button>
+        <button type="button" style="all: unset; cursor: pointer">Clear</button>
       </template>
     </TextField>
     <TextField label="Label" v-model="multiline" as="textarea" :rows="4" />

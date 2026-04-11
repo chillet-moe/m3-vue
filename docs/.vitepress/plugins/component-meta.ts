@@ -72,10 +72,13 @@ export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
       ? options.tsconfigPath
       : path.join(root, options.tsconfigPath);
 
-    const checker = createChecker(tsconfigAbsPath, options.checkerOptions ?? {
-      forceUseTs: true,
-      printer: { newLine: 1 },
-    });
+    const checker = createChecker(
+      tsconfigAbsPath,
+      options.checkerOptions ?? {
+        forceUseTs: true,
+        printer: { newLine: 1 },
+      },
+    );
 
     const patterns = Array.isArray(options.components) ? options.components : [options.components];
     const files = await fg(patterns, { cwd: root, absolute: true, onlyFiles: true });

@@ -1,4 +1,4 @@
-import type { Plugin, ResolvedConfig } from 'vite';
+import type { Plugin, ResolvedConfig } from 'vite-plus';
 import fs from 'node:fs';
 import path from 'node:path';
 

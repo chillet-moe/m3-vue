@@ -24,7 +24,13 @@ defineSlots<{
 </script>
 
 <template>
-  <label :class="'m3-radio'" data-scope="radio" data-part="root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
+  <label
+    :class="'m3-radio'"
+    data-scope="radio"
+    data-part="root"
+    :aria-disabled="disabled ? 'true' : 'false'"
+    data-state-layer-hover-target
+  >
     <input
       v-model="checked"
       :class="'m3-radio-input'"

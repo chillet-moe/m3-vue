@@ -15,8 +15,8 @@ const multiple = ref<MenuModelValue>(['archive']);
 </script>
 
 <template>
-  <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
-    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+  <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start">
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem">
       <Button v-dropdown="singleBinding">Open single-select menu</Button>
       <Button v-dropdown="multipleBinding">Open multi-select menu</Button>
     </div>
