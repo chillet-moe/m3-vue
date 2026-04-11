@@ -48,7 +48,8 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix"
+    "lint:fix": "oxlint --fix",
+    "remove-unused-vars": "tsx scripts/remove-unused-vars/index.ts"
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
