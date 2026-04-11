@@ -27,6 +27,7 @@ export * from './components/Snackbar';
 export * from './components/Switch';
 export * from './components/Radio';
 export * from './components/CheckBox';
+export * from './components/Item';
 export * from './components/Menu';
 export * from './components/Form';
 export * from './components/FormField';

@@ -67,6 +67,7 @@ export default defineConfig({
             { text: 'Combobox', link: '/components/combobox' },
             { text: 'Dialog', link: '/components/dialog' },
             { text: 'Icon', link: '/components/icon' },
+            { text: 'Item', link: '/components/item' },
             { text: 'Menu', link: '/components/menu' },
             { text: 'Radio', link: '/components/radio' },
             { text: 'Select', link: '/components/select' },

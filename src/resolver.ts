@@ -19,6 +19,7 @@ export const m3VueComponentNames = [
   'FormField',
   'Icon',
   'IconButton',
+  'Item',
   'Menu',
   'MenuContainer',
   'MenuDivider',
