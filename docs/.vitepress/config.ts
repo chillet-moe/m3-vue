@@ -64,7 +64,6 @@ export default defineConfig({
             { text: 'Snackbar', link: '/components/snackbar' },
             { text: 'Switch', link: '/components/switch' },
             { text: 'TextField', link: '/components/text-field' },
-            { text: 'Tooltip', link: '/components/tooltip' },
           ],
         },
         {
