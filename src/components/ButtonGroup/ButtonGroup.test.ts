@@ -61,7 +61,7 @@ describe('ButtonGroup', () => {
     const button = container.querySelector('.m3-button');
     const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
 
-    expect(container.querySelector('.m3-selection-group')).not.toBeNull();
+    expect(container.querySelector('.m3-button-group')).not.toBeNull();
     expect(button?.getAttribute('data-color')).toBe('tonal');
     expect(button?.getAttribute('data-size')).toBe('medium');
 

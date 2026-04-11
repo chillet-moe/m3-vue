@@ -24,10 +24,12 @@ defineSlots<{
 </script>
 
 <template>
-  <label :class="'m3-checkbox'" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
+  <label :class="'m3-checkbox'" data-scope="checkbox" data-part="root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
     <input
       v-model="checked"
       :class="'m3-checkbox-input'"
+      data-scope="checkbox"
+      data-part="input"
       type="checkbox"
       :disabled="disabled"
       :name="name"
@@ -35,13 +37,13 @@ defineSlots<{
       :aria-label="ariaLabel"
     />
 
-    <span :class="'m3-checkbox-control'" aria-hidden="true">
-      <span :class="'m3-checkbox-box'" />
-      <span :class="'m3-checkbox-icon'" />
+    <span :class="'m3-checkbox-control'" data-scope="checkbox" data-part="control" aria-hidden="true">
+      <span :class="'m3-checkbox-box'" data-scope="checkbox" data-part="box" />
+      <span :class="'m3-checkbox-icon'" data-scope="checkbox" data-part="icon" />
       <span class="state-layer" data-state-layer-hover-from="target" />
     </span>
 
-    <span v-if="$slots.default" :class="'m3-checkbox-label'"><slot /></span>
+    <span v-if="$slots.default" :class="'m3-checkbox-label'" data-scope="checkbox" data-part="label"><slot /></span>
   </label>
 </template>
 

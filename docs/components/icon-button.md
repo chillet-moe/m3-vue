@@ -43,6 +43,8 @@ Icon buttons expose compact, icon-first actions with the same Material 3 shape, 
   </IconButton>
 </DemoContainer>
 
+<AnatomyTable scope="icon-button" />
+
 <ApiTable component="IconButton" v-model="props" />
 
 ## Examples

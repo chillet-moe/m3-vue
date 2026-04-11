@@ -61,20 +61,24 @@ const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-l
 <template>
   <section
     :class="'m3-snackbar'"
+    data-scope="snackbar"
+    data-part="root"
     :data-action-layout="actionLayout"
     role="status"
     aria-live="polite"
     aria-atomic="true"
     :aria-labelledby="contentId"
   >
-    <div :id="contentId" :class="'m3-snackbar-content'">
+    <div :id="contentId" :class="'m3-snackbar-content'" data-scope="snackbar" data-part="content">
       <slot />
     </div>
 
-    <div v-if="hasAction || hasDismiss" :class="'m3-snackbar-actions'">
+    <div v-if="hasAction || hasDismiss" :class="'m3-snackbar-actions'" data-scope="snackbar" data-part="actions">
       <Button
         v-if="hasAction"
         :class="'m3-snackbar-action-button'"
+        data-scope="snackbar"
+        data-part="action-button"
         color="text"
         size="small"
         :disabled="actionDisabled"
@@ -89,6 +93,8 @@ const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-l
       <IconButton
         v-if="hasDismiss"
         :class="'m3-snackbar-dismiss-button'"
+        data-scope="snackbar"
+        data-part="dismiss-button"
         color="standard"
         size="small"
         :aria-label="dismissButtonLabel"

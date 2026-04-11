@@ -33,6 +33,8 @@ Text fields cover baseline Material 3 input cases including supporting text, val
   </div>
 </DemoContainer>
 
+<AnatomyTable scope="text-field" />
+
 <ApiTable component="TextField" v-model="props" :exclude="['as', 'rows']" />
 
 ## Examples

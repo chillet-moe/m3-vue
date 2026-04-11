@@ -29,6 +29,8 @@ Radio buttons present mutually exclusive choices with Material 3 state styling a
   </div>
 </DemoContainer>
 
+<AnatomyTable scope="radio" />
+
 <ApiTable component="Radio" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
 ## Examples

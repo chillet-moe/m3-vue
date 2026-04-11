@@ -105,6 +105,8 @@ const slots = defineSlots<{
   <component
     :is="tag"
     :class="['state-layer', 'm3-icon-button']"
+    data-scope="icon-button"
+    data-part="root"
     :data-color="color"
     :data-size="size"
     :data-shape="shape"
@@ -121,7 +123,7 @@ const slots = defineSlots<{
     @pointerup="handlePointerUp"
     @pointercancel="handlePointerCancel"
   >
-    <Icon v-if="props.icon" :name="props.icon" :class="['m3-icon-button-icon']" :disabled="disabled" />
+    <Icon v-if="props.icon" :name="props.icon" :class="['m3-icon-button-icon']" data-scope="icon-button" data-part="icon" :disabled="disabled" />
     <slot name="default" :disabled="disabled" />
   </component>
 </template>

@@ -34,6 +34,8 @@ provide(buttonContextKey, {
   <SelectionGroup
     v-model="modelValue"
     class="m3-button-group"
+    data-scope="button-group"
+    data-part="root"
     :disabled="disabled"
     :selection-mode="selectionMode"
     :name="name"

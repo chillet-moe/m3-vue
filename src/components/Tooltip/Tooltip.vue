@@ -17,7 +17,7 @@ const slots = defineSlots<{
 </script>
 
 <template>
-  <div :class="'m3-tooltip'" :data-variant="variant" :popover="popover">
+  <div :class="'m3-tooltip'" data-scope="tooltip" data-part="root" :data-variant="variant" :popover="popover">
     <slot name="default"></slot>
   </div>
 </template>

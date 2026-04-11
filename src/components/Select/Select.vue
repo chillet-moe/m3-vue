@@ -481,6 +481,8 @@ defineExpose({
 <template>
   <div
     class="m3-text-field m3-select"
+    data-scope="select"
+    data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
@@ -489,7 +491,7 @@ defineExpose({
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
   >
-    <div class="m3-select-trigger" @click="handleFieldClick">
+    <div class="m3-select-trigger" data-scope="select" data-part="trigger" @click="handleFieldClick">
       <TextField
         :id="triggerId"
         ref="textFieldRef"
@@ -528,7 +530,7 @@ defineExpose({
         </template>
         <template #trailing>
           <slot v-if="slots.trailing" name="trailing" />
-          <span class="m3-select-indicator" aria-hidden="true">
+          <span class="m3-select-indicator" data-scope="select" data-part="indicator" aria-hidden="true">
             <Icon name="arrow_drop_down" />
           </span>
         </template>
@@ -548,16 +550,20 @@ defineExpose({
       ref="menuRef"
       v-model:open="open"
       class="m3-select-menu"
+      data-scope="select"
+      data-part="menu"
       :color="props.menuColor"
       :style="{ 'position-anchor': anchorName }"
       @select="handleMenuSelect"
     >
       <MenuContainer>
-        <TransitionGroup tag="div" name="m3-select-options" class="m3-select-options">
+        <TransitionGroup tag="div" name="m3-select-options" class="m3-select-options" data-scope="select" data-part="options">
           <MenuItem
             v-for="{ option, index } in filteredOptionEntries"
             :key="`${index}-${option.value}`"
             class="m3-select-option"
+            data-scope="select"
+            data-part="option"
             :data-option-index="index"
             :data-has-option-leading="option.leadingIcon || slots.optionLeading ? 'true' : undefined"
             :disabled="option.disabled"
@@ -567,12 +573,12 @@ defineExpose({
             :close-on-select="!props.multiple"
           >
             <template #leading>
-              <span class="m3-select-option-leading-content">
-                <span class="m3-select-option-check" aria-hidden="true">
+              <span class="m3-select-option-leading-content" data-scope="select" data-part="option-leading-content">
+                <span class="m3-select-option-check" data-scope="select" data-part="option-check" aria-hidden="true">
                   <Icon name="check" />
                 </span>
 
-                <span v-if="option.leadingIcon || slots.optionLeading" class="m3-select-option-icon" aria-hidden="true">
+                <span v-if="option.leadingIcon || slots.optionLeading" class="m3-select-option-icon" data-scope="select" data-part="option-icon" aria-hidden="true">
                   <slot name="optionLeading" :option="option" :selected="false">
                     <Icon v-if="option.leadingIcon" :name="option.leadingIcon" />
                   </slot>
@@ -599,6 +605,8 @@ defineExpose({
             v-if="props.filterable && !hasFilteredOptions"
             key="no-results"
             class="m3-select-empty"
+            data-scope="select"
+            data-part="empty"
             aria-live="polite"
           >
             {{ props.filterNoResultsText }}

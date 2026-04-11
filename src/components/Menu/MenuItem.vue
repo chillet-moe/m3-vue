@@ -153,32 +153,34 @@ function hasSuffix() {
     :aria-checked="resolvedRole === 'menuitem' ? undefined : resolvedChecked ? 'true' : 'false'"
     :aria-describedby="hasSupporting() ? supportingId : undefined"
     :class="['state-layer', 'm3-menu-item']"
+    data-scope="menu-item"
+    data-part="root"
     @click="handleClick"
   >
-    <span v-if="hasLeading()" class="m3-menu-item-leading">
+    <span v-if="hasLeading()" class="m3-menu-item-leading" data-scope="menu-item" data-part="leading">
       <slot name="leading" v-bind="slotProps" />
     </span>
 
-    <span class="m3-menu-item-content">
-      <span class="m3-menu-item-label">
+    <span class="m3-menu-item-content" data-scope="menu-item" data-part="content">
+      <span class="m3-menu-item-label" data-scope="menu-item" data-part="label">
         <slot v-bind="slotProps" />
       </span>
 
-      <span v-if="hasSupporting()" :id="supportingId" class="m3-menu-item-supporting">
+      <span v-if="hasSupporting()" :id="supportingId" class="m3-menu-item-supporting" data-scope="menu-item" data-part="supporting">
         <slot name="supporting" v-bind="slotProps" />
       </span>
     </span>
 
-    <span v-if="hasSuffix()" class="m3-menu-item-suffix">
-      <span v-if="hasTrailing()" class="m3-menu-item-trailing">
+    <span v-if="hasSuffix()" class="m3-menu-item-suffix" data-scope="menu-item" data-part="suffix">
+      <span v-if="hasTrailing()" class="m3-menu-item-trailing" data-scope="menu-item" data-part="trailing">
         <slot name="trailing" v-bind="slotProps" />
       </span>
 
-      <span v-if="hasBadge()" class="m3-menu-item-badge">
+      <span v-if="hasBadge()" class="m3-menu-item-badge" data-scope="menu-item" data-part="badge">
         <slot name="badge" v-bind="slotProps" />
       </span>
 
-      <span v-if="hasTrailingText()" class="m3-menu-item-trailing-text">
+      <span v-if="hasTrailingText()" class="m3-menu-item-trailing-text" data-scope="menu-item" data-part="trailing-text">
         <slot name="trailingText" v-bind="slotProps" />
       </span>
     </span>

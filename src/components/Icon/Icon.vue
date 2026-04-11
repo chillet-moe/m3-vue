@@ -8,7 +8,7 @@ defineProps<IconProps>();
 </script>
 
 <template>
-  <span :class="'m3-icon'">{{ name }}</span>
+  <span :class="'m3-icon'" data-scope="icon" data-part="root">{{ name }}</span>
 </template>
 
 <style src="./Icon.css"></style>

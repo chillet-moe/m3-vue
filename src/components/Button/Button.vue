@@ -116,6 +116,8 @@ const slots = defineSlots<{
   <component
     :is="tag"
     :class="['state-layer', 'm3-button']"
+    data-scope="button"
+    data-part="root"
     :data-color="color"
     :data-size="size"
     :data-shape="shape"
@@ -135,6 +137,8 @@ const slots = defineSlots<{
       v-if="props.leadingIcon"
       :name="props.leadingIcon"
       :class="['m3-button-leading', 'm3-button-icon']"
+      data-scope="button"
+      data-part="leading"
       :disabled="disabled"
     />
     <slot v-else name="leading" :disabled="disabled" />
@@ -145,6 +149,8 @@ const slots = defineSlots<{
       v-if="props.trailingIcon"
       :name="props.trailingIcon"
       :class="['m3-button-trailing', 'm3-button-icon']"
+      data-scope="button"
+      data-part="trailing"
       :disabled="disabled"
     />
     <slot v-else name="trailing" :disabled="disabled" />

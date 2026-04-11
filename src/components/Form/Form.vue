@@ -8,7 +8,7 @@ defineProps<FormProps>();
 </script>
 
 <template>
-  <form :class="'m3-form'" :aria-label="ariaLabel" novalidate>
+  <form :class="'m3-form'" data-scope="form" data-part="root" :aria-label="ariaLabel" novalidate>
     <slot />
   </form>
 </template>

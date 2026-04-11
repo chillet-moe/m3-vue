@@ -46,6 +46,8 @@ Buttons let people trigger primary, secondary, or low-emphasis actions with Mate
   </Button>
 </DemoContainer>
 
+<AnatomyTable scope="button" />
+
 <ApiTable component="Button" v-model="props" />
 
 ## Examples

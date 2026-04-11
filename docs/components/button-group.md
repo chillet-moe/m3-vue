@@ -50,6 +50,8 @@ Button groups keep a related set of options visually connected while preserving 
   </ButtonGroup>
 </DemoContainer>
 
+<AnatomyTable scope="button-group" />
+
 <ApiTable component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
 
 ## Examples

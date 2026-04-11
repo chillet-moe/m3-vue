@@ -6,7 +6,7 @@ defineSlots<{
 </script>
 
 <template>
-  <div role="presentation" class="m3-menu-container">
+  <div role="presentation" class="m3-menu-container" data-scope="menu" data-part="container">
     <slot />
   </div>
 </template>

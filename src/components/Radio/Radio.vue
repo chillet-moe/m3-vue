@@ -24,10 +24,12 @@ defineSlots<{
 </script>
 
 <template>
-  <label :class="'m3-radio'" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
+  <label :class="'m3-radio'" data-scope="radio" data-part="root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
     <input
       v-model="checked"
       :class="'m3-radio-input'"
+      data-scope="radio"
+      data-part="input"
       type="radio"
       :disabled="disabled"
       :name="name"
@@ -35,13 +37,13 @@ defineSlots<{
       :aria-label="ariaLabel"
     />
 
-    <span :class="'m3-radio-control'" aria-hidden="true">
-      <span :class="'m3-radio-outer'" />
-      <span :class="'m3-radio-inner'" />
+    <span :class="'m3-radio-control'" data-scope="radio" data-part="control" aria-hidden="true">
+      <span :class="'m3-radio-outer'" data-scope="radio" data-part="outer" />
+      <span :class="'m3-radio-inner'" data-scope="radio" data-part="inner" />
       <span class="state-layer" data-state-layer-hover-from="target" />
     </span>
 
-    <span v-if="$slots.default" :class="'m3-radio-label'"><slot /></span>
+    <span v-if="$slots.default" :class="'m3-radio-label'" data-scope="radio" data-part="label"><slot /></span>
   </label>
 </template>
 

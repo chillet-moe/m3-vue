@@ -131,7 +131,7 @@ function toggleAppearance() {
   background: --translucent(var(--vp-c-bg), 0.78);
 }
 
-.home-brand:deep(.m3-button) {
+.home-brand {
   gap: 0.625rem;
 }
 

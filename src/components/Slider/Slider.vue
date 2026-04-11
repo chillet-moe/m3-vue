@@ -569,6 +569,8 @@ onBeforeUnmount(() => {
   <div
     ref="slider"
     :aria-disabled="disabled"
+    data-scope="slider"
+    data-part="root"
     :class="[
       'm3-slider',
       `m3-slider-${size}`,
@@ -598,8 +600,8 @@ onBeforeUnmount(() => {
       @focus="onValueIndicatorFocus"
       @blur="onValueIndicatorBlur"
     />
-    <div data-track="active" aria-hidden="true" class="m3-slider-track m3-slider-track-active" />
-    <div data-track="inactive" aria-hidden="true" class="m3-slider-track m3-slider-track-inactive" />
+    <div data-track="active" aria-hidden="true" class="m3-slider-track m3-slider-track-active" data-scope="slider" data-part="track-active" />
+    <div data-track="inactive" aria-hidden="true" class="m3-slider-track m3-slider-track-inactive" data-scope="slider" data-part="track-inactive" />
     <template v-if="stopIndicatorsFiltered && stopIndicatorsFiltered.length > 0">
       <div aria-hidden="true" class="m3-slider-stop-indicator-container m3-slider-stop-indicator-active-container">
         <div
@@ -649,9 +651,9 @@ onBeforeUnmount(() => {
       ]"
     />
 
-    <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" class="m3-slider-handle" />
-    <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" class="m3-slider-value-indicator">
-      <span class="m3-slider-value-indicator-text">
+    <div ref="handle" data-value-indicator-anchor="true" aria-hidden="true" class="m3-slider-handle" data-scope="slider" data-part="handle" />
+    <div v-if="valueIndicator" ref="valueIndicator" data-value-indicator="true" class="m3-slider-value-indicator" data-scope="slider" data-part="value-indicator">
+      <span class="m3-slider-value-indicator-text" data-scope="slider" data-part="value-indicator-text">
         {{ valueText }}
       </span>
     </div>

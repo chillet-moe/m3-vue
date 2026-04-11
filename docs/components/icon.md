@@ -27,6 +27,8 @@ The icon component renders Material Symbols names directly, making it easy to re
   </div>
 </DemoContainer>
 
+<AnatomyTable scope="icon" />
+
 <ApiTable component="Icon" v-model="props" />
 
 ## Examples

@@ -232,6 +232,8 @@ defineSlots<{
   <component
     :is="tag"
     :class="['state-layer', 'm3-chip']"
+    data-scope="chip"
+    data-part="root"
     :data-variant="variant"
     :data-selected="isSelected ? 'true' : 'false'"
     :data-elevated="elevated ? 'true' : 'false'"
@@ -250,6 +252,8 @@ defineSlots<{
     <input
       v-if="selectable"
       :class="'m3-chip-input'"
+      data-scope="chip"
+      data-part="input"
       :type="inputType"
       :name="inputName"
       :value="inputValue"
@@ -259,16 +263,16 @@ defineSlots<{
       @change="handleChange"
     />
 
-    <span v-if="showAvatar" :class="'m3-chip-avatar'" aria-hidden="true">
-      <img :src="avatarSrc" :class="'m3-chip-avatar-image'" alt="" />
+    <span v-if="showAvatar" :class="'m3-chip-avatar'" data-scope="chip" data-part="avatar" aria-hidden="true">
+      <img :src="avatarSrc" :class="'m3-chip-avatar-image'" data-scope="chip" data-part="avatar-image" alt="" />
     </span>
-    <span v-if="resolvedLeadingIcon" :class="'m3-chip-leading'" aria-hidden="true">
-      <Icon :name="resolvedLeadingIcon" :class="'m3-chip-icon'" />
+    <span v-if="resolvedLeadingIcon" :class="'m3-chip-leading'" data-scope="chip" data-part="leading" aria-hidden="true">
+      <Icon :name="resolvedLeadingIcon" :class="'m3-chip-icon'" data-scope="chip" data-part="icon" />
     </span>
-    <span :class="'m3-chip-content'">
-      <span :class="'m3-chip-label'"><slot /></span>
-      <span v-if="hasTrailing && trailingIcon" :class="'m3-chip-trailing'" aria-hidden="true">
-        <Icon :name="trailingIcon" :class="'m3-chip-icon'" />
+    <span :class="'m3-chip-content'" data-scope="chip" data-part="content">
+      <span :class="'m3-chip-label'" data-scope="chip" data-part="label"><slot /></span>
+      <span v-if="hasTrailing && trailingIcon" :class="'m3-chip-trailing'" data-scope="chip" data-part="trailing" aria-hidden="true">
+        <Icon :name="trailingIcon" :class="'m3-chip-icon'" data-scope="chip" data-part="icon" />
       </span>
     </span>
   </component>

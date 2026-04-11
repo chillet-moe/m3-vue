@@ -40,6 +40,8 @@ Chip groups coordinate single or multiple chip selection while keeping the chips
   </ChipGroup>
 </DemoContainer>
 
+<AnatomyTable scope="chip-group" />
+
 <ApiTable component="ChipGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
 
 ## Examples

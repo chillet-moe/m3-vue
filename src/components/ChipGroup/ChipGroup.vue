@@ -21,6 +21,8 @@ defineSlots<{
   <SelectionGroup
     v-model="modelValue"
     :class="'m3-chip-group'"
+    data-scope="chip-group"
+    data-part="root"
     :disabled="props.disabled"
     :selection-mode="props.selectionMode"
     :name="props.name"

@@ -72,3 +72,7 @@ Menu supports dropdown, context, submenu, and object-driven item rendering while
 ### MenuLabel
 
 <ApiTable component="MenuLabel" />
+
+<AnatomyTable scope="menu" />
+
+<AnatomyTable scope="menu-item" />

@@ -29,6 +29,8 @@ Tooltip exposes the shared tooltip surface for plain and rich treatments, with c
   <Tooltip v-bind="props">{{ content }}</Tooltip>
 </DemoContainer>
 
+<AnatomyTable scope="tooltip" />
+
 <ApiTable component="Tooltip" v-model="props" />
 
 ### Default

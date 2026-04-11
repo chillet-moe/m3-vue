@@ -33,6 +33,8 @@ Switches communicate an immediate on or off state and support optional checked a
   </div>
 </DemoContainer>
 
+<AnatomyTable scope="switch" />
+
 <ApiTable component="Switch" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
 ## Examples

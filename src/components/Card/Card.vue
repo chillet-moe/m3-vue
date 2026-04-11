@@ -26,12 +26,14 @@ const slots = defineSlots<{
 </script>
 
 <template>
-  <div v-if="!clickable" :class="['m3-card']" :data-color="color">
+  <div v-if="!clickable" :class="['m3-card']" data-scope="card" data-part="root" :data-color="color">
     <slot />
   </div>
   <button
     v-else
     :class="['m3-card', 'state-layer']"
+    data-scope="card"
+    data-part="root"
     :data-color="color"
     :data-pressed="pressed"
     @pointerdown="onPointerDown"

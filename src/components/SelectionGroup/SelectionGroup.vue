@@ -56,7 +56,7 @@ provide(selectionGroupContextKey, {
 </script>
 
 <template>
-  <fieldset :aria-label="ariaLabel">
+  <fieldset :aria-label="ariaLabel" data-scope="selection-group" data-part="root">
     <slot />
   </fieldset>
 </template>

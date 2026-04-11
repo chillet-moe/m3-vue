@@ -39,6 +39,8 @@ Select provides an anchored menu for choosing one or many options, with optional
   </div>
 </DemoContainer>
 
+<AnatomyTable scope="select" />
+
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
 ## Examples

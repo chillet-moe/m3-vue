@@ -151,6 +151,8 @@ defineExpose({
   <div
     ref="rootRef"
     :class="'m3-text-field'"
+    data-scope="text-field"
+    data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
@@ -158,14 +160,14 @@ defineExpose({
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
   >
-    <div ref="containerRef" :class="'m3-text-field-container'">
-      <label v-if="props.label" :class="'m3-text-field-label'" :for="inputId">{{ props.label }}</label>
+    <div ref="containerRef" :class="'m3-text-field-container'" data-scope="text-field" data-part="container">
+      <label v-if="props.label" :class="'m3-text-field-label'" data-scope="text-field" data-part="label" :for="inputId">{{ props.label }}</label>
 
-      <span :class="'m3-text-field-content'">
-        <span v-if="slots.leading" :class="'m3-text-field-leading-slot'">
+      <span :class="'m3-text-field-content'" data-scope="text-field" data-part="content">
+        <span v-if="slots.leading" :class="'m3-text-field-leading-slot'" data-scope="text-field" data-part="leading">
           <slot name="leading" />
         </span>
-        <span v-if="slots.prefix" :class="'m3-text-field-prefix-slot'">
+        <span v-if="slots.prefix" :class="'m3-text-field-prefix-slot'" data-scope="text-field" data-part="prefix">
           <slot name="prefix" />
         </span>
 
@@ -175,6 +177,8 @@ defineExpose({
           ref="controlRef"
           v-model="modelValue"
           :class="['m3-text-field-input', 'm3-text-field-textarea']"
+          data-scope="text-field"
+          data-part="input"
           :name="props.name"
           :rows="props.rows"
           :placeholder="props.placeholder"
@@ -196,6 +200,8 @@ defineExpose({
           ref="controlRef"
           v-model="modelValue"
           :class="'m3-text-field-input'"
+          data-scope="text-field"
+          data-part="input"
           :name="props.name"
           :placeholder="props.placeholder"
           :disabled="props.disabled"
@@ -211,22 +217,22 @@ defineExpose({
           @keydown="handleKeydown"
         />
 
-        <span v-if="slots.suffix" :class="'m3-text-field-suffix-slot'">
+        <span v-if="slots.suffix" :class="'m3-text-field-suffix-slot'" data-scope="text-field" data-part="suffix">
           <slot name="suffix" />
         </span>
-        <span v-if="slots.trailing" :class="'m3-text-field-trailing-slot'">
+        <span v-if="slots.trailing" :class="'m3-text-field-trailing-slot'" data-scope="text-field" data-part="trailing">
           <slot name="trailing" />
         </span>
       </span>
 
-      <fieldset :class="'m3-text-field-outline'" aria-hidden="true">
+      <fieldset :class="'m3-text-field-outline'" data-scope="text-field" data-part="outline" aria-hidden="true">
         <legend v-if="props.label">
           <span>{{ props.label }}</span>
         </legend>
       </fieldset>
     </div>
 
-    <div v-if="supportingMessage" :id="supportingId" :class="'m3-text-field-supporting'" aria-live="polite">
+    <div v-if="supportingMessage" :id="supportingId" :class="'m3-text-field-supporting'" data-scope="text-field" data-part="supporting" aria-live="polite">
       {{ supportingMessage }}
     </div>
   </div>

@@ -36,10 +36,12 @@ defineSlots<{
 </script>
 
 <template>
-  <label :class="'m3-switch'" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
+  <label :class="'m3-switch'" data-scope="switch" data-part="root" :aria-disabled="disabled ? 'true' : 'false'" data-state-layer-hover-target>
     <input
       v-model="checked"
       :class="'m3-switch-input'"
+      data-scope="switch"
+      data-part="input"
       type="checkbox"
       :disabled="disabled"
       :name="name"
@@ -47,10 +49,10 @@ defineSlots<{
       :aria-label="ariaLabel"
     />
 
-    <span :class="'m3-switch-control'" :data-with-icon="uncheckedIcon ? 'true' : 'false'" aria-hidden="true">
-      <span :class="'m3-switch-track'" />
-      <span :class="'m3-switch-handle'">
-        <span v-if="withIcon" :class="'m3-switch-icon'">{{ checked ? checkedIcon : uncheckedIcon }}</span>
+    <span :class="'m3-switch-control'" data-scope="switch" data-part="control" :data-with-icon="uncheckedIcon ? 'true' : 'false'" aria-hidden="true">
+      <span :class="'m3-switch-track'" data-scope="switch" data-part="track" />
+      <span :class="'m3-switch-handle'" data-scope="switch" data-part="handle">
+        <span v-if="withIcon" :class="'m3-switch-icon'" data-scope="switch" data-part="icon">{{ checked ? checkedIcon : uncheckedIcon }}</span>
         <span
           class="state-layer"
           data-state-layer-hover-from="target"
@@ -59,7 +61,7 @@ defineSlots<{
       </span>
     </span>
 
-    <span v-if="$slots.default" :class="'m3-switch-label'"><slot /></span>
+    <span v-if="$slots.default" :class="'m3-switch-label'" data-scope="switch" data-part="label"><slot /></span>
   </label>
 </template>
 

@@ -29,6 +29,8 @@ Checkboxes let people confirm independent selections while preserving clear unch
   </div>
 </DemoContainer>
 
+<AnatomyTable scope="checkbox" />
+
 <ApiTable component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
 ## Examples

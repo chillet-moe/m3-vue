@@ -12,6 +12,7 @@ import '../../../src/styles/theme.css';
 import ApiTable from '../components/ApiTable.vue';
 import Controls from '../components/Controls.vue';
 import DemoContainer from '../components/DemoContainer.vue';
+import AnatomyTable from '../components/AnatomyTable.vue';
 
 export default {
   extends: DefaultTheme,
@@ -21,5 +22,6 @@ export default {
     app.component('ApiTable', ApiTable);
     app.component('Controls', Controls);
     app.component('DemoContainer', DemoContainer);
+    app.component('AnatomyTable', AnatomyTable);
   },
 } satisfies Theme;

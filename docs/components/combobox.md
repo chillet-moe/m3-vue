@@ -36,6 +36,10 @@ Combobox combines free-form text entry with option picking, making it useful for
 
 <ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />
 
+::: info
+Combobox 是 Select 的封装，共享 `select` scope。详见 [Select Anatomy](./select)。
+:::
+
 ## Examples
 
 ### Default

@@ -434,6 +434,8 @@ defineExpose({
     role="menu"
     aria-orientation="vertical"
     class="m3-menu m3-dropdown"
+    data-scope="menu"
+    data-part="root"
     :data-color="color"
     :data-menu-id="menuId"
     @toggle="onMenuToggle"
@@ -441,7 +443,7 @@ defineExpose({
     @click="onMenuClick"
     @focusin="onMenuFocusIn"
   >
-    <div class="m3-menu-surface">
+    <div class="m3-menu-surface" data-scope="menu" data-part="surface">
       <MenuContentRenderer v-if="items?.length" :items="items" />
       <slot />
     </div>

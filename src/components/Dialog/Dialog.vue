@@ -126,6 +126,8 @@ defineExpose({
   <dialog
     ref="dialog"
     :class="'m3-dialog'"
+    data-scope="dialog"
+    data-part="root"
     :data-has-icon="hasIcon ? 'true' : 'false'"
     :data-has-headline="hasHeadline ? 'true' : 'false'"
     :data-has-actions="hasActions ? 'true' : 'false'"
@@ -135,20 +137,20 @@ defineExpose({
     @close="onClose"
     @click="onClick"
   >
-    <div class="m3-dialog-surface">
-      <div v-if="hasIcon" :class="'m3-dialog-icon'">
+    <div class="m3-dialog-surface" data-scope="dialog" data-part="surface">
+      <div v-if="hasIcon" :class="'m3-dialog-icon'" data-scope="dialog" data-part="icon">
         <slot name="icon" />
       </div>
 
-      <h2 v-if="hasHeadline" :id="headlineId" :class="'m3-dialog-headline'">
+      <h2 v-if="hasHeadline" :id="headlineId" :class="'m3-dialog-headline'" data-scope="dialog" data-part="headline">
         <slot name="headline" />
       </h2>
 
-      <div v-if="hasContent" :id="contentId" :class="'m3-dialog-content'">
+      <div v-if="hasContent" :id="contentId" :class="'m3-dialog-content'" data-scope="dialog" data-part="content">
         <slot />
       </div>
 
-      <div v-if="hasActions" :class="'m3-dialog-actions'">
+      <div v-if="hasActions" :class="'m3-dialog-actions'" data-scope="dialog" data-part="actions">
         <slot name="actions" />
       </div>
     </div>

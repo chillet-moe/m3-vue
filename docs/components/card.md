@@ -32,6 +32,8 @@ Cards provide a flexible surface for grouped content, with elevated, filled, out
   </Card>
 </DemoContainer>
 
+<AnatomyTable scope="card" />
+
 <ApiTable component="Card" v-model="props" />
 
 ## Examples

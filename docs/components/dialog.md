@@ -36,6 +36,8 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
   </Dialog>
 </DemoContainer>
 
+<AnatomyTable scope="dialog" />
+
 <ApiTable component="Dialog" v-model="props" />
 
 ## Examples

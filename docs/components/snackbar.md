@@ -38,6 +38,8 @@ Snackbar presents transient status updates with optional action and dismiss affo
   </div>
 </DemoContainer>
 
+<AnatomyTable scope="snackbar" />
+
 <ApiTable component="Snackbar" v-model="props" />
 
 ## Examples
