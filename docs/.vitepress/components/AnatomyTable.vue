@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, useId, watch } from 'vue';
 import allAnatomy from 'virtual:component-anatomy';
+import { CheckBox } from '@/components/CheckBox';
+import { Tooltip } from '@/components/Tooltip';
+import { Icon } from '@/components/Icon';
+import { useLocalStorage } from '@vueuse/core';
+import { showSnackbar } from '@/components/Snackbar';
+import type { AnatomyPart } from '../plugins/component-anatomy.ts';
 
 const props = defineProps<{
   scope: string;
@@ -10,23 +16,19 @@ const anatomy = computed(() => {
   return allAnatomy[props.scope] ?? null;
 });
 
-const highlightEnabled = ref(false);
+const highlightEnabled = useLocalStorage('anatomy-highlight-enabled', false);
 const highlightedPart = ref<string | null>(null);
 
 function highlightElements(part: string) {
   if (!highlightEnabled.value) return;
-  const elements = document.querySelectorAll<HTMLElement>(
-    `[data-scope="${props.scope}"][data-part="${part}"]`,
-  );
+  const elements = document.querySelectorAll<HTMLElement>(`[data-scope="${props.scope}"][data-part="${part}"]`);
   for (const el of elements) {
     el.dataset.anatomyHighlight = 'true';
   }
 }
 
 function clearHighlights() {
-  const highlighted = document.querySelectorAll<HTMLElement>(
-    `[data-scope="${props.scope}"][data-anatomy-highlight]`,
-  );
+  const highlighted = document.querySelectorAll<HTMLElement>(`[data-scope="${props.scope}"][data-anatomy-highlight]`);
   for (const el of highlighted) {
     delete el.dataset.anatomyHighlight;
   }
@@ -48,21 +50,42 @@ watch(highlightEnabled, (enabled) => {
     highlightedPart.value = null;
   }
 });
+
+const partSelectorId = useId();
+
+async function onCopyPartSelector(text: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+    void showSnackbar({
+      message: `${text} copied to clipboard`,
+    });
+  } catch (err) {
+    void showSnackbar({
+      message: `Failed to copy ${text} to clipboard`,
+    })
+  }
+}
+
+const anatomyData = computed(() => {
+  return anatomy.value?.parts.map((part: AnatomyPart) => ({
+    ...part,
+    selector: `[data-scope="${props.scope}"][data-part="${part.part}"]`,
+  })) ?? [];
+});
 </script>
 
 <template>
   <div v-if="anatomy" class="vp-raw anatomy-panel">
     <div class="anatomy-header">
       <span class="anatomy-header-title">Anatomy</span>
-      <label class="anatomy-highlight-toggle">
-        <input v-model="highlightEnabled" type="checkbox" class="anatomy-highlight-checkbox" />
+      <CheckBox v-model:checked="highlightEnabled" :label="'Highlight'" class="anatomy-highlight-checkbox">
         <span class="anatomy-highlight-label">Highlight</span>
-      </label>
+      </CheckBox>
     </div>
 
     <div class="anatomy-parts-list">
       <div
-        v-for="part in anatomy.parts"
+        v-for="part in anatomyData"
         :key="part.part"
         class="anatomy-part-row"
         :data-active="highlightedPart === part.part ? 'true' : 'false'"
@@ -72,7 +95,8 @@ watch(highlightEnabled, (enabled) => {
         <code class="anatomy-part-element">&lt;{{ part.element }}&gt;</code>
         <span class="anatomy-part-name">{{ part.part }}</span>
         <span v-if="part.conditional" class="anatomy-part-conditional">conditional</span>
-        <code class="anatomy-part-selector">[data-scope="{{ scope }}"][data-part="{{ part.part }}"]</code>
+        <code class="anatomy-part-selector" v-tooltip="`#${part.part}-${partSelectorId}`" @click.prevent="onCopyPartSelector(part.selector)">{{ part.selector }}</code>
+        <Tooltip :id="`${part.part}-${partSelectorId}`"><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip>
       </div>
     </div>
   </div>
@@ -113,12 +137,7 @@ watch(highlightEnabled, (enabled) => {
 
 .anatomy-highlight-checkbox {
   margin: 0;
-  cursor: pointer;
-}
-
-.anatomy-highlight-label {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-2);
+  height: 0;
 }
 
 .anatomy-parts-list {
@@ -138,7 +157,7 @@ watch(highlightEnabled, (enabled) => {
 }
 
 .anatomy-part-row:hover,
-.anatomy-part-row[data-active="true"] {
+.anatomy-part-row[data-active='true'] {
   background: var(--vp-c-bg-alt);
 }
 
@@ -168,6 +187,7 @@ watch(highlightEnabled, (enabled) => {
   color: var(--vp-c-text-3);
   opacity: 0;
   transition: opacity 0.15s;
+  cursor: pointer;
 }
 
 .anatomy-part-row:hover .anatomy-part-selector {
@@ -176,9 +196,10 @@ watch(highlightEnabled, (enabled) => {
 </style>
 
 <style>
-[data-anatomy-highlight="true"] {
-  outline: 2px dashed var(--md-sys-color-primary, #6750a4) !important;
+[data-anatomy-highlight='true'] {
+  outline: 2px dashed var(--md-sys-color-tertiary, #6750a4) !important;
   outline-offset: 2px;
   border-radius: 4px;
+  filter: brightness(2) !important;
 }
 </style>
