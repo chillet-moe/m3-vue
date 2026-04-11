@@ -41,6 +41,8 @@ Select provides an anchored menu for choosing one or many options, with optional
 
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="SelectDefaultSrc">

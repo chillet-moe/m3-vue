@@ -48,6 +48,8 @@ Buttons let people trigger primary, secondary, or low-emphasis actions with Mate
 
 <ApiTable component="Button" v-model="props" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="ButtonDefaultSrc">

@@ -45,6 +45,8 @@ Icon buttons expose compact, icon-first actions with the same Material 3 shape, 
 
 <ApiTable component="IconButton" v-model="props" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="IconButtonDefaultSrc" :viewport="false">

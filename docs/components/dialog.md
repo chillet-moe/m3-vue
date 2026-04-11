@@ -38,6 +38,8 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
 
 <ApiTable component="Dialog" v-model="props" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="DialogDefaultSrc" :viewport="false">

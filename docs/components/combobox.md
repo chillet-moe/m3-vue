@@ -36,6 +36,8 @@ Combobox combines free-form text entry with option picking, making it useful for
 
 <ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="ComboboxDefaultSrc">

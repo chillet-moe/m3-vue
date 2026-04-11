@@ -40,6 +40,8 @@ Snackbar presents transient status updates with optional action and dismiss affo
 
 <ApiTable component="Snackbar" v-model="props" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="SnackbarDefaultSrc" :viewport="false">

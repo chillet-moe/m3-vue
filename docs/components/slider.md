@@ -68,6 +68,8 @@ Slider handles horizontal and vertical range input, inset icons, value indicator
 
 <ApiTable component="Slider" v-model="props" :exclude="['formatter', 'stopIndicators', 'lowerLimit', 'upperLimit', 'wheelStep']" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="SliderDefaultSrc" :viewport="false">

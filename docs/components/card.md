@@ -34,6 +34,8 @@ Cards provide a flexible surface for grouped content, with elevated, filled, out
 
 <ApiTable component="Card" v-model="props" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="CardDefaultSrc" :viewport="false">

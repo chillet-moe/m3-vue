@@ -124,7 +124,7 @@ function isActiveLink(path?: string) {
 }
 
 .docs-sidebar-group + .docs-sidebar-group {
-  margin-block-start: 1.125rem;
+  margin-block-start: 1.5rem;
 }
 
 .docs-sidebar-title {
@@ -135,6 +135,8 @@ function isActiveLink(path?: string) {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   line-height: 1.25;
+  margin-inline-start: 0.5rem;
+  margin-block-end: 0.25rem;
 }
 
 .docs-sidebar-links {

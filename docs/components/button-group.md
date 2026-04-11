@@ -52,6 +52,8 @@ Button groups keep a related set of options visually connected while preserving 
 
 <ApiTable component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="ButtonGroupDefaultSrc" :viewport="false">

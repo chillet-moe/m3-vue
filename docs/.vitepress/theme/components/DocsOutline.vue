@@ -38,6 +38,7 @@ function isActiveOutlineLink(link: string) {
   inset-block-start: calc(0.25rem + 4.5rem);
   align-self: start;
   max-block-size: calc(100vh - 6rem);
+  margin-inline-start: 1rem;
   margin-inline-end: 2rem;
 }
 
@@ -49,7 +50,7 @@ function isActiveOutlineLink(link: string) {
 }
 
 .docs-outline-title {
-  margin-inline-start: 1.5rem;
+  margin-inline-start: 0.75rem;
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
   font-weight: 700;

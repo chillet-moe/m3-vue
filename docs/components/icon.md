@@ -29,6 +29,8 @@ The icon component renders Material Symbols names directly, making it easy to re
 
 <ApiTable component="Icon" v-model="props" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="IconDefaultSrc" :viewport="false">

@@ -35,6 +35,8 @@ Switches communicate an immediate on or off state and support optional checked a
 
 <ApiTable component="Switch" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
+## Examples
+
 ### Default
 
 <DemoContainer :src="SwitchDefaultSrc" :viewport="false">
