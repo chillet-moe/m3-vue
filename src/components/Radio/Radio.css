@@ -33,6 +33,10 @@
   user-select: none;
 }
 
+.m3-radio:has(.m3-radio-input:checked) {
+  --md-state-layer-color: var(--md-sys-color-primary);
+}
+
 .m3-radio[aria-disabled='true'] {
   cursor: default;
 }

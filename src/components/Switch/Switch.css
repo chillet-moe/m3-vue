@@ -60,6 +60,10 @@
   user-select: none;
 }
 
+.m3-switch:has(.m3-switch-input:checked) {
+  --md-state-layer-color: var(--md-sys-color-primary);
+}
+
 .m3-switch[aria-disabled='true'] {
   cursor: default;
 }

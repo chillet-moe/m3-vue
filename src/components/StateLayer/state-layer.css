@@ -2,8 +2,6 @@
   position: relative;
   -webkit-tap-highlight-color: transparent;
 
-  --md-state-layer-color: currentColor;
-
   &::before {
     content: '';
     position: absolute;
@@ -16,7 +14,7 @@
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    background-color: var(--md-state-layer-color);
+    background-color: var(--md-state-layer-color, currentColor);
     opacity: 0;
     transition: opacity var(--md-easing-fast);
   }
@@ -70,7 +68,7 @@ html:not(.js) :active.state-layer::after {
   height: 100%;
   pointer-events: none;
   border-radius: inherit;
-  background-color: var(--md-state-layer-color);
+  background-color: var(--md-state-layer-color, currentColor);
   overflow: hidden;
   background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="2.5" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.8"/%3E%3C/svg%3E');
   background-size: 100px 100px;
@@ -78,8 +76,8 @@ html:not(.js) :active.state-layer::after {
   mask-image: radial-gradient(
     circle at var(--x) var(--y),
     transparent calc(var(--r) - 95%),
-    var(--md-state-layer-color) calc(var(--r) - 20%),
-    var(--md-state-layer-color) var(--r),
+    var(--md-state-layer-color, currentColor) calc(var(--r) - 20%),
+    var(--md-state-layer-color, currentColor) var(--r),
     transparent calc(var(--r) + 10%)
   );
   opacity: var(--md-sys-state-hover-state-layer-opacity);

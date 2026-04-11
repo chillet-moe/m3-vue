@@ -34,6 +34,10 @@
   user-select: none;
 }
 
+.m3-checkbox:has(.m3-checkbox-input:checked) {
+  --md-state-layer-color: var(--md-sys-color-primary);
+}
+
 .m3-checkbox[aria-disabled='true'] {
   cursor: default;
 }
@@ -103,10 +107,6 @@
   border-color: var(--md-comp-checkbox-selected-icon-color);
   opacity: 1;
   transform: translate(-50%, calc(-50% - --dp(1))) rotate(-45deg) scale(1);
-}
-
-.m3-checkbox:has(.m3-checkbox-input:not(:disabled):hover) .m3-checkbox-box {
-  box-shadow: inset 0 0 0 var(--md-comp-checkbox-outline-width) var(--md-sys-color-on-surface);
 }
 
 .m3-checkbox:has(.m3-checkbox-input:not(:disabled):active) .m3-checkbox-box,
