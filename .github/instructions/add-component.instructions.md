@@ -129,8 +129,8 @@ defineSlots<{
 CSS 注意事项：
 
 - 颜色透明度使用 `--translucent()` 函数：`color: --translucent(var(--md-sys-color-primary), 0.5);`
-- Android dp 单位转换使用 `--dp()` 函数：`width: --dp(16);`（= 1rem）。仅在新组件中使用，已有代码直接用 rem。
-- 优先使用 CSS 逻辑属性（`margin-inline-start` 而非 `margin-left`）
+- Android dp 单位转换使用 `--dp()` 函数：`width: --dp(16);`（= 1rem）。仅在组件代码中使用。
+- 优先使用 CSS 逻辑属性（例如 `margin-inline-start` 而非 `margin-left`）
 - 尽量用 CSS 实现效果，避免 JS
 - 可以使用 Baseline 2025 的平台特性
 - 参考 `reference-tokens/components/` 中对应的 token CSS 文件
