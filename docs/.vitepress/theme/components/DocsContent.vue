@@ -51,7 +51,13 @@ import DocsPager from './DocsPager.vue';
 
 @media (max-width: 64rem) {
   .docs-main {
-    padding-inline: 1rem;
+    padding-inline: 0.5rem;
+  }
+
+  .docs-page-card {
+    padding: 1rem 0.75rem;
+    border-radius: 1rem;
+    overflow-x: auto;
   }
 }
 </style>

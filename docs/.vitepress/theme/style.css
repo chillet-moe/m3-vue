@@ -49,7 +49,7 @@ body {
 }
 
 .vp-doc h1 {
-  margin-block: 0 1.75rem;
+  margin-block: 0.5rem 1.75rem;
   font-size: clamp(2.5rem, 5vw, 3.75rem);
   font-weight: 550;
   line-height: 1;
@@ -133,7 +133,7 @@ body {
 }
 
 .vp-doc div[class*='language-'] {
-  margin-block: 1.25rem;
+  margin: 1.25rem 0;
   border-radius: 1.25rem;
 }
 

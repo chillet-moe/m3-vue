@@ -168,5 +168,9 @@ function isActiveLink(path?: string) {
   .docs-sidebar[data-open='true'] {
     transform: translateX(0);
   }
+
+  .docs-sidebar-surface {
+    background: var(--vp-c-bg);
+  }
 }
 </style>
