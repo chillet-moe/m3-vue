@@ -3,13 +3,10 @@ import vue from '@vitejs/plugin-vue';
 import { fileURLToPath } from 'url';
 import pkg from './package.json';
 import { webTypesFromVueComponentMeta } from './scripts/web-types-gen';
-import path from 'node:path';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import copyFiles from './scripts/copy-files';
 import { browserslistToTargets, Features } from 'lightningcss';
 import browserslist from 'browserslist';
 
-const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 const externalPackages = [...new Set([...Object.keys(pkg.peerDependencies), '@nuxt/kit'])];
 
 export default defineConfig({
@@ -91,25 +88,5 @@ export default defineConfig({
       // https://github.com/porsche-design-system/porsche-design-system/issues/4257
       exclude: Features.LightDark,
     },
-  },
-  test: {
-    projects: [
-      {
-        extends: true,
-        test: {
-          name: 'unit',
-          include: ['src/**/*.test.ts'],
-          exclude: ['src/**/*.stories.@(js|jsx|mjs|ts|tsx)', 'src/**/*.mdx'],
-        },
-      },
-      {
-        extends: true,
-        plugins: [
-          storybookTest({
-            configDir: path.join(dirname, '.storybook'),
-          }),
-        ],
-      },
-    ],
-  },
+  }
 });

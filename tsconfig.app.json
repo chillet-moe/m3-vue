@@ -23,8 +23,6 @@
     "env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.vue",
-    ".storybook/decorator.ts",
-    ".storybook/preview.ts"
+    "src/**/*.vue"
   ]
 }
