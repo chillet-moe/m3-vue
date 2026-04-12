@@ -1,0 +1,83 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .m3-pagination {
+    --md-comp-pagination-item-space: --dp(4);
+    --md-comp-pagination-link-min-width: --dp(40);
+    --md-comp-pagination-link-padding-inline: --dp(12);
+    --md-comp-pagination-nav-inline-space: --dp(4);
+    --md-comp-pagination-nav-icon-size: --dp(20);
+    --md-comp-pagination-ellipsis-size: --dp(40);
+    --md-comp-pagination-ellipsis-color: var(--md-sys-color-on-surface-variant);
+  }
+}
+
+.m3-pagination {
+  inline-size: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m3-pagination-content {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--md-comp-pagination-item-space);
+}
+
+.m3-pagination-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.m3-pagination-link.m3-button {
+  min-inline-size: var(--md-comp-pagination-link-min-width);
+  padding-inline: var(--md-comp-pagination-link-padding-inline);
+}
+
+.m3-pagination-previous.m3-pagination-link.m3-button,
+.m3-pagination-next.m3-pagination-link.m3-button {
+  gap: var(--md-comp-pagination-nav-inline-space);
+}
+
+.m3-pagination-nav-icon,
+.m3-pagination-ellipsis-icon {
+  inline-size: var(--md-comp-pagination-nav-icon-size);
+  block-size: var(--md-comp-pagination-nav-icon-size);
+  font-size: var(--md-comp-pagination-nav-icon-size);
+}
+
+.m3-pagination-nav-text {
+  @apply label-large;
+  display: none;
+}
+
+.m3-pagination-ellipsis {
+  inline-size: var(--md-comp-pagination-ellipsis-size);
+  block-size: var(--md-comp-pagination-ellipsis-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--md-comp-pagination-ellipsis-color);
+}
+
+.m3-pagination-visually-hidden {
+  position: absolute;
+  inline-size: 0.0625rem;
+  block-size: 0.0625rem;
+  padding: 0;
+  margin: -0.0625rem;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
+@media (width >= 40rem) {
+  .m3-pagination-nav-text {
+    display: inline;
+  }
+}

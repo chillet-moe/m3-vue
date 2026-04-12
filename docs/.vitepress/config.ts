@@ -63,6 +63,7 @@ export default defineConfig({
             { text: 'Icon', link: '/components/icon' },
             { text: 'Item', link: '/components/item' },
             { text: 'Menu', link: '/components/menu' },
+            { text: 'Pagination', link: '/components/pagination' },
             { text: 'Radio', link: '/components/radio' },
             { text: 'Select', link: '/components/select' },
             { text: 'Slider', link: '/components/slider' },
