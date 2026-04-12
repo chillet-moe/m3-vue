@@ -1,1 +1,0 @@
-- 添加新组件时参照 .github/instructions/add-component.instructions.md 中的步骤进行
