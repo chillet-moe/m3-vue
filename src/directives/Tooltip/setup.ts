@@ -375,8 +375,6 @@ export function setupTooltip(
     }
 
     const targetChanged = opts.target !== nextOpts.target;
-    const contentChanged = opts.content !== nextOpts.content;
-
     opts = nextOpts;
     invalidateFallbackPlacements();
 

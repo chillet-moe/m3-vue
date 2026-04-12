@@ -6,6 +6,12 @@ import './styles/theme.css';
 
 // Composables
 export { usePressedState } from './composables/pressedState.ts';
+export { useTabs } from './composables/useTabs';
+export type { UseTabsOptions, UseTabsReturn } from './composables/useTabs';
+export { useMenu } from './composables/useMenu';
+export type { UseMenuOptions, UseMenuReturn } from './composables/useMenu';
+export { useSelect } from './composables/useSelect';
+export type { UseSelectOptions, UseSelectReturn } from './composables/useSelect';
 
 // Directives
 export * from './directives';
@@ -35,6 +41,7 @@ export * from './components/FormField';
 export * from './components/TextField';
 export * from './components/Select';
 export * from './components/Combobox';
+export * from './components/Tabs';
 
 // Resolver
 export { M3VueResolver } from './resolver';

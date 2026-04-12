@@ -46,7 +46,10 @@ export default defineConfig({
         },
         {
           text: 'Guides',
-          items: [{ text: 'Styling', link: '/guides/styling' }],
+          items: [
+            { text: 'Styling', link: '/guides/styling' },
+            { text: 'Composables', link: '/guides/composables' },
+          ],
         },
         {
           text: 'Components',
@@ -69,6 +72,7 @@ export default defineConfig({
             { text: 'Slider', link: '/components/slider' },
             { text: 'Snackbar', link: '/components/snackbar' },
             { text: 'Switch', link: '/components/switch' },
+            { text: 'Tabs', link: '/components/tabs' },
             { text: 'TextField', link: '/components/text-field' },
           ],
         },

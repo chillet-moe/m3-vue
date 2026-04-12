@@ -32,9 +32,47 @@ src/components/<Name>/
 ├── <Name>Context.ts    # Context 注入（可选，用于父子组件通信）
 ├── <Name>Types.ts      # 共享类型（可选，多个子组件共享时）
 └── index.ts            # 导出
+
+src/composables/
+└── use<Name>.ts        # Composable（可选，见下方说明）
+└── use<Name>.test.ts   # Composable 测试（可选）
 ```
 
 多部件组件（如 Menu）将所有子组件放在同一目录下。
+
+### Composable 模式（可选）
+
+对于交互逻辑复杂的组件，可以将核心逻辑提取到 `src/composables/use<Name>.ts` 中。这样用户既可以使用开箱即用的 `.vue` 组件，也可以用 composable 搭配自定义模板实现 headless 用法。
+
+已有 composable 的组件：`useTabs`、`useMenu`、`useSelect`。
+
+#### Composable 文件模式
+
+```ts
+// src/composables/use<Name>.ts
+import { type Ref, computed, ref } from 'vue';
+
+export type Use<Name>Options = {
+  /** 选项说明 */
+  value?: MaybeRefOrGetter<string>;
+};
+
+export type Use<Name>Return = {
+  /** 返回值说明 */
+  value: ComputedRef<string>;
+};
+
+export function use<Name>(options: Use<Name>Options = {}): Use<Name>Return {
+  // 逻辑实现...
+}
+```
+
+注意事项：
+
+- Composable 的参数使用 `MaybeRefOrGetter` 以同时支持静态值、ref 和 getter
+- 返回值中的响应式状态使用 `ComputedRef` / `Ref`，方法直接暴露为函数
+- Composable 不依赖 `provide` / `inject`，保持独立可测试
+- 组件内使用 composable 时，**变量名不能与 `ref="..."` 模板引用同名**，否则 Vue 会将模板 ref 绑定到 composable 返回的普通对象上。例如 Menu.vue 中 `ref="menu"` 对应 `useTemplateRef('menu')`，composable 返回值应命名为 `menuActions` 而非 `menu`
 
 ### index.ts 导出模式
 
@@ -151,6 +189,13 @@ CSS 注意事项：
 export * from './components/<Name>';
 ```
 
+如果有对应的 composable，在 `// Composables` 区域添加：
+
+```ts
+export { use<Name> } from './composables/use<Name>';
+export type { Use<Name>Options, Use<Name>Return } from './composables/use<Name>';
+```
+
 ### src/resolver.ts
 
 在 `m3VueComponentNames` 数组中添加组件名（PascalCase）。多部件组件的每个子组件都要添加：
@@ -261,7 +306,8 @@ pnpm docs:build
 
 - [ ] `src/components/<Name>/` — 组件 .vue、.css、index.ts
 - [ ] 模板中所有元素添加了 `data-scope` 和 `data-part`
-- [ ] `src/index.ts` — 添加 export
+- [ ] `src/composables/use<Name>.ts` — Composable（如适用）
+- [ ] `src/index.ts` — 添加 export（组件 + composable）
 - [ ] `src/resolver.ts` — `m3VueComponentNames` 中添加名称
 - [ ] `docs/components/<name>.md` — 文档页（DemoContainer → AnatomyTable → ApiTable → Examples）
 - [ ] `docs/demos/<name>/` — 至少一个 Default demo

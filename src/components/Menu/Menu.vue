@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { inject, nextTick, onUnmounted, provide, useId, useTemplateRef, watch } from 'vue';
+import { inject, provide, useId, useTemplateRef } from 'vue';
+import { useMenu } from '@/composables/useMenu';
 import MenuContentRenderer from './MenuContentRenderer.vue';
 import { menuContextKey, menuSelectionContextKey, menuSubmenuContextKey } from './MenuContext';
 import type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue } from './MenuTypes';
@@ -36,394 +37,50 @@ const menuRef = useTemplateRef<HTMLDivElement>('menu');
 const parentMenu = inject(menuContextKey, null);
 const parentSubmenu = inject(menuSubmenuContextKey, null);
 const menuId = `menu-${useId()}`;
-const submenuClosers = new Set<() => void>();
 
-type ExternalMenuShowDetail = {
-  focus?: 'first' | 'last';
-  source?: HTMLElement;
-};
-
-function registerSubmenu(close: () => void) {
-  submenuClosers.add(close);
-
-  return () => {
-    submenuClosers.delete(close);
-  };
-}
-
-function closeSubmenus(except?: () => void) {
-  for (const close of submenuClosers) {
-    if (close === except) {
-      continue;
+const menuActions = useMenu({
+  menuId,
+  menuRef: menuRef as any,
+  open,
+  modelValue,
+  multiple: () => multiple,
+  onSelect: (event, itemElement) => {
+    if (parentMenu) {
+      parentMenu.notifySelect(event, itemElement);
+      return;
     }
-
-    close();
-  }
-}
-
-function closeMenuChain() {
-  parentSubmenu?.close();
-  parentMenu?.closeAll() ?? hide();
-}
-
-function isValueSelected(value: MenuItemValue) {
-  if (multiple) {
-    return Array.isArray(modelValue.value) ? modelValue.value.includes(value) : false;
-  }
-
-  return modelValue.value === value;
-}
-
-function toggleValue(value: MenuItemValue) {
-  if (multiple) {
-    const currentValues = Array.isArray(modelValue.value) ? [...modelValue.value] : [];
-    const currentIndex = currentValues.findIndex((item) => item === value);
-
-    if (currentIndex >= 0) {
-      currentValues.splice(currentIndex, 1);
-    } else {
-      currentValues.push(value);
-    }
-
-    modelValue.value = currentValues;
-    return;
-  }
-
-  modelValue.value = value;
-}
-
-function isMenuOpen(menu: HTMLElement) {
-  return menu.matches(':popover-open');
-}
+    emit('select', event, itemElement);
+  },
+  parentCloseAll: parentMenu?.closeAll,
+  parentSubmenu,
+});
 
 provide(menuContextKey, {
   id: menuId,
   getColor: () => color,
   notifySelect: (event, itemElement) => {
-    parentMenu?.notifySelect(event, itemElement) ?? emit('select', event, itemElement);
+    if (parentMenu) {
+      parentMenu.notifySelect(event, itemElement);
+      return;
+    }
+    emit('select', event, itemElement);
   },
-  closeAll: closeMenuChain,
-  registerSubmenu,
-  closeSubmenus,
+  closeAll: menuActions.closeMenuChain,
+  registerSubmenu: menuActions.registerSubmenu,
+  closeSubmenus: menuActions.closeSubmenus,
 });
 
 provide(menuSelectionContextKey, {
   multiple: () => multiple,
-  isSelected: isValueSelected,
-  toggle: toggleValue,
-});
-
-function showMenu(source?: HTMLElement) {
-  const menu = menuRef.value;
-
-  if (!menu) {
-    return;
-  }
-
-  if (isMenuOpen(menu)) {
-    return;
-  }
-
-  if (source) {
-    try {
-      menu.showPopover({ source });
-    } catch {
-      menu.showPopover();
-    }
-    return;
-  }
-
-  menu.showPopover();
-}
-
-function hideMenu() {
-  const menu = menuRef.value;
-
-  if (!menu) {
-    return;
-  }
-
-  if (!isMenuOpen(menu)) {
-    return;
-  }
-
-  menu.hidePopover();
-}
-
-function getMenuItemElements() {
-  const menu = menuRef.value;
-
-  if (!menu) {
-    return [] as HTMLElement[];
-  }
-
-  return Array.from(
-    menu.querySelectorAll<HTMLElement>(
-      '[role="menuitem"]:not([disabled]):not([aria-disabled="true"]), [role="menuitemradio"]:not([disabled]):not([aria-disabled="true"]), [role="menuitemcheckbox"]:not([disabled]):not([aria-disabled="true"])',
-    ),
-  ).filter((item) => item.dataset.menuOwner === menuId);
-}
-
-function focusItem(index: number) {
-  const menuItems = getMenuItemElements();
-
-  if (!menuItems.length) {
-    return;
-  }
-
-  const normalized = (index + menuItems.length) % menuItems.length;
-  menuItems[normalized]?.focus();
-}
-
-async function show(focusFirst = false, source?: HTMLElement) {
-  open.value = true;
-  showMenu(source);
-
-  if (focusFirst) {
-    await nextTick();
-    focusItem(0);
-  }
-}
-
-function hide() {
-  closeSubmenus();
-  open.value = false;
-  hideMenu();
-}
-
-function toggle() {
-  if (open.value) {
-    hide();
-    return;
-  }
-
-  void show();
-}
-
-function onMenuKeydown(event: KeyboardEvent) {
-  const menuItems = getMenuItemElements();
-
-  if (!menuItems.length) {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.stopPropagation();
-      hide();
-    }
-    return;
-  }
-
-  const currentIndex = menuItems.findIndex((item) => item === document.activeElement);
-
-  if (event.key === 'ArrowDown') {
-    event.preventDefault();
-    event.stopPropagation();
-    closeSubmenus();
-    focusItem(currentIndex + 1);
-    return;
-  }
-
-  if (event.key === 'ArrowUp') {
-    event.preventDefault();
-    event.stopPropagation();
-    closeSubmenus();
-    focusItem(currentIndex - 1);
-    return;
-  }
-
-  if (event.key === 'Home') {
-    event.preventDefault();
-    event.stopPropagation();
-    closeSubmenus();
-    focusItem(0);
-    return;
-  }
-
-  if (event.key === 'End') {
-    event.preventDefault();
-    event.stopPropagation();
-    closeSubmenus();
-    focusItem(menuItems.length - 1);
-    return;
-  }
-
-  if (event.key === 'ArrowLeft' && parentSubmenu) {
-    event.preventDefault();
-    event.stopPropagation();
-    parentSubmenu.closeAndFocusTrigger();
-    return;
-  }
-
-  if (event.key === 'Escape') {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (parentSubmenu) {
-      parentSubmenu.closeAndFocusTrigger();
-      return;
-    }
-
-    hide();
-  }
-}
-
-function onMenuClick(event: MouseEvent) {
-  const target = event.target as HTMLElement | null;
-
-  if (!target) {
-    return;
-  }
-
-  const item = target.closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]');
-
-  if (!item || item.dataset.menuOwner !== menuId || item.matches('[disabled], [aria-disabled="true"]')) {
-    return;
-  }
-
-  if (item.dataset.submenu === 'true') {
-    return;
-  }
-
-  const shouldCloseOnSelect = item.dataset.closeOnSelect !== 'false';
-
-  closeSubmenus();
-  parentMenu?.notifySelect(event, item) ?? emit('select', event, item);
-
-  if (shouldCloseOnSelect) {
-    closeMenuChain();
-  }
-}
-
-function onMenuFocusIn(event: FocusEvent) {
-  const target = event.target as HTMLElement | null;
-
-  if (!target) {
-    return;
-  }
-
-  const item = target.closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]');
-
-  if (!item || item.dataset.menuOwner !== menuId || item.dataset.submenu === 'true') {
-    return;
-  }
-
-  closeSubmenus();
-}
-
-function onMenuToggle(event: Event) {
-  const menu = event.currentTarget as HTMLElement | null;
-
-  if (!menu) {
-    return;
-  }
-
-  const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
-  let isOpen: boolean;
-
-  if (nextState === 'open') {
-    isOpen = true;
-  } else if (nextState === 'closed') {
-    isOpen = false;
-  } else {
-    isOpen = isMenuOpen(menu);
-  }
-
-  if (isOpen) {
-    if (!open.value) {
-      open.value = true;
-    }
-
-    return;
-  }
-
-  closeSubmenus();
-
-  if (open.value) {
-    open.value = false;
-  }
-}
-
-function onExternalDropdownShowWithFocus(event: Event) {
-  const detail = event instanceof CustomEvent ? (event.detail as ExternalMenuShowDetail | undefined) : undefined;
-  const focusTarget = detail?.focus;
-  const source = detail?.source;
-
-  open.value = true;
-  showMenu(source);
-
-  if (!focusTarget) {
-    return;
-  }
-
-  void nextTick(() => {
-    if (focusTarget === 'last') {
-      const menuItems = getMenuItemElements();
-
-      if (!menuItems.length) {
-        return;
-      }
-
-      focusItem(menuItems.length - 1);
-      return;
-    }
-
-    focusItem(0);
-  });
-}
-
-function onExternalDropdownHide() {
-  hide();
-}
-
-watch(
-  [menuRef, open],
-  ([menu, nextOpen]) => {
-    if (!menu) {
-      return;
-    }
-
-    if (nextOpen) {
-      showMenu();
-      return;
-    }
-
-    hideMenu();
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
-
-watch(
-  menuRef,
-  (menu, previousMenu) => {
-    previousMenu?.removeEventListener('m3-dropdown:show', onExternalDropdownShowWithFocus);
-    previousMenu?.removeEventListener('m3-dropdown:hide', onExternalDropdownHide);
-
-    if (!menu) {
-      return;
-    }
-
-    menu.addEventListener('m3-dropdown:show', onExternalDropdownShowWithFocus);
-    menu.addEventListener('m3-dropdown:hide', onExternalDropdownHide);
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
-
-onUnmounted(() => {
-  closeSubmenus();
-  menuRef.value?.removeEventListener('m3-dropdown:show', onExternalDropdownShowWithFocus);
-  menuRef.value?.removeEventListener('m3-dropdown:hide', onExternalDropdownHide);
+  isSelected: menuActions.isValueSelected,
+  toggle: menuActions.toggleValue,
 });
 
 defineExpose({
   menuRef,
-  show,
-  hide,
-  toggle,
+  show: menuActions.show,
+  hide: menuActions.hide,
+  toggle: menuActions.toggle,
 });
 </script>
 
@@ -438,10 +95,10 @@ defineExpose({
     data-part="root"
     :data-color="color"
     :data-menu-id="menuId"
-    @toggle="onMenuToggle"
-    @keydown="onMenuKeydown"
-    @click="onMenuClick"
-    @focusin="onMenuFocusIn"
+    @toggle="menuActions.onMenuToggle"
+    @keydown="menuActions.onMenuKeydown"
+    @click="menuActions.onMenuClick"
+    @focusin="menuActions.onMenuFocusIn"
   >
     <div class="m3-menu-surface" data-scope="menu" data-part="surface">
       <MenuContentRenderer v-if="items?.length" :items="items" />

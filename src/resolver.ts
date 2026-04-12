@@ -40,6 +40,10 @@ export const m3VueComponentNames = [
   'Select',
   'SelectionGroup',
   'Switch',
+  'Tab',
+  'TabList',
+  'TabPanel',
+  'Tabs',
   'TextField',
   'Tooltip',
 ] as const;

@@ -5,7 +5,7 @@ import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
 import MenuItem from '@/components/Menu/MenuItem.vue';
 import TextField from '@/components/TextField/TextField.vue';
-import { hideDropdownElement, showDropdownElement } from '@/directives/Dropdown/helpers';
+import { useSelect } from '@/composables/useSelect';
 
 export type SelectOptionValue = string | number;
 
@@ -139,7 +139,6 @@ const open = defineModel<boolean>('open', { default: false });
 const triggerRef = ref<HTMLElement>();
 const menuRef = ref<SelectExposed>();
 const textFieldRef = ref<TextFieldExposed>();
-const filterQuery = ref('');
 const anchorName = `--m3-select-anchor-${generatedId}`;
 
 const triggerId = computed(() => {
@@ -158,6 +157,20 @@ const hasLeading = computed(() => {
   return Boolean(slots.leading);
 });
 
+const select = useSelect({
+  options: () => props.options,
+  multiple: () => props.multiple,
+  filterable: () => props.filterable,
+  disabled: () => props.disabled,
+  displaySeparator: () => props.displaySeparator,
+  modelValue,
+  open,
+  onChange: (value) => emit('change', value),
+  menuRef: menuRef as any,
+  triggerRef,
+  textFieldRef: textFieldRef as any,
+});
+
 const textFieldPlaceholder = computed(() => {
   if (props.filterable && open.value) {
     return props.filterPlaceholder;
@@ -169,17 +182,17 @@ const textFieldPlaceholder = computed(() => {
 const textFieldValue = computed({
   get() {
     if (props.filterable && open.value) {
-      return filterQuery.value;
+      return select.filterQuery.value;
     }
 
-    return displayText.value;
+    return select.displayText.value;
   },
   set(nextValue: string) {
     if (!props.filterable) {
       return;
     }
 
-    filterQuery.value = nextValue;
+    select.filterQuery.value = nextValue;
   },
 });
 
@@ -193,130 +206,6 @@ const controlAttrs = computed(() => {
   delete forwarded.style;
   return forwarded;
 });
-
-const selectedOptions = computed(() => {
-  if (props.multiple) {
-    if (!Array.isArray(modelValue.value)) {
-      return [] as SelectOption[];
-    }
-
-    const selectedValues = new Set(modelValue.value);
-    return props.options.filter((option) => selectedValues.has(option.value));
-  }
-
-  return props.options.filter((option) => option.value === modelValue.value);
-});
-
-const hasValue = computed(() => {
-  return selectedOptions.value.length > 0;
-});
-
-const displayText = computed(() => {
-  if (!selectedOptions.value.length) {
-    return '';
-  }
-
-  return selectedOptions.value.map((option) => option.label).join(props.displaySeparator);
-});
-
-const submittedValues = computed(() => {
-  if (props.disabled || !props.name) {
-    return [] as string[];
-  }
-
-  if (props.multiple) {
-    if (!Array.isArray(modelValue.value)) {
-      return [] as string[];
-    }
-
-    return modelValue.value.map((value) => String(value));
-  }
-
-  if (modelValue.value === undefined || Array.isArray(modelValue.value)) {
-    return [] as string[];
-  }
-
-  return [String(modelValue.value)];
-});
-
-const filteredOptionEntries = computed(() => {
-  const normalizedQuery = filterQuery.value.trim().toLocaleLowerCase();
-
-  return props.options
-    .map((option, index) => ({ option, index }))
-    .filter(({ option }) => {
-      if (!props.filterable || !normalizedQuery) {
-        return true;
-      }
-
-      const searchableText = [option.label, option.supportingText, option.trailingText]
-        .filter(Boolean)
-        .join(' ')
-        .toLocaleLowerCase();
-
-      return searchableText.includes(normalizedQuery);
-    });
-});
-
-const hasFilteredOptions = computed(() => {
-  return filteredOptionEntries.value.length > 0;
-});
-
-function isOptionSelected(option: SelectOption) {
-  if (props.multiple) {
-    return Array.isArray(modelValue.value) ? modelValue.value.includes(option.value) : false;
-  }
-
-  return modelValue.value === option.value;
-}
-
-function updateValue(nextValue: SelectModelValue) {
-  modelValue.value = nextValue;
-  emit('change', nextValue);
-}
-
-function toggleOption(option: SelectOption) {
-  if (option.disabled) {
-    return;
-  }
-
-  if (props.multiple) {
-    const nextValues = Array.isArray(modelValue.value) ? [...modelValue.value] : [];
-    const currentIndex = nextValues.findIndex((value) => value === option.value);
-
-    if (currentIndex >= 0) {
-      nextValues.splice(currentIndex, 1);
-    } else {
-      nextValues.push(option.value);
-    }
-
-    updateValue(nextValues);
-    return;
-  }
-
-  if (modelValue.value === option.value) {
-    return;
-  }
-
-  updateValue(option.value);
-  filterQuery.value = '';
-}
-
-function handleMenuSelect(_event: MouseEvent, itemElement: HTMLElement) {
-  const optionIndex = Number(itemElement.dataset.optionIndex);
-
-  if (!Number.isInteger(optionIndex)) {
-    return;
-  }
-
-  const option = props.options[optionIndex];
-
-  if (!option) {
-    return;
-  }
-
-  toggleOption(option);
-}
 
 function handleFocus(event: FocusEvent) {
   emit('focus', event);
@@ -332,111 +221,6 @@ function handleBlur(event: FocusEvent) {
   emit('blur', event);
 }
 
-function focus() {
-  textFieldRef.value?.focus();
-}
-
-function blur() {
-  textFieldRef.value?.blur();
-}
-
-async function show() {
-  if (props.filterable) {
-    textFieldRef.value?.focus();
-  }
-
-  await menuRef.value?.show(false, triggerRef.value);
-}
-
-function hide() {
-  menuRef.value?.hide();
-}
-
-function toggle() {
-  menuRef.value?.toggle();
-}
-
-function openMenu(focus: 'first' | 'last' | undefined = undefined) {
-  const menuElement = menuRef.value?.menuRef;
-
-  if (!menuElement) {
-    return;
-  }
-
-  open.value = true;
-  showDropdownElement(menuElement, {
-    focus,
-    source: triggerRef.value ?? undefined,
-  });
-}
-
-function closeMenu() {
-  const menuElement = menuRef.value?.menuRef;
-
-  if (!menuElement) {
-    return;
-  }
-
-  open.value = false;
-  hideDropdownElement(menuElement);
-}
-
-function handleFieldClick() {
-  if (props.disabled || open.value) {
-    return;
-  }
-
-  if (props.filterable) {
-    textFieldRef.value?.focus();
-  }
-
-  openMenu();
-}
-
-function handleFieldInput() {
-  if (!props.filterable || props.disabled) {
-    return;
-  }
-
-  if (!open.value) {
-    openMenu();
-  }
-}
-
-function handleFilterKeydown(event: KeyboardEvent) {
-  if (props.disabled) {
-    return;
-  }
-
-  if (event.key === 'Escape' && open.value) {
-    event.preventDefault();
-    closeMenu();
-    return;
-  }
-
-  if (event.key === 'ArrowDown') {
-    event.preventDefault();
-    openMenu('first');
-    return;
-  }
-
-  if (event.key === 'ArrowUp') {
-    event.preventDefault();
-    openMenu('last');
-    return;
-  }
-
-  if (!props.filterable && ['Enter', ' '].includes(event.key)) {
-    event.preventDefault();
-    openMenu('first');
-    return;
-  }
-
-  if (event.key === 'Home' || event.key === 'End') {
-    event.stopPropagation();
-  }
-}
-
 watch(
   () => textFieldRef.value?.containerEl,
   (nextContainer, previousContainer) => {
@@ -450,31 +234,13 @@ watch(
   },
 );
 
-watch(
-  open,
-  (nextOpen) => {
-    if (nextOpen) {
-      if (props.filterable) {
-        textFieldRef.value?.focus();
-      }
-
-      return;
-    }
-
-    filterQuery.value = '';
-  },
-  {
-    immediate: true,
-  },
-);
-
 defineExpose({
   el: textFieldRef,
-  focus,
-  blur,
-  show,
-  hide,
-  toggle,
+  focus: select.focus,
+  blur: select.blur,
+  show: select.show,
+  hide: select.hide,
+  toggle: select.toggle,
 });
 </script>
 
@@ -485,13 +251,13 @@ defineExpose({
     data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
-    :data-populated="hasValue ? 'true' : 'false'"
+    :data-populated="select.hasValue.value ? 'true' : 'false'"
     :data-open="open ? 'true' : 'false'"
     :data-filterable="props.filterable ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
   >
-    <div class="m3-select-trigger" data-scope="select" data-part="trigger" @click="handleFieldClick">
+    <div class="m3-select-trigger" data-scope="select" data-part="trigger" @click="select.handleFieldClick">
       <TextField
         :id="triggerId"
         ref="textFieldRef"
@@ -513,11 +279,11 @@ defineExpose({
         :aria-required="props.required ? 'true' : undefined"
         :aria-label="props.label ? undefined : filterAriaLabel"
         v-bind="controlAttrs"
-        @click="handleFieldClick"
-        @input="handleFieldInput"
+        @click="select.handleFieldClick"
+        @input="select.handleFieldInput"
         @focus="handleFocus"
         @blur="handleBlur"
-        @keydown="handleFilterKeydown"
+        @keydown="select.handleFilterKeydown"
       >
         <template v-if="slots.leading" #leading>
           <slot name="leading" />
@@ -538,7 +304,7 @@ defineExpose({
     </div>
 
     <input
-      v-for="(submittedValue, index) in submittedValues"
+      v-for="(submittedValue, index) in select.submittedValues.value"
       :key="`${props.name}-${submittedValue}-${index}`"
       type="hidden"
       :name="props.name"
@@ -554,7 +320,7 @@ defineExpose({
       data-part="menu"
       :color="props.menuColor"
       :style="{ 'position-anchor': anchorName }"
-      @select="handleMenuSelect"
+      @select="select.handleMenuSelect"
     >
       <MenuContainer>
         <TransitionGroup
@@ -565,7 +331,7 @@ defineExpose({
           data-part="options"
         >
           <MenuItem
-            v-for="{ option, index } in filteredOptionEntries"
+            v-for="{ option, index } in select.filteredOptionEntries.value"
             :key="`${index}-${option.value}`"
             class="m3-select-option"
             data-scope="select"
@@ -574,8 +340,8 @@ defineExpose({
             :data-has-option-leading="option.leadingIcon || slots.optionLeading ? 'true' : undefined"
             :disabled="option.disabled"
             :role="props.multiple ? 'menuitemcheckbox' : 'menuitemradio'"
-            :checked="isOptionSelected(option)"
-            :selected="isOptionSelected(option)"
+            :checked="select.isOptionSelected(option)"
+            :selected="select.isOptionSelected(option)"
             :close-on-select="!props.multiple"
           >
             <template #leading>
@@ -605,7 +371,7 @@ defineExpose({
             </template>
 
             <template v-if="slots.optionTrailing" #trailing>
-              <slot name="optionTrailing" :option="option" :selected="isOptionSelected(option)" />
+              <slot name="optionTrailing" :option="option" :selected="select.isOptionSelected(option)" />
             </template>
 
             <template v-else-if="option.trailingText" #trailingText>
@@ -614,7 +380,7 @@ defineExpose({
           </MenuItem>
 
           <div
-            v-if="props.filterable && !hasFilteredOptions"
+            v-if="props.filterable && !select.hasFilteredOptions.value"
             key="no-results"
             class="m3-select-empty"
             data-scope="select"
