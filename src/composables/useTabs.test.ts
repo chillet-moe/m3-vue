@@ -14,7 +14,7 @@ describe('useTabs', () => {
   });
 
   it('sets value via setValue', () => {
-    const tabs = useTabs({ value: 'tab1' });
+    const tabs = useTabs({ value: 'tab1' as string });
     tabs.setValue('tab2');
     expect(tabs.value.value).toBe('tab2');
   });
@@ -22,7 +22,7 @@ describe('useTabs', () => {
   it('calls onValueChange when setValue is called', () => {
     const changes: string[] = [];
     const tabs = useTabs({
-      value: 'tab1',
+      value: 'tab1' as string,
       onValueChange: (v) => changes.push(v),
     });
 
@@ -49,7 +49,7 @@ describe('useTabs', () => {
   });
 
   it('generates trigger attributes with correct aria props', () => {
-    const tabs = useTabs({ value: 'active' });
+    const tabs = useTabs({ value: 'active' as string });
     const activeAttrs = tabs.getTriggerAttrs('active');
     const inactiveAttrs = tabs.getTriggerAttrs('other');
 
@@ -62,7 +62,7 @@ describe('useTabs', () => {
   });
 
   it('generates panel attributes with correct aria props', () => {
-    const tabs = useTabs({ value: 'active' });
+    const tabs = useTabs({ value: 'active' as string });
     const activePanel = tabs.getPanelAttrs('active');
     const inactivePanel = tabs.getPanelAttrs('other');
 
@@ -93,7 +93,7 @@ describe('useTabs', () => {
   it('trigger onClick calls setValue', () => {
     const changes: string[] = [];
     const tabs = useTabs({
-      value: 'tab1',
+      value: 'tab1' as string,
       onValueChange: (v) => changes.push(v),
     });
 

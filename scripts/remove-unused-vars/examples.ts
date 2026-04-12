@@ -48,7 +48,7 @@ export async function cleanupMultipleFiles() {
 /**
  * 示例 2: 处理单个文件并获取详细信息
  */
-async function cleanupWithDetails() {
+export async function cleanupWithDetails() {
   const result = await removeUnusedCssVariables({
     filePath: 'src/components/Button/Button.css',
     verbose: true,
@@ -65,7 +65,7 @@ async function cleanupWithDetails() {
 /**
  * 示例 3: 自定义变量前缀
  */
-async function cleanupWithCustomPrefix() {
+export async function cleanupWithCustomPrefix() {
   // 如果你的 CSS 使用不同的变量前缀（如 $var 或 @var）
   await removeUnusedCssVariables({
     filePath: 'src/custom-style.css',

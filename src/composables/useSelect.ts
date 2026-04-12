@@ -9,6 +9,7 @@ export type UseSelectOption = {
   disabled?: boolean;
   supportingText?: string;
   trailingText?: string;
+  leadingIcon?: string;
 };
 
 export type UseSelectModelValue = UseSelectOptionValue | UseSelectOptionValue[] | undefined;

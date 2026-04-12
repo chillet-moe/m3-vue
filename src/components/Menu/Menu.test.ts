@@ -47,7 +47,7 @@ function installPopoverPolyfill() {
     }
 
     return originalMatches.call(this, selector);
-  };
+  } as typeof Element.prototype.matches;
 
   if (typeof prototype.showPopover !== 'function') {
     Object.defineProperty(prototype, 'showPopover', {

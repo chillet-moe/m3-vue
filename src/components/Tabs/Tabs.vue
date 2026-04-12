@@ -10,13 +10,13 @@ export type TabsProps = {
   variant?: TabsVariant;
 
   /** The orientation of the tab list. @default 'horizontal' */
-  orientation?: UseTabsOptions['orientation'];
+  orientation?: 'horizontal' | 'vertical';
 
   /** Whether arrow-key navigation loops. @default true */
-  loop?: UseTabsOptions['loop'];
+  loop?: boolean;
 
   /** Whether focusing a trigger selects it. @default true */
-  selectWhenFocused?: UseTabsOptions['selectWhenFocused'];
+  selectWhenFocused?: boolean;
 };
 
 const { variant = 'primary', orientation, loop, selectWhenFocused } = defineProps<TabsProps>();
@@ -33,9 +33,9 @@ const tabs = useTabs({
   onValueChange: (v) => {
     modelValue.value = v;
   },
-  orientation: () => orientation,
-  loop: () => loop,
-  selectWhenFocused: () => selectWhenFocused,
+  orientation: () => orientation ?? 'horizontal',
+  loop: () => loop ?? true,
+  selectWhenFocused: () => selectWhenFocused ?? true,
 });
 
 provide(tabsContextKey, tabs);

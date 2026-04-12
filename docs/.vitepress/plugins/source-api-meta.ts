@@ -157,10 +157,11 @@ function getSourceFile(program: ts.Program, absolutePath: string): ts.SourceFile
 }
 
 function getExportSymbol(checker: ts.TypeChecker, sourceFile: ts.SourceFile, name: string): ts.Symbol | undefined {
-  if (!sourceFile.symbol) {
+  const sf = sourceFile as ts.SourceFile & { symbol?: ts.Symbol };
+  if (!sf.symbol) {
     return undefined;
   }
-  const symbol = checker.getExportsOfModule(sourceFile.symbol).find((item) => item.name === name);
+  const symbol = checker.getExportsOfModule(sf.symbol).find((item) => item.name === name);
   if (!symbol) {
     return undefined;
   }
