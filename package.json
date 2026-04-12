@@ -67,6 +67,7 @@
     "fast-glob": "^3.3.3",
     "glob": "^13.0.6",
     "lightningcss": "^1.32.0",
+    "oxc-minify": "^0.124.0",
     "shiki": "2.5.0",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
