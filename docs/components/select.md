@@ -68,3 +68,9 @@ Select provides an anchored menu for choosing one or many options, with optional
 <DemoContainer :src="SelectConfigurationsSrc">
   <SelectConfigurations />
 </DemoContainer>
+
+## Composable
+
+### useSelect
+
+<SourceApiTable api="useSelect" />

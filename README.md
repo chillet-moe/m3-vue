@@ -19,6 +19,7 @@ These projects for inspiration and reference:
 - https://github.com/KTibow/m3-svelte -- Some implementation ideas
 - https://github.com/makmn1/material-design-token-gen -- MD3 Tokens (`/reference-tokens`)
 - https://github.com/vuelessjs/vueless
+- https://github.com/melt-ui/next-gen -- The idea of Builder pattern
 
 ## Auto Import (unplugin-vue-components)
 

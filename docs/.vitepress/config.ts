@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress';
 import { fileURLToPath } from 'url';
 import { componentMetaPlugin } from './plugins/component-meta';
 import { componentAnatomyPlugin } from './plugins/component-anatomy';
+import { sourceApiMetaPlugin } from './plugins/source-api-meta';
 
 export default defineConfig({
   title: 'M3 Vue',
@@ -24,6 +25,9 @@ export default defineConfig({
       }),
       componentAnatomyPlugin({
         components: 'src/components/**/*.vue',
+      }),
+      sourceApiMetaPlugin({
+        tsconfigPath: 'tsconfig.docs.json',
       }),
     ],
     css: {

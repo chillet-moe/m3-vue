@@ -73,6 +73,12 @@ Use the `useTabs` composable directly to build custom tab UIs without any predef
   <TabsHeadless />
 </DemoContainer>
 
+## Composable
+
+### useTabs
+
+<SourceApiTable api="useTabs" />
+
 ## API
 
 ### Tabs

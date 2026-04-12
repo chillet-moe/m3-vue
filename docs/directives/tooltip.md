@@ -63,19 +63,7 @@ Pass a selector or an element reference when the tooltip surface is already rend
 - `HTMLElement`: an existing tooltip element
 - `TooltipConfig`: a configuration object
 
-`TooltipConfig` fields:
-
-| Field            | Type                                                         | Default     | Notes                                                             |
-| ---------------- | ------------------------------------------------------------ | ----------- | ----------------------------------------------------------------- |
-| `target`         | `string \| HTMLElement`                                      | -           | Existing tooltip element to control                               |
-| `content`        | `string`                                                     | -           | Text used when the directive creates the tooltip element          |
-| `placement`      | `'top' \| 'bottom' \| 'left' \| 'right' \| 'start' \| 'end'` | `'top'`     | Logical values adapt to writing direction                         |
-| `offset`         | `string`                                                     | `'0.25rem'` | Applied through CSS `translate`                                   |
-| `interactive`    | `boolean`                                                    | `true`      | Uses dialog semantics when `true`, tooltip semantics when `false` |
-| `popoverType`    | `'hint' \| 'auto' \| 'manual'`                               | `'hint'`    | Passed to the underlying popover element                          |
-| `openDelay`      | `number`                                                     | `60`        | Delay before showing on hover, in milliseconds                    |
-| `closeDelay`     | `number`                                                     | `80`        | Delay before closing on pointer leave, in milliseconds            |
-| `longpressDelay` | `number`                                                     | `450`       | Touch long-press delay, in milliseconds                           |
+<SourceApiTable api="vTooltip" type="TooltipConfig" :show-signature="false" />
 
 ## Behavior Notes
 

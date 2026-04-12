@@ -32,26 +32,15 @@ The promise resolves to the clicked action value. If no explicit `value` is prov
 
 ## Options
 
-| Field             | Type                        | Default                                              | Notes                                                |
-| ----------------- | --------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `headline`        | `string`                    | -                                                    | Optional dialog title                                |
-| `content`         | `string`                    | -                                                    | Optional supporting text                             |
-| `icon`            | `string`                    | -                                                    | Material Symbols icon name rendered in the icon slot |
-| `actions`         | `DialogAction[]`            | `[{ label: 'OK', value: 'confirm', color: 'text' }]` | Footer actions                                       |
-| `closeOnBackdrop` | `boolean`                   | `true`                                               | Closes when the backdrop is clicked                  |
-| `role`            | `'dialog' \| 'alertdialog'` | -                                                    | Forwarded to the rendered `<dialog>` element         |
+The tables below are generated from source types and stay in sync with API changes.
 
-`DialogAction` fields:
+### ShowDialogOptions
 
-| Field          | Type                                                | Default  | Notes                                           |
-| -------------- | --------------------------------------------------- | -------- | ----------------------------------------------- |
-| `label`        | `string`                                            | -        | Visible button text                             |
-| `value`        | `string`                                            | `label`  | Value used to resolve the promise               |
-| `color`        | `ButtonProps['color']`                              | `'text'` | Button style                                    |
-| `disabled`     | `boolean`                                           | `false`  | Disables the action                             |
-| `autofocus`    | `boolean`                                           | `false`  | Autofocuses the action button                   |
-| `closeOnClick` | `boolean`                                           | `true`   | Keep the dialog open by setting this to `false` |
-| `onClick`      | `() => void \| boolean \| Promise<void \| boolean>` | -        | Return `false` to keep the dialog open          |
+<SourceApiTable api="showDialog" type="ShowDialogOptions" :show-signature="false" />
+
+### DialogAction
+
+<SourceApiTable api="showDialog" type="DialogAction" :show-signature="false" />
 
 ## Behavior Notes
 

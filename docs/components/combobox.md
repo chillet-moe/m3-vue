@@ -53,3 +53,11 @@ Combobox 是 Select 的封装，共享 `select` scope。详见 [Select Anatomy](
 <DemoContainer :src="ComboboxMultiSelectSrc">
   <ComboboxMultiSelect />
 </DemoContainer>
+
+## Composable
+
+`Combobox` shares the same composable as `Select`.
+
+### useSelect
+
+<SourceApiTable api="useSelect" />

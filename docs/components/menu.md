@@ -43,6 +43,12 @@ Menu supports dropdown, context, submenu, and object-driven item rendering while
   <MenuDeclarative />
 </DemoContainer>
 
+## Composable
+
+### useMenu
+
+<SourceApiTable api="useMenu" />
+
 ## API
 
 ### Menu

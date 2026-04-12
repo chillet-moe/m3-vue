@@ -87,13 +87,7 @@ Use the object form when you want to override the anchor or outside-click behavi
 </button>
 ```
 
-Binding fields:
-
-| Field                 | Type                            | Default         | Notes                                                            |
-| --------------------- | ------------------------------- | --------------- | ---------------------------------------------------------------- |
-| `target`              | `string \| HTMLElement \| null` | -               | Required popover surface                                         |
-| `anchor`              | `HTMLElement \| null`           | Trigger element | Element used as the position anchor                              |
-| `closeOnOutsideClick` | `boolean`                       | `true`          | Closes when a pointer event happens outside trigger and dropdown |
+<SourceApiTable api="vDropdown" type="DropdownTargetBinding" :show-signature="false" />
 
 ## Keyboard And Events
 

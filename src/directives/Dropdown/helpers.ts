@@ -4,8 +4,14 @@ export type DropdownTargetBinding =
   | string
   | HTMLElement
   | {
+      /** Element used as the position anchor. Defaults to the trigger element. */
       anchor?: HTMLElement | null;
+      /**
+       * Closes when a pointer event happens outside trigger and dropdown.
+       * @default true
+       */
       closeOnOutsideClick?: boolean;
+      /** Popover surface to control. */
       target: string | HTMLElement | null;
     }
   | null
