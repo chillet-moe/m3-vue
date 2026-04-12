@@ -78,13 +78,15 @@ function parseUnionOptionsFromTypeObject(typeObject: unknown): string[] | undefi
   }
 
   const pending: unknown[] = [typeObject];
+  let pendingIndex = 0;
   const visited = new Set<object>();
   const options = new Set<string>();
   let hasLiteralOption = false;
-  let hasUnsupportedLeaf = false;
+  let hasWidePrimitiveLeaf = false;
+  const widePrimitiveLeafSet = new Set(['string', 'number', 'boolean', 'bigint', 'symbol', 'any', 'unknown', 'object']);
 
-  while (pending.length > 0) {
-    const current = pending.pop();
+  while (pendingIndex < pending.length) {
+    const current = pending[pendingIndex++];
     if (!current || typeof current !== 'object') {
       continue;
     }
@@ -110,12 +112,12 @@ function parseUnionOptionsFromTypeObject(typeObject: unknown): string[] | undefi
       continue;
     }
 
-    if (typeText) {
-      hasUnsupportedLeaf = true;
+    if (typeText && widePrimitiveLeafSet.has(typeText)) {
+      hasWidePrimitiveLeaf = true;
     }
   }
 
-  if (!hasLiteralOption || hasUnsupportedLeaf) {
+  if (!hasLiteralOption || hasWidePrimitiveLeaf) {
     return undefined;
   }
 
