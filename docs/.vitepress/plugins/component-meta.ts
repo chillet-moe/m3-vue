@@ -60,6 +60,68 @@ function parseUnionOptions(type: string): string[] | undefined {
   return [...new Set(optionParts.map((part) => part.slice(1, -1)))];
 }
 
+type MetaTypeObject = {
+  checker?: {
+    typeToString?: (type: unknown) => string;
+  };
+  types?: unknown[];
+  value?: unknown;
+};
+
+/**
+ * 从 vue-component-meta 的类型对象提取字符串字面量联合选项。
+ * 支持类型别名场景（如 `MenuColor | undefined`）。
+ */
+function parseUnionOptionsFromTypeObject(typeObject: unknown): string[] | undefined {
+  if (!typeObject || typeof typeObject !== 'object') {
+    return undefined;
+  }
+
+  const pending: unknown[] = [typeObject];
+  const visited = new Set<object>();
+  const options = new Set<string>();
+  let hasLiteralOption = false;
+  let hasUnsupportedLeaf = false;
+
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (!current || typeof current !== 'object') {
+      continue;
+    }
+    if (visited.has(current)) {
+      continue;
+    }
+    visited.add(current);
+
+    const node = current as MetaTypeObject;
+    if (Array.isArray(node.types) && node.types.length > 0) {
+      pending.push(...node.types);
+      continue;
+    }
+
+    if (typeof node.value === 'string') {
+      hasLiteralOption = true;
+      options.add(node.value);
+      continue;
+    }
+
+    const typeText = typeof node.checker?.typeToString === 'function' ? node.checker.typeToString(current).trim() : '';
+    if (typeText === 'undefined' || typeText === 'null' || typeText === 'void') {
+      continue;
+    }
+
+    if (typeText) {
+      hasUnsupportedLeaf = true;
+    }
+  }
+
+  if (!hasLiteralOption || hasUnsupportedLeaf) {
+    return undefined;
+  }
+
+  return [...options];
+}
+
 export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
   const virtualModuleId = 'virtual:component-meta';
   const resolvedVirtualModuleId = '\0' + virtualModuleId;
@@ -92,12 +154,12 @@ export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
       const props: PropMeta[] = (meta.props ?? [])
         .filter((p) => !p.global)
         .map((p) => ({
-          name: p.name,
-          type: p.type ?? 'any',
-          required: p.required,
+          options: parseUnionOptionsFromTypeObject(p.getTypeObject?.()) ?? parseUnionOptions(p.type ?? ''),
           default: p.default,
           description: p.description,
-          options: parseUnionOptions(p.type ?? ''),
+          name: p.name,
+          required: p.required,
+          type: p.type ?? 'any',
         }));
 
       const events: EventMeta[] = (meta.events ?? []).map((e: any) => ({
