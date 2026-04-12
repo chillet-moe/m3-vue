@@ -13,7 +13,7 @@ const value = ref(2);
       <div style="font-size: 0.75rem; opacity: 0.72">{{ direction }}</div>
       <Slider
         v-model:value="value"
-        style="block-size: 12rem"
+        style="inline-size: 12rem"
         vertical
         :min="0"
         :max="5"
