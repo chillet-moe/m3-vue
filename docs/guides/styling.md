@@ -1,6 +1,6 @@
 # Styling
 
-M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为稳定的 CSS API。你可以使用这些属性来自定义组件样式，而无需使用 Vue 的 `:deep()`。
+M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为稳定的 CSS API。你可以使用这些属性来自定义组件样式。记得使用 `:deep` 选择器来确保样式能够正确应用到组件内部元素。
 
 ## data-scope 和 data-part
 
@@ -15,28 +15,20 @@ M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为�
 
 ```css
 /* 自定义所有 Button 的根元素 */
-[data-scope='button'][data-part='root'] {
+:deep([data-scope='button'][data-part='root']) {
   border-radius: 8px;
 }
 
 /* 自定义 TextField 的 label */
-[data-scope='text-field'][data-part='label'] {
+:deep([data-scope='text-field'][data-part='label']) {
   font-weight: bold;
 }
 
 /* 自定义 Menu 中 MenuItem 的 label */
-[data-scope='menu-item'][data-part='label'] {
+:deep([data-scope='menu-item'][data-part='label']) {
   color: red;
 }
 ```
-
-## 与 `:deep()` 的对比
-
-|        | `data-scope` / `data-part` | `:deep()`                    |
-| ------ | -------------------------- | ---------------------------- |
-| 稳定性 | 稳定的公共 API             | 依赖内部 class 名            |
-| 作用域 | 全局或局部均可             | 需在 `<style scoped>` 中使用 |
-| 可读性 | 语义化，描述组件结构       | 依赖实现细节                 |
 
 ## 查看组件的 Anatomy
 
