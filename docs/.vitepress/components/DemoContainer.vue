@@ -139,6 +139,18 @@ const hasToolbar = computed(() => {
   font-size: 0.8125rem;
 }
 
+html.dark .demo-source :deep(.shiki),
+html.dark .demo-source :deep(.shiki span) {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+html.dark .demo-source :deep(.shiki span) {
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
 @media (max-width: 40rem) {
   .demo-toolbar {
     align-items: stretch;
