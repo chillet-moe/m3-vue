@@ -115,7 +115,7 @@ const anatomyData = computed(() => {
 .anatomy-panel {
   margin-block: 1rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 0.75rem;
+  border-radius: 1.5rem;
   overflow: clip;
   background: var(--vp-c-bg-soft);
 }
@@ -146,7 +146,7 @@ const anatomyData = computed(() => {
 
 .anatomy-highlight-checkbox {
   margin: 0;
-  height: 0;
+  height: 2.5rem;
 }
 
 .anatomy-parts-list {
