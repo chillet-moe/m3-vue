@@ -509,6 +509,50 @@ describe('Menu', () => {
     app.unmount();
   });
 
+  it('renders MenuItem href as an anchor and keeps keyboard activation semantics', async () => {
+    installPopoverPolyfill();
+
+    const selectedValues: string[] = [];
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: true,
+          onSelect: (_event: MouseEvent, itemElement: HTMLElement) => {
+            selectedValues.push(itemElement.textContent?.trim() ?? '');
+          },
+        },
+        {
+          default: () => [
+            h(MenuContainer, null, {
+              default: () => [h(MenuItem, { href: '#account' }, { default: () => 'Account settings' })],
+            }),
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
+    const linkItem = container.querySelector<HTMLAnchorElement>('a[role="menuitem"]');
+
+    expect(linkItem?.getAttribute('href')).toBe('#account');
+
+    linkItem?.focus();
+    linkItem?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: ' ' }));
+    await nextTick();
+
+    expect(selectedValues).toEqual(['Account settings']);
+    expect(isPopoverOpen(menu)).toBe(false);
+
+    app.unmount();
+  });
+
   it('supports vibrant color option', async () => {
     installPopoverPolyfill();
 

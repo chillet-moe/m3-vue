@@ -7,6 +7,9 @@ export type MenuItemProps = {
   /** Optional value that participates in Menu selection state. */
   value?: MenuItemValue;
 
+  /** Optional href. When provided, the item renders as an anchor. */
+  href?: string;
+
   /** Disables item interaction. */
   disabled?: boolean;
 
@@ -31,6 +34,7 @@ export type MenuItemProps = {
 
 const {
   value = undefined,
+  href = undefined,
   disabled = false,
   closeOnSelect = true,
   selected = false,
@@ -98,6 +102,28 @@ const resolvedRole = computed(() => {
   return menuSelection.multiple() ? 'menuitemcheckbox' : 'menuitemradio';
 });
 
+const tag = computed(() => {
+  if (href) {
+    return 'a';
+  }
+
+  return 'button';
+});
+
+const isButtonTag = computed(() => tag.value === 'button');
+const isAnchorTag = computed(() => tag.value === 'a');
+const nativeDisabled = computed(() => (isButtonTag.value ? disabled : undefined));
+const ariaDisabled = computed(() => (disabled && !isButtonTag.value ? 'true' : undefined));
+const resolvedHref = computed(() => {
+  if (!href) {
+    return undefined;
+  }
+
+  return disabled && isAnchorTag.value ? undefined : href;
+});
+const tabIndex = computed(() => (disabled && !isButtonTag.value ? -1 : undefined));
+const type = computed(() => (isButtonTag.value ? 'button' : undefined));
+
 const slotProps = computed(() => ({
   checked: resolvedChecked.value,
   disabled,
@@ -105,12 +131,45 @@ const slotProps = computed(() => ({
   submenu,
 }));
 
-function handleClick() {
+function guardDisabledInteraction(event: Event) {
+  if (!disabled) {
+    return false;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+  return true;
+}
+
+function handleClick(event: MouseEvent) {
+  if (guardDisabledInteraction(event)) {
+    return;
+  }
+
   if (!usesMenuSelection.value || !menuSelection || value === undefined) {
     return;
   }
 
   menuSelection.toggle(value);
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (guardDisabledInteraction(event)) {
+    return;
+  }
+
+  if (event.key !== ' ') {
+    return;
+  }
+
+  const currentTarget = event.currentTarget;
+
+  if (!(currentTarget instanceof HTMLElement) || currentTarget instanceof HTMLButtonElement) {
+    return;
+  }
+
+  event.preventDefault();
+  currentTarget.click();
 }
 
 function hasLeading() {
@@ -139,10 +198,14 @@ function hasSuffix() {
 </script>
 
 <template>
-  <button
-    type="button"
+  <component
+    :is="tag"
     :role="resolvedRole"
-    :disabled="disabled"
+    :href="resolvedHref"
+    :disabled="nativeDisabled"
+    :aria-disabled="ariaDisabled"
+    :tabindex="tabIndex"
+    :type="type"
     :data-selected="resolvedSelected ? 'true' : undefined"
     :data-menu-owner="menuContext?.id"
     :data-has-supporting="hasSupporting() ? 'true' : undefined"
@@ -156,6 +219,7 @@ function hasSuffix() {
     data-scope="menu-item"
     data-part="root"
     @click="handleClick"
+    @keydown="handleKeydown"
   >
     <span v-if="hasLeading()" class="m3-menu-item-leading" data-scope="menu-item" data-part="leading">
       <slot name="leading" v-bind="slotProps" />
@@ -195,7 +259,7 @@ function hasSuffix() {
         <slot name="trailingText" v-bind="slotProps" />
       </span>
     </span>
-  </button>
+  </component>
 </template>
 
 <style src="./MenuItem.css"></style>

@@ -104,7 +104,8 @@
   outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
 }
 
-.m3-menu-item:disabled {
+.m3-menu-item:disabled,
+.m3-menu-item[aria-disabled='true'] {
   cursor: default;
   --_menu-item-current-label-color: --translucent(
     var(--_menu-item-disabled-label-color),
@@ -128,7 +129,8 @@
   );
 }
 
-.m3-menu-item[data-selected='true']:disabled {
+.m3-menu-item[data-selected='true']:disabled,
+.m3-menu-item[data-selected='true'][aria-disabled='true'] {
   --_menu-item-current-container-color: --translucent(
     var(--_menu-item-selected-disabled-container-color),
     var(--_menu-item-selected-disabled-container-opacity)

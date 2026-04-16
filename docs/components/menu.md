@@ -11,6 +11,8 @@ import MenuSelectable from '../demos/menu/MenuSelectable.vue';
 import MenuSelectableSrc from '../demos/menu/MenuSelectable.vue?raw';
 import MenuDeclarative from '../demos/menu/MenuDeclarative.vue';
 import MenuDeclarativeSrc from '../demos/menu/MenuDeclarative.vue?raw';
+import MenuLinks from '../demos/menu/MenuLinks.vue';
+import MenuLinksSrc from '../demos/menu/MenuLinks.vue?raw';
 </script>
 
 # Menu
@@ -42,6 +44,24 @@ Menu supports dropdown, context, submenu, and object-driven item rendering while
 <DemoContainer :src="MenuDeclarativeSrc" :viewport="false">
   <MenuDeclarative />
 </DemoContainer>
+
+### Links
+
+Render the `MenuItem` itself as the interactive link. Do not nest `<a>` inside `MenuItem`, because that creates invalid interactive markup.
+
+<DemoContainer :src="MenuLinksSrc" :viewport="false">
+  <MenuLinks />
+</DemoContainer>
+
+If you are using Vue Router, keep `MenuItem` as the rendered anchor and let `RouterLink` provide the navigation state through its `custom` slot:
+
+```vue
+<RouterLink custom to="/settings" v-slot="{ href, navigate }">
+  <MenuItem :href="href" @click="navigate">
+    Settings
+  </MenuItem>
+</RouterLink>
+```
 
 ## Composable
 
