@@ -7,10 +7,10 @@
   font-feature-settings: 'liga';
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
-  font-size: 1em;
   width: 1em;
   height: 1em;
   line-height: 1;
+  font-size: 1.5rem;
 }
 
 .m3-icon svg {
