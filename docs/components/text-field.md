@@ -10,6 +10,8 @@ import TextFieldDefault from '../demos/text-field/TextFieldDefault.vue';
 import TextFieldDefaultSrc from '../demos/text-field/TextFieldDefault.vue?raw';
 import TextFieldConfigurations from '../demos/text-field/TextFieldConfigurations.vue';
 import TextFieldConfigurationsSrc from '../demos/text-field/TextFieldConfigurations.vue?raw';
+import TextFieldPassword from '../demos/text-field/TextFieldPassword.vue';
+import TextFieldPasswordSrc from '../demos/text-field/TextFieldPassword.vue?raw';
 
 const props = ref({
   label: 'Label',
@@ -49,4 +51,10 @@ Text fields cover baseline Material 3 input cases including supporting text, val
 
 <DemoContainer :src="TextFieldConfigurationsSrc">
   <TextFieldConfigurations />
+</DemoContainer>
+
+### Password Visibility
+
+<DemoContainer :src="TextFieldPasswordSrc">
+  <TextFieldPassword />
 </DemoContainer>
