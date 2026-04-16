@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressedState } from '@/composables/pressedState';
 import { Icon } from '@/components/Icon';
 import { computed, useSlots } from 'vue';
@@ -71,23 +72,13 @@ defineSlots<{
 const slots = useSlots();
 
 const interactive = computed(() => props.clickable || Boolean(props.href));
-const tag = computed(() => {
-  if (props.href) {
-    return 'a';
-  }
-
-  if (interactive.value) {
-    return 'button';
-  }
-
-  return 'div';
+const { tag, nativeDisabled, href, ariaDisabled, tabIndex, type } = useLinkTag({
+  defaultTag: computed(() => (interactive.value ? 'button' : 'div')),
+  href: computed(() => props.href),
+  disabled: computed(() => props.disabled),
+  ariaDisabledMode: 'non-button',
+  disabledTabIndexMode: 'anchor',
 });
-const isAnchor = computed(() => tag.value === 'a');
-const nativeDisabled = computed(() => (tag.value === 'button' ? props.disabled : undefined));
-const href = computed(() => (props.disabled && isAnchor.value ? undefined : props.href));
-const ariaDisabled = computed(() => (props.disabled && tag.value !== 'button' ? 'true' : undefined));
-const tabIndex = computed(() => (props.disabled && isAnchor.value ? -1 : undefined));
-const type = computed(() => (tag.value === 'button' ? 'button' : undefined));
 
 const hasHeader = computed(() => Boolean(slots.header));
 const hasFooter = computed(() => Boolean(slots.footer));

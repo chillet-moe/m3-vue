@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useLinkTag } from '@/composables/useLinkTag';
 import { computed, inject, useId, useSlots } from 'vue';
 import { menuContextKey, menuSelectionContextKey } from './MenuContext';
 import type { MenuItemValue } from './MenuTypes';
@@ -102,27 +103,20 @@ const resolvedRole = computed(() => {
   return menuSelection.multiple() ? 'menuitemcheckbox' : 'menuitemradio';
 });
 
-const tag = computed(() => {
-  if (href) {
-    return 'a';
-  }
-
-  return 'button';
+const {
+  tag,
+  isButtonTag,
+  nativeDisabled,
+  ariaDisabled,
+  href: resolvedHref,
+  tabIndex,
+  type,
+} = useLinkTag({
+  defaultTag: 'button',
+  href,
+  disabled,
+  ariaDisabledMode: 'non-button',
 });
-
-const isButtonTag = computed(() => tag.value === 'button');
-const isAnchorTag = computed(() => tag.value === 'a');
-const nativeDisabled = computed(() => (isButtonTag.value ? disabled : undefined));
-const ariaDisabled = computed(() => (disabled && !isButtonTag.value ? 'true' : undefined));
-const resolvedHref = computed(() => {
-  if (!href) {
-    return undefined;
-  }
-
-  return disabled && isAnchorTag.value ? undefined : href;
-});
-const tabIndex = computed(() => (disabled && !isButtonTag.value ? -1 : undefined));
-const type = computed(() => (isButtonTag.value ? 'button' : undefined));
 
 const slotProps = computed(() => ({
   checked: resolvedChecked.value,

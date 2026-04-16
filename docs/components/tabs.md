@@ -12,6 +12,8 @@ import TabsSecondary from '../demos/tabs/TabsSecondary.vue';
 import TabsSecondarySrc from '../demos/tabs/TabsSecondary.vue?raw';
 import TabsWithIcons from '../demos/tabs/TabsWithIcons.vue';
 import TabsWithIconsSrc from '../demos/tabs/TabsWithIcons.vue?raw';
+import TabsLinks from '../demos/tabs/TabsLinks.vue';
+import TabsLinksSrc from '../demos/tabs/TabsLinks.vue?raw';
 import TabsHeadless from '../demos/tabs/TabsHeadless.vue';
 import TabsHeadlessSrc from '../demos/tabs/TabsHeadless.vue?raw';
 
@@ -63,6 +65,14 @@ Tabs is built on the `useTabs` composable — the interaction logic (keyboard na
 
 <DemoContainer :src="TabsWithIconsSrc">
   <TabsWithIcons />
+</DemoContainer>
+
+### Router-Style Links
+
+Use the same `RouterLink custom` pattern as `Button` and `Item`, then pass the generated `href` and `navigate` handler into `Tab`.
+
+<DemoContainer :src="TabsLinksSrc">
+  <TabsLinks />
 </DemoContainer>
 
 ### Headless (useTabs only)

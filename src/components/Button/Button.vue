@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressedState } from '@/composables/pressedState';
 import { computed, inject, unref } from 'vue';
 
@@ -46,23 +47,11 @@ const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
-const tag = computed(() => {
-  if (props.href) {
-    return 'a';
-  }
-  if (toggleable.value) {
-    return 'label';
-  }
-  return 'button';
+const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
+  defaultTag: computed(() => (toggleable.value ? 'label' : 'button')),
+  href: computed(() => props.href),
+  disabled,
 });
-
-const isAnchor = computed(() => tag.value === 'a');
-const nativeDisabled = computed(() => (tag.value === 'button' ? disabled.value : undefined));
-// Anchors do not support the native disabled attribute, so mirror the state with ARIA and focus management.
-const ariaDisabled = computed(() => (disabled.value && isAnchor.value ? 'true' : undefined));
-const href = computed(() => (disabled.value && isAnchor.value ? undefined : props.href));
-const tabIndex = computed(() => (disabled.value && isAnchor.value ? -1 : undefined));
-const type = computed(() => (tag.value === 'button' ? 'button' : undefined));
 
 const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
 
