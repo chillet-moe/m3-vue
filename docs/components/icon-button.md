@@ -20,6 +20,8 @@ import IconButtonDisabled from '../demos/icon-button/IconButtonDisabled.vue';
 import IconButtonDisabledSrc from '../demos/icon-button/IconButtonDisabled.vue?raw';
 import IconButtonToggleable from '../demos/icon-button/IconButtonToggleable.vue';
 import IconButtonToggleableSrc from '../demos/icon-button/IconButtonToggleable.vue?raw';
+import IconButtonRouterLink from '../demos/icon-button/IconButtonRouterLink.vue';
+import IconButtonRouterLinkSrc from '../demos/icon-button/IconButtonRouterLink.vue?raw';
 
 const props = ref({
   toggleable: false,
@@ -89,4 +91,12 @@ Icon buttons expose compact, icon-first actions with the same Material 3 shape, 
 
 <DemoContainer :src="IconButtonToggleableSrc" :viewport="false">
   <IconButtonToggleable />
+</DemoContainer>
+
+### Vue Router
+
+Use the same `RouterLink custom` pattern as `Button`, then forward `href` and `navigate` to `IconButton`.
+
+<DemoContainer :src="IconButtonRouterLinkSrc" :viewport="false">
+  <IconButtonRouterLink />
 </DemoContainer>

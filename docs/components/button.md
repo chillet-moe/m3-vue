@@ -22,6 +22,8 @@ import ButtonLeadingIcons from '../demos/button/ButtonLeadingIcons.vue';
 import ButtonLeadingIconsSrc from '../demos/button/ButtonLeadingIcons.vue?raw';
 import ButtonTrailingIcons from '../demos/button/ButtonTrailingIcons.vue';
 import ButtonTrailingIconsSrc from '../demos/button/ButtonTrailingIcons.vue?raw';
+import ButtonRouterLink from '../demos/button/ButtonRouterLink.vue';
+import ButtonRouterLinkSrc from '../demos/button/ButtonRouterLink.vue?raw';
 
 const props = ref({
   toggleable: false,
@@ -98,4 +100,12 @@ Buttons let people trigger primary, secondary, or low-emphasis actions with Mate
 
 <DemoContainer :src="ButtonTrailingIconsSrc">
   <ButtonTrailingIcons />
+</DemoContainer>
+
+### Vue Router
+
+Use `RouterLink custom` and pass its `href` and `navigate` values into `Button`. That keeps `Button` responsible for rendering the final anchor element.
+
+<DemoContainer :src="ButtonRouterLinkSrc">
+  <ButtonRouterLink />
 </DemoContainer>

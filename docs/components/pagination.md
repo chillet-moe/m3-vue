@@ -20,6 +20,8 @@ import PaginationSimple from '../demos/pagination/PaginationSimple.vue';
 import PaginationSimpleSrc from '../demos/pagination/PaginationSimple.vue?raw';
 import PaginationIconsOnly from '../demos/pagination/PaginationIconsOnly.vue';
 import PaginationIconsOnlySrc from '../demos/pagination/PaginationIconsOnly.vue?raw';
+import PaginationRouterLink from '../demos/pagination/PaginationRouterLink.vue';
+import PaginationRouterLinkSrc from '../demos/pagination/PaginationRouterLink.vue?raw';
 
 const props = ref({
   ariaLabel: 'Pagination',
@@ -77,3 +79,9 @@ Pagination provides a composable page-navigation pattern with previous/next help
 ### Icons Only
 
 <DemoContainer :src="PaginationIconsOnlySrc"><PaginationIconsOnly /></DemoContainer>
+
+### Vue Router
+
+`PaginationLink`, `PaginationPrevious`, and `PaginationNext` follow the same pattern: use `RouterLink custom`, then forward `href` and `navigate` into the pagination control.
+
+<DemoContainer :src="PaginationRouterLinkSrc"><PaginationRouterLink /></DemoContainer>

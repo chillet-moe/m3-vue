@@ -12,6 +12,8 @@ import ItemVariants from '../demos/item/ItemVariants.vue';
 import ItemVariantsSrc from '../demos/item/ItemVariants.vue?raw';
 import ItemCompositions from '../demos/item/ItemCompositions.vue';
 import ItemCompositionsSrc from '../demos/item/ItemCompositions.vue?raw';
+import ItemRouterLink from '../demos/item/ItemRouterLink.vue';
+import ItemRouterLinkSrc from '../demos/item/ItemRouterLink.vue?raw';
 
 const props = ref({
   variant: 'default',
@@ -50,3 +52,9 @@ Item is a flexible row-like surface inspired by shadcn Item, suitable for intera
 ### Compositions
 
 <DemoContainer :src="ItemCompositionsSrc"><ItemCompositions /></DemoContainer>
+
+### Vue Router
+
+When `Item` is acting as navigation, use `RouterLink custom` and feed its `href` and `navigate` into the component.
+
+<DemoContainer :src="ItemRouterLinkSrc"><ItemRouterLink /></DemoContainer>
