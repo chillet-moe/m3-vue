@@ -6,7 +6,15 @@
   },
   "files": [
     "dist",
-    "web-types.json"
+    "web-types.json",
+    "docs/README.md",
+    "docs/getting-started.md",
+    "docs/guides",
+    "docs/components",
+    "docs/directives",
+    "docs/functions",
+    "docs/utilities",
+    "docs/demos"
   ],
   "type": "module",
   "sideEffects": [
@@ -18,6 +26,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
+    "./docs": "./docs/README.md",
+    "./docs/*": "./docs/*",
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
