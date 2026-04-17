@@ -73,6 +73,7 @@ export function use<Name>(options: Use<Name>Options = {}): Use<Name>Return {
 - 返回值中的响应式状态使用 `ComputedRef` / `Ref`，方法直接暴露为函数
 - Composable 不依赖 `provide` / `inject`，保持独立可测试
 - 组件内使用 composable 时，**变量名不能与 `ref="..."` 模板引用同名**，否则 Vue 会将模板 ref 绑定到 composable 返回的普通对象上。例如 Menu.vue 中 `ref="menu"` 对应 `useTemplateRef('menu')`，composable 返回值应命名为 `menuActions` 而非 `menu`
+- **SSR 安全的 ID 生成**：如果 composable 需要生成 DOM 可见的 ID（用于 `id`、`aria-controls` 等属性），必须在组件实例内使用 Vue 的 `useId()`，**禁止**使用模块级计数器、`Math.random()`、`Date.now()` 或 `crypto.randomUUID()`。这些非确定性方式会导致服务端和客户端生成不同的 ID，引发 SSR 水合不匹配。如果 composable 也需要在组件外使用（如测试），可以用 `getCurrentInstance()` 判断：`const id = getCurrentInstance() ? useId() : fallback`。同时应提供 `id` 选项让用户传入自定义稳定 ID
 
 ### index.ts 导出模式
 
@@ -128,6 +129,17 @@ defineSlots<{
 </template>
 
 <style src="./<Name>.css"></style>
+```
+
+### ID 生成（SSR 安全）
+
+组件中需要生成唯一 ID（用于 `id`、`aria-controls`、`aria-labelledby` 等属性）时，**必须使用 Vue 的 `useId()`**。绝对不要使用 `Math.random()`、`Date.now()`、`crypto.randomUUID()` 或模块级自增计数器，它们在 SSR 环境下会导致服务端与客户端生成不同值，引发水合不匹配。
+
+```ts
+import { useId } from 'vue';
+
+const generatedId = useId();
+const headlineId = `dialog-headline-${useId()}`;
 ```
 
 ### data-scope 和 data-part

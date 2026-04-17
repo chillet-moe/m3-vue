@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TransitionGroup, computed, ref, useAttrs, useSlots, watch } from 'vue';
+import { TransitionGroup, computed, ref, useAttrs, useId, useSlots, watch } from 'vue';
 import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
@@ -96,10 +96,7 @@ type TextFieldExposed = {
 
 const attrs = useAttrs();
 const slots = useSlots();
-const generatedId =
-  typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-    ? crypto.randomUUID()
-    : `select-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+const generatedId = useId();
 
 const props = withDefaults(defineProps<SelectProps>(), {
   label: undefined,
