@@ -1,4 +1,4 @@
-import { type ComputedRef, type Ref, computed, ref, toValue, watch } from 'vue';
+import { type ComputedRef, type Ref, computed, getCurrentInstance, ref, toValue, useId, watch } from 'vue';
 import type { MaybeRefOrGetter } from 'vue';
 
 export type UseTabsOptions<T extends string = string> = {
@@ -16,6 +16,9 @@ export type UseTabsOptions<T extends string = string> = {
 
   /** Whether focusing a trigger selects it. @default true */
   selectWhenFocused?: MaybeRefOrGetter<boolean>;
+
+  /** Stable base id used to build aria ids for triggers/panels. */
+  id?: MaybeRefOrGetter<string>;
 };
 
 export type UseTabsReturn<T extends string = string> = {
@@ -46,7 +49,9 @@ const TRIGGER_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home',
 let idCounter = 0;
 
 export function useTabs<T extends string = string>(options: UseTabsOptions<T> = {}): UseTabsReturn<T> {
-  const id = `tabs-${++idCounter}`;
+  const instance = getCurrentInstance();
+  const generatedId = instance ? `tabs-${useId()}` : `tabs-${++idCounter}`;
+  const id = toValue(options.id) ?? generatedId;
 
   const orientation = computed(() => toValue(options.orientation) ?? 'horizontal');
   const loop = computed(() => toValue(options.loop) ?? true);

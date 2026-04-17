@@ -82,6 +82,16 @@ describe('useTabs', () => {
     expect(trigger['aria-controls']).toBe(panel.id);
   });
 
+  it('uses explicit id when provided', () => {
+    const tabs = useTabs({ value: 'tab1', id: 'main-nav-tabs' });
+    const trigger = tabs.getTriggerAttrs('tab1');
+    const panel = tabs.getPanelAttrs('tab1');
+
+    expect(tabs.id).toBe('main-nav-tabs');
+    expect(trigger.id).toBe('main-nav-tabs-trigger-tab1');
+    expect(panel.id).toBe('main-nav-tabs-panel-tab1');
+  });
+
   it('panel aria-labelledby matches trigger id', () => {
     const tabs = useTabs({ value: 'tab1' });
     const trigger = tabs.getTriggerAttrs('tab1');
