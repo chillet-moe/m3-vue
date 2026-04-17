@@ -77,11 +77,15 @@ const hasValue = computed(() => {
 });
 
 const supportingMessage = computed(() => {
-  return props.error ?? props.description;
+  return props.error || props.description;
+});
+
+const hasSupporting = computed(() => {
+  return Boolean(supportingMessage.value || slots.supporting);
 });
 
 const supportingId = computed(() => {
-  return supportingMessage.value ? `${inputId.value}-supporting` : undefined;
+  return hasSupporting.value ? `${inputId.value}-supporting` : undefined;
 });
 
 const invalid = computed(() => {
@@ -240,14 +244,14 @@ defineExpose({
     </div>
 
     <div
-      v-if="supportingMessage"
+      v-if="hasSupporting"
       :id="supportingId"
       :class="'m3-text-field-supporting'"
       data-scope="text-field"
       data-part="supporting"
       aria-live="polite"
     >
-      {{ supportingMessage }}
+      <slot name="supporting">{{ supportingMessage }}</slot>
     </div>
   </div>
 </template>
