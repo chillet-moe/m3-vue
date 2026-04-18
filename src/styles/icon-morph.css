@@ -1,0 +1,107 @@
+.m3-icon-morph {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'opsz' 24;
+
+  transition: font-variation-settings var(--md-easing);
+}
+
+/* hover, 变粗 */
+.m3-icon-morph:hover {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 600,
+    'opsz' 24;
+}
+
+/* active, 变细 */
+.m3-icon-morph:focus-visible,
+.m3-icon-morph:active {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 300,
+    'opsz' 24;
+}
+
+/* selected, 变实心 */
+.m3-icon-morph[aria-selected='true'] {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'opsz' 24;
+}
+
+/* selected, hover, 变实心且变粗 */
+.m3-icon-morph[aria-selected='true']:hover {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 600,
+    'opsz' 24;
+}
+
+/* selected, active, 变实心且变细 */
+.m3-icon-morph[aria-selected='true']:focus-visible,
+.m3-icon-morph[aria-selected='true']:active {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 300,
+    'opsz' 24;
+}
+
+/* ------------------------ */
+
+.m3-text-morph {
+  font-variation-settings: 'GRAD' 0;
+  transition:
+    font-variation-settings,
+    font-weight var(--md-easing);
+}
+
+/* hover, 变粗 */
+.m3-text-morph:hover {
+  font-variation-settings: 'GRAD' 50;
+}
+
+/* 语言非英文时，使用字重 */
+html:not([lang='en']) .m3-text-morph:hover {
+  font-weight: 450;
+  font-variation-settings: 'GRAD' 0;
+}
+
+/* active, 变细 */
+.m3-text-morph:focus-visible,
+.m3-text-morph:active {
+  font-variation-settings: 'GRAD' -50;
+}
+
+/* 语言非英文时，使用字重 */
+html:not([lang='en']) .m3-text-morph:focus-visible,
+html:not([lang='en']) .m3-text-morph:active {
+  font-weight: 400;
+  font-variation-settings: 'GRAD' 0;
+}
+
+/* selected, 变更粗 */
+.m3-text-morph[aria-selected='true'] {
+  font-variation-settings: 'GRAD' 125;
+}
+
+/* 语言非英文时，使用字重 */
+.m3-text-morph[aria-selected='true'] {
+  font-weight: 500;
+  font-variation-settings: 'GRAD' 0;
+}
+
+/* selected, active 变细 */
+.m3-text-morph[aria-selected='true']:focus-visible,
+.m3-text-morph[aria-selected='true']:active {
+  font-variation-settings: 'GRAD' -50;
+}
+
+/* 语言非英文时，使用字重 */
+.m3-text-morph[aria-selected='true']:focus-visible,
+.m3-text-morph[aria-selected='true']:active {
+  font-weight: 300;
+  font-variation-settings: 'GRAD' 0;
+}
