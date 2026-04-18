@@ -39,6 +39,8 @@
 
 .m3-text-morph {
   --m3-text-morph-grad: 0;
+  --m3-text-morph-base-weight: var(--md-sys-typescale-label-medium-weight, 400);
+  --m3-text-morph-weight-offset: 0;
 
   font-variation-settings: 'GRAD' var(--m3-text-morph-grad);
   transition:
@@ -58,7 +60,8 @@
   ):hover,
 .m3-morph-host:not(:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])):hover
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
-  font-weight: 450;
+  --m3-text-morph-weight-offset: 50;
+  font-weight: calc(var(--m3-text-morph-base-weight) + var(--m3-text-morph-weight-offset));
   --m3-text-morph-grad: 0;
 }
 
@@ -77,7 +80,8 @@
 .m3-morph-host:focus-visible :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
 .m3-morph-host:active :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
 .m3-morph-host:has(.state-layer:active) :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
-  font-weight: 350;
+  --m3-text-morph-weight-offset: -50;
+  font-weight: calc(var(--m3-text-morph-base-weight) + var(--m3-text-morph-weight-offset));
   --m3-text-morph-grad: 0;
 }
 
@@ -95,7 +99,8 @@
 ),
 .m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
-  font-weight: 500;
+  --m3-text-morph-weight-offset: 100;
+  font-weight: calc(var(--m3-text-morph-base-weight) + var(--m3-text-morph-weight-offset));
   --m3-text-morph-grad: 0;
 }
 
@@ -126,6 +131,7 @@
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
 .m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):has(.state-layer:active)
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
-  font-weight: 400;
+  --m3-text-morph-weight-offset: 0;
+  font-weight: calc(var(--m3-text-morph-base-weight) + var(--m3-text-morph-weight-offset));
   --m3-text-morph-grad: 0;
 }

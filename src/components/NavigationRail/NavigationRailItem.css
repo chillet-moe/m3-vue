@@ -152,6 +152,8 @@
 
 .m3-navigation-rail-item-label {
   @apply label-medium;
+  --m3-text-morph-base-weight: 500;
+
   position: relative;
   z-index: 1;
   color: var(--_navigation-rail-item-current-label-color);
