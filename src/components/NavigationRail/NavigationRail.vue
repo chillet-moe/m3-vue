@@ -23,6 +23,12 @@ const stateModel = defineModel<'collapsed' | 'expanded'>('state', {
 defineSlots<{
   /** Navigation destinations. Usually a list of NavigationRailItem components. */
   default(props: { value: string | undefined; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
+
+  /** Leading slot for other components, such as a header or a floating action button. */
+  leading(props: { value: string | undefined; disabled: boolean; state: 'expanded' }): any;
+
+  /** Trailing slot for other components, such as a header or a floating action button. */
+  trailing(props: { value: string | undefined; disabled: boolean; state: 'expanded' }): any;
 }>();
 
 const selectedValue = computed(() => modelValue.value);
@@ -54,9 +60,13 @@ provide(navigationRailContextKey, {
     :data-disabled="props.disabled ? 'true' : undefined"
     :aria-label="props.ariaLabel"
   >
+    <slot name="leading" :value="selectedValue" :disabled="props.disabled" :state="railState" />
+
     <div class="m3-navigation-rail-items" data-scope="navigation-rail" data-part="items">
       <slot :value="selectedValue" :disabled="props.disabled" :state="railState" />
     </div>
+
+    <slot name="trailing" :value="selectedValue" :disabled="props.disabled" :state="railState" />
   </nav>
 </template>
 
