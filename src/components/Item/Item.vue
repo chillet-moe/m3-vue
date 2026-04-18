@@ -1,33 +1,16 @@
 <script setup lang="ts">
+import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
+import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressedState } from '@/composables/pressedState';
-import { Icon } from '@/components/Icon';
-import { computed, useSlots } from 'vue';
+import { computed, inject, unref, useSlots } from 'vue';
+import type { ButtonProps } from '@/components/Button';
 
-export type ItemProps = {
-  /** Visual style variant. */
-  variant?: 'default' | 'outline' | 'muted';
+type ItemButtonProps = Omit<ButtonProps, 'toggleable'>;
 
-  /** Size variant. */
-  size?: 'default' | 'sm';
-
-  /** Disable interaction. */
-  disabled?: boolean;
-
-  /** Whether the item should be interactive like a button. */
-  clickable?: boolean;
-
+export type ItemProps = ItemButtonProps & {
   /** Highlight the item as active/selected. */
   active?: boolean;
-
-  /** Optional href. When provided, the item renders as an anchor. */
-  href?: string;
-
-  /** Name of the leading media icon. */
-  mediaIcon?: string;
-
-  /** Name of the trailing action icon. */
-  actionIcon?: string;
 
   /** Fallback title when default slot is not provided. */
   title?: string;
@@ -37,71 +20,33 @@ export type ItemProps = {
 };
 
 const props = withDefaults(defineProps<ItemProps>(), {
-  variant: 'default',
-  size: 'default',
-  disabled: false,
-  clickable: true,
   active: false,
   href: undefined,
-  mediaIcon: undefined,
-  actionIcon: undefined,
+  color: undefined,
+  size: undefined,
+  shape: undefined,
+  leadingIcon: undefined,
+  trailingIcon: undefined,
+  disabled: undefined,
   title: undefined,
   description: undefined,
 });
 
-defineSlots<{
-  /** Optional content above the main row. */
-  header(props: { active: boolean; disabled: boolean; clickable: boolean }): any;
+const context = inject(buttonContextKey, undefined);
+const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
+const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
+const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
-  /** Optional leading media content. */
-  media(props: { active: boolean; disabled: boolean; clickable: boolean }): any;
-
-  /** Main title content. */
-  default(props: { active: boolean; disabled: boolean; clickable: boolean }): any;
-
-  /** Optional description below the title. */
-  description(props: { active: boolean; disabled: boolean; clickable: boolean }): any;
-
-  /** Optional trailing actions content. */
-  actions(props: { active: boolean; disabled: boolean; clickable: boolean }): any;
-
-  /** Optional content below the main row. */
-  footer(props: { active: boolean; disabled: boolean; clickable: boolean }): any;
-}>();
-
-const slots = useSlots();
-
-const interactive = computed(() => props.clickable || Boolean(props.href));
-const { tag, nativeDisabled, href, ariaDisabled, tabIndex, type } = useLinkTag({
-  defaultTag: computed(() => (interactive.value ? 'button' : 'div')),
+const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
+  defaultTag: 'button',
   href: computed(() => props.href),
-  disabled: computed(() => props.disabled),
-  ariaDisabledMode: 'non-button',
-  disabledTabIndexMode: 'anchor',
+  disabled,
 });
 
-const hasHeader = computed(() => Boolean(slots.header));
-const hasFooter = computed(() => Boolean(slots.footer));
-const hasMedia = computed(() => Boolean(props.mediaIcon || slots.media));
-const hasActions = computed(() => Boolean(props.actionIcon || slots.actions));
-const hasTitle = computed(() => Boolean(props.title || slots.default));
-const hasDescription = computed(() => Boolean(props.description || slots.description));
-
-const slotProps = computed(() => ({
-  active: props.active,
-  disabled: props.disabled,
-  clickable: interactive.value,
-}));
-
 const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
-const isPressed = computed(() => interactive.value && !props.disabled && pressed.value);
 
-const guardBlockedInteraction = (event: Event) => {
-  if (!interactive.value) {
-    return true;
-  }
-
-  if (!props.disabled) {
+const guardDisabledInteraction = (event: Event) => {
+  if (!disabled.value) {
     return false;
   }
 
@@ -111,40 +56,75 @@ const guardBlockedInteraction = (event: Event) => {
 };
 
 const handlePointerDown = (event: PointerEvent) => {
-  if (guardBlockedInteraction(event)) return;
+  if (guardDisabledInteraction(event)) return;
   onPointerDown(event);
 };
 
 const handlePointerUp = (event: PointerEvent) => {
-  if (guardBlockedInteraction(event)) return;
+  if (guardDisabledInteraction(event)) return;
   onPointerUp(event);
 };
 
 const handlePointerCancel = (event: PointerEvent) => {
-  if (guardBlockedInteraction(event)) return;
+  if (guardDisabledInteraction(event)) return;
   onPointerCancel(event);
 };
 
 const handleClick = (event: MouseEvent) => {
-  guardBlockedInteraction(event);
+  guardDisabledInteraction(event);
 };
+
+defineSlots<{
+  /** Optional content above the main row. */
+  header(props: { active: boolean; disabled: boolean }): any;
+
+  /** Optional leading content. */
+  leading(props: { active: boolean; disabled: boolean }): any;
+
+  /** Main title content. */
+  default(props: { active: boolean; disabled: boolean }): any;
+
+  /** Optional description below the title. */
+  description(props: { active: boolean; disabled: boolean }): any;
+
+  /** Optional trailing content. */
+  trailing(props: { active: boolean; disabled: boolean }): any;
+
+  /** Optional content below the main row. */
+  footer(props: { active: boolean; disabled: boolean }): any;
+}>();
+
+const slots = useSlots();
+
+const hasHeader = computed(() => Boolean(slots.header));
+const hasFooter = computed(() => Boolean(slots.footer));
+const hasTitle = computed(() => Boolean(props.title || slots.default));
+const hasDescription = computed(() => Boolean(props.description || slots.description));
+const hasLeading = computed(() => !props.leadingIcon && Boolean(slots.leading));
+const hasTrailing = computed(() => !props.trailingIcon && Boolean(slots.trailing));
+const isSelected = computed(() => props.active);
+const slotProps = computed(() => ({
+  active: props.active,
+  disabled: disabled.value,
+}));
 </script>
 
 <template>
   <component
     :is="tag"
-    :class="[{ 'state-layer': interactive }, 'm3-item']"
+    class="state-layer m3-button m3-item m3-morph-host"
     data-scope="item"
     data-part="root"
-    :data-variant="props.variant"
-    :data-size="props.size"
-    :data-clickable="interactive ? 'true' : 'false'"
-    :data-disabled="props.disabled ? 'true' : 'false'"
-    :data-active="props.active ? 'true' : undefined"
-    :data-pressed="isPressed ? 'true' : 'false'"
+    data-color="text"
+    :data-size="size"
+    :data-shape="shape"
+    :data-pressed="!disabled && pressed ? 'true' : 'false'"
+    :data-active="isSelected ? 'true' : undefined"
+    :data-selected="isSelected ? 'true' : undefined"
     :href="href"
     :disabled="nativeDisabled"
     :aria-disabled="ariaDisabled"
+    :aria-current="isSelected ? 'page' : undefined"
     :tabindex="tabIndex"
     :type="type"
     @click="handleClick"
@@ -152,48 +132,46 @@ const handleClick = (event: MouseEvent) => {
     @pointerup="handlePointerUp"
     @pointercancel="handlePointerCancel"
   >
-    <span v-if="hasHeader" class="m3-item-header" data-scope="item" data-part="header">
-      <slot name="header" v-bind="slotProps" />
+    <Icon
+      v-if="props.leadingIcon"
+      :name="props.leadingIcon"
+      :class="['m3-item-leading', 'm3-item-icon', 'm3-icon-morph']"
+      data-scope="item"
+      data-part="leading"
+      :disabled="disabled"
+    />
+    <span v-else-if="hasLeading" class="m3-item-leading-slot" data-scope="item" data-part="leading">
+      <slot name="leading" v-bind="slotProps" />
     </span>
 
     <span class="m3-item-main" data-scope="item" data-part="main">
-      <span v-if="hasMedia" class="m3-item-media" data-scope="item" data-part="media">
-        <Icon
-          v-if="props.mediaIcon"
-          :name="props.mediaIcon"
-          class="m3-item-icon"
-          data-scope="item"
-          data-part="media-icon"
-          :disabled="props.disabled"
-        />
-        <slot v-else name="media" v-bind="slotProps" />
+      <span v-if="hasHeader" class="m3-item-header m3-text-morph" data-scope="item" data-part="header">
+        <slot name="header" v-bind="slotProps" />
       </span>
 
-      <span class="m3-item-content" data-scope="item" data-part="content">
-        <span v-if="hasTitle" class="m3-item-title" data-scope="item" data-part="title">
-          <slot v-bind="slotProps">{{ props.title }}</slot>
-        </span>
-
-        <span v-if="hasDescription" class="m3-item-description" data-scope="item" data-part="description">
-          <slot name="description" v-bind="slotProps">{{ props.description }}</slot>
-        </span>
+      <span v-if="hasTitle" class="m3-item-title m3-text-morph" data-scope="item" data-part="title">
+        <slot v-bind="slotProps">{{ props.title }}</slot>
       </span>
 
-      <span v-if="hasActions" class="m3-item-actions" data-scope="item" data-part="actions">
-        <Icon
-          v-if="props.actionIcon"
-          :name="props.actionIcon"
-          class="m3-item-icon"
-          data-scope="item"
-          data-part="action-icon"
-          :disabled="props.disabled"
-        />
-        <slot v-else name="actions" v-bind="slotProps" />
+      <span v-if="hasDescription" class="m3-item-description m3-text-morph" data-scope="item" data-part="description">
+        <slot name="description" v-bind="slotProps">{{ props.description }}</slot>
+      </span>
+
+      <span v-if="hasFooter" class="m3-item-footer m3-text-morph" data-scope="item" data-part="footer">
+        <slot name="footer" v-bind="slotProps" />
       </span>
     </span>
 
-    <span v-if="hasFooter" class="m3-item-footer" data-scope="item" data-part="footer">
-      <slot name="footer" v-bind="slotProps" />
+    <Icon
+      v-if="props.trailingIcon"
+      :name="props.trailingIcon"
+      :class="['m3-item-trailing', 'm3-item-icon', 'm3-icon-morph']"
+      data-scope="item"
+      data-part="trailing"
+      :disabled="disabled"
+    />
+    <span v-else-if="hasTrailing" class="m3-item-trailing-slot" data-scope="item" data-part="trailing">
+      <slot name="trailing" v-bind="slotProps" />
     </span>
   </component>
 </template>

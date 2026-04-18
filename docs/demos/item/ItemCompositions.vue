@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import { Button } from '@/components/Button';
 import { Item } from '@/components/Item';
 </script>
 
 <template>
   <div class="item-demo-column">
-    <Item variant="outline" href="/components/button">
-      <template #media>
+    <Item color="text" href="/components/button">
+      <template #leading>
         <span class="item-demo-avatar">M3</span>
       </template>
       Library Overview
       <template #description>Open the Button docs page.</template>
-      <template #actions>
+      <template #trailing>
         <span class="item-demo-arrow">→</span>
       </template>
     </Item>
 
-    <Item :clickable="false" size="sm">
-      <template #header>Non-interactive</template>
+    <Item size="extra-small" leading-icon="sync">
+      <template #header>Recent Sync</template>
       Local Cache
       <template #description>Synced 3 minutes ago.</template>
-      <template #footer>
-        <Button size="extra-small" color="text">Inspect</Button>
-      </template>
+      <template #footer> Last source: docs registry </template>
     </Item>
   </div>
 </template>

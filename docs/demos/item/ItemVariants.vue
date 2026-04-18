@@ -5,25 +5,20 @@ import { Item } from '@/components/Item';
 <template>
   <div class="item-demo-column">
     <Item
-      variant="default"
-      title="Default Variant"
-      description="Standard styling with a filled surface."
-      media-icon="folder"
-      action-icon="chevron_right"
+      color="text"
+      size="small"
+      title="Filled / Small"
+      description="Uses Button color and size tokens."
+      leading-icon="folder"
+      trailing-icon="chevron_right"
     />
     <Item
-      variant="outline"
-      title="Outline Variant"
-      description="Outlined surface with transparent background."
-      media-icon="drafts"
-      action-icon="open_in_new"
-    />
-    <Item
-      variant="muted"
-      title="Muted Variant"
-      description="Low-contrast styling for secondary content."
-      media-icon="history"
-      action-icon="more_horiz"
+      color="outlined"
+      size="medium"
+      title="Outlined / Medium"
+      description="Same API as Button, with Item content layout."
+      leading-icon="drafts"
+      trailing-icon="open_in_new"
     />
   </div>
 </template>

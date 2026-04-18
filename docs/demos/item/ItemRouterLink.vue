@@ -35,27 +35,17 @@ const DemoRouterLink = defineComponent({
 <template>
   <div style="display: flex; flex-direction: column; gap: 0.75rem; max-inline-size: 28rem">
     <DemoRouterLink custom to="/account/profile" v-slot="{ href, navigate, isActive }">
-      <Item
-        :href="href"
-        :active="isActive"
-        title="Profile"
-        description="Manage your account details."
-        media-icon="person"
-        action-icon="chevron_right"
-        @click="navigate"
-      />
+      <Item :href="href" :active="isActive" leading-icon="person" trailing-icon="chevron_right" @click="navigate">
+        Profile
+        <template #description>Manage your account details.</template>
+      </Item>
     </DemoRouterLink>
 
     <DemoRouterLink custom to="/account/security" v-slot="{ href, navigate, isActive }">
-      <Item
-        :href="href"
-        :active="isActive"
-        title="Security"
-        description="Passwords, passkeys, and sign-in alerts."
-        media-icon="shield"
-        action-icon="chevron_right"
-        @click="navigate"
-      />
+      <Item :href="href" :active="isActive" leading-icon="shield" trailing-icon="chevron_right" @click="navigate">
+        Security
+        <template #description>Passwords, passkeys, and sign-in alerts.</template>
+      </Item>
     </DemoRouterLink>
 
     <div>Current route: {{ currentPath }}</div>

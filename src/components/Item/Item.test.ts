@@ -3,21 +3,12 @@ import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick } from 'vue';
 import Item from './Item.vue';
 
-function createPointerEvent(type: string, init: EventInit & { pointerId?: number } = {}): Event {
-  const event = new Event(type, init);
-  Object.defineProperty(event, 'pointerId', {
-    configurable: true,
-    value: init.pointerId ?? 1,
-  });
-  return event;
-}
-
 afterEach(() => {
   document.body.innerHTML = '';
 });
 
 describe('Item', () => {
-  it('renders default content with icon shortcuts', async () => {
+  it('renders default content with button icon shortcuts', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -25,8 +16,8 @@ describe('Item', () => {
       h(Item, {
         title: 'Profile',
         description: 'Manage your account settings.',
-        mediaIcon: 'person',
-        actionIcon: 'chevron_right',
+        leadingIcon: 'person',
+        trailingIcon: 'chevron_right',
       }),
     );
 
@@ -36,17 +27,20 @@ describe('Item', () => {
     const root = container.querySelector<HTMLElement>('[data-scope="item"][data-part="root"]');
     const title = container.querySelector<HTMLElement>('[data-scope="item"][data-part="title"]');
     const description = container.querySelector<HTMLElement>('[data-scope="item"][data-part="description"]');
-    const media = container.querySelector<HTMLElement>('[data-scope="item"][data-part="media-icon"]');
-    const action = container.querySelector<HTMLElement>('[data-scope="item"][data-part="action-icon"]');
+    const leading = container.querySelector<HTMLElement>('[data-scope="item"][data-part="leading"]');
+    const trailing = container.querySelector<HTMLElement>('[data-scope="item"][data-part="trailing"]');
 
     expect(root?.tagName).toBe('BUTTON');
-    expect(root?.dataset.variant).toBe('default');
-    expect(root?.dataset.size).toBe('default');
-    expect(root?.dataset.clickable).toBe('true');
+    expect(root?.dataset.color).toBe('filled');
+    expect(root?.dataset.size).toBe('small');
     expect(title?.textContent).toContain('Profile');
     expect(description?.textContent).toContain('Manage your account settings.');
-    expect(media).not.toBeNull();
-    expect(action).not.toBeNull();
+    expect(leading).not.toBeNull();
+    expect(trailing).not.toBeNull();
+    expect(leading?.classList.contains('m3-icon-morph')).toBe(true);
+    expect(trailing?.classList.contains('m3-icon-morph')).toBe(true);
+    expect(title?.classList.contains('m3-text-morph')).toBe(true);
+    expect(description?.classList.contains('m3-text-morph')).toBe(true);
 
     app.unmount();
   });
@@ -76,29 +70,37 @@ describe('Item', () => {
     app.unmount();
   });
 
-  it('can render a non-interactive layout container', async () => {
+  it('supports active state with leading and trailing slots', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
     const app = createApp(() =>
-      h(Item, {
-        clickable: false,
-        title: 'Static item',
-      }),
+      h(
+        Item,
+        {
+          active: true,
+        },
+        {
+          leading: () => h('span', { id: 'item-leading' }, 'L'),
+          default: () => 'Active item',
+          description: () => 'Uses navigation-rail-like active indicator.',
+          trailing: () => h('span', { id: 'item-trailing' }, 'R'),
+        },
+      ),
     );
 
     app.mount(container);
     await nextTick();
 
     const root = container.querySelector<HTMLElement>('[data-scope="item"][data-part="root"]');
+    const leading = container.querySelector<HTMLElement>('[data-scope="item"][data-part="leading"]');
+    const trailing = container.querySelector<HTMLElement>('[data-scope="item"][data-part="trailing"]');
 
-    expect(root?.tagName).toBe('DIV');
-    expect(root?.dataset.clickable).toBe('false');
-
-    root?.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, pointerId: 2 }));
-    await nextTick();
-
-    expect(root?.dataset.pressed).toBe('false');
+    expect(root?.dataset.active).toBe('true');
+    expect(root?.dataset.selected).toBe('true');
+    expect(root?.getAttribute('aria-current')).toBe('page');
+    expect(leading?.textContent).toContain('L');
+    expect(trailing?.textContent).toContain('R');
 
     app.unmount();
   });

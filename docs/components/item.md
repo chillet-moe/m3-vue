@@ -16,14 +16,14 @@ import ItemRouterLink from '../demos/item/ItemRouterLink.vue';
 import ItemRouterLinkSrc from '../demos/item/ItemRouterLink.vue?raw';
 
 const props = ref({
-  variant: 'default',
-  size: 'default',
+  color: 'text',
+  size: 'small',
+  shape: 'rounded',
   disabled: false,
-  clickable: true,
   active: false,
   href: undefined,
-  mediaIcon: 'person',
-  actionIcon: 'chevron_right',
+  leadingIcon: 'person',
+  trailingIcon: 'chevron_right',
   title: 'Profile',
   description: 'Manage your account settings.',
 });
@@ -31,7 +31,7 @@ const props = ref({
 
 # Item
 
-Item is a flexible row-like surface inspired by shadcn Item, suitable for interactive list entries and richer button-like actions.
+Item is a Button extension with richer content layout, suitable for interactive list entries and action rows.
 
 <DemoContainer><Item v-bind="props" /></DemoContainer>
 
@@ -45,7 +45,7 @@ Item is a flexible row-like surface inspired by shadcn Item, suitable for intera
 
 <DemoContainer :src="ItemDefaultSrc"><ItemDefault /></DemoContainer>
 
-### Variants
+### Colors & Sizes
 
 <DemoContainer :src="ItemVariantsSrc"><ItemVariants /></DemoContainer>
 
