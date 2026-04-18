@@ -70,6 +70,7 @@ export default defineConfig({
             { text: 'Icon', link: '/components/icon' },
             { text: 'Item', link: '/components/item' },
             { text: 'Menu', link: '/components/menu' },
+            { text: 'NavigationRail', link: '/components/navigation-rail' },
             { text: 'Pagination', link: '/components/pagination' },
             { text: 'Radio', link: '/components/radio' },
             { text: 'Select', link: '/components/select' },

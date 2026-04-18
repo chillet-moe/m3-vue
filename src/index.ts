@@ -35,6 +35,7 @@ export * from './components/Radio';
 export * from './components/CheckBox';
 export * from './components/Item';
 export * from './components/Menu';
+export * from './components/NavigationRail';
 export * from './components/Pagination';
 export * from './components/Form';
 export * from './components/FormField';

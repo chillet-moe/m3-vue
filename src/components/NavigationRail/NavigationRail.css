@@ -1,0 +1,67 @@
+@layer tokens {
+  .m3-navigation-rail {
+    --md-comp-navigation-rail-collapsed-width: --dp(80);
+    --md-comp-navigation-rail-expanded-width: --dp(220);
+    --md-comp-navigation-rail-collapsed-top-space: --dp(44);
+    --md-comp-navigation-rail-expanded-top-space: --dp(44);
+    --md-comp-navigation-rail-bottom-space: --dp(16);
+    --md-comp-navigation-rail-collapsed-item-gap: --dp(4);
+    --md-comp-navigation-rail-expanded-item-gap: --dp(2);
+    --md-comp-navigation-rail-collapsed-padding-inline: 0;
+    --md-comp-navigation-rail-expanded-padding-inline: --dp(8);
+    --md-comp-navigation-rail-container-shape: var(--md-sys-shape-corner-none);
+    --md-comp-navigation-rail-container-color: var(--md-sys-color-surface);
+    --md-comp-navigation-rail-motion: var(--md-easing-spatial);
+  }
+}
+
+.m3-navigation-rail {
+  --_navigation-rail-current-width: var(--md-comp-navigation-rail-collapsed-width);
+  --_navigation-rail-current-top-space: var(--md-comp-navigation-rail-collapsed-top-space);
+  --_navigation-rail-current-item-gap: var(--md-comp-navigation-rail-collapsed-item-gap);
+  --_navigation-rail-current-padding-inline: var(--md-comp-navigation-rail-collapsed-padding-inline);
+
+  all: unset;
+  box-sizing: border-box;
+  inline-size: var(--_navigation-rail-current-width);
+  min-inline-size: 0;
+  min-block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding-block: var(--_navigation-rail-current-top-space) var(--md-comp-navigation-rail-bottom-space);
+  padding-inline: var(--_navigation-rail-current-padding-inline);
+  border-radius: var(--md-comp-navigation-rail-container-shape);
+  background-color: var(--md-comp-navigation-rail-container-color);
+  overflow-x: clip;
+  transition:
+    inline-size var(--md-comp-navigation-rail-motion),
+    padding var(--md-comp-navigation-rail-motion);
+}
+
+.m3-navigation-rail[data-state='expanded'] {
+  --_navigation-rail-current-width: var(--md-comp-navigation-rail-expanded-width);
+  --_navigation-rail-current-top-space: var(--md-comp-navigation-rail-expanded-top-space);
+  --_navigation-rail-current-item-gap: var(--md-comp-navigation-rail-expanded-item-gap);
+  --_navigation-rail-current-padding-inline: var(--md-comp-navigation-rail-expanded-padding-inline);
+}
+
+.m3-navigation-rail-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  inline-size: 100%;
+  gap: var(--_navigation-rail-current-item-gap);
+  transition: gap var(--md-comp-navigation-rail-motion);
+}
+
+.m3-navigation-rail[data-state='expanded'] .m3-navigation-rail-items {
+  align-items: flex-start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-navigation-rail,
+  .m3-navigation-rail-items {
+    transition-duration: 0ms;
+  }
+}

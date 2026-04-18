@@ -27,6 +27,8 @@ export const m3VueComponentNames = [
   'MenuItem',
   'MenuLabel',
   'MenuSubMenu',
+  'NavigationRail',
+  'NavigationRailItem',
   'Pagination',
   'PaginationContent',
   'PaginationEllipsis',

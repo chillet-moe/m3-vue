@@ -1,107 +1,131 @@
-.m3-icon-morph {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'opsz' 24;
+:where(.m3-icon-morph, .m3-text-morph) {
+  --m3-morph-selected: 0;
+}
 
+:where(.m3-icon-morph, .m3-text-morph):is([aria-selected='true'], [data-selected='true'], [aria-current='page']),
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])
+  :where(.m3-icon-morph, .m3-text-morph) {
+  --m3-morph-selected: 1;
+}
+
+.m3-icon-morph {
+  --m3-icon-morph-weight: 400;
+  --m3-icon-morph-optical-size: 24;
+
+  font-variation-settings:
+    'FILL' var(--m3-morph-selected),
+    'wght' var(--m3-icon-morph-weight),
+    'opsz' var(--m3-icon-morph-optical-size);
   transition: font-variation-settings var(--md-easing);
 }
 
 /* hover, 变粗 */
-.m3-icon-morph:hover {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 600,
-    'opsz' 24;
+.m3-icon-morph:hover,
+.m3-morph-host:hover .m3-icon-morph {
+  --m3-icon-morph-weight: 600;
 }
 
 /* active, 变细 */
 .m3-icon-morph:focus-visible,
-.m3-icon-morph:active {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 300,
-    'opsz' 24;
-}
-
-/* selected, 变实心 */
-.m3-icon-morph[aria-selected='true'] {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'opsz' 24;
-}
-
-/* selected, hover, 变实心且变粗 */
-.m3-icon-morph[aria-selected='true']:hover {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 600,
-    'opsz' 24;
-}
-
-/* selected, active, 变实心且变细 */
-.m3-icon-morph[aria-selected='true']:focus-visible,
-.m3-icon-morph[aria-selected='true']:active {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 300,
-    'opsz' 24;
+.m3-icon-morph:active,
+.m3-morph-host:focus-visible .m3-icon-morph,
+.m3-morph-host:active .m3-icon-morph,
+.m3-morph-host .state-layer:active .m3-icon-morph,
+.m3-morph-host:has(.state-layer:active) .m3-icon-morph {
+  --m3-icon-morph-weight: 300;
 }
 
 /* ------------------------ */
 
 .m3-text-morph {
-  font-variation-settings: 'GRAD' 0;
+  --m3-text-morph-grad: 0;
+
+  font-variation-settings: 'GRAD' var(--m3-text-morph-grad);
   transition:
-    font-variation-settings,
+    font-variation-settings var(--md-easing),
     font-weight var(--md-easing);
 }
 
 /* hover, 变粗 */
-.m3-text-morph:hover {
-  font-variation-settings: 'GRAD' 50;
+.m3-text-morph:not(:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])):hover,
+.m3-morph-host:not(:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])):hover .m3-text-morph {
+  --m3-text-morph-grad: 50;
 }
 
-/* 语言非英文时，使用字重 */
-html:not([lang='en']) .m3-text-morph:hover {
+/* CJK 语言时，使用字重 */
+:is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):not(
+    :is([aria-selected='true'], [data-selected='true'], [aria-current='page'])
+  ):hover,
+.m3-morph-host:not(:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])):hover
+  :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
   font-weight: 450;
-  font-variation-settings: 'GRAD' 0;
+  --m3-text-morph-grad: 0;
 }
 
 /* active, 变细 */
 .m3-text-morph:focus-visible,
-.m3-text-morph:active {
-  font-variation-settings: 'GRAD' -50;
+.m3-text-morph:active,
+.m3-morph-host:focus-visible .m3-text-morph,
+.m3-morph-host:active .m3-text-morph,
+.m3-morph-host:has(.state-layer:active) .m3-text-morph {
+  --m3-text-morph-grad: -125;
 }
 
-/* 语言非英文时，使用字重 */
-html:not([lang='en']) .m3-text-morph:focus-visible,
-html:not([lang='en']) .m3-text-morph:active {
-  font-weight: 400;
-  font-variation-settings: 'GRAD' 0;
+/* CJK 语言时，使用字重 */
+:is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):focus-visible,
+:is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):active,
+.m3-morph-host:focus-visible :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
+.m3-morph-host:active :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
+.m3-morph-host:has(.state-layer:active) :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
+  font-weight: 350;
+  --m3-text-morph-grad: 0;
 }
 
 /* selected, 变更粗 */
-.m3-text-morph[aria-selected='true'] {
-  font-variation-settings: 'GRAD' 125;
+.m3-text-morph:is([aria-selected='true'], [data-selected='true'], [aria-current='page']),
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']) .m3-text-morph {
+  --m3-text-morph-grad: 125;
 }
 
-/* 语言非英文时，使用字重 */
-.m3-text-morph[aria-selected='true'] {
+/* CJK 语言时，使用字重 */
+:is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):is(
+  [aria-selected='true'],
+  [data-selected='true'],
+  [aria-current='page']
+),
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])
+  :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
   font-weight: 500;
-  font-variation-settings: 'GRAD' 0;
+  --m3-text-morph-grad: 0;
 }
 
 /* selected, active 变细 */
-.m3-text-morph[aria-selected='true']:focus-visible,
-.m3-text-morph[aria-selected='true']:active {
-  font-variation-settings: 'GRAD' -50;
+.m3-text-morph:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):focus-visible,
+.m3-text-morph:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):active,
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):focus-visible .m3-text-morph,
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):active .m3-text-morph,
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):has(.state-layer:active)
+  .m3-text-morph {
+  --m3-text-morph-grad: -125;
 }
 
-/* 语言非英文时，使用字重 */
-.m3-text-morph[aria-selected='true']:focus-visible,
-.m3-text-morph[aria-selected='true']:active {
-  font-weight: 300;
-  font-variation-settings: 'GRAD' 0;
+/* CJK 语言时，使用字重 */
+:is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):is(
+    [aria-selected='true'],
+    [data-selected='true'],
+    [aria-current='page']
+  ):focus-visible,
+:is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):is(
+    [aria-selected='true'],
+    [data-selected='true'],
+    [aria-current='page']
+  ):active,
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):focus-visible
+  :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):active
+  :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):has(.state-layer:active)
+  :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
+  font-weight: 400;
+  --m3-text-morph-grad: 0;
 }
