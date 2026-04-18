@@ -91,6 +91,18 @@
     padding var(--md-comp-navigation-rail-item-motion);
 }
 
+.m3-navigation-rail-item-state-layer {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  block-size: 100%;
+  inline-size: 100%;
+
+  .state-layer {
+    position: absolute;
+  }
+}
+
 .m3-navigation-rail-item-indicator::before {
   content: '';
   position: absolute;

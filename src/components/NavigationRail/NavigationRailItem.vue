@@ -163,12 +163,13 @@ const handleKeydown = (event: KeyboardEvent) => {
     @click="handleClick"
     @keydown="handleKeydown"
   >
-    <span
-      class="m3-navigation-rail-item-indicator state-layer"
-      data-scope="navigation-rail-item"
-      data-part="indicator"
-      data-state-layer-hover-from="target"
-    >
+    <span class="m3-navigation-rail-item-indicator" data-scope="navigation-rail-item" data-part="indicator">
+      <span
+        aria-hidden="true"
+        class="m3-navigation-rail-item-state-layer state-layer"
+        data-state-layer-hover-from="target"
+      />
+
       <span class="m3-navigation-rail-item-icon-layer" data-scope="navigation-rail-item" data-part="icon-layer">
         <span class="m3-navigation-rail-item-icon" data-scope="navigation-rail-item" data-part="icon">
           <slot name="icon" v-bind="slotProps">
