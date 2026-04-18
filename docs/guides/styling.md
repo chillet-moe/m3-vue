@@ -7,7 +7,7 @@ M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为�
 - **`data-scope`**：标识组件的类型，例如 `button`、`text-field`、`menu-item`。
 - **`data-part`**：标识组件内部的具体元素，例如 `root`、`label`、`leading`。
 
-每个组件的根元素都有 `data-part="root"`。
+每个组件的根元素都有 `data-part="root"`，而根元素不能使用 `:deep`。
 
 ## 用法
 
@@ -15,7 +15,7 @@ M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为�
 
 ```css
 /* 自定义所有 Button 的根元素 */
-:deep([data-scope='button'][data-part='root']) {
+[data-scope='button'][data-part='root'] {
   border-radius: 8px;
 }
 
