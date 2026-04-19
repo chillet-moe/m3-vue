@@ -33,7 +33,7 @@ const DemoRouterLink = defineComponent({
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; gap: 0.75rem; max-inline-size: 28rem">
+  <div style="display: flex; flex-direction: column; gap: 0.125rem; max-inline-size: 28rem">
     <DemoRouterLink custom to="/account/profile" v-slot="{ href, navigate, isActive }">
       <Item :href="href" :active="isActive" leading-icon="person" trailing-icon="chevron_right" @click="navigate">
         Profile

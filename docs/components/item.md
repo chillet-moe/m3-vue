@@ -8,8 +8,8 @@ import { Item } from '@/components/Item';
 
 import ItemDefault from '../demos/item/ItemDefault.vue';
 import ItemDefaultSrc from '../demos/item/ItemDefault.vue?raw';
-import ItemVariants from '../demos/item/ItemVariants.vue';
-import ItemVariantsSrc from '../demos/item/ItemVariants.vue?raw';
+import ItemList from '../demos/item/ItemList.vue';
+import ItemListSrc from '../demos/item/ItemList.vue?raw';
 import ItemCompositions from '../demos/item/ItemCompositions.vue';
 import ItemCompositionsSrc from '../demos/item/ItemCompositions.vue?raw';
 import ItemRouterLink from '../demos/item/ItemRouterLink.vue';
@@ -45,9 +45,9 @@ Item is a Button extension with richer content layout, suitable for interactive 
 
 <DemoContainer :src="ItemDefaultSrc"><ItemDefault /></DemoContainer>
 
-### Colors & Sizes
+### List
 
-<DemoContainer :src="ItemVariantsSrc"><ItemVariants /></DemoContainer>
+<DemoContainer :src="ItemListSrc"><ItemList /></DemoContainer>
 
 ### Compositions
 
