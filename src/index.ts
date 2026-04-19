@@ -38,6 +38,7 @@ export * from './components/ListItem';
 export * from './components/Menu';
 export * from './components/NavigationRail';
 export * from './components/Pagination';
+export * from './components/ProgressIndicator';
 export * from './components/TextField';
 export * from './components/Select';
 export * from './components/Combobox';
