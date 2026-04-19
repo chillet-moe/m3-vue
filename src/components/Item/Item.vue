@@ -6,7 +6,7 @@ import { usePressedState } from '@/composables/pressedState';
 import { computed, inject, unref, useSlots } from 'vue';
 import type { ButtonProps } from '@/components/Button';
 
-type ItemButtonProps = Omit<ButtonProps, 'toggleable'>;
+type ItemButtonProps = Omit<ButtonProps, 'toggleable' | 'color' | 'size'>;
 
 export type ItemProps = ItemButtonProps & {
   /** Highlight the item as active/selected. */
@@ -116,7 +116,7 @@ const slotProps = computed(() => ({
     data-scope="item"
     data-part="root"
     data-color="text"
-    :data-size="size"
+    data-size="small"
     :data-shape="shape"
     :data-pressed="!disabled && pressed ? 'true' : 'false'"
     :data-active="isSelected ? 'true' : undefined"

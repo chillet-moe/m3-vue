@@ -22,13 +22,12 @@
     --md-comp-item-active-state-layer-color: var(--md-sys-color-on-secondary-container);
     --md-comp-item-inactive-state-layer-color: var(--md-color-on-container);
     --md-comp-item-motion: var(--md-easing-fast-spatial);
-    --md-comp-item-indicator-shape: var(--md-sys-shape-corner-full);
+    --md-comp-item-indicator-shape: var(--md-comp-button-container-shape, var(--md-sys-shape-corner-full));
     --md-comp-item-indicator-collapsed-visual-width: --dp(12);
   }
 }
 
 .m3-item {
-  --md-comp-item-indicator-shape: var(--md-comp-button-container-shape, var(--md-sys-shape-corner-full));
   --_item-current-label-color: var(--md-comp-item-inactive-label-color);
   --_item-current-icon-color: var(--md-comp-item-inactive-icon-color);
   --_item-current-state-layer-color: var(--md-comp-item-inactive-state-layer-color);
@@ -51,6 +50,10 @@
   text-align: start;
 
   --md-state-layer-color: var(--_item-current-state-layer-color);
+}
+
+.m3-item:disabled {
+  background-color: transparent;
 }
 
 .m3-item::before {
@@ -81,7 +84,6 @@
   row-gap: var(--md-comp-item-content-gap);
   padding-block: var(--md-comp-item-main-padding-block);
   padding-inline: var(--md-comp-item-main-padding-inline);
-  border-radius: var(--md-comp-item-indicator-shape);
   overflow: hidden;
   transition: border-radius var(--md-easing-fast-spatial);
 }
@@ -93,6 +95,11 @@
   position: relative;
   z-index: 1;
   min-inline-size: 0;
+
+  .m3-item:disabled &,
+  .m3-item[aria-disabled='true'] & {
+    color: color-mix(in srgb, currentColor 38%, transparent);
+  }
 }
 
 .m3-item-header,
@@ -199,7 +206,7 @@
   --md-comp-item-main-padding-inline: --dp(8);
   --md-comp-item-gap: --dp(8);
   --md-comp-item-content-gap: --dp(1);
-  --md-comp-item-icon-size: --dp(18);
+  --md-comp-item-icon-size: --dp(20);
 }
 
 .m3-button.m3-item[data-size='small'] {
@@ -210,7 +217,7 @@
   --md-comp-item-main-padding-inline: --dp(8);
   --md-comp-item-gap: --dp(12);
   --md-comp-item-content-gap: --dp(1);
-  --md-comp-item-icon-size: --dp(18);
+  --md-comp-item-icon-size: --dp(24);
 }
 
 .m3-button.m3-item[data-size='medium'] {
