@@ -30,6 +30,7 @@ const props = ref({
   color: 'filled',
   size: 'medium',
   shape: 'rounded',
+  pressShapeMorph: true,
   disabled: false,
   href: undefined,
   leadingIcon: 'favorite',

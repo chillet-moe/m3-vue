@@ -394,7 +394,7 @@ label.m3-button:has(input:disabled) {
 .m3-button[data-shape='rounded'] {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
 
-  &[data-pressed='true'] {
+  &[data-press-shape-morph='true'][data-pressed='true'] {
     --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
   }
 }
@@ -402,7 +402,7 @@ label.m3-button:has(input:disabled) {
 .m3-button[data-shape='square'] {
   --md-comp-button-container-shape: var(--md-comp-button-container-shape-square);
 
-  &[data-pressed='true'] {
+  &[data-press-shape-morph='true'][data-pressed='true'] {
     --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
   }
 }
@@ -438,7 +438,7 @@ label.m3-button:has(input:disabled) {
     --md-color-container: var(--md-comp-button-selected-container-color);
     --md-color-on-container: var(--md-comp-button-label-text-selected-color);
 
-    &:active {
+    &[data-press-shape-morph='true']:active {
       --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
     }
   }
@@ -494,14 +494,14 @@ label.m3-button:has(input:disabled) {
   }
 
   /* Pressed state border-radius overrides */
-  &:first-of-type:active,
-  &:last-of-type:active {
+  &[data-press-shape-morph='true']:first-of-type:active,
+  &[data-press-shape-morph='true']:last-of-type:active {
     --md-comp-button-group-connected-inner-corner-corner-size: var(
       --md-comp-button-group-connected-pressed-inner-corner-corner-size
     );
   }
 
-  &:not(:first-of-type):not(:last-of-type):active {
+  &[data-press-shape-morph='true']:not(:first-of-type):not(:last-of-type):active {
     border-radius: var(--md-comp-button-group-connected-pressed-inner-corner-corner-size);
   }
 

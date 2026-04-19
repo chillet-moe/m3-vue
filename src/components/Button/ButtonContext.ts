@@ -6,6 +6,7 @@ export interface ButtonContext {
   size?: MaybeRef<ButtonProps['size'] | undefined>;
   color?: MaybeRef<ButtonProps['color'] | undefined>;
   shape?: MaybeRef<ButtonProps['shape'] | undefined>;
+  pressShapeMorph?: MaybeRef<ButtonProps['pressShapeMorph'] | undefined>;
   disabled?: MaybeRef<boolean | undefined>;
 }
 

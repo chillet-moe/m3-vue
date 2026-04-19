@@ -21,6 +21,9 @@ export type ButtonProps = {
   /** The shape of the button. */
   shape?: 'rounded' | 'square';
 
+  /** Whether pressed-state shape morphing is enabled. */
+  pressShapeMorph?: boolean;
+
   /** The href attribute. If provided, the button will be rendered as an anchor element. */
   href?: string;
 
@@ -36,6 +39,7 @@ export type ButtonProps = {
 
 const props = withDefaults(defineProps<ButtonProps>(), {
   toggleable: undefined,
+  pressShapeMorph: undefined,
   disabled: undefined,
 });
 
@@ -45,6 +49,7 @@ const toggleable = computed(() => props.toggleable ?? unref(context?.toggleable)
 const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
 const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
+const pressShapeMorph = computed(() => props.pressShapeMorph ?? unref(context?.pressShapeMorph) ?? true);
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
 const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
@@ -68,16 +73,19 @@ const guardDisabledInteraction = (event: Event) => {
 
 const handlePointerDown = (event: PointerEvent) => {
   if (guardDisabledInteraction(event)) return;
+  if (!pressShapeMorph.value) return;
   onPointerDown(event);
 };
 
 const handlePointerUp = (event: PointerEvent) => {
   if (guardDisabledInteraction(event)) return;
+  if (!pressShapeMorph.value) return;
   onPointerUp(event);
 };
 
 const handlePointerCancel = (event: PointerEvent) => {
   if (guardDisabledInteraction(event)) return;
+  if (!pressShapeMorph.value) return;
   onPointerCancel(event);
 };
 
@@ -110,7 +118,8 @@ const slots = defineSlots<{
     :data-color="color"
     :data-size="size"
     :data-shape="shape"
-    :data-pressed="!disabled && pressed ? 'true' : 'false'"
+    :data-press-shape-morph="pressShapeMorph ? 'true' : 'false'"
+    :data-pressed="!disabled && pressShapeMorph && pressed ? 'true' : 'false'"
     :data-toggleable="toggleable ? 'true' : 'false'"
     :href="href"
     :disabled="nativeDisabled"

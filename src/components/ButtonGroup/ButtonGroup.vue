@@ -10,12 +10,14 @@ export type ButtonGroupProps = SelectionGroupProps & {
   type?: 'standard' | 'connected';
   size?: ButtonProps['size'];
   color?: ButtonProps['color'];
+  pressShapeMorph?: ButtonProps['pressShapeMorph'];
 };
 
 const props = withDefaults(defineProps<ButtonGroupProps>(), {
   type: 'standard',
   color: 'tonal',
   size: 'small',
+  pressShapeMorph: true,
   disabled: false,
   selectionMode: 'single',
 });
@@ -25,6 +27,7 @@ const modelValue = defineModel<SelectionGroupModelValue>('modelValue');
 provide(buttonContextKey, {
   size: toRef(() => props.size),
   color: toRef(() => props.color),
+  pressShapeMorph: toRef(() => props.pressShapeMorph),
   toggleable: toRef(() => true),
   disabled: toRef(() => props.disabled),
 });

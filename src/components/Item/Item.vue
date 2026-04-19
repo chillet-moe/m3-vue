@@ -6,7 +6,7 @@ import { usePressedState } from '@/composables/pressedState';
 import { computed, inject, unref, useSlots } from 'vue';
 import type { ButtonProps } from '@/components/Button';
 
-type ItemButtonProps = Omit<ButtonProps, 'toggleable' | 'color' | 'size'>;
+type ItemButtonProps = Omit<ButtonProps, 'toggleable' | 'color' | 'size' | 'pressShapeMorph'>;
 
 export type ItemProps = ItemButtonProps & {
   /** Highlight the item as active/selected. */

@@ -52,4 +52,38 @@ describe('Button', () => {
 
     app.unmount();
   });
+
+  it('keeps pressed state disabled when click morphing is turned off', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      render() {
+        return h(
+          Button,
+          {
+            pressShapeMorph: false,
+          },
+          {
+            default: () => 'Button',
+          },
+        );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const button = container.querySelector('button') as HTMLButtonElement | null;
+
+    expect(button).not.toBeNull();
+    expect(button?.dataset.pressShapeMorph).toBe('false');
+
+    button?.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, pointerId: 9 }));
+    await nextTick();
+
+    expect(button?.dataset.pressed).toBe('false');
+
+    app.unmount();
+  });
 });
