@@ -8,6 +8,7 @@
 @import './typography.css';
 @import './typography-classes.css';
 @import './color-classes.css';
+@import './prose.css';
 
 @layer tokens {
   :root {
