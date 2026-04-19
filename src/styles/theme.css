@@ -1,3 +1,5 @@
+@layer reset, base, tokens, components;
+
 @import './reset.css';
 @import './tokens.css';
 @import './motion.css';
@@ -6,8 +8,6 @@
 @import './typography.css';
 @import './typography-classes.css';
 @import './color-classes.css';
-
-@layer base, tokens;
 
 @layer tokens {
   :root {

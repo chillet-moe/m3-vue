@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import pkg from './package.json' with { type: 'json' };
 import { webTypesFromVueComponentMeta } from './scripts/web-types-gen/index.ts';
 import copyFiles from './scripts/copy-files/index.ts';
+import fixCssLayerOrder from './scripts/fix-css-layer-order/index.ts';
 import { browserslistToTargets, Features } from 'lightningcss';
 import browserslist from 'browserslist';
 
@@ -58,6 +59,7 @@ export default defineConfig({
         },
       ],
     }),
+    fixCssLayerOrder(),
   ],
   resolve: {
     alias: {
