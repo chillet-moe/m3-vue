@@ -68,7 +68,7 @@ export default defineConfig({
             { text: 'Combobox', link: '/components/combobox' },
             { text: 'Dialog', link: '/components/dialog' },
             { text: 'Icon', link: '/components/icon' },
-            { text: 'Item', link: '/components/item' },
+            { text: 'ListItem', link: '/components/item' },
             { text: 'Menu', link: '/components/menu' },
             { text: 'NavigationRail', link: '/components/navigation-rail' },
             { text: 'Pagination', link: '/components/pagination' },

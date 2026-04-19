@@ -6,9 +6,9 @@ import { usePressedState } from '@/composables/pressedState';
 import { computed, inject, unref, useSlots } from 'vue';
 import type { ButtonProps } from '@/components/Button';
 
-type ItemButtonProps = Omit<ButtonProps, 'toggleable' | 'color' | 'size' | 'pressShapeMorph'>;
+type ListItemButtonProps = Omit<ButtonProps, 'toggleable' | 'color' | 'size' | 'pressShapeMorph'>;
 
-export type ItemProps = ItemButtonProps & {
+export type ListItemProps = ListItemButtonProps & {
   /** Highlight the item as active/selected. */
   active?: boolean;
 
@@ -19,7 +19,7 @@ export type ItemProps = ItemButtonProps & {
   description?: string;
 };
 
-const props = withDefaults(defineProps<ItemProps>(), {
+const props = withDefaults(defineProps<ListItemProps>(), {
   active: false,
   href: undefined,
   color: undefined,
@@ -175,4 +175,4 @@ const slotProps = computed(() => ({
   </component>
 </template>
 
-<style src="./Item.css"></style>
+<style src="./ListItem.css"></style>

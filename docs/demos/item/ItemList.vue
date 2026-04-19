@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { Item } from '@/components/Item';
+import { ListItem } from '@/components/ListItem';
 </script>
 
 <template>
   <div class="item-demo-column">
-    <Item title="Item 1" />
-    <Item title="Item 2" />
-    <Item title="Item 3" />
-    <Item title="Item 4" />
-    <Item title="Item 5" leading-icon="settings" active />
-    <Item title="Item 6" leading-icon="star" />
+    <ListItem title="Item 1" />
+    <ListItem title="Item 2" />
+    <ListItem title="Item 3" />
+    <ListItem title="Item 4" />
+    <ListItem title="Item 5" leading-icon="settings" active />
+    <ListItem title="Item 6" leading-icon="star" />
   </div>
 </template>
 

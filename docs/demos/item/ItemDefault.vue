@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Item } from '@/components/Item';
+import { ListItem } from '@/components/ListItem';
 </script>
 
 <template>
-  <Item
+  <ListItem
     title="Profile"
     description="Manage your account settings."
     leading-icon="person"

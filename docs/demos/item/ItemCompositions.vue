@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Item } from '@/components/Item';
+import { ListItem } from '@/components/ListItem';
 </script>
 
 <template>
   <div class="item-demo-column">
-    <Item color="text" href="/components/button">
+    <ListItem color="text" href="/components/button">
       <template #leading>
         <span class="item-demo-avatar">M3</span>
       </template>
@@ -13,14 +13,14 @@ import { Item } from '@/components/Item';
       <template #trailing>
         <span class="item-demo-arrow">→</span>
       </template>
-    </Item>
+    </ListItem>
 
-    <Item size="extra-small" leading-icon="sync">
+    <ListItem size="extra-small" leading-icon="sync">
       <template #header>Recent Sync</template>
       Local Cache
       <template #description>Synced 3 minutes ago.</template>
       <template #footer> Last source: docs registry </template>
-    </Item>
+    </ListItem>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
-import { Item } from '@/components/Item';
+import { ListItem } from '@/components/ListItem';
 
 const currentPath = ref('/account/profile');
 
@@ -35,17 +35,17 @@ const DemoRouterLink = defineComponent({
 <template>
   <div style="display: flex; flex-direction: column; gap: 0.125rem; max-inline-size: 28rem">
     <DemoRouterLink custom to="/account/profile" v-slot="{ href, navigate, isActive }">
-      <Item :href="href" :active="isActive" leading-icon="person" trailing-icon="chevron_right" @click="navigate">
+      <ListItem :href="href" :active="isActive" leading-icon="person" trailing-icon="chevron_right" @click="navigate">
         Profile
         <template #description>Manage your account details.</template>
-      </Item>
+      </ListItem>
     </DemoRouterLink>
 
     <DemoRouterLink custom to="/account/security" v-slot="{ href, navigate, isActive }">
-      <Item :href="href" :active="isActive" leading-icon="shield" trailing-icon="chevron_right" @click="navigate">
+      <ListItem :href="href" :active="isActive" leading-icon="shield" trailing-icon="chevron_right" @click="navigate">
         Security
         <template #description>Passwords, passkeys, and sign-in alerts.</template>
-      </Item>
+      </ListItem>
     </DemoRouterLink>
 
     <div>Current route: {{ currentPath }}</div>

@@ -69,7 +69,7 @@ Tabs is built on the `useTabs` composable — the interaction logic (keyboard na
 
 ### Router-Style Links
 
-Use the same `RouterLink custom` pattern as `Button` and `Item`, then pass the generated `href` and `navigate` handler into `Tab`.
+Use the same `RouterLink custom` pattern as `Button` and `ListItem`, then pass the generated `href` and `navigate` handler into `Tab`.
 
 <DemoContainer :src="TabsLinksSrc">
   <TabsLinks />

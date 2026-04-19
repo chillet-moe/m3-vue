@@ -1,19 +1,19 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick } from 'vue';
-import Item from './Item.vue';
+import ListItem from './ListItem.vue';
 
 afterEach(() => {
   document.body.innerHTML = '';
 });
 
-describe('Item', () => {
+describe('ListItem', () => {
   it('renders default content with button icon shortcuts', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
     const app = createApp(() =>
-      h(Item, {
+      h(ListItem, {
         title: 'Profile',
         description: 'Manage your account settings.',
         leadingIcon: 'person',
@@ -50,7 +50,7 @@ describe('Item', () => {
     document.body.appendChild(container);
 
     const app = createApp(() =>
-      h(Item, {
+      h(ListItem, {
         href: '/settings',
         disabled: true,
         title: 'Open settings',
@@ -76,7 +76,7 @@ describe('Item', () => {
 
     const app = createApp(() =>
       h(
-        Item,
+        ListItem,
         {
           active: true,
         },

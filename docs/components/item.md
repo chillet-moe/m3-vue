@@ -1,10 +1,10 @@
 ---
-title: Item
+title: ListItem
 ---
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Item } from '@/components/Item';
+import { ListItem } from '@/components/ListItem';
 
 import ItemDefault from '../demos/item/ItemDefault.vue';
 import ItemDefaultSrc from '../demos/item/ItemDefault.vue?raw';
@@ -29,15 +29,15 @@ const props = ref({
 });
 </script>
 
-# Item
+# ListItem
 
-Item is a Button extension with richer content layout, suitable for interactive list entries and action rows.
+ListItem is a Button extension with richer content layout, suitable for interactive list entries and action rows.
 
-<DemoContainer><Item v-bind="props" /></DemoContainer>
+<DemoContainer><ListItem v-bind="props" /></DemoContainer>
 
 <AnatomyTable scope="item" />
 
-<ApiTable component="Item" v-model="props" />
+<ApiTable component="ListItem" v-model="props" />
 
 ## Examples
 
@@ -55,6 +55,6 @@ Item is a Button extension with richer content layout, suitable for interactive 
 
 ### Vue Router
 
-When `Item` is acting as navigation, use `RouterLink custom` and feed its `href` and `navigate` into the component.
+When `ListItem` is acting as navigation, use `RouterLink custom` and feed its `href` and `navigate` into the component.
 
 <DemoContainer :src="ItemRouterLinkSrc"><ItemRouterLink /></DemoContainer>
