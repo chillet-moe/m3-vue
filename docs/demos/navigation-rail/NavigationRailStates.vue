@@ -19,6 +19,9 @@ const toggleState = () => {
       aria-label="Expandable navigation rail"
       style="block-size: 28rem"
     >
+      <template #leading>Leading slot</template>
+      <template #trailing>Trailing slot</template>
+
       <NavigationRailItem value="home" icon="home" label="Home" />
       <NavigationRailItem value="inbox" icon="inbox" label="Inbox" />
       <NavigationRailItem value="bookmarks" icon="bookmark" label="Saved" />

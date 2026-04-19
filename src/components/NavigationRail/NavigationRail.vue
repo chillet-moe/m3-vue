@@ -25,10 +25,10 @@ defineSlots<{
   default(props: { value: string | undefined; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
 
   /** Leading slot for other components, such as a header or a floating action button. */
-  leading(props: { value: string | undefined; disabled: boolean; state: 'expanded' }): any;
+  leading(props: { value: string | undefined; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
 
   /** Trailing slot for other components, such as a header or a floating action button. */
-  trailing(props: { value: string | undefined; disabled: boolean; state: 'expanded' }): any;
+  trailing(props: { value: string | undefined; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
 }>();
 
 const selectedValue = computed(() => modelValue.value);

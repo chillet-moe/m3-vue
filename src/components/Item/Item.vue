@@ -33,7 +33,6 @@ const props = withDefaults(defineProps<ItemProps>(), {
 });
 
 const context = inject(buttonContextKey, undefined);
-const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
