@@ -165,14 +165,16 @@ const headlineId = `dialog-headline-${useId()}`;
   }
 }
 
-/* 使用 data 属性选择器而非 CSS 类名来区分变体 */
-.m3-<name > [data-variant='filled'] {
-  background: var(--md-comp-<name>-container-color);
-}
+@layer components {
+  /* 使用 data 属性选择器而非 CSS 类名来区分变体 */
+  .m3-<name > [data-variant='filled'] {
+    background: var(--md-comp-<name>-container-color);
+  }
 
-.m3-<name > [data-disabled='true'] {
-  opacity: 0.38;
-  pointer-events: none;
+  .m3-<name > [data-disabled='true'] {
+    opacity: 0.38;
+    pointer-events: none;
+  }
 }
 ```
 

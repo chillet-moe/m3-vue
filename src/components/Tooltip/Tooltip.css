@@ -49,108 +49,110 @@
   }
 }
 
-.m3-tooltip[data-variant='plain'] {
-  background-color: var(--md-comp-plain-tooltip-container-color);
-  color: var(--md-comp-plain-tooltip-supporting-text-color);
-  border-radius: var(--md-comp-plain-tooltip-container-shape);
+@layer components {
+  .m3-tooltip[data-variant='plain'] {
+    background-color: var(--md-comp-plain-tooltip-container-color);
+    color: var(--md-comp-plain-tooltip-supporting-text-color);
+    border-radius: var(--md-comp-plain-tooltip-container-shape);
 
-  font-family:
-    var(--md-comp-plain-tooltip-supporting-text-font),
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    sans-serif;
-  font-size: var(--md-comp-plain-tooltip-supporting-text-size);
-  line-height: var(--md-comp-plain-tooltip-supporting-text-line-height);
-  font-weight: var(--md-comp-plain-tooltip-supporting-text-weight);
-  letter-spacing: var(--md-comp-plain-tooltip-supporting-text-tracking);
-}
-
-.m3-tooltip[data-variant='rich'] {
-  background-color: var(--md-comp-rich-tooltip-container-color);
-  box-shadow: var(--md-comp-rich-tooltip-container-elevation);
-  color: var(--md-comp-rich-tooltip-supporting-text-color);
-  border-radius: var(--md-comp-rich-tooltip-container-shape);
-
-  font-family:
-    var(--md-comp-rich-tooltip-supporting-text-font),
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    sans-serif;
-  font-size: var(--md-comp-rich-tooltip-supporting-text-size);
-  line-height: var(--md-comp-rich-tooltip-supporting-text-line-height);
-  font-weight: var(--md-comp-rich-tooltip-supporting-text-weight);
-  letter-spacing: var(--md-comp-rich-tooltip-supporting-text-tracking);
-}
-
-.m3-tooltip,
-.m3-tooltip[data-vtt-fallback='1'] {
-  margin: 0;
-  inset: auto;
-  border: none;
-
-  padding-inline: 0.5rem;
-  padding-block: 0.25rem;
-
-  display: inline-flex;
-  align-items: center;
-
-  max-inline-size: min(28rem, calc(100vw - 16px));
-}
-
-/* 有 Anchor Positioning 就走 CSS 锚定 */
-@supports (position-anchor: --a) and (position-area: block-start) {
-  .m3-tooltip[popover] {
-    position: fixed;
-    /* position-anchor / position-area / position-try-fallbacks / position-visibility
-       由 directive 通过 style.setProperty 写入，避免你在 CSS 里写死 anchor-name */
+    font-family:
+      var(--md-comp-plain-tooltip-supporting-text-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-plain-tooltip-supporting-text-size);
+    line-height: var(--md-comp-plain-tooltip-supporting-text-line-height);
+    font-weight: var(--md-comp-plain-tooltip-supporting-text-weight);
+    letter-spacing: var(--md-comp-plain-tooltip-supporting-text-tracking);
   }
-}
 
-/* 进/出场动画：fade（可选加一点点位移） */
-.m3-tooltip[popover] {
-  opacity: 0;
-  transform: translateY(4px); /* 不需要位移就删掉这一行 */
-  pointer-events: none;
+  .m3-tooltip[data-variant='rich'] {
+    background-color: var(--md-comp-rich-tooltip-container-color);
+    box-shadow: var(--md-comp-rich-tooltip-container-elevation);
+    color: var(--md-comp-rich-tooltip-supporting-text-color);
+    border-radius: var(--md-comp-rich-tooltip-container-shape);
 
-  /* 关键：把 overlay / display 也加进 transition，并允许离散过渡 */
-  transition:
-    opacity var(--md-duration-fast) ease,
-    transform var(--md-duration-fast) ease,
-    overlay var(--md-duration-fast) allow-discrete,
-    display var(--md-duration-fast) allow-discrete;
-}
+    font-family:
+      var(--md-comp-rich-tooltip-supporting-text-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-rich-tooltip-supporting-text-size);
+    line-height: var(--md-comp-rich-tooltip-supporting-text-line-height);
+    font-weight: var(--md-comp-rich-tooltip-supporting-text-weight);
+    letter-spacing: var(--md-comp-rich-tooltip-supporting-text-tracking);
+  }
 
-/* 显示态 */
-.m3-tooltip[popover]:popover-open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
+  .m3-tooltip,
+  .m3-tooltip[data-vtt-fallback='1'] {
+    margin: 0;
+    inset: auto;
+    border: none;
 
-/* 关键：popover 从 display:none 进入时需要一个“起始样式” */
-@starting-style {
+    padding-inline: 0.5rem;
+    padding-block: 0.25rem;
+
+    display: inline-flex;
+    align-items: center;
+
+    max-inline-size: min(28rem, calc(100vw - 16px));
+  }
+
+  /* 有 Anchor Positioning 就走 CSS 锚定 */
+  @supports (position-anchor: --a) and (position-area: block-start) {
+    .m3-tooltip[popover] {
+      position: fixed;
+      /* position-anchor / position-area / position-try-fallbacks / position-visibility
+         由 directive 通过 style.setProperty 写入，避免你在 CSS 里写死 anchor-name */
+    }
+  }
+
+  /* 进/出场动画：fade（可选加一点点位移） */
+  .m3-tooltip[popover] {
+    opacity: 0;
+    transform: translateY(4px); /* 不需要位移就删掉这一行 */
+    pointer-events: none;
+
+    /* 关键：把 overlay / display 也加进 transition，并允许离散过渡 */
+    transition:
+      opacity var(--md-duration-fast) ease,
+      transform var(--md-duration-fast) ease,
+      overlay var(--md-duration-fast) allow-discrete,
+      display var(--md-duration-fast) allow-discrete;
+  }
+
+  /* 显示态 */
   .m3-tooltip[popover]:popover-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* 关键：popover 从 display:none 进入时需要一个“起始样式” */
+  @starting-style {
+    .m3-tooltip[popover]:popover-open {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+
+  /* fallback 也复用同样的动画逻辑 */
+  .m3-tooltip[data-vtt-fallback='1'] {
     opacity: 0;
     transform: translateY(4px);
+    pointer-events: none;
+    transition:
+      opacity var(--md-duration-fast) ease,
+      transform var(--md-duration-fast) ease;
   }
-}
 
-/* fallback 也复用同样的动画逻辑 */
-.m3-tooltip[data-vtt-fallback='1'] {
-  opacity: 0;
-  transform: translateY(4px);
-  pointer-events: none;
-  transition:
-    opacity var(--md-duration-fast) ease,
-    transform var(--md-duration-fast) ease;
-}
-
-.m3-tooltip[data-vtt-fallback='1'][data-vtt-open='1'] {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  .m3-tooltip[data-vtt-fallback='1'][data-vtt-open='1'] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 }

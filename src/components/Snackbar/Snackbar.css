@@ -27,89 +27,91 @@
   }
 }
 
-.m3-snackbar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: 'content actions';
-  gap: 0.5rem;
-  align-items: center;
-
-  min-block-size: var(--md-comp-snackbar-with-single-line-container-height);
-  padding-inline: var(--md-comp-snackbar-container-padding-inline-start)
-    var(--md-comp-snackbar-container-padding-inline-end);
-  padding-block: 0;
-  border-radius: var(--md-comp-snackbar-container-shape);
-
-  color: var(--md-comp-snackbar-supporting-text-color);
-  background-color: var(--md-comp-snackbar-container-color);
-  box-shadow: var(--md-comp-snackbar-container-elevation);
-}
-
-.m3-snackbar-content {
-  grid-area: content;
-  min-inline-size: 0;
-  overflow-wrap: anywhere;
-  padding-block-start: var(--md-comp-snackbar-container-padding-block);
-  padding-block-end: var(--md-comp-snackbar-container-padding-block);
-
-  font-size: var(--md-comp-snackbar-supporting-text-size);
-  line-height: var(--md-comp-snackbar-supporting-text-line-height);
-  font-weight: var(--md-comp-snackbar-supporting-text-weight);
-  letter-spacing: var(--md-comp-snackbar-supporting-text-tracking);
-}
-
-.m3-snackbar[data-action-layout='new-line'] .m3-snackbar-content {
-  padding-block-end: 0;
-}
-
-.m3-snackbar-actions {
-  grid-area: actions;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  min-inline-size: max-content;
-  justify-self: end;
-}
-
-.m3-snackbar[data-action-layout='new-line'] {
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    'content'
-    'actions';
-  row-gap: 0.5rem;
-  padding-block-end: var(--md-comp-snackbar-container-padding-inline-end);
-}
-
-.m3-snackbar[data-action-layout='new-line'] .m3-snackbar-actions {
-  justify-self: end;
-}
-
-.m3-snackbar-action-button {
-  --md-comp-button-text-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-text-hovered-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-text-focused-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-text-pressed-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-text-disabled-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-text-hovered-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-text-focused-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-text-pressed-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
-  --md-comp-button-focus-indicator-color: var(--md-comp-snackbar-action-label-text-color);
-}
-
-.m3-snackbar-dismiss-button {
-  --md-comp-icon-button-standard-icon-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-standard-hovered-icon-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-standard-focused-icon-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-standard-pressed-icon-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-standard-disabled-icon-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-standard-hovered-state-layer-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-standard-focused-state-layer-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-standard-pressed-state-layer-color: var(--md-comp-snackbar-icon-color);
-  --md-comp-icon-button-focus-indicator-color: var(--md-comp-snackbar-icon-color);
-}
-
-@media (width < 40rem) {
+@layer components {
   .m3-snackbar {
-    inline-size: min(100%, calc(100vi - 2rem));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'content actions';
+    gap: 0.5rem;
+    align-items: center;
+
+    min-block-size: var(--md-comp-snackbar-with-single-line-container-height);
+    padding-inline: var(--md-comp-snackbar-container-padding-inline-start)
+      var(--md-comp-snackbar-container-padding-inline-end);
+    padding-block: 0;
+    border-radius: var(--md-comp-snackbar-container-shape);
+
+    color: var(--md-comp-snackbar-supporting-text-color);
+    background-color: var(--md-comp-snackbar-container-color);
+    box-shadow: var(--md-comp-snackbar-container-elevation);
+  }
+
+  .m3-snackbar-content {
+    grid-area: content;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    padding-block-start: var(--md-comp-snackbar-container-padding-block);
+    padding-block-end: var(--md-comp-snackbar-container-padding-block);
+
+    font-size: var(--md-comp-snackbar-supporting-text-size);
+    line-height: var(--md-comp-snackbar-supporting-text-line-height);
+    font-weight: var(--md-comp-snackbar-supporting-text-weight);
+    letter-spacing: var(--md-comp-snackbar-supporting-text-tracking);
+  }
+
+  .m3-snackbar[data-action-layout='new-line'] .m3-snackbar-content {
+    padding-block-end: 0;
+  }
+
+  .m3-snackbar-actions {
+    grid-area: actions;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-inline-size: max-content;
+    justify-self: end;
+  }
+
+  .m3-snackbar[data-action-layout='new-line'] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'content'
+      'actions';
+    row-gap: 0.5rem;
+    padding-block-end: var(--md-comp-snackbar-container-padding-inline-end);
+  }
+
+  .m3-snackbar[data-action-layout='new-line'] .m3-snackbar-actions {
+    justify-self: end;
+  }
+
+  .m3-snackbar-action-button {
+    --md-comp-button-text-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-text-hovered-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-text-focused-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-text-pressed-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-text-disabled-label-text-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-text-hovered-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-text-focused-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-text-pressed-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-comp-button-focus-indicator-color: var(--md-comp-snackbar-action-label-text-color);
+  }
+
+  .m3-snackbar-dismiss-button {
+    --md-comp-icon-button-standard-icon-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-standard-hovered-icon-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-standard-focused-icon-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-standard-pressed-icon-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-standard-disabled-icon-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-standard-hovered-state-layer-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-standard-focused-state-layer-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-standard-pressed-state-layer-color: var(--md-comp-snackbar-icon-color);
+    --md-comp-icon-button-focus-indicator-color: var(--md-comp-snackbar-icon-color);
+  }
+
+  @media (width < 40rem) {
+    .m3-snackbar {
+      inline-size: min(100%, calc(100vi - 2rem));
+    }
   }
 }

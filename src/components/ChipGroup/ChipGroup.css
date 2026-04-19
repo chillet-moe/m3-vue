@@ -1,9 +1,11 @@
-.m3-chip-group {
-  border: none;
-  margin: 0;
-  padding: 0;
-  min-inline-size: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: --dp(8);
+@layer components {
+  .m3-chip-group {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-inline-size: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: --dp(8);
+  }
 }

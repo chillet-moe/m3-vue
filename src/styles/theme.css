@@ -4,6 +4,8 @@
 @import './shape.css';
 @import './elevation.css';
 @import './typography.css';
+@import './typography-classes.css';
+@import './color-classes.css';
 
 @layer base, tokens;
 

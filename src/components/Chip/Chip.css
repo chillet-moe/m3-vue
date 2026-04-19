@@ -233,681 +233,695 @@
   }
 }
 
-.m3-chip {
-  @apply label-large;
+@layer components {
+  .m3-chip {
+    @apply label-large;
 
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--md-comp-chip-icon-gap);
-  user-select: none;
-  min-inline-size: 0;
-  max-inline-size: 100%;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--md-comp-chip-icon-gap);
+    user-select: none;
+    min-inline-size: 0;
+    max-inline-size: 100%;
 
-  border: none;
-  margin: 0;
-  padding-inline-start: var(--md-comp-chip-leading-space);
-  padding-inline-end: var(--md-comp-chip-trailing-space);
-  block-size: var(--md-chip-container-height);
+    border: none;
+    margin: 0;
+    padding-inline-start: var(--md-comp-chip-leading-space);
+    padding-inline-end: var(--md-comp-chip-trailing-space);
+    block-size: var(--md-chip-container-height);
 
-  background-color: var(--md-chip-container-color);
-  color: var(--md-chip-label-color);
-  box-shadow:
-    var(--md-chip-container-elevation),
-    inset 0 0 0 var(--md-chip-outline-width) var(--md-chip-outline-color);
-  transition:
-    background-color var(--md-easing-fast),
-    box-shadow var(--md-easing-fast),
-    color var(--md-easing-fast),
-    border-radius var(--md-easing-fast-spatial);
+    background-color: var(--md-chip-container-color);
+    color: var(--md-chip-label-color);
+    box-shadow:
+      var(--md-chip-container-elevation),
+      inset 0 0 0 var(--md-chip-outline-width) var(--md-chip-outline-color);
+    transition:
+      background-color var(--md-easing-fast),
+      box-shadow var(--md-easing-fast),
+      color var(--md-easing-fast),
+      border-radius var(--md-easing-fast-spatial);
 
-  border-start-start-radius: var(--md-chip-container-shape);
-  border-start-end-radius: var(--md-chip-container-shape);
-  border-end-end-radius: var(--md-chip-container-shape);
-  border-end-start-radius: var(--md-chip-container-shape);
+    border-start-start-radius: var(--md-chip-container-shape);
+    border-start-end-radius: var(--md-chip-container-shape);
+    border-end-end-radius: var(--md-chip-container-shape);
+    border-end-start-radius: var(--md-chip-container-shape);
 
-  --md-chip-container-height: 2rem;
-  --md-chip-container-shape: var(--md-sys-shape-corner-small);
-  --md-chip-flat-container-elevation: var(--md-sys-elevation-level0);
-  --md-chip-elevated-container-elevation: var(--md-sys-elevation-level1);
-  --md-chip-elevated-container-color: var(--md-sys-color-surface-container-low);
-  --md-chip-flat-outline-color: var(--md-sys-color-outline-variant);
-  --md-chip-flat-outline-width: 0.0625rem;
-  --md-chip-label-default-color: var(--md-sys-color-on-surface);
-  --md-chip-hover-label-color: var(--md-chip-label-default-color);
-  --md-chip-focus-label-color: var(--md-chip-label-default-color);
-  --md-chip-pressed-label-color: var(--md-chip-label-default-color);
-  --md-chip-disabled-label-color: var(--md-sys-color-on-surface);
-  --md-chip-disabled-label-opacity: 0.38;
-  --md-chip-icon-size: 1.125rem;
-  --md-chip-leading-default-color: currentColor;
-  --md-chip-trailing-default-color: currentColor;
-  --md-chip-hover-leading-color: var(--md-chip-leading-default-color);
-  --md-chip-hover-trailing-color: var(--md-chip-trailing-default-color);
-  --md-chip-focus-leading-color: var(--md-chip-leading-default-color);
-  --md-chip-focus-trailing-color: var(--md-chip-trailing-default-color);
-  --md-chip-pressed-leading-color: var(--md-chip-leading-default-color);
-  --md-chip-pressed-trailing-color: var(--md-chip-trailing-default-color);
-  --md-chip-disabled-leading-color: var(--md-sys-color-on-surface);
-  --md-chip-disabled-trailing-color: var(--md-sys-color-on-surface);
-  --md-chip-disabled-icon-opacity: 0.38;
-  --md-chip-hover-state-layer-color: currentColor;
-  --md-chip-focus-state-layer-color: currentColor;
-  --md-chip-pressed-state-layer-color: currentColor;
-  --md-chip-focus-indicator-color: var(--md-sys-color-secondary);
-  --md-chip-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
-  --md-chip-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
-  --md-chip-disabled-flat-outline-color: var(--md-sys-color-on-surface);
-  --md-chip-disabled-flat-outline-opacity: 0.12;
-  --md-chip-disabled-flat-selected-container-color: var(--md-sys-color-on-surface);
-  --md-chip-disabled-flat-selected-container-opacity: 0.12;
-  --md-chip-disabled-elevated-container-color: var(--md-sys-color-on-surface);
-  --md-chip-disabled-elevated-container-opacity: 0.12;
-  --md-chip-disabled-elevated-container-elevation: var(--md-sys-elevation-level0);
-  --md-chip-selected-container-color: var(--md-chip-container-color);
-  --md-chip-selected-elevated-container-color: var(--md-chip-selected-container-color);
-  --md-chip-selected-outline-width: var(--md-chip-flat-outline-width);
-  --md-chip-selected-label-color: var(--md-chip-label-default-color);
-  --md-chip-selected-hover-label-color: var(--md-chip-hover-label-color);
-  --md-chip-selected-focus-label-color: var(--md-chip-focus-label-color);
-  --md-chip-selected-pressed-label-color: var(--md-chip-pressed-label-color);
-  --md-chip-selected-leading-color: var(--md-chip-leading-default-color);
-  --md-chip-selected-trailing-color: var(--md-chip-trailing-default-color);
-  --md-chip-selected-hover-leading-color: var(--md-chip-hover-leading-color);
-  --md-chip-selected-hover-trailing-color: var(--md-chip-hover-trailing-color);
-  --md-chip-selected-focus-leading-color: var(--md-chip-focus-leading-color);
-  --md-chip-selected-focus-trailing-color: var(--md-chip-focus-trailing-color);
-  --md-chip-selected-pressed-leading-color: var(--md-chip-pressed-leading-color);
-  --md-chip-selected-pressed-trailing-color: var(--md-chip-pressed-trailing-color);
-  --md-chip-selected-hover-state-layer-color: var(--md-chip-hover-state-layer-color);
-  --md-chip-selected-focus-state-layer-color: var(--md-chip-focus-state-layer-color);
-  --md-chip-selected-pressed-state-layer-color: var(--md-chip-pressed-state-layer-color);
-  --md-chip-flat-hover-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-flat-focus-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-flat-pressed-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-flat-selected-hover-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-flat-selected-focus-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-flat-selected-pressed-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-container-color: transparent;
-  --md-chip-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-outline-color: var(--md-chip-flat-outline-color);
-  --md-chip-outline-width: var(--md-chip-flat-outline-width);
-  --md-chip-label-color: var(--md-chip-label-default-color);
-  --md-chip-leading-icon-color: var(--md-chip-leading-default-color);
-  --md-chip-trailing-icon-color: var(--md-chip-trailing-default-color);
-  --md-state-layer-color: var(--md-chip-hover-state-layer-color);
-}
-
-.m3-chip[data-variant='assist'] {
-  --md-chip-container-height: var(--md-comp-assist-chip-container-height);
-  --md-chip-container-shape: var(--md-comp-assist-chip-container-shape);
-  --md-chip-flat-container-elevation: var(--md-comp-assist-chip-flat-container-elevation);
-  --md-chip-elevated-container-elevation: var(--md-comp-assist-chip-elevated-container-elevation);
-  --md-chip-elevated-container-color: var(--md-comp-assist-chip-elevated-container-color);
-  --md-chip-flat-outline-color: var(--md-sys-color-outline);
-  --md-chip-flat-outline-width: var(--md-comp-assist-chip-flat-outline-width);
-  --md-chip-label-default-color: var(--md-comp-assist-chip-label-text-color);
-  --md-chip-hover-label-color: var(--md-comp-assist-chip-hover-label-text-color);
-  --md-chip-focus-label-color: var(--md-comp-assist-chip-focus-label-text-color);
-  --md-chip-pressed-label-color: var(--md-comp-assist-chip-pressed-label-text-color);
-  --md-chip-disabled-label-color: var(--md-comp-assist-chip-disabled-label-text-color);
-  --md-chip-disabled-label-opacity: var(--md-comp-assist-chip-disabled-label-text-opacity);
-  --md-chip-icon-size: var(--md-comp-assist-chip-with-icon-icon-size);
-  --md-chip-leading-default-color: var(--md-comp-assist-chip-with-icon-icon-color);
-  --md-chip-trailing-default-color: var(--md-comp-assist-chip-with-icon-icon-color);
-  --md-chip-hover-leading-color: var(--md-comp-assist-chip-with-icon-hover-icon-color);
-  --md-chip-hover-trailing-color: var(--md-comp-assist-chip-with-icon-hover-icon-color);
-  --md-chip-focus-leading-color: var(--md-comp-assist-chip-with-icon-focus-icon-color);
-  --md-chip-focus-trailing-color: var(--md-comp-assist-chip-with-icon-focus-icon-color);
-  --md-chip-pressed-leading-color: var(--md-comp-assist-chip-with-icon-pressed-icon-color);
-  --md-chip-pressed-trailing-color: var(--md-comp-assist-chip-with-icon-pressed-icon-color);
-  --md-chip-disabled-leading-color: var(--md-comp-assist-chip-with-icon-disabled-icon-color);
-  --md-chip-disabled-trailing-color: var(--md-comp-assist-chip-with-icon-disabled-icon-color);
-  --md-chip-disabled-icon-opacity: var(--md-comp-assist-chip-with-icon-disabled-icon-opacity);
-  --md-chip-hover-state-layer-color: var(--md-comp-assist-chip-hover-state-layer-color);
-  --md-chip-focus-state-layer-color: var(--md-comp-assist-chip-focus-state-layer-color);
-  --md-chip-pressed-state-layer-color: var(--md-comp-assist-chip-pressed-state-layer-color);
-  --md-chip-focus-indicator-color: var(--md-comp-assist-chip-focus-indicator-color);
-  --md-chip-focus-indicator-thickness: var(--md-comp-assist-chip-focus-indicator-thickness);
-  --md-chip-focus-indicator-outline-offset: var(--md-comp-assist-chip-focus-indicator-outline-offset);
-  --md-chip-disabled-flat-outline-color: var(--md-comp-assist-chip-flat-disabled-outline-color);
-  --md-chip-disabled-flat-outline-opacity: var(--md-comp-assist-chip-flat-disabled-outline-opacity);
-  --md-chip-disabled-elevated-container-color: var(--md-comp-assist-chip-elevated-disabled-container-color);
-  --md-chip-disabled-elevated-container-opacity: var(--md-comp-assist-chip-elevated-disabled-container-opacity);
-  --md-chip-disabled-elevated-container-elevation: var(--md-comp-assist-chip-elevated-disabled-container-elevation);
-  --md-chip-flat-focus-outline-color: var(--md-comp-assist-chip-flat-focus-outline-color);
-  --md-chip-elevated-hover-container-elevation: var(--md-comp-chip-assist-elevated-hover-container-elevation);
-  --md-chip-elevated-focus-container-elevation: var(--md-comp-assist-chip-elevated-focus-container-elevation);
-  --md-chip-elevated-pressed-container-elevation: var(--md-comp-chip-assist-elevated-pressed-container-elevation);
-}
-
-.m3-chip[data-variant='filter'] {
-  --md-chip-container-height: var(--md-comp-filter-chip-container-height);
-  --md-chip-container-shape: var(--md-comp-filter-chip-container-shape);
-  --md-chip-flat-container-elevation: var(--md-comp-filter-chip-flat-container-elevation);
-  --md-chip-elevated-container-elevation: var(--md-comp-filter-chip-elevated-container-elevation);
-  --md-chip-elevated-container-color: var(--md-comp-filter-chip-elevated-unselected-container-color);
-  --md-chip-flat-outline-color: var(--md-comp-filter-chip-flat-unselected-outline-color);
-  --md-chip-flat-outline-width: var(--md-comp-filter-chip-flat-unselected-outline-width);
-  --md-chip-label-default-color: var(--md-comp-filter-chip-unselected-label-text-color);
-  --md-chip-hover-label-color: var(--md-comp-filter-chip-unselected-hover-label-text-color);
-  --md-chip-focus-label-color: var(--md-comp-filter-chip-unselected-focus-label-text-color);
-  --md-chip-pressed-label-color: var(--md-comp-filter-chip-unselected-pressed-label-text-color);
-  --md-chip-disabled-label-color: var(--md-comp-filter-chip-disabled-label-text-color);
-  --md-chip-disabled-label-opacity: var(--md-comp-filter-chip-disabled-label-text-opacity);
-  --md-chip-icon-size: var(--md-comp-filter-chip-with-icon-icon-size);
-  --md-chip-leading-default-color: var(--md-comp-filter-chip-with-leading-icon-unselected-leading-icon-color);
-  --md-chip-trailing-default-color: var(--md-comp-filter-chip-with-trailing-icon-unselected-trailing-icon-color);
-  --md-chip-hover-leading-color: var(--md-comp-filter-chip-with-leading-icon-unselected-hover-leading-icon-color);
-  --md-chip-hover-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-unselected-hover-trailing-icon-color);
-  --md-chip-focus-leading-color: var(--md-comp-filter-chip-with-leading-icon-unselected-focus-leading-icon-color);
-  --md-chip-focus-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-unselected-focus-trailing-icon-color);
-  --md-chip-pressed-leading-color: var(--md-comp-filter-chip-with-leading-icon-unselected-pressed-leading-icon-color);
-  --md-chip-pressed-trailing-color: var(
-    --md-comp-filter-chip-with-trailing-icon-unselected-pressed-trailing-icon-color
-  );
-  --md-chip-disabled-leading-color: var(--md-comp-filter-chip-with-leading-icon-disabled-leading-icon-color);
-  --md-chip-disabled-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-disabled-trailing-icon-color);
-  --md-chip-disabled-icon-opacity: var(--md-comp-filter-chip-with-leading-icon-disabled-leading-icon-opacity);
-  --md-chip-hover-state-layer-color: var(--md-comp-filter-chip-unselected-hover-state-layer-color);
-  --md-chip-focus-state-layer-color: var(--md-comp-filter-chip-unselected-focus-state-layer-color);
-  --md-chip-pressed-state-layer-color: var(--md-comp-filter-chip-unselected-pressed-state-layer-color);
-  --md-chip-focus-indicator-color: var(--md-comp-filter-chip-focus-indicator-color);
-  --md-chip-focus-indicator-thickness: var(--md-comp-filter-chip-focus-indicator-thickness);
-  --md-chip-focus-indicator-outline-offset: var(--md-comp-filter-chip-focus-indicator-outline-offset);
-  --md-chip-disabled-flat-outline-color: var(--md-comp-filter-chip-flat-disabled-unselected-outline-color);
-  --md-chip-disabled-flat-outline-opacity: var(--md-comp-filter-chip-flat-disabled-unselected-outline-opacity);
-  --md-chip-disabled-flat-selected-container-color: var(--md-comp-filter-chip-flat-disabled-selected-container-color);
-  --md-chip-disabled-flat-selected-container-opacity: var(
-    --md-comp-filter-chip-flat-disabled-selected-container-opacity
-  );
-  --md-chip-disabled-elevated-container-color: var(--md-comp-filter-chip-elevated-disabled-container-color);
-  --md-chip-disabled-elevated-container-opacity: var(--md-comp-filter-chip-elevated-disabled-container-opacity);
-  --md-chip-disabled-elevated-container-elevation: var(--md-comp-filter-chip-elevated-disabled-container-elevation);
-  --md-chip-flat-focus-outline-color: var(--md-comp-filter-chip-flat-unselected-focus-outline-color);
-  --md-chip-flat-hover-container-elevation: var(--md-comp-filter-chip-flat-unselected-hover-container-elevation);
-  --md-chip-flat-focus-container-elevation: var(--md-comp-filter-chip-flat-unselected-focus-container-elevation);
-  --md-chip-flat-pressed-container-elevation: var(--md-comp-filter-chip-flat-unselected-pressed-container-elevation);
-  --md-chip-elevated-hover-container-elevation: var(--md-comp-filter-chip-elevated-hover-container-elevation);
-  --md-chip-elevated-focus-container-elevation: var(--md-comp-filter-chip-elevated-focus-container-elevation);
-  --md-chip-elevated-pressed-container-elevation: var(--md-comp-filter-chip-elevated-pressed-container-elevation);
-  --md-chip-selected-container-color: var(--md-comp-filter-chip-flat-selected-container-color);
-  --md-chip-selected-elevated-container-color: var(--md-comp-filter-chip-elevated-selected-container-color);
-  --md-chip-selected-outline-width: var(--md-comp-filter-chip-flat-selected-outline-width);
-  --md-chip-selected-label-color: var(--md-comp-filter-chip-selected-label-text-color);
-  --md-chip-selected-hover-label-color: var(--md-comp-filter-chip-selected-hover-label-text-color);
-  --md-chip-selected-focus-label-color: var(--md-comp-filter-chip-selected-focus-label-text-color);
-  --md-chip-selected-pressed-label-color: var(--md-comp-filter-chip-selected-pressed-label-text-color);
-  --md-chip-selected-leading-color: var(--md-comp-filter-chip-with-leading-icon-selected-leading-icon-color);
-  --md-chip-selected-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-selected-trailing-icon-color);
-  --md-chip-selected-hover-leading-color: var(
-    --md-comp-filter-chip-with-leading-icon-selected-hover-leading-icon-color
-  );
-  --md-chip-selected-hover-trailing-color: var(
-    --md-comp-filter-chip-with-trailing-icon-selected-hover-trailing-icon-color
-  );
-  --md-chip-selected-focus-leading-color: var(
-    --md-comp-filter-chip-with-leading-icon-selected-focus-leading-icon-color
-  );
-  --md-chip-selected-focus-trailing-color: var(
-    --md-comp-filter-chip-with-trailing-icon-selected-focus-trailing-icon-color
-  );
-  --md-chip-selected-pressed-leading-color: var(
-    --md-comp-filter-chip-with-leading-icon-selected-pressed-leading-icon-color
-  );
-  --md-chip-selected-pressed-trailing-color: var(
-    --md-comp-filter-chip-with-trailing-icon-selected-pressed-trailing-icon-color
-  );
-  --md-chip-selected-hover-state-layer-color: var(--md-comp-filter-chip-selected-hover-state-layer-color);
-  --md-chip-selected-focus-state-layer-color: var(--md-comp-filter-chip-selected-focus-state-layer-color);
-  --md-chip-selected-pressed-state-layer-color: var(--md-comp-filter-chip-selected-pressed-state-layer-color);
-  --md-chip-flat-selected-hover-container-elevation: var(--md-comp-filter-chip-flat-selected-hover-container-elevation);
-  --md-chip-flat-selected-focus-container-elevation: var(--md-comp-filter-chip-flat-selected-focus-container-elevation);
-  --md-chip-flat-selected-pressed-container-elevation: var(
-    --md-comp-filter-chip-flat-selected-pressed-container-elevation
-  );
-}
-
-.m3-chip[data-variant='input'] {
-  --md-chip-container-height: var(--md-comp-input-chip-container-height);
-  --md-chip-container-shape: var(--md-comp-input-chip-container-shape);
-  --md-chip-flat-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-elevated-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-elevated-container-color: transparent;
-  --md-chip-flat-outline-color: var(--md-comp-input-chip-unselected-outline-color);
-  --md-chip-flat-outline-width: var(--md-comp-input-chip-unselected-outline-width);
-  --md-chip-label-default-color: var(--md-comp-input-chip-unselected-label-text-color);
-  --md-chip-hover-label-color: var(--md-comp-input-chip-unselected-hover-label-text-color);
-  --md-chip-focus-label-color: var(--md-comp-input-chip-unselected-focus-label-text-color);
-  --md-chip-pressed-label-color: var(--md-comp-input-chip-unselected-pressed-label-text-color);
-  --md-chip-disabled-label-color: var(--md-comp-input-chip-disabled-label-text-color);
-  --md-chip-disabled-label-opacity: var(--md-comp-input-chip-disabled-label-text-opacity);
-  --md-chip-icon-size: var(--md-comp-input-chip-with-leading-icon-leading-icon-size);
-  --md-chip-leading-default-color: var(--md-comp-input-chip-with-leading-icon-unselected-leading-icon-color);
-  --md-chip-trailing-default-color: var(--md-comp-input-chip-with-trailing-icon-unselected-trailing-icon-color);
-  --md-chip-hover-leading-color: var(--md-comp-input-chip-with-leading-icon-unselected-hover-leading-icon-color);
-  --md-chip-hover-trailing-color: var(--md-comp-input-chip-with-trailing-icon-unselected-hover-trailing-icon-color);
-  --md-chip-focus-leading-color: var(--md-comp-input-chip-with-leading-icon-unselected-focus-leading-icon-color);
-  --md-chip-focus-trailing-color: var(--md-comp-input-chip-with-trailing-icon-unselected-focus-trailing-icon-color);
-  --md-chip-pressed-leading-color: var(--md-comp-input-chip-with-leading-icon-unselected-pressed-leading-icon-color);
-  --md-chip-pressed-trailing-color: var(--md-comp-input-chip-with-trailing-icon-unselected-pressed-trailing-icon-color);
-  --md-chip-disabled-leading-color: var(--md-comp-input-chip-with-leading-icon-disabled-leading-icon-color);
-  --md-chip-disabled-trailing-color: var(--md-comp-input-chip-with-trailing-icon-disabled-trailing-icon-color);
-  --md-chip-disabled-icon-opacity: var(--md-comp-input-chip-with-leading-icon-disabled-leading-icon-opacity);
-  --md-chip-hover-state-layer-color: var(--md-comp-input-chip-unselected-hover-state-layer-color);
-  --md-chip-focus-state-layer-color: var(--md-comp-input-chip-unselected-focus-state-layer-color);
-  --md-chip-pressed-state-layer-color: var(--md-comp-input-chip-unselected-pressed-state-layer-color);
-  --md-chip-focus-indicator-color: var(--md-comp-input-chip-focus-indicator-color);
-  --md-chip-focus-indicator-thickness: var(--md-comp-input-chip-focus-indicator-thickness);
-  --md-chip-focus-indicator-outline-offset: var(--md-comp-input-chip-focus-indicator-outline-offset);
-  --md-chip-disabled-flat-outline-color: var(--md-comp-input-chip-disabled-unselected-outline-color);
-  --md-chip-disabled-flat-outline-opacity: var(--md-comp-input-chip-disabled-unselected-outline-opacity);
-  --md-chip-disabled-flat-selected-container-color: var(--md-comp-input-chip-disabled-selected-container-color);
-  --md-chip-disabled-flat-selected-container-opacity: var(--md-comp-input-chip-disabled-selected-container-opacity);
-  --md-chip-disabled-elevated-container-color: transparent;
-  --md-chip-disabled-elevated-container-opacity: 0;
-  --md-chip-disabled-elevated-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-flat-focus-outline-color: var(--md-comp-input-chip-unselected-focus-outline-color);
-  --md-chip-flat-hover-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-flat-focus-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-flat-pressed-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-elevated-hover-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-elevated-focus-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-elevated-pressed-container-elevation: var(--md-comp-input-chip-container-elevation);
-  --md-chip-selected-container-color: var(--md-comp-input-chip-selected-container-color);
-  --md-chip-selected-elevated-container-color: var(--md-comp-input-chip-selected-container-color);
-  --md-chip-selected-outline-width: var(--md-comp-input-chip-selected-outline-width);
-  --md-chip-selected-label-color: var(--md-comp-input-chip-selected-label-text-color);
-  --md-chip-selected-hover-label-color: var(--md-comp-input-chip-selected-hover-label-text-color);
-  --md-chip-selected-focus-label-color: var(--md-comp-input-chip-selected-focus-label-text-color);
-  --md-chip-selected-pressed-label-color: var(--md-comp-input-chip-selected-pressed-label-text-color);
-  --md-chip-selected-leading-color: var(--md-comp-input-chip-with-leading-icon-selected-leading-icon-color);
-  --md-chip-selected-trailing-color: var(--md-comp-input-chip-with-trailing-icon-selected-trailing-icon-color);
-  --md-chip-selected-hover-leading-color: var(--md-comp-input-chip-with-leading-icon-selected-hover-leading-icon-color);
-  --md-chip-selected-hover-trailing-color: var(
-    --md-comp-input-chip-with-trailing-icon-selected-hover-trailing-icon-color
-  );
-  --md-chip-selected-focus-leading-color: var(--md-comp-input-chip-with-leading-icon-selected-focus-leading-icon-color);
-  --md-chip-selected-focus-trailing-color: var(
-    --md-comp-input-chip-with-trailing-icon-selected-focus-trailing-icon-color
-  );
-  --md-chip-selected-pressed-leading-color: var(
-    --md-comp-input-chip-with-leading-icon-selected-pressed-leading-icon-color
-  );
-  --md-chip-selected-pressed-trailing-color: var(
-    --md-comp-input-chip-with-trailing-icon-selected-pressed-trailing-icon-color
-  );
-  --md-chip-selected-hover-state-layer-color: var(--md-comp-input-chip-selected-hover-state-layer-color);
-  --md-chip-selected-focus-state-layer-color: var(--md-comp-input-chip-selected-focus-state-layer-color);
-  --md-chip-selected-pressed-state-layer-color: var(--md-comp-input-chip-selected-pressed-state-layer-color);
-  --md-chip-avatar-size: var(--md-comp-input-chip-with-avatar-avatar-size);
-  --md-chip-avatar-shape: var(--md-comp-input-chip-with-avatar-avatar-shape);
-  --md-chip-avatar-disabled-opacity: var(--md-comp-input-chip-with-avatar-disabled-avatar-opacity);
-}
-
-.m3-chip[data-variant='suggestion'] {
-  --md-chip-container-height: var(--md-comp-suggestion-chip-container-height);
-  --md-chip-container-shape: var(--md-comp-suggestion-chip-container-shape);
-  --md-chip-flat-container-elevation: var(--md-comp-suggestion-chip-flat-container-elevation);
-  --md-chip-elevated-container-elevation: var(--md-comp-suggestion-chip-elevated-container-elevation);
-  --md-chip-elevated-container-color: var(--md-comp-suggestion-chip-elevated-container-color);
-  --md-chip-flat-outline-color: var(--md-sys-color-outline);
-  --md-chip-flat-outline-width: var(--md-comp-suggestion-chip-flat-outline-width);
-  --md-chip-label-default-color: var(--md-comp-suggestion-chip-label-text-color);
-  --md-chip-hover-label-color: var(--md-comp-suggestion-chip-hover-label-text-color);
-  --md-chip-focus-label-color: var(--md-comp-suggestion-chip-focus-label-text-color);
-  --md-chip-pressed-label-color: var(--md-comp-suggestion-chip-pressed-label-text-color);
-  --md-chip-disabled-label-color: var(--md-comp-suggestion-chip-disabled-label-text-color);
-  --md-chip-disabled-label-opacity: var(--md-comp-suggestion-chip-disabled-label-text-opacity);
-  --md-chip-icon-size: var(--md-comp-suggestion-chip-with-leading-icon-leading-icon-size);
-  --md-chip-leading-default-color: var(--md-comp-suggestion-chip-with-leading-icon-leading-icon-color);
-  --md-chip-trailing-default-color: var(--md-comp-suggestion-chip-with-leading-icon-leading-icon-color);
-  --md-chip-hover-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-hover-leading-icon-color);
-  --md-chip-hover-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-hover-leading-icon-color);
-  --md-chip-focus-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-focus-leading-icon-color);
-  --md-chip-focus-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-focus-leading-icon-color);
-  --md-chip-pressed-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-pressed-leading-icon-color);
-  --md-chip-pressed-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-pressed-leading-icon-color);
-  --md-chip-disabled-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-color);
-  --md-chip-disabled-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-color);
-  --md-chip-disabled-icon-opacity: var(--md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-opacity);
-  --md-chip-hover-state-layer-color: var(--md-comp-suggestion-chip-hover-state-layer-color);
-  --md-chip-focus-state-layer-color: var(--md-comp-suggestion-chip-focus-state-layer-color);
-  --md-chip-pressed-state-layer-color: var(--md-comp-suggestion-chip-pressed-state-layer-color);
-  --md-chip-focus-indicator-color: var(--md-comp-suggestion-chip-focus-indicator-color);
-  --md-chip-focus-indicator-thickness: var(--md-comp-suggestion-chip-focus-indicator-thickness);
-  --md-chip-focus-indicator-outline-offset: var(--md-comp-suggestion-chip-focus-indicator-outline-offset);
-  --md-chip-disabled-flat-outline-color: var(--md-comp-suggestion-chip-flat-disabled-outline-color);
-  --md-chip-disabled-flat-outline-opacity: var(--md-comp-suggestion-chip-flat-disabled-outline-opacity);
-  --md-chip-disabled-elevated-container-color: var(--md-comp-suggestion-chip-elevated-disabled-container-color);
-  --md-chip-disabled-elevated-container-opacity: var(--md-comp-suggestion-chip-elevated-disabled-container-opacity);
-  --md-chip-disabled-elevated-container-elevation: var(--md-comp-suggestion-chip-elevated-disabled-container-elevation);
-  --md-chip-flat-focus-outline-color: var(--md-comp-suggestion-chip-flat-focus-outline-color);
-  --md-chip-elevated-hover-container-elevation: var(--md-comp-chip-suggestion-elevated-hover-container-elevation);
-  --md-chip-elevated-focus-container-elevation: var(--md-comp-suggestion-chip-elevated-focus-container-elevation);
-  --md-chip-elevated-pressed-container-elevation: var(--md-comp-chip-suggestion-elevated-pressed-container-elevation);
-}
-
-.m3-chip:not(:disabled):not([aria-disabled='true']) {
-  cursor: pointer;
-}
-
-.m3-chip[data-elevated='true']:not([data-variant='input']) {
-  --md-chip-container-color: var(--md-chip-elevated-container-color);
-  --md-chip-container-elevation: var(--md-chip-elevated-container-elevation);
-  --md-chip-outline-width: 0;
-}
-
-.m3-chip[data-selected='true'][data-variant='filter'],
-.m3-chip[data-selected='true'][data-variant='input'] {
-  --md-chip-container-color: var(--md-chip-selected-container-color);
-  --md-chip-outline-width: var(--md-chip-selected-outline-width);
-  --md-chip-label-color: var(--md-chip-selected-label-color);
-  --md-chip-leading-icon-color: var(--md-chip-selected-leading-color);
-  --md-chip-trailing-icon-color: var(--md-chip-selected-trailing-color);
-  --md-state-layer-color: var(--md-chip-selected-hover-state-layer-color);
-  animation: m3-chip-select 280ms var(--md-timing-function-fast-spatial);
-}
-
-.m3-chip[data-selected='true'][data-elevated='true'][data-variant='filter'] {
-  --md-chip-container-color: var(--md-chip-selected-elevated-container-color);
-}
-
-.m3-chip[data-with-leading='true'] {
-  padding-inline-start: var(--md-comp-chip-with-icon-side-space);
-}
-
-.m3-chip[data-with-trailing='true'] {
-  padding-inline-end: var(--md-comp-chip-with-icon-side-space);
-}
-
-.m3-chip:hover {
-  --md-chip-label-color: var(--md-chip-hover-label-color);
-  --md-chip-leading-icon-color: var(--md-chip-hover-leading-color);
-  --md-chip-trailing-icon-color: var(--md-chip-hover-trailing-color);
-  --md-state-layer-color: var(--md-chip-hover-state-layer-color);
-  --md-chip-container-elevation: var(--md-chip-flat-hover-container-elevation);
-}
-
-.m3-chip:hover[data-elevated='true']:not([data-variant='input']) {
-  --md-chip-container-elevation: var(--md-chip-elevated-hover-container-elevation);
-}
-
-.m3-chip:hover[data-selected='true'][data-variant='filter'],
-.m3-chip:hover[data-selected='true'][data-variant='input'] {
-  --md-chip-label-color: var(--md-chip-selected-hover-label-color);
-  --md-chip-leading-icon-color: var(--md-chip-selected-hover-leading-color);
-  --md-chip-trailing-icon-color: var(--md-chip-selected-hover-trailing-color);
-  --md-state-layer-color: var(--md-chip-selected-hover-state-layer-color);
-  --md-chip-container-elevation: var(--md-chip-flat-selected-hover-container-elevation);
-}
-
-.m3-chip:has(.m3-chip-input:focus-visible),
-.m3-chip:focus-visible {
-  --md-chip-label-color: var(--md-chip-focus-label-color);
-  --md-chip-leading-icon-color: var(--md-chip-focus-leading-color);
-  --md-chip-trailing-icon-color: var(--md-chip-focus-trailing-color);
-  --md-state-layer-color: var(--md-chip-focus-state-layer-color);
-  --md-chip-container-elevation: var(--md-chip-flat-focus-container-elevation);
-  --md-chip-outline-color: var(--md-chip-flat-focus-outline-color, var(--md-chip-outline-color));
-
-  outline: var(--md-chip-focus-indicator-thickness) solid var(--md-chip-focus-indicator-color);
-  outline-offset: var(--md-chip-focus-indicator-outline-offset);
-}
-
-.m3-chip:has(.m3-chip-input:focus-visible)[data-elevated='true']:not([data-variant='input']),
-.m3-chip:focus-visible[data-elevated='true']:not([data-variant='input']) {
-  --md-chip-container-elevation: var(--md-chip-elevated-focus-container-elevation);
-}
-
-.m3-chip:has(.m3-chip-input:focus-visible)[data-selected='true'][data-variant='filter'],
-.m3-chip:has(.m3-chip-input:focus-visible)[data-selected='true'][data-variant='input'] {
-  --md-chip-label-color: var(--md-chip-selected-focus-label-color);
-  --md-chip-leading-icon-color: var(--md-chip-selected-focus-leading-color);
-  --md-chip-trailing-icon-color: var(--md-chip-selected-focus-trailing-color);
-  --md-state-layer-color: var(--md-chip-selected-focus-state-layer-color);
-  --md-chip-container-elevation: var(--md-chip-flat-selected-focus-container-elevation);
-}
-
-.m3-chip[data-pressed='true'] {
-  --md-chip-label-color: var(--md-chip-pressed-label-color);
-  --md-chip-leading-icon-color: var(--md-chip-pressed-leading-color);
-  --md-chip-trailing-icon-color: var(--md-chip-pressed-trailing-color);
-  --md-state-layer-color: var(--md-chip-pressed-state-layer-color);
-  --md-chip-container-elevation: var(--md-chip-flat-pressed-container-elevation);
-}
-
-.m3-chip[data-pressed='true'][data-elevated='true']:not([data-variant='input']) {
-  --md-chip-container-elevation: var(--md-chip-elevated-pressed-container-elevation);
-}
-
-.m3-chip[data-pressed='true'][data-selected='true'][data-variant='filter'],
-.m3-chip[data-pressed='true'][data-selected='true'][data-variant='input'] {
-  --md-chip-label-color: var(--md-chip-selected-pressed-label-color);
-  --md-chip-leading-icon-color: var(--md-chip-selected-pressed-leading-color);
-  --md-chip-trailing-icon-color: var(--md-chip-selected-pressed-trailing-color);
-  --md-state-layer-color: var(--md-chip-selected-pressed-state-layer-color);
-  --md-chip-container-elevation: var(--md-chip-flat-selected-pressed-container-elevation);
-}
-
-.m3-chip:disabled,
-.m3-chip[aria-disabled='true'] {
-  cursor: default;
-  --md-chip-label-color: --translucent(var(--md-chip-disabled-label-color), var(--md-chip-disabled-label-opacity));
-  --md-chip-leading-icon-color: --translucent(
-    var(--md-chip-disabled-leading-color),
-    var(--md-chip-disabled-icon-opacity)
-  );
-  --md-chip-trailing-icon-color: --translucent(
-    var(--md-chip-disabled-trailing-color),
-    var(--md-chip-disabled-icon-opacity)
-  );
-  --md-chip-container-elevation: var(--md-chip-flat-container-elevation);
-  --md-chip-outline-color: --translucent(
-    var(--md-chip-disabled-flat-outline-color),
-    var(--md-chip-disabled-flat-outline-opacity)
-  );
-  --md-state-layer-color: transparent;
-}
-
-.m3-chip:disabled[data-selected='true'][data-variant='filter'],
-.m3-chip:disabled[data-selected='true'][data-variant='input'],
-.m3-chip[aria-disabled='true'][data-selected='true'][data-variant='filter'],
-.m3-chip[aria-disabled='true'][data-selected='true'][data-variant='input'] {
-  --md-chip-container-color: --translucent(
-    var(--md-chip-disabled-flat-selected-container-color),
-    var(--md-chip-disabled-flat-selected-container-opacity)
-  );
-}
-
-.m3-chip:disabled[data-elevated='true']:not([data-variant='input']),
-.m3-chip[aria-disabled='true'][data-elevated='true']:not([data-variant='input']) {
-  --md-chip-container-color: --translucent(
-    var(--md-chip-disabled-elevated-container-color),
-    var(--md-chip-disabled-elevated-container-opacity)
-  );
-  --md-chip-container-elevation: var(--md-chip-disabled-elevated-container-elevation);
-  --md-chip-outline-width: 0;
-}
-
-.m3-chip-input {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  opacity: 0;
-  cursor: inherit;
-}
-
-.m3-chip-label {
-  min-inline-size: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  transition: color 120ms var(--md-timing-function-fast);
-}
-
-.m3-chip-content {
-  min-inline-size: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--md-comp-chip-icon-gap);
-  transition: transform 220ms var(--md-timing-function-fast-spatial);
-}
-
-.m3-chip-icon,
-.m3-chip-avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-}
-
-.m3-chip-icon {
-  inline-size: var(--md-chip-icon-size);
-  block-size: var(--md-chip-icon-size);
-  font-size: var(--md-chip-icon-size);
-}
-
-.m3-chip-leading {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--md-chip-leading-icon-color);
-  transition:
-    color 120ms var(--md-timing-function-fast),
-    transform 220ms var(--md-timing-function-fast-spatial),
-    opacity 120ms var(--md-timing-function-fast);
-}
-
-.m3-chip-trailing {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--md-chip-trailing-icon-color);
-  transition:
-    color 120ms var(--md-timing-function-fast),
-    transform 220ms var(--md-timing-function-fast-spatial),
-    opacity 120ms var(--md-timing-function-fast);
-}
-
-.m3-chip-avatar {
-  inline-size: var(--md-chip-avatar-size, var(--md-chip-icon-size));
-  block-size: var(--md-chip-avatar-size, var(--md-chip-icon-size));
-  overflow: hidden;
-  border-radius: var(--md-chip-avatar-shape, 9999rem);
-}
-
-.m3-chip-avatar-image {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-}
-
-.m3-chip:disabled .m3-chip-avatar,
-.m3-chip[aria-disabled='true'] .m3-chip-avatar {
-  opacity: var(--md-chip-avatar-disabled-opacity, 0.38);
-}
-
-.m3-chip[data-selected='true'][data-variant='filter'] .m3-chip-leading,
-.m3-chip[data-selected='true'][data-variant='input'] .m3-chip-leading {
-  animation: m3-chip-leading-select 220ms var(--md-timing-function-fast-spatial);
-}
-
-.m3-chip[data-selected='true'][data-variant='filter'][data-leading-source='selected-icon'] .m3-chip-content {
-  animation: m3-chip-content-select 220ms var(--md-timing-function-fast-spatial);
-}
-
-@keyframes m3-chip-select {
-  0% {
-    transform: scaleX(0.94);
+    --md-chip-container-height: 2rem;
+    --md-chip-container-shape: var(--md-sys-shape-corner-small);
+    --md-chip-flat-container-elevation: var(--md-sys-elevation-level0);
+    --md-chip-elevated-container-elevation: var(--md-sys-elevation-level1);
+    --md-chip-elevated-container-color: var(--md-sys-color-surface-container-low);
+    --md-chip-flat-outline-color: var(--md-sys-color-outline-variant);
+    --md-chip-flat-outline-width: 0.0625rem;
+    --md-chip-label-default-color: var(--md-sys-color-on-surface);
+    --md-chip-hover-label-color: var(--md-chip-label-default-color);
+    --md-chip-focus-label-color: var(--md-chip-label-default-color);
+    --md-chip-pressed-label-color: var(--md-chip-label-default-color);
+    --md-chip-disabled-label-color: var(--md-sys-color-on-surface);
+    --md-chip-disabled-label-opacity: 0.38;
+    --md-chip-icon-size: 1.125rem;
+    --md-chip-leading-default-color: currentColor;
+    --md-chip-trailing-default-color: currentColor;
+    --md-chip-hover-leading-color: var(--md-chip-leading-default-color);
+    --md-chip-hover-trailing-color: var(--md-chip-trailing-default-color);
+    --md-chip-focus-leading-color: var(--md-chip-leading-default-color);
+    --md-chip-focus-trailing-color: var(--md-chip-trailing-default-color);
+    --md-chip-pressed-leading-color: var(--md-chip-leading-default-color);
+    --md-chip-pressed-trailing-color: var(--md-chip-trailing-default-color);
+    --md-chip-disabled-leading-color: var(--md-sys-color-on-surface);
+    --md-chip-disabled-trailing-color: var(--md-sys-color-on-surface);
+    --md-chip-disabled-icon-opacity: 0.38;
+    --md-chip-hover-state-layer-color: currentColor;
+    --md-chip-focus-state-layer-color: currentColor;
+    --md-chip-pressed-state-layer-color: currentColor;
+    --md-chip-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-chip-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
+    --md-chip-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
+    --md-chip-disabled-flat-outline-color: var(--md-sys-color-on-surface);
+    --md-chip-disabled-flat-outline-opacity: 0.12;
+    --md-chip-disabled-flat-selected-container-color: var(--md-sys-color-on-surface);
+    --md-chip-disabled-flat-selected-container-opacity: 0.12;
+    --md-chip-disabled-elevated-container-color: var(--md-sys-color-on-surface);
+    --md-chip-disabled-elevated-container-opacity: 0.12;
+    --md-chip-disabled-elevated-container-elevation: var(--md-sys-elevation-level0);
+    --md-chip-selected-container-color: var(--md-chip-container-color);
+    --md-chip-selected-elevated-container-color: var(--md-chip-selected-container-color);
+    --md-chip-selected-outline-width: var(--md-chip-flat-outline-width);
+    --md-chip-selected-label-color: var(--md-chip-label-default-color);
+    --md-chip-selected-hover-label-color: var(--md-chip-hover-label-color);
+    --md-chip-selected-focus-label-color: var(--md-chip-focus-label-color);
+    --md-chip-selected-pressed-label-color: var(--md-chip-pressed-label-color);
+    --md-chip-selected-leading-color: var(--md-chip-leading-default-color);
+    --md-chip-selected-trailing-color: var(--md-chip-trailing-default-color);
+    --md-chip-selected-hover-leading-color: var(--md-chip-hover-leading-color);
+    --md-chip-selected-hover-trailing-color: var(--md-chip-hover-trailing-color);
+    --md-chip-selected-focus-leading-color: var(--md-chip-focus-leading-color);
+    --md-chip-selected-focus-trailing-color: var(--md-chip-focus-trailing-color);
+    --md-chip-selected-pressed-leading-color: var(--md-chip-pressed-leading-color);
+    --md-chip-selected-pressed-trailing-color: var(--md-chip-pressed-trailing-color);
+    --md-chip-selected-hover-state-layer-color: var(--md-chip-hover-state-layer-color);
+    --md-chip-selected-focus-state-layer-color: var(--md-chip-focus-state-layer-color);
+    --md-chip-selected-pressed-state-layer-color: var(--md-chip-pressed-state-layer-color);
+    --md-chip-flat-hover-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-flat-focus-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-flat-pressed-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-flat-selected-hover-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-flat-selected-focus-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-flat-selected-pressed-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-container-color: transparent;
+    --md-chip-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-outline-color: var(--md-chip-flat-outline-color);
+    --md-chip-outline-width: var(--md-chip-flat-outline-width);
+    --md-chip-label-color: var(--md-chip-label-default-color);
+    --md-chip-leading-icon-color: var(--md-chip-leading-default-color);
+    --md-chip-trailing-icon-color: var(--md-chip-trailing-default-color);
+    --md-state-layer-color: var(--md-chip-hover-state-layer-color);
   }
 
-  72% {
-    transform: scaleX(1.01);
+  .m3-chip[data-variant='assist'] {
+    --md-chip-container-height: var(--md-comp-assist-chip-container-height);
+    --md-chip-container-shape: var(--md-comp-assist-chip-container-shape);
+    --md-chip-flat-container-elevation: var(--md-comp-assist-chip-flat-container-elevation);
+    --md-chip-elevated-container-elevation: var(--md-comp-assist-chip-elevated-container-elevation);
+    --md-chip-elevated-container-color: var(--md-comp-assist-chip-elevated-container-color);
+    --md-chip-flat-outline-color: var(--md-sys-color-outline);
+    --md-chip-flat-outline-width: var(--md-comp-assist-chip-flat-outline-width);
+    --md-chip-label-default-color: var(--md-comp-assist-chip-label-text-color);
+    --md-chip-hover-label-color: var(--md-comp-assist-chip-hover-label-text-color);
+    --md-chip-focus-label-color: var(--md-comp-assist-chip-focus-label-text-color);
+    --md-chip-pressed-label-color: var(--md-comp-assist-chip-pressed-label-text-color);
+    --md-chip-disabled-label-color: var(--md-comp-assist-chip-disabled-label-text-color);
+    --md-chip-disabled-label-opacity: var(--md-comp-assist-chip-disabled-label-text-opacity);
+    --md-chip-icon-size: var(--md-comp-assist-chip-with-icon-icon-size);
+    --md-chip-leading-default-color: var(--md-comp-assist-chip-with-icon-icon-color);
+    --md-chip-trailing-default-color: var(--md-comp-assist-chip-with-icon-icon-color);
+    --md-chip-hover-leading-color: var(--md-comp-assist-chip-with-icon-hover-icon-color);
+    --md-chip-hover-trailing-color: var(--md-comp-assist-chip-with-icon-hover-icon-color);
+    --md-chip-focus-leading-color: var(--md-comp-assist-chip-with-icon-focus-icon-color);
+    --md-chip-focus-trailing-color: var(--md-comp-assist-chip-with-icon-focus-icon-color);
+    --md-chip-pressed-leading-color: var(--md-comp-assist-chip-with-icon-pressed-icon-color);
+    --md-chip-pressed-trailing-color: var(--md-comp-assist-chip-with-icon-pressed-icon-color);
+    --md-chip-disabled-leading-color: var(--md-comp-assist-chip-with-icon-disabled-icon-color);
+    --md-chip-disabled-trailing-color: var(--md-comp-assist-chip-with-icon-disabled-icon-color);
+    --md-chip-disabled-icon-opacity: var(--md-comp-assist-chip-with-icon-disabled-icon-opacity);
+    --md-chip-hover-state-layer-color: var(--md-comp-assist-chip-hover-state-layer-color);
+    --md-chip-focus-state-layer-color: var(--md-comp-assist-chip-focus-state-layer-color);
+    --md-chip-pressed-state-layer-color: var(--md-comp-assist-chip-pressed-state-layer-color);
+    --md-chip-focus-indicator-color: var(--md-comp-assist-chip-focus-indicator-color);
+    --md-chip-focus-indicator-thickness: var(--md-comp-assist-chip-focus-indicator-thickness);
+    --md-chip-focus-indicator-outline-offset: var(--md-comp-assist-chip-focus-indicator-outline-offset);
+    --md-chip-disabled-flat-outline-color: var(--md-comp-assist-chip-flat-disabled-outline-color);
+    --md-chip-disabled-flat-outline-opacity: var(--md-comp-assist-chip-flat-disabled-outline-opacity);
+    --md-chip-disabled-elevated-container-color: var(--md-comp-assist-chip-elevated-disabled-container-color);
+    --md-chip-disabled-elevated-container-opacity: var(--md-comp-assist-chip-elevated-disabled-container-opacity);
+    --md-chip-disabled-elevated-container-elevation: var(--md-comp-assist-chip-elevated-disabled-container-elevation);
+    --md-chip-flat-focus-outline-color: var(--md-comp-assist-chip-flat-focus-outline-color);
+    --md-chip-elevated-hover-container-elevation: var(--md-comp-chip-assist-elevated-hover-container-elevation);
+    --md-chip-elevated-focus-container-elevation: var(--md-comp-assist-chip-elevated-focus-container-elevation);
+    --md-chip-elevated-pressed-container-elevation: var(--md-comp-chip-assist-elevated-pressed-container-elevation);
   }
 
-  100% {
-    transform: scale(1);
+  .m3-chip[data-variant='filter'] {
+    --md-chip-container-height: var(--md-comp-filter-chip-container-height);
+    --md-chip-container-shape: var(--md-comp-filter-chip-container-shape);
+    --md-chip-flat-container-elevation: var(--md-comp-filter-chip-flat-container-elevation);
+    --md-chip-elevated-container-elevation: var(--md-comp-filter-chip-elevated-container-elevation);
+    --md-chip-elevated-container-color: var(--md-comp-filter-chip-elevated-unselected-container-color);
+    --md-chip-flat-outline-color: var(--md-comp-filter-chip-flat-unselected-outline-color);
+    --md-chip-flat-outline-width: var(--md-comp-filter-chip-flat-unselected-outline-width);
+    --md-chip-label-default-color: var(--md-comp-filter-chip-unselected-label-text-color);
+    --md-chip-hover-label-color: var(--md-comp-filter-chip-unselected-hover-label-text-color);
+    --md-chip-focus-label-color: var(--md-comp-filter-chip-unselected-focus-label-text-color);
+    --md-chip-pressed-label-color: var(--md-comp-filter-chip-unselected-pressed-label-text-color);
+    --md-chip-disabled-label-color: var(--md-comp-filter-chip-disabled-label-text-color);
+    --md-chip-disabled-label-opacity: var(--md-comp-filter-chip-disabled-label-text-opacity);
+    --md-chip-icon-size: var(--md-comp-filter-chip-with-icon-icon-size);
+    --md-chip-leading-default-color: var(--md-comp-filter-chip-with-leading-icon-unselected-leading-icon-color);
+    --md-chip-trailing-default-color: var(--md-comp-filter-chip-with-trailing-icon-unselected-trailing-icon-color);
+    --md-chip-hover-leading-color: var(--md-comp-filter-chip-with-leading-icon-unselected-hover-leading-icon-color);
+    --md-chip-hover-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-unselected-hover-trailing-icon-color);
+    --md-chip-focus-leading-color: var(--md-comp-filter-chip-with-leading-icon-unselected-focus-leading-icon-color);
+    --md-chip-focus-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-unselected-focus-trailing-icon-color);
+    --md-chip-pressed-leading-color: var(--md-comp-filter-chip-with-leading-icon-unselected-pressed-leading-icon-color);
+    --md-chip-pressed-trailing-color: var(
+      --md-comp-filter-chip-with-trailing-icon-unselected-pressed-trailing-icon-color
+    );
+    --md-chip-disabled-leading-color: var(--md-comp-filter-chip-with-leading-icon-disabled-leading-icon-color);
+    --md-chip-disabled-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-disabled-trailing-icon-color);
+    --md-chip-disabled-icon-opacity: var(--md-comp-filter-chip-with-leading-icon-disabled-leading-icon-opacity);
+    --md-chip-hover-state-layer-color: var(--md-comp-filter-chip-unselected-hover-state-layer-color);
+    --md-chip-focus-state-layer-color: var(--md-comp-filter-chip-unselected-focus-state-layer-color);
+    --md-chip-pressed-state-layer-color: var(--md-comp-filter-chip-unselected-pressed-state-layer-color);
+    --md-chip-focus-indicator-color: var(--md-comp-filter-chip-focus-indicator-color);
+    --md-chip-focus-indicator-thickness: var(--md-comp-filter-chip-focus-indicator-thickness);
+    --md-chip-focus-indicator-outline-offset: var(--md-comp-filter-chip-focus-indicator-outline-offset);
+    --md-chip-disabled-flat-outline-color: var(--md-comp-filter-chip-flat-disabled-unselected-outline-color);
+    --md-chip-disabled-flat-outline-opacity: var(--md-comp-filter-chip-flat-disabled-unselected-outline-opacity);
+    --md-chip-disabled-flat-selected-container-color: var(--md-comp-filter-chip-flat-disabled-selected-container-color);
+    --md-chip-disabled-flat-selected-container-opacity: var(
+      --md-comp-filter-chip-flat-disabled-selected-container-opacity
+    );
+    --md-chip-disabled-elevated-container-color: var(--md-comp-filter-chip-elevated-disabled-container-color);
+    --md-chip-disabled-elevated-container-opacity: var(--md-comp-filter-chip-elevated-disabled-container-opacity);
+    --md-chip-disabled-elevated-container-elevation: var(--md-comp-filter-chip-elevated-disabled-container-elevation);
+    --md-chip-flat-focus-outline-color: var(--md-comp-filter-chip-flat-unselected-focus-outline-color);
+    --md-chip-flat-hover-container-elevation: var(--md-comp-filter-chip-flat-unselected-hover-container-elevation);
+    --md-chip-flat-focus-container-elevation: var(--md-comp-filter-chip-flat-unselected-focus-container-elevation);
+    --md-chip-flat-pressed-container-elevation: var(--md-comp-filter-chip-flat-unselected-pressed-container-elevation);
+    --md-chip-elevated-hover-container-elevation: var(--md-comp-filter-chip-elevated-hover-container-elevation);
+    --md-chip-elevated-focus-container-elevation: var(--md-comp-filter-chip-elevated-focus-container-elevation);
+    --md-chip-elevated-pressed-container-elevation: var(--md-comp-filter-chip-elevated-pressed-container-elevation);
+    --md-chip-selected-container-color: var(--md-comp-filter-chip-flat-selected-container-color);
+    --md-chip-selected-elevated-container-color: var(--md-comp-filter-chip-elevated-selected-container-color);
+    --md-chip-selected-outline-width: var(--md-comp-filter-chip-flat-selected-outline-width);
+    --md-chip-selected-label-color: var(--md-comp-filter-chip-selected-label-text-color);
+    --md-chip-selected-hover-label-color: var(--md-comp-filter-chip-selected-hover-label-text-color);
+    --md-chip-selected-focus-label-color: var(--md-comp-filter-chip-selected-focus-label-text-color);
+    --md-chip-selected-pressed-label-color: var(--md-comp-filter-chip-selected-pressed-label-text-color);
+    --md-chip-selected-leading-color: var(--md-comp-filter-chip-with-leading-icon-selected-leading-icon-color);
+    --md-chip-selected-trailing-color: var(--md-comp-filter-chip-with-trailing-icon-selected-trailing-icon-color);
+    --md-chip-selected-hover-leading-color: var(
+      --md-comp-filter-chip-with-leading-icon-selected-hover-leading-icon-color
+    );
+    --md-chip-selected-hover-trailing-color: var(
+      --md-comp-filter-chip-with-trailing-icon-selected-hover-trailing-icon-color
+    );
+    --md-chip-selected-focus-leading-color: var(
+      --md-comp-filter-chip-with-leading-icon-selected-focus-leading-icon-color
+    );
+    --md-chip-selected-focus-trailing-color: var(
+      --md-comp-filter-chip-with-trailing-icon-selected-focus-trailing-icon-color
+    );
+    --md-chip-selected-pressed-leading-color: var(
+      --md-comp-filter-chip-with-leading-icon-selected-pressed-leading-icon-color
+    );
+    --md-chip-selected-pressed-trailing-color: var(
+      --md-comp-filter-chip-with-trailing-icon-selected-pressed-trailing-icon-color
+    );
+    --md-chip-selected-hover-state-layer-color: var(--md-comp-filter-chip-selected-hover-state-layer-color);
+    --md-chip-selected-focus-state-layer-color: var(--md-comp-filter-chip-selected-focus-state-layer-color);
+    --md-chip-selected-pressed-state-layer-color: var(--md-comp-filter-chip-selected-pressed-state-layer-color);
+    --md-chip-flat-selected-hover-container-elevation: var(
+      --md-comp-filter-chip-flat-selected-hover-container-elevation
+    );
+    --md-chip-flat-selected-focus-container-elevation: var(
+      --md-comp-filter-chip-flat-selected-focus-container-elevation
+    );
+    --md-chip-flat-selected-pressed-container-elevation: var(
+      --md-comp-filter-chip-flat-selected-pressed-container-elevation
+    );
   }
-}
 
-@keyframes m3-chip-leading-select {
-  0% {
+  .m3-chip[data-variant='input'] {
+    --md-chip-container-height: var(--md-comp-input-chip-container-height);
+    --md-chip-container-shape: var(--md-comp-input-chip-container-shape);
+    --md-chip-flat-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-elevated-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-elevated-container-color: transparent;
+    --md-chip-flat-outline-color: var(--md-comp-input-chip-unselected-outline-color);
+    --md-chip-flat-outline-width: var(--md-comp-input-chip-unselected-outline-width);
+    --md-chip-label-default-color: var(--md-comp-input-chip-unselected-label-text-color);
+    --md-chip-hover-label-color: var(--md-comp-input-chip-unselected-hover-label-text-color);
+    --md-chip-focus-label-color: var(--md-comp-input-chip-unselected-focus-label-text-color);
+    --md-chip-pressed-label-color: var(--md-comp-input-chip-unselected-pressed-label-text-color);
+    --md-chip-disabled-label-color: var(--md-comp-input-chip-disabled-label-text-color);
+    --md-chip-disabled-label-opacity: var(--md-comp-input-chip-disabled-label-text-opacity);
+    --md-chip-icon-size: var(--md-comp-input-chip-with-leading-icon-leading-icon-size);
+    --md-chip-leading-default-color: var(--md-comp-input-chip-with-leading-icon-unselected-leading-icon-color);
+    --md-chip-trailing-default-color: var(--md-comp-input-chip-with-trailing-icon-unselected-trailing-icon-color);
+    --md-chip-hover-leading-color: var(--md-comp-input-chip-with-leading-icon-unselected-hover-leading-icon-color);
+    --md-chip-hover-trailing-color: var(--md-comp-input-chip-with-trailing-icon-unselected-hover-trailing-icon-color);
+    --md-chip-focus-leading-color: var(--md-comp-input-chip-with-leading-icon-unselected-focus-leading-icon-color);
+    --md-chip-focus-trailing-color: var(--md-comp-input-chip-with-trailing-icon-unselected-focus-trailing-icon-color);
+    --md-chip-pressed-leading-color: var(--md-comp-input-chip-with-leading-icon-unselected-pressed-leading-icon-color);
+    --md-chip-pressed-trailing-color: var(
+      --md-comp-input-chip-with-trailing-icon-unselected-pressed-trailing-icon-color
+    );
+    --md-chip-disabled-leading-color: var(--md-comp-input-chip-with-leading-icon-disabled-leading-icon-color);
+    --md-chip-disabled-trailing-color: var(--md-comp-input-chip-with-trailing-icon-disabled-trailing-icon-color);
+    --md-chip-disabled-icon-opacity: var(--md-comp-input-chip-with-leading-icon-disabled-leading-icon-opacity);
+    --md-chip-hover-state-layer-color: var(--md-comp-input-chip-unselected-hover-state-layer-color);
+    --md-chip-focus-state-layer-color: var(--md-comp-input-chip-unselected-focus-state-layer-color);
+    --md-chip-pressed-state-layer-color: var(--md-comp-input-chip-unselected-pressed-state-layer-color);
+    --md-chip-focus-indicator-color: var(--md-comp-input-chip-focus-indicator-color);
+    --md-chip-focus-indicator-thickness: var(--md-comp-input-chip-focus-indicator-thickness);
+    --md-chip-focus-indicator-outline-offset: var(--md-comp-input-chip-focus-indicator-outline-offset);
+    --md-chip-disabled-flat-outline-color: var(--md-comp-input-chip-disabled-unselected-outline-color);
+    --md-chip-disabled-flat-outline-opacity: var(--md-comp-input-chip-disabled-unselected-outline-opacity);
+    --md-chip-disabled-flat-selected-container-color: var(--md-comp-input-chip-disabled-selected-container-color);
+    --md-chip-disabled-flat-selected-container-opacity: var(--md-comp-input-chip-disabled-selected-container-opacity);
+    --md-chip-disabled-elevated-container-color: transparent;
+    --md-chip-disabled-elevated-container-opacity: 0;
+    --md-chip-disabled-elevated-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-flat-focus-outline-color: var(--md-comp-input-chip-unselected-focus-outline-color);
+    --md-chip-flat-hover-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-flat-focus-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-flat-pressed-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-elevated-hover-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-elevated-focus-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-elevated-pressed-container-elevation: var(--md-comp-input-chip-container-elevation);
+    --md-chip-selected-container-color: var(--md-comp-input-chip-selected-container-color);
+    --md-chip-selected-elevated-container-color: var(--md-comp-input-chip-selected-container-color);
+    --md-chip-selected-outline-width: var(--md-comp-input-chip-selected-outline-width);
+    --md-chip-selected-label-color: var(--md-comp-input-chip-selected-label-text-color);
+    --md-chip-selected-hover-label-color: var(--md-comp-input-chip-selected-hover-label-text-color);
+    --md-chip-selected-focus-label-color: var(--md-comp-input-chip-selected-focus-label-text-color);
+    --md-chip-selected-pressed-label-color: var(--md-comp-input-chip-selected-pressed-label-text-color);
+    --md-chip-selected-leading-color: var(--md-comp-input-chip-with-leading-icon-selected-leading-icon-color);
+    --md-chip-selected-trailing-color: var(--md-comp-input-chip-with-trailing-icon-selected-trailing-icon-color);
+    --md-chip-selected-hover-leading-color: var(
+      --md-comp-input-chip-with-leading-icon-selected-hover-leading-icon-color
+    );
+    --md-chip-selected-hover-trailing-color: var(
+      --md-comp-input-chip-with-trailing-icon-selected-hover-trailing-icon-color
+    );
+    --md-chip-selected-focus-leading-color: var(
+      --md-comp-input-chip-with-leading-icon-selected-focus-leading-icon-color
+    );
+    --md-chip-selected-focus-trailing-color: var(
+      --md-comp-input-chip-with-trailing-icon-selected-focus-trailing-icon-color
+    );
+    --md-chip-selected-pressed-leading-color: var(
+      --md-comp-input-chip-with-leading-icon-selected-pressed-leading-icon-color
+    );
+    --md-chip-selected-pressed-trailing-color: var(
+      --md-comp-input-chip-with-trailing-icon-selected-pressed-trailing-icon-color
+    );
+    --md-chip-selected-hover-state-layer-color: var(--md-comp-input-chip-selected-hover-state-layer-color);
+    --md-chip-selected-focus-state-layer-color: var(--md-comp-input-chip-selected-focus-state-layer-color);
+    --md-chip-selected-pressed-state-layer-color: var(--md-comp-input-chip-selected-pressed-state-layer-color);
+    --md-chip-avatar-size: var(--md-comp-input-chip-with-avatar-avatar-size);
+    --md-chip-avatar-shape: var(--md-comp-input-chip-with-avatar-avatar-shape);
+    --md-chip-avatar-disabled-opacity: var(--md-comp-input-chip-with-avatar-disabled-avatar-opacity);
+  }
+
+  .m3-chip[data-variant='suggestion'] {
+    --md-chip-container-height: var(--md-comp-suggestion-chip-container-height);
+    --md-chip-container-shape: var(--md-comp-suggestion-chip-container-shape);
+    --md-chip-flat-container-elevation: var(--md-comp-suggestion-chip-flat-container-elevation);
+    --md-chip-elevated-container-elevation: var(--md-comp-suggestion-chip-elevated-container-elevation);
+    --md-chip-elevated-container-color: var(--md-comp-suggestion-chip-elevated-container-color);
+    --md-chip-flat-outline-color: var(--md-sys-color-outline);
+    --md-chip-flat-outline-width: var(--md-comp-suggestion-chip-flat-outline-width);
+    --md-chip-label-default-color: var(--md-comp-suggestion-chip-label-text-color);
+    --md-chip-hover-label-color: var(--md-comp-suggestion-chip-hover-label-text-color);
+    --md-chip-focus-label-color: var(--md-comp-suggestion-chip-focus-label-text-color);
+    --md-chip-pressed-label-color: var(--md-comp-suggestion-chip-pressed-label-text-color);
+    --md-chip-disabled-label-color: var(--md-comp-suggestion-chip-disabled-label-text-color);
+    --md-chip-disabled-label-opacity: var(--md-comp-suggestion-chip-disabled-label-text-opacity);
+    --md-chip-icon-size: var(--md-comp-suggestion-chip-with-leading-icon-leading-icon-size);
+    --md-chip-leading-default-color: var(--md-comp-suggestion-chip-with-leading-icon-leading-icon-color);
+    --md-chip-trailing-default-color: var(--md-comp-suggestion-chip-with-leading-icon-leading-icon-color);
+    --md-chip-hover-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-hover-leading-icon-color);
+    --md-chip-hover-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-hover-leading-icon-color);
+    --md-chip-focus-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-focus-leading-icon-color);
+    --md-chip-focus-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-focus-leading-icon-color);
+    --md-chip-pressed-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-pressed-leading-icon-color);
+    --md-chip-pressed-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-pressed-leading-icon-color);
+    --md-chip-disabled-leading-color: var(--md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-color);
+    --md-chip-disabled-trailing-color: var(--md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-color);
+    --md-chip-disabled-icon-opacity: var(--md-comp-suggestion-chip-with-leading-icon-disabled-leading-icon-opacity);
+    --md-chip-hover-state-layer-color: var(--md-comp-suggestion-chip-hover-state-layer-color);
+    --md-chip-focus-state-layer-color: var(--md-comp-suggestion-chip-focus-state-layer-color);
+    --md-chip-pressed-state-layer-color: var(--md-comp-suggestion-chip-pressed-state-layer-color);
+    --md-chip-focus-indicator-color: var(--md-comp-suggestion-chip-focus-indicator-color);
+    --md-chip-focus-indicator-thickness: var(--md-comp-suggestion-chip-focus-indicator-thickness);
+    --md-chip-focus-indicator-outline-offset: var(--md-comp-suggestion-chip-focus-indicator-outline-offset);
+    --md-chip-disabled-flat-outline-color: var(--md-comp-suggestion-chip-flat-disabled-outline-color);
+    --md-chip-disabled-flat-outline-opacity: var(--md-comp-suggestion-chip-flat-disabled-outline-opacity);
+    --md-chip-disabled-elevated-container-color: var(--md-comp-suggestion-chip-elevated-disabled-container-color);
+    --md-chip-disabled-elevated-container-opacity: var(--md-comp-suggestion-chip-elevated-disabled-container-opacity);
+    --md-chip-disabled-elevated-container-elevation: var(
+      --md-comp-suggestion-chip-elevated-disabled-container-elevation
+    );
+    --md-chip-flat-focus-outline-color: var(--md-comp-suggestion-chip-flat-focus-outline-color);
+    --md-chip-elevated-hover-container-elevation: var(--md-comp-chip-suggestion-elevated-hover-container-elevation);
+    --md-chip-elevated-focus-container-elevation: var(--md-comp-suggestion-chip-elevated-focus-container-elevation);
+    --md-chip-elevated-pressed-container-elevation: var(--md-comp-chip-suggestion-elevated-pressed-container-elevation);
+  }
+
+  .m3-chip:not(:disabled):not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  .m3-chip[data-elevated='true']:not([data-variant='input']) {
+    --md-chip-container-color: var(--md-chip-elevated-container-color);
+    --md-chip-container-elevation: var(--md-chip-elevated-container-elevation);
+    --md-chip-outline-width: 0;
+  }
+
+  .m3-chip[data-selected='true'][data-variant='filter'],
+  .m3-chip[data-selected='true'][data-variant='input'] {
+    --md-chip-container-color: var(--md-chip-selected-container-color);
+    --md-chip-outline-width: var(--md-chip-selected-outline-width);
+    --md-chip-label-color: var(--md-chip-selected-label-color);
+    --md-chip-leading-icon-color: var(--md-chip-selected-leading-color);
+    --md-chip-trailing-icon-color: var(--md-chip-selected-trailing-color);
+    --md-state-layer-color: var(--md-chip-selected-hover-state-layer-color);
+    animation: m3-chip-select 280ms var(--md-timing-function-fast-spatial);
+  }
+
+  .m3-chip[data-selected='true'][data-elevated='true'][data-variant='filter'] {
+    --md-chip-container-color: var(--md-chip-selected-elevated-container-color);
+  }
+
+  .m3-chip[data-with-leading='true'] {
+    padding-inline-start: var(--md-comp-chip-with-icon-side-space);
+  }
+
+  .m3-chip[data-with-trailing='true'] {
+    padding-inline-end: var(--md-comp-chip-with-icon-side-space);
+  }
+
+  .m3-chip:hover {
+    --md-chip-label-color: var(--md-chip-hover-label-color);
+    --md-chip-leading-icon-color: var(--md-chip-hover-leading-color);
+    --md-chip-trailing-icon-color: var(--md-chip-hover-trailing-color);
+    --md-state-layer-color: var(--md-chip-hover-state-layer-color);
+    --md-chip-container-elevation: var(--md-chip-flat-hover-container-elevation);
+  }
+
+  .m3-chip:hover[data-elevated='true']:not([data-variant='input']) {
+    --md-chip-container-elevation: var(--md-chip-elevated-hover-container-elevation);
+  }
+
+  .m3-chip:hover[data-selected='true'][data-variant='filter'],
+  .m3-chip:hover[data-selected='true'][data-variant='input'] {
+    --md-chip-label-color: var(--md-chip-selected-hover-label-color);
+    --md-chip-leading-icon-color: var(--md-chip-selected-hover-leading-color);
+    --md-chip-trailing-icon-color: var(--md-chip-selected-hover-trailing-color);
+    --md-state-layer-color: var(--md-chip-selected-hover-state-layer-color);
+    --md-chip-container-elevation: var(--md-chip-flat-selected-hover-container-elevation);
+  }
+
+  .m3-chip:has(.m3-chip-input:focus-visible),
+  .m3-chip:focus-visible {
+    --md-chip-label-color: var(--md-chip-focus-label-color);
+    --md-chip-leading-icon-color: var(--md-chip-focus-leading-color);
+    --md-chip-trailing-icon-color: var(--md-chip-focus-trailing-color);
+    --md-state-layer-color: var(--md-chip-focus-state-layer-color);
+    --md-chip-container-elevation: var(--md-chip-flat-focus-container-elevation);
+    --md-chip-outline-color: var(--md-chip-flat-focus-outline-color, var(--md-chip-outline-color));
+
+    outline: var(--md-chip-focus-indicator-thickness) solid var(--md-chip-focus-indicator-color);
+    outline-offset: var(--md-chip-focus-indicator-outline-offset);
+  }
+
+  .m3-chip:has(.m3-chip-input:focus-visible)[data-elevated='true']:not([data-variant='input']),
+  .m3-chip:focus-visible[data-elevated='true']:not([data-variant='input']) {
+    --md-chip-container-elevation: var(--md-chip-elevated-focus-container-elevation);
+  }
+
+  .m3-chip:has(.m3-chip-input:focus-visible)[data-selected='true'][data-variant='filter'],
+  .m3-chip:has(.m3-chip-input:focus-visible)[data-selected='true'][data-variant='input'] {
+    --md-chip-label-color: var(--md-chip-selected-focus-label-color);
+    --md-chip-leading-icon-color: var(--md-chip-selected-focus-leading-color);
+    --md-chip-trailing-icon-color: var(--md-chip-selected-focus-trailing-color);
+    --md-state-layer-color: var(--md-chip-selected-focus-state-layer-color);
+    --md-chip-container-elevation: var(--md-chip-flat-selected-focus-container-elevation);
+  }
+
+  .m3-chip[data-pressed='true'] {
+    --md-chip-label-color: var(--md-chip-pressed-label-color);
+    --md-chip-leading-icon-color: var(--md-chip-pressed-leading-color);
+    --md-chip-trailing-icon-color: var(--md-chip-pressed-trailing-color);
+    --md-state-layer-color: var(--md-chip-pressed-state-layer-color);
+    --md-chip-container-elevation: var(--md-chip-flat-pressed-container-elevation);
+  }
+
+  .m3-chip[data-pressed='true'][data-elevated='true']:not([data-variant='input']) {
+    --md-chip-container-elevation: var(--md-chip-elevated-pressed-container-elevation);
+  }
+
+  .m3-chip[data-pressed='true'][data-selected='true'][data-variant='filter'],
+  .m3-chip[data-pressed='true'][data-selected='true'][data-variant='input'] {
+    --md-chip-label-color: var(--md-chip-selected-pressed-label-color);
+    --md-chip-leading-icon-color: var(--md-chip-selected-pressed-leading-color);
+    --md-chip-trailing-icon-color: var(--md-chip-selected-pressed-trailing-color);
+    --md-state-layer-color: var(--md-chip-selected-pressed-state-layer-color);
+    --md-chip-container-elevation: var(--md-chip-flat-selected-pressed-container-elevation);
+  }
+
+  .m3-chip:disabled,
+  .m3-chip[aria-disabled='true'] {
+    cursor: default;
+    --md-chip-label-color: --translucent(var(--md-chip-disabled-label-color), var(--md-chip-disabled-label-opacity));
+    --md-chip-leading-icon-color: --translucent(
+      var(--md-chip-disabled-leading-color),
+      var(--md-chip-disabled-icon-opacity)
+    );
+    --md-chip-trailing-icon-color: --translucent(
+      var(--md-chip-disabled-trailing-color),
+      var(--md-chip-disabled-icon-opacity)
+    );
+    --md-chip-container-elevation: var(--md-chip-flat-container-elevation);
+    --md-chip-outline-color: --translucent(
+      var(--md-chip-disabled-flat-outline-color),
+      var(--md-chip-disabled-flat-outline-opacity)
+    );
+    --md-state-layer-color: transparent;
+  }
+
+  .m3-chip:disabled[data-selected='true'][data-variant='filter'],
+  .m3-chip:disabled[data-selected='true'][data-variant='input'],
+  .m3-chip[aria-disabled='true'][data-selected='true'][data-variant='filter'],
+  .m3-chip[aria-disabled='true'][data-selected='true'][data-variant='input'] {
+    --md-chip-container-color: --translucent(
+      var(--md-chip-disabled-flat-selected-container-color),
+      var(--md-chip-disabled-flat-selected-container-opacity)
+    );
+  }
+
+  .m3-chip:disabled[data-elevated='true']:not([data-variant='input']),
+  .m3-chip[aria-disabled='true'][data-elevated='true']:not([data-variant='input']) {
+    --md-chip-container-color: --translucent(
+      var(--md-chip-disabled-elevated-container-color),
+      var(--md-chip-disabled-elevated-container-opacity)
+    );
+    --md-chip-container-elevation: var(--md-chip-disabled-elevated-container-elevation);
+    --md-chip-outline-width: 0;
+  }
+
+  .m3-chip-input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
     opacity: 0;
-    transform: scale(0.72);
+    cursor: inherit;
   }
 
-  68% {
-    opacity: 1;
-    transform: scale(1.08);
+  .m3-chip-label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 120ms var(--md-timing-function-fast);
   }
 
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes m3-chip-content-select {
-  0% {
-    transform: translateX(calc((var(--md-chip-icon-size) + var(--md-comp-chip-icon-gap)) * -1));
+  .m3-chip-content {
+    min-inline-size: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--md-comp-chip-icon-gap);
+    transition: transform 220ms var(--md-timing-function-fast-spatial);
   }
 
-  100% {
-    transform: translateX(0);
-  }
-}
-
-[data-type='connected'] .m3-chip {
-  &:first-of-type {
-    border-start-start-radius: var(--md-comp-button-group-connected-container-shape);
-    border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-end-start-radius: var(--md-comp-button-group-connected-container-shape);
+  .m3-chip-icon,
+  .m3-chip-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
   }
 
-  &:last-of-type {
-    border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-start-end-radius: var(--md-comp-button-group-connected-container-shape);
-    border-end-end-radius: var(--md-comp-button-group-connected-container-shape);
-    border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+  .m3-chip-icon {
+    inline-size: var(--md-chip-icon-size);
+    block-size: var(--md-chip-icon-size);
+    font-size: var(--md-chip-icon-size);
   }
 
-  &:not(:first-of-type):not(:last-of-type) {
-    border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+  .m3-chip-leading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--md-chip-leading-icon-color);
+    transition:
+      color 120ms var(--md-timing-function-fast),
+      transform 220ms var(--md-timing-function-fast-spatial),
+      opacity 120ms var(--md-timing-function-fast);
   }
 
-  &:first-of-type[data-selected='true'][data-variant='filter'],
-  &:first-of-type[data-selected='true'][data-variant='input'] {
-    border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-  }
-
-  &:last-of-type[data-selected='true'][data-variant='filter'],
-  &:last-of-type[data-selected='true'][data-variant='input'] {
-    border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-  }
-
-  &:not(:first-of-type):not(:last-of-type)[data-selected='true'][data-variant='filter'],
-  &:not(:first-of-type):not(:last-of-type)[data-selected='true'][data-variant='input'] {
-    border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .m3-chip,
-  .m3-chip-content,
-  .m3-chip-label,
-  .m3-chip-leading,
   .m3-chip-trailing {
-    transition-duration: 0ms;
-    animation-duration: 0ms;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--md-chip-trailing-icon-color);
+    transition:
+      color 120ms var(--md-timing-function-fast),
+      transform 220ms var(--md-timing-function-fast-spatial),
+      opacity 120ms var(--md-timing-function-fast);
+  }
+
+  .m3-chip-avatar {
+    inline-size: var(--md-chip-avatar-size, var(--md-chip-icon-size));
+    block-size: var(--md-chip-avatar-size, var(--md-chip-icon-size));
+    overflow: hidden;
+    border-radius: var(--md-chip-avatar-shape, 9999rem);
+  }
+
+  .m3-chip-avatar-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .m3-chip:disabled .m3-chip-avatar,
+  .m3-chip[aria-disabled='true'] .m3-chip-avatar {
+    opacity: var(--md-chip-avatar-disabled-opacity, 0.38);
+  }
+
+  .m3-chip[data-selected='true'][data-variant='filter'] .m3-chip-leading,
+  .m3-chip[data-selected='true'][data-variant='input'] .m3-chip-leading {
+    animation: m3-chip-leading-select 220ms var(--md-timing-function-fast-spatial);
+  }
+
+  .m3-chip[data-selected='true'][data-variant='filter'][data-leading-source='selected-icon'] .m3-chip-content {
+    animation: m3-chip-content-select 220ms var(--md-timing-function-fast-spatial);
+  }
+
+  @keyframes m3-chip-select {
+    0% {
+      transform: scaleX(0.94);
+    }
+
+    72% {
+      transform: scaleX(1.01);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes m3-chip-leading-select {
+    0% {
+      opacity: 0;
+      transform: scale(0.72);
+    }
+
+    68% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes m3-chip-content-select {
+    0% {
+      transform: translateX(calc((var(--md-chip-icon-size) + var(--md-comp-chip-icon-gap)) * -1));
+    }
+
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  [data-type='connected'] .m3-chip {
+    &:first-of-type {
+      border-start-start-radius: var(--md-comp-button-group-connected-container-shape);
+      border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-container-shape);
+    }
+
+    &:last-of-type {
+      border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-start-end-radius: var(--md-comp-button-group-connected-container-shape);
+      border-end-end-radius: var(--md-comp-button-group-connected-container-shape);
+      border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+    }
+
+    &:not(:first-of-type):not(:last-of-type) {
+      border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+    }
+
+    &:first-of-type[data-selected='true'][data-variant='filter'],
+    &:first-of-type[data-selected='true'][data-variant='input'] {
+      border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+    }
+
+    &:last-of-type[data-selected='true'][data-variant='filter'],
+    &:last-of-type[data-selected='true'][data-variant='input'] {
+      border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+    }
+
+    &:not(:first-of-type):not(:last-of-type)[data-selected='true'][data-variant='filter'],
+    &:not(:first-of-type):not(:last-of-type)[data-selected='true'][data-variant='input'] {
+      border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-chip,
+    .m3-chip-content,
+    .m3-chip-label,
+    .m3-chip-leading,
+    .m3-chip-trailing {
+      transition-duration: 0ms;
+      animation-duration: 0ms;
+    }
   }
 }

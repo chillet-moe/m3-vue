@@ -23,121 +23,126 @@
   }
 }
 
-.m3-radio {
-  display: inline-flex;
-  align-items: center;
-  gap: --dp(4);
-  position: relative;
-  inline-size: fit-content;
-  cursor: pointer;
-  user-select: none;
-}
+@layer components {
+  .m3-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: --dp(4);
+    position: relative;
+    inline-size: fit-content;
+    cursor: pointer;
+    user-select: none;
+  }
 
-.m3-radio:has(.m3-radio-input:checked) {
-  --md-state-layer-color: var(--md-sys-color-primary);
-}
+  .m3-radio:has(.m3-radio-input:checked) {
+    --md-state-layer-color: var(--md-sys-color-primary);
+  }
 
-.m3-radio[aria-disabled='true'] {
-  cursor: default;
-}
+  .m3-radio[aria-disabled='true'] {
+    cursor: default;
+  }
 
-.m3-radio-input {
-  position: absolute;
-  margin: 0;
-  opacity: 0;
-  inset: 0;
-  cursor: inherit;
-}
+  .m3-radio-input {
+    position: absolute;
+    margin: 0;
+    opacity: 0;
+    inset: 0;
+    cursor: inherit;
+  }
 
-.m3-radio-control {
-  position: relative;
-  inline-size: var(--md-comp-radio-target-size);
-  block-size: var(--md-comp-radio-target-size);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-}
+  .m3-radio-control {
+    position: relative;
+    inline-size: var(--md-comp-radio-target-size);
+    block-size: var(--md-comp-radio-target-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
 
-.m3-radio-outer {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: var(--md-comp-radio-icon-size);
-  block-size: var(--md-comp-radio-icon-size);
-  border-radius: var(--md-comp-radio-icon-shape);
-  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-comp-radio-unselected-outline-color);
-  transform: translate(-50%, -50%);
-  transition: box-shadow var(--md-easing-fast);
-}
+  .m3-radio-outer {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--md-comp-radio-icon-size);
+    block-size: var(--md-comp-radio-icon-size);
+    border-radius: var(--md-comp-radio-icon-shape);
+    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-comp-radio-unselected-outline-color);
+    transform: translate(-50%, -50%);
+    transition: box-shadow var(--md-easing-fast);
+  }
 
-.m3-radio-inner {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: var(--md-comp-radio-selected-dot-size);
-  block-size: var(--md-comp-radio-selected-dot-size);
-  border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-comp-radio-selected-dot-color);
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform var(--md-easing-fast-spatial);
-}
+  .m3-radio-inner {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--md-comp-radio-selected-dot-size);
+    block-size: var(--md-comp-radio-selected-dot-size);
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--md-comp-radio-selected-dot-color);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform var(--md-easing-fast-spatial);
+  }
 
-.m3-radio-control > .m3-state-layer {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: var(--md-comp-radio-state-layer-size);
-  block-size: var(--md-comp-radio-state-layer-size);
-  border-radius: var(--md-sys-shape-corner-full);
-  transform: translate(-50%, -50%);
-}
+  .m3-radio-control > .m3-state-layer {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--md-comp-radio-state-layer-size);
+    block-size: var(--md-comp-radio-state-layer-size);
+    border-radius: var(--md-sys-shape-corner-full);
+    transform: translate(-50%, -50%);
+  }
 
-.m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
-  box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-comp-radio-selected-outline-color);
-}
+  .m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
+    box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-comp-radio-selected-outline-color);
+  }
 
-.m3-radio-input:checked + .m3-radio-control .m3-radio-inner {
-  transform: translate(-50%, -50%) scale(1);
-}
+  .m3-radio-input:checked + .m3-radio-control .m3-radio-inner {
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-.m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-outer {
-  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
-}
+  .m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-outer {
+    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
+  }
 
-.m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer,
-.m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
-  box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-sys-color-primary);
-}
+  .m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer,
+  .m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
+    box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-sys-color-primary);
+  }
 
-.m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-outer {
-  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
-}
+  .m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-outer {
+    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
+  }
 
-.m3-radio-input:focus-visible + .m3-radio-control {
-  outline: var(--md-comp-radio-focus-indicator-thickness) solid var(--md-comp-radio-focus-indicator-color);
-  outline-offset: var(--md-comp-radio-focus-indicator-offset);
-  border-radius: var(--md-comp-radio-icon-shape);
-}
+  .m3-radio-input:focus-visible + .m3-radio-control {
+    outline: var(--md-comp-radio-focus-indicator-thickness) solid var(--md-comp-radio-focus-indicator-color);
+    outline-offset: var(--md-comp-radio-focus-indicator-offset);
+    border-radius: var(--md-comp-radio-icon-shape);
+  }
 
-.m3-radio-input:disabled + .m3-radio-control .m3-radio-outer {
-  box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width)
-    --translucent(var(--md-comp-radio-disabled-unselected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
-}
+  .m3-radio-input:disabled + .m3-radio-control .m3-radio-outer {
+    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width)
+      --translucent(
+        var(--md-comp-radio-disabled-unselected-outline-color),
+        var(--md-comp-radio-disabled-outline-opacity)
+      );
+  }
 
-.m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-outer {
-  box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width)
-    --translucent(var(--md-comp-radio-disabled-selected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
-}
+  .m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-outer {
+    box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width)
+      --translucent(var(--md-comp-radio-disabled-selected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
+  }
 
-.m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-inner {
-  background-color: --translucent(
-    var(--md-comp-radio-disabled-selected-dot-color),
-    var(--md-comp-radio-disabled-dot-opacity)
-  );
-}
+  .m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-inner {
+    background-color: --translucent(
+      var(--md-comp-radio-disabled-selected-dot-color),
+      var(--md-comp-radio-disabled-dot-opacity)
+    );
+  }
 
-.m3-radio-label {
-  @apply body-medium;
-  color: var(--md-sys-color-on-surface);
+  .m3-radio-label {
+    @apply body-medium;
+    color: var(--md-sys-color-on-surface);
+  }
 }

@@ -134,428 +134,432 @@
   }
 }
 
-.m3-button {
-  border: none;
-  user-select: none;
+@layer components {
+  .m3-button {
+    border: none;
+    user-select: none;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-  transition:
-    border-radius var(--md-easing-fast-spatial),
-    box-shadow var(--md-easing-fast),
-    background-color var(--md-easing-fast),
-    color var(--md-easing-fast);
+    transition:
+      border-radius var(--md-easing-fast-spatial),
+      box-shadow var(--md-easing-fast),
+      background-color var(--md-easing-fast),
+      color var(--md-easing-fast);
 
-  --md-color-container: var(--md-comp-button-container-color);
-  --md-color-on-container: var(--md-comp-button-label-text-color);
+    --md-color-container: var(--md-comp-button-container-color);
+    --md-color-on-container: var(--md-comp-button-label-text-color);
 
-  background-color: var(--md-color-container);
-  color: var(--md-color-on-container);
-  box-shadow:
-    var(--md-comp-button-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
+    background-color: var(--md-color-container);
+    color: var(--md-color-on-container);
+    box-shadow:
+      var(--md-comp-button-container-elevation),
+      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
 
-  border-start-start-radius: var(--md-comp-button-container-shape);
-  border-start-end-radius: var(--md-comp-button-container-shape);
-  border-end-end-radius: var(--md-comp-button-container-shape);
-  border-end-start-radius: var(--md-comp-button-container-shape);
-}
-
-.m3-button:not(:disabled):not(:has(input:disabled)) {
-  cursor: pointer;
-}
-
-.m3-button:hover {
-  --md-color-on-container: var(--md-comp-button-hovered-label-text-color);
-  box-shadow:
-    var(--md-comp-button-hovered-container-elevation, var(--md-comp-button-container-elevation)),
-    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
-}
-
-.m3-button:focus-visible,
-.m3-button:has(input:focus-visible) {
-  --md-color-on-container: var(--md-comp-button-focused-label-text-color);
-  box-shadow:
-    var(--md-comp-button-focused-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
-
-  outline-offset: var(--md-comp-button-focus-indicator-outline-offset);
-  outline: var(--md-comp-button-focus-indicator-color) solid var(--md-comp-button-focus-indicator-thickness);
-}
-
-.m3-button[data-pressed='true'] {
-  --md-color-on-container: var(--md-comp-button-pressed-label-text-color);
-  box-shadow:
-    var(--md-comp-button-pressed-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
-}
-
-.m3-button:disabled,
-label.m3-button:has(input:disabled) {
-  background-color: rgb(from var(--md-comp-button-disabled-container-color) r g b / 0.1);
-  color: rgb(from var(--md-comp-button-disabled-label-text-color) r g b / 0.38);
-  box-shadow:
-    var(--md-comp-button-disabled-container-elevation),
-    inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
-}
-
-/* elevated */
-.m3-button[data-color='elevated'] {
-  --md-comp-button-container-color: var(--md-comp-button-elevated-container-color);
-  --md-comp-button-container-elevation: var(--md-comp-button-elevated-container-elevation);
-  --md-comp-button-label-text-color: var(--md-comp-button-elevated-label-text-color);
-  --md-comp-button-hovered-container-elevation: var(--md-comp-button-elevated-hovered-container-elevation);
-  --md-comp-button-hovered-label-text-color: var(--md-comp-button-elevated-hovered-label-text-color);
-  --md-comp-button-focused-container-elevation: var(--md-comp-button-elevated-focused-container-elevation);
-  --md-comp-button-focused-label-text-color: var(--md-comp-button-elevated-focused-label-text-color);
-  --md-comp-button-pressed-container-elevation: var(--md-comp-button-elevated-pressed-container-elevation);
-  --md-comp-button-pressed-label-text-color: var(--md-comp-button-elevated-pressed-label-text-color);
-  --md-comp-button-disabled-container-color: var(--md-comp-button-elevated-disabled-container-color);
-  --md-comp-button-disabled-container-elevation: var(--md-comp-button-elevated-disabled-container-elevation);
-  --md-comp-button-disabled-label-text-color: var(--md-comp-button-elevated-disabled-label-text-color);
-  --md-comp-button-unselected-container-color: var(--md-comp-button-elevated-unselected-container-color);
-  --md-comp-button-selected-container-color: var(--md-comp-button-elevated-selected-container-color);
-  --md-comp-button-unselected-label-text-color: var(--md-comp-button-elevated-unselected-label-text-color);
-  --md-comp-button-selected-label-text-color: var(--md-comp-button-elevated-selected-label-text-color);
-}
-
-/* filled */
-.m3-button[data-color='filled'] {
-  --md-comp-button-container-color: var(--md-comp-button-filled-container-color);
-  --md-comp-button-container-elevation: var(--md-comp-button-filled-container-elevation);
-  --md-comp-button-label-text-color: var(--md-comp-button-filled-label-text-color);
-  --md-comp-button-hovered-container-elevation: var(--md-comp-button-filled-hovered-container-elevation);
-  --md-comp-button-hovered-label-text-color: var(--md-comp-button-filled-hovered-label-text-color);
-  --md-comp-button-focused-container-elevation: var(--md-comp-button-filled-focused-container-elevation);
-  --md-comp-button-focused-label-text-color: var(--md-comp-button-filled-focused-label-text-color);
-  --md-comp-button-pressed-container-elevation: var(--md-comp-button-filled-pressed-container-elevation);
-  --md-comp-button-pressed-label-text-color: var(--md-comp-button-filled-pressed-label-text-color);
-  --md-comp-button-disabled-container-color: var(--md-comp-button-filled-disabled-container-color);
-  --md-comp-button-disabled-container-elevation: var(--md-comp-button-filled-disabled-container-elevation);
-  --md-comp-button-disabled-label-text-color: var(--md-comp-button-filled-disabled-label-text-color);
-  --md-comp-button-unselected-container-color: var(--md-comp-button-filled-unselected-container-color);
-  --md-comp-button-selected-container-color: var(--md-comp-button-filled-selected-container-color);
-  --md-comp-button-unselected-label-text-color: var(--md-comp-button-filled-unselected-label-text-color);
-  --md-comp-button-selected-label-text-color: var(--md-comp-button-filled-selected-label-text-color);
-}
-
-/* tonal */
-.m3-button[data-color='tonal'] {
-  --md-comp-button-container-color: var(--md-comp-button-tonal-container-color);
-  --md-comp-button-container-elevation: var(--md-comp-button-tonal-container-elevation);
-  --md-comp-button-label-text-color: var(--md-comp-button-tonal-label-text-color);
-  --md-comp-button-hovered-container-elevation: var(--md-comp-button-tonal-hovered-container-elevation);
-  --md-comp-button-hovered-label-text-color: var(--md-comp-button-tonal-hovered-label-text-color);
-  --md-comp-button-focused-container-elevation: var(--md-comp-button-tonal-focused-container-elevation);
-  --md-comp-button-focused-label-text-color: var(--md-comp-button-tonal-focused-label-text-color);
-  --md-comp-button-pressed-container-elevation: var(--md-comp-button-tonal-pressed-container-elevation);
-  --md-comp-button-pressed-label-text-color: var(--md-comp-button-tonal-pressed-label-text-color);
-  --md-comp-button-disabled-container-color: var(--md-comp-button-tonal-disabled-container-color);
-  --md-comp-button-disabled-container-elevation: var(--md-comp-button-tonal-disabled-container-elevation);
-  --md-comp-button-disabled-label-text-color: var(--md-comp-button-tonal-disabled-label-text-color);
-  --md-comp-button-unselected-container-color: var(--md-comp-button-tonal-unselected-container-color);
-  --md-comp-button-selected-container-color: var(--md-comp-button-tonal-selected-container-color);
-  --md-comp-button-unselected-label-text-color: var(--md-comp-button-tonal-unselected-label-text-color);
-  --md-comp-button-selected-label-text-color: var(--md-comp-button-tonal-selected-label-text-color);
-}
-
-/* outlined */
-.m3-button[data-color='outlined'] {
-  --md-comp-button-container-color: transparent;
-  --md-comp-button-label-text-color: var(--md-comp-button-outlined-label-text-color);
-  --button-outline-color: var(--md-comp-button-outlined-outline-color);
-  --md-comp-button-hovered-label-text-color: var(--md-comp-button-outlined-hovered-label-text-color);
-  --md-comp-button-focused-label-text-color: var(--md-comp-button-outlined-focused-label-text-color);
-  --md-comp-button-pressed-label-text-color: var(--md-comp-button-outlined-pressed-label-text-color);
-  --md-comp-button-disabled-container-color: transparent;
-  --md-comp-button-disabled-label-text-color: var(--md-comp-button-outlined-disabled-label-text-color);
-  --md-comp-button-unselected-container-color: transparent;
-  --md-comp-button-selected-container-color: var(--md-comp-button-outlined-selected-container-color);
-  --md-comp-button-unselected-label-text-color: var(--md-comp-button-outlined-unselected-label-text-color);
-  --md-comp-button-selected-label-text-color: var(--md-comp-button-outlined-selected-label-text-color);
-}
-
-/* text */
-.m3-button[data-color='text'] {
-  --md-comp-button-container-color: transparent;
-  --md-comp-button-label-text-color: var(--md-comp-button-text-label-text-color);
-  --md-comp-button-hovered-label-text-color: var(--md-comp-button-text-hovered-label-text-color);
-  --md-comp-button-focused-label-text-color: var(--md-comp-button-text-focused-label-text-color);
-  --md-comp-button-pressed-label-text-color: var(--md-comp-button-text-pressed-label-text-color);
-  --md-comp-button-disabled-container-color: transparent;
-  --md-comp-button-disabled-label-text-color: var(--md-comp-button-text-disabled-label-text-color);
-  --md-comp-button-unselected-container-color: transparent;
-  --md-comp-button-selected-container-color: transparent;
-  --md-comp-button-unselected-label-text-color: var(--md-comp-button-text-label-text-color);
-  --md-comp-button-selected-label-text-color: var(--md-comp-button-text-label-text-color);
-}
-
-/* Size Variants */
-.m3-button[data-size='extra-small'] {
-  @apply label-large;
-
-  height: --dp(32);
-  padding-inline: --dp(12);
-
-  --md-comp-button-container-shape-round: --dp(32 / 2);
-  --md-comp-button-container-shape-square: var(--md-comp-button-xsmall-container-shape-square);
-  --md-comp-button-pressed-container-shape: var(--md-comp-button-xsmall-pressed-container-shape);
-  --md-comp-button-selected-container-shape: var(--md-comp-button-xsmall-selected-container-shape-round);
-
-  --md-comp-button-icon-size: var(--md-comp-button-xsmall-icon-size);
-  --md-comp-button-icon-label-space: var(--md-comp-button-xsmall-icon-label-space);
-}
-
-.m3-button[data-size='small'] {
-  @apply label-large;
-
-  height: --dp(40);
-  padding-inline: --dp(16);
-
-  --md-comp-button-container-shape-round: --dp(40 / 2);
-  --md-comp-button-container-shape-square: var(--md-comp-button-small-container-shape-square);
-  --md-comp-button-pressed-container-shape: var(--md-comp-button-small-pressed-container-shape);
-  --md-comp-button-selected-container-shape: var(--md-comp-button-small-selected-container-shape-round);
-
-  --md-comp-button-icon-size: var(--md-comp-button-small-icon-size);
-  --md-comp-button-icon-label-space: var(--md-comp-button-small-icon-label-space);
-}
-
-.m3-button[data-size='medium'] {
-  @apply title-medium;
-
-  height: --dp(56);
-  padding-inline: --dp(24);
-
-  --md-comp-button-container-shape-round: --dp(56 / 2);
-  --md-comp-button-container-shape-square: var(--md-comp-button-medium-container-shape-square);
-  --md-comp-button-pressed-container-shape: var(--md-comp-button-medium-pressed-container-shape);
-  --md-comp-button-selected-container-shape: var(--md-comp-button-medium-selected-container-shape-round);
-
-  --md-comp-button-icon-size: var(--md-comp-button-medium-icon-size);
-  --md-comp-button-icon-label-space: var(--md-comp-button-medium-icon-label-space);
-}
-
-.m3-button[data-size='large'] {
-  @apply headline-small;
-
-  height: --dp(96);
-  padding-inline: --dp(48);
-
-  --md-comp-button-container-shape-round: --dp(96 / 2);
-  --md-comp-button-container-shape-square: var(--md-comp-button-large-container-shape-square);
-  --md-comp-button-pressed-container-shape: var(--md-comp-button-large-pressed-container-shape);
-  --md-comp-button-selected-container-shape: var(--md-comp-button-large-selected-container-shape-round);
-
-  --md-comp-button-icon-size: var(--md-comp-button-large-icon-size);
-  --md-comp-button-icon-label-space: var(--md-comp-button-large-icon-label-space);
-}
-
-.m3-button[data-size='extra-large'] {
-  @apply headline-large;
-
-  height: --dp(136);
-  padding-inline: --dp(64);
-
-  --md-comp-button-container-shape-round: --dp(136 / 2);
-  --md-comp-button-container-shape-square: var(--md-comp-button-xlarge-container-shape-square);
-  --md-comp-button-pressed-container-shape: var(--md-comp-button-xlarge-pressed-container-shape);
-  --md-comp-button-selected-container-shape: var(--md-comp-button-xlarge-selected-container-shape-round);
-
-  --md-comp-button-icon-size: var(--md-comp-button-xlarge-icon-size);
-  --md-comp-button-icon-label-space: var(--md-comp-button-xlarge-icon-label-space);
-}
-
-.m3-button[data-color='outlined'] {
-  &[data-size='extra-small'] {
-    --button-outline-width: var(--md-comp-button-xsmall-outlined-outline-width);
+    border-start-start-radius: var(--md-comp-button-container-shape);
+    border-start-end-radius: var(--md-comp-button-container-shape);
+    border-end-end-radius: var(--md-comp-button-container-shape);
+    border-end-start-radius: var(--md-comp-button-container-shape);
   }
 
-  &[data-size='small'] {
-    --button-outline-width: var(--md-comp-button-small-outlined-outline-width);
+  .m3-button:not(:disabled):not(:has(input:disabled)) {
+    cursor: pointer;
   }
 
-  &[data-size='medium'] {
-    --button-outline-width: var(--md-comp-button-medium-outlined-outline-width);
+  .m3-button:hover {
+    --md-color-on-container: var(--md-comp-button-hovered-label-text-color);
+    box-shadow:
+      var(--md-comp-button-hovered-container-elevation, var(--md-comp-button-container-elevation)),
+      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
   }
 
-  &[data-size='large'] {
-    --button-outline-width: var(--md-comp-button-large-outlined-outline-width);
+  .m3-button:focus-visible,
+  .m3-button:has(input:focus-visible) {
+    --md-color-on-container: var(--md-comp-button-focused-label-text-color);
+    box-shadow:
+      var(--md-comp-button-focused-container-elevation),
+      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
+
+    outline-offset: var(--md-comp-button-focus-indicator-outline-offset);
+    outline: var(--md-comp-button-focus-indicator-color) solid var(--md-comp-button-focus-indicator-thickness);
   }
 
-  &[data-size='extra-large'] {
-    --button-outline-width: var(--md-comp-button-xlarge-outlined-outline-width);
-  }
-}
-
-/* Shape Variants */
-.m3-button[data-shape='rounded'] {
-  --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
-
-  &[data-press-shape-morph='true'][data-pressed='true'] {
-    --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
-  }
-}
-
-.m3-button[data-shape='square'] {
-  --md-comp-button-container-shape: var(--md-comp-button-container-shape-square);
-
-  &[data-press-shape-morph='true'][data-pressed='true'] {
-    --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
-  }
-}
-
-.m3-button[data-toggleable='true'] {
-  input[type='checkbox'],
-  input[type='radio'] {
-    all: unset;
-    appearance: none;
-    opacity: 0;
+  .m3-button[data-pressed='true'] {
+    --md-color-on-container: var(--md-comp-button-pressed-label-text-color);
+    box-shadow:
+      var(--md-comp-button-pressed-container-elevation),
+      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
   }
 
-  --md-color-container: var(--md-comp-button-unselected-container-color);
-  --md-color-on-container: var(--md-comp-button-label-text-unselected-color);
-
-  &:hover {
-    --md-color-on-container: var(--md-comp-button-unselected-hovered-label-text-color);
+  .m3-button:disabled,
+  label.m3-button:has(input:disabled) {
+    background-color: rgb(from var(--md-comp-button-disabled-container-color) r g b / 0.1);
+    color: rgb(from var(--md-comp-button-disabled-label-text-color) r g b / 0.38);
+    box-shadow:
+      var(--md-comp-button-disabled-container-elevation),
+      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
   }
 
-  &:focus-visible,
-  &:has(input:focus-visible) {
-    --md-color-on-container: var(--md-comp-button-unselected-focused-label-text-color);
+  /* elevated */
+  .m3-button[data-color='elevated'] {
+    --md-comp-button-container-color: var(--md-comp-button-elevated-container-color);
+    --md-comp-button-container-elevation: var(--md-comp-button-elevated-container-elevation);
+    --md-comp-button-label-text-color: var(--md-comp-button-elevated-label-text-color);
+    --md-comp-button-hovered-container-elevation: var(--md-comp-button-elevated-hovered-container-elevation);
+    --md-comp-button-hovered-label-text-color: var(--md-comp-button-elevated-hovered-label-text-color);
+    --md-comp-button-focused-container-elevation: var(--md-comp-button-elevated-focused-container-elevation);
+    --md-comp-button-focused-label-text-color: var(--md-comp-button-elevated-focused-label-text-color);
+    --md-comp-button-pressed-container-elevation: var(--md-comp-button-elevated-pressed-container-elevation);
+    --md-comp-button-pressed-label-text-color: var(--md-comp-button-elevated-pressed-label-text-color);
+    --md-comp-button-disabled-container-color: var(--md-comp-button-elevated-disabled-container-color);
+    --md-comp-button-disabled-container-elevation: var(--md-comp-button-elevated-disabled-container-elevation);
+    --md-comp-button-disabled-label-text-color: var(--md-comp-button-elevated-disabled-label-text-color);
+    --md-comp-button-unselected-container-color: var(--md-comp-button-elevated-unselected-container-color);
+    --md-comp-button-selected-container-color: var(--md-comp-button-elevated-selected-container-color);
+    --md-comp-button-unselected-label-text-color: var(--md-comp-button-elevated-unselected-label-text-color);
+    --md-comp-button-selected-label-text-color: var(--md-comp-button-elevated-selected-label-text-color);
   }
 
-  &[data-pressed='true'] {
-    --md-color-on-container: var(--md-comp-button-unselected-pressed-label-text-color);
+  /* filled */
+  .m3-button[data-color='filled'] {
+    --md-comp-button-container-color: var(--md-comp-button-filled-container-color);
+    --md-comp-button-container-elevation: var(--md-comp-button-filled-container-elevation);
+    --md-comp-button-label-text-color: var(--md-comp-button-filled-label-text-color);
+    --md-comp-button-hovered-container-elevation: var(--md-comp-button-filled-hovered-container-elevation);
+    --md-comp-button-hovered-label-text-color: var(--md-comp-button-filled-hovered-label-text-color);
+    --md-comp-button-focused-container-elevation: var(--md-comp-button-filled-focused-container-elevation);
+    --md-comp-button-focused-label-text-color: var(--md-comp-button-filled-focused-label-text-color);
+    --md-comp-button-pressed-container-elevation: var(--md-comp-button-filled-pressed-container-elevation);
+    --md-comp-button-pressed-label-text-color: var(--md-comp-button-filled-pressed-label-text-color);
+    --md-comp-button-disabled-container-color: var(--md-comp-button-filled-disabled-container-color);
+    --md-comp-button-disabled-container-elevation: var(--md-comp-button-filled-disabled-container-elevation);
+    --md-comp-button-disabled-label-text-color: var(--md-comp-button-filled-disabled-label-text-color);
+    --md-comp-button-unselected-container-color: var(--md-comp-button-filled-unselected-container-color);
+    --md-comp-button-selected-container-color: var(--md-comp-button-filled-selected-container-color);
+    --md-comp-button-unselected-label-text-color: var(--md-comp-button-filled-unselected-label-text-color);
+    --md-comp-button-selected-label-text-color: var(--md-comp-button-filled-selected-label-text-color);
   }
 
-  &:has(input[type='checkbox']:checked),
-  &:has(input[type='radio']:checked) {
-    --md-comp-button-container-shape: var(--md-comp-button-selected-container-shape);
+  /* tonal */
+  .m3-button[data-color='tonal'] {
+    --md-comp-button-container-color: var(--md-comp-button-tonal-container-color);
+    --md-comp-button-container-elevation: var(--md-comp-button-tonal-container-elevation);
+    --md-comp-button-label-text-color: var(--md-comp-button-tonal-label-text-color);
+    --md-comp-button-hovered-container-elevation: var(--md-comp-button-tonal-hovered-container-elevation);
+    --md-comp-button-hovered-label-text-color: var(--md-comp-button-tonal-hovered-label-text-color);
+    --md-comp-button-focused-container-elevation: var(--md-comp-button-tonal-focused-container-elevation);
+    --md-comp-button-focused-label-text-color: var(--md-comp-button-tonal-focused-label-text-color);
+    --md-comp-button-pressed-container-elevation: var(--md-comp-button-tonal-pressed-container-elevation);
+    --md-comp-button-pressed-label-text-color: var(--md-comp-button-tonal-pressed-label-text-color);
+    --md-comp-button-disabled-container-color: var(--md-comp-button-tonal-disabled-container-color);
+    --md-comp-button-disabled-container-elevation: var(--md-comp-button-tonal-disabled-container-elevation);
+    --md-comp-button-disabled-label-text-color: var(--md-comp-button-tonal-disabled-label-text-color);
+    --md-comp-button-unselected-container-color: var(--md-comp-button-tonal-unselected-container-color);
+    --md-comp-button-selected-container-color: var(--md-comp-button-tonal-selected-container-color);
+    --md-comp-button-unselected-label-text-color: var(--md-comp-button-tonal-unselected-label-text-color);
+    --md-comp-button-selected-label-text-color: var(--md-comp-button-tonal-selected-label-text-color);
+  }
 
-    --md-color-container: var(--md-comp-button-selected-container-color);
-    --md-color-on-container: var(--md-comp-button-label-text-selected-color);
+  /* outlined */
+  .m3-button[data-color='outlined'] {
+    --md-comp-button-container-color: transparent;
+    --md-comp-button-label-text-color: var(--md-comp-button-outlined-label-text-color);
+    --button-outline-color: var(--md-comp-button-outlined-outline-color);
+    --md-comp-button-hovered-label-text-color: var(--md-comp-button-outlined-hovered-label-text-color);
+    --md-comp-button-focused-label-text-color: var(--md-comp-button-outlined-focused-label-text-color);
+    --md-comp-button-pressed-label-text-color: var(--md-comp-button-outlined-pressed-label-text-color);
+    --md-comp-button-disabled-container-color: transparent;
+    --md-comp-button-disabled-label-text-color: var(--md-comp-button-outlined-disabled-label-text-color);
+    --md-comp-button-unselected-container-color: transparent;
+    --md-comp-button-selected-container-color: var(--md-comp-button-outlined-selected-container-color);
+    --md-comp-button-unselected-label-text-color: var(--md-comp-button-outlined-unselected-label-text-color);
+    --md-comp-button-selected-label-text-color: var(--md-comp-button-outlined-selected-label-text-color);
+  }
 
-    &[data-press-shape-morph='true']:active {
+  /* text */
+  .m3-button[data-color='text'] {
+    --md-comp-button-container-color: transparent;
+    --md-comp-button-label-text-color: var(--md-comp-button-text-label-text-color);
+    --md-comp-button-hovered-label-text-color: var(--md-comp-button-text-hovered-label-text-color);
+    --md-comp-button-focused-label-text-color: var(--md-comp-button-text-focused-label-text-color);
+    --md-comp-button-pressed-label-text-color: var(--md-comp-button-text-pressed-label-text-color);
+    --md-comp-button-disabled-container-color: transparent;
+    --md-comp-button-disabled-label-text-color: var(--md-comp-button-text-disabled-label-text-color);
+    --md-comp-button-unselected-container-color: transparent;
+    --md-comp-button-selected-container-color: transparent;
+    --md-comp-button-unselected-label-text-color: var(--md-comp-button-text-label-text-color);
+    --md-comp-button-selected-label-text-color: var(--md-comp-button-text-label-text-color);
+  }
+
+  /* Size Variants */
+  .m3-button[data-size='extra-small'] {
+    @apply label-large;
+
+    height: --dp(32);
+    padding-inline: --dp(12);
+
+    --md-comp-button-container-shape-round: --dp(32 / 2);
+    --md-comp-button-container-shape-square: var(--md-comp-button-xsmall-container-shape-square);
+    --md-comp-button-pressed-container-shape: var(--md-comp-button-xsmall-pressed-container-shape);
+    --md-comp-button-selected-container-shape: var(--md-comp-button-xsmall-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-xsmall-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-xsmall-icon-label-space);
+  }
+
+  .m3-button[data-size='small'] {
+    @apply label-large;
+
+    height: --dp(40);
+    padding-inline: --dp(16);
+
+    --md-comp-button-container-shape-round: --dp(40 / 2);
+    --md-comp-button-container-shape-square: var(--md-comp-button-small-container-shape-square);
+    --md-comp-button-pressed-container-shape: var(--md-comp-button-small-pressed-container-shape);
+    --md-comp-button-selected-container-shape: var(--md-comp-button-small-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-small-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-small-icon-label-space);
+  }
+
+  .m3-button[data-size='medium'] {
+    @apply title-medium;
+
+    height: --dp(56);
+    padding-inline: --dp(24);
+
+    --md-comp-button-container-shape-round: --dp(56 / 2);
+    --md-comp-button-container-shape-square: var(--md-comp-button-medium-container-shape-square);
+    --md-comp-button-pressed-container-shape: var(--md-comp-button-medium-pressed-container-shape);
+    --md-comp-button-selected-container-shape: var(--md-comp-button-medium-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-medium-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-medium-icon-label-space);
+  }
+
+  .m3-button[data-size='large'] {
+    @apply headline-small;
+
+    height: --dp(96);
+    padding-inline: --dp(48);
+
+    --md-comp-button-container-shape-round: --dp(96 / 2);
+    --md-comp-button-container-shape-square: var(--md-comp-button-large-container-shape-square);
+    --md-comp-button-pressed-container-shape: var(--md-comp-button-large-pressed-container-shape);
+    --md-comp-button-selected-container-shape: var(--md-comp-button-large-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-large-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-large-icon-label-space);
+  }
+
+  .m3-button[data-size='extra-large'] {
+    @apply headline-large;
+
+    height: --dp(136);
+    padding-inline: --dp(64);
+
+    --md-comp-button-container-shape-round: --dp(136 / 2);
+    --md-comp-button-container-shape-square: var(--md-comp-button-xlarge-container-shape-square);
+    --md-comp-button-pressed-container-shape: var(--md-comp-button-xlarge-pressed-container-shape);
+    --md-comp-button-selected-container-shape: var(--md-comp-button-xlarge-selected-container-shape-round);
+
+    --md-comp-button-icon-size: var(--md-comp-button-xlarge-icon-size);
+    --md-comp-button-icon-label-space: var(--md-comp-button-xlarge-icon-label-space);
+  }
+
+  .m3-button[data-color='outlined'] {
+    &[data-size='extra-small'] {
+      --button-outline-width: var(--md-comp-button-xsmall-outlined-outline-width);
+    }
+
+    &[data-size='small'] {
+      --button-outline-width: var(--md-comp-button-small-outlined-outline-width);
+    }
+
+    &[data-size='medium'] {
+      --button-outline-width: var(--md-comp-button-medium-outlined-outline-width);
+    }
+
+    &[data-size='large'] {
+      --button-outline-width: var(--md-comp-button-large-outlined-outline-width);
+    }
+
+    &[data-size='extra-large'] {
+      --button-outline-width: var(--md-comp-button-xlarge-outlined-outline-width);
+    }
+  }
+
+  /* Shape Variants */
+  .m3-button[data-shape='rounded'] {
+    --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
+
+    &[data-press-shape-morph='true'][data-pressed='true'] {
       --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
     }
   }
-}
 
-[data-type='connected'] .m3-button {
-  border-start-start-radius: var(--md-comp-button-group-connected-container-shape);
-  border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-  border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-  border-end-start-radius: var(--md-comp-button-group-connected-container-shape);
+  .m3-button[data-shape='square'] {
+    --md-comp-button-container-shape: var(--md-comp-button-container-shape-square);
 
-  &:first-of-type {
+    &[data-press-shape-morph='true'][data-pressed='true'] {
+      --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
+    }
+  }
+
+  .m3-button[data-toggleable='true'] {
+    input[type='checkbox'],
+    input[type='radio'] {
+      all: unset;
+      appearance: none;
+      opacity: 0;
+    }
+
+    --md-color-container: var(--md-comp-button-unselected-container-color);
+    --md-color-on-container: var(--md-comp-button-label-text-unselected-color);
+
+    &:hover {
+      --md-color-on-container: var(--md-comp-button-unselected-hovered-label-text-color);
+    }
+
+    &:focus-visible,
+    &:has(input:focus-visible) {
+      --md-color-on-container: var(--md-comp-button-unselected-focused-label-text-color);
+    }
+
+    &[data-pressed='true'] {
+      --md-color-on-container: var(--md-comp-button-unselected-pressed-label-text-color);
+    }
+
+    &:has(input[type='checkbox']:checked),
+    &:has(input[type='radio']:checked) {
+      --md-comp-button-container-shape: var(--md-comp-button-selected-container-shape);
+
+      --md-color-container: var(--md-comp-button-selected-container-color);
+      --md-color-on-container: var(--md-comp-button-label-text-selected-color);
+
+      &[data-press-shape-morph='true']:active {
+        --md-comp-button-container-shape: var(--md-comp-button-pressed-container-shape);
+      }
+    }
+  }
+
+  [data-type='connected'] .m3-button {
     border-start-start-radius: var(--md-comp-button-group-connected-container-shape);
     border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
     border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
     border-end-start-radius: var(--md-comp-button-group-connected-container-shape);
 
-    &[data-pressed='true'] {
+    &:first-of-type {
+      border-start-start-radius: var(--md-comp-button-group-connected-container-shape);
+      border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-container-shape);
+
+      &[data-pressed='true'] {
+        --md-comp-button-group-connected-inner-corner-corner-size: var(
+          --md-comp-button-group-connected-pressed-inner-corner-corner-size
+        );
+      }
+    }
+
+    &:last-of-type {
+      --md-comp-button-container-shape: var(--md-comp-button-group-connected-inner-corner-corner-size);
+
+      border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-start-end-radius: var(--md-comp-button-group-connected-container-shape);
+      border-end-end-radius: var(--md-comp-button-group-connected-container-shape);
+      border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+
+      &[data-pressed='true'] {
+        --md-comp-button-group-connected-inner-corner-corner-size: var(
+          --md-comp-button-group-connected-pressed-inner-corner-corner-size
+        );
+      }
+    }
+
+    &:not(:first-of-type):not(:last-of-type) {
+      --md-comp-button-container-shape: var(--md-comp-button-group-connected-inner-corner-corner-size);
+
+      border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+
+      &[data-pressed='true'] {
+        --md-comp-button-group-connected-inner-corner-corner-size: var(
+          --md-comp-button-group-connected-pressed-inner-corner-corner-size
+        );
+      }
+    }
+
+    /* Pressed state border-radius overrides */
+
+    &[data-press-shape-morph='true']:first-of-type:active,
+    &[data-press-shape-morph='true']:last-of-type:active {
       --md-comp-button-group-connected-inner-corner-corner-size: var(
         --md-comp-button-group-connected-pressed-inner-corner-corner-size
       );
     }
-  }
 
-  &:last-of-type {
-    --md-comp-button-container-shape: var(--md-comp-button-group-connected-inner-corner-corner-size);
+    &[data-press-shape-morph='true']:not(:first-of-type):not(:last-of-type):active {
+      border-radius: var(--md-comp-button-group-connected-pressed-inner-corner-corner-size);
+    }
 
-    border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-start-end-radius: var(--md-comp-button-group-connected-container-shape);
-    border-end-end-radius: var(--md-comp-button-group-connected-container-shape);
-    border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
+    /* Selected state border-radius overrides */
 
-    &[data-pressed='true'] {
-      --md-comp-button-group-connected-inner-corner-corner-size: var(
-        --md-comp-button-group-connected-pressed-inner-corner-corner-size
-      );
+    &:first-of-type:has(input:checked) {
+      border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+
+      &[data-pressed='true'] {
+        --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
+          --md-comp-button-group-connected-pressed-inner-corner-corner-size
+        );
+      }
+    }
+
+    &:last-of-type:has(input:checked) {
+      border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+
+      &[data-pressed='true'] {
+        --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
+          --md-comp-button-group-connected-pressed-inner-corner-corner-size
+        );
+      }
+    }
+
+    &:not(:first-of-type):not(:last-of-type):has(input:checked) {
+      border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+      border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
+
+      &[data-pressed='true'] {
+        --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
+          --md-comp-button-group-connected-pressed-inner-corner-corner-size
+        );
+      }
     }
   }
 
-  &:not(:first-of-type):not(:last-of-type) {
-    --md-comp-button-container-shape: var(--md-comp-button-group-connected-inner-corner-corner-size);
-
-    border-start-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-start-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-end-end-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-    border-end-start-radius: var(--md-comp-button-group-connected-inner-corner-corner-size);
-
-    &[data-pressed='true'] {
-      --md-comp-button-group-connected-inner-corner-corner-size: var(
-        --md-comp-button-group-connected-pressed-inner-corner-corner-size
-      );
-    }
+  .m3-button-leading {
+    margin-inline-end: var(--md-comp-button-icon-label-space);
   }
 
-  /* Pressed state border-radius overrides */
-  &[data-press-shape-morph='true']:first-of-type:active,
-  &[data-press-shape-morph='true']:last-of-type:active {
-    --md-comp-button-group-connected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-pressed-inner-corner-corner-size
-    );
+  .m3-button-trailing {
+    margin-inline-start: var(--md-comp-button-icon-label-space);
   }
 
-  &[data-press-shape-morph='true']:not(:first-of-type):not(:last-of-type):active {
-    border-radius: var(--md-comp-button-group-connected-pressed-inner-corner-corner-size);
+  .m3-button-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--md-comp-button-icon-size);
+    height: var(--md-comp-button-icon-size);
+    font-size: var(--md-comp-button-icon-size);
   }
-
-  /* Selected state border-radius overrides */
-  &:first-of-type:has(input:checked) {
-    border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-
-    &[data-pressed='true'] {
-      --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-        --md-comp-button-group-connected-pressed-inner-corner-corner-size
-      );
-    }
-  }
-
-  &:last-of-type:has(input:checked) {
-    border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-
-    &[data-pressed='true'] {
-      --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-        --md-comp-button-group-connected-pressed-inner-corner-corner-size
-      );
-    }
-  }
-
-  &:not(:first-of-type):not(:last-of-type):has(input:checked) {
-    border-start-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-start-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-end-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-    border-end-start-radius: var(--md-comp-button-group-connected-selected-inner-corner-corner-size);
-
-    &[data-pressed='true'] {
-      --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-        --md-comp-button-group-connected-pressed-inner-corner-corner-size
-      );
-    }
-  }
-}
-
-.m3-button-leading {
-  margin-inline-end: var(--md-comp-button-icon-label-space);
-}
-
-.m3-button-trailing {
-  margin-inline-start: var(--md-comp-button-icon-label-space);
-}
-
-.m3-button-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: var(--md-comp-button-icon-size);
-  height: var(--md-comp-button-icon-size);
-  font-size: var(--md-comp-button-icon-size);
 }

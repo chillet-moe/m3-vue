@@ -31,242 +31,244 @@
   }
 }
 
-.m3-dialog {
-  position: fixed;
-  inset: 0;
+@layer components {
+  .m3-dialog {
+    position: fixed;
+    inset: 0;
 
-  margin: 0;
-  border: none;
-  padding: 0;
+    margin: 0;
+    border: none;
+    padding: 0;
 
-  display: grid;
-  place-items: center;
+    display: grid;
+    place-items: center;
 
-  inline-size: 100%;
-  block-size: 100%;
-  max-inline-size: none;
-  max-block-size: none;
-  overflow: hidden;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    max-block-size: none;
+    overflow: hidden;
 
-  color: inherit;
-  background: transparent;
-  box-shadow: none;
+    color: inherit;
+    background: transparent;
+    box-shadow: none;
 
-  pointer-events: none;
-  transition:
-    overlay var(--md-duration-fast) allow-discrete,
-    display var(--md-duration-fast) allow-discrete;
-}
-
-.m3-dialog[open] {
-  pointer-events: auto;
-}
-
-.m3-dialog::backdrop {
-  background-color: transparent;
-  transition:
-    background-color var(--md-duration-spatial) var(--md-timing-function-spatial),
-    display var(--md-duration-spatial) allow-discrete,
-    overlay var(--md-duration-spatial) allow-discrete;
-}
-
-.m3-dialog[open]::backdrop {
-  background-color: --translucent(var(--md-sys-color-scrim), 0.3);
-  animation: dialogOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
-}
-
-.m3-dialog-surface {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  /* Safari stretches auto grid rows when the dialog resolves extra block-size. */
-  align-content: start;
-  row-gap: 1rem;
-
-  inline-size: min(35rem, calc(100vi - 3rem));
-  min-inline-size: min(17.5rem, calc(100vi - 3rem));
-  max-inline-size: calc(100vi - 3rem);
-  max-block-size: calc(100vb - 3rem);
-  overflow: hidden;
-
-  padding: 1.5rem;
-  border-radius: var(--md-comp-dialog-container-shape);
-
-  background-color: var(--md-comp-dialog-container-color);
-  box-shadow: var(--md-comp-dialog-container-elevation);
-
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity var(--md-easing-fast),
-    visibility var(--md-easing-fast);
-}
-
-.m3-dialog[open] .m3-dialog-surface {
-  opacity: 1;
-  visibility: visible;
-  animation:
-    dialogIn var(--md-timing-function-emphasized-decel) 500ms,
-    dialogOpacity var(--md-timing-function-emphasized-decel) 100ms backwards;
-}
-
-.m3-dialog-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: var(--md-comp-dialog-with-icon-icon-color);
-  font-size: var(--md-comp-dialog-with-icon-icon-size);
-  line-height: 1;
-}
-
-.m3-dialog-headline {
-  margin: 0;
-  opacity: 0;
-
-  color: var(--md-comp-dialog-headline-color);
-  font-family:
-    var(--md-comp-dialog-headline-font),
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    sans-serif;
-  font-size: var(--md-comp-dialog-headline-size);
-  line-height: var(--md-comp-dialog-headline-line-height);
-  font-weight: var(--md-comp-dialog-headline-weight);
-  letter-spacing: var(--md-comp-dialog-headline-tracking);
-  transition: opacity var(--md-easing-fast);
-}
-
-.m3-dialog-content {
-  min-block-size: 0;
-  overflow: auto;
-  opacity: 0;
-
-  color: var(--md-comp-dialog-supporting-text-color);
-  font-family:
-    var(--md-comp-dialog-supporting-text-font),
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    sans-serif;
-  font-size: var(--md-comp-dialog-supporting-text-size);
-  line-height: var(--md-comp-dialog-supporting-text-line-height);
-  font-weight: var(--md-comp-dialog-supporting-text-weight);
-  letter-spacing: var(--md-comp-dialog-supporting-text-tracking);
-  transition: opacity var(--md-easing-fast);
-}
-
-.m3-dialog-actions {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: end;
-  gap: 0.5rem;
-  opacity: 0;
-  inset-block-end: 100%;
-  transition:
-    opacity var(--md-easing-fast),
-    inset-block-end var(--md-duration-spatial) var(--md-timing-function-spatial);
-}
-
-.m3-dialog[open] .m3-dialog-headline {
-  opacity: 1;
-  animation: dialogOpacity var(--md-easing-fast);
-}
-
-.m3-dialog[open] .m3-dialog-content {
-  opacity: 1;
-  animation: dialogOpacity var(--md-easing-fast) 50ms backwards;
-}
-
-.m3-dialog[open] .m3-dialog-actions {
-  opacity: 1;
-  inset-block-end: 0;
-  animation:
-    buttonsIn var(--md-timing-function-spatial) var(--md-duration-spatial),
-    dialogOpacity var(--md-easing-fast) backwards;
-}
-
-.m3-dialog[data-has-icon='true'] {
-  .m3-dialog-headline,
-  .m3-dialog-content {
-    text-align: center;
+    pointer-events: none;
+    transition:
+      overlay var(--md-duration-fast) allow-discrete,
+      display var(--md-duration-fast) allow-discrete;
   }
-}
 
-@media (width < 40rem) {
-  .m3-dialog-surface {
-    inline-size: calc(100vi - 2rem);
-    min-inline-size: min(17.5rem, calc(100vi - 2rem));
-    max-inline-size: calc(100vi - 2rem);
-    max-block-size: calc(100vb - 2rem);
-    padding: 1.25rem;
+  .m3-dialog[open] {
+    pointer-events: auto;
   }
-}
 
-@starting-style {
-  .m3-dialog[open] .m3-dialog-surface {
-    opacity: 0;
-    visibility: hidden;
+  .m3-dialog::backdrop {
+    background-color: transparent;
+    transition:
+      background-color var(--md-duration-spatial) var(--md-timing-function-spatial),
+      display var(--md-duration-spatial) allow-discrete,
+      overlay var(--md-duration-spatial) allow-discrete;
   }
 
   .m3-dialog[open]::backdrop {
-    background-color: transparent;
+    background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+    animation: dialogOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
   }
 
-  .m3-dialog[open] .m3-dialog-headline,
-  .m3-dialog[open] .m3-dialog-content {
+  .m3-dialog-surface {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    /* Safari stretches auto grid rows when the dialog resolves extra block-size. */
+    align-content: start;
+    row-gap: 1rem;
+
+    inline-size: min(35rem, calc(100vi - 3rem));
+    min-inline-size: min(17.5rem, calc(100vi - 3rem));
+    max-inline-size: calc(100vi - 3rem);
+    max-block-size: calc(100vb - 3rem);
+    overflow: hidden;
+
+    padding: 1.5rem;
+    border-radius: var(--md-comp-dialog-container-shape);
+
+    background-color: var(--md-comp-dialog-container-color);
+    box-shadow: var(--md-comp-dialog-container-elevation);
+
     opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--md-easing-fast),
+      visibility var(--md-easing-fast);
+  }
+
+  .m3-dialog[open] .m3-dialog-surface {
+    opacity: 1;
+    visibility: visible;
+    animation:
+      dialogIn var(--md-timing-function-emphasized-decel) 500ms,
+      dialogOpacity var(--md-timing-function-emphasized-decel) 100ms backwards;
+  }
+
+  .m3-dialog-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--md-comp-dialog-with-icon-icon-color);
+    font-size: var(--md-comp-dialog-with-icon-icon-size);
+    line-height: 1;
+  }
+
+  .m3-dialog-headline {
+    margin: 0;
+    opacity: 0;
+
+    color: var(--md-comp-dialog-headline-color);
+    font-family:
+      var(--md-comp-dialog-headline-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-dialog-headline-size);
+    line-height: var(--md-comp-dialog-headline-line-height);
+    font-weight: var(--md-comp-dialog-headline-weight);
+    letter-spacing: var(--md-comp-dialog-headline-tracking);
+    transition: opacity var(--md-easing-fast);
+  }
+
+  .m3-dialog-content {
+    min-block-size: 0;
+    overflow: auto;
+    opacity: 0;
+
+    color: var(--md-comp-dialog-supporting-text-color);
+    font-family:
+      var(--md-comp-dialog-supporting-text-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-dialog-supporting-text-size);
+    line-height: var(--md-comp-dialog-supporting-text-line-height);
+    font-weight: var(--md-comp-dialog-supporting-text-weight);
+    letter-spacing: var(--md-comp-dialog-supporting-text-tracking);
+    transition: opacity var(--md-easing-fast);
+  }
+
+  .m3-dialog-actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 0.5rem;
+    opacity: 0;
+    inset-block-end: 100%;
+    transition:
+      opacity var(--md-easing-fast),
+      inset-block-end var(--md-duration-spatial) var(--md-timing-function-spatial);
+  }
+
+  .m3-dialog[open] .m3-dialog-headline {
+    opacity: 1;
+    animation: dialogOpacity var(--md-easing-fast);
+  }
+
+  .m3-dialog[open] .m3-dialog-content {
+    opacity: 1;
+    animation: dialogOpacity var(--md-easing-fast) 50ms backwards;
   }
 
   .m3-dialog[open] .m3-dialog-actions {
-    opacity: 0;
-    inset-block-end: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .m3-dialog,
-  .m3-dialog::backdrop,
-  .m3-dialog-surface,
-  .m3-dialog-headline,
-  .m3-dialog-content,
-  .m3-dialog-actions {
-    transition-duration: 0ms;
-    animation-duration: 0ms;
-  }
-}
-
-@keyframes dialogIn {
-  0% {
-    transform: translateY(-3rem) scaleY(0.9);
-    clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
-  }
-
-  100% {
-    transform: translateY(0) scaleY(1);
-    clip-path: inset(0 0 0 0 round var(--md-comp-dialog-container-shape));
-  }
-}
-
-@keyframes buttonsIn {
-  0% {
-    inset-block-end: 100%;
-  }
-
-  100% {
-    inset-block-end: 0;
-  }
-}
-
-@keyframes dialogOpacity {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
     opacity: 1;
+    inset-block-end: 0;
+    animation:
+      buttonsIn var(--md-timing-function-spatial) var(--md-duration-spatial),
+      dialogOpacity var(--md-easing-fast) backwards;
+  }
+
+  .m3-dialog[data-has-icon='true'] {
+    .m3-dialog-headline,
+    .m3-dialog-content {
+      text-align: center;
+    }
+  }
+
+  @media (width < 40rem) {
+    .m3-dialog-surface {
+      inline-size: calc(100vi - 2rem);
+      min-inline-size: min(17.5rem, calc(100vi - 2rem));
+      max-inline-size: calc(100vi - 2rem);
+      max-block-size: calc(100vb - 2rem);
+      padding: 1.25rem;
+    }
+  }
+
+  @starting-style {
+    .m3-dialog[open] .m3-dialog-surface {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .m3-dialog[open]::backdrop {
+      background-color: transparent;
+    }
+
+    .m3-dialog[open] .m3-dialog-headline,
+    .m3-dialog[open] .m3-dialog-content {
+      opacity: 0;
+    }
+
+    .m3-dialog[open] .m3-dialog-actions {
+      opacity: 0;
+      inset-block-end: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-dialog,
+    .m3-dialog::backdrop,
+    .m3-dialog-surface,
+    .m3-dialog-headline,
+    .m3-dialog-content,
+    .m3-dialog-actions {
+      transition-duration: 0ms;
+      animation-duration: 0ms;
+    }
+  }
+
+  @keyframes dialogIn {
+    0% {
+      transform: translateY(-3rem) scaleY(0.9);
+      clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
+    }
+
+    100% {
+      transform: translateY(0) scaleY(1);
+      clip-path: inset(0 0 0 0 round var(--md-comp-dialog-container-shape));
+    }
+  }
+
+  @keyframes buttonsIn {
+    0% {
+      inset-block-end: 100%;
+    }
+
+    100% {
+      inset-block-end: 0;
+    }
+  }
+
+  @keyframes dialogOpacity {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
 }

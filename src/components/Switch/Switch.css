@@ -50,204 +50,216 @@
   }
 }
 
-.m3-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  position: relative;
-  inline-size: fit-content;
-  cursor: pointer;
-  user-select: none;
-}
+@layer components {
+  .m3-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    inline-size: fit-content;
+    cursor: pointer;
+    user-select: none;
+  }
 
-.m3-switch:has(.m3-switch-input:checked) {
-  --md-state-layer-color: var(--md-sys-color-primary);
-}
+  .m3-switch:has(.m3-switch-input:checked) {
+    --md-state-layer-color: var(--md-sys-color-primary);
+  }
 
-.m3-switch[aria-disabled='true'] {
-  cursor: default;
-}
+  .m3-switch[aria-disabled='true'] {
+    cursor: default;
+  }
 
-.m3-switch-input {
-  position: absolute;
-  margin: 0;
-  opacity: 0;
-  inset: 0;
-  cursor: inherit;
-}
+  .m3-switch-input {
+    position: absolute;
+    margin: 0;
+    opacity: 0;
+    inset: 0;
+    cursor: inherit;
+  }
 
-.m3-switch-control {
-  position: relative;
-  inline-size: var(--md-comp-switch-track-width);
-  block-size: var(--md-comp-switch-track-height);
-  display: inline-flex;
-  align-items: center;
+  .m3-switch-control {
+    position: relative;
+    inline-size: var(--md-comp-switch-track-width);
+    block-size: var(--md-comp-switch-track-height);
+    display: inline-flex;
+    align-items: center;
 
-  --switch-handle-base-width: var(--md-comp-switch-unselected-handle-width);
-  --switch-handle-base-height: var(--md-comp-switch-unselected-handle-height);
-  --switch-handle-width: var(--switch-handle-base-width);
-  --switch-handle-height: var(--switch-handle-base-height);
-  --switch-handle-unchecked-inset: 0.5rem;
-  --switch-handle-center-unchecked: calc(var(--switch-handle-unchecked-inset) + var(--switch-handle-base-width) / 2);
-  --switch-handle-center-checked: calc(100% - 0.25rem - var(--md-comp-switch-selected-handle-width) / 2);
-  --switch-handle-center: var(--switch-handle-center-unchecked);
-}
+    --switch-handle-base-width: var(--md-comp-switch-unselected-handle-width);
+    --switch-handle-base-height: var(--md-comp-switch-unselected-handle-height);
+    --switch-handle-width: var(--switch-handle-base-width);
+    --switch-handle-height: var(--switch-handle-base-height);
+    --switch-handle-unchecked-inset: 0.5rem;
+    --switch-handle-center-unchecked: calc(var(--switch-handle-unchecked-inset) + var(--switch-handle-base-width) / 2);
+    --switch-handle-center-checked: calc(100% - 0.25rem - var(--md-comp-switch-selected-handle-width) / 2);
+    --switch-handle-center: var(--switch-handle-center-unchecked);
+  }
 
-.m3-switch-track {
-  inline-size: 100%;
-  block-size: 100%;
-  border-radius: var(--md-comp-switch-track-shape);
-  background-color: var(--md-comp-switch-unselected-track-color);
-  box-shadow: inset 0 0 0 var(--md-comp-switch-track-outline-width) var(--md-comp-switch-unselected-track-outline-color);
-  transition:
-    background-color var(--md-easing-fast),
-    box-shadow var(--md-easing-fast);
-}
+  .m3-switch-track {
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: var(--md-comp-switch-track-shape);
+    background-color: var(--md-comp-switch-unselected-track-color);
+    box-shadow: inset 0 0 0 var(--md-comp-switch-track-outline-width)
+      var(--md-comp-switch-unselected-track-outline-color);
+    transition:
+      background-color var(--md-easing-fast),
+      box-shadow var(--md-easing-fast);
+  }
 
-.m3-switch-handle {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: calc(var(--switch-handle-center) - var(--switch-handle-width) / 2);
-  inline-size: var(--switch-handle-width);
-  block-size: var(--switch-handle-height);
-  border-radius: var(--md-comp-switch-handle-shape);
-  background-color: var(--md-comp-switch-unselected-handle-color);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(-50%);
-  transition: all var(--md-easing-fast-spatial);
-}
-
-.m3-switch-control[data-with-icon='true'] {
-  --switch-handle-unchecked-inset: 0.25rem;
-
-  --switch-handle-base-width: var(--md-comp-switch-with-icon-handle-width);
-  --switch-handle-base-height: var(--md-comp-switch-with-icon-handle-height);
-}
-
-.m3-switch-input:checked + .m3-switch-control .m3-switch-track {
-  background-color: var(--md-comp-switch-selected-track-color);
-  box-shadow: none;
-}
-
-.m3-switch-input:checked + .m3-switch-control {
-  --switch-handle-center: var(--switch-handle-center-checked);
-  --switch-handle-width: var(--md-comp-switch-selected-handle-width);
-  --switch-handle-height: var(--md-comp-switch-selected-handle-height);
-}
-
-.m3-switch-input:checked + .m3-switch-control .m3-switch-handle {
-  background-color: var(--md-comp-switch-selected-handle-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-track {
-  background-color: var(--md-comp-switch-unselected-hover-track-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-handle {
-  background-color: var(--md-comp-switch-unselected-hover-handle-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control .m3-switch-track {
-  background-color: var(--md-comp-switch-selected-hover-track-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control .m3-switch-handle {
-  background-color: var(--md-comp-switch-selected-hover-handle-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-control {
-  --switch-handle-width: var(--md-comp-switch-pressed-handle-width);
-  --switch-handle-height: var(--md-comp-switch-pressed-handle-height);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-track {
-  background-color: var(--md-comp-switch-unselected-pressed-track-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-input:checked + .m3-switch-control .m3-switch-track {
-  background-color: var(--md-comp-switch-selected-pressed-track-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-input:checked + .m3-switch-control .m3-switch-handle {
-  background-color: var(--md-comp-switch-selected-pressed-handle-color);
-}
-
-.m3-switch:has(.m3-switch-input:not(:disabled):active)
-  .m3-switch-input:not(:checked)
-  + .m3-switch-control
   .m3-switch-handle {
-  background-color: var(--md-comp-switch-unselected-pressed-handle-color);
-}
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: calc(var(--switch-handle-center) - var(--switch-handle-width) / 2);
+    inline-size: var(--switch-handle-width);
+    block-size: var(--switch-handle-height);
+    border-radius: var(--md-comp-switch-handle-shape);
+    background-color: var(--md-comp-switch-unselected-handle-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    transition: all var(--md-easing-fast-spatial);
+  }
 
-.m3-switch-input:focus-visible + .m3-switch-control {
-  outline: var(--md-comp-switch-focus-indicator-thickness) solid var(--md-comp-switch-focus-indicator-color);
-  outline-offset: var(--md-comp-switch-focus-indicator-offset);
-  border-radius: var(--md-comp-switch-track-shape);
-}
+  .m3-switch-control[data-with-icon='true'] {
+    --switch-handle-unchecked-inset: 0.25rem;
 
-.m3-switch-input:disabled + .m3-switch-control .m3-switch-track {
-  background-color: --translucent(
-    var(--md-comp-switch-disabled-unselected-track-color),
-    var(--md-comp-switch-disabled-track-opacity)
-  );
-  box-shadow: inset 0 0 0 var(--md-comp-switch-track-outline-width)
-    --translucent(
-      var(--md-comp-switch-disabled-unselected-track-outline-color),
+    --switch-handle-base-width: var(--md-comp-switch-with-icon-handle-width);
+    --switch-handle-base-height: var(--md-comp-switch-with-icon-handle-height);
+  }
+
+  .m3-switch-input:checked + .m3-switch-control .m3-switch-track {
+    background-color: var(--md-comp-switch-selected-track-color);
+    box-shadow: none;
+  }
+
+  .m3-switch-input:checked + .m3-switch-control {
+    --switch-handle-center: var(--switch-handle-center-checked);
+    --switch-handle-width: var(--md-comp-switch-selected-handle-width);
+    --switch-handle-height: var(--md-comp-switch-selected-handle-height);
+  }
+
+  .m3-switch-input:checked + .m3-switch-control .m3-switch-handle {
+    background-color: var(--md-comp-switch-selected-handle-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-track {
+    background-color: var(--md-comp-switch-unselected-hover-track-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-handle {
+    background-color: var(--md-comp-switch-unselected-hover-handle-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control .m3-switch-track {
+    background-color: var(--md-comp-switch-selected-hover-track-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover)
+    .m3-switch-input:checked
+    + .m3-switch-control
+    .m3-switch-handle {
+    background-color: var(--md-comp-switch-selected-hover-handle-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-control {
+    --switch-handle-width: var(--md-comp-switch-pressed-handle-width);
+    --switch-handle-height: var(--md-comp-switch-pressed-handle-height);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-track {
+    background-color: var(--md-comp-switch-unselected-pressed-track-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):active)
+    .m3-switch-input:checked
+    + .m3-switch-control
+    .m3-switch-track {
+    background-color: var(--md-comp-switch-selected-pressed-track-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):active)
+    .m3-switch-input:checked
+    + .m3-switch-control
+    .m3-switch-handle {
+    background-color: var(--md-comp-switch-selected-pressed-handle-color);
+  }
+
+  .m3-switch:has(.m3-switch-input:not(:disabled):active)
+    .m3-switch-input:not(:checked)
+    + .m3-switch-control
+    .m3-switch-handle {
+    background-color: var(--md-comp-switch-unselected-pressed-handle-color);
+  }
+
+  .m3-switch-input:focus-visible + .m3-switch-control {
+    outline: var(--md-comp-switch-focus-indicator-thickness) solid var(--md-comp-switch-focus-indicator-color);
+    outline-offset: var(--md-comp-switch-focus-indicator-offset);
+    border-radius: var(--md-comp-switch-track-shape);
+  }
+
+  .m3-switch-input:disabled + .m3-switch-control .m3-switch-track {
+    background-color: --translucent(
+      var(--md-comp-switch-disabled-unselected-track-color),
       var(--md-comp-switch-disabled-track-opacity)
     );
-}
+    box-shadow: inset 0 0 0 var(--md-comp-switch-track-outline-width)
+      --translucent(
+        var(--md-comp-switch-disabled-unselected-track-outline-color),
+        var(--md-comp-switch-disabled-track-opacity)
+      );
+  }
 
-.m3-switch-input:disabled + .m3-switch-control .m3-switch-handle {
-  background-color: --translucent(
-    var(--md-comp-switch-disabled-unselected-handle-color),
-    var(--md-comp-switch-disabled-unselected-handle-opacity)
-  );
-}
+  .m3-switch-input:disabled + .m3-switch-control .m3-switch-handle {
+    background-color: --translucent(
+      var(--md-comp-switch-disabled-unselected-handle-color),
+      var(--md-comp-switch-disabled-unselected-handle-opacity)
+    );
+  }
 
-.m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-track {
-  background-color: --translucent(
-    var(--md-comp-switch-disabled-selected-track-color),
-    var(--md-comp-switch-disabled-track-opacity)
-  );
-  box-shadow: none;
-}
+  .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-track {
+    background-color: --translucent(
+      var(--md-comp-switch-disabled-selected-track-color),
+      var(--md-comp-switch-disabled-track-opacity)
+    );
+    box-shadow: none;
+  }
 
-.m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-handle {
-  background-color: --translucent(
-    var(--md-comp-switch-disabled-selected-handle-color),
-    var(--md-comp-switch-disabled-selected-handle-opacity)
-  );
-}
+  .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-handle {
+    background-color: --translucent(
+      var(--md-comp-switch-disabled-selected-handle-color),
+      var(--md-comp-switch-disabled-selected-handle-opacity)
+    );
+  }
 
-.m3-switch-icon {
-  font-family: 'Material Symbols Outlined';
-  font-size: var(--md-comp-switch-unselected-icon-size);
-  line-height: 1;
-  color: var(--md-comp-switch-unselected-icon-color);
-}
+  .m3-switch-icon {
+    font-family: 'Material Symbols Outlined';
+    font-size: var(--md-comp-switch-unselected-icon-size);
+    line-height: 1;
+    color: var(--md-comp-switch-unselected-icon-color);
+  }
 
-.m3-switch-input:checked + .m3-switch-control .m3-switch-icon {
-  color: var(--md-comp-switch-selected-icon-color);
-  font-size: var(--md-comp-switch-selected-icon-size);
-}
+  .m3-switch-input:checked + .m3-switch-control .m3-switch-icon {
+    color: var(--md-comp-switch-selected-icon-color);
+    font-size: var(--md-comp-switch-selected-icon-size);
+  }
 
-.m3-switch-input:disabled + .m3-switch-control .m3-switch-icon {
-  color: --translucent(
-    var(--md-comp-switch-disabled-unselected-icon-color),
-    var(--md-comp-switch-disabled-unselected-icon-opacity)
-  );
-}
+  .m3-switch-input:disabled + .m3-switch-control .m3-switch-icon {
+    color: --translucent(
+      var(--md-comp-switch-disabled-unselected-icon-color),
+      var(--md-comp-switch-disabled-unselected-icon-opacity)
+    );
+  }
 
-.m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-icon {
-  color: --translucent(
-    var(--md-comp-switch-disabled-selected-icon-color),
-    var(--md-comp-switch-disabled-selected-icon-opacity)
-  );
-}
+  .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-icon {
+    color: --translucent(
+      var(--md-comp-switch-disabled-selected-icon-color),
+      var(--md-comp-switch-disabled-selected-icon-opacity)
+    );
+  }
 
-.m3-switch-label {
-  @apply body-medium;
-  color: var(--md-sys-color-on-surface);
+  .m3-switch-label {
+    @apply body-medium;
+    color: var(--md-sys-color-on-surface);
+  }
 }
