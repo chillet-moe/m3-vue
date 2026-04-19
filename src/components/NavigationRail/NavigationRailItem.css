@@ -20,7 +20,7 @@
     --md-comp-navigation-rail-item-expanded-height: --dp(56);
 
     --md-comp-navigation-rail-item-active-indicator-color: var(--md-sys-color-secondary-container);
-    --md-comp-navigation-rail-item-active-label-color: var(--md-sys-color-on-secondary-container);
+    --md-comp-navigation-rail-item-active-label-color: var(--md-sys-color-secondary);
     --md-comp-navigation-rail-item-inactive-label-color: var(--md-sys-color-on-surface-variant);
     --md-comp-navigation-rail-item-active-icon-color: var(--md-sys-color-on-secondary-container);
     --md-comp-navigation-rail-item-inactive-icon-color: var(--md-sys-color-on-surface-variant);

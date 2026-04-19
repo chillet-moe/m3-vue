@@ -132,7 +132,9 @@ const slots = defineSlots<{
     />
     <slot v-else name="leading" :disabled="disabled" />
 
-    <slot name="default" :disabled="disabled" />
+    <span data-part="text">
+      <slot name="default" :disabled="disabled" />
+    </span>
 
     <Icon
       v-if="props.trailingIcon"

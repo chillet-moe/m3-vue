@@ -11,7 +11,7 @@
     --md-comp-button-label-text-selected-color: var(--md-sys-color-on-primary);
     --md-comp-button-icon-size: 1.25rem;
     --md-comp-button-container-shape: var(--md-comp-button-container-shape-round);
-    --md-comp-button-container-shape-round: calc(var(--md-comp-button-container-height) / 2);
+    --md-comp-button-container-shape-round: 0;
     --md-comp-button-container-shape-square: var(--md-sys-shape-corner-medium);
     --md-comp-button-icon-label-space: 0.5rem;
     --md-comp-button-pressed-container-shape: var(--md-sys-shape-corner-small);

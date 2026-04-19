@@ -1,20 +1,22 @@
-.m3-icon {
-  font-family: 'Material Symbols Outlined';
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  font-feature-settings: 'liga';
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  font-size: 1.5rem;
-}
+@layer base {
+  .m3-icon {
+    font-family: 'Material Symbols Outlined';
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    font-size: 1em;
+  }
 
-.m3-icon svg {
-  width: 100%;
-  height: 100%;
-  fill: currentColor;
+  .m3-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
 }

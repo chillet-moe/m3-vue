@@ -219,7 +219,7 @@
   --md-comp-item-min-height: --dp(56);
   --md-comp-item-padding-block: --dp(6);
   --md-comp-item-padding-inline: --dp(16);
-  --md-comp-item-gap: --dp(16);
+  --md-comp-item-gap: --dp(20);
   --md-comp-item-content-gap: --dp(1);
   --md-comp-item-icon-size: --dp(24);
 }
