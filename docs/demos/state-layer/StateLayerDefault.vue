@@ -1,6 +1,6 @@
 <template>
   <div
-    class="state-layer"
+    class="m3-state-layer"
     tabindex="0"
     role="button"
     style="

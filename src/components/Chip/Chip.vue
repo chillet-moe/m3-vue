@@ -231,7 +231,7 @@ defineSlots<{
 <template>
   <component
     :is="tag"
-    :class="['state-layer', 'm3-chip']"
+    :class="['m3-state-layer', 'm3-chip']"
     data-scope="chip"
     data-part="root"
     :data-variant="variant"

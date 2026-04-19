@@ -98,7 +98,7 @@
   block-size: 100%;
   inline-size: 100%;
 
-  .state-layer {
+  .m3-state-layer {
     position: absolute;
   }
 }

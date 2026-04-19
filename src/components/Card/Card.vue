@@ -31,7 +31,7 @@ const slots = defineSlots<{
   </div>
   <button
     v-else
-    :class="['m3-card', 'state-layer']"
+    :class="['m3-card', 'm3-state-layer']"
     data-scope="card"
     data-part="root"
     :data-color="color"

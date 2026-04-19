@@ -19,7 +19,7 @@ Apply the `state-layer` class to an interactive element and set a readable foreg
 
 ```vue
 <div
-  class="state-layer"
+  class="m3-state-layer"
   tabindex="0"
   role="button"
   style="

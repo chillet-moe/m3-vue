@@ -1,5 +1,5 @@
 @layer base {
-  .state-layer {
+  .m3-state-layer {
     position: relative;
     -webkit-tap-highlight-color: transparent;
 
@@ -23,13 +23,13 @@
   }
 
   :is(
-    :disabled.state-layer,
-    input:disabled + .layer-container.state-layer,
-    input:disabled + .layer-container .state-layer,
-    label:has(> input:disabled).state-layer,
-    label:has(> input:disabled) .state-layer,
-    [aria-disabled='true'].state-layer,
-    [aria-disabled='true'] .state-layer
+    :disabled.m3-state-layer,
+    input:disabled + .layer-container.m3-state-layer,
+    input:disabled + .layer-container .m3-state-layer,
+    label:has(> input:disabled).m3-state-layer,
+    label:has(> input:disabled) .m3-state-layer,
+    [aria-disabled='true'].m3-state-layer,
+    [aria-disabled='true'] .m3-state-layer
   ) {
     pointer-events: none;
 
@@ -39,16 +39,16 @@
     }
   }
 
-  .state-layer:hover::after,
-  [data-state-layer-hover-target]:hover .state-layer[data-state-layer-hover-from='target']::after,
-  .state-layer:active::after {
+  .m3-state-layer:hover::after,
+  [data-state-layer-hover-target]:hover .m3-state-layer[data-state-layer-hover-from='target']::after,
+  .m3-state-layer:active::after {
     opacity: var(--md-sys-state-hover-state-layer-opacity);
   }
 
-  :focus-visible.state-layer::after,
-  input:focus-visible + .state-layer::after,
-  label:has(> input:focus-visible).state-layer::after,
-  html:not(.js) :active.state-layer::after {
+  :focus-visible.m3-state-layer::after,
+  input:focus-visible + .m3-state-layer::after,
+  label:has(> input:focus-visible).m3-state-layer::after,
+  html:not(.js) :active.m3-state-layer::after {
     opacity: var(--md-sys-state-focus-state-layer-opacity);
   }
 

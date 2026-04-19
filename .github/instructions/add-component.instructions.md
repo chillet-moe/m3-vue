@@ -189,9 +189,9 @@ CSS 注意事项：
 
 如果 CSS 修改原生 HTML 元素不可行，可以采用：不可见的原生 HTML 元素负责功能和可访问性，自己的元素作为视觉效果。参考 CheckBox、Switch、Radio 的实现。
 
-### Ripple 效果（state-layer）
+### Ripple 效果（m3-state-layer）
 
-添加 `state-layer` 类到指定的组件即可让其拥有水波纹效果。
+添加 `m3-state-layer` 类到指定的组件即可让其拥有水波纹效果。
 
 `data-state-layer-hover-from` `data-state-layer-hover-target` 用于视觉区域与触发区域不一致的情况，使用方法可以参考已有的。
 

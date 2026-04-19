@@ -93,7 +93,7 @@ const slots = defineSlots<{
 <template>
   <component
     :is="tag"
-    :class="['state-layer', 'm3-icon-button']"
+    :class="['m3-state-layer', 'm3-icon-button']"
     data-scope="icon-button"
     data-part="root"
     :data-color="color"

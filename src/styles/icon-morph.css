@@ -30,8 +30,8 @@
 .m3-icon-morph:active,
 .m3-morph-host:focus-visible .m3-icon-morph,
 .m3-morph-host:active .m3-icon-morph,
-.m3-morph-host .state-layer:active .m3-icon-morph,
-.m3-morph-host:has(.state-layer:active) .m3-icon-morph {
+.m3-morph-host .m3-state-layer:active .m3-icon-morph,
+.m3-morph-host:has(.m3-state-layer:active) .m3-icon-morph {
   --m3-icon-morph-weight: 300;
 }
 
@@ -70,7 +70,7 @@
 .m3-text-morph:active,
 .m3-morph-host:focus-visible .m3-text-morph,
 .m3-morph-host:active .m3-text-morph,
-.m3-morph-host:has(.state-layer:active) .m3-text-morph {
+.m3-morph-host:has(.m3-state-layer:active) .m3-text-morph {
   --m3-text-morph-grad: -125;
 }
 
@@ -79,7 +79,8 @@
 :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):active,
 .m3-morph-host:focus-visible :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
 .m3-morph-host:active :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
-.m3-morph-host:has(.state-layer:active) :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
+.m3-morph-host:has(.m3-state-layer:active)
+  :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
   --m3-text-morph-weight-offset: -50;
   font-weight: calc(var(--m3-text-morph-base-weight) + var(--m3-text-morph-weight-offset));
   --m3-text-morph-grad: 0;
@@ -109,7 +110,7 @@
 .m3-text-morph:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):active,
 .m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):focus-visible .m3-text-morph,
 .m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):active .m3-text-morph,
-.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):has(.state-layer:active)
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):has(.m3-state-layer:active)
   .m3-text-morph {
   --m3-text-morph-grad: -125;
 }
@@ -129,7 +130,7 @@
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
 .m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):active
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
-.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):has(.state-layer:active)
+.m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):has(.m3-state-layer:active)
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
   --m3-text-morph-weight-offset: 0;
   font-weight: calc(var(--m3-text-morph-base-weight) + var(--m3-text-morph-weight-offset));

@@ -119,7 +119,7 @@ function initStateLayer() {
   document.addEventListener('pointerdown', (e) => {
     if (e.button != 0) return;
 
-    const layer = (e.target as Element).closest('.state-layer');
+    const layer = (e.target as Element).closest('.m3-state-layer');
     if (!layer || !isEnabled(layer)) return;
 
     const rect = layer.getBoundingClientRect();
@@ -130,7 +130,7 @@ function initStateLayer() {
     if (e.repeat) return;
 
     const target = e.target as Element;
-    const layer = target.closest('.state-layer');
+    const layer = target.closest('.m3-state-layer');
     if (!layer || !isEnabled(layer)) return;
 
     const isActivate = e.key == 'Enter' || (e.key == ' ' && layer.tagName == 'BUTTON');

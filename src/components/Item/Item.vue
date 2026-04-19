@@ -112,7 +112,7 @@ const slotProps = computed(() => ({
 <template>
   <component
     :is="tag"
-    class="state-layer m3-button m3-item m3-morph-host"
+    class="m3-state-layer m3-button m3-item m3-morph-host"
     data-scope="item"
     data-part="root"
     data-color="text"

@@ -209,7 +209,7 @@ function hasSuffix() {
     :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
     :aria-checked="resolvedRole === 'menuitem' ? undefined : resolvedChecked ? 'true' : 'false'"
     :aria-describedby="hasSupporting() ? supportingId : undefined"
-    :class="['state-layer', 'm3-menu-item']"
+    :class="['m3-state-layer', 'm3-menu-item']"
     data-scope="menu-item"
     data-part="root"
     @click="handleClick"

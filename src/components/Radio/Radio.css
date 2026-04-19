@@ -83,7 +83,7 @@
   transition: transform var(--md-easing-fast-spatial);
 }
 
-.m3-radio-control > .state-layer {
+.m3-radio-control > .m3-state-layer {
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: 50%;

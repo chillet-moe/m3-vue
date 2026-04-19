@@ -46,7 +46,7 @@ defineSlots<{
     <span :class="'m3-radio-control'" data-scope="radio" data-part="control" aria-hidden="true">
       <span :class="'m3-radio-outer'" data-scope="radio" data-part="outer" />
       <span :class="'m3-radio-inner'" data-scope="radio" data-part="inner" />
-      <span class="state-layer" data-state-layer-hover-from="target" />
+      <span class="m3-state-layer" data-state-layer-hover-from="target" />
     </span>
 
     <span v-if="$slots.default" :class="'m3-radio-label'" data-scope="radio" data-part="label"><slot /></span>

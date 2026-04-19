@@ -166,7 +166,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     <span class="m3-navigation-rail-item-indicator" data-scope="navigation-rail-item" data-part="indicator">
       <span
         aria-hidden="true"
-        class="m3-navigation-rail-item-state-layer state-layer"
+        class="m3-navigation-rail-item-state-layer m3-state-layer"
         data-state-layer-hover-from="target"
       />
 

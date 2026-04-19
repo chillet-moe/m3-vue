@@ -68,7 +68,7 @@ defineSlots<{
           checked ? checkedIcon : uncheckedIcon
         }}</span>
         <span
-          class="state-layer"
+          class="m3-state-layer"
           data-state-layer-hover-from="target"
           style="position: absolute; width: 2.5rem; height: 2.5rem; border-radius: 1.25rem"
         />
