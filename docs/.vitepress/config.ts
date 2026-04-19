@@ -58,6 +58,7 @@ export default defineConfig({
         {
           text: 'Components',
           items: [
+            { text: 'Badge', link: '/components/badge' },
             { text: 'Button', link: '/components/button' },
             { text: 'IconButton', link: '/components/icon-button' },
             { text: 'ButtonGroup', link: '/components/button-group' },

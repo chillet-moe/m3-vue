@@ -18,6 +18,7 @@ export * from './directives';
 export * from './plugin';
 
 // Components
+export * from './components/Badge';
 export * from './components/Button';
 export * from './components/ButtonGroup';
 export * from './components/SelectionGroup';

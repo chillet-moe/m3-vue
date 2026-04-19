@@ -1,0 +1,59 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .m3-badge {
+    --md-comp-badge-shape: var(--md-sys-shape-corner-full);
+    --md-comp-badge-size: --dp(6);
+    --md-comp-badge-large-shape: var(--md-sys-shape-corner-full);
+    --md-comp-badge-large-size: --dp(16);
+    --md-comp-badge-large-label-inline-padding: --dp(4);
+  }
+}
+
+@layer components {
+  .m3-badge {
+    --md-color-container: var(--md-sys-color-error);
+    --md-color-on-container: var(--md-sys-color-on-error);
+
+    background-color: var(--md-color-container);
+    color: var(--md-color-on-container);
+
+    --md-badge-container-shape: var(--md-comp-badge-shape);
+    --md-badge-container-size: var(--md-comp-badge-size);
+
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    user-select: none;
+    overflow: hidden;
+    flex: none;
+
+    inline-size: var(--md-badge-container-size);
+    min-inline-size: var(--md-badge-container-size);
+    block-size: var(--md-badge-container-size);
+
+    border-radius: var(--md-badge-container-shape);
+  }
+
+  .m3-badge[data-variant='large'] {
+    --md-badge-container-shape: var(--md-comp-badge-large-shape);
+    --md-badge-container-size: var(--md-comp-badge-large-size);
+
+    inline-size: auto;
+    padding-inline: var(--md-comp-badge-large-label-inline-padding);
+  }
+
+  .m3-badge-label {
+    @apply label-small;
+
+    color: inherit;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .m3-badge[data-hidden='true'] {
+    display: none;
+  }
+}

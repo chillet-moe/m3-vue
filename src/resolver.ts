@@ -6,6 +6,7 @@ import type { ComponentResolver } from 'unplugin-vue-components/types';
  * When you add a new component, update this list so auto-import keeps working.
  */
 export const m3VueComponentNames = [
+  'Badge',
   'Button',
   'ButtonGroup',
   'ButtonGroupItem',
