@@ -1,107 +1,109 @@
-.state-layer {
-  position: relative;
-  -webkit-tap-highlight-color: transparent;
+@layer base {
+  .state-layer {
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background-color: var(--md-state-layer-color, currentColor);
+      opacity: 0;
+      transition: opacity var(--md-easing-fast);
+    }
+  }
+
+  :is(
+    :disabled.state-layer,
+    input:disabled + .layer-container.state-layer,
+    input:disabled + .layer-container .state-layer,
+    label:has(> input:disabled).state-layer,
+    label:has(> input:disabled) .state-layer,
+    [aria-disabled='true'].state-layer,
+    [aria-disabled='true'] .state-layer
+  ) {
     pointer-events: none;
+
+    &::after,
+    > .ripple {
+      display: none;
+    }
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background-color: var(--md-state-layer-color, currentColor);
-    opacity: 0;
-    transition: opacity var(--md-easing-fast);
+  .state-layer:hover::after,
+  [data-state-layer-hover-target]:hover .state-layer[data-state-layer-hover-from='target']::after,
+  .state-layer:active::after {
+    opacity: var(--md-sys-state-hover-state-layer-opacity);
   }
-}
 
-:is(
-  :disabled.state-layer,
-  input:disabled + .layer-container.state-layer,
-  input:disabled + .layer-container .state-layer,
-  label:has(> input:disabled).state-layer,
-  label:has(> input:disabled) .state-layer,
-  [aria-disabled='true'].state-layer,
-  [aria-disabled='true'] .state-layer
-) {
-  pointer-events: none;
-
-  &::after,
-  > .ripple {
-    display: none;
+  :focus-visible.state-layer::after,
+  input:focus-visible + .state-layer::after,
+  label:has(> input:focus-visible).state-layer::after,
+  html:not(.js) :active.state-layer::after {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
   }
-}
 
-.state-layer:hover::after,
-[data-state-layer-hover-target]:hover .state-layer[data-state-layer-hover-from='target']::after,
-.state-layer:active::after {
-  opacity: var(--md-sys-state-hover-state-layer-opacity);
-}
-
-:focus-visible.state-layer::after,
-input:focus-visible + .state-layer::after,
-label:has(> input:focus-visible).state-layer::after,
-html:not(.js) :active.state-layer::after {
-  opacity: var(--md-sys-state-focus-state-layer-opacity);
-}
-
-@property --r {
-  syntax: '<percentage>';
-  inherits: false;
-  initial-value: 0%;
-}
-
-.ripple {
-  --x: 50%;
-  --y: 50%;
-  --r: 0%;
-  --duration: 400ms;
-
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  border-radius: inherit;
-  background-color: var(--md-state-layer-color, currentColor);
-  overflow: hidden;
-  background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="2.5" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.8"/%3E%3C/svg%3E');
-  background-size: 100px 100px;
-  background-blend-mode: luminosity;
-  mask-image: radial-gradient(
-    circle at var(--x) var(--y),
-    transparent calc(var(--r) - 95%),
-    var(--md-state-layer-color, currentColor) calc(var(--r) - 20%),
-    var(--md-state-layer-color, currentColor) var(--r),
-    transparent calc(var(--r) + 10%)
-  );
-  opacity: var(--md-sys-state-hover-state-layer-opacity);
-  transition: opacity var(--md-easing-slow-spatial);
-  animation:
-    ripple-expand var(--duration) cubic-bezier(0.4, 0, 0.2, 1) forwards,
-    ripple-fade-out 650ms ease-out var(--duration) forwards;
-}
-
-@keyframes ripple-expand {
-  to {
-    --r: 120%;
+  @property --r {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
   }
-}
 
-@keyframes ripple-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
   .ripple {
-    display: none;
+    --x: 50%;
+    --y: 50%;
+    --r: 0%;
+    --duration: 400ms;
+
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: inherit;
+    background-color: var(--md-state-layer-color, currentColor);
+    overflow: hidden;
+    background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="2.5" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.8"/%3E%3C/svg%3E');
+    background-size: 100px 100px;
+    background-blend-mode: luminosity;
+    mask-image: radial-gradient(
+      circle at var(--x) var(--y),
+      transparent calc(var(--r) - 95%),
+      var(--md-state-layer-color, currentColor) calc(var(--r) - 20%),
+      var(--md-state-layer-color, currentColor) var(--r),
+      transparent calc(var(--r) + 10%)
+    );
+    opacity: var(--md-sys-state-hover-state-layer-opacity);
+    transition: opacity var(--md-easing-slow-spatial);
+    animation:
+      ripple-expand var(--duration) cubic-bezier(0.4, 0, 0.2, 1) forwards,
+      ripple-fade-out 650ms ease-out var(--duration) forwards;
+  }
+
+  @keyframes ripple-expand {
+    to {
+      --r: 120%;
+    }
+  }
+
+  @keyframes ripple-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ripple {
+      display: none;
+    }
   }
 }

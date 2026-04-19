@@ -191,7 +191,7 @@ CSS 注意事项：
 
 ### Ripple 效果（state-layer）
 
-添加 `state-layer` 类到指定的组件即可让其拥有水波纹效果。但是要注意，`state-layer` 类会给 :before 伪元素添加样式。如有必要，用一个额外的元素来承载 `state-layer` 类，避免影响组件其他部分的样式。
+添加 `state-layer` 类到指定的组件即可让其拥有水波纹效果。
 
 `data-state-layer-hover-from` `data-state-layer-hover-target` 用于视觉区域与触发区域不一致的情况，使用方法可以参考已有的。
 
