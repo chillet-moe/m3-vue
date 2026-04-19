@@ -26,6 +26,7 @@ const toggleState = () => {
       <NavigationRailItem value="inbox" icon="inbox" label="Inbox" />
       <NavigationRailItem value="bookmarks" icon="bookmark" label="Saved" />
       <NavigationRailItem value="settings" icon="settings" label="Settings" />
+      <NavigationRailItem value="star" icon="star">very very very very long text</NavigationRailItem>
     </NavigationRail>
     <Button @click="toggleState">Switch to {{ state === 'collapsed' ? 'expanded' : 'collapsed' }}</Button>
   </div>

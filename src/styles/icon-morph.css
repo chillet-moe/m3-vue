@@ -39,7 +39,7 @@
 
 .m3-text-morph {
   --m3-text-morph-grad: 0;
-  --m3-text-morph-base-weight: var(--md-sys-typescale-label-medium-weight, 400);
+  --m3-text-morph-base-weight: 400;
   --m3-text-morph-weight-offset: 0;
 
   font-variation-settings: 'GRAD' var(--m3-text-morph-grad);
