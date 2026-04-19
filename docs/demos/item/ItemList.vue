@@ -4,8 +4,12 @@ import { Item } from '@/components/Item';
 
 <template>
   <div class="item-demo-column">
-    <Item title="Folder" leading-icon="folder" />
-    <Item title="Drafts" leading-icon="drafts" trailing-icon="open_in_new" />
+    <Item title="Item 1" />
+    <Item title="Item 2" />
+    <Item title="Item 3" />
+    <Item title="Item 4" />
+    <Item title="Item 5" />
+    <Item title="Item 6" />
   </div>
 </template>
 

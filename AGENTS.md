@@ -1,4 +1,5 @@
-- 添加新组件时参照 .github/instructions/add-component.instructions.md 中的步骤进行
+- 添加新组件时参照 .github/instructions/add-component.instructions.md 中的步骤进行。
+- 效果倾向于使用纯 css 实现。
 
 <!--VITE PLUS START-->
 

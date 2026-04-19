@@ -43,7 +43,7 @@
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   justify-content: stretch;
-  column-gap: var(--md-comp-item-gap);
+  column-gap: 0;
   padding-block: var(--md-comp-item-padding-block);
   padding-inline: var(--md-comp-item-padding-inline);
   block-size: auto;
@@ -82,10 +82,18 @@
   min-inline-size: 0;
   display: grid;
   row-gap: var(--md-comp-item-content-gap);
-  padding-block: var(--md-comp-item-main-padding-block);
-  padding-inline: var(--md-comp-item-main-padding-inline);
   overflow: hidden;
   transition: border-radius var(--md-easing-fast-spatial);
+}
+
+.m3-item:has(> .m3-item-leading) .m3-item-main,
+.m3-item:has(> .m3-item-leading-slot) .m3-item-main {
+  margin-inline-start: var(--md-comp-item-gap);
+}
+
+.m3-item:has(> .m3-item-trailing) .m3-item-main,
+.m3-item:has(> .m3-item-trailing-slot) .m3-item-main {
+  margin-inline-end: var(--md-comp-item-gap);
 }
 
 .m3-item-header,
@@ -202,8 +210,6 @@
   --md-comp-item-min-height: --dp(48);
   --md-comp-item-padding-block: --dp(4);
   --md-comp-item-padding-inline: --dp(16);
-  --md-comp-item-main-padding-block: --dp(8);
-  --md-comp-item-main-padding-inline: --dp(8);
   --md-comp-item-gap: --dp(8);
   --md-comp-item-content-gap: --dp(1);
   --md-comp-item-icon-size: --dp(20);
@@ -212,10 +218,8 @@
 .m3-button.m3-item[data-size='small'] {
   --md-comp-item-min-height: --dp(56);
   --md-comp-item-padding-block: --dp(6);
-  --md-comp-item-padding-inline: --dp(20);
-  --md-comp-item-main-padding-block: --dp(8);
-  --md-comp-item-main-padding-inline: --dp(8);
-  --md-comp-item-gap: --dp(12);
+  --md-comp-item-padding-inline: --dp(16);
+  --md-comp-item-gap: --dp(16);
   --md-comp-item-content-gap: --dp(1);
   --md-comp-item-icon-size: --dp(24);
 }
@@ -224,8 +228,6 @@
   --md-comp-item-min-height: --dp(64);
   --md-comp-item-padding-block: --dp(8);
   --md-comp-item-padding-inline: --dp(22);
-  --md-comp-item-main-padding-block: --dp(10);
-  --md-comp-item-main-padding-inline: --dp(16);
   --md-comp-item-gap: --dp(14);
   --md-comp-item-content-gap: --dp(2);
   --md-comp-item-icon-size: --dp(24);
@@ -235,8 +237,6 @@
   --md-comp-item-min-height: --dp(80);
   --md-comp-item-padding-block: --dp(10);
   --md-comp-item-padding-inline: --dp(24);
-  --md-comp-item-main-padding-block: --dp(12);
-  --md-comp-item-main-padding-inline: --dp(20);
   --md-comp-item-gap: --dp(16);
   --md-comp-item-content-gap: --dp(3);
   --md-comp-item-icon-size: --dp(24);
@@ -246,8 +246,6 @@
   --md-comp-item-min-height: --dp(96);
   --md-comp-item-padding-block: --dp(12);
   --md-comp-item-padding-inline: --dp(32);
-  --md-comp-item-main-padding-block: --dp(16);
-  --md-comp-item-main-padding-inline: --dp(24);
   --md-comp-item-gap: --dp(20);
   --md-comp-item-content-gap: --dp(4);
   --md-comp-item-icon-size: --dp(28);
