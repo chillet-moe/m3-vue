@@ -26,11 +26,11 @@ export type ProgressIndicatorProps = {
   /** Current progress value. */
   value?: number;
 
-  /** Track thickness. Numbers are treated as dp units. */
-  thickness?: number | string;
+  /** Track thickness. Such as '4px' */
+  thickness?: string;
 
-  /** Circular indicator size. Numbers are treated as dp units. */
-  size?: number | string;
+  /** Circular indicator size. */
+  size?: string;
 
   /** Whether to show the stop indicator for linear determinate progress. */
   stopIndicator?: boolean;
@@ -49,7 +49,7 @@ const props = withDefaults(defineProps<ProgressIndicatorProps>(), {
   min: 0,
   max: 100,
   value: 0,
-  thickness: 4,
+  thickness: '0.25rem',
   size: undefined,
   stopIndicator: true,
   ariaLabel: undefined,
@@ -94,9 +94,6 @@ const linearGapSize = computed(() => {
   return 'var(--md-progress-indicator-linear-track-active-indicator-space)';
 });
 
-const resolvedThickness = computed(() => resolveLength(props.thickness));
-const resolvedSize = computed(() => resolveLength(props.size));
-
 const resolvedAriaValueText = computed(() => {
   if (props.ariaValueText) {
     return props.ariaValueText;
@@ -114,12 +111,12 @@ const rootStyle = computed<CSSProperties>(() => {
     '--md-progress-indicator-linear-gap-size': linearGapSize.value,
   };
 
-  if (resolvedThickness.value) {
-    style['--md-progress-indicator-resolved-thickness'] = resolvedThickness.value;
+  if (props.thickness) {
+    style['--md-progress-indicator-resolved-thickness'] = props.thickness;
   }
 
-  if (resolvedSize.value) {
-    style['--md-progress-indicator-resolved-size'] = resolvedSize.value;
+  if (props.size) {
+    style['--md-progress-indicator-resolved-size'] = props.size;
   }
 
   return style as CSSProperties;
@@ -173,18 +170,6 @@ function isFiniteNumber(value: unknown): value is number {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
-}
-
-function resolveLength(value: number | string | undefined): string | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return `${value / 16}rem`;
-  }
-
-  return typeof value === 'string' ? value : undefined;
 }
 
 function createHorizontalWavePath(width: number, height: number, amplitude: number, waves: number) {

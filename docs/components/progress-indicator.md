@@ -22,7 +22,7 @@ const props = ref({
   min: 0,
   max: 100,
   value: 62,
-  thickness: 4,
+  thickness: '0.5rem',
   size: undefined,
   stopIndicator: true,
   ariaLabel: 'Loading progress',
