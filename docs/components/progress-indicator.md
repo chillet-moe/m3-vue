@@ -14,6 +14,8 @@ import ProgressIndicatorShapes from '../demos/progress-indicator/ProgressIndicat
 import ProgressIndicatorShapesSrc from '../demos/progress-indicator/ProgressIndicatorShapes.vue?raw';
 import ProgressIndicatorIndeterminate from '../demos/progress-indicator/ProgressIndicatorIndeterminate.vue';
 import ProgressIndicatorIndeterminateSrc from '../demos/progress-indicator/ProgressIndicatorIndeterminate.vue?raw';
+import ProgressIndicatorAnimated from '../demos/progress-indicator/ProgressIndicatorAnimated.vue';
+import ProgressIndicatorAnimatedSrc from '../demos/progress-indicator/ProgressIndicatorAnimated.vue?raw';
 
 const props = ref({
   variant: 'linear',
@@ -68,4 +70,12 @@ Progress indicators communicate known and unknown progress in linear or circular
 
 <DemoContainer :src="ProgressIndicatorIndeterminateSrc" :viewport="false">
   <ProgressIndicatorIndeterminate />
+</DemoContainer>
+
+### Animated Value
+
+Value changes are smoothly interpolated using a spring physics animation.
+
+<DemoContainer :src="ProgressIndicatorAnimatedSrc" :viewport="false">
+  <ProgressIndicatorAnimated />
 </DemoContainer>

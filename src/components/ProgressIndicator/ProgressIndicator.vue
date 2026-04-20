@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue';
+import { computed, onBeforeUnmount, ref, watch, type CSSProperties } from 'vue';
 
 const linearWavePath = createHorizontalWavePath(100, 10, 3, 5);
 const circularWavePath = createCircularWavePath(50, 50, 42, 3.5, 12, 8);
@@ -84,10 +84,98 @@ const progressRatio = computed(() => {
   return (normalizedValue.value - normalizedMin.value) / range;
 });
 
+// Animated display ratio, driven by a spring physics simulation.
+const progressRatioDisplayed = ref(isDeterminate.value ? progressRatio.value : 0);
+const progressPercentDisplayed = computed(() => progressRatioDisplayed.value * 100);
+
+// progressPercent still reflects the true (non-animated) value, used only for ARIA.
 const progressPercent = computed(() => progressRatio.value * 100);
 
+const progressDisplaySettleDistance = 0.0005;
+const progressDisplaySettleVelocity = 0.0005;
+let syncProgressFrame = 0;
+let syncProgressTime = 0;
+let progressVelocity = 0;
+
+const stopSyncProgress = () => {
+  if (syncProgressFrame) {
+    window.cancelAnimationFrame(syncProgressFrame);
+    syncProgressFrame = 0;
+  }
+  syncProgressTime = 0;
+};
+
+const finishSyncProgress = () => {
+  stopSyncProgress();
+  progressRatioDisplayed.value = progressRatio.value;
+  progressVelocity = 0;
+};
+
+const syncProgressFrameStep = (timestamp: number) => {
+  if (!syncProgressTime) {
+    syncProgressTime = timestamp;
+    syncProgressFrame = window.requestAnimationFrame(syncProgressFrameStep);
+    return;
+  }
+
+  const deltaSeconds = Math.min((timestamp - syncProgressTime) / 1000, 0.05);
+  syncProgressTime = timestamp;
+
+  const target = progressRatio.value;
+  const stiffness = 420;
+  const damping = 36;
+  const distance = target - progressRatioDisplayed.value;
+  const acceleration = distance * stiffness - progressVelocity * damping;
+
+  progressVelocity += acceleration * deltaSeconds;
+  progressRatioDisplayed.value += progressVelocity * deltaSeconds;
+
+  if (
+    Math.abs(target - progressRatioDisplayed.value) <= progressDisplaySettleDistance &&
+    Math.abs(progressVelocity) <= progressDisplaySettleVelocity
+  ) {
+    finishSyncProgress();
+    return;
+  }
+
+  syncProgressFrame = window.requestAnimationFrame(syncProgressFrameStep);
+};
+
+const startSyncProgress = () => {
+  const target = progressRatio.value;
+  if (Math.abs(target - progressRatioDisplayed.value) <= progressDisplaySettleDistance && progressVelocity === 0) {
+    progressRatioDisplayed.value = target;
+    return;
+  }
+
+  if (!syncProgressFrame) {
+    syncProgressTime = 0;
+    syncProgressFrame = window.requestAnimationFrame(syncProgressFrameStep);
+  }
+};
+
+watch(
+  progressRatio,
+  () => {
+    if (isDeterminate.value) {
+      startSyncProgress();
+    }
+  },
+  { flush: 'sync' },
+);
+
+watch(isDeterminate, (determinate) => {
+  stopSyncProgress();
+  progressRatioDisplayed.value = determinate ? progressRatio.value : 0;
+  progressVelocity = 0;
+});
+
+onBeforeUnmount(() => {
+  stopSyncProgress();
+});
+
 const linearGapSize = computed(() => {
-  if (!isDeterminate.value || progressRatio.value <= 0 || progressRatio.value >= 1) {
+  if (!isDeterminate.value || progressRatioDisplayed.value <= 0 || progressRatioDisplayed.value >= 1) {
     return '0px';
   }
 
@@ -106,8 +194,8 @@ const showStopIndicator = computed(() => props.variant === 'linear' && isDetermi
 
 const rootStyle = computed<CSSProperties>(() => {
   const style: Record<string, string> = {
-    '--md-progress-indicator-active-ratio': progressRatio.value.toString(),
-    '--md-progress-indicator-active-percent': `${progressPercent.value}%`,
+    '--md-progress-indicator-active-ratio': progressRatioDisplayed.value.toString(),
+    '--md-progress-indicator-active-percent': `${progressPercentDisplayed.value}%`,
     '--md-progress-indicator-linear-gap-size': linearGapSize.value,
   };
 
@@ -123,7 +211,7 @@ const rootStyle = computed<CSSProperties>(() => {
 });
 
 const circularActiveDasharray = computed(() => {
-  const activeLength = progressPercent.value;
+  const activeLength = progressPercentDisplayed.value;
   const remainingLength = Math.max(circularTrackLength - activeLength, 0);
 
   if (remainingLength <= 0) {
@@ -138,7 +226,7 @@ const circularTrackDasharray = computed(() => {
     return undefined;
   }
 
-  const activeLength = progressPercent.value;
+  const activeLength = progressPercentDisplayed.value;
   const gapLength = activeLength > 0 && activeLength < circularTrackLength ? circularTrackGap : 0;
   const visibleTrackLength = Math.max(circularTrackLength - activeLength - gapLength, 0);
 
@@ -154,7 +242,7 @@ const circularTrackDashoffset = computed(() => {
     return undefined;
   }
 
-  const activeLength = progressPercent.value;
+  const activeLength = progressPercentDisplayed.value;
   const gapLength = activeLength > 0 && activeLength < circularTrackLength ? circularTrackGap : 0;
 
   if (gapLength <= 0) {
