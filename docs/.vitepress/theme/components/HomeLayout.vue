@@ -21,7 +21,7 @@ function toggleAppearance() {
 </script>
 
 <template>
-  <div class="home-layout">
+  <div class="home-layout vp-raw">
     <header class="home-header">
       <div class="home-header-inner">
         <Button class="home-brand" color="text" size="medium" :href="resolveLink('/')">
