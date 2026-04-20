@@ -3,6 +3,10 @@ import { fileURLToPath } from 'url';
 import { componentMetaPlugin } from './plugins/component-meta';
 import { componentAnatomyPlugin } from './plugins/component-anatomy';
 import { sourceApiMetaPlugin } from './plugins/source-api-meta';
+import { layerPreludePlugin } from './plugins/layer-prelude';
+
+// Sync with theme.css
+const m3LayerOrder = ['reset', 'base', 'tokens', 'components'];
 
 export default defineConfig({
   title: 'M3 Vue',
@@ -19,6 +23,7 @@ export default defineConfig({
       },
     },
     plugins: [
+      layerPreludePlugin({ layers: m3LayerOrder }),
       componentMetaPlugin({
         tsconfigPath: 'tsconfig.docs.json',
         components: ['src/components/**/*.vue'],
