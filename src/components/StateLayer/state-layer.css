@@ -41,7 +41,7 @@
 
   .m3-state-layer:hover:not(:has(.m3-state-layer:hover))::after,
   [data-state-layer-hover-target]:hover .m3-state-layer[data-state-layer-hover-from='target']::after,
-  .m3-state-layer:active::after {
+  .m3-state-layer:active:not(:has(.m3-state-layer:active))::after {
     opacity: var(--md-sys-state-hover-state-layer-opacity);
   }
 

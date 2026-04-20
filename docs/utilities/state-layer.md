@@ -5,6 +5,8 @@ title: State Layer
 <script setup lang="ts">
 import StateLayerDefault from '../demos/state-layer/StateLayerDefault.vue';
 import StateLayerDefaultSrc from '../demos/state-layer/StateLayerDefault.vue?raw';
+import StateLayerNested from '../demos/state-layer/StateLayerNested.vue';
+import StateLayerNestedSrc from '../demos/state-layer/StateLayerNested.vue?raw';
 </script>
 
 # State Layer
@@ -61,5 +63,11 @@ The function is idempotent, so calling it more than once is safe.
 - Disabled controls and elements with `aria-disabled="true"` suppress the overlay and ripple.
 - When `@property` animation support is unavailable, the ripple falls back to a JavaScript animation path.
 - `prefers-reduced-motion: reduce` disables the ripple animation.
+
+## Nested State Layers
+
+When a `m3-state-layer` element is nested inside another, hovering or pressing the inner element will not activate the outer element's overlay. Only the innermost interactive layer responds.
+
+<DemoContainer :src="StateLayerNestedSrc" :viewport="false"><StateLayerNested /></DemoContainer>
 
 For elevation shadows that are often paired with state layers, see [Elevation](/utilities/elevation).
