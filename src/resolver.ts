@@ -16,8 +16,6 @@ export const m3VueComponentNames = [
   'ChipGroup',
   'Combobox',
   'Dialog',
-  'Form',
-  'FormField',
   'Icon',
   'IconButton',
   'ListItem',
