@@ -138,13 +138,13 @@
   }
 
   .m3-select-options > .m3-menu-item:first-child {
-    border-start-start-radius: var(--md-comp-menus-active-container-shape);
-    border-start-end-radius: var(--md-comp-menus-active-container-shape);
+    border-start-start-radius: var(--_menu-item-first-start-radius);
+    border-start-end-radius: var(--_menu-item-first-end-radius);
   }
 
   .m3-select-options > .m3-menu-item:last-child {
-    border-end-start-radius: var(--md-comp-menus-active-container-shape);
-    border-end-end-radius: var(--md-comp-menus-active-container-shape);
+    border-end-start-radius: var(--_menu-item-last-start-radius);
+    border-end-end-radius: var(--_menu-item-last-end-radius);
   }
 
   .m3-select-options-move,

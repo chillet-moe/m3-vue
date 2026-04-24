@@ -5,8 +5,8 @@
     --md-comp-menus-container-shape: var(--md-sys-shape-corner-large);
     --md-comp-menus-active-container-shape: var(--md-sys-shape-corner-large);
     --md-comp-menus-inactive-container-shape: var(--md-sys-shape-corner-small);
-    --md-comp-menus-menu-item-first-child-shape: calc(var(--md-comp-menus-container-shape) - --dp(4));
-    --md-comp-menus-menu-item-last-child-shape: calc(var(--md-comp-menus-container-shape) - --dp(4));
+    --md-comp-menus-menu-item-first-child-shape: calc(var(--md-comp-menus-container-shape) - --dp(3));
+    --md-comp-menus-menu-item-last-child-shape: calc(var(--md-comp-menus-container-shape) - --dp(3));
     --md-comp-menu-container-elevation: var(--md-sys-elevation-level2);
     --md-comp-menu-container-shadow-color: var(--md-sys-color-shadow);
 
