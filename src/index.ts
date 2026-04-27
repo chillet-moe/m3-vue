@@ -19,6 +19,7 @@ export * from './plugin';
 
 // Components
 export * from './components/Badge';
+export * from './components/BottomSheet';
 export * from './components/Button';
 export * from './components/ButtonGroup';
 export * from './components/SelectionGroup';
@@ -43,6 +44,7 @@ export * from './components/Pagination';
 export * from './components/ProgressIndicator';
 export * from './components/TextField';
 export * from './components/Select';
+export * from './components/SideSheet';
 export * from './components/Combobox';
 export * from './components/Tabs';
 

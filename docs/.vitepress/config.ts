@@ -64,6 +64,7 @@ export default defineConfig({
           text: 'Components',
           items: [
             { text: 'Badge', link: '/components/badge' },
+            { text: 'BottomSheet', link: '/components/bottom-sheet' },
             { text: 'Button', link: '/components/button' },
             { text: 'IconButton', link: '/components/icon-button' },
             { text: 'ButtonGroup', link: '/components/button-group' },
@@ -83,6 +84,7 @@ export default defineConfig({
             { text: 'ProgressIndicator', link: '/components/progress-indicator' },
             { text: 'Radio', link: '/components/radio' },
             { text: 'Select', link: '/components/select' },
+            { text: 'SideSheet', link: '/components/side-sheet' },
             { text: 'Slider', link: '/components/slider' },
             { text: 'Snackbar', link: '/components/snackbar' },
             { text: 'Switch', link: '/components/switch' },

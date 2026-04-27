@@ -1,0 +1,159 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .m3-bottom-sheet {
+    --md-comp-sheet-bottom-docked-container-color: var(--md-sys-color-surface-container-low);
+    --md-comp-sheet-bottom-docked-modal-container-elevation: var(--md-sys-elevation-level1);
+    --md-comp-sheet-bottom-docked-standard-container-elevation: var(--md-sys-elevation-level1);
+    --md-comp-sheet-bottom-docked-container-shape: var(--md-sys-shape-corner-extra-large-top);
+    --md-comp-sheet-bottom-docked-minimized-container-shape: var(--md-sys-shape-corner-none);
+    --md-comp-sheet-bottom-docked-drag-handle-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-sheet-bottom-docked-drag-handle-width: 2rem;
+    --md-comp-sheet-bottom-docked-drag-handle-height: 0.25rem;
+    --md-comp-sheet-bottom-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-sheet-bottom-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
+    --md-comp-sheet-bottom-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
+    --md-bottom-sheet-max-height: calc(100vb - 3rem);
+    --md-bottom-sheet-drag-offset: 0px;
+    --md-bottom-sheet-translate-offset: 0px;
+    --md-bottom-sheet-background-extension: 0px;
+  }
+}
+
+@layer components {
+  .m3-bottom-sheet {
+    position: fixed;
+    inset: 0;
+
+    margin: 0;
+    border: none;
+    padding: 0;
+
+    display: grid;
+    align-items: end;
+    justify-items: center;
+
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    max-block-size: none;
+    overflow: hidden;
+
+    color: inherit;
+    background: transparent;
+    box-shadow: none;
+
+    pointer-events: none;
+    transition:
+      overlay var(--md-duration-fast) allow-discrete,
+      display var(--md-duration-fast) allow-discrete;
+  }
+
+  .m3-bottom-sheet[open] {
+    pointer-events: auto;
+  }
+
+  .m3-bottom-sheet::backdrop {
+    background-color: transparent;
+    transition:
+      background-color var(--md-duration-spatial) var(--md-timing-function-spatial),
+      display var(--md-duration-spatial) allow-discrete,
+      overlay var(--md-duration-spatial) allow-discrete;
+  }
+
+  .m3-bottom-sheet[open]::backdrop {
+    background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+  }
+
+  .m3-bottom-sheet-surface {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    row-gap: 1rem;
+
+    inline-size: 100%;
+    max-inline-size: 40rem;
+    max-block-size: min(calc(var(--md-bottom-sheet-max-height) + var(--md-bottom-sheet-background-extension)), 100vb);
+    overflow: hidden;
+
+    padding: 1rem 1.5rem calc(1.5rem + var(--md-bottom-sheet-background-extension));
+    border-radius: var(--md-comp-sheet-bottom-docked-container-shape);
+
+    background-color: var(--md-comp-sheet-bottom-docked-container-color);
+    box-shadow: var(--md-comp-sheet-bottom-docked-modal-container-elevation);
+
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform 320ms var(--md-timing-function-emphasized-decel),
+      padding-block-end 320ms var(--md-timing-function-emphasized-decel),
+      max-block-size 320ms var(--md-timing-function-emphasized-decel),
+      visibility var(--md-duration-spatial);
+    will-change: transform;
+    touch-action: pan-y;
+  }
+
+  .m3-bottom-sheet[open] .m3-bottom-sheet-surface {
+    transform: translateY(var(--md-bottom-sheet-translate-offset));
+    visibility: visible;
+  }
+
+  .m3-bottom-sheet[data-dragging='true'] .m3-bottom-sheet-surface {
+    transition: none;
+    cursor: grabbing;
+  }
+
+  .m3-bottom-sheet-drag-handle {
+    justify-self: center;
+    inline-size: var(--md-comp-sheet-bottom-docked-drag-handle-width);
+    block-size: var(--md-comp-sheet-bottom-docked-drag-handle-height);
+    border-radius: calc(infinity * 1px);
+    background: var(--md-comp-sheet-bottom-docked-drag-handle-color);
+    touch-action: none;
+  }
+
+  .m3-bottom-sheet-headline {
+    @apply title-large;
+
+    margin: 0;
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .m3-bottom-sheet-content {
+    @apply body-medium;
+
+    min-block-size: 0;
+    overflow: auto;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .m3-bottom-sheet-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 0.5rem;
+  }
+
+  @starting-style {
+    .m3-bottom-sheet[open] .m3-bottom-sheet-surface {
+      transform: translateY(100%);
+      visibility: hidden;
+    }
+
+    .m3-bottom-sheet[open]::backdrop {
+      background-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-bottom-sheet,
+    .m3-bottom-sheet::backdrop,
+    .m3-bottom-sheet-surface {
+      transition-duration: 0ms;
+    }
+  }
+}

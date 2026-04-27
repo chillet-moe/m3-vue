@@ -1,0 +1,171 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .m3-side-sheet {
+    --md-comp-sheet-side-docked-modal-container-color: var(--md-sys-color-surface-container-low);
+    --md-comp-sheet-side-docked-standard-container-color: var(--md-sys-color-surface);
+    --md-comp-sheet-side-docked-modal-container-elevation: var(--md-sys-elevation-level1);
+    --md-comp-sheet-side-docked-standard-container-elevation: var(--md-sys-elevation-level0);
+    --md-comp-sheet-side-docked-container-height: 100%;
+    --md-comp-sheet-side-docked-container-shape: var(--md-sys-shape-corner-none);
+    --md-comp-sheet-side-detached-container-shape: var(--md-sys-shape-corner-large);
+    --md-comp-sheet-side-docked-container-width: 16rem;
+    --md-comp-sheet-side-docked-modal-container-shape: var(--md-sys-shape-corner-large-start);
+    --md-comp-sheet-side-docked-headline-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-sheet-side-docked-headline-font: var(--md-sys-typescale-title-large-font);
+    --md-comp-sheet-side-docked-headline-line-height: var(--md-sys-typescale-title-large-line-height);
+    --md-comp-sheet-side-docked-headline-size: var(--md-sys-typescale-title-large-size);
+    --md-comp-sheet-side-docked-headline-tracking: var(--md-sys-typescale-title-large-tracking);
+    --md-comp-sheet-side-docked-headline-weight: var(--md-sys-typescale-title-large-weight);
+    --md-comp-sheet-side-docked-headline-type: var(--md-sys-typescale-title-large);
+    --md-comp-sheet-side-docked-divider-color: var(--md-sys-color-outline);
+    --md-comp-sheet-side-docked-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-sheet-side-docked-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
+    --md-comp-sheet-side-docked-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
+    --md-side-sheet-width: var(--md-comp-sheet-side-docked-container-width);
+    --md-side-sheet-closed-translate: 100%;
+  }
+}
+
+@layer components {
+  .m3-side-sheet {
+    position: fixed;
+    inset: 0;
+
+    margin: 0;
+    border: none;
+    padding: 0;
+
+    display: grid;
+    align-items: stretch;
+
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    max-block-size: none;
+    overflow: hidden;
+
+    color: inherit;
+    background: transparent;
+    box-shadow: none;
+
+    pointer-events: none;
+    transition:
+      overlay var(--md-duration-fast) allow-discrete,
+      display var(--md-duration-fast) allow-discrete;
+  }
+
+  .m3-side-sheet[data-side='start'] {
+    --md-side-sheet-closed-translate: -100%;
+
+    justify-items: start;
+  }
+
+  .m3-side-sheet[data-side='end'] {
+    --md-side-sheet-closed-translate: 100%;
+
+    justify-items: end;
+  }
+
+  .m3-side-sheet[open] {
+    pointer-events: auto;
+  }
+
+  .m3-side-sheet::backdrop {
+    background-color: transparent;
+    transition:
+      background-color var(--md-duration-spatial) var(--md-timing-function-spatial),
+      display var(--md-duration-spatial) allow-discrete,
+      overlay var(--md-duration-spatial) allow-discrete;
+  }
+
+  .m3-side-sheet[open]::backdrop {
+    background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+  }
+
+  .m3-side-sheet-surface {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    align-content: start;
+    row-gap: 1rem;
+
+    inline-size: min(var(--md-side-sheet-width), 100vi);
+    block-size: var(--md-comp-sheet-side-docked-container-height);
+    max-block-size: 100vb;
+    overflow: hidden;
+
+    padding: 1.5rem;
+    background-color: var(--md-comp-sheet-side-docked-modal-container-color);
+    box-shadow: var(--md-comp-sheet-side-docked-modal-container-elevation);
+
+    opacity: 0;
+    transform: translateX(var(--md-side-sheet-closed-translate));
+    transition:
+      opacity 160ms var(--md-timing-function-emphasized-decel),
+      transform 320ms var(--md-timing-function-emphasized-decel);
+    will-change: opacity, transform;
+  }
+
+  .m3-side-sheet[data-side='start'] .m3-side-sheet-surface {
+    border-radius: var(--md-sys-shape-corner-large-end);
+  }
+
+  .m3-side-sheet[data-side='end'] .m3-side-sheet-surface {
+    border-radius: var(--md-comp-sheet-side-docked-modal-container-shape);
+  }
+
+  .m3-side-sheet[open] .m3-side-sheet-surface {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .m3-side-sheet-headline {
+    margin: 0;
+    color: var(--md-comp-sheet-side-docked-headline-color);
+    font-family:
+      var(--md-comp-sheet-side-docked-headline-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-sheet-side-docked-headline-size);
+    line-height: var(--md-comp-sheet-side-docked-headline-line-height);
+    font-weight: var(--md-comp-sheet-side-docked-headline-weight);
+    letter-spacing: var(--md-comp-sheet-side-docked-headline-tracking);
+  }
+
+  .m3-side-sheet-content {
+    @apply body-medium;
+
+    min-block-size: 0;
+    overflow: auto;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .m3-side-sheet-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 0.5rem;
+  }
+
+  @starting-style {
+    .m3-side-sheet[open] .m3-side-sheet-surface {
+      opacity: 0;
+      transform: translateX(var(--md-side-sheet-closed-translate));
+    }
+
+    .m3-side-sheet[open]::backdrop {
+      background-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-side-sheet,
+    .m3-side-sheet::backdrop,
+    .m3-side-sheet-surface {
+      transition-duration: 0ms;
+    }
+  }
+}

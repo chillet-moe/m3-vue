@@ -7,6 +7,7 @@ import type { ComponentResolver } from 'unplugin-vue-components/types';
  */
 export const m3VueComponentNames = [
   'Badge',
+  'BottomSheet',
   'Button',
   'ButtonGroup',
   'ButtonGroupItem',
@@ -43,6 +44,7 @@ export const m3VueComponentNames = [
   'Snackbar',
   'Select',
   'SelectionGroup',
+  'SideSheet',
   'Switch',
   'Tab',
   'TabList',
