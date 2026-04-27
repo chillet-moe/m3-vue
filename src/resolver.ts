@@ -18,6 +18,7 @@ export const m3VueComponentNames = [
   'Dialog',
   'Icon',
   'IconButton',
+  'InputOtp',
   'ListItem',
   'Menu',
   'MenuContainer',

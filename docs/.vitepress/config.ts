@@ -74,6 +74,7 @@ export default defineConfig({
             { text: 'Combobox', link: '/components/combobox' },
             { text: 'Dialog', link: '/components/dialog' },
             { text: 'Icon', link: '/components/icon' },
+            { text: 'InputOtp', link: '/components/input-otp' },
             { text: 'ListItem', link: '/components/item' },
             { text: 'Menu', link: '/components/menu' },
             { text: 'NavigationRail', link: '/components/navigation-rail' },

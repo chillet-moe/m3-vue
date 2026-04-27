@@ -1,0 +1,115 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  .m3-input-otp {
+    --md-comp-input-otp-container-shape: var(--md-sys-shape-corner-medium);
+    --md-comp-input-otp-small-container-size: 2.5rem;
+    --md-comp-input-otp-medium-container-size: 3rem;
+    --md-comp-input-otp-large-container-size: 3.5rem;
+    --md-comp-input-otp-outline-width: 0.0625rem;
+    --md-comp-input-otp-outline-color: var(--md-sys-color-outline);
+    --md-comp-input-otp-input-text-color: var(--md-sys-color-on-surface);
+    --md-comp-input-otp-input-text-font: var(--md-sys-typescale-title-medium-font);
+    --md-comp-input-otp-input-text-line-height: var(--md-sys-typescale-title-medium-line-height);
+    --md-comp-input-otp-input-text-size: var(--md-sys-typescale-title-medium-size);
+    --md-comp-input-otp-input-text-weight: var(--md-sys-typescale-title-medium-weight);
+    --md-comp-input-otp-caret-color: var(--md-sys-color-primary);
+    --md-comp-input-otp-focus-outline-width: 0.1875rem;
+    --md-comp-input-otp-focus-outline-color: var(--md-sys-color-primary);
+    --md-comp-input-otp-hover-outline-color: var(--md-sys-color-on-surface);
+    --md-comp-input-otp-error-outline-color: var(--md-sys-color-error);
+    --md-comp-input-otp-error-caret-color: var(--md-sys-color-error);
+    --md-comp-input-otp-disabled-opacity: 0.38;
+  }
+}
+
+@layer components {
+  .m3-input-otp {
+    --_outline-color: var(--md-comp-input-otp-outline-color);
+    --_outline-width: var(--md-comp-input-otp-outline-width);
+    --_container-size: var(--md-comp-input-otp-medium-container-size);
+    --_input-color: var(--md-comp-input-otp-input-text-color);
+    --_caret-color: var(--md-comp-input-otp-caret-color);
+
+    display: inline-grid;
+    min-inline-size: 0;
+  }
+
+  .m3-input-otp[data-size='small'] {
+    --_container-size: var(--md-comp-input-otp-small-container-size);
+    --md-comp-input-otp-input-text-size: var(--md-sys-typescale-title-small-size);
+    --md-comp-input-otp-input-text-line-height: var(--md-sys-typescale-title-small-line-height);
+  }
+
+  .m3-input-otp[data-size='large'] {
+    --_container-size: var(--md-comp-input-otp-large-container-size);
+    --md-comp-input-otp-input-text-size: var(--md-sys-typescale-title-large-size);
+    --md-comp-input-otp-input-text-line-height: var(--md-sys-typescale-title-large-line-height);
+  }
+
+  .m3-input-otp-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-inline-size: 0;
+  }
+
+  .m3-input-otp-native {
+    display: none;
+  }
+
+  .m3-input-otp-input {
+    box-sizing: border-box;
+    inline-size: var(--_container-size);
+    block-size: var(--_container-size);
+    padding: 0;
+    border: var(--_outline-width) solid var(--_outline-color);
+    border-radius: var(--md-comp-input-otp-container-shape);
+    outline: 0;
+    background: transparent;
+    color: var(--_input-color);
+    caret-color: var(--_caret-color);
+    text-align: center;
+    font-family: var(--md-comp-input-otp-input-text-font), sans-serif;
+    font-size: var(--md-comp-input-otp-input-text-size);
+    line-height: var(--md-comp-input-otp-input-text-line-height);
+    font-weight: var(--md-comp-input-otp-input-text-weight);
+    letter-spacing: 0;
+    transition:
+      border-color var(--md-duration-fast) var(--md-timing-function-fast),
+      border-width var(--md-duration-fast) var(--md-timing-function-fast),
+      color var(--md-duration-fast) var(--md-timing-function-fast);
+  }
+
+  .m3-input-otp-input::placeholder {
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .m3-input-otp-input:not(:disabled):hover {
+    --_outline-color: var(--md-comp-input-otp-hover-outline-color);
+  }
+
+  .m3-input-otp-input:focus {
+    --_outline-color: var(--md-comp-input-otp-focus-outline-color);
+    --_outline-width: var(--md-comp-input-otp-focus-outline-width);
+  }
+
+  .m3-input-otp[data-invalid='true'] {
+    --_outline-color: var(--md-comp-input-otp-error-outline-color);
+    --_caret-color: var(--md-comp-input-otp-error-caret-color);
+  }
+
+  .m3-input-otp[data-invalid='true'] .m3-input-otp-input:not(:disabled):hover,
+  .m3-input-otp[data-invalid='true'] .m3-input-otp-input:focus {
+    --_outline-color: var(--md-comp-input-otp-error-outline-color);
+  }
+
+  .m3-input-otp[data-disabled='true'] {
+    --_input-color: --translucent(var(--md-comp-input-otp-input-text-color), var(--md-comp-input-otp-disabled-opacity));
+    --_outline-color: --translucent(var(--md-comp-input-otp-outline-color), var(--md-comp-input-otp-disabled-opacity));
+  }
+
+  .m3-input-otp[data-readonly='true'] .m3-input-otp-input {
+    cursor: default;
+  }
+}

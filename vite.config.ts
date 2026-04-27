@@ -20,7 +20,7 @@ export default defineConfig({
     printWidth: 120,
   },
   lint: {
-    plugins: ['typescript', 'unicorn', 'oxc'],
+    plugins: ['typescript', 'unicorn', 'oxc', 'vue'],
     categories: {
       correctness: 'error',
     },
