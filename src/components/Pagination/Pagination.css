@@ -37,6 +37,13 @@
   .m3-pagination-link.m3-button {
     min-inline-size: var(--md-comp-pagination-link-min-width);
     padding-inline: var(--md-comp-pagination-link-padding-inline);
+
+    & [data-part='text'] {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .m3-pagination-previous.m3-pagination-link.m3-button,
