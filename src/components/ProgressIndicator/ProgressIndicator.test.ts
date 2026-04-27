@@ -79,8 +79,8 @@ describe('ProgressIndicator', () => {
       variant: 'circular',
       shape: 'wavy',
       value: 75,
-      size: 64,
-      thickness: 6,
+      size: '4rem',
+      thickness: '0.375rem',
     });
 
     const activeIndicator = container.querySelector('[data-part="active-indicator"]') as SVGPathElement | null;
