@@ -24,7 +24,11 @@ function mountRail(initialValue = 'home', initialState: 'collapsed' | 'expanded'
           {
             modelValue: currentValue.value,
             state: currentState.value,
-            'onUpdate:modelValue': (value: string) => {
+            'onUpdate:modelValue': (value: string | undefined) => {
+              if (value === undefined) {
+                return;
+              }
+
               updates.push(value);
               currentValue.value = value;
             },

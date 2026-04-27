@@ -24,7 +24,11 @@ function mountTabs(tabProps: Record<string, unknown>, initialValue = 'overview')
           Tabs,
           {
             modelValue: currentValue.value,
-            'onUpdate:modelValue': (value: string) => {
+            'onUpdate:modelValue': (value: string | undefined) => {
+              if (value === undefined) {
+                return;
+              }
+
               updates.push(value);
               currentValue.value = value;
             },
