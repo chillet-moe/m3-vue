@@ -73,6 +73,7 @@ export default defineConfig({
             { text: 'ChipGroup', link: '/components/chip-group' },
             { text: 'Combobox', link: '/components/combobox' },
             { text: 'Dialog', link: '/components/dialog' },
+            { text: 'Divider', link: '/components/divider' },
             { text: 'Icon', link: '/components/icon' },
             { text: 'InputOtp', link: '/components/input-otp' },
             { text: 'ListItem', link: '/components/item' },

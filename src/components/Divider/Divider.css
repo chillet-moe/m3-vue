@@ -1,0 +1,52 @@
+@layer tokens {
+  .m3-divider {
+    --md-comp-divider-thickness: 0.0625rem;
+    --md-comp-divider-color: var(--md-sys-color-outline-variant);
+    --md-comp-divider-inset: --dp(16);
+  }
+}
+
+@layer components {
+  .m3-divider {
+    --md-divider-thickness: var(--md-comp-divider-thickness);
+    --md-divider-spacing: 0;
+
+    flex: none;
+    border: none;
+    background: var(--md-comp-divider-color);
+  }
+
+  .m3-divider[data-orientation='horizontal'] {
+    inline-size: 100%;
+    block-size: var(--md-divider-thickness);
+    margin-block: var(--md-divider-spacing);
+  }
+
+  .m3-divider[data-orientation='vertical'] {
+    align-self: stretch;
+    inline-size: var(--md-divider-thickness);
+    min-block-size: 1em;
+    block-size: auto;
+    margin-inline: var(--md-divider-spacing);
+  }
+
+  .m3-divider[data-orientation='horizontal'][data-inset='start'],
+  .m3-divider[data-orientation='horizontal'][data-inset='both'] {
+    margin-inline-start: var(--md-comp-divider-inset);
+  }
+
+  .m3-divider[data-orientation='horizontal'][data-inset='end'],
+  .m3-divider[data-orientation='horizontal'][data-inset='both'] {
+    margin-inline-end: var(--md-comp-divider-inset);
+  }
+
+  .m3-divider[data-orientation='vertical'][data-inset='start'],
+  .m3-divider[data-orientation='vertical'][data-inset='both'] {
+    margin-block-start: var(--md-comp-divider-inset);
+  }
+
+  .m3-divider[data-orientation='vertical'][data-inset='end'],
+  .m3-divider[data-orientation='vertical'][data-inset='both'] {
+    margin-block-end: var(--md-comp-divider-inset);
+  }
+}
