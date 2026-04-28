@@ -9,12 +9,16 @@ import { Button } from '@/components/Button';
 
 import SideSheetDefault from '../demos/side-sheet/SideSheetDefault.vue';
 import SideSheetDefaultSrc from '../demos/side-sheet/SideSheetDefault.vue?raw';
+import SideSheetDetached from '../demos/side-sheet/SideSheetDetached.vue';
+import SideSheetDetachedSrc from '../demos/side-sheet/SideSheetDetached.vue?raw';
 import SideSheetStart from '../demos/side-sheet/SideSheetStart.vue';
 import SideSheetStartSrc from '../demos/side-sheet/SideSheetStart.vue?raw';
 
 const props = ref({
   closeOnBackdrop: true,
+  lockScroll: true,
   side: 'end',
+  variant: 'docked',
   width: undefined,
 });
 
@@ -23,7 +27,7 @@ const open = ref(false);
 
 # SideSheet
 
-Side sheets present modal supporting content from the side of the viewport using the native `<dialog>` element. Page scrolling behind the sheet is locked while it is open.
+Side sheets present modal supporting content from the side of the viewport using the native `<dialog>` element. Page scrolling behind the sheet is locked by default while it is open.
 
 <DemoContainer :viewport="false">
   <Button @click="open = true">Open side sheet</Button>
@@ -53,4 +57,10 @@ Side sheets present modal supporting content from the side of the viewport using
 
 <DemoContainer :src="SideSheetStartSrc" :viewport="false">
   <SideSheetStart />
+</DemoContainer>
+
+### Detached
+
+<DemoContainer :src="SideSheetDetachedSrc" :viewport="false">
+  <SideSheetDetached />
 </DemoContainer>

@@ -82,6 +82,7 @@ describe('SideSheet', () => {
     expect(dialog?.open).toBe(true);
     expect(dialog?.dataset.scope).toBe('side-sheet');
     expect(dialog?.dataset.side).toBe('end');
+    expect(dialog?.dataset.variant).toBe('docked');
     expect(document.body.style.overflow).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).not.toBe('');
@@ -163,6 +164,74 @@ describe('SideSheet', () => {
     await nextTick();
 
     expect(open.value).toBe(false);
+
+    app.unmount();
+  });
+
+  it('can leave page scrolling unlocked while open', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const open = ref(true);
+    const lockScroll = ref(false);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(SideSheet, {
+            open: open.value,
+            lockScroll: lockScroll.value,
+            'onUpdate:open': (value: boolean) => {
+              open.value = value;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
+
+    expect(dialog?.open).toBe(true);
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
+    expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
+
+    lockScroll.value = true;
+    await nextTick();
+
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
+
+    lockScroll.value = false;
+    await nextTick();
+
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
+
+    app.unmount();
+  });
+
+  it('supports the detached visual variant', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        return () =>
+          h(SideSheet, {
+            open: true,
+            variant: 'detached',
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
+
+    expect(dialog?.dataset.variant).toBe('detached');
 
     app.unmount();
   });

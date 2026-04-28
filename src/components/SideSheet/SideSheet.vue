@@ -6,8 +6,14 @@ export type SideSheetProps = {
   /** Whether clicking the backdrop closes the sheet. */
   closeOnBackdrop?: boolean;
 
+  /** Whether page scrolling behind the sheet is locked while open. */
+  lockScroll?: boolean;
+
   /** Which viewport side the sheet enters from. */
   side?: 'start' | 'end';
+
+  /** Sheet visual style. */
+  variant?: 'docked' | 'detached';
 
   /** Sheet surface width. Such as '20rem'. */
   width?: string;
@@ -15,7 +21,9 @@ export type SideSheetProps = {
 
 const props = withDefaults(defineProps<SideSheetProps>(), {
   closeOnBackdrop: true,
+  lockScroll: true,
   side: 'end',
+  variant: 'docked',
   width: undefined,
 });
 
@@ -90,15 +98,24 @@ const releaseScrollLockIfNeeded = () => {
   releaseScrollLock = undefined;
 };
 
+const syncScrollLock = () => {
+  if (open.value && props.lockScroll) {
+    acquireScrollLock();
+    return;
+  }
+
+  releaseScrollLockIfNeeded();
+};
+
 watch(
-  [dialogRef, open],
+  [dialogRef, open, () => props.lockScroll],
   ([dialog]) => {
     if (!dialog) {
       return;
     }
 
     if (open.value) {
-      acquireScrollLock();
+      syncScrollLock();
       showDialog();
       return;
     }
@@ -164,6 +181,7 @@ onUnmounted(() => {
     data-scope="side-sheet"
     data-part="root"
     :data-side="props.side"
+    :data-variant="props.variant"
     :data-has-headline="hasHeadline ? 'true' : 'false'"
     :data-has-actions="hasActions ? 'true' : 'false'"
     :style="rootStyle"
