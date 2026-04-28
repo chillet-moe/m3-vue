@@ -24,6 +24,7 @@ export const m3VueComponentNames = [
   'InputOtp',
   'LinearProgressIndicator',
   'ListItem',
+  'LoadingIndicator',
   'Menu',
   'MenuContainer',
   'MenuDivider',

@@ -4,6 +4,10 @@ export { initStateLayer } from './components/StateLayer/state-layer';
 // Styles
 import './styles/theme.css';
 
+// Shapes
+export * from './shapes/animatable';
+export * from './shapes/animatableSmall';
+
 // Composables
 export { usePressedState } from './composables/pressedState.ts';
 export { useTabs } from './composables/useTabs';
@@ -40,6 +44,7 @@ export * from './components/CheckBox';
 export * from './components/CircularProgressIndicator';
 export * from './components/ListItem';
 export * from './components/LinearProgressIndicator';
+export * from './components/LoadingIndicator';
 export * from './components/Menu';
 export * from './components/NavigationRail';
 export * from './components/Pagination';

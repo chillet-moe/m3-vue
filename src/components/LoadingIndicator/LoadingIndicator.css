@@ -1,0 +1,66 @@
+@layer tokens {
+  .m3-loading-indicator {
+    --md-comp-loading-indicator-active-indicator-color: var(--md-color-on-container, var(--md-sys-color-primary));
+    --md-comp-loading-indicator-contained-container-color: var(
+      --md-color-container,
+      var(--md-sys-color-primary-container)
+    );
+    --md-comp-loading-indicator-contained-active-indicator-color: var(
+      --md-color-on-container,
+      var(--md-sys-color-on-primary-container)
+    );
+    --md-comp-loading-indicator-active-indicator-size: --dp(38);
+    --md-comp-loading-indicator-container-height: --dp(48);
+    --md-comp-loading-indicator-container-width: --dp(48);
+    --md-comp-loading-indicator-container-shape: var(--md-sys-shape-corner-full);
+  }
+}
+
+@layer components {
+  .m3-loading-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--md-comp-loading-indicator-container-width);
+    block-size: var(--md-comp-loading-indicator-container-height);
+    color: var(--md-comp-loading-indicator-active-indicator-color);
+    vertical-align: middle;
+    print-color-adjust: exact;
+  }
+
+  .m3-loading-indicator[data-visible='false'] {
+    visibility: hidden;
+  }
+
+  .m3-loading-indicator[data-variant='contained'] {
+    color: var(--md-comp-loading-indicator-contained-active-indicator-color);
+  }
+
+  .m3-loading-indicator-container {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: var(--md-comp-loading-indicator-container-shape);
+    background: transparent;
+    color: inherit;
+  }
+
+  .m3-loading-indicator[data-variant='contained'] .m3-loading-indicator-container {
+    background: var(--md-comp-loading-indicator-contained-container-color);
+  }
+
+  .m3-loading-indicator-active-svg {
+    display: block;
+    overflow: visible;
+    inline-size: var(--md-comp-loading-indicator-active-indicator-size);
+    block-size: var(--md-comp-loading-indicator-active-indicator-size);
+  }
+
+  .m3-loading-indicator-active {
+    fill: currentColor;
+    transform-box: view-box;
+    transform-origin: center;
+  }
+}

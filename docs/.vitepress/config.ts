@@ -83,6 +83,7 @@ export default defineConfig({
                   items: [
                     { text: 'CircularProgressIndicator', link: '/components/circular-progress-indicator' },
                     { text: 'LinearProgressIndicator', link: '/components/linear-progress-indicator' },
+                    { text: 'LoadingIndicator', link: '/components/loading-indicator' },
                   ],
                 },
               ],
@@ -151,6 +152,7 @@ export default defineConfig({
           text: 'Utilities',
           items: [
             { text: 'Elevation', link: '/utilities/elevation' },
+            { text: 'Material Shape Paths', link: '/utilities/material-shape-paths' },
             { text: 'State Layer', link: '/utilities/state-layer' },
           ],
         },
