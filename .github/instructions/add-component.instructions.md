@@ -5,6 +5,10 @@ applyTo: 'src/components/**'
 
 # 添加新组件
 
+## 参考
+
+https://github.com/material-components/material-components-android 这是 Material Design 3 的官方 Android 实现，一些动画效果的实现可以参考它。
+
 ## 概览
 
 添加新组件需要修改/创建以下文件（按顺序）：

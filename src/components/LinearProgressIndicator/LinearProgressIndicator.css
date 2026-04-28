@@ -1,0 +1,217 @@
+@property --m3-linear-progress-indicator-segment-start {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --m3-linear-progress-indicator-segment-end {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@layer tokens {
+  .m3-linear-progress-indicator {
+    --md-linear-progress-indicator-active-indicator-color: var(--md-color-on-container, var(--md-sys-color-primary));
+    --md-linear-progress-indicator-track-color: var(--md-color-container, var(--md-sys-color-secondary-container));
+    --md-linear-progress-indicator-stop-indicator-color: var(--md-linear-progress-indicator-active-indicator-color);
+    --md-linear-progress-indicator-track-thickness: --dp(4);
+    --md-linear-progress-indicator-track-active-indicator-gap: --dp(4);
+    --md-linear-progress-indicator-stop-indicator-size: --dp(4);
+    --md-linear-progress-indicator-wave-amplitude: --dp(3);
+    --md-linear-progress-indicator-wave-wavelength: --dp(40);
+    --md-linear-progress-indicator-indeterminate-wave-wavelength: --dp(20);
+    --md-linear-progress-indicator-with-wave-height: --dp(10);
+    --md-linear-progress-indicator-shape: var(--md-sys-shape-corner-full);
+  }
+}
+
+@layer components {
+  .m3-linear-progress-indicator {
+    display: block;
+    inline-size: 100%;
+    block-size: var(--md-linear-progress-indicator-track-thickness);
+    color: var(--md-linear-progress-indicator-active-indicator-color);
+    print-color-adjust: exact;
+  }
+
+  .m3-linear-progress-indicator[data-shape='wavy'] {
+    block-size: max(
+      var(--md-linear-progress-indicator-with-wave-height),
+      calc(var(--md-linear-progress-indicator-track-thickness) + var(--md-linear-progress-indicator-wave-amplitude) * 2)
+    );
+  }
+
+  .m3-linear-progress-indicator-viewport {
+    position: relative;
+    overflow: hidden;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .m3-linear-progress-indicator[data-direction='rtl'] .m3-linear-progress-indicator-viewport {
+    transform: scaleX(-1);
+  }
+
+  .m3-linear-progress-indicator-track,
+  .m3-linear-progress-indicator-active,
+  .m3-linear-progress-indicator-active-flat {
+    position: absolute;
+    inset-block-start: calc((100% - var(--md-linear-progress-indicator-track-thickness)) / 2);
+    block-size: var(--md-linear-progress-indicator-track-thickness);
+    border-radius: var(--md-linear-progress-indicator-shape);
+  }
+
+  .m3-linear-progress-indicator-track {
+    inset-inline-end: 0;
+    inset-inline-start: calc(
+      (100% - var(--md-linear-progress-indicator-active-track-gap-size)) *
+        var(--md-linear-progress-indicator-progress) + var(--md-linear-progress-indicator-active-track-gap-size)
+    );
+    background: var(--md-linear-progress-indicator-track-color);
+  }
+
+  .m3-linear-progress-indicator[data-indeterminate='true'] .m3-linear-progress-indicator-track {
+    inset-inline-start: 0;
+  }
+
+  .m3-linear-progress-indicator-active {
+    overflow: hidden;
+    inset-inline-start: 0;
+    color: var(--md-linear-progress-indicator-active-indicator-color);
+  }
+
+  .m3-linear-progress-indicator-active-determinate {
+    inline-size: calc(
+      (100% - var(--md-linear-progress-indicator-active-track-gap-size)) * var(--md-linear-progress-indicator-progress)
+    );
+  }
+
+  .m3-linear-progress-indicator-active-indeterminate {
+    inset-inline: 0;
+    --m3-linear-progress-indicator-segment-start: 0;
+    --m3-linear-progress-indicator-segment-end: 0;
+    clip-path: inset(
+      0 calc((1 - var(--m3-linear-progress-indicator-segment-end)) * 100%) 0
+        calc(var(--m3-linear-progress-indicator-segment-start) * 100%) round var(--md-linear-progress-indicator-shape)
+    );
+  }
+
+  .m3-linear-progress-indicator-active-indeterminate-one {
+    animation:
+      m3-linear-progress-indicator-segment-one-start 1800ms infinite,
+      m3-linear-progress-indicator-segment-one-end 1800ms infinite;
+  }
+
+  .m3-linear-progress-indicator-active-indeterminate-two {
+    animation:
+      m3-linear-progress-indicator-segment-two-start 1800ms infinite,
+      m3-linear-progress-indicator-segment-two-end 1800ms infinite;
+  }
+
+  .m3-linear-progress-indicator-active-flat {
+    inset-inline: 0;
+    background: currentColor;
+  }
+
+  .m3-linear-progress-indicator-active-wavy {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    display: block;
+    overflow: visible;
+  }
+
+  .m3-linear-progress-indicator-active-wavy path {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: var(--md-linear-progress-indicator-track-thickness);
+  }
+
+  .m3-linear-progress-indicator[data-shape='wavy'] .m3-linear-progress-indicator-active {
+    inset-block-start: 0;
+    block-size: 100%;
+    border-radius: 0;
+  }
+
+  .m3-linear-progress-indicator[data-shape='wavy'] .m3-linear-progress-indicator-active-flat {
+    display: none;
+  }
+
+  .m3-linear-progress-indicator-stop-indicator {
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block-start: calc((100% - var(--md-linear-progress-indicator-stop-indicator-size)) / 2);
+    inline-size: var(--md-linear-progress-indicator-stop-indicator-size);
+    block-size: var(--md-linear-progress-indicator-stop-indicator-size);
+    border-radius: var(--md-linear-progress-indicator-shape);
+    background: var(--md-linear-progress-indicator-stop-indicator-color);
+  }
+
+  .m3-linear-progress-indicator[data-progress-state='complete'] .m3-linear-progress-indicator-stop-indicator {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-linear-progress-indicator-active-indeterminate {
+      animation: none;
+      --m3-linear-progress-indicator-segment-start: 0.14;
+      --m3-linear-progress-indicator-segment-end: 0.58;
+    }
+
+    .m3-linear-progress-indicator-active-indeterminate-two {
+      display: none;
+    }
+  }
+
+  @keyframes m3-linear-progress-indicator-segment-one-start {
+    0%,
+    70.3889% {
+      --m3-linear-progress-indicator-segment-start: 0;
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+
+    100% {
+      --m3-linear-progress-indicator-segment-start: 1;
+    }
+  }
+
+  @keyframes m3-linear-progress-indicator-segment-one-end {
+    0%,
+    55.5556% {
+      --m3-linear-progress-indicator-segment-end: 0;
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+
+    87.0556%,
+    100% {
+      --m3-linear-progress-indicator-segment-end: 1;
+    }
+  }
+
+  @keyframes m3-linear-progress-indicator-segment-two-start {
+    0%,
+    18.5% {
+      --m3-linear-progress-indicator-segment-start: 0;
+      animation-timing-function: cubic-bezier(0, 0, 0.65, 1);
+    }
+
+    65.7222%,
+    100% {
+      --m3-linear-progress-indicator-segment-start: 1;
+    }
+  }
+
+  @keyframes m3-linear-progress-indicator-segment-two-end {
+    0% {
+      --m3-linear-progress-indicator-segment-end: 0;
+      animation-timing-function: cubic-bezier(0.1, 0, 0.45, 1);
+    }
+
+    41.6667%,
+    100% {
+      --m3-linear-progress-indicator-segment-end: 1;
+    }
+  }
+}
