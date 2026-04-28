@@ -2,28 +2,41 @@
 
 @layer tokens {
   .m3-tabs {
-    /* Primary tab tokens */
     --md-comp-tabs-container-color: var(--md-sys-color-surface);
+    --md-comp-tabs-container-elevation: var(--md-sys-elevation-level0);
     --md-comp-tabs-container-height: 3rem;
-    --md-comp-tabs-with-icon-and-label-container-height: 4rem;
+    --md-comp-tabs-with-icon-and-label-container-height: 4.5rem;
+    --md-comp-tabs-divider-color: var(--md-sys-color-surface-variant);
+    --md-comp-tabs-divider-thickness: 0.0625rem;
 
     --md-comp-tabs-active-label-color: var(--md-sys-color-primary);
     --md-comp-tabs-inactive-label-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-tabs-active-icon-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-icon-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-tabs-active-hover-label-color: var(--md-sys-color-primary);
+    --md-comp-tabs-inactive-hover-label-color: var(--md-sys-color-on-surface);
+    --md-comp-tabs-active-focus-label-color: var(--md-sys-color-primary);
+    --md-comp-tabs-inactive-focus-label-color: var(--md-sys-color-on-surface);
+    --md-comp-tabs-active-pressed-label-color: var(--md-sys-color-primary);
+    --md-comp-tabs-inactive-pressed-label-color: var(--md-sys-color-on-surface);
 
     --md-comp-tabs-active-indicator-color: var(--md-sys-color-primary);
-    --md-comp-tabs-active-indicator-height: 0.1875rem;
-    --md-comp-tabs-active-indicator-shape: 0.1875rem 0.1875rem 0 0;
+    --md-comp-tabs-active-indicator-height: 0.125rem;
+    --md-comp-tabs-active-indicator-minimum-size: 1.5rem;
+    --md-comp-tabs-active-indicator-shape: 0.125rem 0.125rem 0 0;
 
+    --md-comp-tabs-active-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-tabs-inactive-state-layer-color: var(--md-sys-color-on-surface-variant);
     --md-comp-tabs-active-hover-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-tabs-active-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
     --md-comp-tabs-inactive-hover-state-layer-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-inactive-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
-
+    --md-comp-tabs-active-focus-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-tabs-inactive-focus-state-layer-color: var(--md-sys-color-on-surface);
     --md-comp-tabs-active-pressed-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-tabs-active-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
     --md-comp-tabs-inactive-pressed-state-layer-color: var(--md-sys-color-primary);
+
+    --md-comp-tabs-active-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+    --md-comp-tabs-inactive-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
+    --md-comp-tabs-active-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+    --md-comp-tabs-inactive-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
+    --md-comp-tabs-active-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
     --md-comp-tabs-inactive-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
 
     --md-comp-tabs-label-text-font: var(--md-sys-typescale-title-small-font);
@@ -33,20 +46,30 @@
     --md-comp-tabs-label-text-tracking: var(--md-sys-typescale-title-small-tracking);
 
     --md-comp-tabs-icon-size: 1.5rem;
+    --md-comp-tabs-icon-label-space: 0.5rem;
     --md-comp-tabs-tab-padding-inline: 0.75rem;
+    --md-comp-tabs-scrollable-tab-min-width: 4.5rem;
+    --md-comp-tabs-tab-max-width: 16.5rem;
 
-    --md-comp-tabs-indicator-animation-duration: 400ms;
+    --md-comp-tabs-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-comp-tabs-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
+    --md-comp-tabs-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
+    --md-comp-tabs-focus-indicator-shape: var(--md-sys-shape-corner-medium);
+
+    --md-comp-tabs-indicator-animation-duration: 250ms;
     --md-comp-tabs-indicator-animation-easing: cubic-bezier(0.2, 0, 0, 1);
+    --md-comp-tabs-indicator-fade-duration: 150ms;
   }
 
-  /* Secondary variant overrides */
   .m3-tabs[data-variant='secondary'] {
     --md-comp-tabs-active-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-icon-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-indicator-height: 0.125rem;
-    --md-comp-tabs-active-indicator-shape: 0;
+    --md-comp-tabs-active-hover-label-color: var(--md-sys-color-on-surface);
+    --md-comp-tabs-active-focus-label-color: var(--md-sys-color-on-surface);
+    --md-comp-tabs-active-pressed-label-color: var(--md-sys-color-on-surface);
 
+    --md-comp-tabs-active-state-layer-color: var(--md-sys-color-on-surface);
     --md-comp-tabs-active-hover-state-layer-color: var(--md-sys-color-on-surface);
+    --md-comp-tabs-active-focus-state-layer-color: var(--md-sys-color-on-surface);
     --md-comp-tabs-active-pressed-state-layer-color: var(--md-sys-color-on-surface);
   }
 }
@@ -55,19 +78,24 @@
   .m3-tabs {
     display: flex;
     flex-direction: column;
+
+    --md-color-container: var(--md-comp-tabs-container-color);
+    --md-color-on-container: var(--md-comp-tabs-inactive-label-color);
   }
 
   .m3-tabs[data-orientation='vertical'] {
     flex-direction: row;
   }
 
-  /* Tab list */
   .m3-tab-list {
     position: relative;
     display: flex;
-    background: var(--md-comp-tabs-container-color);
+    align-items: stretch;
     min-block-size: var(--md-comp-tabs-container-height);
-    overflow-x: auto;
+    background: var(--md-color-container);
+    box-shadow: var(--md-comp-tabs-container-elevation);
+    overflow-x: clip;
+    overflow-y: hidden;
     scrollbar-width: none;
   }
 
@@ -75,21 +103,29 @@
     display: none;
   }
 
-  .m3-tabs[data-orientation='vertical'] .m3-tab-list {
-    flex-direction: column;
-    overflow-x: visible;
-    overflow-y: auto;
-    min-block-size: auto;
+  .m3-tabs[data-mode='scrollable'] .m3-tab-list {
+    overflow-x: auto;
   }
 
-  /* Divider line at the bottom of the tab list */
+  .m3-tab-list:has(.m3-tab-icon) {
+    min-block-size: var(--md-comp-tabs-with-icon-and-label-container-height);
+  }
+
+  .m3-tabs[data-orientation='vertical'] .m3-tab-list {
+    flex-direction: column;
+    min-block-size: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   .m3-tab-list::after {
     content: '';
     position: absolute;
     inset-block-end: 0;
     inset-inline: 0;
-    block-size: 1px;
-    background: var(--md-sys-color-surface-variant);
+    block-size: var(--md-comp-tabs-divider-thickness);
+    background: var(--md-comp-tabs-divider-color);
+    pointer-events: none;
     z-index: 0;
   }
 
@@ -98,132 +134,213 @@
     inset-inline-end: 0;
     inset-inline-start: auto;
     block-size: auto;
-    inline-size: 1px;
+    inline-size: var(--md-comp-tabs-divider-thickness);
   }
 
-  /* Tab trigger */
   .m3-tab {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    min-inline-size: 0;
+    min-block-size: var(--md-comp-tabs-container-height);
+    padding-block: 0;
+    padding-inline: var(--md-comp-tabs-tab-padding-inline);
+    border: none;
+    border-radius: var(--md-sys-shape-corner-none);
+    background: transparent;
+    color: var(--md-comp-tabs-inactive-label-color);
+    cursor: pointer;
+    font-family: var(--md-comp-tabs-label-text-font);
+    font-size: var(--md-comp-tabs-label-text-size);
+    font-weight: var(--md-comp-tabs-label-text-weight);
+    letter-spacing: var(--md-comp-tabs-label-text-tracking);
+    line-height: var(--md-comp-tabs-label-text-line-height);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--md-easing-fast);
+    z-index: 1;
+
+    --md-state-layer-color: var(--md-comp-tabs-inactive-state-layer-color);
+  }
+
+  .m3-tab:has(.m3-tab-icon) {
+    min-block-size: var(--md-comp-tabs-with-icon-and-label-container-height);
+  }
+
+  .m3-tabs[data-mode='scrollable'] .m3-tab {
+    flex: 0 0 auto;
+    min-inline-size: var(--md-comp-tabs-scrollable-tab-min-width);
+    max-inline-size: var(--md-comp-tabs-tab-max-width);
+  }
+
+  .m3-tabs[data-orientation='vertical'] .m3-tab {
+    flex: 0 0 auto;
+    min-inline-size: var(--md-comp-tabs-scrollable-tab-min-width);
+    max-inline-size: none;
+  }
+
+  .m3-tab-content {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.125rem;
-    flex: 1 0 auto;
+    gap: 0;
     min-inline-size: 0;
-    padding-inline: var(--md-comp-tabs-tab-padding-inline);
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-family: var(--md-comp-tabs-label-text-font);
-    font-size: var(--md-comp-tabs-label-text-size);
-    line-height: var(--md-comp-tabs-label-text-line-height);
-    font-weight: var(--md-comp-tabs-label-text-weight);
-    letter-spacing: var(--md-comp-tabs-label-text-tracking);
-    color: var(--md-comp-tabs-inactive-label-color);
-    transition: color 150ms;
-    -webkit-tap-highlight-color: transparent;
-    z-index: 1;
-  }
-
-  .m3-tab:focus-visible {
-    outline: 2px solid var(--md-sys-color-secondary);
-    outline-offset: -2px;
-    border-radius: var(--md-sys-shape-corner-medium);
-  }
-
-  .m3-tab[data-active] {
-    color: var(--md-comp-tabs-active-label-color);
-  }
-
-  .m3-tab[data-disabled] {
-    opacity: 0.38;
+    max-inline-size: 100%;
     pointer-events: none;
   }
 
-  /* Tab icon */
+  .m3-tab:has(.m3-tab-icon) .m3-tab-content {
+    gap: var(--md-comp-tabs-icon-label-space);
+  }
+
+  .m3-tab-label {
+    display: block;
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .m3-tab-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--md-comp-tabs-icon-size);
     inline-size: var(--md-comp-tabs-icon-size);
     block-size: var(--md-comp-tabs-icon-size);
-    color: var(--md-comp-tabs-inactive-icon-color);
+    color: currentColor;
+    font-size: var(--md-comp-tabs-icon-size);
+    line-height: 1;
   }
 
-  .m3-tab[data-active] .m3-tab-icon {
-    color: var(--md-comp-tabs-active-icon-color);
+  .m3-tab[data-active] {
+    color: var(--md-comp-tabs-active-label-color);
+
+    --md-state-layer-color: var(--md-comp-tabs-active-state-layer-color);
   }
 
-  /* Active indicator */
-  .m3-tab-indicator {
-    position: absolute;
-    inset-block-end: 0;
-    inset-inline: 0;
-    block-size: var(--md-comp-tabs-active-indicator-height);
-    border-radius: var(--md-comp-tabs-active-indicator-shape);
-    background: var(--md-comp-tabs-active-indicator-color);
-    opacity: 0;
-    transition: opacity var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing);
+  .m3-tab:hover {
+    color: var(--md-comp-tabs-inactive-hover-label-color);
+
+    --md-state-layer-color: var(--md-comp-tabs-inactive-hover-state-layer-color);
   }
 
-  .m3-tab[data-active] .m3-tab-indicator {
-    opacity: 1;
+  .m3-tab[data-active]:hover {
+    color: var(--md-comp-tabs-active-hover-label-color);
+
+    --md-state-layer-color: var(--md-comp-tabs-active-hover-state-layer-color);
   }
 
-  .m3-tabs[data-variant='secondary'] .m3-tab-indicator {
-    inset-inline: 0;
+  .m3-tab:focus-visible {
+    color: var(--md-comp-tabs-inactive-focus-label-color);
+    border-radius: var(--md-comp-tabs-focus-indicator-shape);
+    outline: var(--md-comp-tabs-focus-indicator-thickness) solid var(--md-comp-tabs-focus-indicator-color);
+    outline-offset: var(--md-comp-tabs-focus-indicator-outline-offset);
+
+    --md-state-layer-color: var(--md-comp-tabs-inactive-focus-state-layer-color);
   }
 
-  .m3-tabs[data-orientation='vertical'] .m3-tab-indicator {
-    inset-block: 0;
-    inset-inline-start: auto;
-    inset-inline-end: 0;
-    block-size: auto;
-    inline-size: var(--md-comp-tabs-active-indicator-height);
+  .m3-tab[data-active]:focus-visible {
+    color: var(--md-comp-tabs-active-focus-label-color);
+
+    --md-state-layer-color: var(--md-comp-tabs-active-focus-state-layer-color);
   }
 
-  /* State layer (hover/pressed) */
-  .m3-tab::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: var(--md-comp-tabs-inactive-hover-state-layer-color);
-    opacity: 0;
-    transition: opacity 150ms;
-    pointer-events: none;
+  .m3-tab:active {
+    color: var(--md-comp-tabs-inactive-pressed-label-color);
+
+    --md-state-layer-color: var(--md-comp-tabs-inactive-pressed-state-layer-color);
   }
 
-  .m3-tab:hover::before {
+  .m3-tab[data-active]:active {
+    color: var(--md-comp-tabs-active-pressed-label-color);
+
+    --md-state-layer-color: var(--md-comp-tabs-active-pressed-state-layer-color);
+  }
+
+  .m3-tab:hover.m3-state-layer::after {
     opacity: var(--md-comp-tabs-inactive-hover-state-layer-opacity);
   }
 
-  .m3-tab:active::before {
-    opacity: var(--md-comp-tabs-inactive-pressed-state-layer-opacity);
-    background: var(--md-comp-tabs-inactive-pressed-state-layer-color);
-  }
-
-  .m3-tab[data-active]::before {
-    background: var(--md-comp-tabs-active-hover-state-layer-color);
-  }
-
-  .m3-tab[data-active]:hover::before {
+  .m3-tab[data-active]:hover.m3-state-layer::after {
     opacity: var(--md-comp-tabs-active-hover-state-layer-opacity);
   }
 
-  .m3-tab[data-active]:active::before {
-    opacity: var(--md-comp-tabs-active-pressed-state-layer-opacity);
-    background: var(--md-comp-tabs-active-pressed-state-layer-color);
+  .m3-tab:focus-visible.m3-state-layer::after {
+    opacity: var(--md-comp-tabs-inactive-focus-state-layer-opacity);
   }
 
-  /* Tab panel */
+  .m3-tab[data-active]:focus-visible.m3-state-layer::after {
+    opacity: var(--md-comp-tabs-active-focus-state-layer-opacity);
+  }
+
+  .m3-tab:active.m3-state-layer::after {
+    opacity: var(--md-comp-tabs-inactive-pressed-state-layer-opacity);
+  }
+
+  .m3-tab[data-active]:active.m3-state-layer::after {
+    opacity: var(--md-comp-tabs-active-pressed-state-layer-opacity);
+  }
+
+  .m3-tab[data-disabled] {
+    color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .m3-tab-indicator {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: var(--_tabs-indicator-inline-size, 0);
+    min-inline-size: min(var(--md-comp-tabs-active-indicator-minimum-size), 100%);
+    block-size: var(--md-comp-tabs-active-indicator-height);
+    border-radius: var(--md-comp-tabs-active-indicator-shape);
+    background: var(--md-comp-tabs-active-indicator-color);
+    opacity: var(--_tabs-indicator-opacity, 0);
+    translate: var(--_tabs-indicator-inline-start, 0) 0;
+    transition:
+      translate var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
+      inline-size var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
+      opacity var(--md-comp-tabs-indicator-fade-duration) linear;
+    pointer-events: none;
+    will-change: translate, inline-size;
+    z-index: 2;
+  }
+
+  .m3-tabs[data-orientation='vertical'] .m3-tab-indicator {
+    inset-block-start: 0;
+    inset-block-end: auto;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inline-size: var(--md-comp-tabs-active-indicator-height);
+    min-inline-size: 0;
+    block-size: var(--_tabs-indicator-block-size, 0);
+    border-radius: var(--md-comp-tabs-active-indicator-shape);
+    translate: 0 var(--_tabs-indicator-block-start, 0);
+    transition:
+      translate var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
+      block-size var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
+      opacity var(--md-comp-tabs-indicator-fade-duration) linear;
+  }
+
   .m3-tab-panel {
     flex: 1;
   }
 
   .m3-tab-panel[hidden] {
     display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-tab,
+    .m3-tab-indicator {
+      transition-duration: 0ms;
+    }
   }
 }

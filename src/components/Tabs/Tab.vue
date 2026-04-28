@@ -94,7 +94,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 <template>
   <component
     :is="tag"
-    class="m3-tab"
+    class="m3-state-layer m3-tab"
     data-scope="tabs"
     data-part="trigger"
     :data-disabled="props.disabled ? 'true' : undefined"
@@ -107,12 +107,13 @@ const handleKeydown = (event: KeyboardEvent) => {
     @click="handleClick"
     @keydown="handleKeydown"
   >
-    <span v-if="$slots.icon" class="m3-tab-icon" data-scope="tabs" data-part="trigger-icon">
-      <slot name="icon" :active="active" />
+    <span class="m3-tab-content" data-scope="tabs" data-part="trigger-content">
+      <span v-if="$slots.icon" class="m3-tab-icon" data-scope="tabs" data-part="trigger-icon">
+        <slot name="icon" :active="active" />
+      </span>
+      <span class="m3-tab-label" data-scope="tabs" data-part="trigger-label">
+        <slot :active="active" />
+      </span>
     </span>
-    <span class="m3-tab-label" data-scope="tabs" data-part="trigger-label">
-      <slot :active="active" />
-    </span>
-    <span class="m3-tab-indicator" data-scope="tabs" data-part="indicator" />
   </component>
 </template>

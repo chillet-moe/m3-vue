@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { provide, watch } from 'vue';
-import { useTabs, type UseTabsOptions } from '@/composables/useTabs';
+import { provide } from 'vue';
+import { useTabs } from '@/composables/useTabs';
 import { tabsContextKey } from './TabsContext';
 
 export type TabsVariant = 'primary' | 'secondary';
+export type TabsMode = 'fixed' | 'scrollable';
 
 export type TabsProps = {
   /** Visual variant of the tabs. @default 'primary' */
   variant?: TabsVariant;
+
+  /** Layout mode for the tab list. @default 'fixed' */
+  mode?: TabsMode;
 
   /** The orientation of the tab list. @default 'horizontal' */
   orientation?: 'horizontal' | 'vertical';
@@ -19,7 +23,7 @@ export type TabsProps = {
   selectWhenFocused?: boolean;
 };
 
-const { variant = 'primary', orientation, loop, selectWhenFocused } = defineProps<TabsProps>();
+const { variant = 'primary', mode = 'fixed', orientation, loop, selectWhenFocused } = defineProps<TabsProps>();
 
 const modelValue = defineModel<string>();
 
@@ -47,6 +51,7 @@ provide(tabsContextKey, tabs);
     data-scope="tabs"
     data-part="root"
     :data-variant="variant"
+    :data-mode="mode"
     :data-orientation="tabs.orientation.value"
   >
     <slot :value="tabs.value.value" />
