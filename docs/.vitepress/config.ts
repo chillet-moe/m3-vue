@@ -83,7 +83,6 @@ export default defineConfig({
             { text: 'Menu', link: '/components/menu' },
             { text: 'NavigationRail', link: '/components/navigation-rail' },
             { text: 'Pagination', link: '/components/pagination' },
-            { text: 'ProgressIndicator', link: '/components/progress-indicator' },
             { text: 'Radio', link: '/components/radio' },
             { text: 'Select', link: '/components/select' },
             { text: 'SideSheet', link: '/components/side-sheet' },
