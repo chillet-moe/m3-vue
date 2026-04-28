@@ -112,4 +112,40 @@ describe('useTabs', () => {
 
     expect(changes).toEqual(['tab2']);
   });
+
+  it('skips disabled triggers during keyboard navigation', () => {
+    const changes: string[] = [];
+    const tabs = useTabs({
+      value: 'overview' as string,
+      onValueChange: (v) => changes.push(v),
+    });
+
+    const list = document.createElement('div');
+    list.setAttribute('role', 'tablist');
+
+    for (const value of ['overview', 'details', 'settings']) {
+      const trigger = document.createElement('button');
+      const attrs = tabs.getTriggerAttrs(value);
+
+      trigger.setAttribute('role', String(attrs.role));
+      trigger.dataset.tabValue = value;
+
+      if (value === 'details') {
+        trigger.dataset.disabled = 'true';
+      }
+
+      if (value === 'overview') {
+        trigger.addEventListener('keydown', attrs.onKeydown as (event: KeyboardEvent) => void);
+      }
+
+      list.append(trigger);
+    }
+
+    document.body.append(list);
+
+    const overviewTrigger = list.querySelector<HTMLElement>('[data-tab-value="overview"]');
+    overviewTrigger?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+
+    expect(changes).toEqual(['settings']);
+  });
 });

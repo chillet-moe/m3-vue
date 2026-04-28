@@ -3,14 +3,18 @@ import { provide } from 'vue';
 import { useTabs } from '@/composables/useTabs';
 import { tabsContextKey } from './TabsContext';
 
-export type TabsVariant = 'primary' | 'secondary';
-export type TabsMode = 'fixed' | 'scrollable';
+export type TabsVariant = 'tonal' | 'line';
+export type TabsMode = 'auto' | 'fixed' | 'scrollable';
+export type TabsDensity = 'default' | 'compact';
 
 export type TabsProps = {
-  /** Visual variant of the tabs. @default 'primary' */
+  /** Visual variant of the tabs. @default 'tonal' */
   variant?: TabsVariant;
 
-  /** Layout mode for the tab list. @default 'fixed' */
+  /** Visual density of the tab list. @default 'default' */
+  density?: TabsDensity;
+
+  /** Layout mode for the tab list. @default 'auto' */
   mode?: TabsMode;
 
   /** The orientation of the tab list. @default 'horizontal' */
@@ -23,7 +27,14 @@ export type TabsProps = {
   selectWhenFocused?: boolean;
 };
 
-const { variant = 'primary', mode = 'fixed', orientation, loop, selectWhenFocused } = defineProps<TabsProps>();
+const props = withDefaults(defineProps<TabsProps>(), {
+  variant: 'tonal',
+  density: 'default',
+  mode: 'auto',
+  orientation: 'horizontal',
+  loop: true,
+  selectWhenFocused: true,
+});
 
 const modelValue = defineModel<string>();
 
@@ -37,9 +48,9 @@ const tabs = useTabs({
   onValueChange: (v) => {
     modelValue.value = v;
   },
-  orientation: () => orientation ?? 'horizontal',
-  loop: () => loop ?? true,
-  selectWhenFocused: () => selectWhenFocused ?? true,
+  orientation: () => props.orientation,
+  loop: () => props.loop,
+  selectWhenFocused: () => props.selectWhenFocused,
 });
 
 provide(tabsContextKey, tabs);
@@ -50,8 +61,9 @@ provide(tabsContextKey, tabs);
     class="m3-tabs"
     data-scope="tabs"
     data-part="root"
-    :data-variant="variant"
-    :data-mode="mode"
+    :data-variant="props.variant"
+    :data-density="props.density"
+    :data-mode="props.mode"
     :data-orientation="tabs.orientation.value"
   >
     <slot :value="tabs.value.value" />

@@ -5,9 +5,20 @@
     --md-comp-tabs-container-color: var(--md-sys-color-surface);
     --md-comp-tabs-container-elevation: var(--md-sys-elevation-level0);
     --md-comp-tabs-container-height: 3rem;
+    --md-comp-tabs-compact-container-height: 2.5rem;
     --md-comp-tabs-with-icon-and-label-container-height: 4.5rem;
+    --md-comp-tabs-compact-with-icon-and-label-container-height: 3.5rem;
+    --md-comp-tabs-container-padding: 0rem;
+    --md-comp-tabs-container-gap: 0rem;
+    --md-comp-tabs-container-shape: var(--md-sys-shape-corner-none);
     --md-comp-tabs-divider-color: var(--md-sys-color-surface-variant);
     --md-comp-tabs-divider-thickness: 0.0625rem;
+
+    --md-comp-tabs-active-container-color: transparent;
+    --md-comp-tabs-active-container-elevation: var(--md-sys-elevation-level0);
+    --md-comp-tabs-active-container-outline-color: transparent;
+    --md-comp-tabs-active-container-outline-width: 0rem;
+    --md-comp-tabs-active-container-shape: var(--md-sys-shape-corner-none);
 
     --md-comp-tabs-active-label-color: var(--md-sys-color-primary);
     --md-comp-tabs-inactive-label-color: var(--md-sys-color-on-surface-variant);
@@ -19,9 +30,9 @@
     --md-comp-tabs-inactive-pressed-label-color: var(--md-sys-color-on-surface);
 
     --md-comp-tabs-active-indicator-color: var(--md-sys-color-primary);
-    --md-comp-tabs-active-indicator-height: 0.125rem;
+    --md-comp-tabs-active-indicator-height: 0.1875rem;
     --md-comp-tabs-active-indicator-minimum-size: 1.5rem;
-    --md-comp-tabs-active-indicator-shape: 0.125rem 0.125rem 0 0;
+    --md-comp-tabs-active-indicator-shape: 0.1875rem 0.1875rem 0 0;
 
     --md-comp-tabs-active-state-layer-color: var(--md-sys-color-primary);
     --md-comp-tabs-inactive-state-layer-color: var(--md-sys-color-on-surface-variant);
@@ -48,6 +59,7 @@
     --md-comp-tabs-icon-size: 1.5rem;
     --md-comp-tabs-icon-label-space: 0.5rem;
     --md-comp-tabs-tab-padding-inline: 0.75rem;
+    --md-comp-tabs-compact-tab-padding-inline: 0.625rem;
     --md-comp-tabs-scrollable-tab-min-width: 4.5rem;
     --md-comp-tabs-tab-max-width: 16.5rem;
 
@@ -59,18 +71,76 @@
     --md-comp-tabs-indicator-animation-duration: 250ms;
     --md-comp-tabs-indicator-animation-easing: cubic-bezier(0.2, 0, 0, 1);
     --md-comp-tabs-indicator-fade-duration: 150ms;
+
+    --md-comp-tabs-tonal-container-color: var(--md-sys-color-surface-container);
+    --md-comp-tabs-tonal-container-height: 2.75rem;
+    --md-comp-tabs-tonal-compact-container-height: 2.25rem;
+    --md-comp-tabs-tonal-container-padding: 0.25rem;
+    --md-comp-tabs-tonal-compact-container-padding: 0.1875rem;
+    --md-comp-tabs-tonal-container-gap: 0.125rem;
+    --md-comp-tabs-tonal-container-shape: var(--md-sys-shape-corner-medium);
+    --md-comp-tabs-tonal-active-container-color: var(--md-sys-color-surface-container-lowest);
+    --md-comp-tabs-tonal-active-container-elevation: var(--md-sys-elevation-level0);
+    --md-comp-tabs-tonal-active-container-outline-color: rgb(from var(--md-sys-color-outline-variant) r g b / 0.6);
+    --md-comp-tabs-tonal-active-container-outline-width: 0.0625rem;
+    --md-comp-tabs-tonal-active-container-shape: var(--md-sys-shape-corner-small);
+    --md-comp-tabs-tonal-active-label-color: var(--md-sys-color-on-surface);
+    --md-comp-tabs-tonal-inactive-label-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-tabs-tonal-hover-label-color: var(--md-sys-color-on-surface);
+    --md-comp-tabs-tonal-state-layer-color: var(--md-color-on-container);
+    --md-comp-tabs-tonal-active-state-layer-color: var(--md-sys-color-outline);
+    --md-comp-tabs-tonal-tab-padding-inline: 1rem;
+    --md-comp-tabs-tonal-compact-tab-padding-inline: 0.75rem;
   }
 
-  .m3-tabs[data-variant='secondary'] {
-    --md-comp-tabs-active-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-hover-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-focus-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-pressed-label-color: var(--md-sys-color-on-surface);
+  .m3-tabs[data-density='compact'] {
+    --md-comp-tabs-container-height: var(--md-comp-tabs-compact-container-height);
+    --md-comp-tabs-with-icon-and-label-container-height: var(
+      --md-comp-tabs-compact-with-icon-and-label-container-height
+    );
+    --md-comp-tabs-tab-padding-inline: var(--md-comp-tabs-compact-tab-padding-inline);
+  }
 
-    --md-comp-tabs-active-state-layer-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-hover-state-layer-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-focus-state-layer-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-pressed-state-layer-color: var(--md-sys-color-on-surface);
+  .m3-tabs[data-variant='tonal'] {
+    --md-comp-tabs-container-color: var(--md-comp-tabs-tonal-container-color);
+    --md-comp-tabs-container-height: var(--md-comp-tabs-tonal-container-height);
+    --md-comp-tabs-with-icon-and-label-container-height: var(--md-comp-tabs-tonal-container-height);
+    --md-comp-tabs-container-padding: var(--md-comp-tabs-tonal-container-padding);
+    --md-comp-tabs-container-gap: var(--md-comp-tabs-tonal-container-gap);
+    --md-comp-tabs-container-shape: var(--md-comp-tabs-tonal-container-shape);
+
+    --md-comp-tabs-active-container-color: var(--md-comp-tabs-tonal-active-container-color);
+    --md-comp-tabs-active-container-elevation: var(--md-comp-tabs-tonal-active-container-elevation);
+    --md-comp-tabs-active-container-outline-color: var(--md-comp-tabs-tonal-active-container-outline-color);
+    --md-comp-tabs-active-container-outline-width: var(--md-comp-tabs-tonal-active-container-outline-width);
+    --md-comp-tabs-active-container-shape: var(--md-comp-tabs-tonal-active-container-shape);
+
+    --md-comp-tabs-active-label-color: var(--md-comp-tabs-tonal-active-label-color);
+    --md-comp-tabs-inactive-label-color: var(--md-comp-tabs-tonal-inactive-label-color);
+    --md-comp-tabs-active-hover-label-color: var(--md-comp-tabs-tonal-active-label-color);
+    --md-comp-tabs-inactive-hover-label-color: var(--md-comp-tabs-tonal-hover-label-color);
+    --md-comp-tabs-active-focus-label-color: var(--md-comp-tabs-tonal-active-label-color);
+    --md-comp-tabs-inactive-focus-label-color: var(--md-comp-tabs-tonal-hover-label-color);
+    --md-comp-tabs-active-pressed-label-color: var(--md-comp-tabs-tonal-active-label-color);
+    --md-comp-tabs-inactive-pressed-label-color: var(--md-comp-tabs-tonal-hover-label-color);
+
+    --md-comp-tabs-active-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+    --md-comp-tabs-inactive-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+    --md-comp-tabs-active-hover-state-layer-color: var(--md-comp-tabs-tonal-active-state-layer-color);
+    --md-comp-tabs-inactive-hover-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+    --md-comp-tabs-active-focus-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+    --md-comp-tabs-inactive-focus-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+    --md-comp-tabs-active-pressed-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+    --md-comp-tabs-inactive-pressed-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+
+    --md-comp-tabs-tab-padding-inline: var(--md-comp-tabs-tonal-tab-padding-inline);
+  }
+
+  .m3-tabs[data-variant='tonal'][data-density='compact'] {
+    --md-comp-tabs-container-height: var(--md-comp-tabs-tonal-compact-container-height);
+    --md-comp-tabs-with-icon-and-label-container-height: var(--md-comp-tabs-tonal-compact-container-height);
+    --md-comp-tabs-container-padding: var(--md-comp-tabs-tonal-compact-container-padding);
+    --md-comp-tabs-tab-padding-inline: var(--md-comp-tabs-tonal-compact-tab-padding-inline);
   }
 }
 
@@ -91,12 +161,22 @@
     position: relative;
     display: flex;
     align-items: stretch;
+    box-sizing: border-box;
+    gap: var(--md-comp-tabs-container-gap);
     min-block-size: var(--md-comp-tabs-container-height);
+    padding: var(--md-comp-tabs-container-padding);
+    border-radius: var(--md-comp-tabs-container-shape);
     background: var(--md-color-container);
     box-shadow: var(--md-comp-tabs-container-elevation);
     overflow-x: clip;
     overflow-y: hidden;
     scrollbar-width: none;
+  }
+
+  .m3-tabs[data-mode='auto'] .m3-tab-list {
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    overflow-x: auto;
   }
 
   .m3-tab-list::-webkit-scrollbar {
@@ -142,15 +222,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: 1 1 0;
+    box-sizing: border-box;
+    flex: 0 0 auto;
     min-inline-size: 0;
     min-block-size: var(--md-comp-tabs-container-height);
     padding-block: 0;
     padding-inline: var(--md-comp-tabs-tab-padding-inline);
     border: none;
-    border-radius: var(--md-sys-shape-corner-none);
-    background: transparent;
-    color: var(--md-comp-tabs-inactive-label-color);
+    border-radius: var(--md-comp-tabs-active-container-shape);
+    background: var(--md-color-container);
+    color: var(--md-color-on-container);
     cursor: pointer;
     font-family: var(--md-comp-tabs-label-text-font);
     font-size: var(--md-comp-tabs-label-text-size);
@@ -159,10 +240,19 @@
     line-height: var(--md-comp-tabs-label-text-line-height);
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
-    transition: color var(--md-easing-fast);
+    transition:
+      background-color var(--md-easing-fast),
+      box-shadow var(--md-easing-fast),
+      color var(--md-easing-fast);
     z-index: 1;
 
+    --md-color-container: transparent;
+    --md-color-on-container: var(--md-comp-tabs-inactive-label-color);
     --md-state-layer-color: var(--md-comp-tabs-inactive-state-layer-color);
+  }
+
+  .m3-tabs[data-mode='fixed'] .m3-tab {
+    flex: 1 1 0;
   }
 
   .m3-tab:has(.m3-tab-icon) {
@@ -219,25 +309,26 @@
   }
 
   .m3-tab[data-active] {
-    color: var(--md-comp-tabs-active-label-color);
+    --md-color-container: var(--md-comp-tabs-active-container-color);
+    --md-color-on-container: var(--md-comp-tabs-active-label-color);
 
     --md-state-layer-color: var(--md-comp-tabs-active-state-layer-color);
   }
 
   .m3-tab:hover {
-    color: var(--md-comp-tabs-inactive-hover-label-color);
+    --md-color-on-container: var(--md-comp-tabs-inactive-hover-label-color);
 
     --md-state-layer-color: var(--md-comp-tabs-inactive-hover-state-layer-color);
   }
 
   .m3-tab[data-active]:hover {
-    color: var(--md-comp-tabs-active-hover-label-color);
+    --md-color-on-container: var(--md-comp-tabs-active-hover-label-color);
 
     --md-state-layer-color: var(--md-comp-tabs-active-hover-state-layer-color);
   }
 
   .m3-tab:focus-visible {
-    color: var(--md-comp-tabs-inactive-focus-label-color);
+    --md-color-on-container: var(--md-comp-tabs-inactive-focus-label-color);
     border-radius: var(--md-comp-tabs-focus-indicator-shape);
     outline: var(--md-comp-tabs-focus-indicator-thickness) solid var(--md-comp-tabs-focus-indicator-color);
     outline-offset: var(--md-comp-tabs-focus-indicator-outline-offset);
@@ -246,19 +337,19 @@
   }
 
   .m3-tab[data-active]:focus-visible {
-    color: var(--md-comp-tabs-active-focus-label-color);
+    --md-color-on-container: var(--md-comp-tabs-active-focus-label-color);
 
     --md-state-layer-color: var(--md-comp-tabs-active-focus-state-layer-color);
   }
 
   .m3-tab:active {
-    color: var(--md-comp-tabs-inactive-pressed-label-color);
+    --md-color-on-container: var(--md-comp-tabs-inactive-pressed-label-color);
 
     --md-state-layer-color: var(--md-comp-tabs-inactive-pressed-state-layer-color);
   }
 
   .m3-tab[data-active]:active {
-    color: var(--md-comp-tabs-active-pressed-label-color);
+    --md-color-on-container: var(--md-comp-tabs-active-pressed-label-color);
 
     --md-state-layer-color: var(--md-comp-tabs-active-pressed-state-layer-color);
   }
@@ -288,9 +379,59 @@
   }
 
   .m3-tab[data-disabled] {
+    --md-color-on-container: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
+
     color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
     cursor: default;
     pointer-events: none;
+  }
+
+  .m3-tabs[data-variant='tonal'] .m3-tab-list {
+    block-size: var(--md-comp-tabs-container-height);
+  }
+
+  .m3-tabs[data-variant='tonal'][data-orientation='vertical'] .m3-tab-list {
+    block-size: auto;
+  }
+
+  .m3-tabs[data-variant='tonal'] .m3-tab-list::after {
+    display: none;
+  }
+
+  .m3-tabs[data-variant='tonal'] .m3-tab {
+    min-block-size: 100%;
+  }
+
+  .m3-tabs[data-variant='tonal'][data-orientation='vertical'] .m3-tab {
+    min-block-size: calc(
+      var(--md-comp-tabs-container-height) - var(--md-comp-tabs-container-padding) -
+        var(--md-comp-tabs-container-padding)
+    );
+  }
+
+  .m3-tabs[data-variant='tonal'] .m3-tab:has(.m3-tab-icon) {
+    min-block-size: 100%;
+  }
+
+  .m3-tabs[data-variant='tonal'][data-orientation='vertical'] .m3-tab:has(.m3-tab-icon) {
+    min-block-size: calc(
+      var(--md-comp-tabs-container-height) - var(--md-comp-tabs-container-padding) -
+        var(--md-comp-tabs-container-padding)
+    );
+  }
+
+  .m3-tabs[data-variant='tonal'] .m3-tab:has(.m3-tab-icon) .m3-tab-content {
+    flex-direction: row;
+  }
+
+  .m3-tabs[data-variant='tonal'] .m3-tab[data-active] {
+    box-shadow:
+      var(--md-comp-tabs-active-container-elevation),
+      inset 0 0 0 var(--md-comp-tabs-active-container-outline-width) var(--md-comp-tabs-active-container-outline-color);
+  }
+
+  .m3-tabs[data-variant='tonal'] .m3-tab-indicator {
+    display: none;
   }
 
   .m3-tab-indicator {

@@ -48,6 +48,26 @@ const TRIGGER_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home',
 
 let idCounter = 0;
 
+function isTriggerDisabled(trigger: HTMLElement) {
+  return (
+    trigger.hasAttribute('disabled') ||
+    trigger.getAttribute('aria-disabled') === 'true' ||
+    trigger.hasAttribute('data-disabled')
+  );
+}
+
+function getEventTrigger(event: KeyboardEvent) {
+  if (event.currentTarget instanceof HTMLElement) {
+    return event.currentTarget;
+  }
+
+  if (event.target instanceof HTMLElement) {
+    return event.target.closest<HTMLElement>('[role="tab"]');
+  }
+
+  return undefined;
+}
+
 export function useTabs<T extends string = string>(options: UseTabsOptions<T> = {}): UseTabsReturn<T> {
   const instance = getCurrentInstance();
   const generatedId = instance ? `tabs-${useId()}` : `tabs-${++idCounter}`;
@@ -98,15 +118,16 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
       return;
     }
 
-    const el = e.currentTarget as HTMLElement | null;
+    const el = getEventTrigger(e);
     if (!el) return;
 
     e.preventDefault();
 
-    const triggerList = el.parentElement;
+    const triggerList = el.closest<HTMLElement>('[role="tablist"]');
     if (!triggerList) return;
 
     const triggers = Array.from(triggerList.querySelectorAll<HTMLElement>('[role="tab"]'));
+    const enabledTriggers = triggers.filter((trigger) => !isTriggerDisabled(trigger));
     const currIndex = triggers.indexOf(el);
     if (currIndex === -1) return;
 
@@ -115,22 +136,47 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
 
     let next: HTMLElement | undefined;
 
+    const findAdjacentTrigger = (direction: 1 | -1) => {
+      let index = currIndex;
+
+      for (let i = 0; i < triggers.length; i++) {
+        index += direction;
+
+        if (index < 0 || index >= triggers.length) {
+          if (!loop.value) {
+            return undefined;
+          }
+
+          index = (index + triggers.length) % triggers.length;
+        }
+
+        const candidate = triggers[index];
+        if (!candidate || candidate === el) {
+          return undefined;
+        }
+
+        if (!isTriggerDisabled(candidate)) {
+          return candidate;
+        }
+      }
+
+      return undefined;
+    };
+
     switch (e.key) {
       case prevKey: {
-        const idx = currIndex - 1;
-        next = loop.value ? triggers.at(idx) : triggers.at(Math.max(idx, 0));
+        next = findAdjacentTrigger(-1);
         break;
       }
       case nextKey: {
-        const idx = currIndex + 1;
-        next = loop.value ? triggers.at(idx % triggers.length) : triggers.at(Math.min(idx, triggers.length - 1));
+        next = findAdjacentTrigger(1);
         break;
       }
       case 'Home':
-        next = triggers[0];
+        next = enabledTriggers[0];
         break;
       case 'End':
-        next = triggers.at(-1);
+        next = enabledTriggers.at(-1);
         break;
     }
 
