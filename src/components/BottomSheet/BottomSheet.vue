@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
-import { computed, onMounted, onUnmounted, ref, type CSSProperties, useId, useSlots, useTemplateRef, watch } from 'vue';
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  ref,
+  type CSSProperties,
+  useId,
+  useSlots,
+  useTemplateRef,
+  watch,
+} from 'vue';
 
 export type BottomSheetProps = {
   /** Whether clicking the backdrop closes the sheet. */
@@ -283,7 +294,9 @@ const finishDrag = () => {
   touchDragActive = false;
 
   if (shouldClose) {
-    close();
+    void nextTick(() => {
+      close();
+    });
     return;
   }
 

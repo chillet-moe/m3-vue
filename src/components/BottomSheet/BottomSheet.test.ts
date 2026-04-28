@@ -225,12 +225,18 @@ describe('BottomSheet', () => {
     const surface = container.querySelector('[data-part="surface"]') as HTMLElement | null;
 
     expect(surface).not.toBeNull();
+    const close = vi.spyOn(dialog!, 'close');
 
     surface?.dispatchEvent(createPointerEvent('pointerdown', { clientY: 300 }));
     surface?.dispatchEvent(createPointerEvent('pointermove', { clientY: 420 }));
     surface?.dispatchEvent(createPointerEvent('pointerup', { clientY: 420 }));
+
+    expect(close).not.toHaveBeenCalled();
+    expect(dialog?.open).toBe(true);
+
     await nextTick();
 
+    expect(close).toHaveBeenCalledTimes(1);
     expect(open.value).toBe(false);
     expect(dialog?.open).toBe(false);
 

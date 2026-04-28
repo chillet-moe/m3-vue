@@ -45,8 +45,8 @@
 
     pointer-events: none;
     transition:
-      overlay var(--md-duration-fast) allow-discrete,
-      display var(--md-duration-fast) allow-discrete;
+      overlay var(--md-duration-spatial) allow-discrete,
+      display var(--md-duration-spatial) allow-discrete;
   }
 
   .m3-bottom-sheet[open] {
@@ -63,6 +63,7 @@
 
   .m3-bottom-sheet[open]::backdrop {
     background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+    animation: bottomSheetBackdropOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
   }
 
   .m3-bottom-sheet-surface {
@@ -100,6 +101,7 @@
   .m3-bottom-sheet[open] .m3-bottom-sheet-surface {
     transform: translateY(var(--md-bottom-sheet-translate-offset));
     visibility: visible;
+    animation: bottomSheetIn 320ms var(--md-timing-function-emphasized-decel);
   }
 
   .m3-bottom-sheet[data-dragging='true'] .m3-bottom-sheet-surface {
@@ -154,6 +156,27 @@
     .m3-bottom-sheet::backdrop,
     .m3-bottom-sheet-surface {
       transition-duration: 0ms;
+      animation-duration: 0ms;
+    }
+  }
+
+  @keyframes bottomSheetIn {
+    0% {
+      transform: translateY(100%);
+    }
+
+    100% {
+      transform: translateY(var(--md-bottom-sheet-translate-offset));
+    }
+  }
+
+  @keyframes bottomSheetBackdropOpacity {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
     }
   }
 }

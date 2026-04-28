@@ -51,8 +51,8 @@
 
     pointer-events: none;
     transition:
-      overlay var(--md-duration-fast) allow-discrete,
-      display var(--md-duration-fast) allow-discrete;
+      overlay var(--md-duration-spatial) allow-discrete,
+      display var(--md-duration-spatial) allow-discrete;
   }
 
   .m3-side-sheet[data-side='start'] {
@@ -81,6 +81,7 @@
 
   .m3-side-sheet[open]::backdrop {
     background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+    animation: sideSheetBackdropOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
   }
 
   .m3-side-sheet-surface {
@@ -117,6 +118,7 @@
   .m3-side-sheet[open] .m3-side-sheet-surface {
     opacity: 1;
     transform: translateX(0);
+    animation: sideSheetIn 320ms var(--md-timing-function-emphasized-decel);
   }
 
   .m3-side-sheet-headline {
@@ -166,6 +168,29 @@
     .m3-side-sheet::backdrop,
     .m3-side-sheet-surface {
       transition-duration: 0ms;
+      animation-duration: 0ms;
+    }
+  }
+
+  @keyframes sideSheetIn {
+    0% {
+      opacity: 0;
+      transform: translateX(var(--md-side-sheet-closed-translate));
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes sideSheetBackdropOpacity {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
     }
   }
 }
