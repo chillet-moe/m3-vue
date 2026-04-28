@@ -243,6 +243,22 @@
     font-size: var(--md-comp-outlined-text-field-trailing-icon-size);
   }
 
+  .m3-text-field-date-picker-button {
+    margin-block: -0.75rem;
+    margin-inline-end: -0.75rem;
+
+    --md-comp-icon-button-small-container-height: 3rem;
+    --md-comp-icon-button-small-icon-size: var(--md-comp-outlined-text-field-trailing-icon-size);
+    --md-comp-icon-button-small-default-leading-space: 0.75rem;
+    --md-comp-icon-button-small-default-trailing-space: 0.75rem;
+    --md-comp-icon-button-filled-container-color: --translucent(var(--md-sys-color-on-surface-variant), 0.08);
+    --md-comp-icon-button-filled-icon-color: var(--_trailing-icon-color);
+    --md-comp-icon-button-filled-hovered-icon-color: var(--_trailing-icon-color);
+    --md-comp-icon-button-filled-focused-icon-color: var(--_trailing-icon-color);
+    --md-comp-icon-button-filled-pressed-icon-color: var(--_trailing-icon-color);
+    --md-state-layer-color: var(--_trailing-icon-color);
+  }
+
   .m3-text-field:focus-within .m3-text-field-prefix-slot,
   .m3-text-field[data-visually-focused='true'] .m3-text-field-prefix-slot,
   .m3-text-field:focus-within .m3-text-field-suffix-slot,

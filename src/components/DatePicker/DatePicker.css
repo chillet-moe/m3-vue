@@ -1,0 +1,391 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  :where(.m3-date-picker) {
+    --md-comp-date-picker-docked-container-color: var(--md-sys-color-surface-container-high);
+    --md-comp-date-picker-docked-container-elevation: var(--md-sys-elevation-level3);
+    --md-comp-date-picker-docked-container-shape: var(--md-sys-shape-corner-extra-large);
+    --md-comp-date-picker-docked-date-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-date-picker-docked-date-today-container-outline-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-date-today-container-outline-width: 0.0625rem;
+    --md-comp-date-picker-docked-date-selected-container-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-menu-list-item-selected-container-color: var(--md-sys-color-surface-variant);
+    --md-comp-date-picker-docked-container-width: 22.5rem;
+    --md-comp-date-picker-docked-date-container-width: 3rem;
+    --md-comp-date-picker-docked-date-container-height: 3rem;
+    --md-comp-date-picker-docked-weekdays-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-weekdays-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-docked-weekdays-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-docked-weekdays-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-docked-weekdays-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-docked-weekdays-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-docked-date-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-docked-date-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-docked-date-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-docked-date-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-docked-date-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-docked-date-unselected-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-date-unselected-outside-month-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-date-unselected-outside-month-label-text-opacity: 0.38;
+    --md-comp-date-picker-docked-date-today-label-text-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-date-selected-label-text-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-docked-menu-button-container-shape: var(--md-sys-shape-corner-full);
+    --md-comp-date-picker-docked-menu-button-label-text-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-menu-button-label-text-font: var(--md-sys-typescale-label-large-font);
+    --md-comp-date-picker-docked-menu-button-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
+    --md-comp-date-picker-docked-menu-button-label-text-size: var(--md-sys-typescale-label-large-size);
+    --md-comp-date-picker-docked-menu-button-label-text-weight: var(--md-sys-typescale-label-large-weight);
+    --md-comp-date-picker-docked-menu-button-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
+    --md-comp-date-picker-docked-menu-list-item-label-text-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-menu-list-item-label-text-font: var(--md-sys-typescale-body-large-font);
+    --md-comp-date-picker-docked-menu-list-item-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --md-comp-date-picker-docked-menu-list-item-label-text-size: var(--md-sys-typescale-body-large-size);
+    --md-comp-date-picker-docked-menu-list-item-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --md-comp-date-picker-docked-menu-list-item-label-text-weight: var(--md-sys-typescale-body-large-weight);
+    --md-comp-date-picker-docked-menu-list-item-selected-leading-icon-color: var(--md-sys-color-on-surface);
+    --md-comp-date-picker-docked-date-unselected-hover-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --md-comp-date-picker-docked-date-selected-hover-state-layer-color: var(--md-sys-color-on-primary);
+    --md-comp-date-picker-docked-date-today-hover-state-layer-color: var(--md-sys-color-primary);
+    --md-comp-date-picker-docked-menu-list-item-hover-state-layer-color: var(--md-sys-color-on-surface);
+  }
+}
+
+@layer components {
+  .m3-date-picker {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    border: none;
+    padding: 0.5rem 0 0;
+    box-sizing: border-box;
+    inline-size: min(var(--md-comp-date-picker-docked-container-width), calc(100vw - 2rem));
+    overflow: visible;
+    background: transparent;
+    color: inherit;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    position-visibility: anchors-visible;
+
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 100ms var(--md-timing-function-emphasized-decel),
+      overlay var(--md-duration-fast) allow-discrete,
+      display var(--md-duration-fast) allow-discrete;
+
+    --md-color-container: var(--md-comp-date-picker-docked-container-color);
+    --md-color-on-container: var(--md-sys-color-on-surface);
+    --md-state-layer-color: var(--md-comp-date-picker-docked-date-unselected-hover-state-layer-color);
+  }
+
+  .m3-date-picker:popover-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .m3-date-picker::backdrop {
+    background-color: transparent;
+    transition: background-color var(--md-duration-spatial) var(--md-timing-function-spatial);
+  }
+
+  .m3-date-picker-surface {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-block-size: min(38rem, calc(100dvb - 2rem));
+    overflow: hidden;
+    border-radius: var(--md-comp-date-picker-docked-container-shape);
+    background: var(--md-color-container);
+    color: var(--md-color-on-container);
+    box-shadow: var(--md-comp-date-picker-docked-container-elevation);
+    transform: scale(0.98, 0.9);
+    transform-origin: top center;
+    transition: transform 120ms var(--md-timing-function-emphasized-accel);
+  }
+
+  .m3-date-picker:popover-open .m3-date-picker-surface {
+    transform: scale(1);
+    transition-duration: 220ms;
+    transition-timing-function: var(--md-timing-function-fast-spatial);
+  }
+
+  .m3-date-picker-header {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(4.5rem, 1fr) 2.5rem 2.5rem minmax(5.25rem, 1fr) 2.5rem;
+    align-items: center;
+    gap: 0.25rem;
+    min-block-size: 4.5rem;
+    padding-block: 0.75rem 0.5rem;
+    padding-inline: 0.75rem;
+    border-block-end: 1px solid --translucent(var(--md-sys-color-on-surface), 0.12);
+  }
+
+  .m3-date-picker-switch {
+    min-inline-size: 0;
+    min-block-size: 2.5rem;
+    padding-inline: 0.75rem;
+    gap: 0.25rem;
+    font-family:
+      var(--md-comp-date-picker-docked-menu-button-label-text-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-date-picker-docked-menu-button-label-text-size);
+    line-height: var(--md-comp-date-picker-docked-menu-button-label-text-line-height);
+    font-weight: var(--md-comp-date-picker-docked-menu-button-label-text-weight);
+    letter-spacing: var(--md-comp-date-picker-docked-menu-button-label-text-tracking);
+
+    --md-comp-button-container-shape: var(--md-comp-date-picker-docked-menu-button-container-shape);
+    --md-comp-button-container-shape-round: var(--md-comp-date-picker-docked-menu-button-container-shape);
+    --md-comp-button-small-icon-size: 1.25rem;
+    --md-comp-button-small-container-shape-round: var(--md-comp-date-picker-docked-menu-button-container-shape);
+    --md-comp-button-text-label-text-color: var(--md-comp-date-picker-docked-menu-button-label-text-color);
+    --md-comp-button-text-hovered-label-text-color: var(--md-comp-date-picker-docked-menu-button-label-text-color);
+    --md-comp-button-text-focused-label-text-color: var(--md-comp-date-picker-docked-menu-button-label-text-color);
+    --md-comp-button-text-pressed-label-text-color: var(--md-comp-date-picker-docked-menu-button-label-text-color);
+    --md-state-layer-color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .m3-date-picker-switch .m3-button-trailing {
+    margin-inline-start: 0.25rem;
+  }
+
+  .m3-date-picker-switch [data-part='text'] {
+    white-space: nowrap;
+  }
+
+  .m3-date-picker-calendar {
+    padding-inline: 1rem;
+    padding-block: 0.75rem 1rem;
+  }
+
+  .m3-date-picker-weekdays,
+  .m3-date-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    justify-items: center;
+  }
+
+  .m3-date-picker-weekdays {
+    padding-block-end: 0.25rem;
+  }
+
+  .m3-date-picker-weekday {
+    display: grid;
+    place-items: center;
+    inline-size: var(--md-comp-date-picker-docked-date-container-width);
+    block-size: 2.5rem;
+    color: var(--md-comp-date-picker-docked-weekdays-label-text-color);
+    font-family:
+      var(--md-comp-date-picker-docked-weekdays-label-text-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-date-picker-docked-weekdays-label-text-size);
+    line-height: var(--md-comp-date-picker-docked-weekdays-label-text-line-height);
+    font-weight: var(--md-comp-date-picker-docked-weekdays-label-text-weight);
+    letter-spacing: var(--md-comp-date-picker-docked-weekdays-label-text-tracking);
+  }
+
+  .m3-date-picker-day {
+    border: none;
+    display: grid;
+    place-items: center;
+    inline-size: var(--md-comp-date-picker-docked-date-container-width);
+    block-size: var(--md-comp-date-picker-docked-date-container-height);
+    border-radius: var(--md-comp-date-picker-docked-date-container-shape);
+    color: var(--md-comp-date-picker-docked-date-unselected-label-text-color);
+    font-family:
+      var(--md-comp-date-picker-docked-date-label-text-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-date-picker-docked-date-label-text-size);
+    line-height: var(--md-comp-date-picker-docked-date-label-text-line-height);
+    font-weight: var(--md-comp-date-picker-docked-date-label-text-weight);
+    letter-spacing: var(--md-comp-date-picker-docked-date-label-text-tracking);
+    cursor: pointer;
+
+    --md-state-layer-color: var(--md-comp-date-picker-docked-date-unselected-hover-state-layer-color);
+  }
+
+  .m3-date-picker-day[data-outside-month='true'] {
+    color: --translucent(
+      var(--md-comp-date-picker-docked-date-unselected-outside-month-label-text-color),
+      var(--md-comp-date-picker-docked-date-unselected-outside-month-label-text-opacity)
+    );
+  }
+
+  .m3-date-picker-day[data-today='true'] {
+    color: var(--md-comp-date-picker-docked-date-today-label-text-color);
+    box-shadow: inset 0 0 0 var(--md-comp-date-picker-docked-date-today-container-outline-width)
+      var(--md-comp-date-picker-docked-date-today-container-outline-color);
+
+    --md-state-layer-color: var(--md-comp-date-picker-docked-date-today-hover-state-layer-color);
+  }
+
+  .m3-date-picker-day[data-selected='true'] {
+    color: var(--md-comp-date-picker-docked-date-selected-label-text-color);
+    background: var(--md-comp-date-picker-docked-date-selected-container-color);
+    box-shadow: none;
+
+    --md-state-layer-color: var(--md-comp-date-picker-docked-date-selected-hover-state-layer-color);
+  }
+
+  .m3-date-picker-day:disabled,
+  .m3-date-picker-list-item:disabled {
+    color: --translucent(var(--md-sys-color-on-surface), 0.38);
+    cursor: default;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .m3-date-picker-day:focus-visible,
+  .m3-date-picker-switch:focus-visible,
+  .m3-date-picker-list-item:focus-visible {
+    outline-offset: 0.125rem;
+    outline: var(--md-sys-color-secondary) solid var(--md-sys-state-focus-indicator-thickness);
+  }
+
+  .m3-date-picker-list {
+    display: grid;
+    align-content: start;
+    max-block-size: min(27rem, calc(100dvb - 10rem));
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding-block: 0.75rem;
+  }
+
+  .m3-date-picker-list-item {
+    border: none;
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    align-items: center;
+    min-block-size: 3rem;
+    padding-inline: 0 1.5rem;
+    color: var(--md-comp-date-picker-docked-menu-list-item-label-text-color);
+    font-family:
+      var(--md-comp-date-picker-docked-menu-list-item-label-text-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-comp-date-picker-docked-menu-list-item-label-text-size);
+    line-height: var(--md-comp-date-picker-docked-menu-list-item-label-text-line-height);
+    font-weight: var(--md-comp-date-picker-docked-menu-list-item-label-text-weight);
+    letter-spacing: var(--md-comp-date-picker-docked-menu-list-item-label-text-tracking);
+    cursor: pointer;
+    text-align: start;
+
+    --md-state-layer-color: var(--md-comp-date-picker-docked-menu-list-item-hover-state-layer-color);
+  }
+
+  .m3-date-picker-list-item[data-selected='true'] {
+    background: var(--md-comp-date-picker-docked-menu-list-item-selected-container-color);
+  }
+
+  .m3-date-picker-list-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--md-comp-date-picker-docked-menu-list-item-selected-leading-icon-color);
+    font-size: 1.5rem;
+  }
+
+  .m3-date-picker-actions {
+    display: flex;
+    justify-content: end;
+    gap: 0.5rem;
+    padding-block: 0.5rem 0.75rem;
+    padding-inline: 1rem;
+    border-block-start: 1px solid --translucent(var(--md-sys-color-on-surface), 0.12);
+  }
+
+  .m3-date-picker[data-variant='modal'] {
+    inset: 0;
+    margin: auto;
+    padding: 0;
+    inline-size: min(var(--md-comp-date-picker-docked-container-width), calc(100vw - 2rem));
+    block-size: fit-content;
+    position-area: none;
+    position-try-fallbacks: none;
+  }
+
+  .m3-date-picker[data-variant='modal']::backdrop {
+    background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+  }
+
+  .m3-date-picker[data-variant='modal'] .m3-date-picker-surface {
+    transform-origin: center;
+  }
+
+  @media (width < 40rem), (pointer: coarse) {
+    .m3-date-picker[data-variant='auto'] {
+      inset: 0;
+      margin: auto;
+      padding: 0;
+      inline-size: min(var(--md-comp-date-picker-docked-container-width), calc(100vw - 2rem));
+      block-size: fit-content;
+      position-area: none;
+      position-try-fallbacks: none;
+    }
+
+    .m3-date-picker[data-variant='auto']::backdrop {
+      background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+    }
+
+    .m3-date-picker[data-variant='auto'] .m3-date-picker-surface {
+      transform-origin: center;
+    }
+  }
+
+  @starting-style {
+    .m3-date-picker:popover-open {
+      opacity: 0;
+    }
+
+    .m3-date-picker:popover-open .m3-date-picker-surface {
+      transform: scale(0.98, 0.9);
+    }
+  }
+
+  @media (width < 26rem) {
+    .m3-date-picker {
+      inline-size: calc(100vw - 1rem);
+    }
+
+    .m3-date-picker-header {
+      grid-template-columns: 2.25rem minmax(3.75rem, 1fr) 2.25rem 2.25rem minmax(4.5rem, 1fr) 2.25rem;
+      gap: 0.125rem;
+      padding-inline: 0.5rem;
+    }
+
+    .m3-date-picker-calendar {
+      padding-inline: 0.5rem;
+    }
+
+    .m3-date-picker-day,
+    .m3-date-picker-weekday {
+      inline-size: 2.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-date-picker,
+    .m3-date-picker::backdrop,
+    .m3-date-picker-surface {
+      transition-duration: 0ms;
+    }
+  }
+}

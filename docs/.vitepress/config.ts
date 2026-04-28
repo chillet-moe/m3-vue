@@ -107,6 +107,7 @@ export default defineConfig({
               text: 'Inputs',
               items: [
                 { text: 'Combobox', link: '/components/combobox' },
+                { text: 'DatePicker', link: '/components/date-picker' },
                 { text: 'InputOtp', link: '/components/input-otp' },
                 { text: 'Select', link: '/components/select' },
                 { text: 'TextField', link: '/components/text-field' },

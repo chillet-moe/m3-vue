@@ -3,6 +3,63 @@ import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import TextField from './TextField.vue';
 
+const popoverOpenElements = new WeakSet<HTMLElement>();
+
+function installPopoverPolyfill() {
+  const prototype = HTMLElement.prototype as HTMLElement & {
+    showPopover?: (options?: { source?: HTMLElement }) => void;
+    hidePopover?: () => void;
+  };
+
+  const originalMatches = Element.prototype.matches;
+
+  Element.prototype.matches = function (this: Element, selector: string) {
+    if (selector === ':popover-open') {
+      return popoverOpenElements.has(this as HTMLElement);
+    }
+
+    return originalMatches.call(this, selector);
+  } as typeof Element.prototype.matches;
+
+  if (typeof prototype.showPopover !== 'function') {
+    Object.defineProperty(prototype, 'showPopover', {
+      configurable: true,
+      value(this: HTMLElement) {
+        popoverOpenElements.add(this);
+        const toggleEvent = new Event('toggle');
+        Object.defineProperty(toggleEvent, 'newState', {
+          configurable: true,
+          value: 'open',
+        });
+        this.dispatchEvent(toggleEvent);
+      },
+    });
+  }
+
+  if (typeof prototype.hidePopover !== 'function') {
+    Object.defineProperty(prototype, 'hidePopover', {
+      configurable: true,
+      value(this: HTMLElement) {
+        popoverOpenElements.delete(this);
+        const toggleEvent = new Event('toggle');
+        Object.defineProperty(toggleEvent, 'newState', {
+          configurable: true,
+          value: 'closed',
+        });
+        this.dispatchEvent(toggleEvent);
+      },
+    });
+  }
+}
+
+function isPopoverOpen(element: HTMLElement | null) {
+  return element ? popoverOpenElements.has(element) : false;
+}
+
+function getDatePickerButton(container: HTMLElement, date: string) {
+  return container.querySelector<HTMLButtonElement>(`.m3-date-picker-day[data-date="${date}"]`);
+}
+
 describe('TextField', () => {
   afterEach(() => {
     document.body.innerHTML = '';
@@ -84,6 +141,98 @@ describe('TextField', () => {
     await nextTick();
 
     expect(container.querySelector('.m3-text-field-supporting')?.textContent?.trim()).toBe('Helper text');
+
+    app.unmount();
+  });
+
+  it('opens the library DatePicker for date inputs and updates the date value on confirmation', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const value = ref('2026-04-28');
+
+        return () =>
+          h(TextField, {
+            label: 'Date',
+            type: 'date',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = nextValue as string;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector<HTMLInputElement>('.m3-text-field-input');
+    const datePicker = container.querySelector<HTMLElement>('.m3-date-picker');
+
+    expect(input?.type).toBe('text');
+
+    input?.click();
+    await nextTick();
+    await nextTick();
+
+    expect(isPopoverOpen(datePicker)).toBe(true);
+
+    getDatePickerButton(container, '2026-04-30')?.click();
+    await nextTick();
+
+    Array.from(container.querySelectorAll<HTMLButtonElement>('button'))
+      .find((button) => button.textContent?.trim() === 'OK')
+      ?.click();
+    await nextTick();
+
+    expect(input?.value).toBe('2026-04-30');
+    expect(isPopoverOpen(datePicker)).toBe(false);
+
+    app.unmount();
+  });
+
+  it('preserves the time segment when datetime-local inputs pick a new date', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const value = ref('2026-04-28T09:30');
+
+        return () =>
+          h(TextField, {
+            label: 'Date time',
+            type: 'datetime-local',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = nextValue as string;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    container.querySelector<HTMLInputElement>('.m3-text-field-input')?.click();
+    await nextTick();
+    await nextTick();
+
+    getDatePickerButton(container, '2026-04-30')?.click();
+    await nextTick();
+
+    Array.from(container.querySelectorAll<HTMLButtonElement>('button'))
+      .find((button) => button.textContent?.trim() === 'OK')
+      ?.click();
+    await nextTick();
+
+    expect(container.querySelector<HTMLInputElement>('.m3-text-field-input')?.value).toBe('2026-04-30T09:30');
 
     app.unmount();
   });
