@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useLinkTag } from '@/composables/useLinkTag';
-import { usePressedState } from '@/composables/pressedState';
+import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { computed, inject, unref } from 'vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
@@ -58,40 +58,10 @@ const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
   disabled,
 });
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
-
-const guardDisabledInteraction = (event: Event) => {
-  if (!disabled.value) {
-    return false;
-  }
-
-  // Guard all synthetic pressed-state handlers for label/anchor render paths.
-  event.preventDefault();
-  event.stopPropagation();
-  return true;
-};
-
-const handlePointerDown = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  if (!pressShapeMorph.value) return;
-  onPointerDown(event);
-};
-
-const handlePointerUp = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  if (!pressShapeMorph.value) return;
-  onPointerUp(event);
-};
-
-const handlePointerCancel = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  if (!pressShapeMorph.value) return;
-  onPointerCancel(event);
-};
-
-const handleClick = (event: MouseEvent) => {
-  guardDisabledInteraction(event);
-};
+const { pressShapeMorphAttrs } = usePressShapeMorph({
+  enabled: pressShapeMorph,
+  disabled,
+});
 
 const slots = defineSlots<{
   /** Slot for leading content, such as an icon.
@@ -119,17 +89,13 @@ const slots = defineSlots<{
     :data-size="size"
     :data-shape="shape"
     :data-press-shape-morph="pressShapeMorph ? 'true' : 'false'"
-    :data-pressed="!disabled && pressShapeMorph && pressed ? 'true' : 'false'"
     :data-toggleable="toggleable ? 'true' : 'false'"
     :href="href"
     :disabled="nativeDisabled"
     :aria-disabled="ariaDisabled"
     :tabindex="tabIndex"
     :type="type"
-    @click="handleClick"
-    @pointerdown="handlePointerDown"
-    @pointerup="handlePointerUp"
-    @pointercancel="handlePointerCancel"
+    v-bind="pressShapeMorphAttrs"
   >
     <Icon
       v-if="props.leadingIcon"

@@ -2,7 +2,7 @@
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
-import { usePressedState } from '@/composables/pressedState';
+import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { computed, inject, unref, useSlots } from 'vue';
 import type { ButtonProps } from '@/components/Button';
 
@@ -42,36 +42,7 @@ const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
   disabled,
 });
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
-
-const guardDisabledInteraction = (event: Event) => {
-  if (!disabled.value) {
-    return false;
-  }
-
-  event.preventDefault();
-  event.stopPropagation();
-  return true;
-};
-
-const handlePointerDown = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerDown(event);
-};
-
-const handlePointerUp = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerUp(event);
-};
-
-const handlePointerCancel = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerCancel(event);
-};
-
-const handleClick = (event: MouseEvent) => {
-  guardDisabledInteraction(event);
-};
+const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
 
 defineSlots<{
   /** Optional content above the main row. */
@@ -117,7 +88,6 @@ const slotProps = computed(() => ({
     data-color="text"
     data-size="small"
     :data-shape="shape"
-    :data-pressed="!disabled && pressed ? 'true' : 'false'"
     :data-active="isSelected ? 'true' : undefined"
     :data-selected="isSelected ? 'true' : undefined"
     :href="href"
@@ -126,10 +96,7 @@ const slotProps = computed(() => ({
     :aria-current="isSelected ? 'page' : undefined"
     :tabindex="tabIndex"
     :type="type"
-    @click="handleClick"
-    @pointerdown="handlePointerDown"
-    @pointerup="handlePointerUp"
-    @pointercancel="handlePointerCancel"
+    v-bind="pressShapeMorphAttrs"
   >
     <Icon
       v-if="props.leadingIcon"

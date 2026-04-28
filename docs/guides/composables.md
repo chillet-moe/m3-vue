@@ -12,12 +12,13 @@ M3 Vue 将复杂组件的**交互逻辑**与**视觉呈现**分离。每个复�
 
 ## 可用的 Composables
 
-| Composable        | 用途                                  | 对应组件                             |
-| ----------------- | ------------------------------------- | ------------------------------------ |
-| `useTabs`         | 标签页切换、键盘导航、ARIA            | `Tabs`, `Tab`, `TabList`, `TabPanel` |
-| `useMenu`         | 菜单打开/关闭、键盘导航、子菜单、选择 | `Menu`                               |
-| `useSelect`       | 选项过滤、值管理、菜单控制            | `Select`, `Combobox`                 |
-| `usePressedState` | 按下状态管理                          | `Button`, `IconButton`               |
+| Composable           | 用途                                  | 对应组件                                           |
+| -------------------- | ------------------------------------- | -------------------------------------------------- |
+| `useTabs`            | 标签页切换、键盘导航、ARIA            | `Tabs`, `Tab`, `TabList`, `TabPanel`               |
+| `useMenu`            | 菜单打开/关闭、键盘导航、子菜单、选择 | `Menu`                                             |
+| `useSelect`          | 选项过滤、值管理、菜单控制            | `Select`, `Combobox`                               |
+| `usePressShapeMorph` | 按压变形属性、禁用拦截和释放状态管理  | `Button`, `IconButton`, `Chip`, `Card`, `ListItem` |
+| `usePressedState`    | 低层按下状态管理                      | `usePressShapeMorph`                               |
 
 ## 使用方式
 
@@ -69,6 +70,20 @@ const items = ['first', 'second', 'third'];
 ```
 
 Composable 返回的属性对象包含了所有必要的 `role`、`aria-*`、`tabindex`、事件处理器等，通过 `v-bind` 展开到元素上即可获得完整的可访问性和交互行为。
+
+按压变形可以直接绑定到自定义元素上：
+
+```vue
+<script setup>
+import { usePressShapeMorph } from '@chillet/m3-vue';
+
+const { pressShapeMorphAttrs } = usePressShapeMorph();
+</script>
+
+<template>
+  <button v-bind="pressShapeMorphAttrs">Action</button>
+</template>
+```
 
 ## API 模式
 

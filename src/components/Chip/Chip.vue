@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, unref } from 'vue';
 
-import { usePressedState } from '@/composables/pressedState.ts';
+import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { Icon } from '@/components/Icon';
 import { selectionGroupContextKey, type SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
 
@@ -180,36 +180,7 @@ const type = computed(() => {
   return undefined;
 });
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
-
-const guardDisabledInteraction = (event: Event) => {
-  if (!mergedDisabled.value) {
-    return false;
-  }
-
-  event.preventDefault();
-  event.stopPropagation();
-  return true;
-};
-
-const handlePointerDown = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerDown(event);
-};
-
-const handlePointerUp = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerUp(event);
-};
-
-const handlePointerCancel = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerCancel(event);
-};
-
-const handleClick = (event: MouseEvent) => {
-  guardDisabledInteraction(event);
-};
+const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled: mergedDisabled });
 
 const handleChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -237,17 +208,13 @@ defineSlots<{
     :data-variant="variant"
     :data-selected="isSelected ? 'true' : 'false'"
     :data-elevated="elevated ? 'true' : 'false'"
-    :data-pressed="!mergedDisabled && pressed ? 'true' : 'false'"
     :data-with-leading="hasLeading ? 'true' : 'false'"
     :data-with-trailing="hasTrailing ? 'true' : 'false'"
     :data-leading-source="leadingSource !== 'none' ? leadingSource : undefined"
     :aria-disabled="mergedDisabled ? 'true' : 'false'"
     :disabled="nativeDisabled"
     :type="type"
-    @click="handleClick"
-    @pointerdown="handlePointerDown"
-    @pointerup="handlePointerUp"
-    @pointercancel="handlePointerCancel"
+    v-bind="pressShapeMorphAttrs"
   >
     <input
       v-if="selectable"

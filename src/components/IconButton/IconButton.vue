@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useLinkTag } from '@/composables/useLinkTag';
-import { usePressedState } from '@/composables/pressedState.ts';
+import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { computed, inject, unref } from 'vue';
 import { Icon } from '@/components/Icon';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext.ts';
@@ -53,36 +53,7 @@ const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
   disabled,
 });
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
-
-const guardDisabledInteraction = (event: Event) => {
-  if (!disabled.value) {
-    return false;
-  }
-
-  event.preventDefault();
-  event.stopPropagation();
-  return true;
-};
-
-const handlePointerDown = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerDown(event);
-};
-
-const handlePointerUp = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerUp(event);
-};
-
-const handlePointerCancel = (event: PointerEvent) => {
-  if (guardDisabledInteraction(event)) return;
-  onPointerCancel(event);
-};
-
-const handleClick = (event: MouseEvent) => {
-  guardDisabledInteraction(event);
-};
+const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
 
 const slots = defineSlots<{
   /** Default slot for the main content of the icon button. Receives `disabled` as a prop. */
@@ -100,17 +71,13 @@ const slots = defineSlots<{
     :data-size="size"
     :data-shape="shape"
     :data-width="width"
-    :data-pressed="!disabled && pressed ? 'true' : 'false'"
     :data-toggleable="toggleable ? 'true' : 'false'"
     :href="href"
     :disabled="nativeDisabled"
     :aria-disabled="ariaDisabled"
     :tabindex="tabIndex"
     :type="type"
-    @click="handleClick"
-    @pointerdown="handlePointerDown"
-    @pointerup="handlePointerUp"
-    @pointercancel="handlePointerCancel"
+    v-bind="pressShapeMorphAttrs"
   >
     <Icon
       v-if="props.icon"

@@ -86,4 +86,43 @@ describe('Button', () => {
 
     app.unmount();
   });
+
+  it('blocks click listeners on disabled anchor buttons', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    let clickCount = 0;
+
+    const app = createApp({
+      render() {
+        return h(
+          Button,
+          {
+            href: '/blocked',
+            disabled: true,
+            onClick: () => {
+              clickCount += 1;
+            },
+          },
+          {
+            default: () => 'Button',
+          },
+        );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const button = container.querySelector('a') as HTMLAnchorElement | null;
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+    const dispatched = button?.dispatchEvent(clickEvent);
+
+    expect(button?.getAttribute('href')).toBeNull();
+    expect(dispatched).toBe(false);
+    expect(clickEvent.defaultPrevented).toBe(true);
+    expect(clickCount).toBe(0);
+
+    app.unmount();
+  });
 });

@@ -10,6 +10,8 @@ export * from './shapes/animatableSmall';
 
 // Composables
 export { usePressedState } from './composables/pressedState.ts';
+export { usePressShapeMorph } from './composables/usePressShapeMorph.ts';
+export type { PressShapeMorphAttrs, UsePressShapeMorphOptions } from './composables/usePressShapeMorph.ts';
 export { useTabs } from './composables/useTabs';
 export type { UseTabsOptions, UseTabsReturn } from './composables/useTabs';
 export { useMenu } from './composables/useMenu';

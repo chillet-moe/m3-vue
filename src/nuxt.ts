@@ -43,10 +43,12 @@ export default defineNuxtModule<M3VueNuxtOptions>({
     }
 
     if (options.imports) {
-      addImports({
-        name: 'usePressedState',
-        from: PACKAGE_NAME,
-      });
+      for (const name of ['usePressedState', 'usePressShapeMorph']) {
+        addImports({
+          name,
+          from: PACKAGE_NAME,
+        });
+      }
     }
 
     if (options.directives) {

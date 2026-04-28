@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, unref } from 'vue';
 import { cardContextKey } from '@/components/Card/CardContext.ts';
-import { usePressedState } from '@/composables/pressedState.ts';
+import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 
 export type CardProps = {
   /** The color style of the card. */
@@ -17,7 +17,7 @@ const context = inject(cardContextKey, undefined);
 
 const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
 
-const { pressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState();
+const { pressShapeMorphAttrs } = usePressShapeMorph();
 
 const slots = defineSlots<{
   /** Default slot for the main content of the card. */
@@ -35,10 +35,7 @@ const slots = defineSlots<{
     data-scope="card"
     data-part="root"
     :data-color="color"
-    :data-pressed="pressed"
-    @pointerdown="onPointerDown"
-    @pointerup="onPointerUp"
-    @pointercancel="onPointerCancel"
+    v-bind="pressShapeMorphAttrs"
   >
     <slot />
   </button>
