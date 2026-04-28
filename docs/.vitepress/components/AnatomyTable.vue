@@ -18,6 +18,7 @@ const anatomy = computed(() => {
 
 const highlightEnabled = useLocalStorage('anatomy-highlight-enabled', false);
 const highlightedPart = ref<string | null>(null);
+const collapsed = useLocalStorage(`anatomy-table-collapsed:${props.scope}`, false);
 
 function highlightElements(part: string) {
   if (!highlightEnabled.value) return;
@@ -42,6 +43,15 @@ function onRowEnter(part: string) {
 function onRowLeave() {
   clearHighlights();
   highlightedPart.value = null;
+}
+
+function toggleCollapsed() {
+  collapsed.value = !collapsed.value;
+
+  if (collapsed.value) {
+    clearHighlights();
+    highlightedPart.value = null;
+  }
 }
 
 watch(highlightEnabled, (enabled) => {
@@ -79,13 +89,24 @@ const anatomyData = computed(() => {
 <template>
   <div v-if="anatomy" class="vp-raw anatomy-panel">
     <div class="anatomy-header">
-      <span class="anatomy-header-title">Anatomy</span>
+      <button
+        class="anatomy-toggle m3-state-layer"
+        type="button"
+        :aria-expanded="!collapsed"
+        :aria-controls="`anatomy-parts-${partSelectorId}`"
+        :aria-label="collapsed ? 'Expand anatomy table' : 'Collapse anatomy table'"
+        @click="toggleCollapsed"
+      >
+        <Icon class="anatomy-toggle-icon" name="expand_more" aria-hidden="true" />
+        <span class="anatomy-header-title">Anatomy</span>
+        <span class="anatomy-part-count">{{ anatomyData.length }}</span>
+      </button>
       <CheckBox v-model:checked="highlightEnabled" :label="'Highlight'" class="anatomy-highlight-checkbox">
         <span class="anatomy-highlight-label">Highlight</span>
       </CheckBox>
     </div>
 
-    <div class="anatomy-parts-list">
+    <div v-show="!collapsed" :id="`anatomy-parts-${partSelectorId}`" class="anatomy-parts-list">
       <div
         v-for="part in anatomyData"
         :key="part.part"
@@ -128,12 +149,61 @@ const anatomyData = computed(() => {
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
+.anatomy-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.375rem 0.625rem;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  margin-inline-start: -0.5rem;
+}
+
+.anatomy-toggle:hover {
+  background: var(--vp-c-bg-alt);
+}
+
+.anatomy-toggle:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+
+.anatomy-toggle-icon {
+  font-size: 1.125rem;
+  color: var(--vp-c-text-3);
+  transition: transform 0.15s;
+}
+
+.anatomy-toggle[aria-expanded='true'] .anatomy-toggle-icon {
+  transform: rotate(180deg);
+}
+
 .anatomy-header-title {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--vp-c-text-3);
+}
+
+.anatomy-part-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.375rem;
+  block-size: 1.375rem;
+  border-radius: 999px;
+  padding-inline: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-alt);
 }
 
 .anatomy-highlight-toggle {
