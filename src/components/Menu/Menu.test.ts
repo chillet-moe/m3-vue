@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick, ref, withDirectives } from 'vue';
+import Select, { type SelectModelValue, type SelectOption } from '@/components/Select/Select.vue';
 import { vDropdown } from '@/directives/Menu';
 import Menu, { type MenuContentItem, type MenuModelValue } from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
@@ -141,6 +142,21 @@ describe('Menu', () => {
           trailingText: 'Del',
         },
       ],
+    },
+  ];
+
+  const selectOptions: SelectOption[] = [
+    {
+      label: 'Espresso',
+      value: 'espresso',
+    },
+    {
+      label: 'Pour-over',
+      value: 'pour-over',
+    },
+    {
+      label: 'Cold brew',
+      value: 'cold-brew',
     },
   ];
 
@@ -505,6 +521,86 @@ describe('Menu', () => {
 
     expect(selectedValues).toEqual(['Keep open']);
     expect(isPopoverOpen(menu)).toBe(true);
+
+    app.unmount();
+  });
+
+  it('keeps the containing menu open when selecting from an embedded Select', async () => {
+    installPopoverPolyfill();
+
+    let selectedValue: SelectModelValue = undefined;
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const open = ref(true);
+        const value = ref<SelectModelValue>();
+
+        return () =>
+          h(
+            Menu,
+            {
+              open: open.value,
+              'onUpdate:open': (nextOpen: boolean) => {
+                open.value = nextOpen;
+              },
+            },
+            {
+              default: () => [
+                h(MenuContainer, null, {
+                  default: () => [
+                    h(
+                      'div',
+                      {
+                        style: {
+                          padding: '0.5rem',
+                          inlineSize: '16rem',
+                        },
+                      },
+                      [
+                        h(Select, {
+                          label: 'Coffee',
+                          options: selectOptions,
+                          modelValue: value.value,
+                          'onUpdate:modelValue': (nextValue: SelectModelValue) => {
+                            value.value = nextValue;
+                            selectedValue = nextValue;
+                          },
+                        }),
+                      ],
+                    ),
+                  ],
+                }),
+              ],
+            },
+          );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const rootMenu = container.querySelector<HTMLElement>('.m3-menu:not(.m3-select-menu)');
+    const selectMenu = container.querySelector<HTMLElement>('.m3-select-menu');
+    const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
+
+    expect(isPopoverOpen(rootMenu)).toBe(true);
+
+    trigger?.click();
+    await nextTick();
+
+    const selectItems = container.querySelectorAll<HTMLButtonElement>('.m3-select-option');
+
+    expect(isPopoverOpen(selectMenu)).toBe(true);
+
+    selectItems[1]?.click();
+    await nextTick();
+
+    expect(selectedValue).toBe('pour-over');
+    expect(isPopoverOpen(rootMenu)).toBe(true);
+    expect(isPopoverOpen(selectMenu)).toBe(false);
 
     app.unmount();
   });

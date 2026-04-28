@@ -9,6 +9,8 @@ import MenuContext from '../demos/menu/MenuContext.vue';
 import MenuContextSrc from '../demos/menu/MenuContext.vue?raw';
 import MenuSelectable from '../demos/menu/MenuSelectable.vue';
 import MenuSelectableSrc from '../demos/menu/MenuSelectable.vue?raw';
+import MenuWithSelect from '../demos/menu/MenuWithSelect.vue';
+import MenuWithSelectSrc from '../demos/menu/MenuWithSelect.vue?raw';
 import MenuDeclarative from '../demos/menu/MenuDeclarative.vue';
 import MenuDeclarativeSrc from '../demos/menu/MenuDeclarative.vue?raw';
 import MenuLinks from '../demos/menu/MenuLinks.vue';
@@ -37,6 +39,14 @@ Menu supports dropdown, context, submenu, and object-driven item rendering while
 
 <DemoContainer :src="MenuSelectableSrc" :viewport="false">
   <MenuSelectable />
+</DemoContainer>
+
+### Embedded Select
+
+Select options close the Select menu without closing the containing Menu.
+
+<DemoContainer :src="MenuWithSelectSrc" :viewport="false">
+  <MenuWithSelect />
 </DemoContainer>
 
 ### Declarative Items

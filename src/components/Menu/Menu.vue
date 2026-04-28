@@ -34,8 +34,10 @@ defineSlots<{
 }>();
 
 const menuRef = useTemplateRef<HTMLDivElement>('menu');
-const parentMenu = inject(menuContextKey, null);
+const ambientParentMenu = inject(menuContextKey, null);
 const parentSubmenu = inject(menuSubmenuContextKey, null);
+// Only MenuSubMenu opts a child Menu into the parent menu chain.
+const parentMenu = parentSubmenu ? ambientParentMenu : null;
 const menuId = `menu-${useId()}`;
 
 const menuActions = useMenu({
