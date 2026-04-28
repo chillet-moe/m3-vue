@@ -1,22 +1,16 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress';
 
-import { Button, Card } from '@/index';
-import { useNav, useSiteInfo } from '../composables/nav';
+import { useSiteInfo } from '../composables/nav';
 import { useSidebar, useSidebarControl } from '../composables/sidebar';
-import { normalizePath } from '../utils';
+import DocsSidebarItems from './DocsSidebarItems.vue';
 
 const { isOpen, close } = useSidebarControl();
-const { currentPath, sidebarItems } = useSidebar();
+const { sidebarItems } = useSidebar();
 const { siteLogo, siteTitle } = useSiteInfo();
 
 function resolveLink(path: string) {
   return withBase(path);
-}
-
-function isActiveLink(path?: string) {
-  if (!path) return false;
-  return normalizePath(path) === currentPath.value;
 }
 </script>
 
@@ -34,33 +28,10 @@ function isActiveLink(path?: string) {
         <section v-for="item in sidebarItems" :key="item.text || item.link || 'group'" class="docs-sidebar-group">
           <template v-if="item.items?.length">
             <h2 v-if="item.text" class="docs-sidebar-title">{{ item.text }}</h2>
-            <div class="docs-sidebar-links">
-              <Button
-                v-for="child in item.items"
-                :key="child.link || child.text"
-                class="docs-sidebar-link"
-                color="text"
-                size="medium"
-                :href="child.link ? resolveLink(child.link) : undefined"
-                :data-active="isActiveLink(child.link) ? 'true' : 'false'"
-                @click="close()"
-              >
-                {{ child.text }}
-              </Button>
-            </div>
+            <DocsSidebarItems :items="item.items" />
           </template>
 
-          <Button
-            v-else-if="item.link && item.text"
-            class="docs-sidebar-link"
-            color="text"
-            size="medium"
-            :href="resolveLink(item.link)"
-            :data-active="isActiveLink(item.link) ? 'true' : 'false'"
-            @click="close()"
-          >
-            {{ item.text }}
-          </Button>
+          <DocsSidebarItems v-else :items="[item]" />
         </section>
       </nav>
     </div>
@@ -137,21 +108,6 @@ function isActiveLink(path?: string) {
   line-height: 1.25;
   margin-inline-start: 0.5rem;
   margin-block-end: 0.25rem;
-}
-
-.docs-sidebar-links {
-  display: grid;
-  gap: 0.375rem;
-}
-
-.docs-sidebar-link[data-active='true'] {
-  background: --translucent(var(--md-sys-color-primary), 0.12);
-}
-
-.docs-sidebar-link {
-  text-align: start;
-  justify-content: flex-start;
-  color: var(--md-sys-color-on-surface);
 }
 
 @media (max-width: 64rem) {
