@@ -1,5 +1,6 @@
 - 添加新组件时参照 .github/instructions/add-component.instructions.md 中的步骤进行。
 - 效果倾向于使用纯 css 实现。
+- 我是这个库的唯一使用者，所以适度的 API 变更修改是可以接受的。
 
 <!--VITE PLUS START-->
 
