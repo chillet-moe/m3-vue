@@ -10,6 +10,8 @@ import CircularProgressIndicatorDefault from '../demos/circular-progress-indicat
 import CircularProgressIndicatorDefaultSrc from '../demos/circular-progress-indicator/CircularProgressIndicatorDefault.vue?raw';
 import CircularProgressIndicatorIndeterminate from '../demos/circular-progress-indicator/CircularProgressIndicatorIndeterminate.vue';
 import CircularProgressIndicatorIndeterminateSrc from '../demos/circular-progress-indicator/CircularProgressIndicatorIndeterminate.vue?raw';
+import CircularProgressIndicatorValueAnimation from '../demos/circular-progress-indicator/CircularProgressIndicatorValueAnimation.vue';
+import CircularProgressIndicatorValueAnimationSrc from '../demos/circular-progress-indicator/CircularProgressIndicatorValueAnimation.vue?raw';
 
 const props = ref({
   value: 0.42,
@@ -43,6 +45,12 @@ CircularProgressIndicator displays determinate or indeterminate progress around 
 
 <DemoContainer :src="CircularProgressIndicatorDefaultSrc">
   <CircularProgressIndicatorDefault />
+</DemoContainer>
+
+### Value animation
+
+<DemoContainer :src="CircularProgressIndicatorValueAnimationSrc">
+  <CircularProgressIndicatorValueAnimation />
 </DemoContainer>
 
 ### Indeterminate

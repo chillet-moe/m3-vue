@@ -1,15 +1,16 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vite-plus/test';
-import { createApp, h, nextTick } from 'vue';
+import { createApp, h, nextTick, ref } from 'vue';
 import CircularProgressIndicator from './CircularProgressIndicator.vue';
 
 async function mountCircularProgressIndicator(props: Record<string, unknown> = {}) {
   const container = document.createElement('div');
   document.body.appendChild(container);
+  const propsRef = ref(props);
 
   const app = createApp({
     render() {
-      return h(CircularProgressIndicator, props);
+      return h(CircularProgressIndicator, propsRef.value);
     },
   });
 
@@ -20,7 +21,18 @@ async function mountCircularProgressIndicator(props: Record<string, unknown> = {
     app,
     container,
     root: container.querySelector('.m3-circular-progress-indicator') as HTMLElement | null,
+    async updateProps(nextProps: Record<string, unknown>) {
+      propsRef.value = {
+        ...propsRef.value,
+        ...nextProps,
+      };
+      await nextTick();
+    },
   };
+}
+
+async function nextAnimationFrame() {
+  await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 }
 
 describe('CircularProgressIndicator', () => {
@@ -74,6 +86,30 @@ describe('CircularProgressIndicator', () => {
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-size')).toBe('3rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-thickness')).toBe('0.375rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-active-indicator-gap')).toBe('0.25rem');
+
+    app.unmount();
+  });
+
+  it('animates the displayed determinate value while exposing the real value', async () => {
+    const { app, root, updateProps } = await mountCircularProgressIndicator({
+      value: 0,
+      min: 0,
+      max: 1,
+    });
+
+    await updateProps({ value: 1 });
+
+    expect(root?.getAttribute('aria-valuenow')).toBe('1');
+    expect(root?.getAttribute('aria-valuetext')).toBe('100%');
+    expect(root?.style.getPropertyValue('--md-circular-progress-indicator-progress')).toBe('0');
+
+    await nextAnimationFrame();
+    await nextAnimationFrame();
+    await nextTick();
+
+    const displayedProgress = Number(root?.style.getPropertyValue('--md-circular-progress-indicator-progress'));
+    expect(displayedProgress).toBeGreaterThan(0);
+    expect(displayedProgress).not.toBe(1);
 
     app.unmount();
   });

@@ -8,6 +8,7 @@ import {
   getCircularTrackGapDegrees,
   type CircularIndeterminateState,
 } from '../progressIndicatorPath';
+import { useProgressDisplayedValue } from '../progressIndicatorValue';
 
 export type CircularProgressIndicatorProps = {
   /** Whether the progress value is unknown. */
@@ -83,13 +84,14 @@ const progressRatio = computed(() => {
   return clamp((clampedValue.value - props.min) / range, 0, 1);
 });
 
+const progressRatioDisplayed = useProgressDisplayedValue(progressRatio, isDeterminate);
 const progressPercent = computed(() => progressRatio.value * 100);
 const progressState = computed(() => {
-  if (progressRatio.value <= 0) {
+  if (progressRatioDisplayed.value <= 0) {
     return 'empty';
   }
 
-  if (progressRatio.value >= 1) {
+  if (progressRatioDisplayed.value >= 1) {
     return 'complete';
   }
 
@@ -176,7 +178,7 @@ const ariaValueTextResolved = computed(() => {
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {
-    '--md-circular-progress-indicator-progress': progressRatio.value.toString(),
+    '--md-circular-progress-indicator-progress': progressRatioDisplayed.value.toString(),
   };
 
   if (props.size) {
@@ -211,10 +213,10 @@ const radius = computed(() => Math.max(1, (layout.value.size - layout.value.thic
 const viewBox = computed(() => `0 0 ${layout.value.size} ${layout.value.size}`);
 const activeStartDegrees = computed(() => (isDeterminate.value ? 0 : indeterminateState.value.startDegrees));
 const activeEndDegrees = computed(() =>
-  isDeterminate.value ? progressRatio.value * 360 : indeterminateState.value.endDegrees,
+  isDeterminate.value ? progressRatioDisplayed.value * 360 : indeterminateState.value.endDegrees,
 );
 const activePath = computed(() => {
-  if (isDeterminate.value && progressRatio.value <= 0) {
+  if (isDeterminate.value && progressRatioDisplayed.value <= 0) {
     return '';
   }
 
@@ -233,7 +235,7 @@ const activePath = computed(() => {
 });
 const trackPath = computed(() => {
   if (isDeterminate.value) {
-    if (progressRatio.value >= 1) {
+    if (progressRatioDisplayed.value >= 1) {
       return '';
     }
 
@@ -241,9 +243,9 @@ const trackPath = computed(() => {
       layout.value.trackGap,
       layout.value.thickness,
       radius.value,
-      progressRatio.value,
+      progressRatioDisplayed.value,
     );
-    const startDegrees = progressRatio.value * 360 + gapDegrees;
+    const startDegrees = progressRatioDisplayed.value * 360 + gapDegrees;
     const endDegrees = 360 - gapDegrees;
     return createCircularArcPath(center.value, radius.value, startDegrees, endDegrees);
   }

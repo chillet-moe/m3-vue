@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { clamp, createLinearWavePath } from '../progressIndicatorPath';
+import { useProgressDisplayedValue } from '../progressIndicatorValue';
 
 export type LinearProgressIndicatorProps = {
   /** Whether the progress value is unknown. */
@@ -83,13 +84,15 @@ const progressRatio = computed(() => {
   return clamp((clampedValue.value - props.min) / range, 0, 1);
 });
 
+const progressRatioDisplayed = useProgressDisplayedValue(progressRatio, isDeterminate);
 const progressPercent = computed(() => progressRatio.value * 100);
+const progressPercentDisplayed = computed(() => progressRatioDisplayed.value * 100);
 const progressState = computed(() => {
-  if (progressRatio.value <= 0) {
+  if (progressRatioDisplayed.value <= 0) {
     return 'empty';
   }
 
-  if (progressRatio.value >= 1) {
+  if (progressRatioDisplayed.value >= 1) {
     return 'complete';
   }
 
@@ -178,8 +181,8 @@ const ariaValueTextResolved = computed(() => {
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {
-    '--md-linear-progress-indicator-progress': progressRatio.value.toString(),
-    '--md-linear-progress-indicator-progress-percent': `${progressPercent.value}%`,
+    '--md-linear-progress-indicator-progress': progressRatioDisplayed.value.toString(),
+    '--md-linear-progress-indicator-progress-percent': `${progressPercentDisplayed.value}%`,
     '--md-linear-progress-indicator-active-track-gap-size': isTrackGapVisible.value
       ? 'var(--md-linear-progress-indicator-track-active-indicator-gap)'
       : '0px',
