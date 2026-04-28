@@ -62,6 +62,12 @@ export type SelectProps = {
   /** Enables multi-select behavior. */
   multiple?: boolean;
 
+  /** Shows a trailing button that clears the current selection. */
+  clearable?: boolean;
+
+  /** Accessible label for the clear button. */
+  clearLabel?: string;
+
   /** Visual color style of the dropdown menu. */
   menuColor?: MenuColor;
 
@@ -108,6 +114,8 @@ const props = withDefaults(defineProps<SelectProps>(), {
   name: undefined,
   placeholder: undefined,
   multiple: false,
+  clearable: false,
+  clearLabel: 'Clear selection',
   menuColor: 'standard',
   displaySeparator: ', ',
   filterable: false,
@@ -293,6 +301,18 @@ defineExpose({
         </template>
         <template #trailing>
           <slot v-if="slots.trailing" name="trailing" />
+          <button
+            v-if="props.clearable && select.hasValue.value && !props.disabled"
+            class="m3-select-clear-button m3-state-layer"
+            data-scope="select"
+            data-part="clear-button"
+            type="button"
+            :aria-label="props.clearLabel"
+            @mousedown.stop.prevent
+            @click.stop="select.clearValue"
+          >
+            <Icon class="m3-select-clear-icon" name="close" data-scope="select" data-part="clear-icon" />
+          </button>
           <span class="m3-select-indicator" data-scope="select" data-part="indicator" aria-hidden="true">
             <Icon name="arrow_drop_down" />
           </span>

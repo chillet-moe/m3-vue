@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
-import Select, { type SelectOption } from './Select.vue';
+import Select, { type SelectModelValue, type SelectOption } from './Select.vue';
 
 const options: SelectOption[] = [
   {
@@ -240,6 +240,105 @@ describe('Select', () => {
 
     expect(hiddenInputs.map((input) => input.name)).toEqual(['coffee', 'coffee']);
     expect(hiddenInputs.map((input) => input.value)).toEqual(['espresso', 'cold-brew']);
+
+    app.unmount();
+  });
+
+  it('clears a single selection from the trailing clear button', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    let selectedValue: SelectModelValue = 'espresso';
+    let changedValue: SelectModelValue | 'unchanged' = 'unchanged';
+
+    const app = createApp({
+      setup() {
+        const value = ref<SelectModelValue>('espresso');
+
+        return () =>
+          h(Select, {
+            label: 'Coffee',
+            options,
+            clearable: true,
+            clearLabel: 'Clear coffee',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = nextValue as SelectModelValue;
+              selectedValue = value.value;
+            },
+            onChange: (nextValue) => {
+              changedValue = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const clearButton = container.querySelector<HTMLButtonElement>('[data-part="clear-button"]');
+
+    expect(clearButton?.getAttribute('aria-label')).toBe('Clear coffee');
+
+    clearButton?.click();
+    await nextTick();
+
+    expect(selectedValue).toBeUndefined();
+    expect(changedValue).toBeUndefined();
+    expect(getSelectInput(container)?.value).toBe('');
+    expect(container.querySelector('[data-part="clear-button"]')).toBeNull();
+    expect(isPopoverOpen(menu)).toBe(false);
+
+    app.unmount();
+  });
+
+  it('clears a multiple selection to an empty array from the trailing clear button', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    let selectedValues: SelectOption['value'][] = ['espresso', 'cold-brew'];
+    let changedValue: SelectModelValue | 'unchanged' = 'unchanged';
+
+    const app = createApp({
+      setup() {
+        const value = ref<SelectOption['value'][]>(['espresso', 'cold-brew']);
+
+        return () =>
+          h(Select, {
+            label: 'Coffee',
+            name: 'coffee',
+            options,
+            multiple: true,
+            clearable: true,
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = [...(nextValue as SelectOption['value'][])];
+              selectedValues = [...value.value];
+            },
+            onChange: (nextValue) => {
+              changedValue = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const clearButton = container.querySelector<HTMLButtonElement>('[data-part="clear-button"]');
+
+    clearButton?.click();
+    await nextTick();
+
+    expect(selectedValues).toEqual([]);
+    expect(changedValue).toEqual([]);
+    expect(getSelectInput(container)?.value).toBe('');
+    expect(container.querySelectorAll('input[type="hidden"]')).toHaveLength(0);
 
     app.unmount();
   });

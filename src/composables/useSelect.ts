@@ -91,6 +91,9 @@ export type UseSelectReturn = {
   /** Toggle an option in the selection. */
   toggleOption: (option: UseSelectOption) => void;
 
+  /** Clear the current selection. */
+  clearValue: () => void;
+
   /** Handle menu item selection event. */
   handleMenuSelect: (event: MouseEvent, itemElement: HTMLElement) => void;
 
@@ -225,6 +228,13 @@ export function useSelect(opts: UseSelectOptions): UseSelectReturn {
     filterQuery.value = '';
   }
 
+  function clearValue() {
+    if (!hasValue.value) return;
+
+    updateValue(multiple() ? [] : undefined);
+    filterQuery.value = '';
+  }
+
   function handleMenuSelect(_event: MouseEvent, itemElement: HTMLElement) {
     const optionIndex = Number(itemElement.dataset.optionIndex);
     if (!Number.isInteger(optionIndex)) return;
@@ -351,6 +361,7 @@ export function useSelect(opts: UseSelectOptions): UseSelectReturn {
     hasFilteredOptions,
     isOptionSelected,
     toggleOption,
+    clearValue,
     handleMenuSelect,
     focus,
     blur,

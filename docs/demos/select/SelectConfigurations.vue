@@ -11,12 +11,13 @@ const empty = ref<SelectModelValue>(undefined);
 
 <template>
   <div style="display: grid; gap: 1rem; max-inline-size: 24rem">
-    <Select v-model="single" label="Coffee" :options="coffeeOptions" description="Single selection" />
+    <Select v-model="single" label="Coffee" :options="coffeeOptions" clearable description="Single selection" />
     <Select
       v-model="multiple"
       label="Beans to restock"
       :options="coffeeOptions"
       multiple
+      clearable
       placeholder="Choose one or more"
       description="Multiple selection stays open after each pick."
     />

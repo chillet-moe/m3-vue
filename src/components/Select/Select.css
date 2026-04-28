@@ -28,6 +28,35 @@
       transform var(--md-duration-fast) var(--md-timing-function-fast);
   }
 
+  .m3-select-clear-button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2rem;
+    block-size: 2rem;
+    margin-block: -0.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--md-sys-shape-corner-full);
+    background: transparent;
+    color: currentColor;
+    cursor: pointer;
+
+    --md-state-layer-color: currentColor;
+  }
+
+  .m3-select-clear-button:focus-visible {
+    outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+    outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
+  }
+
+  .m3-select-clear-icon {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    font-size: 1.25rem;
+  }
+
   .m3-select[data-open='true'] {
     --_outline-width: var(--md-comp-outlined-text-field-focus-outline-width);
     --_outline-color: var(--md-comp-outlined-text-field-focus-outline-color);
