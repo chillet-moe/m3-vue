@@ -121,6 +121,17 @@
     transition: all var(--md-easing-fast-spatial);
   }
 
+  .m3-switch-handle.m3-state-layer::before,
+  .m3-switch-handle.m3-state-layer::after,
+  .m3-switch-handle.m3-state-layer > .ripple {
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: 1.25rem;
+    transform: translate(-50%, -50%);
+  }
+
   .m3-switch-control[data-with-icon='true'] {
     --switch-handle-unchecked-inset: 0.25rem;
 

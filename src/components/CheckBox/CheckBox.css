@@ -55,6 +55,7 @@
     position: relative;
     inline-size: var(--md-comp-checkbox-target-size);
     block-size: var(--md-comp-checkbox-target-size);
+    border-radius: var(--md-comp-checkbox-state-layer-shape);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -87,16 +88,6 @@
     transform: translate(-50%, calc(-50% - --dp(1))) rotate(-45deg) scale(0.5);
     opacity: 0;
     transition: all var(--md-easing-fast-spatial);
-  }
-
-  .m3-checkbox-control > .m3-state-layer {
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    inline-size: var(--md-comp-checkbox-state-layer-size);
-    block-size: var(--md-comp-checkbox-state-layer-size);
-    border-radius: var(--md-comp-checkbox-state-layer-shape);
-    transform: translate(-50%, -50%);
   }
 
   .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box {

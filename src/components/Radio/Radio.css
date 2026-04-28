@@ -54,6 +54,7 @@
     position: relative;
     inline-size: var(--md-comp-radio-target-size);
     block-size: var(--md-comp-radio-target-size);
+    border-radius: var(--md-sys-shape-corner-full);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -82,16 +83,6 @@
     background-color: var(--md-comp-radio-selected-dot-color);
     transform: translate(-50%, -50%) scale(0);
     transition: transform var(--md-easing-fast-spatial);
-  }
-
-  .m3-radio-control > .m3-state-layer {
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    inline-size: var(--md-comp-radio-state-layer-size);
-    block-size: var(--md-comp-radio-state-layer-size);
-    border-radius: var(--md-sys-shape-corner-full);
-    transform: translate(-50%, -50%);
   }
 
   .m3-radio-input:checked + .m3-radio-control .m3-radio-outer {

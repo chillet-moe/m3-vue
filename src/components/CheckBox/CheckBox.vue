@@ -43,10 +43,15 @@ defineSlots<{
       :aria-label="ariaLabel"
     />
 
-    <span :class="'m3-checkbox-control'" data-scope="checkbox" data-part="control" aria-hidden="true">
+    <span
+      :class="['m3-state-layer', 'm3-checkbox-control']"
+      data-scope="checkbox"
+      data-part="control"
+      data-state-layer-hover-from="target"
+      aria-hidden="true"
+    >
       <span :class="'m3-checkbox-box'" data-scope="checkbox" data-part="box" />
       <span :class="'m3-checkbox-icon'" data-scope="checkbox" data-part="icon" />
-      <span class="m3-state-layer" data-state-layer-hover-from="target" />
     </span>
 
     <span v-if="$slots.default" :class="'m3-checkbox-label'" data-scope="checkbox" data-part="label"><slot /></span>

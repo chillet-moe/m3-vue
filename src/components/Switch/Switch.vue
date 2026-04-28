@@ -63,15 +63,15 @@ defineSlots<{
       aria-hidden="true"
     >
       <span :class="'m3-switch-track'" data-scope="switch" data-part="track" />
-      <span :class="'m3-switch-handle'" data-scope="switch" data-part="handle">
+      <span
+        :class="['m3-state-layer', 'm3-switch-handle']"
+        data-scope="switch"
+        data-part="handle"
+        data-state-layer-hover-from="target"
+      >
         <span v-if="withIcon" :class="'m3-switch-icon'" data-scope="switch" data-part="icon">{{
           checked ? checkedIcon : uncheckedIcon
         }}</span>
-        <span
-          class="m3-state-layer"
-          data-state-layer-hover-from="target"
-          style="position: absolute; width: 2.5rem; height: 2.5rem; border-radius: 1.25rem"
-        />
       </span>
     </span>
 
