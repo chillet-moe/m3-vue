@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, useId, useSlots, useTemplateRef, watch } from 'vue';
+import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
+import { computed, onUnmounted, useId, useSlots, useTemplateRef, watch } from 'vue';
 
 export type DialogProps = {
   /** Whether clicking the backdrop closes the dialog. */
@@ -42,6 +43,7 @@ const hasIcon = computed(() => Boolean(slots.icon));
 const hasHeadline = computed(() => Boolean(slots.headline));
 const hasContent = computed(() => Boolean(slots.default));
 const hasActions = computed(() => Boolean(slots.actions));
+let releaseScrollLock: (() => void) | undefined;
 
 const showDialog = () => {
   const dialog = dialogRef.value;
@@ -63,6 +65,15 @@ const closeDialog = (returnValue?: string) => {
   dialog.close(returnValue);
 };
 
+const acquireScrollLock = () => {
+  releaseScrollLock ??= lockPageScroll();
+};
+
+const releaseScrollLockIfNeeded = () => {
+  releaseScrollLock?.();
+  releaseScrollLock = undefined;
+};
+
 watch(
   [dialogRef, open],
   ([dialog]) => {
@@ -71,10 +82,12 @@ watch(
     }
 
     if (open.value) {
+      acquireScrollLock();
       showDialog();
       return;
     }
 
+    releaseScrollLockIfNeeded();
     closeDialog();
   },
   {
@@ -89,6 +102,8 @@ const onCancel = (event: Event) => {
 
 const onClose = (event: Event) => {
   const dialog = event.currentTarget as HTMLDialogElement;
+
+  releaseScrollLockIfNeeded();
 
   if (open.value) {
     open.value = false;
@@ -119,6 +134,10 @@ defineExpose({
   showModal,
   close,
   dialogRef,
+});
+
+onUnmounted(() => {
+  releaseScrollLockIfNeeded();
 });
 </script>
 

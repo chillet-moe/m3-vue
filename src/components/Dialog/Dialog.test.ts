@@ -44,6 +44,9 @@ beforeAll(() => {
 
 afterEach(() => {
   document.body.innerHTML = '';
+  document.body.removeAttribute('style');
+  document.body.removeAttribute('data-m3-scroll-lock');
+  document.documentElement.removeAttribute('style');
 });
 
 describe('Dialog', () => {
@@ -78,11 +81,17 @@ describe('Dialog', () => {
 
     expect(dialog).not.toBeNull();
     expect(dialog?.open).toBe(true);
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
+    expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).not.toBe('');
 
     open.value = false;
     await nextTick();
 
     expect(dialog?.open).toBe(false);
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
+    expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
     app.unmount();
   });
@@ -125,6 +134,8 @@ describe('Dialog', () => {
 
     expect(open.value).toBe(false);
     expect(onClose).toHaveBeenCalledWith('confirmed');
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
 
     app.unmount();
   });
@@ -202,6 +213,8 @@ describe('Dialog', () => {
 
     expect(open.value).toBe(false);
     expect(dialog?.open).toBe(false);
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
 
     app.unmount();
   });

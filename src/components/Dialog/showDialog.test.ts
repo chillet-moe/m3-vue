@@ -44,6 +44,9 @@ beforeAll(() => {
 
 afterEach(() => {
   document.body.innerHTML = '';
+  document.body.removeAttribute('style');
+  document.body.removeAttribute('data-m3-scroll-lock');
+  document.documentElement.removeAttribute('style');
 });
 
 describe('showDialog', () => {
@@ -63,6 +66,8 @@ describe('showDialog', () => {
     const deleteButton = buttons.find((button) => button.textContent?.includes('Delete'));
 
     expect(deleteButton).toBeDefined();
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
 
     deleteButton?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
@@ -70,6 +75,8 @@ describe('showDialog', () => {
     await Promise.resolve();
 
     expect(document.querySelector('dialog')).toBeNull();
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
   });
 
   it('resolves with an empty string when dismissed by backdrop click', async () => {
@@ -83,6 +90,8 @@ describe('showDialog', () => {
     const dialog = document.querySelector('dialog') as HTMLDialogElement | null;
 
     expect(dialog).not.toBeNull();
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
 
     dialog?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
@@ -90,5 +99,7 @@ describe('showDialog', () => {
     await Promise.resolve();
 
     expect(document.querySelector('dialog')).toBeNull();
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
   });
 });

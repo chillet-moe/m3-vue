@@ -83,16 +83,16 @@ describe('SideSheet', () => {
     expect(dialog?.dataset.scope).toBe('side-sheet');
     expect(dialog?.dataset.side).toBe('end');
     expect(document.body.style.overflow).toBe('hidden');
-    expect(document.body.style.position).toBe('fixed');
-    expect(document.documentElement.style.overflow).toBe('hidden');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
+    expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).not.toBe('');
 
     open.value = false;
     await nextTick();
 
     expect(dialog?.open).toBe(false);
     expect(document.body.style.overflow).toBe('');
-    expect(document.body.style.position).toBe('');
-    expect(document.documentElement.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
+    expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
     app.unmount();
   });
@@ -127,7 +127,7 @@ describe('SideSheet', () => {
     expect(open.value).toBe(false);
     expect(onClose).toHaveBeenCalledWith('done');
     expect(document.body.style.overflow).toBe('');
-    expect(document.documentElement.style.overflow).toBe('');
+    expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
     app.unmount();
   });
