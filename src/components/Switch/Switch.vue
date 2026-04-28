@@ -62,7 +62,6 @@ defineSlots<{
       :data-with-icon="uncheckedIcon ? 'true' : 'false'"
       aria-hidden="true"
     >
-      <span :class="'m3-switch-track'" data-scope="switch" data-part="track" />
       <span
         :class="['m3-state-layer', 'm3-switch-handle']"
         data-scope="switch"

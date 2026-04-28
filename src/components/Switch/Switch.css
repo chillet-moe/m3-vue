@@ -94,9 +94,10 @@
     --switch-handle-center: var(--switch-handle-center-unchecked);
   }
 
-  .m3-switch-track {
-    inline-size: 100%;
-    block-size: 100%;
+  .m3-switch-control::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     border-radius: var(--md-comp-switch-track-shape);
     background-color: var(--md-comp-switch-unselected-track-color);
     box-shadow: inset 0 0 0 var(--md-comp-switch-track-outline-width)
@@ -139,7 +140,7 @@
     --switch-handle-base-height: var(--md-comp-switch-with-icon-handle-height);
   }
 
-  .m3-switch-input:checked + .m3-switch-control .m3-switch-track {
+  .m3-switch-input:checked + .m3-switch-control::before {
     background-color: var(--md-comp-switch-selected-track-color);
     box-shadow: none;
   }
@@ -154,7 +155,7 @@
     background-color: var(--md-comp-switch-selected-handle-color);
   }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-track {
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-control::before {
     background-color: var(--md-comp-switch-unselected-hover-track-color);
   }
 
@@ -162,7 +163,7 @@
     background-color: var(--md-comp-switch-unselected-hover-handle-color);
   }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control .m3-switch-track {
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control::before {
     background-color: var(--md-comp-switch-selected-hover-track-color);
   }
 
@@ -178,14 +179,11 @@
     --switch-handle-height: var(--md-comp-switch-pressed-handle-height);
   }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-track {
+  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-control::before {
     background-color: var(--md-comp-switch-unselected-pressed-track-color);
   }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):active)
-    .m3-switch-input:checked
-    + .m3-switch-control
-    .m3-switch-track {
+  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-input:checked + .m3-switch-control::before {
     background-color: var(--md-comp-switch-selected-pressed-track-color);
   }
 
@@ -209,7 +207,7 @@
     border-radius: var(--md-comp-switch-track-shape);
   }
 
-  .m3-switch-input:disabled + .m3-switch-control .m3-switch-track {
+  .m3-switch-input:disabled + .m3-switch-control::before {
     background-color: --translucent(
       var(--md-comp-switch-disabled-unselected-track-color),
       var(--md-comp-switch-disabled-track-opacity)
@@ -228,7 +226,7 @@
     );
   }
 
-  .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-track {
+  .m3-switch-input:disabled:checked + .m3-switch-control::before {
     background-color: --translucent(
       var(--md-comp-switch-disabled-selected-track-color),
       var(--md-comp-switch-disabled-track-opacity)

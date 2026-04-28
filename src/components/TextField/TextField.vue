@@ -237,9 +237,7 @@ defineExpose({
       </span>
 
       <fieldset :class="'m3-text-field-outline'" data-scope="text-field" data-part="outline" aria-hidden="true">
-        <legend v-if="props.label">
-          <span>{{ props.label }}</span>
-        </legend>
+        <legend v-if="props.label">{{ props.label }}</legend>
       </fieldset>
     </div>
 

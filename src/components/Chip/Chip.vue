@@ -266,26 +266,24 @@ defineSlots<{
     <span v-if="showAvatar" :class="'m3-chip-avatar'" data-scope="chip" data-part="avatar" aria-hidden="true">
       <img :src="avatarSrc" :class="'m3-chip-avatar-image'" data-scope="chip" data-part="avatar-image" alt="" />
     </span>
-    <span
+    <Icon
       v-if="resolvedLeadingIcon"
-      :class="'m3-chip-leading'"
+      :name="resolvedLeadingIcon"
+      :class="['m3-chip-leading', 'm3-chip-icon']"
       data-scope="chip"
       data-part="leading"
       aria-hidden="true"
-    >
-      <Icon :name="resolvedLeadingIcon" :class="'m3-chip-icon'" data-scope="chip" data-part="icon" />
-    </span>
+    />
     <span :class="'m3-chip-content'" data-scope="chip" data-part="content">
       <span :class="'m3-chip-label'" data-scope="chip" data-part="label"><slot /></span>
-      <span
+      <Icon
         v-if="hasTrailing && trailingIcon"
-        :class="'m3-chip-trailing'"
+        :name="trailingIcon"
+        :class="['m3-chip-trailing', 'm3-chip-icon']"
         data-scope="chip"
         data-part="trailing"
         aria-hidden="true"
-      >
-        <Icon :name="trailingIcon" :class="'m3-chip-icon'" data-scope="chip" data-part="icon" />
-      </span>
+      />
     </span>
   </component>
 </template>

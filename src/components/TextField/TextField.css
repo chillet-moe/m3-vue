@@ -132,16 +132,14 @@
     block-size: 0;
     padding: 0;
     margin-inline-start: 0.25rem;
-    transition: max-inline-size var(--md-duration) var(--md-timing-function);
-  }
-
-  .m3-text-field-outline legend > span {
-    padding-inline: 0.25rem;
     font-family: var(--md-comp-outlined-text-field-label-text-font), sans-serif;
     font-size: var(--md-comp-outlined-text-field-label-text-populated-size);
     line-height: var(--md-comp-outlined-text-field-label-text-populated-line-height);
     font-weight: var(--md-comp-outlined-text-field-label-text-weight);
     letter-spacing: var(--md-comp-outlined-text-field-label-text-tracking);
+    transition:
+      max-inline-size var(--md-duration) var(--md-timing-function),
+      padding-inline var(--md-duration) var(--md-timing-function);
   }
 
   .m3-text-field-label {
@@ -185,6 +183,7 @@
   .m3-text-field[data-populated='true'] .m3-text-field-outline legend,
   .m3-text-field[data-has-placeholder='true'] .m3-text-field-outline legend {
     max-inline-size: 100%;
+    padding-inline: 0.25rem;
   }
 
   .m3-text-field[data-has-leading='true'][data-populated='false'][data-has-placeholder='false'][data-visually-focused='false']:not(
