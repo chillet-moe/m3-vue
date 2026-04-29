@@ -12,6 +12,11 @@
     height: 1em;
     line-height: 1;
     font-size: 1em;
+
+    font-weight: var(--m3-icon-weight, 400);
+    font-variation-settings:
+      'FILL' var(--m3-icon-fill, 0),
+      'GRAD' var(--m3-icon-grade, 0);
   }
 
   .m3-icon svg {

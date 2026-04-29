@@ -8,8 +8,6 @@ import { Icon } from '@/components/Icon';
 
 import IconDefault from '../demos/icon/IconDefault.vue';
 import IconDefaultSrc from '../demos/icon/IconDefault.vue?raw';
-import IconCatalog from '../demos/icon/IconCatalog.vue';
-import IconCatalogSrc from '../demos/icon/IconCatalog.vue?raw';
 
 const props = ref({
   name: 'settings',
@@ -38,11 +36,3 @@ The icon component renders Material Symbols names directly, making it easy to re
 <DemoContainer :src="IconDefaultSrc" :viewport="false">
   <IconDefault />
 </DemoContainer>
-
-### Available Examples
-
-<DemoContainer :src="IconCatalogSrc" :viewport="false">
-  <IconCatalog />
-</DemoContainer>
-
-In this project’s examples, `favorite`, `home`, `search`, and `settings` are the icons used most often. For a broader catalog, refer to the Material Symbols guide.
