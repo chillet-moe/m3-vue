@@ -265,7 +265,7 @@
     --_navigation-rail-item-current-padding-block: 0;
     --_navigation-rail-item-current-icon-label-space: 0;
 
-    inline-size: 100%;
+    inline-size: auto;
     max-inline-size: 100%;
     justify-items: stretch;
   }
