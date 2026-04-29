@@ -1,8 +1,3 @@
----
-description: 'Use when: adding a new component, creating a new UI component, implementing a new Material Design 3 component. Covers all files that need to be created or modified.'
-applyTo: 'src/components/**'
----
-
 # 添加新组件
 
 ## 参考
