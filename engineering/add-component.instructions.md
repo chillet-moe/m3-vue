@@ -306,7 +306,7 @@ const props = ref({});
 - 如果某些 props 不适合在 ApiTable 中交互（如回调函数、数组），用 `:exclude` 排除
 - md 文件中的 Vue 组件**不能包含换行**，否则会导致渲染错误
 - `<DemoContainer>` 的 `:src` 属性用于显示源码，通过 `?raw` 导入
-- 顶部用于联动 Props 的 `<DemoContainer>` 默认没有 `src`，会自动使用 sticky 预览；示例区带源码的 Demo 不会 sticky
+- 顶部用于联动 Props 的 `<DemoContainer>` 默认没有 `src`，会自动使用 sticky 预览；示例区带源码的 Demo 不会 sticky。组件页可以用 `:sticky="false"` 关闭，用户也可以通过文档顶部工具栏的 pin 按钮全局关闭 sticky 预览
 
 ### Demo 文件 `docs/demos/<name>/`
 

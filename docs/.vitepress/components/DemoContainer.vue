@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue';
 import { codeToHtml } from 'shiki';
+import { useStickyPreviewPreference } from '../theme/composables/preferences';
 
 type ViewportPreset = {
   height: number;
@@ -26,6 +27,7 @@ const sourceOpen = ref(false);
 const highlightedSource = ref('');
 const container = ref<HTMLElement | null>(null);
 const isStuck = ref(false);
+const stickyPreviewEnabled = useStickyPreviewPreference();
 let stickyUpdateFrame = 0;
 
 watchEffect((onCleanup) => {
@@ -59,7 +61,7 @@ const hasToolbar = computed(() => {
 });
 
 const stickyEnabled = computed(() => {
-  return props.sticky ?? !props.src;
+  return stickyPreviewEnabled.value && (props.sticky ?? !props.src);
 });
 
 function getStickyOffset(element: HTMLElement) {

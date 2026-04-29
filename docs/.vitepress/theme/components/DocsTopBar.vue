@@ -5,6 +5,7 @@ import { computed } from 'vue';
 
 import { Button, IconButton } from '@/index';
 import { useNav } from '../composables/nav';
+import { useStickyPreviewPreference } from '../composables/preferences';
 import { useSidebar, useSidebarControl } from '../composables/sidebar';
 import { normalizePath, resolveSocialLabel } from '../utils';
 
@@ -12,6 +13,7 @@ const { page, frontmatter, site, isDark } = useData();
 const { navItems, socialLinks } = useNav();
 const { currentPath } = useSidebar();
 const { toggle: toggleSidebar } = useSidebarControl();
+const stickyPreviewEnabled = useStickyPreviewPreference();
 
 const pageTitle = computed(() => {
   return page.value.title || frontmatter.value.title || site.value.title || 'M3 Vue';
@@ -27,6 +29,10 @@ function resolveLink(path: string) {
 
 function toggleAppearance() {
   isDark.value = !isDark.value;
+}
+
+function toggleStickyPreview() {
+  stickyPreviewEnabled.value = !stickyPreviewEnabled.value;
 }
 </script>
 
@@ -72,6 +78,16 @@ function toggleAppearance() {
         >
           {{ resolveSocialLabel(link.link) }}
         </Button>
+
+        <IconButton
+          color="standard"
+          size="small"
+          width="default"
+          icon="push_pin"
+          :aria-label="stickyPreviewEnabled ? 'Disable sticky preview' : 'Enable sticky preview'"
+          :data-active="stickyPreviewEnabled ? 'true' : 'false'"
+          @click="toggleStickyPreview"
+        />
 
         <IconButton
           color="standard"
@@ -139,6 +155,11 @@ function toggleAppearance() {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.docs-topbar-actions :deep([data-active='true']) {
+  color: var(--md-sys-color-primary);
+  background: --translucent(var(--md-sys-color-primary), 0.12);
 }
 
 .docs-search :deep(.VPNavBarSearchButton) {
