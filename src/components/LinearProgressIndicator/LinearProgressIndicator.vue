@@ -86,7 +86,6 @@ const progressRatio = computed(() => {
 
 const progressRatioDisplayed = useProgressDisplayedValue(progressRatio, isDeterminate);
 const progressPercent = computed(() => progressRatio.value * 100);
-const progressPercentDisplayed = computed(() => progressRatioDisplayed.value * 100);
 const progressState = computed(() => {
   if (progressRatioDisplayed.value <= 0) {
     return 'empty';
@@ -181,11 +180,8 @@ const ariaValueTextResolved = computed(() => {
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {
-    '--md-linear-progress-indicator-progress': progressRatioDisplayed.value.toString(),
-    '--md-linear-progress-indicator-progress-percent': `${progressPercentDisplayed.value}%`,
-    '--md-linear-progress-indicator-active-track-gap-size': isTrackGapVisible.value
-      ? 'var(--md-linear-progress-indicator-track-active-indicator-gap)'
-      : '0px',
+    '--_progress': progressRatioDisplayed.value.toString(),
+    '--_active-track-gap-size': isTrackGapVisible.value ? 'var(--_track-active-indicator-gap)' : '0px',
   };
 
   if (props.thickness) {

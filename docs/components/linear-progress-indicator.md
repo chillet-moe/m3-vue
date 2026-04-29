@@ -41,6 +41,8 @@ LinearProgressIndicator displays determinate or indeterminate progress on a hori
 
 <ApiTable component="LinearProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
 
+<StyleTokenTable component="LinearProgressIndicator" />
+
 ## Examples
 
 ### Default

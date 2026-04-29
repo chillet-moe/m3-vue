@@ -11,18 +11,56 @@
 }
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-progress-indicator-color: initial;
+    --md-progress-indicator-track-color: initial;
+    --md-progress-indicator-stop-indicator-color: initial;
+    --md-linear-progress-indicator-active-indicator-color: initial;
+    --md-linear-progress-indicator-track-color: initial;
+    --md-linear-progress-indicator-stop-indicator-color: initial;
+    --md-linear-progress-indicator-track-thickness: initial;
+    --md-linear-progress-indicator-track-active-indicator-gap: initial;
+    --md-linear-progress-indicator-stop-indicator-size: initial;
+    --md-linear-progress-indicator-wave-amplitude: initial;
+    --md-linear-progress-indicator-wave-wavelength: initial;
+    --md-linear-progress-indicator-indeterminate-wave-wavelength: initial;
+    --md-linear-progress-indicator-with-wave-height: initial;
+    --md-linear-progress-indicator-shape: initial;
+  }
+
   .m3-linear-progress-indicator {
-    --md-linear-progress-indicator-active-indicator-color: var(--md-color-on-container, var(--md-sys-color-primary));
-    --md-linear-progress-indicator-track-color: var(--md-color-container, var(--md-sys-color-secondary-container));
-    --md-linear-progress-indicator-stop-indicator-color: var(--md-linear-progress-indicator-active-indicator-color);
-    --md-linear-progress-indicator-track-thickness: --dp(4);
-    --md-linear-progress-indicator-track-active-indicator-gap: --dp(4);
-    --md-linear-progress-indicator-stop-indicator-size: --dp(4);
-    --md-linear-progress-indicator-wave-amplitude: --dp(3);
-    --md-linear-progress-indicator-wave-wavelength: --dp(40);
-    --md-linear-progress-indicator-indeterminate-wave-wavelength: --dp(20);
-    --md-linear-progress-indicator-with-wave-height: --dp(10);
-    --md-linear-progress-indicator-shape: var(--md-sys-shape-corner-full);
+    --_progress: 0;
+    --_active-track-gap-size: 0px;
+    --_progress-indicator-color: var(
+      --md-progress-indicator-color,
+      var(--md-color-on-container, var(--md-sys-color-primary))
+    );
+    --_progress-indicator-track-color: var(
+      --md-progress-indicator-track-color,
+      var(--md-color-container, var(--md-sys-color-secondary-container))
+    );
+    --_progress-indicator-stop-indicator-color: var(
+      --md-progress-indicator-stop-indicator-color,
+      var(--_progress-indicator-color)
+    );
+    --_active-indicator-color: var(
+      --md-linear-progress-indicator-active-indicator-color,
+      var(--_progress-indicator-color)
+    );
+    --_track-color: var(--md-linear-progress-indicator-track-color, var(--_progress-indicator-track-color));
+    --_stop-indicator-color: var(
+      --md-linear-progress-indicator-stop-indicator-color,
+      var(--_progress-indicator-stop-indicator-color)
+    );
+    --_track-thickness: var(--md-linear-progress-indicator-track-thickness, --dp(4));
+    --_track-active-indicator-gap: var(--md-linear-progress-indicator-track-active-indicator-gap, --dp(4));
+    --_stop-indicator-size: var(--md-linear-progress-indicator-stop-indicator-size, --dp(4));
+    --_wave-amplitude: var(--md-linear-progress-indicator-wave-amplitude, --dp(3));
+    --_wave-wavelength: var(--md-linear-progress-indicator-wave-wavelength, --dp(40));
+    --_indeterminate-wave-wavelength: var(--md-linear-progress-indicator-indeterminate-wave-wavelength, --dp(20));
+    --_with-wave-height: var(--md-linear-progress-indicator-with-wave-height, --dp(10));
+    --_shape: var(--md-linear-progress-indicator-shape, var(--md-sys-shape-corner-full));
   }
 }
 
@@ -30,16 +68,13 @@
   .m3-linear-progress-indicator {
     display: block;
     inline-size: 100%;
-    block-size: var(--md-linear-progress-indicator-track-thickness);
-    color: var(--md-linear-progress-indicator-active-indicator-color);
+    block-size: var(--_track-thickness);
+    color: var(--_active-indicator-color);
     print-color-adjust: exact;
   }
 
   .m3-linear-progress-indicator[data-shape='wavy'] {
-    block-size: max(
-      var(--md-linear-progress-indicator-with-wave-height),
-      calc(var(--md-linear-progress-indicator-track-thickness) + var(--md-linear-progress-indicator-wave-amplitude) * 2)
-    );
+    block-size: max(var(--_with-wave-height), calc(var(--_track-thickness) + var(--_wave-amplitude) * 2));
   }
 
   .m3-linear-progress-indicator-viewport {
@@ -57,18 +92,15 @@
   .m3-linear-progress-indicator-active,
   .m3-linear-progress-indicator-active-flat {
     position: absolute;
-    inset-block-start: calc((100% - var(--md-linear-progress-indicator-track-thickness)) / 2);
-    block-size: var(--md-linear-progress-indicator-track-thickness);
-    border-radius: var(--md-linear-progress-indicator-shape);
+    inset-block-start: calc((100% - var(--_track-thickness)) / 2);
+    block-size: var(--_track-thickness);
+    border-radius: var(--_shape);
   }
 
   .m3-linear-progress-indicator-track {
     inset-inline-end: 0;
-    inset-inline-start: calc(
-      (100% - var(--md-linear-progress-indicator-active-track-gap-size)) *
-        var(--md-linear-progress-indicator-progress) + var(--md-linear-progress-indicator-active-track-gap-size)
-    );
-    background: var(--md-linear-progress-indicator-track-color);
+    inset-inline-start: calc((100% - var(--_active-track-gap-size)) * var(--_progress) + var(--_active-track-gap-size));
+    background: var(--_track-color);
   }
 
   .m3-linear-progress-indicator[data-indeterminate='true'] .m3-linear-progress-indicator-track {
@@ -78,13 +110,11 @@
   .m3-linear-progress-indicator-active {
     overflow: hidden;
     inset-inline-start: 0;
-    color: var(--md-linear-progress-indicator-active-indicator-color);
+    color: var(--_active-indicator-color);
   }
 
   .m3-linear-progress-indicator-active-determinate {
-    inline-size: calc(
-      (100% - var(--md-linear-progress-indicator-active-track-gap-size)) * var(--md-linear-progress-indicator-progress)
-    );
+    inline-size: calc((100% - var(--_active-track-gap-size)) * var(--_progress));
   }
 
   .m3-linear-progress-indicator-active-indeterminate {
@@ -93,7 +123,7 @@
     --m3-linear-progress-indicator-segment-end: 0;
     clip-path: inset(
       0 calc((1 - var(--m3-linear-progress-indicator-segment-end)) * 100%) 0
-        calc(var(--m3-linear-progress-indicator-segment-start) * 100%) round var(--md-linear-progress-indicator-shape)
+        calc(var(--m3-linear-progress-indicator-segment-start) * 100%) round var(--_shape)
     );
   }
 
@@ -126,7 +156,7 @@
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
-    stroke-width: var(--md-linear-progress-indicator-track-thickness);
+    stroke-width: var(--_track-thickness);
   }
 
   .m3-linear-progress-indicator[data-shape='wavy'] .m3-linear-progress-indicator-active {
@@ -142,11 +172,11 @@
   .m3-linear-progress-indicator-stop-indicator {
     position: absolute;
     inset-inline-end: 0;
-    inset-block-start: calc((100% - var(--md-linear-progress-indicator-stop-indicator-size)) / 2);
-    inline-size: var(--md-linear-progress-indicator-stop-indicator-size);
-    block-size: var(--md-linear-progress-indicator-stop-indicator-size);
-    border-radius: var(--md-linear-progress-indicator-shape);
-    background: var(--md-linear-progress-indicator-stop-indicator-color);
+    inset-block-start: calc((100% - var(--_stop-indicator-size)) / 2);
+    inline-size: var(--_stop-indicator-size);
+    block-size: var(--_stop-indicator-size);
+    border-radius: var(--_shape);
+    background: var(--_stop-indicator-color);
   }
 
   .m3-linear-progress-indicator[data-progress-state='complete'] .m3-linear-progress-indicator-stop-indicator {

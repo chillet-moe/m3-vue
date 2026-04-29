@@ -61,7 +61,7 @@ describe('CircularProgressIndicator', () => {
     expect(root?.dataset.indeterminate).toBe('false');
     expect(root?.dataset.shape).toBe('flat');
     expect(root?.dataset.progressState).toBe('partial');
-    expect(root?.style.getPropertyValue('--md-circular-progress-indicator-progress')).toBe('0.25');
+    expect(root?.style.getPropertyValue('--_progress')).toBe('0.25');
     expect(track).not.toBeNull();
     expect(active?.classList.contains('m3-circular-progress-indicator-active-determinate')).toBe(true);
     expect(track?.tagName.toLowerCase()).toBe('path');
@@ -82,7 +82,6 @@ describe('CircularProgressIndicator', () => {
 
     expect(root?.dataset.direction).toBe('counterclockwise');
     expect(root?.dataset.progressState).toBe('complete');
-    expect(root?.style.getPropertyValue('--md-circular-progress-indicator-current-size')).toBe('3rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-size')).toBe('3rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-thickness')).toBe('0.375rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-active-indicator-gap')).toBe('0.25rem');
@@ -101,13 +100,13 @@ describe('CircularProgressIndicator', () => {
 
     expect(root?.getAttribute('aria-valuenow')).toBe('1');
     expect(root?.getAttribute('aria-valuetext')).toBe('100%');
-    expect(root?.style.getPropertyValue('--md-circular-progress-indicator-progress')).toBe('0');
+    expect(root?.style.getPropertyValue('--_progress')).toBe('0');
 
     await nextAnimationFrame();
     await nextAnimationFrame();
     await nextTick();
 
-    const displayedProgress = Number(root?.style.getPropertyValue('--md-circular-progress-indicator-progress'));
+    const displayedProgress = Number(root?.style.getPropertyValue('--_progress'));
     expect(displayedProgress).toBeGreaterThan(0);
     expect(displayedProgress).not.toBe(1);
 
@@ -142,7 +141,7 @@ describe('CircularProgressIndicator', () => {
 
     expect(root?.getAttribute('aria-valuenow')).toBe('0');
     expect(root?.dataset.progressState).toBe('empty');
-    expect(root?.style.getPropertyValue('--md-circular-progress-indicator-progress')).toBe('0');
+    expect(root?.style.getPropertyValue('--_progress')).toBe('0');
 
     app.unmount();
   });

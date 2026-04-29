@@ -33,6 +33,8 @@ Checkboxes let people confirm independent selections while preserving clear unch
 
 <ApiTable component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
+<StyleTokenTable component="CheckBox" />
+
 ## Examples
 
 ### Default

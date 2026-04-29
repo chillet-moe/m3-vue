@@ -11,6 +11,13 @@
 @import './prose.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Context token placeholders; concrete values are provided by components or users. */
+    --md-color-container: initial;
+    --md-color-on-container: initial;
+    --md-state-layer-color: initial;
+  }
+
   :root {
     --md-sys-color-primary: light-dark(var(--md-sys-color-primary-light), var(--md-sys-color-primary-dark));
     --md-sys-color-on-primary: light-dark(var(--md-sys-color-on-primary-light), var(--md-sys-color-on-primary-dark));

@@ -13,6 +13,8 @@ M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为�
 3. `--md-<component>-*`：组件 public token，是推荐的组件级定制入口。
 4. `--_*`：组件内部 private token，只用于实现细节，不作为外部 API。
 
+组件会用 `:where(:root)` 声明 public token 占位符，值为 `initial`。这只是给编辑器和 CSS API 一个明确声明，不是默认值；实际默认值集中在组件根元素的 private token fallback 上。这样 WebStorm 不需要解析深层 `var()` fallback，也不会因为组件 CSS 加载顺序覆盖用户自己的 `:root` 或局部定制。
+
 组件 public token 只覆盖有明确语义的部件或稳定状态，例如 container、label、selected、unselected、error、disabled。`hover`、`focus`、`pressed` 这类瞬时交互状态优先通过 state layer 表达，不默认展开成完整的颜色 token 矩阵。
 
 新增定制优先使用组件自己的 `--md-<component>-*` token。旧的 `--md-comp-*` token 不作为公开 API。

@@ -135,6 +135,11 @@ const readCssLength = (styles: CSSStyleDeclaration, token: string, propValue: st
   return parseCssLength(propValue ?? styles.getPropertyValue(token), fallback, fontSize);
 };
 
+const readCssToken = (styles: CSSStyleDeclaration, token: string) => {
+  const value = styles.getPropertyValue(token).trim();
+  return value && value !== 'initial' ? value : undefined;
+};
+
 const syncLayout = () => {
   const root = rootRef.value;
   if (!root || typeof window === 'undefined') {
@@ -143,7 +148,10 @@ const syncLayout = () => {
 
   const styles = window.getComputedStyle(root);
   const fallbackSize = isWavy.value ? 48 : 40;
-  const size = readCssLength(styles, '--md-circular-progress-indicator-current-size', props.size, fallbackSize);
+  const cssSize =
+    readCssToken(styles, '--md-circular-progress-indicator-size') ??
+    (isWavy.value ? readCssToken(styles, '--md-circular-progress-indicator-with-wave-size') : undefined);
+  const size = parseCssLength(props.size ?? cssSize, fallbackSize, parseCssLength(styles.fontSize, 16));
   const thickness = readCssLength(styles, '--md-circular-progress-indicator-track-thickness', props.thickness, 4);
   const trackGap = readCssLength(
     styles,
@@ -178,7 +186,7 @@ const ariaValueTextResolved = computed(() => {
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {
-    '--md-circular-progress-indicator-progress': progressRatioDisplayed.value.toString(),
+    '--_progress': progressRatioDisplayed.value.toString(),
   };
 
   if (props.size) {
@@ -187,10 +195,6 @@ const rootStyle = computed(() => {
 
   if (props.thickness) {
     style['--md-circular-progress-indicator-track-thickness'] = props.thickness;
-  }
-
-  if (props.size) {
-    style['--md-circular-progress-indicator-current-size'] = props.size;
   }
 
   if (props.trackGap) {

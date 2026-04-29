@@ -58,10 +58,8 @@ describe('LinearProgressIndicator', () => {
     expect(root?.dataset.indeterminate).toBe('false');
     expect(root?.dataset.shape).toBe('flat');
     expect(root?.dataset.progressState).toBe('partial');
-    expect(root?.style.getPropertyValue('--md-linear-progress-indicator-progress')).toBe('0.3');
-    expect(root?.style.getPropertyValue('--md-linear-progress-indicator-active-track-gap-size')).toBe(
-      'var(--md-linear-progress-indicator-track-active-indicator-gap)',
-    );
+    expect(root?.style.getPropertyValue('--_progress')).toBe('0.3');
+    expect(root?.style.getPropertyValue('--_active-track-gap-size')).toBe('var(--_track-active-indicator-gap)');
     expect(container.querySelector('[data-part="track"]')).not.toBeNull();
     expect(container.querySelector('[data-part="active-indicator"]')).not.toBeNull();
     expect(container.querySelector('[data-part="stop-indicator"]')).not.toBeNull();
@@ -82,8 +80,8 @@ describe('LinearProgressIndicator', () => {
     expect(root?.getAttribute('aria-valuenow')).toBe('10');
     expect(root?.getAttribute('aria-valuetext')).toBe('100%');
     expect(root?.dataset.progressState).toBe('complete');
-    expect(root?.style.getPropertyValue('--md-linear-progress-indicator-progress')).toBe('1');
-    expect(root?.style.getPropertyValue('--md-linear-progress-indicator-active-track-gap-size')).toBe('0px');
+    expect(root?.style.getPropertyValue('--_progress')).toBe('1');
+    expect(root?.style.getPropertyValue('--_active-track-gap-size')).toBe('0px');
     expect(root?.style.getPropertyValue('--md-linear-progress-indicator-track-thickness')).toBe('0.5rem');
     expect(root?.style.getPropertyValue('--md-linear-progress-indicator-track-active-indicator-gap')).toBe('0.25rem');
     expect(root?.style.getPropertyValue('--md-linear-progress-indicator-stop-indicator-size')).toBe('0.75rem');
@@ -102,13 +100,13 @@ describe('LinearProgressIndicator', () => {
 
     expect(root?.getAttribute('aria-valuenow')).toBe('1');
     expect(root?.getAttribute('aria-valuetext')).toBe('100%');
-    expect(root?.style.getPropertyValue('--md-linear-progress-indicator-progress')).toBe('0');
+    expect(root?.style.getPropertyValue('--_progress')).toBe('0');
 
     await nextAnimationFrame();
     await nextAnimationFrame();
     await nextTick();
 
-    const displayedProgress = Number(root?.style.getPropertyValue('--md-linear-progress-indicator-progress'));
+    const displayedProgress = Number(root?.style.getPropertyValue('--_progress'));
     expect(displayedProgress).toBeGreaterThan(0);
     expect(displayedProgress).not.toBe(1);
 

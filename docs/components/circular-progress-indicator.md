@@ -39,6 +39,8 @@ CircularProgressIndicator displays determinate or indeterminate progress around 
 
 <ApiTable component="CircularProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
 
+<StyleTokenTable component="CircularProgressIndicator" />
+
 ## Examples
 
 ### Default

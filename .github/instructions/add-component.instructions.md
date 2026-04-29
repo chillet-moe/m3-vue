@@ -167,6 +167,13 @@ const headlineId = `dialog-headline-${useId()}`;
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* 声明 public token 名称，不在这里提供真实默认值 */
+    --md-<name>-container-color: initial;
+    --md-<name>-label-color: initial;
+    --md-<name>-state-layer-color: initial;
+  }
+
   .m3-<name > {
     /* public token 是用户定制入口；private token 是组件内部实现细节 */
     --_container-color: var(--md-<name>-container-color, var(--md-sys-color-surface));
@@ -195,6 +202,7 @@ CSS 注意事项：
   - `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color` 是父子组件传递语义色的上下文 token。
   - `--md-<component>-*` 是组件 public token，只暴露有明确语义的部件或稳定状态。
   - `--_*` 是组件 private token，外部不应依赖。
+- 为 public token 添加低优先级 `:where(:root)` 占位声明，值使用 `initial`；真实默认值必须保留在组件 private token 的 fallback 上，避免占位声明覆盖用户定制。
 - 不要完整复制 Material component token matrix。默认只为 `selected`、`unselected`、`active`、`inactive`、`error`、`disabled` 这类稳定状态暴露 public token。
 - `hover`、`focus`、`pressed` 这类瞬时交互状态优先使用 `--md-state-layer-color` 和 `--md-sys-state-*-state-layer-opacity` 表达。只有组件主体颜色确实会随交互状态改变时，才增加对应 public token。
 - 组件内部消费 private token，例如 `var(--_container-color)`；新的 public API 使用 `--md-<component>-*`，不要继续新增 `--md-comp-*` token。
