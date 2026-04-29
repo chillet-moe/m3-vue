@@ -1,6 +1,7 @@
 import path from 'node:path';
 import fg from 'fast-glob';
 import { createChecker, type MetaCheckerOptions } from 'vue-component-meta';
+import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr';
 
 export interface ComponentMetaPluginOptions {
   tsconfigPath: string;
@@ -217,10 +218,12 @@ export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
     },
 
     // 开发时，当 .vue 文件变化时重新生成 meta
-    async handleHotUpdate({ file }: { file: string }) {
-      if (file.endsWith('.vue') && file.includes('/components/')) {
+    async handleHotUpdate(ctx: MinimalHotUpdateContext) {
+      const normalized = normalizeVitePath(ctx.file);
+      if ((normalized.endsWith('.vue') || normalized.endsWith('.ts')) && normalized.includes('/src/components/')) {
         await generateMeta();
-        // 返回空数组，让 VitePress 自行处理 HMR
+        invalidateVirtualModuleAndReload(ctx, resolvedVirtualModuleId);
+        return [];
       }
     },
   };

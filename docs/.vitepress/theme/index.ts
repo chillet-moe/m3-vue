@@ -14,6 +14,7 @@ import Controls from '../components/Controls.vue';
 import DemoContainer from '../components/DemoContainer.vue';
 import AnatomyTable from '../components/AnatomyTable.vue';
 import SourceApiTable from '../components/SourceApiTable.vue';
+import StyleTokenTable from '../components/StyleTokenTable.vue';
 
 export default {
   extends: DefaultTheme,
@@ -25,5 +26,6 @@ export default {
     app.component('DemoContainer', DemoContainer);
     app.component('AnatomyTable', AnatomyTable);
     app.component('SourceApiTable', SourceApiTable);
+    app.component('StyleTokenTable', StyleTokenTable);
   },
 } satisfies Theme;

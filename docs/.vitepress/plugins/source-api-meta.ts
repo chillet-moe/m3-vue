@@ -1,6 +1,7 @@
 import path from 'node:path';
 import ts from 'typescript';
 import { createChecker as createVueMetaChecker } from 'vue-component-meta';
+import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr';
 
 export interface SourceApiFieldMeta {
   name: string;
@@ -442,8 +443,8 @@ export function sourceApiMetaPlugin(options?: { tsconfigPath?: string }) {
       }
     },
 
-    async handleHotUpdate({ file }: { file: string }) {
-      const normalized = file.replace(/\\/g, '/');
+    async handleHotUpdate(ctx: MinimalHotUpdateContext) {
+      const normalized = normalizeVitePath(ctx.file);
       if (
         normalized.endsWith('.ts') &&
         (normalized.includes('/src/composables/') ||
@@ -453,12 +454,16 @@ export function sourceApiMetaPlugin(options?: { tsconfigPath?: string }) {
           normalized.includes('/src/directives/Dropdown/'))
       ) {
         await generateMeta();
+        invalidateVirtualModuleAndReload(ctx, resolvedVirtualModuleId);
+        return [];
       }
       if (
         normalized.endsWith('.vue') &&
         (normalized.includes('/src/components/Dialog/') || normalized.includes('/src/components/Snackbar/'))
       ) {
         await generateMeta();
+        invalidateVirtualModuleAndReload(ctx, resolvedVirtualModuleId);
+        return [];
       }
     },
   };

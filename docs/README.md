@@ -13,6 +13,6 @@ This package publishes a curated subset of the `docs/` directory for local inspe
 
 ## Notes
 
-- Many markdown pages include VitePress-only components such as `<ApiTable />`, `<SourceApiTable />`, `<AnatomyTable />`, and `<DemoContainer />`.
+- Many markdown pages include VitePress-only components such as `<ApiTable />`, `<SourceApiTable />`, `<AnatomyTable />`, `<StyleTokenTable />`, and `<DemoContainer />`.
 - When a page references demo source via `...Src` imports, read the matching file under `docs/demos/` for the concrete example implementation.
 - API tables rendered by VitePress are supplementary. Public runtime and type definitions in `dist/` remain the source of truth for shipped code.

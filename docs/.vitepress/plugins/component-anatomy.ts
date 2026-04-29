@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import fg from 'fast-glob';
 import { parse as parseSFC } from 'vue/compiler-sfc';
+import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr';
 
 export interface ComponentAnatomyPluginOptions {
   components: string | string[];
@@ -242,9 +243,12 @@ export function componentAnatomyPlugin(options: ComponentAnatomyPluginOptions) {
       }
     },
 
-    async handleHotUpdate({ file }: { file: string }) {
-      if (file.endsWith('.vue') && file.includes('/components/')) {
+    async handleHotUpdate(ctx: MinimalHotUpdateContext) {
+      const normalized = normalizeVitePath(ctx.file);
+      if (normalized.endsWith('.vue') && normalized.includes('/src/components/')) {
         await generateAnatomy();
+        invalidateVirtualModuleAndReload(ctx, resolvedVirtualModuleId);
+        return [];
       }
     },
   };

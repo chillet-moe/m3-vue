@@ -18,7 +18,7 @@ const anatomy = computed(() => {
 
 const highlightEnabled = useLocalStorage('anatomy-highlight-enabled', false);
 const highlightedPart = ref<string | null>(null);
-const collapsed = useLocalStorage(`anatomy-table-collapsed:${props.scope}`, false);
+const collapsed = useLocalStorage('m3-vue-docs:table-collapsed:anatomy', false);
 
 function highlightElements(part: string) {
   if (!highlightEnabled.value) return;

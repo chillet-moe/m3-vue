@@ -23,6 +23,7 @@ https://github.com/material-components/material-components-android/tree/master/l
 4. `docs/components/<name>.md` — 文档页
 5. `docs/demos/<name>/` — 文档 demo
 6. `docs/.vitepress/config.ts` — 侧边栏导航
+7. `docs/.vitepress/components/style-token-meta.ts` — 组件 public styling token metadata（如果组件暴露 styling token）
 
 `web-types.json` 和 `src/nuxt.ts` 会自动处理，不需要手动修改。
 
@@ -167,16 +168,17 @@ const headlineId = `dialog-headline-${useId()}`;
 
 @layer tokens {
   .m3-<name > {
-    /* 使用 Material Design 3 system token */
-    --md-comp-<name>-container-color: var(--md-sys-color-surface);
-    --md-comp-<name>-label-text-color: var(--md-sys-color-on-surface);
+    /* public token 是用户定制入口；private token 是组件内部实现细节 */
+    --_container-color: var(--md-<name>-container-color, var(--md-sys-color-surface));
+    --_label-color: var(--md-<name>-label-color, var(--md-sys-color-on-surface));
+    --_state-layer-color: var(--md-<name>-state-layer-color, var(--_label-color));
   }
 }
 
 @layer components {
   /* 使用 data 属性选择器而非 CSS 类名来区分变体 */
   .m3-<name > [data-variant='filled'] {
-    background: var(--md-comp-<name>-container-color);
+    background: var(--_container-color);
   }
 
   .m3-<name > [data-disabled='true'] {
@@ -188,6 +190,15 @@ const headlineId = `dialog-headline-${useId()}`;
 
 CSS 注意事项：
 
+- CSS token 分四层：
+  - `--md-sys-*` 是主题级 token，不建议在单个组件实例上局部覆盖。
+  - `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color` 是父子组件传递语义色的上下文 token。
+  - `--md-<component>-*` 是组件 public token，只暴露有明确语义的部件或稳定状态。
+  - `--_*` 是组件 private token，外部不应依赖。
+- 不要完整复制 Material component token matrix。默认只为 `selected`、`unselected`、`active`、`inactive`、`error`、`disabled` 这类稳定状态暴露 public token。
+- `hover`、`focus`、`pressed` 这类瞬时交互状态优先使用 `--md-state-layer-color` 和 `--md-sys-state-*-state-layer-opacity` 表达。只有组件主体颜色确实会随交互状态改变时，才增加对应 public token。
+- 组件内部消费 private token，例如 `var(--_container-color)`；新的 public API 使用 `--md-<component>-*`，不要继续新增 `--md-comp-*` token。
+- 如果组件暴露 public styling token，在 `docs/.vitepress/components/style-token-meta.ts` 添加显式 metadata，并在组件文档中使用 `<StyleTokenTable component="<ComponentName>" />` 生成 Styling 部分。
 - 颜色透明度使用 `--translucent()` 函数：`color: --translucent(var(--md-sys-color-primary), 0.5);`
 - Android dp 单位转换使用 `--dp()` 函数：`width: --dp(16);`（= 1rem）。仅在组件代码中使用。
 - 优先使用 CSS 逻辑属性（例如 `margin-inline-start` 而非 `margin-left`）

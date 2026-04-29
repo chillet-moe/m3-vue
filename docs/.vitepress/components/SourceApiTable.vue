@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useId } from 'vue';
 import allMeta from 'virtual:source-api-meta';
+import { useLocalStorage } from '@vueuse/core';
+import { Icon } from '@/components/Icon';
 
 type SourceApiFieldMeta = {
   name: string;
@@ -38,6 +40,9 @@ const meta = computed<SourceApiMeta | null>(() => {
   return (allMeta as Record<string, SourceApiMeta | undefined>)[props.api] ?? null;
 });
 
+const collapsed = useLocalStorage('m3-vue-docs:table-collapsed:source-api', false);
+const tableId = useId();
+
 const sections = computed(() => {
   if (!meta.value) {
     return [] as SourceApiTypeMeta[];
@@ -48,6 +53,14 @@ const sections = computed(() => {
   const matched = meta.value.types.find((item) => item.name === props.type);
   return matched ? [matched] : [];
 });
+
+function toggleCollapsed() {
+  collapsed.value = !collapsed.value;
+}
+
+function getSectionContentId(name: string) {
+  return `source-api-table-${name}-${tableId}`;
+}
 </script>
 
 <template>
@@ -63,9 +76,20 @@ const sections = computed(() => {
 
       <template v-if="sections.length > 0">
         <section v-for="section in sections" :key="section.name" class="source-api-section">
-          <h3 class="source-api-title">{{ section.name }}</h3>
+          <button
+            class="source-api-toggle m3-state-layer"
+            type="button"
+            :aria-expanded="!collapsed"
+            :aria-controls="getSectionContentId(section.name)"
+            :aria-label="collapsed ? `Expand ${section.name} table` : `Collapse ${section.name} table`"
+            @click="toggleCollapsed"
+          >
+            <Icon class="source-api-toggle-icon" name="expand_more" aria-hidden="true" />
+            <span class="source-api-title">{{ section.name }}</span>
+            <span class="source-api-count">{{ section.fields.length }}</span>
+          </button>
 
-          <div class="source-api-scroll">
+          <div v-show="!collapsed" :id="getSectionContentId(section.name)" class="source-api-scroll">
             <table class="source-api-grid">
               <thead>
                 <tr>
@@ -134,10 +158,56 @@ const sections = computed(() => {
   gap: 0.625rem;
 }
 
+.source-api-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: fit-content;
+  min-inline-size: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  padding-block: 0.375rem;
+  padding-inline: 0.625rem;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  margin-inline-start: -0.625rem;
+}
+
+.source-api-toggle:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+
+.source-api-toggle-icon {
+  font-size: 1.125rem;
+  color: var(--vp-c-text-3);
+  transition: transform 0.15s;
+}
+
+.source-api-toggle[aria-expanded='true'] .source-api-toggle-icon {
+  transform: rotate(180deg);
+}
+
 .source-api-title {
   margin: 0;
   font-size: 1rem;
   color: var(--vp-c-text-1);
+}
+
+.source-api-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.375rem;
+  block-size: 1.375rem;
+  border-radius: 999px;
+  padding-inline: 0.375rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: var(--vp-c-bg-alt);
 }
 
 .source-api-scroll {
