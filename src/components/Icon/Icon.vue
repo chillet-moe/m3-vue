@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from 'vue';
 
-type IconWeight = number | 'inherit';
+type IconWeight = number | string | 'inherit';
 
 type IconProps = {
   /** The name of the Material Symbols Outlined icon to display. */
@@ -20,7 +20,8 @@ type IconProps = {
 const { size, weight, variant = 'standalone' } = defineProps<IconProps>();
 
 const resolvedWeight = computed<IconWeight>(() => {
-  return weight ?? (variant === 'inline' ? 'inherit' : 400);
+  const defaultWeight = variant === 'standalone' ? 400 : 'inherit';
+  return weight ?? defaultWeight;
 });
 
 const iconStyle = computed<CSSProperties>(() => {
