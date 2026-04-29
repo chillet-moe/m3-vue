@@ -61,9 +61,9 @@ describe('LoadingIndicator', () => {
     });
 
     expect(root?.dataset.variant).toBe('contained');
-    expect(root?.style.getPropertyValue('--md-comp-loading-indicator-active-indicator-size')).toBe('2rem');
-    expect(root?.style.getPropertyValue('--md-comp-loading-indicator-container-width')).toBe('3.5rem');
-    expect(root?.style.getPropertyValue('--md-comp-loading-indicator-container-height')).toBe('3rem');
+    expect(root?.style.getPropertyValue('--md-loading-indicator-active-indicator-size')).toBe('2rem');
+    expect(root?.style.getPropertyValue('--md-loading-indicator-container-width')).toBe('3.5rem');
+    expect(root?.style.getPropertyValue('--md-loading-indicator-container-height')).toBe('3rem');
 
     app.unmount();
   });

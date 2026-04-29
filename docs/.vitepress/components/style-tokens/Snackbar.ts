@@ -1,0 +1,136 @@
+import type { StyleTokenMeta } from './types';
+
+export const snackbarStyleTokens = [
+  {
+    name: '--md-snackbar-action-label-text-color',
+    description: 'Controls action label text color.',
+    fallback: 'var(--md-sys-color-inverse-primary)',
+    category: 'Color',
+  },
+  {
+    name: '--md-snackbar-action-label-text-font',
+    description: 'Controls action label text font.',
+    fallback: 'var(--md-sys-typescale-label-large-font)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-action-label-text-line-height',
+    description: 'Controls action label text line height.',
+    fallback: 'var(--md-sys-typescale-label-large-line-height)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-action-label-text-size',
+    description: 'Controls action label text size.',
+    fallback: 'var(--md-sys-typescale-label-large-size)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-snackbar-action-label-text-tracking',
+    description: 'Controls action label text tracking.',
+    fallback: 'var(--md-sys-typescale-label-large-tracking)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-action-label-text-weight',
+    description: 'Controls action label text weight.',
+    fallback: 'var(--md-sys-typescale-label-large-weight)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-container-color',
+    description: 'Controls container color.',
+    fallback: 'var(--md-sys-color-inverse-surface)',
+    category: 'Color',
+  },
+  {
+    name: '--md-snackbar-container-elevation',
+    description: 'Controls container elevation.',
+    fallback: 'var(--md-sys-elevation-level3)',
+    category: 'Elevation',
+  },
+  {
+    name: '--md-snackbar-container-padding-block',
+    description: 'Controls container padding block.',
+    fallback: '1rem',
+    category: 'Layout',
+  },
+  {
+    name: '--md-snackbar-container-padding-inline-end',
+    description: 'Controls container padding inline end.',
+    fallback: '0.5rem',
+    category: 'Layout',
+  },
+  {
+    name: '--md-snackbar-container-padding-inline-start',
+    description: 'Controls container padding inline start.',
+    fallback: '1rem',
+    category: 'Layout',
+  },
+  {
+    name: '--md-snackbar-container-shadow-color',
+    description: 'Controls container shadow color.',
+    fallback: 'var(--md-sys-color-shadow)',
+    category: 'Color',
+  },
+  {
+    name: '--md-snackbar-container-shape',
+    description: 'Controls container shape.',
+    fallback: 'var(--md-sys-shape-corner-extra-small)',
+    category: 'Shape',
+  },
+  {
+    name: '--md-snackbar-icon-color',
+    description: 'Controls icon color.',
+    fallback: 'var(--md-sys-color-inverse-on-surface)',
+    category: 'Color',
+  },
+  {
+    name: '--md-snackbar-icon-size',
+    description: 'Controls icon size.',
+    fallback: '1.25rem',
+    category: 'Layout',
+  },
+  {
+    name: '--md-snackbar-supporting-text-color',
+    description: 'Controls supporting text color.',
+    fallback: 'var(--md-sys-color-inverse-on-surface)',
+    category: 'Color',
+  },
+  {
+    name: '--md-snackbar-supporting-text-font',
+    description: 'Controls supporting text font.',
+    fallback: 'var(--md-sys-typescale-body-medium-font)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-supporting-text-line-height',
+    description: 'Controls supporting text line height.',
+    fallback: 'var(--md-sys-typescale-body-medium-line-height)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-supporting-text-size',
+    description: 'Controls supporting text size.',
+    fallback: 'var(--md-sys-typescale-body-medium-size)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-snackbar-supporting-text-tracking',
+    description: 'Controls supporting text tracking.',
+    fallback: 'var(--md-sys-typescale-body-medium-tracking)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-supporting-text-weight',
+    description: 'Controls supporting text weight.',
+    fallback: 'var(--md-sys-typescale-body-medium-weight)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-snackbar-with-single-line-container-height',
+    description: 'Controls with single line container height.',
+    fallback: '3rem',
+    category: 'Layout',
+  },
+] satisfies StyleTokenMeta[];

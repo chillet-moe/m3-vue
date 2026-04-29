@@ -1,33 +1,84 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-dialog-action-label-text-color: initial;
+    --md-dialog-action-label-text-font: initial;
+    --md-dialog-action-label-text-line-height: initial;
+    --md-dialog-action-label-text-size: initial;
+    --md-dialog-action-label-text-tracking: initial;
+    --md-dialog-action-label-text-type: initial;
+    --md-dialog-action-label-text-weight: initial;
+    --md-dialog-container-color: initial;
+    --md-dialog-container-elevation: initial;
+    --md-dialog-container-shape: initial;
+    --md-dialog-headline-color: initial;
+    --md-dialog-headline-font: initial;
+    --md-dialog-headline-line-height: initial;
+    --md-dialog-headline-size: initial;
+    --md-dialog-headline-tracking: initial;
+    --md-dialog-headline-type: initial;
+    --md-dialog-headline-weight: initial;
+    --md-dialog-supporting-text-color: initial;
+    --md-dialog-supporting-text-font: initial;
+    --md-dialog-supporting-text-line-height: initial;
+    --md-dialog-supporting-text-size: initial;
+    --md-dialog-supporting-text-tracking: initial;
+    --md-dialog-supporting-text-type: initial;
+    --md-dialog-supporting-text-weight: initial;
+    --md-dialog-with-icon-icon-color: initial;
+    --md-dialog-with-icon-icon-size: initial;
+  }
+
   .m3-dialog {
-    --md-comp-dialog-container-color: var(--md-sys-color-surface-container-high);
-    --md-comp-dialog-container-elevation: var(--md-sys-elevation-level3);
-    --md-comp-dialog-container-shape: var(--md-sys-shape-corner-extra-large);
-    --md-comp-dialog-action-label-text-font: var(--md-sys-typescale-label-large-font);
-    --md-comp-dialog-action-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
-    --md-comp-dialog-action-label-text-size: var(--md-sys-typescale-label-large-size);
-    --md-comp-dialog-action-label-text-weight: var(--md-sys-typescale-label-large-weight);
-    --md-comp-dialog-action-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
-    --md-comp-dialog-action-label-text-type: var(--md-sys-typescale-label-large);
-    --md-comp-dialog-action-label-text-color: var(--md-sys-color-primary);
-    --md-comp-dialog-with-icon-icon-size: 1.5rem;
-    --md-comp-dialog-with-icon-icon-color: var(--md-sys-color-secondary);
-    --md-comp-dialog-headline-font: var(--md-sys-typescale-headline-small-font);
-    --md-comp-dialog-headline-line-height: var(--md-sys-typescale-headline-small-line-height);
-    --md-comp-dialog-headline-size: var(--md-sys-typescale-headline-small-size);
-    --md-comp-dialog-headline-weight: var(--md-sys-typescale-headline-small-weight);
-    --md-comp-dialog-headline-tracking: var(--md-sys-typescale-headline-small-tracking);
-    --md-comp-dialog-headline-type: var(--md-sys-typescale-headline-small);
-    --md-comp-dialog-headline-color: var(--md-sys-color-on-surface);
-    --md-comp-dialog-supporting-text-font: var(--md-sys-typescale-body-medium-font);
-    --md-comp-dialog-supporting-text-line-height: var(--md-sys-typescale-body-medium-line-height);
-    --md-comp-dialog-supporting-text-size: var(--md-sys-typescale-body-medium-size);
-    --md-comp-dialog-supporting-text-weight: var(--md-sys-typescale-body-medium-weight);
-    --md-comp-dialog-supporting-text-tracking: var(--md-sys-typescale-body-medium-tracking);
-    --md-comp-dialog-supporting-text-type: var(--md-sys-typescale-body-medium);
-    --md-comp-dialog-supporting-text-color: var(--md-sys-color-on-surface-variant);
+    --_dialog-container-color: var(--md-dialog-container-color, var(--md-sys-color-surface-container-high));
+    --_dialog-container-elevation: var(--md-dialog-container-elevation, var(--md-sys-elevation-level3));
+    --_dialog-container-shape: var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large));
+    --_dialog-action-label-text-font: var(--md-dialog-action-label-text-font, var(--md-sys-typescale-label-large-font));
+    --_dialog-action-label-text-line-height: var(
+      --md-dialog-action-label-text-line-height,
+      var(--md-sys-typescale-label-large-line-height)
+    );
+    --_dialog-action-label-text-size: var(--md-dialog-action-label-text-size, var(--md-sys-typescale-label-large-size));
+    --_dialog-action-label-text-weight: var(
+      --md-dialog-action-label-text-weight,
+      var(--md-sys-typescale-label-large-weight)
+    );
+    --_dialog-action-label-text-tracking: var(
+      --md-dialog-action-label-text-tracking,
+      var(--md-sys-typescale-label-large-tracking)
+    );
+    --_dialog-action-label-text-type: var(--md-dialog-action-label-text-type, var(--md-sys-typescale-label-large));
+    --_dialog-action-label-text-color: var(--md-dialog-action-label-text-color, var(--md-sys-color-primary));
+    --_dialog-with-icon-icon-size: var(--md-dialog-with-icon-icon-size, 1.5rem);
+    --_dialog-with-icon-icon-color: var(--md-dialog-with-icon-icon-color, var(--md-sys-color-secondary));
+    --_dialog-headline-font: var(--md-dialog-headline-font, var(--md-sys-typescale-headline-small-font));
+    --_dialog-headline-line-height: var(
+      --md-dialog-headline-line-height,
+      var(--md-sys-typescale-headline-small-line-height)
+    );
+    --_dialog-headline-size: var(--md-dialog-headline-size, var(--md-sys-typescale-headline-small-size));
+    --_dialog-headline-weight: var(--md-dialog-headline-weight, var(--md-sys-typescale-headline-small-weight));
+    --_dialog-headline-tracking: var(--md-dialog-headline-tracking, var(--md-sys-typescale-headline-small-tracking));
+    --_dialog-headline-type: var(--md-dialog-headline-type, var(--md-sys-typescale-headline-small));
+    --_dialog-headline-color: var(--md-dialog-headline-color, var(--md-sys-color-on-surface));
+    --_dialog-supporting-text-font: var(--md-dialog-supporting-text-font, var(--md-sys-typescale-body-medium-font));
+    --_dialog-supporting-text-line-height: var(
+      --md-dialog-supporting-text-line-height,
+      var(--md-sys-typescale-body-medium-line-height)
+    );
+    --_dialog-supporting-text-size: var(--md-dialog-supporting-text-size, var(--md-sys-typescale-body-medium-size));
+    --_dialog-supporting-text-weight: var(
+      --md-dialog-supporting-text-weight,
+      var(--md-sys-typescale-body-medium-weight)
+    );
+    --_dialog-supporting-text-tracking: var(
+      --md-dialog-supporting-text-tracking,
+      var(--md-sys-typescale-body-medium-tracking)
+    );
+    --_dialog-supporting-text-type: var(--md-dialog-supporting-text-type, var(--md-sys-typescale-body-medium));
+    --_dialog-supporting-text-color: var(--md-dialog-supporting-text-color, var(--md-sys-color-on-surface-variant));
   }
 }
 
@@ -90,10 +141,10 @@
     overflow: hidden;
 
     padding: 1.5rem;
-    border-radius: var(--md-comp-dialog-container-shape);
+    border-radius: var(--_dialog-container-shape);
 
-    background-color: var(--md-comp-dialog-container-color);
-    box-shadow: var(--md-comp-dialog-container-elevation);
+    background-color: var(--_dialog-container-color);
+    box-shadow: var(--_dialog-container-elevation);
 
     opacity: 0;
     visibility: hidden;
@@ -115,8 +166,8 @@
     align-items: center;
     justify-content: center;
 
-    color: var(--md-comp-dialog-with-icon-icon-color);
-    font-size: var(--md-comp-dialog-with-icon-icon-size);
+    color: var(--_dialog-with-icon-icon-color);
+    font-size: var(--_dialog-with-icon-icon-size);
     line-height: 1;
   }
 
@@ -124,18 +175,18 @@
     margin: 0;
     opacity: 0;
 
-    color: var(--md-comp-dialog-headline-color);
+    color: var(--_dialog-headline-color);
     font-family:
-      var(--md-comp-dialog-headline-font),
+      var(--_dialog-headline-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-dialog-headline-size);
-    line-height: var(--md-comp-dialog-headline-line-height);
-    font-weight: var(--md-comp-dialog-headline-weight);
-    letter-spacing: var(--md-comp-dialog-headline-tracking);
+    font-size: var(--_dialog-headline-size);
+    line-height: var(--_dialog-headline-line-height);
+    font-weight: var(--_dialog-headline-weight);
+    letter-spacing: var(--_dialog-headline-tracking);
     transition: opacity var(--md-easing-fast);
   }
 
@@ -144,18 +195,18 @@
     overflow: auto;
     opacity: 0;
 
-    color: var(--md-comp-dialog-supporting-text-color);
+    color: var(--_dialog-supporting-text-color);
     font-family:
-      var(--md-comp-dialog-supporting-text-font),
+      var(--_dialog-supporting-text-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-dialog-supporting-text-size);
-    line-height: var(--md-comp-dialog-supporting-text-line-height);
-    font-weight: var(--md-comp-dialog-supporting-text-weight);
-    letter-spacing: var(--md-comp-dialog-supporting-text-tracking);
+    font-size: var(--_dialog-supporting-text-size);
+    line-height: var(--_dialog-supporting-text-line-height);
+    font-weight: var(--_dialog-supporting-text-weight);
+    letter-spacing: var(--_dialog-supporting-text-tracking);
     transition: opacity var(--md-easing-fast);
   }
 
@@ -243,12 +294,12 @@
   @keyframes dialogIn {
     0% {
       transform: translateY(-3rem) scaleY(0.9);
-      clip-path: inset(0 0 100% 0 round var(--md-comp-dialog-container-shape));
+      clip-path: inset(0 0 100% 0 round var(--_dialog-container-shape));
     }
 
     100% {
       transform: translateY(0) scaleY(1);
-      clip-path: inset(0 0 0 0 round var(--md-comp-dialog-container-shape));
+      clip-path: inset(0 0 0 0 round var(--_dialog-container-shape));
     }
   }
 

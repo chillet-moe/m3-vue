@@ -1,95 +1,374 @@
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-outlined-text-field-caret-color: initial;
+    --md-outlined-text-field-container-shape: initial;
+    --md-outlined-text-field-disabled-input-text-color: initial;
+    --md-outlined-text-field-disabled-input-text-opacity: initial;
+    --md-outlined-text-field-disabled-label-text-color: initial;
+    --md-outlined-text-field-disabled-label-text-opacity: initial;
+    --md-outlined-text-field-disabled-leading-icon-color: initial;
+    --md-outlined-text-field-disabled-leading-icon-opacity: initial;
+    --md-outlined-text-field-disabled-outline-color: initial;
+    --md-outlined-text-field-disabled-outline-opacity: initial;
+    --md-outlined-text-field-disabled-outline-width: initial;
+    --md-outlined-text-field-disabled-supporting-text-color: initial;
+    --md-outlined-text-field-disabled-supporting-text-opacity: initial;
+    --md-outlined-text-field-disabled-trailing-icon-color: initial;
+    --md-outlined-text-field-disabled-trailing-icon-opacity: initial;
+    --md-outlined-text-field-error-focus-caret-color: initial;
+    --md-outlined-text-field-error-focus-input-text-color: initial;
+    --md-outlined-text-field-error-focus-label-text-color: initial;
+    --md-outlined-text-field-error-focus-leading-icon-color: initial;
+    --md-outlined-text-field-error-focus-outline-color: initial;
+    --md-outlined-text-field-error-focus-supporting-text-color: initial;
+    --md-outlined-text-field-error-focus-trailing-icon-color: initial;
+    --md-outlined-text-field-error-hover-input-text-color: initial;
+    --md-outlined-text-field-error-hover-label-text-color: initial;
+    --md-outlined-text-field-error-hover-leading-icon-color: initial;
+    --md-outlined-text-field-error-hover-outline-color: initial;
+    --md-outlined-text-field-error-hover-supporting-text-color: initial;
+    --md-outlined-text-field-error-hover-trailing-icon-color: initial;
+    --md-outlined-text-field-error-input-text-color: initial;
+    --md-outlined-text-field-error-label-text-color: initial;
+    --md-outlined-text-field-error-leading-icon-color: initial;
+    --md-outlined-text-field-error-outline-color: initial;
+    --md-outlined-text-field-error-supporting-text-color: initial;
+    --md-outlined-text-field-error-trailing-icon-color: initial;
+    --md-outlined-text-field-focus-input-text-color: initial;
+    --md-outlined-text-field-focus-label-text-color: initial;
+    --md-outlined-text-field-focus-leading-icon-color: initial;
+    --md-outlined-text-field-focus-outline-color: initial;
+    --md-outlined-text-field-focus-outline-width: initial;
+    --md-outlined-text-field-focus-supporting-text-color: initial;
+    --md-outlined-text-field-focus-trailing-icon-color: initial;
+    --md-outlined-text-field-hover-input-text-color: initial;
+    --md-outlined-text-field-hover-label-text-color: initial;
+    --md-outlined-text-field-hover-leading-icon-color: initial;
+    --md-outlined-text-field-hover-outline-color: initial;
+    --md-outlined-text-field-hover-outline-width: initial;
+    --md-outlined-text-field-hover-supporting-text-color: initial;
+    --md-outlined-text-field-hover-trailing-icon-color: initial;
+    --md-outlined-text-field-input-text-color: initial;
+    --md-outlined-text-field-input-text-font: initial;
+    --md-outlined-text-field-input-text-line-height: initial;
+    --md-outlined-text-field-input-text-placeholder-color: initial;
+    --md-outlined-text-field-input-text-prefix-color: initial;
+    --md-outlined-text-field-input-text-size: initial;
+    --md-outlined-text-field-input-text-suffix-color: initial;
+    --md-outlined-text-field-input-text-tracking: initial;
+    --md-outlined-text-field-input-text-weight: initial;
+    --md-outlined-text-field-label-text-color: initial;
+    --md-outlined-text-field-label-text-font: initial;
+    --md-outlined-text-field-label-text-line-height: initial;
+    --md-outlined-text-field-label-text-populated-line-height: initial;
+    --md-outlined-text-field-label-text-populated-size: initial;
+    --md-outlined-text-field-label-text-size: initial;
+    --md-outlined-text-field-label-text-tracking: initial;
+    --md-outlined-text-field-label-text-weight: initial;
+    --md-outlined-text-field-leading-icon-color: initial;
+    --md-outlined-text-field-leading-icon-size: initial;
+    --md-outlined-text-field-outline-color: initial;
+    --md-outlined-text-field-outline-width: initial;
+    --md-outlined-text-field-supporting-text-color: initial;
+    --md-outlined-text-field-supporting-text-font: initial;
+    --md-outlined-text-field-supporting-text-line-height: initial;
+    --md-outlined-text-field-supporting-text-size: initial;
+    --md-outlined-text-field-supporting-text-tracking: initial;
+    --md-outlined-text-field-supporting-text-weight: initial;
+    --md-outlined-text-field-trailing-icon-color: initial;
+    --md-outlined-text-field-trailing-icon-size: initial;
+  }
+
   :where(.m3-text-field) {
-    --md-comp-outlined-text-field-container-shape: var(--md-sys-shape-corner-medium);
-    --md-comp-outlined-text-field-outline-width: 0.0625rem;
-    --md-comp-outlined-text-field-outline-color: var(--md-sys-color-outline);
-    --md-comp-outlined-text-field-label-text-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-label-text-font: var(--md-sys-typescale-body-large-font);
-    --md-comp-outlined-text-field-label-text-line-height: var(--md-sys-typescale-body-large-line-height);
-    --md-comp-outlined-text-field-label-text-size: var(--md-sys-typescale-body-large-size);
-    --md-comp-outlined-text-field-label-text-weight: var(--md-sys-typescale-body-large-weight);
-    --md-comp-outlined-text-field-label-text-tracking: var(--md-sys-typescale-body-large-tracking);
-    --md-comp-outlined-text-field-label-text-populated-line-height: var(--md-sys-typescale-body-small-line-height);
-    --md-comp-outlined-text-field-label-text-populated-size: var(--md-sys-typescale-body-small-size);
-    --md-comp-outlined-text-field-leading-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-leading-icon-size: 1.5rem;
-    --md-comp-outlined-text-field-trailing-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-trailing-icon-size: 1.5rem;
-    --md-comp-outlined-text-field-supporting-text-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-supporting-text-font: var(--md-sys-typescale-body-small-font);
-    --md-comp-outlined-text-field-supporting-text-line-height: var(--md-sys-typescale-body-small-line-height);
-    --md-comp-outlined-text-field-supporting-text-size: var(--md-sys-typescale-body-small-size);
-    --md-comp-outlined-text-field-supporting-text-weight: var(--md-sys-typescale-body-small-weight);
-    --md-comp-outlined-text-field-supporting-text-tracking: var(--md-sys-typescale-body-small-tracking);
-    --md-comp-outlined-text-field-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-input-text-font: var(--md-sys-typescale-body-large-font);
-    --md-comp-outlined-text-field-input-text-line-height: var(--md-sys-typescale-body-large-line-height);
-    --md-comp-outlined-text-field-input-text-size: var(--md-sys-typescale-body-large-size);
-    --md-comp-outlined-text-field-input-text-weight: var(--md-sys-typescale-body-large-weight);
-    --md-comp-outlined-text-field-input-text-tracking: var(--md-sys-typescale-body-large-tracking);
-    --md-comp-outlined-text-field-input-text-prefix-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-input-text-suffix-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-input-text-placeholder-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-caret-color: var(--md-sys-color-primary);
-    --md-comp-outlined-text-field-disabled-outline-width: 0.0625rem;
-    --md-comp-outlined-text-field-disabled-outline-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-disabled-outline-opacity: 0.12;
-    --md-comp-outlined-text-field-disabled-label-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-disabled-label-text-opacity: 0.38;
-    --md-comp-outlined-text-field-disabled-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-disabled-input-text-opacity: 0.38;
-    --md-comp-outlined-text-field-disabled-supporting-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-disabled-supporting-text-opacity: 0.38;
-    --md-comp-outlined-text-field-hover-label-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-hover-leading-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-hover-trailing-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-hover-outline-width: 0.0625rem;
-    --md-comp-outlined-text-field-hover-outline-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-hover-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-hover-supporting-text-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-focus-label-text-color: var(--md-sys-color-primary);
-    --md-comp-outlined-text-field-focus-leading-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-focus-trailing-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-focus-outline-width: 0.1875rem;
-    --md-comp-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
-    --md-comp-outlined-text-field-focus-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-focus-supporting-text-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-error-outline-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-label-text-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-error-supporting-text-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-leading-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-error-trailing-icon-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-focus-outline-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-focus-label-text-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-focus-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-error-focus-supporting-text-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-focus-leading-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-error-focus-trailing-icon-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-focus-caret-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-hover-outline-color: var(--md-sys-color-on-error-container);
-    --md-comp-outlined-text-field-error-hover-label-text-color: var(--md-sys-color-on-error-container);
-    --md-comp-outlined-text-field-error-hover-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-error-hover-supporting-text-color: var(--md-sys-color-error);
-    --md-comp-outlined-text-field-error-hover-leading-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-outlined-text-field-error-hover-trailing-icon-color: var(--md-sys-color-on-error-container);
-    --md-comp-outlined-text-field-disabled-leading-icon-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-disabled-leading-icon-opacity: 0.38;
-    --md-comp-outlined-text-field-disabled-trailing-icon-color: var(--md-sys-color-on-surface);
-    --md-comp-outlined-text-field-disabled-trailing-icon-opacity: 0.38;
+    --_outlined-text-field-container-shape: var(
+      --md-outlined-text-field-container-shape,
+      var(--md-sys-shape-corner-medium)
+    );
+    --_outlined-text-field-outline-width: var(--md-outlined-text-field-outline-width, 0.0625rem);
+    --_outlined-text-field-outline-color: var(--md-outlined-text-field-outline-color, var(--md-sys-color-outline));
+    --_outlined-text-field-label-text-color: var(
+      --md-outlined-text-field-label-text-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-label-text-font: var(
+      --md-outlined-text-field-label-text-font,
+      var(--md-sys-typescale-body-large-font)
+    );
+    --_outlined-text-field-label-text-line-height: var(
+      --md-outlined-text-field-label-text-line-height,
+      var(--md-sys-typescale-body-large-line-height)
+    );
+    --_outlined-text-field-label-text-size: var(
+      --md-outlined-text-field-label-text-size,
+      var(--md-sys-typescale-body-large-size)
+    );
+    --_outlined-text-field-label-text-weight: var(
+      --md-outlined-text-field-label-text-weight,
+      var(--md-sys-typescale-body-large-weight)
+    );
+    --_outlined-text-field-label-text-tracking: var(
+      --md-outlined-text-field-label-text-tracking,
+      var(--md-sys-typescale-body-large-tracking)
+    );
+    --_outlined-text-field-label-text-populated-line-height: var(
+      --md-outlined-text-field-label-text-populated-line-height,
+      var(--md-sys-typescale-body-small-line-height)
+    );
+    --_outlined-text-field-label-text-populated-size: var(
+      --md-outlined-text-field-label-text-populated-size,
+      var(--md-sys-typescale-body-small-size)
+    );
+    --_outlined-text-field-leading-icon-color: var(
+      --md-outlined-text-field-leading-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-leading-icon-size: var(--md-outlined-text-field-leading-icon-size, 1.5rem);
+    --_outlined-text-field-trailing-icon-color: var(
+      --md-outlined-text-field-trailing-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-trailing-icon-size: var(--md-outlined-text-field-trailing-icon-size, 1.5rem);
+    --_outlined-text-field-supporting-text-color: var(
+      --md-outlined-text-field-supporting-text-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-supporting-text-font: var(
+      --md-outlined-text-field-supporting-text-font,
+      var(--md-sys-typescale-body-small-font)
+    );
+    --_outlined-text-field-supporting-text-line-height: var(
+      --md-outlined-text-field-supporting-text-line-height,
+      var(--md-sys-typescale-body-small-line-height)
+    );
+    --_outlined-text-field-supporting-text-size: var(
+      --md-outlined-text-field-supporting-text-size,
+      var(--md-sys-typescale-body-small-size)
+    );
+    --_outlined-text-field-supporting-text-weight: var(
+      --md-outlined-text-field-supporting-text-weight,
+      var(--md-sys-typescale-body-small-weight)
+    );
+    --_outlined-text-field-supporting-text-tracking: var(
+      --md-outlined-text-field-supporting-text-tracking,
+      var(--md-sys-typescale-body-small-tracking)
+    );
+    --_outlined-text-field-input-text-color: var(
+      --md-outlined-text-field-input-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-input-text-font: var(
+      --md-outlined-text-field-input-text-font,
+      var(--md-sys-typescale-body-large-font)
+    );
+    --_outlined-text-field-input-text-line-height: var(
+      --md-outlined-text-field-input-text-line-height,
+      var(--md-sys-typescale-body-large-line-height)
+    );
+    --_outlined-text-field-input-text-size: var(
+      --md-outlined-text-field-input-text-size,
+      var(--md-sys-typescale-body-large-size)
+    );
+    --_outlined-text-field-input-text-weight: var(
+      --md-outlined-text-field-input-text-weight,
+      var(--md-sys-typescale-body-large-weight)
+    );
+    --_outlined-text-field-input-text-tracking: var(
+      --md-outlined-text-field-input-text-tracking,
+      var(--md-sys-typescale-body-large-tracking)
+    );
+    --_outlined-text-field-input-text-prefix-color: var(
+      --md-outlined-text-field-input-text-prefix-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-input-text-suffix-color: var(
+      --md-outlined-text-field-input-text-suffix-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-input-text-placeholder-color: var(
+      --md-outlined-text-field-input-text-placeholder-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-caret-color: var(--md-outlined-text-field-caret-color, var(--md-sys-color-primary));
+    --_outlined-text-field-disabled-outline-width: var(--md-outlined-text-field-disabled-outline-width, 0.0625rem);
+    --_outlined-text-field-disabled-outline-color: var(
+      --md-outlined-text-field-disabled-outline-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-disabled-outline-opacity: var(--md-outlined-text-field-disabled-outline-opacity, 0.12);
+    --_outlined-text-field-disabled-label-text-color: var(
+      --md-outlined-text-field-disabled-label-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-disabled-label-text-opacity: var(--md-outlined-text-field-disabled-label-text-opacity, 0.38);
+    --_outlined-text-field-disabled-input-text-color: var(
+      --md-outlined-text-field-disabled-input-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-disabled-input-text-opacity: var(--md-outlined-text-field-disabled-input-text-opacity, 0.38);
+    --_outlined-text-field-disabled-supporting-text-color: var(
+      --md-outlined-text-field-disabled-supporting-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-disabled-supporting-text-opacity: var(
+      --md-outlined-text-field-disabled-supporting-text-opacity,
+      0.38
+    );
+    --_outlined-text-field-hover-label-text-color: var(
+      --md-outlined-text-field-hover-label-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-hover-leading-icon-color: var(
+      --md-outlined-text-field-hover-leading-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-hover-trailing-icon-color: var(
+      --md-outlined-text-field-hover-trailing-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-hover-outline-width: var(--md-outlined-text-field-hover-outline-width, 0.0625rem);
+    --_outlined-text-field-hover-outline-color: var(
+      --md-outlined-text-field-hover-outline-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-hover-input-text-color: var(
+      --md-outlined-text-field-hover-input-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-hover-supporting-text-color: var(
+      --md-outlined-text-field-hover-supporting-text-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-focus-label-text-color: var(
+      --md-outlined-text-field-focus-label-text-color,
+      var(--md-sys-color-primary)
+    );
+    --_outlined-text-field-focus-leading-icon-color: var(
+      --md-outlined-text-field-focus-leading-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-focus-trailing-icon-color: var(
+      --md-outlined-text-field-focus-trailing-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-focus-outline-width: var(--md-outlined-text-field-focus-outline-width, 0.1875rem);
+    --_outlined-text-field-focus-outline-color: var(
+      --md-outlined-text-field-focus-outline-color,
+      var(--md-sys-color-primary)
+    );
+    --_outlined-text-field-focus-input-text-color: var(
+      --md-outlined-text-field-focus-input-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-focus-supporting-text-color: var(
+      --md-outlined-text-field-focus-supporting-text-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-error-outline-color: var(
+      --md-outlined-text-field-error-outline-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-label-text-color: var(
+      --md-outlined-text-field-error-label-text-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-input-text-color: var(
+      --md-outlined-text-field-error-input-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-error-supporting-text-color: var(
+      --md-outlined-text-field-error-supporting-text-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-leading-icon-color: var(
+      --md-outlined-text-field-error-leading-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-error-trailing-icon-color: var(
+      --md-outlined-text-field-error-trailing-icon-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-focus-outline-color: var(
+      --md-outlined-text-field-error-focus-outline-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-focus-label-text-color: var(
+      --md-outlined-text-field-error-focus-label-text-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-focus-input-text-color: var(
+      --md-outlined-text-field-error-focus-input-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-error-focus-supporting-text-color: var(
+      --md-outlined-text-field-error-focus-supporting-text-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-focus-leading-icon-color: var(
+      --md-outlined-text-field-error-focus-leading-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-error-focus-trailing-icon-color: var(
+      --md-outlined-text-field-error-focus-trailing-icon-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-focus-caret-color: var(
+      --md-outlined-text-field-error-focus-caret-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-hover-outline-color: var(
+      --md-outlined-text-field-error-hover-outline-color,
+      var(--md-sys-color-on-error-container)
+    );
+    --_outlined-text-field-error-hover-label-text-color: var(
+      --md-outlined-text-field-error-hover-label-text-color,
+      var(--md-sys-color-on-error-container)
+    );
+    --_outlined-text-field-error-hover-input-text-color: var(
+      --md-outlined-text-field-error-hover-input-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-error-hover-supporting-text-color: var(
+      --md-outlined-text-field-error-hover-supporting-text-color,
+      var(--md-sys-color-error)
+    );
+    --_outlined-text-field-error-hover-leading-icon-color: var(
+      --md-outlined-text-field-error-hover-leading-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_outlined-text-field-error-hover-trailing-icon-color: var(
+      --md-outlined-text-field-error-hover-trailing-icon-color,
+      var(--md-sys-color-on-error-container)
+    );
+    --_outlined-text-field-disabled-leading-icon-color: var(
+      --md-outlined-text-field-disabled-leading-icon-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-disabled-leading-icon-opacity: var(
+      --md-outlined-text-field-disabled-leading-icon-opacity,
+      0.38
+    );
+    --_outlined-text-field-disabled-trailing-icon-color: var(
+      --md-outlined-text-field-disabled-trailing-icon-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_outlined-text-field-disabled-trailing-icon-opacity: var(
+      --md-outlined-text-field-disabled-trailing-icon-opacity,
+      0.38
+    );
   }
 }
 
 @layer components {
   .m3-text-field {
-    --_outline-color: var(--md-comp-outlined-text-field-outline-color);
-    --_outline-width: var(--md-comp-outlined-text-field-outline-width);
-    --_label-color: var(--md-comp-outlined-text-field-label-text-color);
-    --_input-color: var(--md-comp-outlined-text-field-input-text-color);
-    --_supporting-color: var(--md-comp-outlined-text-field-supporting-text-color);
-    --_leading-icon-color: var(--md-comp-outlined-text-field-leading-icon-color);
-    --_trailing-icon-color: var(--md-comp-outlined-text-field-trailing-icon-color);
-    --_caret-color: var(--md-comp-outlined-text-field-caret-color);
+    --_outline-color: var(--_outlined-text-field-outline-color);
+    --_outline-width: var(--_outlined-text-field-outline-width);
+    --_label-color: var(--_outlined-text-field-label-text-color);
+    --_input-color: var(--_outlined-text-field-input-text-color);
+    --_supporting-color: var(--_outlined-text-field-supporting-text-color);
+    --_leading-icon-color: var(--_outlined-text-field-leading-icon-color);
+    --_trailing-icon-color: var(--_outlined-text-field-trailing-icon-color);
+    --_caret-color: var(--_outlined-text-field-caret-color);
 
     display: grid;
     gap: 0.25rem;
@@ -105,7 +384,7 @@
     padding-block: 0.5rem;
     padding-inline: 1rem;
 
-    border-radius: var(--md-comp-outlined-text-field-container-shape);
+    border-radius: var(--_outlined-text-field-container-shape);
     background: transparent;
   }
 
@@ -132,11 +411,11 @@
     block-size: 0;
     padding: 0;
     margin-inline-start: 0.25rem;
-    font-family: var(--md-comp-outlined-text-field-label-text-font), sans-serif;
-    font-size: var(--md-comp-outlined-text-field-label-text-populated-size);
-    line-height: var(--md-comp-outlined-text-field-label-text-populated-line-height);
-    font-weight: var(--md-comp-outlined-text-field-label-text-weight);
-    letter-spacing: var(--md-comp-outlined-text-field-label-text-tracking);
+    font-family: var(--_outlined-text-field-label-text-font), sans-serif;
+    font-size: var(--_outlined-text-field-label-text-populated-size);
+    line-height: var(--_outlined-text-field-label-text-populated-line-height);
+    font-weight: var(--_outlined-text-field-label-text-weight);
+    letter-spacing: var(--_outlined-text-field-label-text-tracking);
     transition:
       max-inline-size var(--md-duration) var(--md-timing-function),
       padding-inline var(--md-duration) var(--md-timing-function);
@@ -151,11 +430,11 @@
     background: transparent;
 
     color: var(--_label-color);
-    font-family: var(--md-comp-outlined-text-field-label-text-font), sans-serif;
-    font-size: var(--md-comp-outlined-text-field-label-text-size);
-    line-height: var(--md-comp-outlined-text-field-label-text-line-height);
-    font-weight: var(--md-comp-outlined-text-field-label-text-weight);
-    letter-spacing: var(--md-comp-outlined-text-field-label-text-tracking);
+    font-family: var(--_outlined-text-field-label-text-font), sans-serif;
+    font-size: var(--_outlined-text-field-label-text-size);
+    line-height: var(--_outlined-text-field-label-text-line-height);
+    font-weight: var(--_outlined-text-field-label-text-weight);
+    letter-spacing: var(--_outlined-text-field-label-text-tracking);
     pointer-events: none;
     transition:
       inset-block-start var(--md-duration) var(--md-timing-function),
@@ -170,12 +449,12 @@
   .m3-text-field[data-populated='true'] .m3-text-field-label,
   .m3-text-field[data-has-placeholder='true'] .m3-text-field-label {
     inset-block-start: 0;
-    translate: 0 calc(-0.5 * var(--md-comp-outlined-text-field-label-text-populated-line-height));
+    translate: 0 calc(-0.5 * var(--_outlined-text-field-label-text-populated-line-height));
     padding-inline: 0.25rem;
     background: transparent;
 
-    font-size: var(--md-comp-outlined-text-field-label-text-populated-size);
-    line-height: var(--md-comp-outlined-text-field-label-text-populated-line-height);
+    font-size: var(--_outlined-text-field-label-text-populated-size);
+    line-height: var(--_outlined-text-field-label-text-populated-line-height);
   }
 
   .m3-text-field:focus-within .m3-text-field-outline legend,
@@ -211,11 +490,11 @@
     color: var(--_input-color);
     caret-color: var(--_caret-color);
 
-    font-family: var(--md-comp-outlined-text-field-input-text-font), sans-serif;
-    font-size: var(--md-comp-outlined-text-field-input-text-size);
-    line-height: var(--md-comp-outlined-text-field-input-text-line-height);
-    font-weight: var(--md-comp-outlined-text-field-input-text-weight);
-    letter-spacing: var(--md-comp-outlined-text-field-input-text-tracking);
+    font-family: var(--_outlined-text-field-input-text-font), sans-serif;
+    font-size: var(--_outlined-text-field-input-text-size);
+    line-height: var(--_outlined-text-field-input-text-line-height);
+    font-weight: var(--_outlined-text-field-input-text-weight);
+    letter-spacing: var(--_outlined-text-field-input-text-tracking);
   }
 
   .m3-text-field-textarea {
@@ -223,39 +502,39 @@
   }
 
   .m3-text-field-input::placeholder {
-    color: var(--md-comp-outlined-text-field-input-text-placeholder-color);
+    color: var(--_outlined-text-field-input-text-placeholder-color);
   }
 
   .m3-text-field-prefix-slot,
   .m3-text-field-suffix-slot {
-    color: var(--md-comp-outlined-text-field-input-text-prefix-color);
+    color: var(--_outlined-text-field-input-text-prefix-color);
     opacity: 0;
     transition: opacity var(--md-duration-fast) var(--md-timing-function-fast);
   }
 
   .m3-text-field-leading-slot {
     color: var(--_leading-icon-color);
-    font-size: var(--md-comp-outlined-text-field-leading-icon-size);
+    font-size: var(--_outlined-text-field-leading-icon-size);
   }
 
   .m3-text-field-trailing-slot {
     color: var(--_trailing-icon-color);
-    font-size: var(--md-comp-outlined-text-field-trailing-icon-size);
+    font-size: var(--_outlined-text-field-trailing-icon-size);
   }
 
   .m3-text-field-date-picker-button {
     margin-block: -0.75rem;
     margin-inline-end: -0.75rem;
 
-    --md-comp-icon-button-small-container-height: 3rem;
-    --md-comp-icon-button-small-icon-size: var(--md-comp-outlined-text-field-trailing-icon-size);
-    --md-comp-icon-button-small-default-leading-space: 0.75rem;
-    --md-comp-icon-button-small-default-trailing-space: 0.75rem;
-    --md-comp-icon-button-filled-container-color: --translucent(var(--md-sys-color-on-surface-variant), 0.08);
-    --md-comp-icon-button-filled-icon-color: var(--_trailing-icon-color);
-    --md-comp-icon-button-filled-hovered-icon-color: var(--_trailing-icon-color);
-    --md-comp-icon-button-filled-focused-icon-color: var(--_trailing-icon-color);
-    --md-comp-icon-button-filled-pressed-icon-color: var(--_trailing-icon-color);
+    --md-icon-button-small-container-height: 3rem;
+    --md-icon-button-small-icon-size: var(--_outlined-text-field-trailing-icon-size);
+    --md-icon-button-small-default-leading-space: 0.75rem;
+    --md-icon-button-small-default-trailing-space: 0.75rem;
+    --md-icon-button-filled-container-color: --translucent(var(--md-sys-color-on-surface-variant), 0.08);
+    --md-icon-button-filled-icon-color: var(--_trailing-icon-color);
+    --md-icon-button-filled-hovered-icon-color: var(--_trailing-icon-color);
+    --md-icon-button-filled-focused-icon-color: var(--_trailing-icon-color);
+    --md-icon-button-filled-pressed-icon-color: var(--_trailing-icon-color);
     --md-state-layer-color: var(--_trailing-icon-color);
   }
 
@@ -271,74 +550,74 @@
   .m3-text-field-supporting {
     padding-inline: 1rem;
     color: var(--_supporting-color);
-    font-family: var(--md-comp-outlined-text-field-supporting-text-font), sans-serif;
-    font-size: var(--md-comp-outlined-text-field-supporting-text-size);
-    line-height: var(--md-comp-outlined-text-field-supporting-text-line-height);
-    font-weight: var(--md-comp-outlined-text-field-supporting-text-weight);
-    letter-spacing: var(--md-comp-outlined-text-field-supporting-text-tracking);
+    font-family: var(--_outlined-text-field-supporting-text-font), sans-serif;
+    font-size: var(--_outlined-text-field-supporting-text-size);
+    line-height: var(--_outlined-text-field-supporting-text-line-height);
+    font-weight: var(--_outlined-text-field-supporting-text-weight);
+    letter-spacing: var(--_outlined-text-field-supporting-text-tracking);
   }
 
   /* Baseline 2025: :has is required for parent-state styling without JS. */
   .m3-text-field:where(:has(.m3-text-field-input:not(:disabled):hover)) {
-    --_outline-width: var(--md-comp-outlined-text-field-hover-outline-width);
-    --_outline-color: var(--md-comp-outlined-text-field-hover-outline-color);
-    --_label-color: var(--md-comp-outlined-text-field-hover-label-text-color);
+    --_outline-width: var(--_outlined-text-field-hover-outline-width);
+    --_outline-color: var(--_outlined-text-field-hover-outline-color);
+    --_label-color: var(--_outlined-text-field-hover-label-text-color);
   }
 
   .m3-text-field:focus-within,
   .m3-text-field[data-visually-focused='true'] {
-    --_outline-width: var(--md-comp-outlined-text-field-focus-outline-width);
-    --_outline-color: var(--md-comp-outlined-text-field-focus-outline-color);
-    --_label-color: var(--md-comp-outlined-text-field-focus-label-text-color);
+    --_outline-width: var(--_outlined-text-field-focus-outline-width);
+    --_outline-color: var(--_outlined-text-field-focus-outline-color);
+    --_label-color: var(--_outlined-text-field-focus-label-text-color);
   }
 
   .m3-text-field[data-invalid='true'] {
-    --_outline-color: var(--md-comp-outlined-text-field-error-outline-color);
-    --_label-color: var(--md-comp-outlined-text-field-error-label-text-color);
-    --_supporting-color: var(--md-comp-outlined-text-field-error-supporting-text-color);
-    --_trailing-icon-color: var(--md-comp-outlined-text-field-error-trailing-icon-color);
+    --_outline-color: var(--_outlined-text-field-error-outline-color);
+    --_label-color: var(--_outlined-text-field-error-label-text-color);
+    --_supporting-color: var(--_outlined-text-field-error-supporting-text-color);
+    --_trailing-icon-color: var(--_outlined-text-field-error-trailing-icon-color);
   }
 
   .m3-text-field[data-invalid='true']:where(:has(.m3-text-field-input:not(:disabled):hover)) {
-    --_outline-color: var(--md-comp-outlined-text-field-error-hover-outline-color);
-    --_label-color: var(--md-comp-outlined-text-field-error-hover-label-text-color);
-    --_trailing-icon-color: var(--md-comp-outlined-text-field-error-hover-trailing-icon-color);
+    --_outline-color: var(--_outlined-text-field-error-hover-outline-color);
+    --_label-color: var(--_outlined-text-field-error-hover-label-text-color);
+    --_trailing-icon-color: var(--_outlined-text-field-error-hover-trailing-icon-color);
   }
 
   .m3-text-field[data-invalid='true']:focus-within,
   .m3-text-field[data-invalid='true'][data-visually-focused='true'] {
-    --_outline-color: var(--md-comp-outlined-text-field-error-focus-outline-color);
-    --_label-color: var(--md-comp-outlined-text-field-error-focus-label-text-color);
-    --_supporting-color: var(--md-comp-outlined-text-field-error-focus-supporting-text-color);
-    --_trailing-icon-color: var(--md-comp-outlined-text-field-error-focus-trailing-icon-color);
-    --_caret-color: var(--md-comp-outlined-text-field-error-focus-caret-color);
+    --_outline-color: var(--_outlined-text-field-error-focus-outline-color);
+    --_label-color: var(--_outlined-text-field-error-focus-label-text-color);
+    --_supporting-color: var(--_outlined-text-field-error-focus-supporting-text-color);
+    --_trailing-icon-color: var(--_outlined-text-field-error-focus-trailing-icon-color);
+    --_caret-color: var(--_outlined-text-field-error-focus-caret-color);
   }
 
   .m3-text-field[data-disabled='true'] {
-    --_outline-width: var(--md-comp-outlined-text-field-disabled-outline-width);
+    --_outline-width: var(--_outlined-text-field-disabled-outline-width);
     --_outline-color: --translucent(
-      var(--md-comp-outlined-text-field-disabled-outline-color),
-      var(--md-comp-outlined-text-field-disabled-outline-opacity)
+      var(--_outlined-text-field-disabled-outline-color),
+      var(--_outlined-text-field-disabled-outline-opacity)
     );
     --_label-color: --translucent(
-      var(--md-comp-outlined-text-field-disabled-label-text-color),
-      var(--md-comp-outlined-text-field-disabled-label-text-opacity)
+      var(--_outlined-text-field-disabled-label-text-color),
+      var(--_outlined-text-field-disabled-label-text-opacity)
     );
     --_input-color: --translucent(
-      var(--md-comp-outlined-text-field-disabled-input-text-color),
-      var(--md-comp-outlined-text-field-disabled-input-text-opacity)
+      var(--_outlined-text-field-disabled-input-text-color),
+      var(--_outlined-text-field-disabled-input-text-opacity)
     );
     --_supporting-color: --translucent(
-      var(--md-comp-outlined-text-field-disabled-supporting-text-color),
-      var(--md-comp-outlined-text-field-disabled-supporting-text-opacity)
+      var(--_outlined-text-field-disabled-supporting-text-color),
+      var(--_outlined-text-field-disabled-supporting-text-opacity)
     );
     --_leading-icon-color: --translucent(
-      var(--md-comp-outlined-text-field-disabled-leading-icon-color),
-      var(--md-comp-outlined-text-field-disabled-leading-icon-opacity)
+      var(--_outlined-text-field-disabled-leading-icon-color),
+      var(--_outlined-text-field-disabled-leading-icon-opacity)
     );
     --_trailing-icon-color: --translucent(
-      var(--md-comp-outlined-text-field-disabled-trailing-icon-color),
-      var(--md-comp-outlined-text-field-disabled-trailing-icon-opacity)
+      var(--_outlined-text-field-disabled-trailing-icon-color),
+      var(--_outlined-text-field-disabled-trailing-icon-opacity)
     );
   }
 

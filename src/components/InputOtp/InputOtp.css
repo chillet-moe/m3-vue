@@ -1,50 +1,81 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-input-otp-caret-color: initial;
+    --md-input-otp-container-shape: initial;
+    --md-input-otp-disabled-opacity: initial;
+    --md-input-otp-error-caret-color: initial;
+    --md-input-otp-error-outline-color: initial;
+    --md-input-otp-focus-outline-color: initial;
+    --md-input-otp-focus-outline-width: initial;
+    --md-input-otp-hover-outline-color: initial;
+    --md-input-otp-input-text-color: initial;
+    --md-input-otp-input-text-font: initial;
+    --md-input-otp-input-text-line-height: initial;
+    --md-input-otp-input-text-size: initial;
+    --md-input-otp-input-text-weight: initial;
+    --md-input-otp-large-container-size: initial;
+    --md-input-otp-medium-container-size: initial;
+    --md-input-otp-outline-color: initial;
+    --md-input-otp-outline-width: initial;
+    --md-input-otp-small-container-size: initial;
+  }
+
   .m3-input-otp {
-    --md-comp-input-otp-container-shape: var(--md-sys-shape-corner-medium);
-    --md-comp-input-otp-small-container-size: 2.5rem;
-    --md-comp-input-otp-medium-container-size: 3rem;
-    --md-comp-input-otp-large-container-size: 3.5rem;
-    --md-comp-input-otp-outline-width: 0.0625rem;
-    --md-comp-input-otp-outline-color: var(--md-sys-color-outline);
-    --md-comp-input-otp-input-text-color: var(--md-sys-color-on-surface);
-    --md-comp-input-otp-input-text-font: var(--md-sys-typescale-title-medium-font);
-    --md-comp-input-otp-input-text-line-height: var(--md-sys-typescale-title-medium-line-height);
-    --md-comp-input-otp-input-text-size: var(--md-sys-typescale-title-medium-size);
-    --md-comp-input-otp-input-text-weight: var(--md-sys-typescale-title-medium-weight);
-    --md-comp-input-otp-caret-color: var(--md-sys-color-primary);
-    --md-comp-input-otp-focus-outline-width: 0.1875rem;
-    --md-comp-input-otp-focus-outline-color: var(--md-sys-color-primary);
-    --md-comp-input-otp-hover-outline-color: var(--md-sys-color-on-surface);
-    --md-comp-input-otp-error-outline-color: var(--md-sys-color-error);
-    --md-comp-input-otp-error-caret-color: var(--md-sys-color-error);
-    --md-comp-input-otp-disabled-opacity: 0.38;
+    --_input-otp-container-shape: var(--md-input-otp-container-shape, var(--md-sys-shape-corner-medium));
+    --_input-otp-small-container-size: var(--md-input-otp-small-container-size, 2.5rem);
+    --_input-otp-medium-container-size: var(--md-input-otp-medium-container-size, 3rem);
+    --_input-otp-large-container-size: var(--md-input-otp-large-container-size, 3.5rem);
+    --_input-otp-outline-width: var(--md-input-otp-outline-width, 0.0625rem);
+    --_input-otp-outline-color: var(--md-input-otp-outline-color, var(--md-sys-color-outline));
+    --_input-otp-input-text-color: var(--md-input-otp-input-text-color, var(--md-sys-color-on-surface));
+    --_input-otp-input-text-font: var(--md-input-otp-input-text-font, var(--md-sys-typescale-title-medium-font));
+    --_input-otp-input-text-line-height: var(
+      --md-input-otp-input-text-line-height,
+      var(--md-sys-typescale-title-medium-line-height)
+    );
+    --_input-otp-input-text-size: var(--md-input-otp-input-text-size, var(--md-sys-typescale-title-medium-size));
+    --_input-otp-input-text-weight: var(--md-input-otp-input-text-weight, var(--md-sys-typescale-title-medium-weight));
+    --_input-otp-caret-color: var(--md-input-otp-caret-color, var(--md-sys-color-primary));
+    --_input-otp-focus-outline-width: var(--md-input-otp-focus-outline-width, 0.1875rem);
+    --_input-otp-focus-outline-color: var(--md-input-otp-focus-outline-color, var(--md-sys-color-primary));
+    --_input-otp-hover-outline-color: var(--md-input-otp-hover-outline-color, var(--md-sys-color-on-surface));
+    --_input-otp-error-outline-color: var(--md-input-otp-error-outline-color, var(--md-sys-color-error));
+    --_input-otp-error-caret-color: var(--md-input-otp-error-caret-color, var(--md-sys-color-error));
+    --_input-otp-disabled-opacity: var(--md-input-otp-disabled-opacity, 0.38);
   }
 }
 
 @layer components {
   .m3-input-otp {
-    --_outline-color: var(--md-comp-input-otp-outline-color);
-    --_outline-width: var(--md-comp-input-otp-outline-width);
-    --_container-size: var(--md-comp-input-otp-medium-container-size);
-    --_input-color: var(--md-comp-input-otp-input-text-color);
-    --_caret-color: var(--md-comp-input-otp-caret-color);
+    --_outline-color: var(--_input-otp-outline-color);
+    --_outline-width: var(--_input-otp-outline-width);
+    --_container-size: var(--_input-otp-medium-container-size);
+    --_input-color: var(--_input-otp-input-text-color);
+    --_caret-color: var(--_input-otp-caret-color);
 
     display: inline-grid;
     min-inline-size: 0;
   }
 
   .m3-input-otp[data-size='small'] {
-    --_container-size: var(--md-comp-input-otp-small-container-size);
-    --md-comp-input-otp-input-text-size: var(--md-sys-typescale-title-small-size);
-    --md-comp-input-otp-input-text-line-height: var(--md-sys-typescale-title-small-line-height);
+    --_container-size: var(--_input-otp-small-container-size);
+    --_input-otp-input-text-size: var(--md-input-otp-input-text-size, var(--md-sys-typescale-title-small-size));
+    --_input-otp-input-text-line-height: var(
+      --md-input-otp-input-text-line-height,
+      var(--md-sys-typescale-title-small-line-height)
+    );
   }
 
   .m3-input-otp[data-size='large'] {
-    --_container-size: var(--md-comp-input-otp-large-container-size);
-    --md-comp-input-otp-input-text-size: var(--md-sys-typescale-title-large-size);
-    --md-comp-input-otp-input-text-line-height: var(--md-sys-typescale-title-large-line-height);
+    --_container-size: var(--_input-otp-large-container-size);
+    --_input-otp-input-text-size: var(--md-input-otp-input-text-size, var(--md-sys-typescale-title-large-size));
+    --_input-otp-input-text-line-height: var(
+      --md-input-otp-input-text-line-height,
+      var(--md-sys-typescale-title-large-line-height)
+    );
   }
 
   .m3-input-otp-group {
@@ -64,16 +95,16 @@
     block-size: var(--_container-size);
     padding: 0;
     border: var(--_outline-width) solid var(--_outline-color);
-    border-radius: var(--md-comp-input-otp-container-shape);
+    border-radius: var(--_input-otp-container-shape);
     outline: 0;
     background: transparent;
     color: var(--_input-color);
     caret-color: var(--_caret-color);
     text-align: center;
-    font-family: var(--md-comp-input-otp-input-text-font), sans-serif;
-    font-size: var(--md-comp-input-otp-input-text-size);
-    line-height: var(--md-comp-input-otp-input-text-line-height);
-    font-weight: var(--md-comp-input-otp-input-text-weight);
+    font-family: var(--_input-otp-input-text-font), sans-serif;
+    font-size: var(--_input-otp-input-text-size);
+    line-height: var(--_input-otp-input-text-line-height);
+    font-weight: var(--_input-otp-input-text-weight);
     letter-spacing: 0;
     transition:
       border-color var(--md-duration-fast) var(--md-timing-function-fast),
@@ -86,27 +117,27 @@
   }
 
   .m3-input-otp-input:not(:disabled):hover {
-    --_outline-color: var(--md-comp-input-otp-hover-outline-color);
+    --_outline-color: var(--_input-otp-hover-outline-color);
   }
 
   .m3-input-otp-input:focus {
-    --_outline-color: var(--md-comp-input-otp-focus-outline-color);
-    --_outline-width: var(--md-comp-input-otp-focus-outline-width);
+    --_outline-color: var(--_input-otp-focus-outline-color);
+    --_outline-width: var(--_input-otp-focus-outline-width);
   }
 
   .m3-input-otp[data-invalid='true'] {
-    --_outline-color: var(--md-comp-input-otp-error-outline-color);
-    --_caret-color: var(--md-comp-input-otp-error-caret-color);
+    --_outline-color: var(--_input-otp-error-outline-color);
+    --_caret-color: var(--_input-otp-error-caret-color);
   }
 
   .m3-input-otp[data-invalid='true'] .m3-input-otp-input:not(:disabled):hover,
   .m3-input-otp[data-invalid='true'] .m3-input-otp-input:focus {
-    --_outline-color: var(--md-comp-input-otp-error-outline-color);
+    --_outline-color: var(--_input-otp-error-outline-color);
   }
 
   .m3-input-otp[data-disabled='true'] {
-    --_input-color: --translucent(var(--md-comp-input-otp-input-text-color), var(--md-comp-input-otp-disabled-opacity));
-    --_outline-color: --translucent(var(--md-comp-input-otp-outline-color), var(--md-comp-input-otp-disabled-opacity));
+    --_input-color: --translucent(var(--_input-otp-input-text-color), var(--_input-otp-disabled-opacity));
+    --_outline-color: --translucent(var(--_input-otp-outline-color), var(--_input-otp-disabled-opacity));
   }
 
   .m3-input-otp[data-readonly='true'] .m3-input-otp-input {

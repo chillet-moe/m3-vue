@@ -42,6 +42,8 @@ Pagination provides a composable page-navigation pattern with previous/next help
 
 <ApiTable component="Pagination" v-model="props" />
 
+<StyleTokenTable component="Pagination" />
+
 ### PaginationContent
 
 <ApiTable component="PaginationContent" />

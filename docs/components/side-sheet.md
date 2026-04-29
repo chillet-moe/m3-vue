@@ -45,6 +45,8 @@ Side sheets present modal supporting content from the side of the viewport using
 
 <ApiTable component="SideSheet" v-model="props" />
 
+<StyleTokenTable component="SideSheet" />
+
 ## Examples
 
 ### Default

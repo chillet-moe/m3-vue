@@ -1,105 +1,229 @@
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-button-group-between-space: initial;
+    --md-button-group-connected-container-shape: initial;
+    --md-button-group-connected-inner-corner-corner-size: initial;
+    --md-button-group-connected-large-between-space: initial;
+    --md-button-group-connected-large-container-height: initial;
+    --md-button-group-connected-large-container-shape: initial;
+    --md-button-group-connected-large-inner-corner-corner-size: initial;
+    --md-button-group-connected-large-pressed-inner-corner-corner-size: initial;
+    --md-button-group-connected-large-selected-inner-corner-corner-size: initial;
+    --md-button-group-connected-medium-between-space: initial;
+    --md-button-group-connected-medium-container-height: initial;
+    --md-button-group-connected-medium-container-shape: initial;
+    --md-button-group-connected-medium-inner-corner-corner-size: initial;
+    --md-button-group-connected-medium-pressed-inner-corner-corner-size: initial;
+    --md-button-group-connected-medium-selected-inner-corner-corner-size: initial;
+    --md-button-group-connected-pressed-inner-corner-corner-size: initial;
+    --md-button-group-connected-selected-inner-corner-corner-size: initial;
+    --md-button-group-connected-small-between-space: initial;
+    --md-button-group-connected-small-container-height: initial;
+    --md-button-group-connected-small-container-shape: initial;
+    --md-button-group-connected-small-inner-corner-corner-size: initial;
+    --md-button-group-connected-small-pressed-inner-corner-corner-size: initial;
+    --md-button-group-connected-small-selected-inner-corner-corner-size: initial;
+    --md-button-group-connected-xlarge-between-space: initial;
+    --md-button-group-connected-xlarge-container-height: initial;
+    --md-button-group-connected-xlarge-container-shape: initial;
+    --md-button-group-connected-xlarge-inner-corner-corner-size: initial;
+    --md-button-group-connected-xlarge-pressed-inner-corner-corner-size: initial;
+    --md-button-group-connected-xlarge-selected-inner-corner-corner-size: initial;
+    --md-button-group-connected-xsmall-between-space: initial;
+    --md-button-group-connected-xsmall-container-height: initial;
+    --md-button-group-connected-xsmall-container-shape: initial;
+    --md-button-group-connected-xsmall-inner-corner-corner-size: initial;
+    --md-button-group-connected-xsmall-pressed-inner-corner-corner-size: initial;
+    --md-button-group-connected-xsmall-selected-inner-corner-corner-size: initial;
+    --md-button-group-height: initial;
+    --md-button-group-standard-large-between-space: initial;
+    --md-button-group-standard-large-container-height: initial;
+    --md-button-group-standard-large-pressed-item-width-motion-spring-dampening: initial;
+    --md-button-group-standard-large-pressed-item-width-motion-spring-stiffness: initial;
+    --md-button-group-standard-large-pressed-item-width-multiplier: initial;
+    --md-button-group-standard-medium-between-space: initial;
+    --md-button-group-standard-medium-container-height: initial;
+    --md-button-group-standard-medium-pressed-item-width-motion-spring-dampening: initial;
+    --md-button-group-standard-medium-pressed-item-width-motion-spring-stiffness: initial;
+    --md-button-group-standard-medium-pressed-item-width-multiplier: initial;
+    --md-button-group-standard-small-between-space: initial;
+    --md-button-group-standard-small-container-height: initial;
+    --md-button-group-standard-small-pressed-item-width-motion-spring-dampening: initial;
+    --md-button-group-standard-small-pressed-item-width-motion-spring-stiffness: initial;
+    --md-button-group-standard-small-pressed-item-width-multiplier: initial;
+    --md-button-group-standard-xlarge-between-space: initial;
+    --md-button-group-standard-xlarge-container-height: initial;
+    --md-button-group-standard-xlarge-pressed-item-width-motion-spring-dampening: initial;
+    --md-button-group-standard-xlarge-pressed-item-width-motion-spring-stiffness: initial;
+    --md-button-group-standard-xlarge-pressed-item-width-multiplier: initial;
+    --md-button-group-standard-xsmall-between-space: initial;
+    --md-button-group-standard-xsmall-container-height: initial;
+    --md-button-group-standard-xsmall-pressed-item-width-motion-spring-dampening: initial;
+    --md-button-group-standard-xsmall-pressed-item-width-motion-spring-stiffness: initial;
+    --md-button-group-standard-xsmall-pressed-item-width-multiplier: initial;
+  }
+
   .m3-button-group {
-    --md-comp-button-group-standard-xsmall-container-height: 2rem;
-    --md-comp-button-group-standard-xsmall-between-space: 1.125rem;
-    --md-comp-button-group-standard-xsmall-pressed-item-width-motion-spring-dampening: var(
-      --md-sys-motion-spring-fast-spatial-damping
+    --_button-group-standard-xsmall-container-height: var(--md-button-group-standard-xsmall-container-height, 2rem);
+    --_button-group-standard-xsmall-between-space: var(--md-button-group-standard-xsmall-between-space, 1.125rem);
+    --_button-group-standard-xsmall-pressed-item-width-motion-spring-dampening: var(
+      --md-button-group-standard-xsmall-pressed-item-width-motion-spring-dampening,
+      var(--md-sys-motion-spring-fast-spatial-damping)
     );
-    --md-comp-button-group-standard-xsmall-pressed-item-width-motion-spring-stiffness: var(
-      --md-sys-motion-spring-fast-spatial-stiffness
+    --_button-group-standard-xsmall-pressed-item-width-motion-spring-stiffness: var(
+      --md-button-group-standard-xsmall-pressed-item-width-motion-spring-stiffness,
+      var(--md-sys-motion-spring-fast-spatial-stiffness)
     );
-    --md-comp-button-group-standard-xsmall-pressed-item-width-multiplier: 15%;
-    --md-comp-button-group-standard-small-container-height: 2.5rem;
-    --md-comp-button-group-standard-small-between-space: 0.75rem;
-    --md-comp-button-group-standard-small-pressed-item-width-motion-spring-dampening: var(
-      --md-sys-motion-spring-fast-spatial-damping
+    --_button-group-standard-xsmall-pressed-item-width-multiplier: var(
+      --md-button-group-standard-xsmall-pressed-item-width-multiplier,
+      15%
     );
-    --md-comp-button-group-standard-small-pressed-item-width-motion-spring-stiffness: var(
-      --md-sys-motion-spring-fast-spatial-stiffness
+    --_button-group-standard-small-container-height: var(--md-button-group-standard-small-container-height, 2.5rem);
+    --_button-group-standard-small-between-space: var(--md-button-group-standard-small-between-space, 0.75rem);
+    --_button-group-standard-small-pressed-item-width-motion-spring-dampening: var(
+      --md-button-group-standard-small-pressed-item-width-motion-spring-dampening,
+      var(--md-sys-motion-spring-fast-spatial-damping)
     );
-    --md-comp-button-group-standard-small-pressed-item-width-multiplier: 15%;
-    --md-comp-button-group-standard-medium-container-height: 3.5rem;
-    --md-comp-button-group-standard-medium-between-space: 0.5rem;
-    --md-comp-button-group-standard-medium-pressed-item-width-motion-spring-dampening: var(
-      --md-sys-motion-spring-fast-spatial-damping
+    --_button-group-standard-small-pressed-item-width-motion-spring-stiffness: var(
+      --md-button-group-standard-small-pressed-item-width-motion-spring-stiffness,
+      var(--md-sys-motion-spring-fast-spatial-stiffness)
     );
-    --md-comp-button-group-standard-medium-pressed-item-width-motion-spring-stiffness: var(
-      --md-sys-motion-spring-fast-spatial-stiffness
+    --_button-group-standard-small-pressed-item-width-multiplier: var(
+      --md-button-group-standard-small-pressed-item-width-multiplier,
+      15%
     );
-    --md-comp-button-group-standard-medium-pressed-item-width-multiplier: 15%;
-    --md-comp-button-group-standard-large-container-height: 6rem;
-    --md-comp-button-group-standard-large-between-space: 0.5rem;
-    --md-comp-button-group-standard-large-pressed-item-width-motion-spring-dampening: var(
-      --md-sys-motion-spring-fast-spatial-damping
+    --_button-group-standard-medium-container-height: var(--md-button-group-standard-medium-container-height, 3.5rem);
+    --_button-group-standard-medium-between-space: var(--md-button-group-standard-medium-between-space, 0.5rem);
+    --_button-group-standard-medium-pressed-item-width-motion-spring-dampening: var(
+      --md-button-group-standard-medium-pressed-item-width-motion-spring-dampening,
+      var(--md-sys-motion-spring-fast-spatial-damping)
     );
-    --md-comp-button-group-standard-large-pressed-item-width-motion-spring-stiffness: var(
-      --md-sys-motion-spring-fast-spatial-stiffness
+    --_button-group-standard-medium-pressed-item-width-motion-spring-stiffness: var(
+      --md-button-group-standard-medium-pressed-item-width-motion-spring-stiffness,
+      var(--md-sys-motion-spring-fast-spatial-stiffness)
     );
-    --md-comp-button-group-standard-large-pressed-item-width-multiplier: 15%;
-    --md-comp-button-group-standard-xlarge-container-height: 8.5rem;
-    --md-comp-button-group-standard-xlarge-between-space: 0.5rem;
-    --md-comp-button-group-standard-xlarge-pressed-item-width-motion-spring-dampening: var(
-      --md-sys-motion-spring-fast-spatial-damping
+    --_button-group-standard-medium-pressed-item-width-multiplier: var(
+      --md-button-group-standard-medium-pressed-item-width-multiplier,
+      15%
     );
-    --md-comp-button-group-standard-xlarge-pressed-item-width-motion-spring-stiffness: var(
-      --md-sys-motion-spring-fast-spatial-stiffness
+    --_button-group-standard-large-container-height: var(--md-button-group-standard-large-container-height, 6rem);
+    --_button-group-standard-large-between-space: var(--md-button-group-standard-large-between-space, 0.5rem);
+    --_button-group-standard-large-pressed-item-width-motion-spring-dampening: var(
+      --md-button-group-standard-large-pressed-item-width-motion-spring-dampening,
+      var(--md-sys-motion-spring-fast-spatial-damping)
     );
-    --md-comp-button-group-standard-xlarge-pressed-item-width-multiplier: 15%;
-    --md-comp-button-group-connected-xsmall-container-height: 2rem;
-    --md-comp-button-group-connected-xsmall-between-space: 0.125rem;
-    --md-comp-button-group-connected-xsmall-container-shape: calc(
-      var(--md-comp-button-group-connected-xsmall-container-height) / 2
+    --_button-group-standard-large-pressed-item-width-motion-spring-stiffness: var(
+      --md-button-group-standard-large-pressed-item-width-motion-spring-stiffness,
+      var(--md-sys-motion-spring-fast-spatial-stiffness)
     );
-    --md-comp-button-group-connected-xsmall-inner-corner-corner-size: var(--md-sys-shape-corner-value-small);
-    --md-comp-button-group-connected-xsmall-pressed-inner-corner-corner-size: var(
-      --md-sys-shape-corner-value-extra-small
+    --_button-group-standard-large-pressed-item-width-multiplier: var(
+      --md-button-group-standard-large-pressed-item-width-multiplier,
+      15%
     );
-    --md-comp-button-group-connected-xsmall-selected-inner-corner-corner-size: calc(
-      var(--md-comp-button-group-connected-xsmall-container-height) / 2
+    --_button-group-standard-xlarge-container-height: var(--md-button-group-standard-xlarge-container-height, 8.5rem);
+    --_button-group-standard-xlarge-between-space: var(--md-button-group-standard-xlarge-between-space, 0.5rem);
+    --_button-group-standard-xlarge-pressed-item-width-motion-spring-dampening: var(
+      --md-button-group-standard-xlarge-pressed-item-width-motion-spring-dampening,
+      var(--md-sys-motion-spring-fast-spatial-damping)
     );
-    --md-comp-button-group-connected-small-container-height: 2.5rem;
-    --md-comp-button-group-connected-small-between-space: 0.125rem;
-    --md-comp-button-group-connected-small-container-shape: calc(
-      var(--md-comp-button-group-connected-small-container-height) / 2
+    --_button-group-standard-xlarge-pressed-item-width-motion-spring-stiffness: var(
+      --md-button-group-standard-xlarge-pressed-item-width-motion-spring-stiffness,
+      var(--md-sys-motion-spring-fast-spatial-stiffness)
     );
-    --md-comp-button-group-connected-small-inner-corner-corner-size: var(--md-sys-shape-corner-value-small);
-    --md-comp-button-group-connected-small-pressed-inner-corner-corner-size: var(
-      --md-sys-shape-corner-value-extra-small
+    --_button-group-standard-xlarge-pressed-item-width-multiplier: var(
+      --md-button-group-standard-xlarge-pressed-item-width-multiplier,
+      15%
     );
-    --md-comp-button-group-connected-small-selected-inner-corner-corner-size: calc(
-      var(--md-comp-button-group-connected-small-container-height) / 2
+    --_button-group-connected-xsmall-container-height: var(--md-button-group-connected-xsmall-container-height, 2rem);
+    --_button-group-connected-xsmall-between-space: var(--md-button-group-connected-xsmall-between-space, 0.125rem);
+    --_button-group-connected-xsmall-container-shape: var(
+      --md-button-group-connected-xsmall-container-shape,
+      calc(var(--_button-group-connected-xsmall-container-height) / 2)
     );
-    --md-comp-button-group-connected-medium-container-height: 3.5rem;
-    --md-comp-button-group-connected-medium-between-space: 0.125rem;
-    --md-comp-button-group-connected-medium-container-shape: calc(
-      var(--md-comp-button-group-connected-medium-container-height) / 2
+    --_button-group-connected-xsmall-inner-corner-corner-size: var(
+      --md-button-group-connected-xsmall-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-small)
     );
-    --md-comp-button-group-connected-medium-inner-corner-corner-size: var(--md-sys-shape-corner-value-small);
-    --md-comp-button-group-connected-medium-pressed-inner-corner-corner-size: var(
-      --md-sys-shape-corner-value-extra-small
+    --_button-group-connected-xsmall-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-xsmall-pressed-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-extra-small)
     );
-    --md-comp-button-group-connected-medium-selected-inner-corner-corner-size: calc(
-      var(--md-comp-button-group-connected-medium-container-height) / 2
+    --_button-group-connected-xsmall-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-xsmall-selected-inner-corner-corner-size,
+      calc(var(--_button-group-connected-xsmall-container-height) / 2)
     );
-    --md-comp-button-group-connected-large-container-height: 6rem;
-    --md-comp-button-group-connected-large-between-space: 0.125rem;
-    --md-comp-button-group-connected-large-container-shape: calc(
-      var(--md-comp-button-group-connected-large-container-height) / 2
+    --_button-group-connected-small-container-height: var(--md-button-group-connected-small-container-height, 2.5rem);
+    --_button-group-connected-small-between-space: var(--md-button-group-connected-small-between-space, 0.125rem);
+    --_button-group-connected-small-container-shape: var(
+      --md-button-group-connected-small-container-shape,
+      calc(var(--_button-group-connected-small-container-height) / 2)
     );
-    --md-comp-button-group-connected-large-inner-corner-corner-size: var(--md-sys-shape-corner-value-large);
-    --md-comp-button-group-connected-large-pressed-inner-corner-corner-size: var(--md-sys-shape-corner-value-medium);
-    --md-comp-button-group-connected-large-selected-inner-corner-corner-size: calc(
-      var(--md-comp-button-group-connected-large-container-height) / 2
+    --_button-group-connected-small-inner-corner-corner-size: var(
+      --md-button-group-connected-small-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-small)
     );
-    --md-comp-button-group-connected-xlarge-container-height: 8.5rem;
-    --md-comp-button-group-connected-xlarge-between-space: 0.125rem;
-    --md-comp-button-group-connected-xlarge-container-shape: calc(
-      var(--md-comp-button-group-connected-xlarge-container-height) / 2
+    --_button-group-connected-small-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-small-pressed-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-extra-small)
     );
-    --md-comp-button-group-connected-xlarge-inner-corner-corner-size: var(--md-sys-shape-corner-value-large-increased);
-    --md-comp-button-group-connected-xlarge-pressed-inner-corner-corner-size: var(--md-sys-shape-corner-value-large);
-    --md-comp-button-group-connected-xlarge-selected-inner-corner-corner-size: calc(
-      var(--md-comp-button-group-connected-xlarge-container-height) / 2
+    --_button-group-connected-small-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-small-selected-inner-corner-corner-size,
+      calc(var(--_button-group-connected-small-container-height) / 2)
+    );
+    --_button-group-connected-medium-container-height: var(--md-button-group-connected-medium-container-height, 3.5rem);
+    --_button-group-connected-medium-between-space: var(--md-button-group-connected-medium-between-space, 0.125rem);
+    --_button-group-connected-medium-container-shape: var(
+      --md-button-group-connected-medium-container-shape,
+      calc(var(--_button-group-connected-medium-container-height) / 2)
+    );
+    --_button-group-connected-medium-inner-corner-corner-size: var(
+      --md-button-group-connected-medium-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-small)
+    );
+    --_button-group-connected-medium-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-medium-pressed-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-extra-small)
+    );
+    --_button-group-connected-medium-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-medium-selected-inner-corner-corner-size,
+      calc(var(--_button-group-connected-medium-container-height) / 2)
+    );
+    --_button-group-connected-large-container-height: var(--md-button-group-connected-large-container-height, 6rem);
+    --_button-group-connected-large-between-space: var(--md-button-group-connected-large-between-space, 0.125rem);
+    --_button-group-connected-large-container-shape: var(
+      --md-button-group-connected-large-container-shape,
+      calc(var(--_button-group-connected-large-container-height) / 2)
+    );
+    --_button-group-connected-large-inner-corner-corner-size: var(
+      --md-button-group-connected-large-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-large)
+    );
+    --_button-group-connected-large-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-large-pressed-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-medium)
+    );
+    --_button-group-connected-large-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-large-selected-inner-corner-corner-size,
+      calc(var(--_button-group-connected-large-container-height) / 2)
+    );
+    --_button-group-connected-xlarge-container-height: var(--md-button-group-connected-xlarge-container-height, 8.5rem);
+    --_button-group-connected-xlarge-between-space: var(--md-button-group-connected-xlarge-between-space, 0.125rem);
+    --_button-group-connected-xlarge-container-shape: var(
+      --md-button-group-connected-xlarge-container-shape,
+      calc(var(--_button-group-connected-xlarge-container-height) / 2)
+    );
+    --_button-group-connected-xlarge-inner-corner-corner-size: var(
+      --md-button-group-connected-xlarge-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-large-increased)
+    );
+    --_button-group-connected-xlarge-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-xlarge-pressed-inner-corner-corner-size,
+      var(--md-sys-shape-corner-value-large)
+    );
+    --_button-group-connected-xlarge-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-xlarge-selected-inner-corner-corner-size,
+      calc(var(--_button-group-connected-xlarge-container-height) / 2)
     );
   }
 }
@@ -109,125 +233,194 @@
     all: unset;
     display: inline-flex;
 
-    height: var(--md-comp-button-group-height);
-    gap: var(--md-comp-button-group-between-space);
+    height: var(--_button-group-height);
+    gap: var(--_button-group-between-space);
   }
 
   .m3-button-group[data-type='standard'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-standard-medium-between-space);
+    --_button-group-height: var(--md-button-group-height, initial);
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-standard-medium-between-space)
+    );
   }
 
   .m3-button-group[data-type='standard'][data-size='extra-small'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-standard-xsmall-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-standard-xsmall-between-space);
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-standard-xsmall-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-standard-xsmall-between-space)
+    );
   }
 
   .m3-button-group[data-type='standard'][data-size='small'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-standard-small-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-standard-small-between-space);
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-standard-small-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-standard-small-between-space)
+    );
   }
 
   .m3-button-group[data-type='standard'][data-size='medium'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-standard-medium-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-standard-medium-between-space);
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-standard-medium-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-standard-medium-between-space)
+    );
   }
 
   .m3-button-group[data-type='standard'][data-size='large'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-standard-large-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-standard-large-between-space);
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-standard-large-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-standard-large-between-space)
+    );
   }
 
   .m3-button-group[data-type='standard'][data-size='extra-large'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-standard-xlarge-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-standard-xlarge-between-space);
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-standard-xlarge-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-standard-xlarge-between-space)
+    );
   }
 
   .m3-button-group[data-type='connected'] {
-    --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-medium-container-shape);
-    --md-comp-button-group-connected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-medium-inner-corner-corner-size
+    --_button-group-connected-container-shape: var(
+      --md-button-group-connected-container-shape,
+      var(--_button-group-connected-medium-container-shape)
     );
-    --md-comp-button-group-connected-pressed-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-medium-pressed-inner-corner-corner-size
+    --_button-group-connected-inner-corner-corner-size: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_button-group-connected-medium-inner-corner-corner-size)
     );
-    --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-medium-selected-inner-corner-corner-size
+    --_button-group-connected-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-pressed-inner-corner-corner-size,
+      var(--_button-group-connected-medium-pressed-inner-corner-corner-size)
+    );
+    --_button-group-connected-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-selected-inner-corner-corner-size,
+      var(--_button-group-connected-medium-selected-inner-corner-corner-size)
     );
   }
 
   .m3-button-group[data-type='connected'][data-size='extra-small'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-connected-xsmall-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-connected-xsmall-between-space);
-    --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-xsmall-container-shape);
-    --md-comp-button-group-connected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-xsmall-inner-corner-corner-size
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-connected-xsmall-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-connected-xsmall-between-space)
     );
-    --md-comp-button-group-connected-pressed-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-xsmall-pressed-inner-corner-corner-size
+    --_button-group-connected-container-shape: var(
+      --md-button-group-connected-container-shape,
+      var(--_button-group-connected-xsmall-container-shape)
     );
-    --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-xsmall-selected-inner-corner-corner-size
+    --_button-group-connected-inner-corner-corner-size: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_button-group-connected-xsmall-inner-corner-corner-size)
+    );
+    --_button-group-connected-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-pressed-inner-corner-corner-size,
+      var(--_button-group-connected-xsmall-pressed-inner-corner-corner-size)
+    );
+    --_button-group-connected-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-selected-inner-corner-corner-size,
+      var(--_button-group-connected-xsmall-selected-inner-corner-corner-size)
     );
   }
 
   .m3-button-group[data-type='connected'][data-size='small'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-connected-small-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-connected-small-between-space);
-    --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-small-container-shape);
-    --md-comp-button-group-connected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-small-inner-corner-corner-size
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-connected-small-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-connected-small-between-space)
     );
-    --md-comp-button-group-connected-pressed-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-small-pressed-inner-corner-corner-size
+    --_button-group-connected-container-shape: var(
+      --md-button-group-connected-container-shape,
+      var(--_button-group-connected-small-container-shape)
     );
-    --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-small-selected-inner-corner-corner-size
+    --_button-group-connected-inner-corner-corner-size: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_button-group-connected-small-inner-corner-corner-size)
+    );
+    --_button-group-connected-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-pressed-inner-corner-corner-size,
+      var(--_button-group-connected-small-pressed-inner-corner-corner-size)
+    );
+    --_button-group-connected-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-selected-inner-corner-corner-size,
+      var(--_button-group-connected-small-selected-inner-corner-corner-size)
     );
   }
 
   .m3-button-group[data-type='connected'][data-size='medium'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-connected-medium-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-connected-medium-between-space);
-    --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-medium-container-shape);
-    --md-comp-button-group-connected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-medium-inner-corner-corner-size
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-connected-medium-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-connected-medium-between-space)
     );
-    --md-comp-button-group-connected-pressed-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-medium-pressed-inner-corner-corner-size
+    --_button-group-connected-container-shape: var(
+      --md-button-group-connected-container-shape,
+      var(--_button-group-connected-medium-container-shape)
     );
-    --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-medium-selected-inner-corner-corner-size
+    --_button-group-connected-inner-corner-corner-size: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_button-group-connected-medium-inner-corner-corner-size)
+    );
+    --_button-group-connected-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-pressed-inner-corner-corner-size,
+      var(--_button-group-connected-medium-pressed-inner-corner-corner-size)
+    );
+    --_button-group-connected-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-selected-inner-corner-corner-size,
+      var(--_button-group-connected-medium-selected-inner-corner-corner-size)
     );
   }
 
   .m3-button-group[data-type='connected'][data-size='large'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-connected-large-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-connected-large-between-space);
-    --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-large-container-shape);
-    --md-comp-button-group-connected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-large-inner-corner-corner-size
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-connected-large-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-connected-large-between-space)
     );
-    --md-comp-button-group-connected-pressed-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-large-pressed-inner-corner-corner-size
+    --_button-group-connected-container-shape: var(
+      --md-button-group-connected-container-shape,
+      var(--_button-group-connected-large-container-shape)
     );
-    --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-large-selected-inner-corner-corner-size
+    --_button-group-connected-inner-corner-corner-size: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_button-group-connected-large-inner-corner-corner-size)
+    );
+    --_button-group-connected-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-pressed-inner-corner-corner-size,
+      var(--_button-group-connected-large-pressed-inner-corner-corner-size)
+    );
+    --_button-group-connected-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-selected-inner-corner-corner-size,
+      var(--_button-group-connected-large-selected-inner-corner-corner-size)
     );
   }
 
   .m3-button-group[data-type='connected'][data-size='extra-large'] {
-    --md-comp-button-group-height: var(--md-comp-button-group-connected-xlarge-container-height);
-    --md-comp-button-group-between-space: var(--md-comp-button-group-connected-xlarge-between-space);
-    --md-comp-button-group-connected-container-shape: var(--md-comp-button-group-connected-xlarge-container-shape);
-    --md-comp-button-group-connected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-xlarge-inner-corner-corner-size
+    --_button-group-height: var(--md-button-group-height, var(--_button-group-connected-xlarge-container-height));
+    --_button-group-between-space: var(
+      --md-button-group-between-space,
+      var(--_button-group-connected-xlarge-between-space)
     );
-    --md-comp-button-group-connected-pressed-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-xlarge-pressed-inner-corner-corner-size
+    --_button-group-connected-container-shape: var(
+      --md-button-group-connected-container-shape,
+      var(--_button-group-connected-xlarge-container-shape)
     );
-    --md-comp-button-group-connected-selected-inner-corner-corner-size: var(
-      --md-comp-button-group-connected-xlarge-selected-inner-corner-corner-size
+    --_button-group-connected-inner-corner-corner-size: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_button-group-connected-xlarge-inner-corner-corner-size)
+    );
+    --_button-group-connected-pressed-inner-corner-corner-size: var(
+      --md-button-group-connected-pressed-inner-corner-corner-size,
+      var(--_button-group-connected-xlarge-pressed-inner-corner-corner-size)
+    );
+    --_button-group-connected-selected-inner-corner-corner-size: var(
+      --md-button-group-connected-selected-inner-corner-corner-size,
+      var(--_button-group-connected-xlarge-selected-inner-corner-corner-size)
     );
   }
 }

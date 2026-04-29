@@ -33,6 +33,8 @@ Tooltip exposes the shared tooltip surface for plain and rich treatments, with c
 
 <ApiTable component="Tooltip" v-model="props" />
 
+<StyleTokenTable component="Tooltip" />
+
 ### Default
 
 <DemoContainer :src="TooltipDefaultSrc" :viewport="false">

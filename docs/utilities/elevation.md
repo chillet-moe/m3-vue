@@ -61,7 +61,7 @@ Built-in components usually expose their own elevation variables, which already 
 
 ```css
 .custom-dialog-theme {
-  --md-comp-dialog-container-elevation: var(--md-sys-elevation-level4);
+  --md-dialog-container-elevation: var(--md-sys-elevation-level4);
 }
 ```
 

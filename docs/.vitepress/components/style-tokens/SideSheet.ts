@@ -1,0 +1,142 @@
+import type { StyleTokenMeta } from './types';
+
+export const sideSheetStyleTokens = [
+  {
+    name: '--md-sheet-side-detached-container-shape',
+    description: 'Controls side detached container shape.',
+    fallback: 'var(--md-sys-shape-corner-large)',
+    category: 'Shape',
+  },
+  {
+    name: '--md-sheet-side-docked-container-height',
+    description: 'Controls side docked container height.',
+    fallback: '100%',
+    category: 'Layout',
+  },
+  {
+    name: '--md-sheet-side-docked-container-shape',
+    description: 'Controls side docked container shape.',
+    fallback: 'var(--md-sys-shape-corner-none)',
+    category: 'Shape',
+  },
+  {
+    name: '--md-sheet-side-docked-container-width',
+    description: 'Controls side docked container width.',
+    fallback: '16rem',
+    category: 'Layout',
+  },
+  {
+    name: '--md-sheet-side-docked-divider-color',
+    description: 'Controls side docked divider color.',
+    fallback: 'var(--md-sys-color-outline)',
+    category: 'Color',
+  },
+  {
+    name: '--md-sheet-side-docked-focus-indicator-color',
+    description: 'Controls side docked focus indicator color.',
+    fallback: 'var(--md-sys-color-secondary)',
+    category: 'Focus',
+  },
+  {
+    name: '--md-sheet-side-docked-focus-indicator-outline-offset',
+    description: 'Controls side docked focus indicator outline offset.',
+    fallback: 'var(--md-sys-state-focus-indicator-outer-offset)',
+    category: 'Focus',
+  },
+  {
+    name: '--md-sheet-side-docked-focus-indicator-thickness',
+    description: 'Controls side docked focus indicator thickness.',
+    fallback: 'var(--md-sys-state-focus-indicator-thickness)',
+    category: 'Focus',
+  },
+  {
+    name: '--md-sheet-side-docked-headline-color',
+    description: 'Controls side docked headline color.',
+    fallback: 'var(--md-sys-color-on-surface-variant)',
+    category: 'Color',
+  },
+  {
+    name: '--md-sheet-side-docked-headline-font',
+    description: 'Controls side docked headline font.',
+    fallback: 'var(--md-sys-typescale-title-large-font)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-sheet-side-docked-headline-line-height',
+    description: 'Controls side docked headline line height.',
+    fallback: 'var(--md-sys-typescale-title-large-line-height)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-sheet-side-docked-headline-size',
+    description: 'Controls side docked headline size.',
+    fallback: 'var(--md-sys-typescale-title-large-size)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-sheet-side-docked-headline-tracking',
+    description: 'Controls side docked headline tracking.',
+    fallback: 'var(--md-sys-typescale-title-large-tracking)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-sheet-side-docked-headline-type',
+    description: 'Controls side docked headline type.',
+    fallback: 'var(--md-sys-typescale-title-large)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-sheet-side-docked-headline-weight',
+    description: 'Controls side docked headline weight.',
+    fallback: 'var(--md-sys-typescale-title-large-weight)',
+    category: 'Typography',
+  },
+  {
+    name: '--md-sheet-side-docked-modal-container-color',
+    description: 'Controls side docked modal container color.',
+    fallback: 'var(--md-sys-color-surface-container-low)',
+    category: 'Color',
+  },
+  {
+    name: '--md-sheet-side-docked-modal-container-elevation',
+    description: 'Controls side docked modal container elevation.',
+    fallback: 'var(--md-sys-elevation-level1)',
+    category: 'Elevation',
+  },
+  {
+    name: '--md-sheet-side-docked-modal-container-shape',
+    description: 'Controls side docked modal container shape.',
+    fallback: 'var(--md-sys-shape-corner-large-start)',
+    category: 'Shape',
+  },
+  {
+    name: '--md-sheet-side-docked-standard-container-color',
+    description: 'Controls side docked standard container color.',
+    fallback: 'var(--md-sys-color-surface)',
+    category: 'Color',
+  },
+  {
+    name: '--md-sheet-side-docked-standard-container-elevation',
+    description: 'Controls side docked standard container elevation.',
+    fallback: 'var(--md-sys-elevation-level0)',
+    category: 'Elevation',
+  },
+  {
+    name: '--md-side-sheet-closed-translate',
+    description: 'Controls closed translate.',
+    fallback: '100%',
+    category: 'Style',
+  },
+  {
+    name: '--md-side-sheet-detached-gap',
+    description: 'Controls detached gap.',
+    fallback: '1rem',
+    category: 'Layout',
+  },
+  {
+    name: '--md-side-sheet-width',
+    description: 'Controls width.',
+    fallback: 'var(--md-sheet-side-docked-container-width,16rem)',
+    category: 'Layout',
+  },
+] satisfies StyleTokenMeta[];

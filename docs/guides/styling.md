@@ -19,7 +19,7 @@ M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为�
 
 新增定制优先使用组件自己的 `--md-<component>-*` token。旧的 `--md-comp-*` token 不作为公开 API。
 
-每个组件页面的 **Styling** 表格由显式 metadata 生成，只列出推荐的 public token。
+每个组件页面的 **Styling** 表格由显式 metadata 生成，只列出推荐的 public token。metadata 按组件拆分在 `docs/.vitepress/components/style-tokens/<ComponentName>.ts`，统一入口 `style-token-meta.ts` 只负责注册组件名到对应 metadata。
 
 ```css
 .custom-checkbox {

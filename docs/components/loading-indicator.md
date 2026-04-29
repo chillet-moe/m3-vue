@@ -39,6 +39,8 @@ The active indicator morphs between Material shape paths. See [Material Shape Pa
 
 <ApiTable component="LoadingIndicator" v-model="props" :exclude="['ariaLabel']" />
 
+<StyleTokenTable component="LoadingIndicator" />
+
 ## Examples
 
 ### Default

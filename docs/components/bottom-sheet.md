@@ -42,6 +42,8 @@ Bottom sheets present modal content from the bottom edge of the viewport using t
 
 <ApiTable component="BottomSheet" v-model="props" />
 
+<StyleTokenTable component="BottomSheet" />
+
 ## Examples
 
 ### Default

@@ -39,6 +39,8 @@ ListItem is a Button extension with richer content layout, suitable for interact
 
 <ApiTable component="ListItem" v-model="props" />
 
+<StyleTokenTable component="ListItem" />
+
 ## Examples
 
 ### Default

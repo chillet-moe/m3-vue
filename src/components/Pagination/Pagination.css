@@ -1,14 +1,25 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-pagination-ellipsis-color: initial;
+    --md-pagination-ellipsis-size: initial;
+    --md-pagination-item-space: initial;
+    --md-pagination-link-min-width: initial;
+    --md-pagination-link-padding-inline: initial;
+    --md-pagination-nav-icon-size: initial;
+    --md-pagination-nav-inline-space: initial;
+  }
+
   .m3-pagination {
-    --md-comp-pagination-item-space: --dp(4);
-    --md-comp-pagination-link-min-width: --dp(40);
-    --md-comp-pagination-link-padding-inline: --dp(12);
-    --md-comp-pagination-nav-inline-space: --dp(4);
-    --md-comp-pagination-nav-icon-size: --dp(20);
-    --md-comp-pagination-ellipsis-size: --dp(40);
-    --md-comp-pagination-ellipsis-color: var(--md-sys-color-on-surface-variant);
+    --_pagination-item-space: var(--md-pagination-item-space, --dp(4));
+    --_pagination-link-min-width: var(--md-pagination-link-min-width, --dp(40));
+    --_pagination-link-padding-inline: var(--md-pagination-link-padding-inline, --dp(12));
+    --_pagination-nav-inline-space: var(--md-pagination-nav-inline-space, --dp(4));
+    --_pagination-nav-icon-size: var(--md-pagination-nav-icon-size, --dp(20));
+    --_pagination-ellipsis-size: var(--md-pagination-ellipsis-size, --dp(40));
+    --_pagination-ellipsis-color: var(--md-pagination-ellipsis-color, var(--md-sys-color-on-surface-variant));
   }
 }
 
@@ -26,7 +37,7 @@
     list-style: none;
     display: inline-flex;
     align-items: center;
-    gap: var(--md-comp-pagination-item-space);
+    gap: var(--_pagination-item-space);
   }
 
   .m3-pagination-item {
@@ -35,8 +46,8 @@
   }
 
   .m3-pagination-link.m3-button {
-    min-inline-size: var(--md-comp-pagination-link-min-width);
-    padding-inline: var(--md-comp-pagination-link-padding-inline);
+    min-inline-size: var(--_pagination-link-min-width);
+    padding-inline: var(--_pagination-link-padding-inline);
 
     & [data-part='text'] {
       display: inline-flex;
@@ -48,14 +59,14 @@
 
   .m3-pagination-previous.m3-pagination-link.m3-button,
   .m3-pagination-next.m3-pagination-link.m3-button {
-    gap: var(--md-comp-pagination-nav-inline-space);
+    gap: var(--_pagination-nav-inline-space);
   }
 
   .m3-pagination-nav-icon,
   .m3-pagination-ellipsis-icon {
-    inline-size: var(--md-comp-pagination-nav-icon-size);
-    block-size: var(--md-comp-pagination-nav-icon-size);
-    font-size: var(--md-comp-pagination-nav-icon-size);
+    inline-size: var(--_pagination-nav-icon-size);
+    block-size: var(--_pagination-nav-icon-size);
+    font-size: var(--_pagination-nav-icon-size);
   }
 
   .m3-pagination-nav-text {
@@ -64,12 +75,12 @@
   }
 
   .m3-pagination-ellipsis {
-    inline-size: var(--md-comp-pagination-ellipsis-size);
-    block-size: var(--md-comp-pagination-ellipsis-size);
+    inline-size: var(--_pagination-ellipsis-size);
+    block-size: var(--_pagination-ellipsis-size);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--md-comp-pagination-ellipsis-color);
+    color: var(--_pagination-ellipsis-color);
   }
 
   .m3-pagination-visually-hidden {

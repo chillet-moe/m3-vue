@@ -2,51 +2,81 @@
 @import '../../styles/icon-morph.css';
 
 @layer tokens {
-  .m3-item {
-    --md-comp-item-min-height: --dp(56);
-    --md-comp-item-padding-block: --dp(8);
-    --md-comp-item-padding-inline: --dp(8);
-    --md-comp-item-main-padding-block: --dp(8);
-    --md-comp-item-main-padding-inline: --dp(12);
-    --md-comp-item-gap: --dp(12);
-    --md-comp-item-content-gap: --dp(2);
-    --md-comp-item-icon-size: --dp(20);
-    --md-comp-item-header-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-item-footer-color: var(--md-sys-color-on-surface-variant);
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-item-active-icon-color: initial;
+    --md-item-active-indicator-color: initial;
+    --md-item-active-label-color: initial;
+    --md-item-active-state-layer-color: initial;
+    --md-item-content-gap: initial;
+    --md-item-footer-color: initial;
+    --md-item-gap: initial;
+    --md-item-header-color: initial;
+    --md-item-icon-size: initial;
+    --md-item-inactive-icon-color: initial;
+    --md-item-inactive-label-color: initial;
+    --md-item-inactive-state-layer-color: initial;
+    --md-item-indicator-collapsed-visual-width: initial;
+    --md-item-indicator-shape: initial;
+    --md-item-main-padding-block: initial;
+    --md-item-main-padding-inline: initial;
+    --md-item-min-height: initial;
+    --md-item-motion: initial;
+    --md-item-padding-block: initial;
+    --md-item-padding-inline: initial;
+  }
 
-    --md-comp-item-active-indicator-color: var(--md-sys-color-secondary-container);
-    --md-comp-item-active-label-color: var(--md-sys-color-on-secondary-container);
-    --md-comp-item-inactive-label-color: var(--md-color-on-container);
-    --md-comp-item-active-icon-color: var(--md-sys-color-on-secondary-container);
-    --md-comp-item-inactive-icon-color: var(--md-color-on-container);
-    --md-comp-item-active-state-layer-color: var(--md-sys-color-on-secondary-container);
-    --md-comp-item-inactive-state-layer-color: var(--md-color-on-container);
-    --md-comp-item-motion: var(--md-easing-spatial);
-    --md-comp-item-indicator-shape: var(--md-comp-button-container-shape, var(--md-sys-shape-corner-full));
-    --md-comp-item-indicator-collapsed-visual-width: --dp(12);
+  .m3-item {
+    --_item-min-height: var(--md-item-min-height, --dp(56));
+    --_item-padding-block: var(--md-item-padding-block, --dp(8));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(8));
+    --_item-main-padding-block: var(--md-item-main-padding-block, --dp(8));
+    --_item-main-padding-inline: var(--md-item-main-padding-inline, --dp(12));
+    --_item-gap: var(--md-item-gap, --dp(12));
+    --_item-content-gap: var(--md-item-content-gap, --dp(2));
+    --_item-icon-size: var(--md-item-icon-size, --dp(20));
+    --_item-header-color: var(--md-item-header-color, var(--md-sys-color-on-surface-variant));
+    --_item-footer-color: var(--md-item-footer-color, var(--md-sys-color-on-surface-variant));
+
+    --_item-active-indicator-color: var(--md-item-active-indicator-color, var(--md-sys-color-secondary-container));
+    --_item-active-label-color: var(--md-item-active-label-color, var(--md-sys-color-on-secondary-container));
+    --_item-inactive-label-color: var(--md-item-inactive-label-color, var(--md-color-on-container));
+    --_item-active-icon-color: var(--md-item-active-icon-color, var(--md-sys-color-on-secondary-container));
+    --_item-inactive-icon-color: var(--md-item-inactive-icon-color, var(--md-color-on-container));
+    --_item-active-state-layer-color: var(
+      --md-item-active-state-layer-color,
+      var(--md-sys-color-on-secondary-container)
+    );
+    --_item-inactive-state-layer-color: var(--md-item-inactive-state-layer-color, var(--md-color-on-container));
+    --_item-motion: var(--md-item-motion, var(--md-easing-spatial));
+    --_item-indicator-shape: var(
+      --md-item-indicator-shape,
+      var(--_button-container-shape, var(--md-sys-shape-corner-full))
+    );
+    --_item-indicator-collapsed-visual-width: var(--md-item-indicator-collapsed-visual-width, --dp(12));
   }
 }
 
 @layer components {
   .m3-item {
-    --_item-current-label-color: var(--md-comp-item-inactive-label-color);
-    --_item-current-icon-color: var(--md-comp-item-inactive-icon-color);
-    --_item-current-state-layer-color: var(--md-comp-item-inactive-state-layer-color);
-    --_item-current-indicator-visual-width: var(--md-comp-item-indicator-collapsed-visual-width);
+    --_item-current-label-color: var(--_item-inactive-label-color);
+    --_item-current-icon-color: var(--_item-inactive-icon-color);
+    --_item-current-state-layer-color: var(--_item-inactive-state-layer-color);
+    --_item-current-indicator-visual-width: var(--_item-indicator-collapsed-visual-width);
     --_item-current-indicator-opacity: 0;
     --_item-current-indicator-opacity-delay: 50ms;
 
     position: relative;
     inline-size: 100%;
     min-inline-size: 0;
-    min-block-size: var(--md-comp-item-min-height);
+    min-block-size: var(--_item-min-height);
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     justify-content: stretch;
     column-gap: 0;
-    padding-block: var(--md-comp-item-padding-block);
-    padding-inline: var(--md-comp-item-padding-inline);
+    padding-block: var(--_item-padding-block);
+    padding-inline: var(--_item-padding-inline);
     block-size: auto;
     text-align: start;
 
@@ -65,12 +95,12 @@
     translate: -50% 0;
     inline-size: var(--_item-current-indicator-visual-width);
     block-size: 100%;
-    border-radius: var(--md-comp-item-indicator-shape);
-    background-color: var(--md-comp-item-active-indicator-color);
+    border-radius: var(--_item-indicator-shape);
+    background-color: var(--_item-active-indicator-color);
     opacity: var(--_item-current-indicator-opacity);
     pointer-events: none;
     transition:
-      inline-size var(--md-comp-item-motion),
+      inline-size var(--_item-motion),
       border-radius var(--md-easing-fast-spatial),
       opacity var(--md-easing-fast) var(--_item-current-indicator-opacity-delay),
       background-color var(--md-easing-fast);
@@ -82,19 +112,19 @@
     grid-column: 2;
     min-inline-size: 0;
     display: grid;
-    row-gap: var(--md-comp-item-content-gap);
+    row-gap: var(--_item-content-gap);
     overflow: hidden;
     transition: border-radius var(--md-easing-fast-spatial);
   }
 
   .m3-item:has(> .m3-item-leading) .m3-item-main,
   .m3-item:has(> .m3-item-leading-slot) .m3-item-main {
-    margin-inline-start: var(--md-comp-item-gap);
+    margin-inline-start: var(--_item-gap);
   }
 
   .m3-item:has(> .m3-item-trailing) .m3-item-main,
   .m3-item:has(> .m3-item-trailing-slot) .m3-item-main {
-    margin-inline-end: var(--md-comp-item-gap);
+    margin-inline-end: var(--_item-gap);
   }
 
   .m3-item-header,
@@ -114,12 +144,12 @@
   .m3-item-header,
   .m3-item-footer {
     @apply label-medium;
-    color: var(--md-comp-item-header-color);
+    color: var(--_item-header-color);
     min-inline-size: 0;
   }
 
   .m3-item-footer {
-    color: var(--md-comp-item-footer-color);
+    color: var(--_item-footer-color);
   }
 
   .m3-item-title {
@@ -139,8 +169,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--md-comp-item-icon-size);
-    block-size: var(--md-comp-item-icon-size);
+    inline-size: var(--_item-icon-size);
+    block-size: var(--_item-icon-size);
     color: var(--_item-current-icon-color);
 
     z-index: 1;
@@ -148,7 +178,7 @@
 
   .m3-item > .m3-item-leading,
   .m3-item > .m3-item-trailing {
-    font-size: var(--md-comp-item-icon-size);
+    font-size: var(--_item-icon-size);
   }
 
   .m3-item > .m3-item-leading {
@@ -168,9 +198,9 @@
   }
 
   .m3-item-icon {
-    inline-size: var(--md-comp-item-icon-size);
-    block-size: var(--md-comp-item-icon-size);
-    font-size: var(--md-comp-item-icon-size);
+    inline-size: var(--_item-icon-size);
+    block-size: var(--_item-icon-size);
+    font-size: var(--_item-icon-size);
     transition:
       color var(--md-easing-fast),
       font-variation-settings var(--md-easing);
@@ -191,9 +221,9 @@
     --_item-current-indicator-visual-width: 100%;
     --_item-current-indicator-opacity: 1;
     --_item-current-indicator-opacity-delay: 0ms;
-    --_item-current-label-color: var(--md-comp-item-active-label-color);
-    --_item-current-icon-color: var(--md-comp-item-active-icon-color);
-    --_item-current-state-layer-color: var(--md-comp-item-active-state-layer-color);
+    --_item-current-label-color: var(--_item-active-label-color);
+    --_item-current-icon-color: var(--_item-active-icon-color);
+    --_item-current-state-layer-color: var(--_item-active-state-layer-color);
   }
 
   .m3-item:disabled,
@@ -208,48 +238,48 @@
   }
 
   .m3-button.m3-item[data-size='extra-small'] {
-    --md-comp-item-min-height: --dp(48);
-    --md-comp-item-padding-block: --dp(4);
-    --md-comp-item-padding-inline: --dp(16);
-    --md-comp-item-gap: --dp(8);
-    --md-comp-item-content-gap: --dp(1);
-    --md-comp-item-icon-size: --dp(20);
+    --_item-min-height: var(--md-item-min-height, --dp(48));
+    --_item-padding-block: var(--md-item-padding-block, --dp(4));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(16));
+    --_item-gap: var(--md-item-gap, --dp(8));
+    --_item-content-gap: var(--md-item-content-gap, --dp(1));
+    --_item-icon-size: var(--md-item-icon-size, --dp(20));
   }
 
   .m3-button.m3-item[data-size='small'] {
-    --md-comp-item-min-height: --dp(56);
-    --md-comp-item-padding-block: --dp(6);
-    --md-comp-item-padding-inline: --dp(16);
-    --md-comp-item-gap: --dp(20);
-    --md-comp-item-content-gap: --dp(1);
-    --md-comp-item-icon-size: --dp(24);
+    --_item-min-height: var(--md-item-min-height, --dp(56));
+    --_item-padding-block: var(--md-item-padding-block, --dp(6));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(16));
+    --_item-gap: var(--md-item-gap, --dp(20));
+    --_item-content-gap: var(--md-item-content-gap, --dp(1));
+    --_item-icon-size: var(--md-item-icon-size, --dp(24));
   }
 
   .m3-button.m3-item[data-size='medium'] {
-    --md-comp-item-min-height: --dp(64);
-    --md-comp-item-padding-block: --dp(8);
-    --md-comp-item-padding-inline: --dp(22);
-    --md-comp-item-gap: --dp(14);
-    --md-comp-item-content-gap: --dp(2);
-    --md-comp-item-icon-size: --dp(24);
+    --_item-min-height: var(--md-item-min-height, --dp(64));
+    --_item-padding-block: var(--md-item-padding-block, --dp(8));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(22));
+    --_item-gap: var(--md-item-gap, --dp(14));
+    --_item-content-gap: var(--md-item-content-gap, --dp(2));
+    --_item-icon-size: var(--md-item-icon-size, --dp(24));
   }
 
   .m3-button.m3-item[data-size='large'] {
-    --md-comp-item-min-height: --dp(80);
-    --md-comp-item-padding-block: --dp(10);
-    --md-comp-item-padding-inline: --dp(24);
-    --md-comp-item-gap: --dp(16);
-    --md-comp-item-content-gap: --dp(3);
-    --md-comp-item-icon-size: --dp(24);
+    --_item-min-height: var(--md-item-min-height, --dp(80));
+    --_item-padding-block: var(--md-item-padding-block, --dp(10));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(24));
+    --_item-gap: var(--md-item-gap, --dp(16));
+    --_item-content-gap: var(--md-item-content-gap, --dp(3));
+    --_item-icon-size: var(--md-item-icon-size, --dp(24));
   }
 
   .m3-button.m3-item[data-size='extra-large'] {
-    --md-comp-item-min-height: --dp(96);
-    --md-comp-item-padding-block: --dp(12);
-    --md-comp-item-padding-inline: --dp(32);
-    --md-comp-item-gap: --dp(20);
-    --md-comp-item-content-gap: --dp(4);
-    --md-comp-item-icon-size: --dp(28);
+    --_item-min-height: var(--md-item-min-height, --dp(96));
+    --_item-padding-block: var(--md-item-padding-block, --dp(12));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(32));
+    --_item-gap: var(--md-item-gap, --dp(20));
+    --_item-content-gap: var(--md-item-content-gap, --dp(4));
+    --_item-icon-size: var(--md-item-icon-size, --dp(28));
   }
 
   .m3-button.m3-item[data-size='extra-small'],
@@ -258,8 +288,8 @@
   .m3-button.m3-item[data-size='large'],
   .m3-button.m3-item[data-size='extra-large'] {
     block-size: auto;
-    padding-block: var(--md-comp-item-padding-block);
-    padding-inline: var(--md-comp-item-padding-inline);
+    padding-block: var(--_item-padding-block);
+    padding-inline: var(--_item-padding-inline);
   }
 
   /*.m3-button.m3-item[data-size='extra-small'] .m3-item-title,

@@ -1,12 +1,23 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-badge-container-shape: initial;
+    --md-badge-container-size: initial;
+    --md-badge-large-label-inline-padding: initial;
+    --md-badge-large-shape: initial;
+    --md-badge-large-size: initial;
+    --md-badge-shape: initial;
+    --md-badge-size: initial;
+  }
+
   .m3-badge {
-    --md-comp-badge-shape: var(--md-sys-shape-corner-full);
-    --md-comp-badge-size: --dp(6);
-    --md-comp-badge-large-shape: var(--md-sys-shape-corner-full);
-    --md-comp-badge-large-size: --dp(16);
-    --md-comp-badge-large-label-inline-padding: --dp(4);
+    --_badge-shape: var(--md-badge-shape, var(--md-sys-shape-corner-full));
+    --_badge-size: var(--md-badge-size, --dp(6));
+    --_badge-large-shape: var(--md-badge-large-shape, var(--md-sys-shape-corner-full));
+    --_badge-large-size: var(--md-badge-large-size, --dp(16));
+    --_badge-large-label-inline-padding: var(--md-badge-large-label-inline-padding, --dp(4));
   }
 }
 
@@ -18,8 +29,8 @@
     background-color: var(--md-color-container);
     color: var(--md-color-on-container);
 
-    --md-badge-container-shape: var(--md-comp-badge-shape);
-    --md-badge-container-size: var(--md-comp-badge-size);
+    --_badge-container-shape: var(--md-badge-container-shape, var(--_badge-shape));
+    --_badge-container-size: var(--md-badge-container-size, var(--_badge-size));
 
     box-sizing: border-box;
     display: inline-flex;
@@ -30,19 +41,19 @@
     overflow: hidden;
     flex: none;
 
-    inline-size: var(--md-badge-container-size);
-    min-inline-size: var(--md-badge-container-size);
-    block-size: var(--md-badge-container-size);
+    inline-size: var(--_badge-container-size);
+    min-inline-size: var(--_badge-container-size);
+    block-size: var(--_badge-container-size);
 
-    border-radius: var(--md-badge-container-shape);
+    border-radius: var(--_badge-container-shape);
   }
 
   .m3-badge[data-variant='large'] {
-    --md-badge-container-shape: var(--md-comp-badge-large-shape);
-    --md-badge-container-size: var(--md-comp-badge-large-size);
+    --_badge-container-shape: var(--md-badge-container-shape, var(--_badge-large-shape));
+    --_badge-container-size: var(--md-badge-container-size, var(--_badge-large-size));
 
     inline-size: auto;
-    padding-inline: var(--md-comp-badge-large-label-inline-padding);
+    padding-inline: var(--_badge-large-label-inline-padding);
   }
 
   .m3-badge-label {

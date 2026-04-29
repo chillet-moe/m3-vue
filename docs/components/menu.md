@@ -85,6 +85,8 @@ If you are using Vue Router, keep `MenuItem` as the rendered anchor and let `Rou
 
 <ApiTable component="Menu" />
 
+<StyleTokenTable component="Menu" />
+
 ### MenuContainer
 
 <ApiTable component="MenuContainer" />

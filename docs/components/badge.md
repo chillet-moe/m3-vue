@@ -34,6 +34,8 @@ Badges show compact status markers or small counts. Use the small variant for a 
 
 <ApiTable component="Badge" v-model="props" />
 
+<StyleTokenTable component="Badge" />
+
 ## Examples
 
 ### Default

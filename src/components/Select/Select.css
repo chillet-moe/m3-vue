@@ -58,9 +58,9 @@
   }
 
   .m3-select[data-open='true'] {
-    --_outline-width: var(--md-comp-outlined-text-field-focus-outline-width);
-    --_outline-color: var(--md-comp-outlined-text-field-focus-outline-color);
-    --_label-color: var(--md-comp-outlined-text-field-focus-label-text-color);
+    --_outline-width: var(--_outlined-text-field-focus-outline-width);
+    --_outline-color: var(--_outlined-text-field-focus-outline-color);
+    --_label-color: var(--_outlined-text-field-focus-label-text-color);
   }
 
   .m3-select[data-open='true'] .m3-text-field-label,
@@ -70,10 +70,10 @@
 
   .m3-select[data-open='true'] .m3-text-field-label {
     inset-block-start: 0;
-    translate: 0 calc(-0.5 * var(--md-comp-outlined-text-field-label-text-populated-line-height));
+    translate: 0 calc(-0.5 * var(--_outlined-text-field-label-text-populated-line-height));
     padding-inline: 0.25rem;
-    font-size: var(--md-comp-outlined-text-field-label-text-populated-size);
-    line-height: var(--md-comp-outlined-text-field-label-text-populated-line-height);
+    font-size: var(--_outlined-text-field-label-text-populated-size);
+    line-height: var(--_outlined-text-field-label-text-populated-line-height);
   }
 
   .m3-select[data-open='true'] .m3-select-indicator {
@@ -86,10 +86,10 @@
   }
 
   .m3-select[data-invalid='true'][data-open='true'] {
-    --_outline-color: var(--md-comp-outlined-text-field-error-focus-outline-color);
-    --_label-color: var(--md-comp-outlined-text-field-error-focus-label-text-color);
-    --_supporting-color: var(--md-comp-outlined-text-field-error-focus-supporting-text-color);
-    --_trailing-icon-color: var(--md-comp-outlined-text-field-error-focus-trailing-icon-color);
+    --_outline-color: var(--_outlined-text-field-error-focus-outline-color);
+    --_label-color: var(--_outlined-text-field-error-focus-label-text-color);
+    --_supporting-color: var(--_outlined-text-field-error-focus-supporting-text-color);
+    --_trailing-icon-color: var(--_outlined-text-field-error-focus-trailing-icon-color);
   }
 
   .m3-select-menu .m3-menu-container {
@@ -103,8 +103,8 @@
   .m3-select-option .m3-select-option-leading-content {
     display: grid;
     place-items: center;
-    inline-size: var(--md-comp-menus-menu-item-leading-icon-size);
-    block-size: var(--md-comp-menus-menu-item-leading-icon-size);
+    inline-size: var(--_menus-menu-item-leading-icon-size);
+    block-size: var(--_menus-menu-item-leading-icon-size);
   }
 
   .m3-select-option .m3-select-option-check,
@@ -140,10 +140,10 @@
 
   .m3-select-option:not([data-has-option-leading='true']) .m3-menu-item-leading {
     position: absolute;
-    inset-inline-start: var(--md-comp-menus-menu-item-leading-space);
+    inset-inline-start: var(--_menus-menu-item-leading-space);
     inset-block-start: 50%;
     min-inline-size: 0;
-    min-block-size: var(--md-comp-menus-menu-item-leading-icon-size);
+    min-block-size: var(--_menus-menu-item-leading-icon-size);
     translate: 0 -50%;
     pointer-events: none;
   }
@@ -155,9 +155,7 @@
 
   .m3-select-option:not([data-has-option-leading='true'])[data-selected='true'] .m3-menu-item-content,
   .m3-select-option:not([data-has-option-leading='true'])[data-selected='true'] .m3-menu-item-suffix {
-    transform: translateX(
-      calc(var(--md-comp-menus-menu-item-leading-icon-size) + var(--md-comp-menus-menu-item-between-space))
-    );
+    transform: translateX(calc(var(--_menus-menu-item-leading-icon-size) + var(--_menus-menu-item-between-space)));
   }
 
   .m3-select-options {
@@ -199,19 +197,19 @@
 
   .m3-select-empty {
     padding-block: 0.75rem;
-    padding-inline: var(--md-comp-menus-menu-item-leading-space, 1rem);
+    padding-inline: var(--_menus-menu-item-leading-space, 1rem);
     color: var(--md-sys-color-on-surface-variant);
     font-family:
-      var(--md-comp-menus-menu-item-label-text-font),
+      var(--_menus-menu-item-label-text-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-menus-menu-item-label-text-size);
-    line-height: var(--md-comp-menus-menu-item-label-text-line-height);
-    font-weight: var(--md-comp-menus-menu-item-label-text-weight);
-    letter-spacing: var(--md-comp-menus-menu-item-label-text-tracking);
+    font-size: var(--_menus-menu-item-label-text-size);
+    line-height: var(--_menus-menu-item-label-text-line-height);
+    font-weight: var(--_menus-menu-item-label-text-weight);
+    letter-spacing: var(--_menus-menu-item-label-text-tracking);
   }
 
   .m3-select-menu.m3-menu[popover]:not([data-submenu='true']) {

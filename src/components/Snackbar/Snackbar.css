@@ -1,29 +1,82 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-snackbar-action-label-text-color: initial;
+    --md-snackbar-action-label-text-font: initial;
+    --md-snackbar-action-label-text-line-height: initial;
+    --md-snackbar-action-label-text-size: initial;
+    --md-snackbar-action-label-text-tracking: initial;
+    --md-snackbar-action-label-text-weight: initial;
+    --md-snackbar-container-color: initial;
+    --md-snackbar-container-elevation: initial;
+    --md-snackbar-container-padding-block: initial;
+    --md-snackbar-container-padding-inline-end: initial;
+    --md-snackbar-container-padding-inline-start: initial;
+    --md-snackbar-container-shadow-color: initial;
+    --md-snackbar-container-shape: initial;
+    --md-snackbar-icon-color: initial;
+    --md-snackbar-icon-size: initial;
+    --md-snackbar-supporting-text-color: initial;
+    --md-snackbar-supporting-text-font: initial;
+    --md-snackbar-supporting-text-line-height: initial;
+    --md-snackbar-supporting-text-size: initial;
+    --md-snackbar-supporting-text-tracking: initial;
+    --md-snackbar-supporting-text-weight: initial;
+    --md-snackbar-with-single-line-container-height: initial;
+  }
+
   .m3-snackbar {
-    --md-comp-snackbar-container-color: var(--md-sys-color-inverse-surface);
-    --md-comp-snackbar-container-shadow-color: var(--md-sys-color-shadow);
-    --md-comp-snackbar-container-elevation: var(--md-sys-elevation-level3);
-    --md-comp-snackbar-container-shape: var(--md-sys-shape-corner-extra-small);
-    --md-comp-snackbar-container-padding-inline-start: 1rem;
-    --md-comp-snackbar-container-padding-inline-end: 0.5rem;
-    --md-comp-snackbar-container-padding-block: 1rem;
-    --md-comp-snackbar-with-single-line-container-height: 3rem;
-    --md-comp-snackbar-action-label-text-font: var(--md-sys-typescale-label-large-font);
-    --md-comp-snackbar-action-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
-    --md-comp-snackbar-action-label-text-size: var(--md-sys-typescale-label-large-size);
-    --md-comp-snackbar-action-label-text-weight: var(--md-sys-typescale-label-large-weight);
-    --md-comp-snackbar-action-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
-    --md-comp-snackbar-action-label-text-color: var(--md-sys-color-inverse-primary);
-    --md-comp-snackbar-icon-color: var(--md-sys-color-inverse-on-surface);
-    --md-comp-snackbar-icon-size: 1.25rem;
-    --md-comp-snackbar-supporting-text-font: var(--md-sys-typescale-body-medium-font);
-    --md-comp-snackbar-supporting-text-line-height: var(--md-sys-typescale-body-medium-line-height);
-    --md-comp-snackbar-supporting-text-size: var(--md-sys-typescale-body-medium-size);
-    --md-comp-snackbar-supporting-text-weight: var(--md-sys-typescale-body-medium-weight);
-    --md-comp-snackbar-supporting-text-tracking: var(--md-sys-typescale-body-medium-tracking);
-    --md-comp-snackbar-supporting-text-color: var(--md-sys-color-inverse-on-surface);
+    --_snackbar-container-color: var(--md-snackbar-container-color, var(--md-sys-color-inverse-surface));
+    --_snackbar-container-shadow-color: var(--md-snackbar-container-shadow-color, var(--md-sys-color-shadow));
+    --_snackbar-container-elevation: var(--md-snackbar-container-elevation, var(--md-sys-elevation-level3));
+    --_snackbar-container-shape: var(--md-snackbar-container-shape, var(--md-sys-shape-corner-extra-small));
+    --_snackbar-container-padding-inline-start: var(--md-snackbar-container-padding-inline-start, 1rem);
+    --_snackbar-container-padding-inline-end: var(--md-snackbar-container-padding-inline-end, 0.5rem);
+    --_snackbar-container-padding-block: var(--md-snackbar-container-padding-block, 1rem);
+    --_snackbar-with-single-line-container-height: var(--md-snackbar-with-single-line-container-height, 3rem);
+    --_snackbar-action-label-text-font: var(
+      --md-snackbar-action-label-text-font,
+      var(--md-sys-typescale-label-large-font)
+    );
+    --_snackbar-action-label-text-line-height: var(
+      --md-snackbar-action-label-text-line-height,
+      var(--md-sys-typescale-label-large-line-height)
+    );
+    --_snackbar-action-label-text-size: var(
+      --md-snackbar-action-label-text-size,
+      var(--md-sys-typescale-label-large-size)
+    );
+    --_snackbar-action-label-text-weight: var(
+      --md-snackbar-action-label-text-weight,
+      var(--md-sys-typescale-label-large-weight)
+    );
+    --_snackbar-action-label-text-tracking: var(
+      --md-snackbar-action-label-text-tracking,
+      var(--md-sys-typescale-label-large-tracking)
+    );
+    --_snackbar-action-label-text-color: var(
+      --md-snackbar-action-label-text-color,
+      var(--md-sys-color-inverse-primary)
+    );
+    --_snackbar-icon-color: var(--md-snackbar-icon-color, var(--md-sys-color-inverse-on-surface));
+    --_snackbar-icon-size: var(--md-snackbar-icon-size, 1.25rem);
+    --_snackbar-supporting-text-font: var(--md-snackbar-supporting-text-font, var(--md-sys-typescale-body-medium-font));
+    --_snackbar-supporting-text-line-height: var(
+      --md-snackbar-supporting-text-line-height,
+      var(--md-sys-typescale-body-medium-line-height)
+    );
+    --_snackbar-supporting-text-size: var(--md-snackbar-supporting-text-size, var(--md-sys-typescale-body-medium-size));
+    --_snackbar-supporting-text-weight: var(
+      --md-snackbar-supporting-text-weight,
+      var(--md-sys-typescale-body-medium-weight)
+    );
+    --_snackbar-supporting-text-tracking: var(
+      --md-snackbar-supporting-text-tracking,
+      var(--md-sys-typescale-body-medium-tracking)
+    );
+    --_snackbar-supporting-text-color: var(--md-snackbar-supporting-text-color, var(--md-sys-color-inverse-on-surface));
   }
 }
 
@@ -35,28 +88,27 @@
     gap: 0.5rem;
     align-items: center;
 
-    min-block-size: var(--md-comp-snackbar-with-single-line-container-height);
-    padding-inline: var(--md-comp-snackbar-container-padding-inline-start)
-      var(--md-comp-snackbar-container-padding-inline-end);
+    min-block-size: var(--_snackbar-with-single-line-container-height);
+    padding-inline: var(--_snackbar-container-padding-inline-start) var(--_snackbar-container-padding-inline-end);
     padding-block: 0;
-    border-radius: var(--md-comp-snackbar-container-shape);
+    border-radius: var(--_snackbar-container-shape);
 
-    color: var(--md-comp-snackbar-supporting-text-color);
-    background-color: var(--md-comp-snackbar-container-color);
-    box-shadow: var(--md-comp-snackbar-container-elevation);
+    color: var(--_snackbar-supporting-text-color);
+    background-color: var(--_snackbar-container-color);
+    box-shadow: var(--_snackbar-container-elevation);
   }
 
   .m3-snackbar-content {
     grid-area: content;
     min-inline-size: 0;
     overflow-wrap: anywhere;
-    padding-block-start: var(--md-comp-snackbar-container-padding-block);
-    padding-block-end: var(--md-comp-snackbar-container-padding-block);
+    padding-block-start: var(--_snackbar-container-padding-block);
+    padding-block-end: var(--_snackbar-container-padding-block);
 
-    font-size: var(--md-comp-snackbar-supporting-text-size);
-    line-height: var(--md-comp-snackbar-supporting-text-line-height);
-    font-weight: var(--md-comp-snackbar-supporting-text-weight);
-    letter-spacing: var(--md-comp-snackbar-supporting-text-tracking);
+    font-size: var(--_snackbar-supporting-text-size);
+    line-height: var(--_snackbar-supporting-text-line-height);
+    font-weight: var(--_snackbar-supporting-text-weight);
+    letter-spacing: var(--_snackbar-supporting-text-tracking);
   }
 
   .m3-snackbar[data-action-layout='new-line'] .m3-snackbar-content {
@@ -78,7 +130,7 @@
       'content'
       'actions';
     row-gap: 0.5rem;
-    padding-block-end: var(--md-comp-snackbar-container-padding-inline-end);
+    padding-block-end: var(--_snackbar-container-padding-inline-end);
   }
 
   .m3-snackbar[data-action-layout='new-line'] .m3-snackbar-actions {
@@ -86,27 +138,27 @@
   }
 
   .m3-snackbar-action-button {
-    --md-comp-button-text-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-text-hovered-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-text-focused-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-text-pressed-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-text-disabled-label-text-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-text-hovered-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-text-focused-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-text-pressed-state-layer-color: var(--md-comp-snackbar-action-label-text-color);
-    --md-comp-button-focus-indicator-color: var(--md-comp-snackbar-action-label-text-color);
+    --md-button-text-label-text-color: var(--_snackbar-action-label-text-color);
+    --md-button-text-hovered-label-text-color: var(--_snackbar-action-label-text-color);
+    --md-button-text-focused-label-text-color: var(--_snackbar-action-label-text-color);
+    --md-button-text-pressed-label-text-color: var(--_snackbar-action-label-text-color);
+    --md-button-text-disabled-label-text-color: var(--_snackbar-action-label-text-color);
+    --md-button-text-hovered-state-layer-color: var(--_snackbar-action-label-text-color);
+    --md-button-text-focused-state-layer-color: var(--_snackbar-action-label-text-color);
+    --md-button-text-pressed-state-layer-color: var(--_snackbar-action-label-text-color);
+    --md-button-focus-indicator-color: var(--_snackbar-action-label-text-color);
   }
 
   .m3-snackbar-dismiss-button {
-    --md-comp-icon-button-standard-icon-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-standard-hovered-icon-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-standard-focused-icon-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-standard-pressed-icon-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-standard-disabled-icon-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-standard-hovered-state-layer-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-standard-focused-state-layer-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-standard-pressed-state-layer-color: var(--md-comp-snackbar-icon-color);
-    --md-comp-icon-button-focus-indicator-color: var(--md-comp-snackbar-icon-color);
+    --md-icon-button-standard-icon-color: var(--_snackbar-icon-color);
+    --md-icon-button-standard-hovered-icon-color: var(--_snackbar-icon-color);
+    --md-icon-button-standard-focused-icon-color: var(--_snackbar-icon-color);
+    --md-icon-button-standard-pressed-icon-color: var(--_snackbar-icon-color);
+    --md-icon-button-standard-disabled-icon-color: var(--_snackbar-icon-color);
+    --md-icon-button-standard-hovered-state-layer-color: var(--_snackbar-icon-color);
+    --md-icon-button-standard-focused-state-layer-color: var(--_snackbar-icon-color);
+    --md-icon-button-standard-pressed-state-layer-color: var(--_snackbar-icon-color);
+    --md-icon-button-focus-indicator-color: var(--_snackbar-icon-color);
   }
 
   @media (width < 40rem) {

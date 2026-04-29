@@ -1,90 +1,233 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
-  .m3-tooltip {
-    --md-comp-plain-tooltip-container-color: var(--md-sys-color-inverse-surface);
-    --md-comp-plain-tooltip-container-shape: var(--md-sys-shape-corner-extra-small);
-    --md-comp-plain-tooltip-supporting-text-font: var(--md-sys-typescale-body-small-font);
-    --md-comp-plain-tooltip-supporting-text-line-height: var(--md-sys-typescale-body-small-line-height);
-    --md-comp-plain-tooltip-supporting-text-size: var(--md-sys-typescale-body-small-size);
-    --md-comp-plain-tooltip-supporting-text-weight: var(--md-sys-typescale-body-small-weight);
-    --md-comp-plain-tooltip-supporting-text-tracking: var(--md-sys-typescale-body-small-tracking);
-    --md-comp-plain-tooltip-supporting-text-type: var(--md-sys-typescale-body-small);
-    --md-comp-plain-tooltip-supporting-text-color: var(--md-sys-color-inverse-on-surface);
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-plain-tooltip-container-color: initial;
+    --md-plain-tooltip-container-shape: initial;
+    --md-plain-tooltip-supporting-text-color: initial;
+    --md-plain-tooltip-supporting-text-font: initial;
+    --md-plain-tooltip-supporting-text-line-height: initial;
+    --md-plain-tooltip-supporting-text-size: initial;
+    --md-plain-tooltip-supporting-text-tracking: initial;
+    --md-plain-tooltip-supporting-text-type: initial;
+    --md-plain-tooltip-supporting-text-weight: initial;
+    --md-rich-tooltip-action-focus-label-text-color: initial;
+    --md-rich-tooltip-action-focus-state-layer-color: initial;
+    --md-rich-tooltip-action-focus-state-layer-opacity: initial;
+    --md-rich-tooltip-action-hover-label-text-color: initial;
+    --md-rich-tooltip-action-hover-state-layer-color: initial;
+    --md-rich-tooltip-action-hover-state-layer-opacity: initial;
+    --md-rich-tooltip-action-label-text-color: initial;
+    --md-rich-tooltip-action-label-text-font: initial;
+    --md-rich-tooltip-action-label-text-line-height: initial;
+    --md-rich-tooltip-action-label-text-size: initial;
+    --md-rich-tooltip-action-label-text-tracking: initial;
+    --md-rich-tooltip-action-label-text-type: initial;
+    --md-rich-tooltip-action-label-text-weight: initial;
+    --md-rich-tooltip-action-pressed-label-text-color: initial;
+    --md-rich-tooltip-action-pressed-state-layer-color: initial;
+    --md-rich-tooltip-action-pressed-state-layer-opacity: initial;
+    --md-rich-tooltip-container-color: initial;
+    --md-rich-tooltip-container-elevation: initial;
+    --md-rich-tooltip-container-shadow-color: initial;
+    --md-rich-tooltip-container-shape: initial;
+    --md-rich-tooltip-subhead-color: initial;
+    --md-rich-tooltip-subhead-font: initial;
+    --md-rich-tooltip-subhead-line-height: initial;
+    --md-rich-tooltip-subhead-size: initial;
+    --md-rich-tooltip-subhead-tracking: initial;
+    --md-rich-tooltip-subhead-type: initial;
+    --md-rich-tooltip-subhead-weight: initial;
+    --md-rich-tooltip-supporting-text-color: initial;
+    --md-rich-tooltip-supporting-text-font: initial;
+    --md-rich-tooltip-supporting-text-line-height: initial;
+    --md-rich-tooltip-supporting-text-size: initial;
+    --md-rich-tooltip-supporting-text-tracking: initial;
+    --md-rich-tooltip-supporting-text-type: initial;
+    --md-rich-tooltip-supporting-text-weight: initial;
+  }
 
-    --md-comp-rich-tooltip-container-color: var(--md-sys-color-surface-container);
-    --md-comp-rich-tooltip-container-elevation: var(--md-sys-elevation-level2);
-    --md-comp-rich-tooltip-container-shadow-color: var(--md-sys-color-shadow);
-    --md-comp-rich-tooltip-container-shape: var(--md-sys-shape-corner-medium);
-    --md-comp-rich-tooltip-action-label-text-font: var(--md-sys-typescale-label-large-font);
-    --md-comp-rich-tooltip-action-label-text-line-height: var(--md-sys-typescale-label-large-line-height);
-    --md-comp-rich-tooltip-action-label-text-size: var(--md-sys-typescale-label-large-size);
-    --md-comp-rich-tooltip-action-label-text-weight: var(--md-sys-typescale-label-large-weight);
-    --md-comp-rich-tooltip-action-label-text-tracking: var(--md-sys-typescale-label-large-tracking);
-    --md-comp-rich-tooltip-action-label-text-type: var(--md-sys-typescale-label-large);
-    --md-comp-rich-tooltip-action-label-text-color: var(--md-sys-color-primary);
-    --md-comp-rich-tooltip-subhead-font: var(--md-sys-typescale-title-small-font);
-    --md-comp-rich-tooltip-subhead-line-height: var(--md-sys-typescale-title-small-line-height);
-    --md-comp-rich-tooltip-subhead-size: var(--md-sys-typescale-title-small-size);
-    --md-comp-rich-tooltip-subhead-weight: var(--md-sys-typescale-title-small-weight);
-    --md-comp-rich-tooltip-subhead-tracking: var(--md-sys-typescale-title-small-tracking);
-    --md-comp-rich-tooltip-subhead-type: var(--md-sys-typescale-title-small);
-    --md-comp-rich-tooltip-subhead-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-rich-tooltip-supporting-text-font: var(--md-sys-typescale-body-medium-font);
-    --md-comp-rich-tooltip-supporting-text-line-height: var(--md-sys-typescale-body-medium-line-height);
-    --md-comp-rich-tooltip-supporting-text-size: var(--md-sys-typescale-body-medium-size);
-    --md-comp-rich-tooltip-supporting-text-weight: var(--md-sys-typescale-body-medium-weight);
-    --md-comp-rich-tooltip-supporting-text-tracking: var(--md-sys-typescale-body-medium-tracking);
-    --md-comp-rich-tooltip-supporting-text-type: var(--md-sys-typescale-body-medium);
-    --md-comp-rich-tooltip-supporting-text-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-rich-tooltip-action-hover-label-text-color: var(--md-sys-color-primary);
-    --md-comp-rich-tooltip-action-hover-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-rich-tooltip-action-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
-    --md-comp-rich-tooltip-action-focus-label-text-color: var(--md-sys-color-primary);
-    --md-comp-rich-tooltip-action-focus-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-rich-tooltip-action-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
-    --md-comp-rich-tooltip-action-pressed-label-text-color: var(--md-sys-color-primary);
-    --md-comp-rich-tooltip-action-pressed-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-rich-tooltip-action-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
+  .m3-tooltip {
+    --_plain-tooltip-container-color: var(--md-plain-tooltip-container-color, var(--md-sys-color-inverse-surface));
+    --_plain-tooltip-container-shape: var(--md-plain-tooltip-container-shape, var(--md-sys-shape-corner-extra-small));
+    --_plain-tooltip-supporting-text-font: var(
+      --md-plain-tooltip-supporting-text-font,
+      var(--md-sys-typescale-body-small-font)
+    );
+    --_plain-tooltip-supporting-text-line-height: var(
+      --md-plain-tooltip-supporting-text-line-height,
+      var(--md-sys-typescale-body-small-line-height)
+    );
+    --_plain-tooltip-supporting-text-size: var(
+      --md-plain-tooltip-supporting-text-size,
+      var(--md-sys-typescale-body-small-size)
+    );
+    --_plain-tooltip-supporting-text-weight: var(
+      --md-plain-tooltip-supporting-text-weight,
+      var(--md-sys-typescale-body-small-weight)
+    );
+    --_plain-tooltip-supporting-text-tracking: var(
+      --md-plain-tooltip-supporting-text-tracking,
+      var(--md-sys-typescale-body-small-tracking)
+    );
+    --_plain-tooltip-supporting-text-type: var(
+      --md-plain-tooltip-supporting-text-type,
+      var(--md-sys-typescale-body-small)
+    );
+    --_plain-tooltip-supporting-text-color: var(
+      --md-plain-tooltip-supporting-text-color,
+      var(--md-sys-color-inverse-on-surface)
+    );
+
+    --_rich-tooltip-container-color: var(--md-rich-tooltip-container-color, var(--md-sys-color-surface-container));
+    --_rich-tooltip-container-elevation: var(--md-rich-tooltip-container-elevation, var(--md-sys-elevation-level2));
+    --_rich-tooltip-container-shadow-color: var(--md-rich-tooltip-container-shadow-color, var(--md-sys-color-shadow));
+    --_rich-tooltip-container-shape: var(--md-rich-tooltip-container-shape, var(--md-sys-shape-corner-medium));
+    --_rich-tooltip-action-label-text-font: var(
+      --md-rich-tooltip-action-label-text-font,
+      var(--md-sys-typescale-label-large-font)
+    );
+    --_rich-tooltip-action-label-text-line-height: var(
+      --md-rich-tooltip-action-label-text-line-height,
+      var(--md-sys-typescale-label-large-line-height)
+    );
+    --_rich-tooltip-action-label-text-size: var(
+      --md-rich-tooltip-action-label-text-size,
+      var(--md-sys-typescale-label-large-size)
+    );
+    --_rich-tooltip-action-label-text-weight: var(
+      --md-rich-tooltip-action-label-text-weight,
+      var(--md-sys-typescale-label-large-weight)
+    );
+    --_rich-tooltip-action-label-text-tracking: var(
+      --md-rich-tooltip-action-label-text-tracking,
+      var(--md-sys-typescale-label-large-tracking)
+    );
+    --_rich-tooltip-action-label-text-type: var(
+      --md-rich-tooltip-action-label-text-type,
+      var(--md-sys-typescale-label-large)
+    );
+    --_rich-tooltip-action-label-text-color: var(
+      --md-rich-tooltip-action-label-text-color,
+      var(--md-sys-color-primary)
+    );
+    --_rich-tooltip-subhead-font: var(--md-rich-tooltip-subhead-font, var(--md-sys-typescale-title-small-font));
+    --_rich-tooltip-subhead-line-height: var(
+      --md-rich-tooltip-subhead-line-height,
+      var(--md-sys-typescale-title-small-line-height)
+    );
+    --_rich-tooltip-subhead-size: var(--md-rich-tooltip-subhead-size, var(--md-sys-typescale-title-small-size));
+    --_rich-tooltip-subhead-weight: var(--md-rich-tooltip-subhead-weight, var(--md-sys-typescale-title-small-weight));
+    --_rich-tooltip-subhead-tracking: var(
+      --md-rich-tooltip-subhead-tracking,
+      var(--md-sys-typescale-title-small-tracking)
+    );
+    --_rich-tooltip-subhead-type: var(--md-rich-tooltip-subhead-type, var(--md-sys-typescale-title-small));
+    --_rich-tooltip-subhead-color: var(--md-rich-tooltip-subhead-color, var(--md-sys-color-on-surface-variant));
+    --_rich-tooltip-supporting-text-font: var(
+      --md-rich-tooltip-supporting-text-font,
+      var(--md-sys-typescale-body-medium-font)
+    );
+    --_rich-tooltip-supporting-text-line-height: var(
+      --md-rich-tooltip-supporting-text-line-height,
+      var(--md-sys-typescale-body-medium-line-height)
+    );
+    --_rich-tooltip-supporting-text-size: var(
+      --md-rich-tooltip-supporting-text-size,
+      var(--md-sys-typescale-body-medium-size)
+    );
+    --_rich-tooltip-supporting-text-weight: var(
+      --md-rich-tooltip-supporting-text-weight,
+      var(--md-sys-typescale-body-medium-weight)
+    );
+    --_rich-tooltip-supporting-text-tracking: var(
+      --md-rich-tooltip-supporting-text-tracking,
+      var(--md-sys-typescale-body-medium-tracking)
+    );
+    --_rich-tooltip-supporting-text-type: var(
+      --md-rich-tooltip-supporting-text-type,
+      var(--md-sys-typescale-body-medium)
+    );
+    --_rich-tooltip-supporting-text-color: var(
+      --md-rich-tooltip-supporting-text-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_rich-tooltip-action-hover-label-text-color: var(
+      --md-rich-tooltip-action-hover-label-text-color,
+      var(--md-sys-color-primary)
+    );
+    --_rich-tooltip-action-hover-state-layer-color: var(
+      --md-rich-tooltip-action-hover-state-layer-color,
+      var(--md-sys-color-primary)
+    );
+    --_rich-tooltip-action-hover-state-layer-opacity: var(
+      --md-rich-tooltip-action-hover-state-layer-opacity,
+      var(--md-sys-state-hover-state-layer-opacity)
+    );
+    --_rich-tooltip-action-focus-label-text-color: var(
+      --md-rich-tooltip-action-focus-label-text-color,
+      var(--md-sys-color-primary)
+    );
+    --_rich-tooltip-action-focus-state-layer-color: var(
+      --md-rich-tooltip-action-focus-state-layer-color,
+      var(--md-sys-color-primary)
+    );
+    --_rich-tooltip-action-focus-state-layer-opacity: var(
+      --md-rich-tooltip-action-focus-state-layer-opacity,
+      var(--md-sys-state-focus-state-layer-opacity)
+    );
+    --_rich-tooltip-action-pressed-label-text-color: var(
+      --md-rich-tooltip-action-pressed-label-text-color,
+      var(--md-sys-color-primary)
+    );
+    --_rich-tooltip-action-pressed-state-layer-color: var(
+      --md-rich-tooltip-action-pressed-state-layer-color,
+      var(--md-sys-color-primary)
+    );
+    --_rich-tooltip-action-pressed-state-layer-opacity: var(
+      --md-rich-tooltip-action-pressed-state-layer-opacity,
+      var(--md-sys-state-pressed-state-layer-opacity)
+    );
   }
 }
 
 @layer components {
   .m3-tooltip[data-variant='plain'] {
-    background-color: var(--md-comp-plain-tooltip-container-color);
-    color: var(--md-comp-plain-tooltip-supporting-text-color);
-    border-radius: var(--md-comp-plain-tooltip-container-shape);
+    background-color: var(--_plain-tooltip-container-color);
+    color: var(--_plain-tooltip-supporting-text-color);
+    border-radius: var(--_plain-tooltip-container-shape);
 
     font-family:
-      var(--md-comp-plain-tooltip-supporting-text-font),
+      var(--_plain-tooltip-supporting-text-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-plain-tooltip-supporting-text-size);
-    line-height: var(--md-comp-plain-tooltip-supporting-text-line-height);
-    font-weight: var(--md-comp-plain-tooltip-supporting-text-weight);
-    letter-spacing: var(--md-comp-plain-tooltip-supporting-text-tracking);
+    font-size: var(--_plain-tooltip-supporting-text-size);
+    line-height: var(--_plain-tooltip-supporting-text-line-height);
+    font-weight: var(--_plain-tooltip-supporting-text-weight);
+    letter-spacing: var(--_plain-tooltip-supporting-text-tracking);
   }
 
   .m3-tooltip[data-variant='rich'] {
-    background-color: var(--md-comp-rich-tooltip-container-color);
-    box-shadow: var(--md-comp-rich-tooltip-container-elevation);
-    color: var(--md-comp-rich-tooltip-supporting-text-color);
-    border-radius: var(--md-comp-rich-tooltip-container-shape);
+    background-color: var(--_rich-tooltip-container-color);
+    box-shadow: var(--_rich-tooltip-container-elevation);
+    color: var(--_rich-tooltip-supporting-text-color);
+    border-radius: var(--_rich-tooltip-container-shape);
 
     font-family:
-      var(--md-comp-rich-tooltip-supporting-text-font),
+      var(--_rich-tooltip-supporting-text-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-rich-tooltip-supporting-text-size);
-    line-height: var(--md-comp-rich-tooltip-supporting-text-line-height);
-    font-weight: var(--md-comp-rich-tooltip-supporting-text-weight);
-    letter-spacing: var(--md-comp-rich-tooltip-supporting-text-tracking);
+    font-size: var(--_rich-tooltip-supporting-text-size);
+    line-height: var(--_rich-tooltip-supporting-text-line-height);
+    font-weight: var(--_rich-tooltip-supporting-text-weight);
+    letter-spacing: var(--_rich-tooltip-supporting-text-tracking);
   }
 
   .m3-tooltip,

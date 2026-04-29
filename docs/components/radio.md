@@ -33,6 +33,8 @@ Radio buttons present mutually exclusive choices with Material 3 state styling a
 
 <ApiTable component="Radio" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
 
+<StyleTokenTable component="Radio" />
+
 ## Examples
 
 ### Default

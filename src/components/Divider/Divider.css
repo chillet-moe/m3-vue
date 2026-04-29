@@ -1,52 +1,60 @@
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-divider-color: initial;
+    --md-divider-inset: initial;
+    --md-divider-spacing: initial;
+    --md-divider-thickness: initial;
+  }
+
   .m3-divider {
-    --md-comp-divider-thickness: 0.0625rem;
-    --md-comp-divider-color: var(--md-sys-color-outline-variant);
-    --md-comp-divider-inset: --dp(16);
+    --_divider-thickness: var(--md-divider-thickness, 0.0625rem);
+    --_divider-color: var(--md-divider-color, var(--md-sys-color-outline-variant));
+    --_divider-inset: var(--md-divider-inset, --dp(16));
   }
 }
 
 @layer components {
   .m3-divider {
-    --md-divider-thickness: var(--md-comp-divider-thickness);
-    --md-divider-spacing: 0;
+    --_divider-thickness: var(--md-divider-thickness, initial);
+    --_divider-spacing: var(--md-divider-spacing, 0);
 
     flex: none;
     border: none;
-    background: var(--md-comp-divider-color);
+    background: var(--_divider-color);
   }
 
   .m3-divider[data-orientation='horizontal'] {
     inline-size: 100%;
-    block-size: var(--md-divider-thickness);
-    margin-block: var(--md-divider-spacing);
+    block-size: var(--_divider-thickness);
+    margin-block: var(--_divider-spacing);
   }
 
   .m3-divider[data-orientation='vertical'] {
     align-self: stretch;
-    inline-size: var(--md-divider-thickness);
+    inline-size: var(--_divider-thickness);
     min-block-size: 1em;
     block-size: auto;
-    margin-inline: var(--md-divider-spacing);
+    margin-inline: var(--_divider-spacing);
   }
 
   .m3-divider[data-orientation='horizontal'][data-inset='start'],
   .m3-divider[data-orientation='horizontal'][data-inset='both'] {
-    margin-inline-start: var(--md-comp-divider-inset);
+    margin-inline-start: var(--_divider-inset);
   }
 
   .m3-divider[data-orientation='horizontal'][data-inset='end'],
   .m3-divider[data-orientation='horizontal'][data-inset='both'] {
-    margin-inline-end: var(--md-comp-divider-inset);
+    margin-inline-end: var(--_divider-inset);
   }
 
   .m3-divider[data-orientation='vertical'][data-inset='start'],
   .m3-divider[data-orientation='vertical'][data-inset='both'] {
-    margin-block-start: var(--md-comp-divider-inset);
+    margin-block-start: var(--_divider-inset);
   }
 
   .m3-divider[data-orientation='vertical'][data-inset='end'],
   .m3-divider[data-orientation='vertical'][data-inset='both'] {
-    margin-block-end: var(--md-comp-divider-inset);
+    margin-block-end: var(--_divider-inset);
   }
 }

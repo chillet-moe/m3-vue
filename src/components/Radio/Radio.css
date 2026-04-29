@@ -1,25 +1,59 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-radio-disabled-dot-opacity: initial;
+    --md-radio-disabled-outline-opacity: initial;
+    --md-radio-disabled-selected-dot-color: initial;
+    --md-radio-disabled-selected-outline-color: initial;
+    --md-radio-disabled-unselected-outline-color: initial;
+    --md-radio-focus-indicator-color: initial;
+    --md-radio-focus-indicator-offset: initial;
+    --md-radio-focus-indicator-thickness: initial;
+    --md-radio-icon-shape: initial;
+    --md-radio-icon-size: initial;
+    --md-radio-selected-dot-color: initial;
+    --md-radio-selected-dot-size: initial;
+    --md-radio-selected-outline-color: initial;
+    --md-radio-selected-outline-width: initial;
+    --md-radio-state-layer-size: initial;
+    --md-radio-target-size: initial;
+    --md-radio-unselected-outline-color: initial;
+    --md-radio-unselected-outline-width: initial;
+  }
+
   .m3-radio {
-    --md-comp-radio-icon-size: --dp(20);
-    --md-comp-radio-target-size: --dp(40);
-    --md-comp-radio-state-layer-size: --dp(40);
-    --md-comp-radio-icon-shape: var(--md-sys-shape-corner-full);
-    --md-comp-radio-unselected-outline-width: --dp(2);
-    --md-comp-radio-selected-outline-width: --dp(2);
-    --md-comp-radio-unselected-outline-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-radio-selected-outline-color: var(--md-sys-color-primary);
-    --md-comp-radio-selected-dot-size: --dp(10);
-    --md-comp-radio-selected-dot-color: var(--md-sys-color-primary);
-    --md-comp-radio-focus-indicator-color: var(--md-sys-color-secondary);
-    --md-comp-radio-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
-    --md-comp-radio-focus-indicator-offset: var(--md-sys-state-focus-indicator-outer-offset);
-    --md-comp-radio-disabled-unselected-outline-color: var(--md-sys-color-on-surface);
-    --md-comp-radio-disabled-selected-outline-color: var(--md-sys-color-on-surface);
-    --md-comp-radio-disabled-selected-dot-color: var(--md-sys-color-on-surface);
-    --md-comp-radio-disabled-outline-opacity: 0.38;
-    --md-comp-radio-disabled-dot-opacity: 0.38;
+    --_radio-icon-size: var(--md-radio-icon-size, --dp(20));
+    --_radio-target-size: var(--md-radio-target-size, --dp(40));
+    --_radio-state-layer-size: var(--md-radio-state-layer-size, --dp(40));
+    --_radio-icon-shape: var(--md-radio-icon-shape, var(--md-sys-shape-corner-full));
+    --_radio-unselected-outline-width: var(--md-radio-unselected-outline-width, --dp(2));
+    --_radio-selected-outline-width: var(--md-radio-selected-outline-width, --dp(2));
+    --_radio-unselected-outline-color: var(--md-radio-unselected-outline-color, var(--md-sys-color-on-surface-variant));
+    --_radio-selected-outline-color: var(--md-radio-selected-outline-color, var(--md-sys-color-primary));
+    --_radio-selected-dot-size: var(--md-radio-selected-dot-size, --dp(10));
+    --_radio-selected-dot-color: var(--md-radio-selected-dot-color, var(--md-sys-color-primary));
+    --_radio-focus-indicator-color: var(--md-radio-focus-indicator-color, var(--md-sys-color-secondary));
+    --_radio-focus-indicator-thickness: var(
+      --md-radio-focus-indicator-thickness,
+      var(--md-sys-state-focus-indicator-thickness)
+    );
+    --_radio-focus-indicator-offset: var(
+      --md-radio-focus-indicator-offset,
+      var(--md-sys-state-focus-indicator-outer-offset)
+    );
+    --_radio-disabled-unselected-outline-color: var(
+      --md-radio-disabled-unselected-outline-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_radio-disabled-selected-outline-color: var(
+      --md-radio-disabled-selected-outline-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_radio-disabled-selected-dot-color: var(--md-radio-disabled-selected-dot-color, var(--md-sys-color-on-surface));
+    --_radio-disabled-outline-opacity: var(--md-radio-disabled-outline-opacity, 0.38);
+    --_radio-disabled-dot-opacity: var(--md-radio-disabled-dot-opacity, 0.38);
   }
 }
 
@@ -52,8 +86,8 @@
 
   .m3-radio-control {
     position: relative;
-    inline-size: var(--md-comp-radio-target-size);
-    block-size: var(--md-comp-radio-target-size);
+    inline-size: var(--_radio-target-size);
+    block-size: var(--_radio-target-size);
     border-radius: var(--md-sys-shape-corner-full);
     display: inline-flex;
     align-items: center;
@@ -65,10 +99,10 @@
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: var(--md-comp-radio-icon-size);
-    block-size: var(--md-comp-radio-icon-size);
-    border-radius: var(--md-comp-radio-icon-shape);
-    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-comp-radio-unselected-outline-color);
+    inline-size: var(--_radio-icon-size);
+    block-size: var(--_radio-icon-size);
+    border-radius: var(--_radio-icon-shape);
+    box-shadow: inset 0 0 0 var(--_radio-unselected-outline-width) var(--_radio-unselected-outline-color);
     transform: translate(-50%, -50%);
     transition: box-shadow var(--md-easing-fast);
   }
@@ -77,16 +111,16 @@
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: var(--md-comp-radio-selected-dot-size);
-    block-size: var(--md-comp-radio-selected-dot-size);
+    inline-size: var(--_radio-selected-dot-size);
+    block-size: var(--_radio-selected-dot-size);
     border-radius: var(--md-sys-shape-corner-full);
-    background-color: var(--md-comp-radio-selected-dot-color);
+    background-color: var(--_radio-selected-dot-color);
     transform: translate(-50%, -50%) scale(0);
     transition: transform var(--md-easing-fast-spatial);
   }
 
   .m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
-    box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-comp-radio-selected-outline-color);
+    box-shadow: inset 0 0 0 var(--_radio-selected-outline-width) var(--_radio-selected-outline-color);
   }
 
   .m3-radio-input:checked + .m3-radio-control .m3-radio-inner {
@@ -94,42 +128,36 @@
   }
 
   .m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-outer {
-    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
+    box-shadow: inset 0 0 0 var(--_radio-unselected-outline-width) var(--md-sys-color-on-surface);
   }
 
   .m3-radio:has(.m3-radio-input:not(:disabled):hover) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer,
   .m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-input:checked + .m3-radio-control .m3-radio-outer {
-    box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width) var(--md-sys-color-primary);
+    box-shadow: inset 0 0 0 var(--_radio-selected-outline-width) var(--md-sys-color-primary);
   }
 
   .m3-radio:has(.m3-radio-input:not(:disabled):active) .m3-radio-outer {
-    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width) var(--md-sys-color-on-surface);
+    box-shadow: inset 0 0 0 var(--_radio-unselected-outline-width) var(--md-sys-color-on-surface);
   }
 
   .m3-radio-input:focus-visible + .m3-radio-control {
-    outline: var(--md-comp-radio-focus-indicator-thickness) solid var(--md-comp-radio-focus-indicator-color);
-    outline-offset: var(--md-comp-radio-focus-indicator-offset);
-    border-radius: var(--md-comp-radio-icon-shape);
+    outline: var(--_radio-focus-indicator-thickness) solid var(--_radio-focus-indicator-color);
+    outline-offset: var(--_radio-focus-indicator-offset);
+    border-radius: var(--_radio-icon-shape);
   }
 
   .m3-radio-input:disabled + .m3-radio-control .m3-radio-outer {
-    box-shadow: inset 0 0 0 var(--md-comp-radio-unselected-outline-width)
-      --translucent(
-        var(--md-comp-radio-disabled-unselected-outline-color),
-        var(--md-comp-radio-disabled-outline-opacity)
-      );
+    box-shadow: inset 0 0 0 var(--_radio-unselected-outline-width)
+      --translucent(var(--_radio-disabled-unselected-outline-color), var(--_radio-disabled-outline-opacity));
   }
 
   .m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-outer {
-    box-shadow: inset 0 0 0 var(--md-comp-radio-selected-outline-width)
-      --translucent(var(--md-comp-radio-disabled-selected-outline-color), var(--md-comp-radio-disabled-outline-opacity));
+    box-shadow: inset 0 0 0 var(--_radio-selected-outline-width)
+      --translucent(var(--_radio-disabled-selected-outline-color), var(--_radio-disabled-outline-opacity));
   }
 
   .m3-radio-input:disabled:checked + .m3-radio-control .m3-radio-inner {
-    background-color: --translucent(
-      var(--md-comp-radio-disabled-selected-dot-color),
-      var(--md-comp-radio-disabled-dot-opacity)
-    );
+    background-color: --translucent(var(--_radio-disabled-selected-dot-color), var(--_radio-disabled-dot-opacity));
   }
 
   .m3-radio-label {

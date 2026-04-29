@@ -24,16 +24,15 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: var(--md-comp-menus-menu-item-between-space);
+    column-gap: var(--_menus-menu-item-between-space);
     inline-size: 100%;
     box-sizing: border-box;
 
-    min-block-size: var(--md-comp-menus-menu-item-height, 2.75rem);
-    padding-block: var(--md-comp-menus-menu-item-top-space, 0.5rem) var(--md-comp-menus-menu-item-bottom-space, 0.5rem);
-    padding-inline: var(--md-comp-menus-menu-item-leading-space, 1rem)
-      var(--md-comp-menus-menu-item-trailing-space, 1rem);
+    min-block-size: var(--_menus-menu-item-height, 2.75rem);
+    padding-block: var(--_menus-menu-item-top-space, 0.5rem) var(--_menus-menu-item-bottom-space, 0.5rem);
+    padding-inline: var(--_menus-menu-item-leading-space, 1rem) var(--_menus-menu-item-trailing-space, 1rem);
 
-    border-radius: var(--md-comp-menus-menu-item-shape, var(--md-sys-shape-corner-extra-small));
+    border-radius: var(--_menus-menu-item-shape, var(--md-sys-shape-corner-extra-small));
     cursor: pointer;
 
     color: var(--_menu-item-current-label-color);
@@ -41,16 +40,16 @@
     transition: color 120ms var(--md-timing-function-fast);
 
     font-family:
-      var(--md-comp-menus-menu-item-label-text-font),
+      var(--_menus-menu-item-label-text-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-menus-menu-item-label-text-size);
-    line-height: var(--md-comp-menus-menu-item-label-text-line-height);
-    font-weight: var(--md-comp-menus-menu-item-label-text-weight);
-    letter-spacing: var(--md-comp-menus-menu-item-label-text-tracking);
+    font-size: var(--_menus-menu-item-label-text-size);
+    line-height: var(--_menus-menu-item-label-text-line-height);
+    font-weight: var(--_menus-menu-item-label-text-weight);
+    letter-spacing: var(--_menus-menu-item-label-text-tracking);
   }
 
   .m3-menu-item::before {
@@ -167,9 +166,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: var(--md-comp-menus-menu-item-leading-icon-size);
-    min-block-size: var(--md-comp-menus-menu-item-leading-icon-size);
-    font-size: var(--md-comp-menus-menu-item-leading-icon-size);
+    min-inline-size: var(--_menus-menu-item-leading-icon-size);
+    min-block-size: var(--_menus-menu-item-leading-icon-size);
+    font-size: var(--_menus-menu-item-leading-icon-size);
     transition:
       color 120ms var(--md-timing-function-fast),
       transform 220ms var(--md-timing-function-fast-spatial),
@@ -205,16 +204,16 @@
   .m3-menu-item-supporting {
     color: var(--_menu-item-current-supporting-color);
     font-family:
-      var(--md-comp-menus-menu-item-supporting-text-font),
+      var(--_menus-menu-item-supporting-text-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-menus-menu-item-supporting-text-size);
-    line-height: var(--md-comp-menus-menu-item-supporting-text-line-height);
-    font-weight: var(--md-comp-menus-menu-item-supporting-text-weight);
-    letter-spacing: var(--md-comp-menus-menu-item-supporting-text-tracking);
+    font-size: var(--_menus-menu-item-supporting-text-size);
+    line-height: var(--_menus-menu-item-supporting-text-line-height);
+    font-weight: var(--_menus-menu-item-supporting-text-weight);
+    letter-spacing: var(--_menus-menu-item-supporting-text-tracking);
     transition: color 120ms var(--md-timing-function-fast);
   }
 
@@ -239,16 +238,16 @@
   .m3-menu-item-trailing-text {
     color: var(--_menu-item-current-trailing-supporting-color);
     font-family:
-      var(--md-comp-menus-menu-item-trailing-supporting-text-font),
+      var(--_menus-menu-item-trailing-supporting-text-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-menus-menu-item-trailing-supporting-text-size);
-    line-height: var(--md-comp-menus-menu-item-trailing-supporting-text-line-height);
-    font-weight: var(--md-comp-menus-menu-item-trailing-supporting-text-weight);
-    letter-spacing: var(--md-comp-menus-menu-item-trailing-supporting-text-tracking);
+    font-size: var(--_menus-menu-item-trailing-supporting-text-size);
+    line-height: var(--_menus-menu-item-trailing-supporting-text-line-height);
+    font-weight: var(--_menus-menu-item-trailing-supporting-text-weight);
+    letter-spacing: var(--_menus-menu-item-trailing-supporting-text-tracking);
     transition: color 120ms var(--md-timing-function-fast);
   }
 

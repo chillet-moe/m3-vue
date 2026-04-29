@@ -2,57 +2,138 @@
 @import '../../styles/icon-morph.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-navigation-rail-item-active-icon-color: initial;
+    --md-navigation-rail-item-active-indicator-color: initial;
+    --md-navigation-rail-item-active-label-color: initial;
+    --md-navigation-rail-item-active-state-layer-color: initial;
+    --md-navigation-rail-item-collapsed-height: initial;
+    --md-navigation-rail-item-collapsed-icon-label-space: initial;
+    --md-navigation-rail-item-collapsed-indicator-height: initial;
+    --md-navigation-rail-item-collapsed-indicator-width: initial;
+    --md-navigation-rail-item-collapsed-padding-block: initial;
+    --md-navigation-rail-item-disabled-opacity: initial;
+    --md-navigation-rail-item-expanded-height: initial;
+    --md-navigation-rail-item-expanded-icon-label-space: initial;
+    --md-navigation-rail-item-expanded-indicator-height: initial;
+    --md-navigation-rail-item-expanded-leading-space: initial;
+    --md-navigation-rail-item-expanded-trailing-space: initial;
+    --md-navigation-rail-item-focus-indicator-color: initial;
+    --md-navigation-rail-item-focus-indicator-offset: initial;
+    --md-navigation-rail-item-focus-indicator-thickness: initial;
+    --md-navigation-rail-item-icon-size: initial;
+    --md-navigation-rail-item-icon-touch-target-size: initial;
+    --md-navigation-rail-item-inactive-icon-color: initial;
+    --md-navigation-rail-item-inactive-label-color: initial;
+    --md-navigation-rail-item-inactive-state-layer-color: initial;
+    --md-navigation-rail-item-indicator-collapsed-visual-width: initial;
+    --md-navigation-rail-item-indicator-shape: initial;
+    --md-navigation-rail-item-motion: initial;
+  }
+
   .m3-navigation-rail-item {
-    --md-comp-navigation-rail-item-icon-size: --dp(24);
-    --md-comp-navigation-rail-item-icon-touch-target-size: --dp(32);
-    --md-comp-navigation-rail-item-indicator-shape: var(--md-sys-shape-corner-full);
+    --_navigation-rail-item-icon-size: var(--md-navigation-rail-item-icon-size, --dp(24));
+    --_navigation-rail-item-icon-touch-target-size: var(--md-navigation-rail-item-icon-touch-target-size, --dp(32));
+    --_navigation-rail-item-indicator-shape: var(
+      --md-navigation-rail-item-indicator-shape,
+      var(--md-sys-shape-corner-full)
+    );
 
-    --md-comp-navigation-rail-item-collapsed-indicator-width: --dp(56);
-    --md-comp-navigation-rail-item-collapsed-indicator-height: --dp(32);
-    --md-comp-navigation-rail-item-collapsed-height: --dp(64);
-    --md-comp-navigation-rail-item-collapsed-padding-block: --dp(6);
-    --md-comp-navigation-rail-item-collapsed-icon-label-space: --dp(4);
+    --_navigation-rail-item-collapsed-indicator-width: var(
+      --md-navigation-rail-item-collapsed-indicator-width,
+      --dp(56)
+    );
+    --_navigation-rail-item-collapsed-indicator-height: var(
+      --md-navigation-rail-item-collapsed-indicator-height,
+      --dp(32)
+    );
+    --_navigation-rail-item-collapsed-height: var(--md-navigation-rail-item-collapsed-height, --dp(64));
+    --_navigation-rail-item-collapsed-padding-block: var(--md-navigation-rail-item-collapsed-padding-block, --dp(6));
+    --_navigation-rail-item-collapsed-icon-label-space: var(
+      --md-navigation-rail-item-collapsed-icon-label-space,
+      --dp(4)
+    );
 
-    --md-comp-navigation-rail-item-expanded-indicator-height: --dp(56);
-    --md-comp-navigation-rail-item-expanded-leading-space: --dp(16);
-    --md-comp-navigation-rail-item-expanded-trailing-space: --dp(24);
-    --md-comp-navigation-rail-item-expanded-icon-label-space: --dp(8);
-    --md-comp-navigation-rail-item-expanded-height: --dp(56);
+    --_navigation-rail-item-expanded-indicator-height: var(
+      --md-navigation-rail-item-expanded-indicator-height,
+      --dp(56)
+    );
+    --_navigation-rail-item-expanded-leading-space: var(--md-navigation-rail-item-expanded-leading-space, --dp(16));
+    --_navigation-rail-item-expanded-trailing-space: var(--md-navigation-rail-item-expanded-trailing-space, --dp(24));
+    --_navigation-rail-item-expanded-icon-label-space: var(
+      --md-navigation-rail-item-expanded-icon-label-space,
+      --dp(8)
+    );
+    --_navigation-rail-item-expanded-height: var(--md-navigation-rail-item-expanded-height, --dp(56));
 
-    --md-comp-navigation-rail-item-active-indicator-color: var(--md-sys-color-secondary-container);
-    --md-comp-navigation-rail-item-active-label-color: var(--md-sys-color-secondary);
-    --md-comp-navigation-rail-item-inactive-label-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-navigation-rail-item-active-icon-color: var(--md-sys-color-on-secondary-container);
-    --md-comp-navigation-rail-item-inactive-icon-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-navigation-rail-item-active-state-layer-color: var(--md-sys-color-on-secondary-container);
-    --md-comp-navigation-rail-item-inactive-state-layer-color: var(--md-sys-color-on-surface-variant);
+    --_navigation-rail-item-active-indicator-color: var(
+      --md-navigation-rail-item-active-indicator-color,
+      var(--md-sys-color-secondary-container)
+    );
+    --_navigation-rail-item-active-label-color: var(
+      --md-navigation-rail-item-active-label-color,
+      var(--md-sys-color-secondary)
+    );
+    --_navigation-rail-item-inactive-label-color: var(
+      --md-navigation-rail-item-inactive-label-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_navigation-rail-item-active-icon-color: var(
+      --md-navigation-rail-item-active-icon-color,
+      var(--md-sys-color-on-secondary-container)
+    );
+    --_navigation-rail-item-inactive-icon-color: var(
+      --md-navigation-rail-item-inactive-icon-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_navigation-rail-item-active-state-layer-color: var(
+      --md-navigation-rail-item-active-state-layer-color,
+      var(--md-sys-color-on-secondary-container)
+    );
+    --_navigation-rail-item-inactive-state-layer-color: var(
+      --md-navigation-rail-item-inactive-state-layer-color,
+      var(--md-sys-color-on-surface-variant)
+    );
 
-    --md-comp-navigation-rail-item-focus-indicator-color: var(--md-sys-color-secondary);
-    --md-comp-navigation-rail-item-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
-    --md-comp-navigation-rail-item-focus-indicator-offset: var(--md-sys-state-focus-indicator-outer-offset);
-    --md-comp-navigation-rail-item-disabled-opacity: 0.38;
-    --md-comp-navigation-rail-item-motion: var(--md-easing-spatial);
-    --md-comp-navigation-rail-item-indicator-collapsed-visual-width: --dp(12);
+    --_navigation-rail-item-focus-indicator-color: var(
+      --md-navigation-rail-item-focus-indicator-color,
+      var(--md-sys-color-secondary)
+    );
+    --_navigation-rail-item-focus-indicator-thickness: var(
+      --md-navigation-rail-item-focus-indicator-thickness,
+      var(--md-sys-state-focus-indicator-thickness)
+    );
+    --_navigation-rail-item-focus-indicator-offset: var(
+      --md-navigation-rail-item-focus-indicator-offset,
+      var(--md-sys-state-focus-indicator-outer-offset)
+    );
+    --_navigation-rail-item-disabled-opacity: var(--md-navigation-rail-item-disabled-opacity, 0.38);
+    --_navigation-rail-item-motion: var(--md-navigation-rail-item-motion, var(--md-easing-spatial));
+    --_navigation-rail-item-indicator-collapsed-visual-width: var(
+      --md-navigation-rail-item-indicator-collapsed-visual-width,
+      --dp(12)
+    );
   }
 }
 
 @layer components {
   .m3-navigation-rail-item {
-    --_navigation-rail-item-current-indicator-color: var(--md-comp-navigation-rail-item-active-indicator-color);
-    --_navigation-rail-item-current-icon-color: var(--md-comp-navigation-rail-item-inactive-icon-color);
-    --_navigation-rail-item-current-label-color: var(--md-comp-navigation-rail-item-inactive-label-color);
-    --_navigation-rail-item-current-state-layer-color: var(--md-comp-navigation-rail-item-inactive-state-layer-color);
+    --_navigation-rail-item-current-indicator-color: var(--_navigation-rail-item-active-indicator-color);
+    --_navigation-rail-item-current-icon-color: var(--_navigation-rail-item-inactive-icon-color);
+    --_navigation-rail-item-current-label-color: var(--_navigation-rail-item-inactive-label-color);
+    --_navigation-rail-item-current-state-layer-color: var(--_navigation-rail-item-inactive-state-layer-color);
 
-    --_navigation-rail-item-current-indicator-width: var(--md-comp-navigation-rail-item-collapsed-indicator-width);
-    --_navigation-rail-item-current-indicator-height: var(--md-comp-navigation-rail-item-collapsed-indicator-height);
+    --_navigation-rail-item-current-indicator-width: var(--_navigation-rail-item-collapsed-indicator-width);
+    --_navigation-rail-item-current-indicator-height: var(--_navigation-rail-item-collapsed-indicator-height);
     --_navigation-rail-item-current-indicator-visual-width: var(
-      --md-comp-navigation-rail-item-indicator-collapsed-visual-width
+      --_navigation-rail-item-indicator-collapsed-visual-width
     );
     --_navigation-rail-item-current-indicator-opacity: 0;
     --_navigation-rail-item-current-indicator-opacity-delay: 50ms;
-    --_navigation-rail-item-current-height: var(--md-comp-navigation-rail-item-collapsed-height);
-    --_navigation-rail-item-current-padding-block: var(--md-comp-navigation-rail-item-collapsed-padding-block);
-    --_navigation-rail-item-current-icon-label-space: var(--md-comp-navigation-rail-item-collapsed-icon-label-space);
+    --_navigation-rail-item-current-height: var(--_navigation-rail-item-collapsed-height);
+    --_navigation-rail-item-current-padding-block: var(--_navigation-rail-item-collapsed-padding-block);
+    --_navigation-rail-item-current-icon-label-space: var(--_navigation-rail-item-collapsed-icon-label-space);
 
     all: unset;
     box-sizing: border-box;
@@ -66,14 +147,14 @@
     min-block-size: var(--_navigation-rail-item-current-height);
     padding-block: var(--_navigation-rail-item-current-padding-block);
     row-gap: var(--_navigation-rail-item-current-icon-label-space);
-    border-radius: var(--md-comp-navigation-rail-item-indicator-shape);
+    border-radius: var(--_navigation-rail-item-indicator-shape);
     color: var(--_navigation-rail-item-current-label-color);
     cursor: pointer;
     transition:
       color var(--md-easing-fast),
-      min-block-size var(--md-comp-navigation-rail-item-motion),
-      padding var(--md-comp-navigation-rail-item-motion),
-      row-gap var(--md-comp-navigation-rail-item-motion);
+      min-block-size var(--_navigation-rail-item-motion),
+      padding var(--_navigation-rail-item-motion),
+      row-gap var(--_navigation-rail-item-motion);
   }
 
   .m3-navigation-rail-item-indicator {
@@ -84,12 +165,12 @@
     box-sizing: border-box;
     inline-size: var(--_navigation-rail-item-current-indicator-width);
     block-size: var(--_navigation-rail-item-current-indicator-height);
-    border-radius: var(--md-comp-navigation-rail-item-indicator-shape);
+    border-radius: var(--_navigation-rail-item-indicator-shape);
     overflow: hidden;
     transition:
-      inline-size var(--md-comp-navigation-rail-item-motion),
-      block-size var(--md-comp-navigation-rail-item-motion),
-      padding var(--md-comp-navigation-rail-item-motion);
+      inline-size var(--_navigation-rail-item-motion),
+      block-size var(--_navigation-rail-item-motion),
+      padding var(--_navigation-rail-item-motion);
   }
 
   .m3-navigation-rail-item-state-layer {
@@ -112,12 +193,12 @@
     translate: -50% 0;
     inline-size: var(--_navigation-rail-item-current-indicator-visual-width);
     block-size: 100%;
-    border-radius: var(--md-comp-navigation-rail-item-indicator-shape);
+    border-radius: var(--_navigation-rail-item-indicator-shape);
     pointer-events: none;
     background-color: var(--_navigation-rail-item-current-indicator-color);
     opacity: var(--_navigation-rail-item-current-indicator-opacity);
     transition:
-      inline-size var(--md-comp-navigation-rail-item-motion),
+      inline-size var(--_navigation-rail-item-motion),
       opacity var(--md-easing-fast) var(--_navigation-rail-item-current-indicator-opacity-delay),
       background-color var(--md-easing-fast);
   }
@@ -129,9 +210,9 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    inline-size: var(--md-comp-navigation-rail-item-icon-touch-target-size);
-    block-size: var(--md-comp-navigation-rail-item-icon-touch-target-size);
-    border-radius: var(--md-comp-navigation-rail-item-indicator-shape);
+    inline-size: var(--_navigation-rail-item-icon-touch-target-size);
+    block-size: var(--_navigation-rail-item-icon-touch-target-size);
+    border-radius: var(--_navigation-rail-item-indicator-shape);
     --md-state-layer-color: var(--_navigation-rail-item-current-state-layer-color);
   }
 
@@ -139,16 +220,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--md-comp-navigation-rail-item-icon-size);
-    block-size: var(--md-comp-navigation-rail-item-icon-size);
+    inline-size: var(--_navigation-rail-item-icon-size);
+    block-size: var(--_navigation-rail-item-icon-size);
     color: var(--_navigation-rail-item-current-icon-color);
     transition: color var(--md-easing-fast);
   }
 
   .m3-navigation-rail-item-icon-glyph {
-    font-size: var(--md-comp-navigation-rail-item-icon-size);
-    inline-size: var(--md-comp-navigation-rail-item-icon-size);
-    block-size: var(--md-comp-navigation-rail-item-icon-size);
+    font-size: var(--_navigation-rail-item-icon-size);
+    inline-size: var(--_navigation-rail-item-icon-size);
+    block-size: var(--_navigation-rail-item-icon-size);
   }
 
   .m3-navigation-rail-item-label {
@@ -165,22 +246,22 @@
     transition:
       color var(--md-easing-fast),
       opacity var(--md-easing-fast),
-      transform var(--md-comp-navigation-rail-item-motion);
+      transform var(--_navigation-rail-item-motion);
   }
 
   .m3-navigation-rail-item[data-selected='true'] {
     --_navigation-rail-item-current-indicator-visual-width: 100%;
     --_navigation-rail-item-current-indicator-opacity: 1;
     --_navigation-rail-item-current-indicator-opacity-delay: 0ms;
-    --_navigation-rail-item-current-icon-color: var(--md-comp-navigation-rail-item-active-icon-color);
-    --_navigation-rail-item-current-label-color: var(--md-comp-navigation-rail-item-active-label-color);
-    --_navigation-rail-item-current-state-layer-color: var(--md-comp-navigation-rail-item-active-state-layer-color);
+    --_navigation-rail-item-current-icon-color: var(--_navigation-rail-item-active-icon-color);
+    --_navigation-rail-item-current-label-color: var(--_navigation-rail-item-active-label-color);
+    --_navigation-rail-item-current-state-layer-color: var(--_navigation-rail-item-active-state-layer-color);
   }
 
   .m3-navigation-rail-item[data-state='expanded'] {
     --_navigation-rail-item-current-indicator-height: auto;
     --_navigation-rail-item-current-indicator-width: 100%;
-    --_navigation-rail-item-current-height: var(--md-comp-navigation-rail-item-expanded-height);
+    --_navigation-rail-item-current-height: var(--_navigation-rail-item-expanded-height);
     --_navigation-rail-item-current-padding-block: 0;
     --_navigation-rail-item-current-icon-label-space: 0;
 
@@ -191,12 +272,12 @@
 
   .m3-navigation-rail-item[data-state='expanded'] .m3-navigation-rail-item-indicator {
     justify-content: flex-start;
-    min-block-size: var(--md-comp-navigation-rail-item-expanded-indicator-height);
+    min-block-size: var(--_navigation-rail-item-expanded-indicator-height);
     min-inline-size: 0;
     max-inline-size: 100%;
-    column-gap: var(--md-comp-navigation-rail-item-expanded-icon-label-space);
-    padding-inline: var(--md-comp-navigation-rail-item-expanded-leading-space)
-      var(--md-comp-navigation-rail-item-expanded-trailing-space);
+    column-gap: var(--_navigation-rail-item-expanded-icon-label-space);
+    padding-inline: var(--_navigation-rail-item-expanded-leading-space)
+      var(--_navigation-rail-item-expanded-trailing-space);
   }
 
   .m3-navigation-rail-item[data-state='expanded'] .m3-navigation-rail-item-label {
@@ -215,16 +296,16 @@
   }
 
   .m3-navigation-rail-item:focus-visible {
-    outline: var(--md-comp-navigation-rail-item-focus-indicator-thickness) solid
-      var(--md-comp-navigation-rail-item-focus-indicator-color);
-    outline-offset: var(--md-comp-navigation-rail-item-focus-indicator-offset);
+    outline: var(--_navigation-rail-item-focus-indicator-thickness) solid
+      var(--_navigation-rail-item-focus-indicator-color);
+    outline-offset: var(--_navigation-rail-item-focus-indicator-offset);
   }
 
   .m3-navigation-rail-item:disabled,
   .m3-navigation-rail-item[aria-disabled='true'],
   .m3-navigation-rail-item[data-disabled='true'] {
     cursor: default;
-    opacity: var(--md-comp-navigation-rail-item-disabled-opacity);
+    opacity: var(--_navigation-rail-item-disabled-opacity);
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -1,30 +1,102 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-sheet-side-detached-container-shape: initial;
+    --md-sheet-side-docked-container-height: initial;
+    --md-sheet-side-docked-container-shape: initial;
+    --md-sheet-side-docked-container-width: initial;
+    --md-sheet-side-docked-divider-color: initial;
+    --md-sheet-side-docked-focus-indicator-color: initial;
+    --md-sheet-side-docked-focus-indicator-outline-offset: initial;
+    --md-sheet-side-docked-focus-indicator-thickness: initial;
+    --md-sheet-side-docked-headline-color: initial;
+    --md-sheet-side-docked-headline-font: initial;
+    --md-sheet-side-docked-headline-line-height: initial;
+    --md-sheet-side-docked-headline-size: initial;
+    --md-sheet-side-docked-headline-tracking: initial;
+    --md-sheet-side-docked-headline-type: initial;
+    --md-sheet-side-docked-headline-weight: initial;
+    --md-sheet-side-docked-modal-container-color: initial;
+    --md-sheet-side-docked-modal-container-elevation: initial;
+    --md-sheet-side-docked-modal-container-shape: initial;
+    --md-sheet-side-docked-standard-container-color: initial;
+    --md-sheet-side-docked-standard-container-elevation: initial;
+    --md-side-sheet-closed-translate: initial;
+    --md-side-sheet-detached-gap: initial;
+    --md-side-sheet-width: initial;
+  }
+
   .m3-side-sheet {
-    --md-comp-sheet-side-docked-modal-container-color: var(--md-sys-color-surface-container-low);
-    --md-comp-sheet-side-docked-standard-container-color: var(--md-sys-color-surface);
-    --md-comp-sheet-side-docked-modal-container-elevation: var(--md-sys-elevation-level1);
-    --md-comp-sheet-side-docked-standard-container-elevation: var(--md-sys-elevation-level0);
-    --md-comp-sheet-side-docked-container-height: 100%;
-    --md-comp-sheet-side-docked-container-shape: var(--md-sys-shape-corner-none);
-    --md-comp-sheet-side-detached-container-shape: var(--md-sys-shape-corner-large);
-    --md-comp-sheet-side-docked-container-width: 16rem;
-    --md-comp-sheet-side-docked-modal-container-shape: var(--md-sys-shape-corner-large-start);
-    --md-comp-sheet-side-docked-headline-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-sheet-side-docked-headline-font: var(--md-sys-typescale-title-large-font);
-    --md-comp-sheet-side-docked-headline-line-height: var(--md-sys-typescale-title-large-line-height);
-    --md-comp-sheet-side-docked-headline-size: var(--md-sys-typescale-title-large-size);
-    --md-comp-sheet-side-docked-headline-tracking: var(--md-sys-typescale-title-large-tracking);
-    --md-comp-sheet-side-docked-headline-weight: var(--md-sys-typescale-title-large-weight);
-    --md-comp-sheet-side-docked-headline-type: var(--md-sys-typescale-title-large);
-    --md-comp-sheet-side-docked-divider-color: var(--md-sys-color-outline);
-    --md-comp-sheet-side-docked-focus-indicator-color: var(--md-sys-color-secondary);
-    --md-comp-sheet-side-docked-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
-    --md-comp-sheet-side-docked-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
-    --md-side-sheet-detached-gap: 1rem;
-    --md-side-sheet-width: var(--md-comp-sheet-side-docked-container-width);
-    --md-side-sheet-closed-translate: 100%;
+    --_sheet-side-docked-modal-container-color: var(
+      --md-sheet-side-docked-modal-container-color,
+      var(--md-sys-color-surface-container-low)
+    );
+    --_sheet-side-docked-standard-container-color: var(
+      --md-sheet-side-docked-standard-container-color,
+      var(--md-sys-color-surface)
+    );
+    --_sheet-side-docked-modal-container-elevation: var(
+      --md-sheet-side-docked-modal-container-elevation,
+      var(--md-sys-elevation-level1)
+    );
+    --_sheet-side-docked-standard-container-elevation: var(
+      --md-sheet-side-docked-standard-container-elevation,
+      var(--md-sys-elevation-level0)
+    );
+    --_sheet-side-docked-container-height: var(--md-sheet-side-docked-container-height, 100%);
+    --_sheet-side-docked-container-shape: var(--md-sheet-side-docked-container-shape, var(--md-sys-shape-corner-none));
+    --_sheet-side-detached-container-shape: var(
+      --md-sheet-side-detached-container-shape,
+      var(--md-sys-shape-corner-large)
+    );
+    --_sheet-side-docked-container-width: var(--md-sheet-side-docked-container-width, 16rem);
+    --_sheet-side-docked-modal-container-shape: var(
+      --md-sheet-side-docked-modal-container-shape,
+      var(--md-sys-shape-corner-large-start)
+    );
+    --_sheet-side-docked-headline-color: var(
+      --md-sheet-side-docked-headline-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_sheet-side-docked-headline-font: var(
+      --md-sheet-side-docked-headline-font,
+      var(--md-sys-typescale-title-large-font)
+    );
+    --_sheet-side-docked-headline-line-height: var(
+      --md-sheet-side-docked-headline-line-height,
+      var(--md-sys-typescale-title-large-line-height)
+    );
+    --_sheet-side-docked-headline-size: var(
+      --md-sheet-side-docked-headline-size,
+      var(--md-sys-typescale-title-large-size)
+    );
+    --_sheet-side-docked-headline-tracking: var(
+      --md-sheet-side-docked-headline-tracking,
+      var(--md-sys-typescale-title-large-tracking)
+    );
+    --_sheet-side-docked-headline-weight: var(
+      --md-sheet-side-docked-headline-weight,
+      var(--md-sys-typescale-title-large-weight)
+    );
+    --_sheet-side-docked-headline-type: var(--md-sheet-side-docked-headline-type, var(--md-sys-typescale-title-large));
+    --_sheet-side-docked-divider-color: var(--md-sheet-side-docked-divider-color, var(--md-sys-color-outline));
+    --_sheet-side-docked-focus-indicator-color: var(
+      --md-sheet-side-docked-focus-indicator-color,
+      var(--md-sys-color-secondary)
+    );
+    --_sheet-side-docked-focus-indicator-thickness: var(
+      --md-sheet-side-docked-focus-indicator-thickness,
+      var(--md-sys-state-focus-indicator-thickness)
+    );
+    --_sheet-side-docked-focus-indicator-outline-offset: var(
+      --md-sheet-side-docked-focus-indicator-outline-offset,
+      var(--md-sys-state-focus-indicator-outer-offset)
+    );
+    --_side-sheet-detached-gap: var(--md-side-sheet-detached-gap, 1rem);
+    --_side-sheet-width: var(--md-side-sheet-width, var(--_sheet-side-docked-container-width));
+    --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, 100%);
   }
 }
 
@@ -58,27 +130,30 @@
   }
 
   .m3-side-sheet[data-side='start'] {
-    --md-side-sheet-closed-translate: -100%;
+    --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, -100%);
 
     justify-items: start;
   }
 
   .m3-side-sheet[data-side='end'] {
-    --md-side-sheet-closed-translate: 100%;
+    --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, 100%);
 
     justify-items: end;
   }
 
   .m3-side-sheet[data-variant='detached'] {
-    padding: var(--md-side-sheet-detached-gap);
+    padding: var(--_side-sheet-detached-gap);
   }
 
   .m3-side-sheet[data-side='start'][data-variant='detached'] {
-    --md-side-sheet-closed-translate: calc(-100% - var(--md-side-sheet-detached-gap));
+    --_side-sheet-closed-translate: var(
+      --md-side-sheet-closed-translate,
+      calc(-100% - var(--_side-sheet-detached-gap))
+    );
   }
 
   .m3-side-sheet[data-side='end'][data-variant='detached'] {
-    --md-side-sheet-closed-translate: calc(100% + var(--md-side-sheet-detached-gap));
+    --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, calc(100% + var(--_side-sheet-detached-gap)));
   }
 
   .m3-side-sheet[open] {
@@ -105,17 +180,17 @@
     align-content: start;
     row-gap: 1rem;
 
-    inline-size: min(var(--md-side-sheet-width), 100vi);
-    block-size: var(--md-comp-sheet-side-docked-container-height);
+    inline-size: min(var(--_side-sheet-width), 100vi);
+    block-size: var(--_sheet-side-docked-container-height);
     max-block-size: 100vb;
     overflow: hidden;
 
     padding: 1.5rem;
-    background-color: var(--md-comp-sheet-side-docked-modal-container-color);
-    box-shadow: var(--md-comp-sheet-side-docked-modal-container-elevation);
+    background-color: var(--_sheet-side-docked-modal-container-color);
+    box-shadow: var(--_sheet-side-docked-modal-container-elevation);
 
     opacity: 0;
-    transform: translateX(var(--md-side-sheet-closed-translate));
+    transform: translateX(var(--_side-sheet-closed-translate));
     transition:
       opacity 160ms var(--md-timing-function-emphasized-decel),
       transform 320ms var(--md-timing-function-emphasized-decel);
@@ -127,15 +202,15 @@
   }
 
   .m3-side-sheet[data-side='end'] .m3-side-sheet-surface {
-    border-radius: var(--md-comp-sheet-side-docked-modal-container-shape);
+    border-radius: var(--_sheet-side-docked-modal-container-shape);
   }
 
   .m3-side-sheet[data-variant='detached'] .m3-side-sheet-surface {
     inline-size: min(
-      var(--md-side-sheet-width),
-      calc(100vi - var(--md-side-sheet-detached-gap) - var(--md-side-sheet-detached-gap))
+      var(--_side-sheet-width),
+      calc(100vi - var(--_side-sheet-detached-gap) - var(--_side-sheet-detached-gap))
     );
-    border-radius: var(--md-comp-sheet-side-detached-container-shape);
+    border-radius: var(--_sheet-side-detached-container-shape);
   }
 
   .m3-side-sheet[open] .m3-side-sheet-surface {
@@ -146,18 +221,18 @@
 
   .m3-side-sheet-headline {
     margin: 0;
-    color: var(--md-comp-sheet-side-docked-headline-color);
+    color: var(--_sheet-side-docked-headline-color);
     font-family:
-      var(--md-comp-sheet-side-docked-headline-font),
+      var(--_sheet-side-docked-headline-font),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--md-comp-sheet-side-docked-headline-size);
-    line-height: var(--md-comp-sheet-side-docked-headline-line-height);
-    font-weight: var(--md-comp-sheet-side-docked-headline-weight);
-    letter-spacing: var(--md-comp-sheet-side-docked-headline-tracking);
+    font-size: var(--_sheet-side-docked-headline-size);
+    line-height: var(--_sheet-side-docked-headline-line-height);
+    font-weight: var(--_sheet-side-docked-headline-weight);
+    letter-spacing: var(--_sheet-side-docked-headline-tracking);
   }
 
   .m3-side-sheet-content {
@@ -178,7 +253,7 @@
   @starting-style {
     .m3-side-sheet[open] .m3-side-sheet-surface {
       opacity: 0;
-      transform: translateX(var(--md-side-sheet-closed-translate));
+      transform: translateX(var(--_side-sheet-closed-translate));
     }
 
     .m3-side-sheet[open]::backdrop {
@@ -198,7 +273,7 @@
   @keyframes sideSheetIn {
     0% {
       opacity: 0;
-      transform: translateX(var(--md-side-sheet-closed-translate));
+      transform: translateX(var(--_side-sheet-closed-translate));
     }
 
     100% {

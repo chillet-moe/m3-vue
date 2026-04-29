@@ -34,6 +34,8 @@ NavigationRail provides vertical primary destinations through `NavigationRailIte
 
 <ApiTable component="NavigationRail" v-model="props" />
 
+<StyleTokenTable component="NavigationRail" />
+
 ## Examples
 
 ### Default

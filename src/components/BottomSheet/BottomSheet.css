@@ -1,22 +1,65 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-bottom-sheet-background-extension: initial;
+    --md-bottom-sheet-drag-offset: initial;
+    --md-bottom-sheet-max-height: initial;
+    --md-bottom-sheet-translate-offset: initial;
+    --md-sheet-bottom-docked-container-color: initial;
+    --md-sheet-bottom-docked-container-shape: initial;
+    --md-sheet-bottom-docked-drag-handle-color: initial;
+    --md-sheet-bottom-docked-drag-handle-height: initial;
+    --md-sheet-bottom-docked-drag-handle-width: initial;
+    --md-sheet-bottom-docked-minimized-container-shape: initial;
+    --md-sheet-bottom-docked-modal-container-elevation: initial;
+    --md-sheet-bottom-docked-standard-container-elevation: initial;
+    --md-sheet-bottom-focus-indicator-color: initial;
+    --md-sheet-bottom-focus-indicator-outline-offset: initial;
+    --md-sheet-bottom-focus-indicator-thickness: initial;
+  }
+
   .m3-bottom-sheet {
-    --md-comp-sheet-bottom-docked-container-color: var(--md-sys-color-surface-container-low);
-    --md-comp-sheet-bottom-docked-modal-container-elevation: var(--md-sys-elevation-level1);
-    --md-comp-sheet-bottom-docked-standard-container-elevation: var(--md-sys-elevation-level1);
-    --md-comp-sheet-bottom-docked-container-shape: var(--md-sys-shape-corner-extra-large-top);
-    --md-comp-sheet-bottom-docked-minimized-container-shape: var(--md-sys-shape-corner-none);
-    --md-comp-sheet-bottom-docked-drag-handle-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-sheet-bottom-docked-drag-handle-width: 2rem;
-    --md-comp-sheet-bottom-docked-drag-handle-height: 0.25rem;
-    --md-comp-sheet-bottom-focus-indicator-color: var(--md-sys-color-secondary);
-    --md-comp-sheet-bottom-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
-    --md-comp-sheet-bottom-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
-    --md-bottom-sheet-max-height: calc(100vb - 3rem);
-    --md-bottom-sheet-drag-offset: 0px;
-    --md-bottom-sheet-translate-offset: 0px;
-    --md-bottom-sheet-background-extension: 0px;
+    --_sheet-bottom-docked-container-color: var(
+      --md-sheet-bottom-docked-container-color,
+      var(--md-sys-color-surface-container-low)
+    );
+    --_sheet-bottom-docked-modal-container-elevation: var(
+      --md-sheet-bottom-docked-modal-container-elevation,
+      var(--md-sys-elevation-level1)
+    );
+    --_sheet-bottom-docked-standard-container-elevation: var(
+      --md-sheet-bottom-docked-standard-container-elevation,
+      var(--md-sys-elevation-level1)
+    );
+    --_sheet-bottom-docked-container-shape: var(
+      --md-sheet-bottom-docked-container-shape,
+      var(--md-sys-shape-corner-extra-large-top)
+    );
+    --_sheet-bottom-docked-minimized-container-shape: var(
+      --md-sheet-bottom-docked-minimized-container-shape,
+      var(--md-sys-shape-corner-none)
+    );
+    --_sheet-bottom-docked-drag-handle-color: var(
+      --md-sheet-bottom-docked-drag-handle-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_sheet-bottom-docked-drag-handle-width: var(--md-sheet-bottom-docked-drag-handle-width, 2rem);
+    --_sheet-bottom-docked-drag-handle-height: var(--md-sheet-bottom-docked-drag-handle-height, 0.25rem);
+    --_sheet-bottom-focus-indicator-color: var(--md-sheet-bottom-focus-indicator-color, var(--md-sys-color-secondary));
+    --_sheet-bottom-focus-indicator-thickness: var(
+      --md-sheet-bottom-focus-indicator-thickness,
+      var(--md-sys-state-focus-indicator-thickness)
+    );
+    --_sheet-bottom-focus-indicator-outline-offset: var(
+      --md-sheet-bottom-focus-indicator-outline-offset,
+      var(--md-sys-state-focus-indicator-outer-offset)
+    );
+    --_bottom-sheet-max-height: var(--md-bottom-sheet-max-height, calc(100vb - 3rem));
+    --_bottom-sheet-drag-offset: var(--md-bottom-sheet-drag-offset, 0px);
+    --_bottom-sheet-translate-offset: var(--md-bottom-sheet-translate-offset, 0px);
+    --_bottom-sheet-background-extension: var(--md-bottom-sheet-background-extension, 0px);
   }
 }
 
@@ -78,14 +121,14 @@
 
     inline-size: 100%;
     max-inline-size: 40rem;
-    max-block-size: min(calc(var(--md-bottom-sheet-max-height) + var(--md-bottom-sheet-background-extension)), 100vb);
+    max-block-size: min(calc(var(--_bottom-sheet-max-height) + var(--_bottom-sheet-background-extension)), 100vb);
     overflow: hidden;
 
-    padding: 1rem 1.5rem calc(1.5rem + var(--md-bottom-sheet-background-extension));
-    border-radius: var(--md-comp-sheet-bottom-docked-container-shape);
+    padding: 1rem 1.5rem calc(1.5rem + var(--_bottom-sheet-background-extension));
+    border-radius: var(--_sheet-bottom-docked-container-shape);
 
-    background-color: var(--md-comp-sheet-bottom-docked-container-color);
-    box-shadow: var(--md-comp-sheet-bottom-docked-modal-container-elevation);
+    background-color: var(--_sheet-bottom-docked-container-color);
+    box-shadow: var(--_sheet-bottom-docked-modal-container-elevation);
 
     transform: translateY(100%);
     visibility: hidden;
@@ -99,7 +142,7 @@
   }
 
   .m3-bottom-sheet[open] .m3-bottom-sheet-surface {
-    transform: translateY(var(--md-bottom-sheet-translate-offset));
+    transform: translateY(var(--_bottom-sheet-translate-offset));
     visibility: visible;
     animation: bottomSheetIn 320ms var(--md-timing-function-emphasized-decel);
   }
@@ -111,10 +154,10 @@
 
   .m3-bottom-sheet-drag-handle {
     justify-self: center;
-    inline-size: var(--md-comp-sheet-bottom-docked-drag-handle-width);
-    block-size: var(--md-comp-sheet-bottom-docked-drag-handle-height);
+    inline-size: var(--_sheet-bottom-docked-drag-handle-width);
+    block-size: var(--_sheet-bottom-docked-drag-handle-height);
     border-radius: calc(infinity * 1px);
-    background: var(--md-comp-sheet-bottom-docked-drag-handle-color);
+    background: var(--_sheet-bottom-docked-drag-handle-color);
     touch-action: none;
   }
 
@@ -166,7 +209,7 @@
     }
 
     100% {
-      transform: translateY(var(--md-bottom-sheet-translate-offset));
+      transform: translateY(var(--_bottom-sheet-translate-offset));
     }
   }
 

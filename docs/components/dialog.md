@@ -40,6 +40,8 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
 
 <ApiTable component="Dialog" v-model="props" />
 
+<StyleTokenTable component="Dialog" />
+
 ## Examples
 
 ### Default

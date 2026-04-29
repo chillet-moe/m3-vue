@@ -39,6 +39,8 @@ Dividers separate related content into clear groups.
 
 <ApiTable component="Divider" v-model="props" />
 
+<StyleTokenTable component="Divider" />
+
 ## Examples
 
 ### Default

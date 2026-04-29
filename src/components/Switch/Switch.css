@@ -1,52 +1,155 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-switch-disabled-selected-handle-color: initial;
+    --md-switch-disabled-selected-handle-opacity: initial;
+    --md-switch-disabled-selected-icon-color: initial;
+    --md-switch-disabled-selected-icon-opacity: initial;
+    --md-switch-disabled-selected-track-color: initial;
+    --md-switch-disabled-track-opacity: initial;
+    --md-switch-disabled-unselected-handle-color: initial;
+    --md-switch-disabled-unselected-handle-opacity: initial;
+    --md-switch-disabled-unselected-icon-color: initial;
+    --md-switch-disabled-unselected-icon-opacity: initial;
+    --md-switch-disabled-unselected-track-color: initial;
+    --md-switch-disabled-unselected-track-outline-color: initial;
+    --md-switch-focus-indicator-color: initial;
+    --md-switch-focus-indicator-offset: initial;
+    --md-switch-focus-indicator-thickness: initial;
+    --md-switch-handle-shape: initial;
+    --md-switch-pressed-handle-height: initial;
+    --md-switch-pressed-handle-width: initial;
+    --md-switch-selected-handle-color: initial;
+    --md-switch-selected-handle-height: initial;
+    --md-switch-selected-handle-width: initial;
+    --md-switch-selected-hover-handle-color: initial;
+    --md-switch-selected-hover-track-color: initial;
+    --md-switch-selected-icon-color: initial;
+    --md-switch-selected-icon-size: initial;
+    --md-switch-selected-pressed-handle-color: initial;
+    --md-switch-selected-pressed-track-color: initial;
+    --md-switch-selected-track-color: initial;
+    --md-switch-track-height: initial;
+    --md-switch-track-outline-width: initial;
+    --md-switch-track-shape: initial;
+    --md-switch-track-width: initial;
+    --md-switch-unselected-handle-color: initial;
+    --md-switch-unselected-handle-height: initial;
+    --md-switch-unselected-handle-width: initial;
+    --md-switch-unselected-hover-handle-color: initial;
+    --md-switch-unselected-hover-track-color: initial;
+    --md-switch-unselected-icon-color: initial;
+    --md-switch-unselected-icon-size: initial;
+    --md-switch-unselected-pressed-handle-color: initial;
+    --md-switch-unselected-pressed-track-color: initial;
+    --md-switch-unselected-track-color: initial;
+    --md-switch-unselected-track-outline-color: initial;
+    --md-switch-with-icon-handle-height: initial;
+    --md-switch-with-icon-handle-width: initial;
+  }
+
   .m3-switch {
-    --md-comp-switch-selected-icon-color: var(--md-sys-color-primary);
-    --md-comp-switch-selected-icon-size: 1rem;
-    --md-comp-switch-unselected-icon-color: var(--md-sys-color-surface-container-highest);
-    --md-comp-switch-unselected-icon-size: 1rem;
-    --md-comp-switch-track-height: 2rem;
-    --md-comp-switch-track-width: 3.25rem;
-    --md-comp-switch-unselected-track-outline-color: var(--md-sys-color-outline);
-    --md-comp-switch-track-outline-width: 0.125rem;
-    --md-comp-switch-track-shape: var(--md-sys-shape-corner-full);
-    --md-comp-switch-selected-track-color: var(--md-sys-color-primary);
-    --md-comp-switch-unselected-track-color: var(--md-sys-color-surface-container-highest);
-    --md-comp-switch-unselected-handle-height: 1rem;
-    --md-comp-switch-with-icon-handle-height: 1.5rem;
-    --md-comp-switch-selected-handle-height: 1.5rem;
-    --md-comp-switch-pressed-handle-height: 1.75rem;
-    --md-comp-switch-unselected-handle-width: 1rem;
-    --md-comp-switch-with-icon-handle-width: 1.5rem;
-    --md-comp-switch-selected-handle-width: 1.5rem;
-    --md-comp-switch-pressed-handle-width: 1.75rem;
-    --md-comp-switch-handle-shape: var(--md-sys-shape-corner-full);
-    --md-comp-switch-selected-handle-color: var(--md-sys-color-on-primary);
-    --md-comp-switch-unselected-handle-color: var(--md-sys-color-outline);
-    --md-comp-switch-focus-indicator-color: var(--md-sys-color-secondary);
-    --md-comp-switch-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
-    --md-comp-switch-focus-indicator-offset: var(--md-sys-state-focus-indicator-outer-offset);
-    --md-comp-switch-selected-hover-track-color: var(--md-sys-color-primary);
-    --md-comp-switch-unselected-hover-track-color: var(--md-sys-color-surface-container-highest);
-    --md-comp-switch-selected-hover-handle-color: var(--md-sys-color-primary-container);
-    --md-comp-switch-unselected-hover-handle-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-switch-selected-pressed-track-color: var(--md-sys-color-primary);
-    --md-comp-switch-unselected-pressed-track-color: var(--md-sys-color-surface-container-highest);
-    --md-comp-switch-selected-pressed-handle-color: var(--md-sys-color-primary-container);
-    --md-comp-switch-unselected-pressed-handle-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-switch-disabled-track-opacity: 0.12;
-    --md-comp-switch-disabled-selected-track-color: var(--md-sys-color-on-surface);
-    --md-comp-switch-disabled-unselected-track-color: var(--md-sys-color-surface-container-highest);
-    --md-comp-switch-disabled-unselected-track-outline-color: var(--md-sys-color-on-surface);
-    --md-comp-switch-disabled-unselected-handle-opacity: 0.38;
-    --md-comp-switch-disabled-selected-handle-opacity: 1;
-    --md-comp-switch-disabled-selected-handle-color: var(--md-sys-color-surface);
-    --md-comp-switch-disabled-unselected-handle-color: var(--md-sys-color-on-surface);
-    --md-comp-switch-disabled-selected-icon-color: var(--md-sys-color-on-surface);
-    --md-comp-switch-disabled-unselected-icon-color: var(--md-sys-color-surface-container-highest);
-    --md-comp-switch-disabled-selected-icon-opacity: 0.38;
-    --md-comp-switch-disabled-unselected-icon-opacity: 0.38;
+    --_switch-selected-icon-color: var(--md-switch-selected-icon-color, var(--md-sys-color-primary));
+    --_switch-selected-icon-size: var(--md-switch-selected-icon-size, 1rem);
+    --_switch-unselected-icon-color: var(
+      --md-switch-unselected-icon-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_switch-unselected-icon-size: var(--md-switch-unselected-icon-size, 1rem);
+    --_switch-track-height: var(--md-switch-track-height, 2rem);
+    --_switch-track-width: var(--md-switch-track-width, 3.25rem);
+    --_switch-unselected-track-outline-color: var(
+      --md-switch-unselected-track-outline-color,
+      var(--md-sys-color-outline)
+    );
+    --_switch-track-outline-width: var(--md-switch-track-outline-width, 0.125rem);
+    --_switch-track-shape: var(--md-switch-track-shape, var(--md-sys-shape-corner-full));
+    --_switch-selected-track-color: var(--md-switch-selected-track-color, var(--md-sys-color-primary));
+    --_switch-unselected-track-color: var(
+      --md-switch-unselected-track-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_switch-unselected-handle-height: var(--md-switch-unselected-handle-height, 1rem);
+    --_switch-with-icon-handle-height: var(--md-switch-with-icon-handle-height, 1.5rem);
+    --_switch-selected-handle-height: var(--md-switch-selected-handle-height, 1.5rem);
+    --_switch-pressed-handle-height: var(--md-switch-pressed-handle-height, 1.75rem);
+    --_switch-unselected-handle-width: var(--md-switch-unselected-handle-width, 1rem);
+    --_switch-with-icon-handle-width: var(--md-switch-with-icon-handle-width, 1.5rem);
+    --_switch-selected-handle-width: var(--md-switch-selected-handle-width, 1.5rem);
+    --_switch-pressed-handle-width: var(--md-switch-pressed-handle-width, 1.75rem);
+    --_switch-handle-shape: var(--md-switch-handle-shape, var(--md-sys-shape-corner-full));
+    --_switch-selected-handle-color: var(--md-switch-selected-handle-color, var(--md-sys-color-on-primary));
+    --_switch-unselected-handle-color: var(--md-switch-unselected-handle-color, var(--md-sys-color-outline));
+    --_switch-focus-indicator-color: var(--md-switch-focus-indicator-color, var(--md-sys-color-secondary));
+    --_switch-focus-indicator-thickness: var(
+      --md-switch-focus-indicator-thickness,
+      var(--md-sys-state-focus-indicator-thickness)
+    );
+    --_switch-focus-indicator-offset: var(
+      --md-switch-focus-indicator-offset,
+      var(--md-sys-state-focus-indicator-outer-offset)
+    );
+    --_switch-selected-hover-track-color: var(--md-switch-selected-hover-track-color, var(--md-sys-color-primary));
+    --_switch-unselected-hover-track-color: var(
+      --md-switch-unselected-hover-track-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_switch-selected-hover-handle-color: var(
+      --md-switch-selected-hover-handle-color,
+      var(--md-sys-color-primary-container)
+    );
+    --_switch-unselected-hover-handle-color: var(
+      --md-switch-unselected-hover-handle-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_switch-selected-pressed-track-color: var(--md-switch-selected-pressed-track-color, var(--md-sys-color-primary));
+    --_switch-unselected-pressed-track-color: var(
+      --md-switch-unselected-pressed-track-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_switch-selected-pressed-handle-color: var(
+      --md-switch-selected-pressed-handle-color,
+      var(--md-sys-color-primary-container)
+    );
+    --_switch-unselected-pressed-handle-color: var(
+      --md-switch-unselected-pressed-handle-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_switch-disabled-track-opacity: var(--md-switch-disabled-track-opacity, 0.12);
+    --_switch-disabled-selected-track-color: var(
+      --md-switch-disabled-selected-track-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_switch-disabled-unselected-track-color: var(
+      --md-switch-disabled-unselected-track-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_switch-disabled-unselected-track-outline-color: var(
+      --md-switch-disabled-unselected-track-outline-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_switch-disabled-unselected-handle-opacity: var(--md-switch-disabled-unselected-handle-opacity, 0.38);
+    --_switch-disabled-selected-handle-opacity: var(--md-switch-disabled-selected-handle-opacity, 1);
+    --_switch-disabled-selected-handle-color: var(
+      --md-switch-disabled-selected-handle-color,
+      var(--md-sys-color-surface)
+    );
+    --_switch-disabled-unselected-handle-color: var(
+      --md-switch-disabled-unselected-handle-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_switch-disabled-selected-icon-color: var(
+      --md-switch-disabled-selected-icon-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_switch-disabled-unselected-icon-color: var(
+      --md-switch-disabled-unselected-icon-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_switch-disabled-selected-icon-opacity: var(--md-switch-disabled-selected-icon-opacity, 0.38);
+    --_switch-disabled-unselected-icon-opacity: var(--md-switch-disabled-unselected-icon-opacity, 0.38);
   }
 }
 
@@ -79,18 +182,18 @@
 
   .m3-switch-control {
     position: relative;
-    inline-size: var(--md-comp-switch-track-width);
-    block-size: var(--md-comp-switch-track-height);
+    inline-size: var(--_switch-track-width);
+    block-size: var(--_switch-track-height);
     display: inline-flex;
     align-items: center;
 
-    --switch-handle-base-width: var(--md-comp-switch-unselected-handle-width);
-    --switch-handle-base-height: var(--md-comp-switch-unselected-handle-height);
+    --switch-handle-base-width: var(--_switch-unselected-handle-width);
+    --switch-handle-base-height: var(--_switch-unselected-handle-height);
     --switch-handle-width: var(--switch-handle-base-width);
     --switch-handle-height: var(--switch-handle-base-height);
     --switch-handle-unchecked-inset: 0.5rem;
     --switch-handle-center-unchecked: calc(var(--switch-handle-unchecked-inset) + var(--switch-handle-base-width) / 2);
-    --switch-handle-center-checked: calc(100% - 0.25rem - var(--md-comp-switch-selected-handle-width) / 2);
+    --switch-handle-center-checked: calc(100% - 0.25rem - var(--_switch-selected-handle-width) / 2);
     --switch-handle-center: var(--switch-handle-center-unchecked);
   }
 
@@ -98,10 +201,9 @@
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: var(--md-comp-switch-track-shape);
-    background-color: var(--md-comp-switch-unselected-track-color);
-    box-shadow: inset 0 0 0 var(--md-comp-switch-track-outline-width)
-      var(--md-comp-switch-unselected-track-outline-color);
+    border-radius: var(--_switch-track-shape);
+    background-color: var(--_switch-unselected-track-color);
+    box-shadow: inset 0 0 0 var(--_switch-track-outline-width) var(--_switch-unselected-track-outline-color);
     transition:
       background-color var(--md-easing-fast),
       box-shadow var(--md-easing-fast);
@@ -113,8 +215,8 @@
     inset-inline-start: calc(var(--switch-handle-center) - var(--switch-handle-width) / 2);
     inline-size: var(--switch-handle-width);
     block-size: var(--switch-handle-height);
-    border-radius: var(--md-comp-switch-handle-shape);
-    background-color: var(--md-comp-switch-unselected-handle-color);
+    border-radius: var(--_switch-handle-shape);
+    background-color: var(--_switch-unselected-handle-color);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -136,135 +238,129 @@
   .m3-switch-control[data-with-icon='true'] {
     --switch-handle-unchecked-inset: 0.25rem;
 
-    --switch-handle-base-width: var(--md-comp-switch-with-icon-handle-width);
-    --switch-handle-base-height: var(--md-comp-switch-with-icon-handle-height);
+    --switch-handle-base-width: var(--_switch-with-icon-handle-width);
+    --switch-handle-base-height: var(--_switch-with-icon-handle-height);
   }
 
   .m3-switch-input:checked + .m3-switch-control::before {
-    background-color: var(--md-comp-switch-selected-track-color);
+    background-color: var(--_switch-selected-track-color);
     box-shadow: none;
   }
 
   .m3-switch-input:checked + .m3-switch-control {
     --switch-handle-center: var(--switch-handle-center-checked);
-    --switch-handle-width: var(--md-comp-switch-selected-handle-width);
-    --switch-handle-height: var(--md-comp-switch-selected-handle-height);
+    --switch-handle-width: var(--_switch-selected-handle-width);
+    --switch-handle-height: var(--_switch-selected-handle-height);
   }
 
   .m3-switch-input:checked + .m3-switch-control .m3-switch-handle {
-    background-color: var(--md-comp-switch-selected-handle-color);
+    background-color: var(--_switch-selected-handle-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-control::before {
-    background-color: var(--md-comp-switch-unselected-hover-track-color);
+    background-color: var(--_switch-unselected-hover-track-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-handle {
-    background-color: var(--md-comp-switch-unselected-hover-handle-color);
+    background-color: var(--_switch-unselected-hover-handle-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control::before {
-    background-color: var(--md-comp-switch-selected-hover-track-color);
+    background-color: var(--_switch-selected-hover-track-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):hover)
     .m3-switch-input:checked
     + .m3-switch-control
     .m3-switch-handle {
-    background-color: var(--md-comp-switch-selected-hover-handle-color);
+    background-color: var(--_switch-selected-hover-handle-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-control {
-    --switch-handle-width: var(--md-comp-switch-pressed-handle-width);
-    --switch-handle-height: var(--md-comp-switch-pressed-handle-height);
+    --switch-handle-width: var(--_switch-pressed-handle-width);
+    --switch-handle-height: var(--_switch-pressed-handle-height);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-control::before {
-    background-color: var(--md-comp-switch-unselected-pressed-track-color);
+    background-color: var(--_switch-unselected-pressed-track-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-input:checked + .m3-switch-control::before {
-    background-color: var(--md-comp-switch-selected-pressed-track-color);
+    background-color: var(--_switch-selected-pressed-track-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):active)
     .m3-switch-input:checked
     + .m3-switch-control
     .m3-switch-handle {
-    background-color: var(--md-comp-switch-selected-pressed-handle-color);
+    background-color: var(--_switch-selected-pressed-handle-color);
   }
 
   .m3-switch:has(.m3-switch-input:not(:disabled):active)
     .m3-switch-input:not(:checked)
     + .m3-switch-control
     .m3-switch-handle {
-    background-color: var(--md-comp-switch-unselected-pressed-handle-color);
+    background-color: var(--_switch-unselected-pressed-handle-color);
   }
 
   .m3-switch-input:focus-visible + .m3-switch-control {
-    outline: var(--md-comp-switch-focus-indicator-thickness) solid var(--md-comp-switch-focus-indicator-color);
-    outline-offset: var(--md-comp-switch-focus-indicator-offset);
-    border-radius: var(--md-comp-switch-track-shape);
+    outline: var(--_switch-focus-indicator-thickness) solid var(--_switch-focus-indicator-color);
+    outline-offset: var(--_switch-focus-indicator-offset);
+    border-radius: var(--_switch-track-shape);
   }
 
   .m3-switch-input:disabled + .m3-switch-control::before {
     background-color: --translucent(
-      var(--md-comp-switch-disabled-unselected-track-color),
-      var(--md-comp-switch-disabled-track-opacity)
+      var(--_switch-disabled-unselected-track-color),
+      var(--_switch-disabled-track-opacity)
     );
-    box-shadow: inset 0 0 0 var(--md-comp-switch-track-outline-width)
-      --translucent(
-        var(--md-comp-switch-disabled-unselected-track-outline-color),
-        var(--md-comp-switch-disabled-track-opacity)
-      );
+    box-shadow: inset 0 0 0 var(--_switch-track-outline-width)
+      --translucent(var(--_switch-disabled-unselected-track-outline-color), var(--_switch-disabled-track-opacity));
   }
 
   .m3-switch-input:disabled + .m3-switch-control .m3-switch-handle {
     background-color: --translucent(
-      var(--md-comp-switch-disabled-unselected-handle-color),
-      var(--md-comp-switch-disabled-unselected-handle-opacity)
+      var(--_switch-disabled-unselected-handle-color),
+      var(--_switch-disabled-unselected-handle-opacity)
     );
   }
 
   .m3-switch-input:disabled:checked + .m3-switch-control::before {
     background-color: --translucent(
-      var(--md-comp-switch-disabled-selected-track-color),
-      var(--md-comp-switch-disabled-track-opacity)
+      var(--_switch-disabled-selected-track-color),
+      var(--_switch-disabled-track-opacity)
     );
     box-shadow: none;
   }
 
   .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-handle {
     background-color: --translucent(
-      var(--md-comp-switch-disabled-selected-handle-color),
-      var(--md-comp-switch-disabled-selected-handle-opacity)
+      var(--_switch-disabled-selected-handle-color),
+      var(--_switch-disabled-selected-handle-opacity)
     );
   }
 
   .m3-switch-icon {
     font-family: 'Material Symbols Outlined';
-    font-size: var(--md-comp-switch-unselected-icon-size);
+    font-size: var(--_switch-unselected-icon-size);
     line-height: 1;
-    color: var(--md-comp-switch-unselected-icon-color);
+    color: var(--_switch-unselected-icon-color);
   }
 
   .m3-switch-input:checked + .m3-switch-control .m3-switch-icon {
-    color: var(--md-comp-switch-selected-icon-color);
-    font-size: var(--md-comp-switch-selected-icon-size);
+    color: var(--_switch-selected-icon-color);
+    font-size: var(--_switch-selected-icon-size);
   }
 
   .m3-switch-input:disabled + .m3-switch-control .m3-switch-icon {
     color: --translucent(
-      var(--md-comp-switch-disabled-unselected-icon-color),
-      var(--md-comp-switch-disabled-unselected-icon-opacity)
+      var(--_switch-disabled-unselected-icon-color),
+      var(--_switch-disabled-unselected-icon-opacity)
     );
   }
 
   .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-icon {
-    color: --translucent(
-      var(--md-comp-switch-disabled-selected-icon-color),
-      var(--md-comp-switch-disabled-selected-icon-opacity)
-    );
+    color: --translucent(var(--_switch-disabled-selected-icon-color), var(--_switch-disabled-selected-icon-opacity));
   }
 
   .m3-switch-label {

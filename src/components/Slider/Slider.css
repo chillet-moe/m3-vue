@@ -6,6 +6,19 @@
   initial-value: 0;
 }
 
+@layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-slider-active-icon-color: initial;
+    --md-slider-active-track-color: initial;
+    --md-slider-handle-color: initial;
+    --md-slider-inactive-icon-color: initial;
+    --md-slider-inactive-track-color: initial;
+    --md-slider-value-indicator-background: initial;
+    --md-slider-value-indicator-color: initial;
+  }
+}
+
 @layer components {
   .m3-slider {
     position: relative;
@@ -31,13 +44,16 @@
 
     print-color-adjust: exact;
 
-    --md-comp-slider-active-track-color: var(--md-sys-color-primary);
-    --md-comp-slider-inactive-track-color: var(--md-sys-color-primary-container);
-    --md-comp-slider-handle-color: var(--md-sys-color-primary);
-    --md-comp-slider-active-icon-color: var(--md-sys-color-on-primary);
-    --md-comp-slider-inactive-icon-color: var(--md-sys-color-primary);
-    --md-comp-slider-value-indicator-background: var(--md-sys-color-inverse-surface);
-    --md-comp-slider-value-indicator-color: var(--md-sys-color-inverse-on-surface);
+    --_slider-active-track-color: var(--md-slider-active-track-color, var(--md-sys-color-primary));
+    --_slider-inactive-track-color: var(--md-slider-inactive-track-color, var(--md-sys-color-primary-container));
+    --_slider-handle-color: var(--md-slider-handle-color, var(--md-sys-color-primary));
+    --_slider-active-icon-color: var(--md-slider-active-icon-color, var(--md-sys-color-on-primary));
+    --_slider-inactive-icon-color: var(--md-slider-inactive-icon-color, var(--md-sys-color-primary));
+    --_slider-value-indicator-background: var(
+      --md-slider-value-indicator-background,
+      var(--md-sys-color-inverse-surface)
+    );
+    --_slider-value-indicator-color: var(--md-slider-value-indicator-color, var(--md-sys-color-inverse-on-surface));
 
     input {
       position: absolute;
@@ -98,11 +114,23 @@
   }
 
   .m3-slider[aria-disabled='true'] {
-    --md-comp-slider-active-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
-    --md-comp-slider-inactive-track-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.12);
-    --md-comp-slider-handle-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
-    --md-comp-slider-active-icon-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
-    --md-comp-slider-inactive-icon-color: rgb(from var(--md-sys-color-on-surface) r g b / 0.38);
+    --_slider-active-track-color: var(
+      --md-slider-active-track-color,
+      rgb(from var(--md-sys-color-on-surface) r g b / 0.38)
+    );
+    --_slider-inactive-track-color: var(
+      --md-slider-inactive-track-color,
+      rgb(from var(--md-sys-color-on-surface) r g b / 0.12)
+    );
+    --_slider-handle-color: var(--md-slider-handle-color, rgb(from var(--md-sys-color-on-surface) r g b / 0.38));
+    --_slider-active-icon-color: var(
+      --md-slider-active-icon-color,
+      rgb(from var(--md-sys-color-on-surface) r g b / 0.38)
+    );
+    --_slider-inactive-icon-color: var(
+      --md-slider-inactive-icon-color,
+      rgb(from var(--md-sys-color-on-surface) r g b / 0.38)
+    );
   }
 
   .m3-slider-horizontal {
@@ -169,7 +197,7 @@
     block-size: var(--handle-height);
 
     border-radius: calc(var(--handle-height) * 2);
-    background-color: var(--md-comp-slider-handle-color);
+    background-color: var(--_slider-handle-color);
 
     transition:
       inline-size,
@@ -214,7 +242,7 @@
   }
 
   .m3-slider-track-active {
-    background-color: var(--md-comp-slider-active-track-color);
+    background-color: var(--_slider-active-track-color);
 
     inline-size: var(--active-length);
     inset-inline-start: var(--active-start);
@@ -226,7 +254,7 @@
   }
 
   .m3-slider-track-inactive {
-    background-color: var(--md-comp-slider-inactive-track-color);
+    background-color: var(--_slider-inactive-track-color);
 
     inline-size: var(--inactive-length);
     inset-inline-start: var(--inactive-start);
@@ -271,11 +299,11 @@
   }
 
   .m3-slider-inset-icon-on-active {
-    color: var(--md-comp-slider-active-icon-color);
+    color: var(--_slider-active-icon-color);
   }
 
   .m3-slider-inset-icon-on-inactive {
-    color: var(--md-comp-slider-inactive-icon-color);
+    color: var(--_slider-inactive-icon-color);
   }
 
   .m3-slider-inset-icon .m3-icon {
@@ -288,8 +316,8 @@
     margin: 0;
     border: none;
 
-    background-color: var(--md-comp-slider-value-indicator-background);
-    color: var(--md-comp-slider-value-indicator-color);
+    background-color: var(--_slider-value-indicator-background);
+    color: var(--_slider-value-indicator-color);
     border-radius: calc(infinity * 1px);
 
     pointer-events: none;
@@ -340,11 +368,11 @@
   }
 
   .m3-slider-stop-indicator-active {
-    background-color: var(--md-comp-slider-inactive-track-color);
+    background-color: var(--_slider-inactive-track-color);
   }
 
   .m3-slider-stop-indicator-inactive {
-    background-color: var(--md-comp-slider-active-track-color);
+    background-color: var(--_slider-active-track-color);
   }
 
   .m3-slider-stop-indicator-container {

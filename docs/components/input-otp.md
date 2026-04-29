@@ -41,6 +41,8 @@ Input OTP fields collect short one-time codes with single-character cells, keybo
 
 <ApiTable component="InputOtp" v-model="props" :exclude="['id', 'name', 'autocomplete', 'inputMode']" />
 
+<StyleTokenTable component="InputOtp" />
+
 ## Examples
 
 ### Default

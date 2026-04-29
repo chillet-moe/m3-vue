@@ -1,146 +1,326 @@
 @import '../../styles/typography.css';
 
 @layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-tabs-active-container-color: initial;
+    --md-tabs-active-container-elevation: initial;
+    --md-tabs-active-container-outline-color: initial;
+    --md-tabs-active-container-outline-width: initial;
+    --md-tabs-active-container-shape: initial;
+    --md-tabs-active-focus-label-color: initial;
+    --md-tabs-active-focus-state-layer-color: initial;
+    --md-tabs-active-focus-state-layer-opacity: initial;
+    --md-tabs-active-hover-label-color: initial;
+    --md-tabs-active-hover-state-layer-color: initial;
+    --md-tabs-active-hover-state-layer-opacity: initial;
+    --md-tabs-active-indicator-color: initial;
+    --md-tabs-active-indicator-height: initial;
+    --md-tabs-active-indicator-minimum-size: initial;
+    --md-tabs-active-indicator-shape: initial;
+    --md-tabs-active-label-color: initial;
+    --md-tabs-active-pressed-label-color: initial;
+    --md-tabs-active-pressed-state-layer-color: initial;
+    --md-tabs-active-pressed-state-layer-opacity: initial;
+    --md-tabs-active-state-layer-color: initial;
+    --md-tabs-compact-container-height: initial;
+    --md-tabs-compact-tab-padding-inline: initial;
+    --md-tabs-compact-with-icon-and-label-container-height: initial;
+    --md-tabs-container-color: initial;
+    --md-tabs-container-elevation: initial;
+    --md-tabs-container-gap: initial;
+    --md-tabs-container-height: initial;
+    --md-tabs-container-padding: initial;
+    --md-tabs-container-shape: initial;
+    --md-tabs-divider-color: initial;
+    --md-tabs-divider-thickness: initial;
+    --md-tabs-focus-indicator-color: initial;
+    --md-tabs-focus-indicator-outline-offset: initial;
+    --md-tabs-focus-indicator-shape: initial;
+    --md-tabs-focus-indicator-thickness: initial;
+    --md-tabs-icon-label-space: initial;
+    --md-tabs-icon-size: initial;
+    --md-tabs-inactive-focus-label-color: initial;
+    --md-tabs-inactive-focus-state-layer-color: initial;
+    --md-tabs-inactive-focus-state-layer-opacity: initial;
+    --md-tabs-inactive-hover-label-color: initial;
+    --md-tabs-inactive-hover-state-layer-color: initial;
+    --md-tabs-inactive-hover-state-layer-opacity: initial;
+    --md-tabs-inactive-label-color: initial;
+    --md-tabs-inactive-pressed-label-color: initial;
+    --md-tabs-inactive-pressed-state-layer-color: initial;
+    --md-tabs-inactive-pressed-state-layer-opacity: initial;
+    --md-tabs-inactive-state-layer-color: initial;
+    --md-tabs-indicator-animation-duration: initial;
+    --md-tabs-indicator-animation-easing: initial;
+    --md-tabs-indicator-fade-duration: initial;
+    --md-tabs-label-text-font: initial;
+    --md-tabs-label-text-line-height: initial;
+    --md-tabs-label-text-size: initial;
+    --md-tabs-label-text-tracking: initial;
+    --md-tabs-label-text-weight: initial;
+    --md-tabs-scrollable-tab-min-width: initial;
+    --md-tabs-tab-max-width: initial;
+    --md-tabs-tab-padding-inline: initial;
+    --md-tabs-tonal-active-container-color: initial;
+    --md-tabs-tonal-active-container-elevation: initial;
+    --md-tabs-tonal-active-container-outline-color: initial;
+    --md-tabs-tonal-active-container-outline-width: initial;
+    --md-tabs-tonal-active-container-shape: initial;
+    --md-tabs-tonal-active-label-color: initial;
+    --md-tabs-tonal-active-state-layer-color: initial;
+    --md-tabs-tonal-compact-container-height: initial;
+    --md-tabs-tonal-compact-container-padding: initial;
+    --md-tabs-tonal-compact-tab-padding-inline: initial;
+    --md-tabs-tonal-container-color: initial;
+    --md-tabs-tonal-container-gap: initial;
+    --md-tabs-tonal-container-height: initial;
+    --md-tabs-tonal-container-padding: initial;
+    --md-tabs-tonal-container-shape: initial;
+    --md-tabs-tonal-hover-label-color: initial;
+    --md-tabs-tonal-inactive-label-color: initial;
+    --md-tabs-tonal-state-layer-color: initial;
+    --md-tabs-tonal-tab-padding-inline: initial;
+    --md-tabs-with-icon-and-label-container-height: initial;
+  }
+
   .m3-tabs {
-    --md-comp-tabs-container-color: var(--md-sys-color-surface);
-    --md-comp-tabs-container-elevation: var(--md-sys-elevation-level0);
-    --md-comp-tabs-container-height: 3rem;
-    --md-comp-tabs-compact-container-height: 2.5rem;
-    --md-comp-tabs-with-icon-and-label-container-height: 4.5rem;
-    --md-comp-tabs-compact-with-icon-and-label-container-height: 3.5rem;
-    --md-comp-tabs-container-padding: 0rem;
-    --md-comp-tabs-container-gap: 0rem;
-    --md-comp-tabs-container-shape: var(--md-sys-shape-corner-none);
-    --md-comp-tabs-divider-color: var(--md-sys-color-surface-variant);
-    --md-comp-tabs-divider-thickness: 0.0625rem;
+    --_tabs-container-color: var(--md-tabs-container-color, var(--md-sys-color-surface));
+    --_tabs-container-elevation: var(--md-tabs-container-elevation, var(--md-sys-elevation-level0));
+    --_tabs-container-height: var(--md-tabs-container-height, 3rem);
+    --_tabs-compact-container-height: var(--md-tabs-compact-container-height, 2.5rem);
+    --_tabs-with-icon-and-label-container-height: var(--md-tabs-with-icon-and-label-container-height, 4.5rem);
+    --_tabs-compact-with-icon-and-label-container-height: var(
+      --md-tabs-compact-with-icon-and-label-container-height,
+      3.5rem
+    );
+    --_tabs-container-padding: var(--md-tabs-container-padding, 0rem);
+    --_tabs-container-gap: var(--md-tabs-container-gap, 0rem);
+    --_tabs-container-shape: var(--md-tabs-container-shape, var(--md-sys-shape-corner-none));
+    --_tabs-divider-color: var(--md-tabs-divider-color, var(--md-sys-color-surface-variant));
+    --_tabs-divider-thickness: var(--md-tabs-divider-thickness, 0.0625rem);
 
-    --md-comp-tabs-active-container-color: transparent;
-    --md-comp-tabs-active-container-elevation: var(--md-sys-elevation-level0);
-    --md-comp-tabs-active-container-outline-color: transparent;
-    --md-comp-tabs-active-container-outline-width: 0rem;
-    --md-comp-tabs-active-container-shape: var(--md-sys-shape-corner-none);
+    --_tabs-active-container-color: var(--md-tabs-active-container-color, transparent);
+    --_tabs-active-container-elevation: var(--md-tabs-active-container-elevation, var(--md-sys-elevation-level0));
+    --_tabs-active-container-outline-color: var(--md-tabs-active-container-outline-color, transparent);
+    --_tabs-active-container-outline-width: var(--md-tabs-active-container-outline-width, 0rem);
+    --_tabs-active-container-shape: var(--md-tabs-active-container-shape, var(--md-sys-shape-corner-none));
 
-    --md-comp-tabs-active-label-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-label-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-tabs-active-hover-label-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-hover-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-focus-label-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-focus-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-pressed-label-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-pressed-label-color: var(--md-sys-color-on-surface);
+    --_tabs-active-label-color: var(--md-tabs-active-label-color, var(--md-sys-color-primary));
+    --_tabs-inactive-label-color: var(--md-tabs-inactive-label-color, var(--md-sys-color-on-surface-variant));
+    --_tabs-active-hover-label-color: var(--md-tabs-active-hover-label-color, var(--md-sys-color-primary));
+    --_tabs-inactive-hover-label-color: var(--md-tabs-inactive-hover-label-color, var(--md-sys-color-on-surface));
+    --_tabs-active-focus-label-color: var(--md-tabs-active-focus-label-color, var(--md-sys-color-primary));
+    --_tabs-inactive-focus-label-color: var(--md-tabs-inactive-focus-label-color, var(--md-sys-color-on-surface));
+    --_tabs-active-pressed-label-color: var(--md-tabs-active-pressed-label-color, var(--md-sys-color-primary));
+    --_tabs-inactive-pressed-label-color: var(--md-tabs-inactive-pressed-label-color, var(--md-sys-color-on-surface));
 
-    --md-comp-tabs-active-indicator-color: var(--md-sys-color-primary);
-    --md-comp-tabs-active-indicator-height: 0.1875rem;
-    --md-comp-tabs-active-indicator-minimum-size: 1.5rem;
-    --md-comp-tabs-active-indicator-shape: 0.1875rem 0.1875rem 0 0;
+    --_tabs-active-indicator-color: var(--md-tabs-active-indicator-color, var(--md-sys-color-primary));
+    --_tabs-active-indicator-height: var(--md-tabs-active-indicator-height, 0.1875rem);
+    --_tabs-active-indicator-minimum-size: var(--md-tabs-active-indicator-minimum-size, 1.5rem);
+    --_tabs-active-indicator-shape: var(--md-tabs-active-indicator-shape, 0.1875rem 0.1875rem 0 0);
 
-    --md-comp-tabs-active-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-state-layer-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-tabs-active-hover-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-hover-state-layer-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-focus-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-focus-state-layer-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-active-pressed-state-layer-color: var(--md-sys-color-primary);
-    --md-comp-tabs-inactive-pressed-state-layer-color: var(--md-sys-color-primary);
+    --_tabs-active-state-layer-color: var(--md-tabs-active-state-layer-color, var(--md-sys-color-primary));
+    --_tabs-inactive-state-layer-color: var(
+      --md-tabs-inactive-state-layer-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_tabs-active-hover-state-layer-color: var(--md-tabs-active-hover-state-layer-color, var(--md-sys-color-primary));
+    --_tabs-inactive-hover-state-layer-color: var(
+      --md-tabs-inactive-hover-state-layer-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_tabs-active-focus-state-layer-color: var(--md-tabs-active-focus-state-layer-color, var(--md-sys-color-primary));
+    --_tabs-inactive-focus-state-layer-color: var(
+      --md-tabs-inactive-focus-state-layer-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_tabs-active-pressed-state-layer-color: var(
+      --md-tabs-active-pressed-state-layer-color,
+      var(--md-sys-color-primary)
+    );
+    --_tabs-inactive-pressed-state-layer-color: var(
+      --md-tabs-inactive-pressed-state-layer-color,
+      var(--md-sys-color-primary)
+    );
 
-    --md-comp-tabs-active-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
-    --md-comp-tabs-inactive-hover-state-layer-opacity: var(--md-sys-state-hover-state-layer-opacity);
-    --md-comp-tabs-active-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
-    --md-comp-tabs-inactive-focus-state-layer-opacity: var(--md-sys-state-focus-state-layer-opacity);
-    --md-comp-tabs-active-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
-    --md-comp-tabs-inactive-pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity);
+    --_tabs-active-hover-state-layer-opacity: var(
+      --md-tabs-active-hover-state-layer-opacity,
+      var(--md-sys-state-hover-state-layer-opacity)
+    );
+    --_tabs-inactive-hover-state-layer-opacity: var(
+      --md-tabs-inactive-hover-state-layer-opacity,
+      var(--md-sys-state-hover-state-layer-opacity)
+    );
+    --_tabs-active-focus-state-layer-opacity: var(
+      --md-tabs-active-focus-state-layer-opacity,
+      var(--md-sys-state-focus-state-layer-opacity)
+    );
+    --_tabs-inactive-focus-state-layer-opacity: var(
+      --md-tabs-inactive-focus-state-layer-opacity,
+      var(--md-sys-state-focus-state-layer-opacity)
+    );
+    --_tabs-active-pressed-state-layer-opacity: var(
+      --md-tabs-active-pressed-state-layer-opacity,
+      var(--md-sys-state-pressed-state-layer-opacity)
+    );
+    --_tabs-inactive-pressed-state-layer-opacity: var(
+      --md-tabs-inactive-pressed-state-layer-opacity,
+      var(--md-sys-state-pressed-state-layer-opacity)
+    );
 
-    --md-comp-tabs-label-text-font: var(--md-sys-typescale-title-small-font);
-    --md-comp-tabs-label-text-size: var(--md-sys-typescale-title-small-size);
-    --md-comp-tabs-label-text-line-height: var(--md-sys-typescale-title-small-line-height);
-    --md-comp-tabs-label-text-weight: var(--md-sys-typescale-title-small-weight);
-    --md-comp-tabs-label-text-tracking: var(--md-sys-typescale-title-small-tracking);
+    --_tabs-label-text-font: var(--md-tabs-label-text-font, var(--md-sys-typescale-title-small-font));
+    --_tabs-label-text-size: var(--md-tabs-label-text-size, var(--md-sys-typescale-title-small-size));
+    --_tabs-label-text-line-height: var(
+      --md-tabs-label-text-line-height,
+      var(--md-sys-typescale-title-small-line-height)
+    );
+    --_tabs-label-text-weight: var(--md-tabs-label-text-weight, var(--md-sys-typescale-title-small-weight));
+    --_tabs-label-text-tracking: var(--md-tabs-label-text-tracking, var(--md-sys-typescale-title-small-tracking));
 
-    --md-comp-tabs-icon-size: 1.5rem;
-    --md-comp-tabs-icon-label-space: 0.5rem;
-    --md-comp-tabs-tab-padding-inline: 0.75rem;
-    --md-comp-tabs-compact-tab-padding-inline: 0.625rem;
-    --md-comp-tabs-scrollable-tab-min-width: 4.5rem;
-    --md-comp-tabs-tab-max-width: 16.5rem;
+    --_tabs-icon-size: var(--md-tabs-icon-size, 1.5rem);
+    --_tabs-icon-label-space: var(--md-tabs-icon-label-space, 0.5rem);
+    --_tabs-tab-padding-inline: var(--md-tabs-tab-padding-inline, 0.75rem);
+    --_tabs-compact-tab-padding-inline: var(--md-tabs-compact-tab-padding-inline, 0.625rem);
+    --_tabs-scrollable-tab-min-width: var(--md-tabs-scrollable-tab-min-width, 4.5rem);
+    --_tabs-tab-max-width: var(--md-tabs-tab-max-width, 16.5rem);
 
-    --md-comp-tabs-focus-indicator-color: var(--md-sys-color-secondary);
-    --md-comp-tabs-focus-indicator-thickness: var(--md-sys-state-focus-indicator-thickness);
-    --md-comp-tabs-focus-indicator-outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
-    --md-comp-tabs-focus-indicator-shape: var(--md-sys-shape-corner-medium);
+    --_tabs-focus-indicator-color: var(--md-tabs-focus-indicator-color, var(--md-sys-color-secondary));
+    --_tabs-focus-indicator-thickness: var(
+      --md-tabs-focus-indicator-thickness,
+      var(--md-sys-state-focus-indicator-thickness)
+    );
+    --_tabs-focus-indicator-outline-offset: var(
+      --md-tabs-focus-indicator-outline-offset,
+      var(--md-sys-state-focus-indicator-inner-offset)
+    );
+    --_tabs-focus-indicator-shape: var(--md-tabs-focus-indicator-shape, var(--md-sys-shape-corner-medium));
 
-    --md-comp-tabs-indicator-animation-duration: 250ms;
-    --md-comp-tabs-indicator-animation-easing: cubic-bezier(0.2, 0, 0, 1);
-    --md-comp-tabs-indicator-fade-duration: 150ms;
+    --_tabs-indicator-animation-duration: var(--md-tabs-indicator-animation-duration, 250ms);
+    --_tabs-indicator-animation-easing: var(--md-tabs-indicator-animation-easing, cubic-bezier(0.2, 0, 0, 1));
+    --_tabs-indicator-fade-duration: var(--md-tabs-indicator-fade-duration, 150ms);
 
-    --md-comp-tabs-tonal-container-color: var(--md-sys-color-surface-container);
-    --md-comp-tabs-tonal-container-height: 2.75rem;
-    --md-comp-tabs-tonal-compact-container-height: 2.25rem;
-    --md-comp-tabs-tonal-container-padding: 0.25rem;
-    --md-comp-tabs-tonal-compact-container-padding: 0.1875rem;
-    --md-comp-tabs-tonal-container-gap: 0.125rem;
-    --md-comp-tabs-tonal-container-shape: var(--md-sys-shape-corner-medium);
-    --md-comp-tabs-tonal-active-container-color: var(--md-sys-color-surface-container-lowest);
-    --md-comp-tabs-tonal-active-container-elevation: var(--md-sys-elevation-level0);
-    --md-comp-tabs-tonal-active-container-outline-color: rgb(from var(--md-sys-color-outline-variant) r g b / 0.6);
-    --md-comp-tabs-tonal-active-container-outline-width: 0.0625rem;
-    --md-comp-tabs-tonal-active-container-shape: var(--md-sys-shape-corner-small);
-    --md-comp-tabs-tonal-active-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-tonal-inactive-label-color: var(--md-sys-color-on-surface-variant);
-    --md-comp-tabs-tonal-hover-label-color: var(--md-sys-color-on-surface);
-    --md-comp-tabs-tonal-state-layer-color: var(--md-color-on-container);
-    --md-comp-tabs-tonal-active-state-layer-color: var(--md-sys-color-outline);
-    --md-comp-tabs-tonal-tab-padding-inline: 1rem;
-    --md-comp-tabs-tonal-compact-tab-padding-inline: 0.75rem;
+    --_tabs-tonal-container-color: var(--md-tabs-tonal-container-color, var(--md-sys-color-surface-container));
+    --_tabs-tonal-container-height: var(--md-tabs-tonal-container-height, 2.75rem);
+    --_tabs-tonal-compact-container-height: var(--md-tabs-tonal-compact-container-height, 2.25rem);
+    --_tabs-tonal-container-padding: var(--md-tabs-tonal-container-padding, 0.25rem);
+    --_tabs-tonal-compact-container-padding: var(--md-tabs-tonal-compact-container-padding, 0.1875rem);
+    --_tabs-tonal-container-gap: var(--md-tabs-tonal-container-gap, 0.125rem);
+    --_tabs-tonal-container-shape: var(--md-tabs-tonal-container-shape, var(--md-sys-shape-corner-medium));
+    --_tabs-tonal-active-container-color: var(
+      --md-tabs-tonal-active-container-color,
+      var(--md-sys-color-surface-container-lowest)
+    );
+    --_tabs-tonal-active-container-elevation: var(
+      --md-tabs-tonal-active-container-elevation,
+      var(--md-sys-elevation-level0)
+    );
+    --_tabs-tonal-active-container-outline-color: var(
+      --md-tabs-tonal-active-container-outline-color,
+      rgb(from var(--md-sys-color-outline-variant) r g b / 0.6)
+    );
+    --_tabs-tonal-active-container-outline-width: var(--md-tabs-tonal-active-container-outline-width, 0.0625rem);
+    --_tabs-tonal-active-container-shape: var(--md-tabs-tonal-active-container-shape, var(--md-sys-shape-corner-small));
+    --_tabs-tonal-active-label-color: var(--md-tabs-tonal-active-label-color, var(--md-sys-color-on-surface));
+    --_tabs-tonal-inactive-label-color: var(
+      --md-tabs-tonal-inactive-label-color,
+      var(--md-sys-color-on-surface-variant)
+    );
+    --_tabs-tonal-hover-label-color: var(--md-tabs-tonal-hover-label-color, var(--md-sys-color-on-surface));
+    --_tabs-tonal-state-layer-color: var(--md-tabs-tonal-state-layer-color, var(--md-color-on-container));
+    --_tabs-tonal-active-state-layer-color: var(--md-tabs-tonal-active-state-layer-color, var(--md-sys-color-outline));
+    --_tabs-tonal-tab-padding-inline: var(--md-tabs-tonal-tab-padding-inline, 1rem);
+    --_tabs-tonal-compact-tab-padding-inline: var(--md-tabs-tonal-compact-tab-padding-inline, 0.75rem);
   }
 
   .m3-tabs[data-density='compact'] {
-    --md-comp-tabs-container-height: var(--md-comp-tabs-compact-container-height);
-    --md-comp-tabs-with-icon-and-label-container-height: var(
-      --md-comp-tabs-compact-with-icon-and-label-container-height
+    --_tabs-container-height: var(--md-tabs-container-height, var(--_tabs-compact-container-height));
+    --_tabs-with-icon-and-label-container-height: var(
+      --md-tabs-with-icon-and-label-container-height,
+      var(--_tabs-compact-with-icon-and-label-container-height)
     );
-    --md-comp-tabs-tab-padding-inline: var(--md-comp-tabs-compact-tab-padding-inline);
+    --_tabs-tab-padding-inline: var(--md-tabs-tab-padding-inline, var(--_tabs-compact-tab-padding-inline));
   }
 
   .m3-tabs[data-variant='tonal'] {
-    --md-comp-tabs-container-color: var(--md-comp-tabs-tonal-container-color);
-    --md-comp-tabs-container-height: var(--md-comp-tabs-tonal-container-height);
-    --md-comp-tabs-with-icon-and-label-container-height: var(--md-comp-tabs-tonal-container-height);
-    --md-comp-tabs-container-padding: var(--md-comp-tabs-tonal-container-padding);
-    --md-comp-tabs-container-gap: var(--md-comp-tabs-tonal-container-gap);
-    --md-comp-tabs-container-shape: var(--md-comp-tabs-tonal-container-shape);
+    --_tabs-container-color: var(--md-tabs-container-color, var(--_tabs-tonal-container-color));
+    --_tabs-container-height: var(--md-tabs-container-height, var(--_tabs-tonal-container-height));
+    --_tabs-with-icon-and-label-container-height: var(
+      --md-tabs-with-icon-and-label-container-height,
+      var(--_tabs-tonal-container-height)
+    );
+    --_tabs-container-padding: var(--md-tabs-container-padding, var(--_tabs-tonal-container-padding));
+    --_tabs-container-gap: var(--md-tabs-container-gap, var(--_tabs-tonal-container-gap));
+    --_tabs-container-shape: var(--md-tabs-container-shape, var(--_tabs-tonal-container-shape));
 
-    --md-comp-tabs-active-container-color: var(--md-comp-tabs-tonal-active-container-color);
-    --md-comp-tabs-active-container-elevation: var(--md-comp-tabs-tonal-active-container-elevation);
-    --md-comp-tabs-active-container-outline-color: var(--md-comp-tabs-tonal-active-container-outline-color);
-    --md-comp-tabs-active-container-outline-width: var(--md-comp-tabs-tonal-active-container-outline-width);
-    --md-comp-tabs-active-container-shape: var(--md-comp-tabs-tonal-active-container-shape);
+    --_tabs-active-container-color: var(--md-tabs-active-container-color, var(--_tabs-tonal-active-container-color));
+    --_tabs-active-container-elevation: var(
+      --md-tabs-active-container-elevation,
+      var(--_tabs-tonal-active-container-elevation)
+    );
+    --_tabs-active-container-outline-color: var(
+      --md-tabs-active-container-outline-color,
+      var(--_tabs-tonal-active-container-outline-color)
+    );
+    --_tabs-active-container-outline-width: var(
+      --md-tabs-active-container-outline-width,
+      var(--_tabs-tonal-active-container-outline-width)
+    );
+    --_tabs-active-container-shape: var(--md-tabs-active-container-shape, var(--_tabs-tonal-active-container-shape));
 
-    --md-comp-tabs-active-label-color: var(--md-comp-tabs-tonal-active-label-color);
-    --md-comp-tabs-inactive-label-color: var(--md-comp-tabs-tonal-inactive-label-color);
-    --md-comp-tabs-active-hover-label-color: var(--md-comp-tabs-tonal-active-label-color);
-    --md-comp-tabs-inactive-hover-label-color: var(--md-comp-tabs-tonal-hover-label-color);
-    --md-comp-tabs-active-focus-label-color: var(--md-comp-tabs-tonal-active-label-color);
-    --md-comp-tabs-inactive-focus-label-color: var(--md-comp-tabs-tonal-hover-label-color);
-    --md-comp-tabs-active-pressed-label-color: var(--md-comp-tabs-tonal-active-label-color);
-    --md-comp-tabs-inactive-pressed-label-color: var(--md-comp-tabs-tonal-hover-label-color);
+    --_tabs-active-label-color: var(--md-tabs-active-label-color, var(--_tabs-tonal-active-label-color));
+    --_tabs-inactive-label-color: var(--md-tabs-inactive-label-color, var(--_tabs-tonal-inactive-label-color));
+    --_tabs-active-hover-label-color: var(--md-tabs-active-hover-label-color, var(--_tabs-tonal-active-label-color));
+    --_tabs-inactive-hover-label-color: var(--md-tabs-inactive-hover-label-color, var(--_tabs-tonal-hover-label-color));
+    --_tabs-active-focus-label-color: var(--md-tabs-active-focus-label-color, var(--_tabs-tonal-active-label-color));
+    --_tabs-inactive-focus-label-color: var(--md-tabs-inactive-focus-label-color, var(--_tabs-tonal-hover-label-color));
+    --_tabs-active-pressed-label-color: var(
+      --md-tabs-active-pressed-label-color,
+      var(--_tabs-tonal-active-label-color)
+    );
+    --_tabs-inactive-pressed-label-color: var(
+      --md-tabs-inactive-pressed-label-color,
+      var(--_tabs-tonal-hover-label-color)
+    );
 
-    --md-comp-tabs-active-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
-    --md-comp-tabs-inactive-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
-    --md-comp-tabs-active-hover-state-layer-color: var(--md-comp-tabs-tonal-active-state-layer-color);
-    --md-comp-tabs-inactive-hover-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
-    --md-comp-tabs-active-focus-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
-    --md-comp-tabs-inactive-focus-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
-    --md-comp-tabs-active-pressed-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
-    --md-comp-tabs-inactive-pressed-state-layer-color: var(--md-comp-tabs-tonal-state-layer-color);
+    --_tabs-active-state-layer-color: var(--md-tabs-active-state-layer-color, var(--_tabs-tonal-state-layer-color));
+    --_tabs-inactive-state-layer-color: var(--md-tabs-inactive-state-layer-color, var(--_tabs-tonal-state-layer-color));
+    --_tabs-active-hover-state-layer-color: var(
+      --md-tabs-active-hover-state-layer-color,
+      var(--_tabs-tonal-active-state-layer-color)
+    );
+    --_tabs-inactive-hover-state-layer-color: var(
+      --md-tabs-inactive-hover-state-layer-color,
+      var(--_tabs-tonal-state-layer-color)
+    );
+    --_tabs-active-focus-state-layer-color: var(
+      --md-tabs-active-focus-state-layer-color,
+      var(--_tabs-tonal-state-layer-color)
+    );
+    --_tabs-inactive-focus-state-layer-color: var(
+      --md-tabs-inactive-focus-state-layer-color,
+      var(--_tabs-tonal-state-layer-color)
+    );
+    --_tabs-active-pressed-state-layer-color: var(
+      --md-tabs-active-pressed-state-layer-color,
+      var(--_tabs-tonal-state-layer-color)
+    );
+    --_tabs-inactive-pressed-state-layer-color: var(
+      --md-tabs-inactive-pressed-state-layer-color,
+      var(--_tabs-tonal-state-layer-color)
+    );
 
-    --md-comp-tabs-tab-padding-inline: var(--md-comp-tabs-tonal-tab-padding-inline);
+    --_tabs-tab-padding-inline: var(--md-tabs-tab-padding-inline, var(--_tabs-tonal-tab-padding-inline));
   }
 
   .m3-tabs[data-variant='tonal'][data-density='compact'] {
-    --md-comp-tabs-container-height: var(--md-comp-tabs-tonal-compact-container-height);
-    --md-comp-tabs-with-icon-and-label-container-height: var(--md-comp-tabs-tonal-compact-container-height);
-    --md-comp-tabs-container-padding: var(--md-comp-tabs-tonal-compact-container-padding);
-    --md-comp-tabs-tab-padding-inline: var(--md-comp-tabs-tonal-compact-tab-padding-inline);
+    --_tabs-container-height: var(--md-tabs-container-height, var(--_tabs-tonal-compact-container-height));
+    --_tabs-with-icon-and-label-container-height: var(
+      --md-tabs-with-icon-and-label-container-height,
+      var(--_tabs-tonal-compact-container-height)
+    );
+    --_tabs-container-padding: var(--md-tabs-container-padding, var(--_tabs-tonal-compact-container-padding));
+    --_tabs-tab-padding-inline: var(--md-tabs-tab-padding-inline, var(--_tabs-tonal-compact-tab-padding-inline));
   }
 }
 
@@ -149,8 +329,8 @@
     display: flex;
     flex-direction: column;
 
-    --md-color-container: var(--md-comp-tabs-container-color);
-    --md-color-on-container: var(--md-comp-tabs-inactive-label-color);
+    --md-color-container: var(--_tabs-container-color);
+    --md-color-on-container: var(--_tabs-inactive-label-color);
   }
 
   .m3-tabs[data-orientation='vertical'] {
@@ -162,12 +342,12 @@
     display: flex;
     align-items: stretch;
     box-sizing: border-box;
-    gap: var(--md-comp-tabs-container-gap);
-    min-block-size: var(--md-comp-tabs-container-height);
-    padding: var(--md-comp-tabs-container-padding);
-    border-radius: var(--md-comp-tabs-container-shape);
+    gap: var(--_tabs-container-gap);
+    min-block-size: var(--_tabs-container-height);
+    padding: var(--_tabs-container-padding);
+    border-radius: var(--_tabs-container-shape);
     background: var(--md-color-container);
-    box-shadow: var(--md-comp-tabs-container-elevation);
+    box-shadow: var(--_tabs-container-elevation);
     overflow-x: clip;
     overflow-y: hidden;
     scrollbar-width: none;
@@ -188,7 +368,7 @@
   }
 
   .m3-tab-list:has(.m3-tab-icon) {
-    min-block-size: var(--md-comp-tabs-with-icon-and-label-container-height);
+    min-block-size: var(--_tabs-with-icon-and-label-container-height);
   }
 
   .m3-tabs[data-orientation='vertical'] .m3-tab-list {
@@ -203,8 +383,8 @@
     position: absolute;
     inset-block-end: 0;
     inset-inline: 0;
-    block-size: var(--md-comp-tabs-divider-thickness);
-    background: var(--md-comp-tabs-divider-color);
+    block-size: var(--_tabs-divider-thickness);
+    background: var(--_tabs-divider-color);
     pointer-events: none;
     z-index: 0;
   }
@@ -214,7 +394,7 @@
     inset-inline-end: 0;
     inset-inline-start: auto;
     block-size: auto;
-    inline-size: var(--md-comp-tabs-divider-thickness);
+    inline-size: var(--_tabs-divider-thickness);
   }
 
   .m3-tab {
@@ -225,19 +405,19 @@
     box-sizing: border-box;
     flex: 0 0 auto;
     min-inline-size: 0;
-    min-block-size: var(--md-comp-tabs-container-height);
+    min-block-size: var(--_tabs-container-height);
     padding-block: 0;
-    padding-inline: var(--md-comp-tabs-tab-padding-inline);
+    padding-inline: var(--_tabs-tab-padding-inline);
     border: none;
-    border-radius: var(--md-comp-tabs-active-container-shape);
+    border-radius: var(--_tabs-active-container-shape);
     background: var(--md-color-container);
     color: var(--md-color-on-container);
     cursor: pointer;
-    font-family: var(--md-comp-tabs-label-text-font);
-    font-size: var(--md-comp-tabs-label-text-size);
-    font-weight: var(--md-comp-tabs-label-text-weight);
-    letter-spacing: var(--md-comp-tabs-label-text-tracking);
-    line-height: var(--md-comp-tabs-label-text-line-height);
+    font-family: var(--_tabs-label-text-font);
+    font-size: var(--_tabs-label-text-size);
+    font-weight: var(--_tabs-label-text-weight);
+    letter-spacing: var(--_tabs-label-text-tracking);
+    line-height: var(--_tabs-label-text-line-height);
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
     transition:
@@ -247,8 +427,8 @@
     z-index: 1;
 
     --md-color-container: transparent;
-    --md-color-on-container: var(--md-comp-tabs-inactive-label-color);
-    --md-state-layer-color: var(--md-comp-tabs-inactive-state-layer-color);
+    --md-color-on-container: var(--_tabs-inactive-label-color);
+    --md-state-layer-color: var(--_tabs-inactive-state-layer-color);
   }
 
   .m3-tabs[data-mode='fixed'] .m3-tab {
@@ -256,18 +436,18 @@
   }
 
   .m3-tab:has(.m3-tab-icon) {
-    min-block-size: var(--md-comp-tabs-with-icon-and-label-container-height);
+    min-block-size: var(--_tabs-with-icon-and-label-container-height);
   }
 
   .m3-tabs[data-mode='scrollable'] .m3-tab {
     flex: 0 0 auto;
-    min-inline-size: var(--md-comp-tabs-scrollable-tab-min-width);
-    max-inline-size: var(--md-comp-tabs-tab-max-width);
+    min-inline-size: var(--_tabs-scrollable-tab-min-width);
+    max-inline-size: var(--_tabs-tab-max-width);
   }
 
   .m3-tabs[data-orientation='vertical'] .m3-tab {
     flex: 0 0 auto;
-    min-inline-size: var(--md-comp-tabs-scrollable-tab-min-width);
+    min-inline-size: var(--_tabs-scrollable-tab-min-width);
     max-inline-size: none;
   }
 
@@ -285,7 +465,7 @@
   }
 
   .m3-tab:has(.m3-tab-icon) .m3-tab-content {
-    gap: var(--md-comp-tabs-icon-label-space);
+    gap: var(--_tabs-icon-label-space);
   }
 
   .m3-tab-label {
@@ -301,81 +481,81 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--md-comp-tabs-icon-size);
-    block-size: var(--md-comp-tabs-icon-size);
+    inline-size: var(--_tabs-icon-size);
+    block-size: var(--_tabs-icon-size);
     color: currentColor;
-    font-size: var(--md-comp-tabs-icon-size);
+    font-size: var(--_tabs-icon-size);
     line-height: 1;
   }
 
   .m3-tab[data-active] {
-    --md-color-container: var(--md-comp-tabs-active-container-color);
-    --md-color-on-container: var(--md-comp-tabs-active-label-color);
+    --md-color-container: var(--_tabs-active-container-color);
+    --md-color-on-container: var(--_tabs-active-label-color);
 
-    --md-state-layer-color: var(--md-comp-tabs-active-state-layer-color);
+    --md-state-layer-color: var(--_tabs-active-state-layer-color);
   }
 
   .m3-tab:hover {
-    --md-color-on-container: var(--md-comp-tabs-inactive-hover-label-color);
+    --md-color-on-container: var(--_tabs-inactive-hover-label-color);
 
-    --md-state-layer-color: var(--md-comp-tabs-inactive-hover-state-layer-color);
+    --md-state-layer-color: var(--_tabs-inactive-hover-state-layer-color);
   }
 
   .m3-tab[data-active]:hover {
-    --md-color-on-container: var(--md-comp-tabs-active-hover-label-color);
+    --md-color-on-container: var(--_tabs-active-hover-label-color);
 
-    --md-state-layer-color: var(--md-comp-tabs-active-hover-state-layer-color);
+    --md-state-layer-color: var(--_tabs-active-hover-state-layer-color);
   }
 
   .m3-tab:focus-visible {
-    --md-color-on-container: var(--md-comp-tabs-inactive-focus-label-color);
-    border-radius: var(--md-comp-tabs-focus-indicator-shape);
-    outline: var(--md-comp-tabs-focus-indicator-thickness) solid var(--md-comp-tabs-focus-indicator-color);
-    outline-offset: var(--md-comp-tabs-focus-indicator-outline-offset);
+    --md-color-on-container: var(--_tabs-inactive-focus-label-color);
+    border-radius: var(--_tabs-focus-indicator-shape);
+    outline: var(--_tabs-focus-indicator-thickness) solid var(--_tabs-focus-indicator-color);
+    outline-offset: var(--_tabs-focus-indicator-outline-offset);
 
-    --md-state-layer-color: var(--md-comp-tabs-inactive-focus-state-layer-color);
+    --md-state-layer-color: var(--_tabs-inactive-focus-state-layer-color);
   }
 
   .m3-tab[data-active]:focus-visible {
-    --md-color-on-container: var(--md-comp-tabs-active-focus-label-color);
+    --md-color-on-container: var(--_tabs-active-focus-label-color);
 
-    --md-state-layer-color: var(--md-comp-tabs-active-focus-state-layer-color);
+    --md-state-layer-color: var(--_tabs-active-focus-state-layer-color);
   }
 
   .m3-tab:active {
-    --md-color-on-container: var(--md-comp-tabs-inactive-pressed-label-color);
+    --md-color-on-container: var(--_tabs-inactive-pressed-label-color);
 
-    --md-state-layer-color: var(--md-comp-tabs-inactive-pressed-state-layer-color);
+    --md-state-layer-color: var(--_tabs-inactive-pressed-state-layer-color);
   }
 
   .m3-tab[data-active]:active {
-    --md-color-on-container: var(--md-comp-tabs-active-pressed-label-color);
+    --md-color-on-container: var(--_tabs-active-pressed-label-color);
 
-    --md-state-layer-color: var(--md-comp-tabs-active-pressed-state-layer-color);
+    --md-state-layer-color: var(--_tabs-active-pressed-state-layer-color);
   }
 
   .m3-tab:hover.m3-state-layer::after {
-    opacity: var(--md-comp-tabs-inactive-hover-state-layer-opacity);
+    opacity: var(--_tabs-inactive-hover-state-layer-opacity);
   }
 
   .m3-tab[data-active]:hover.m3-state-layer::after {
-    opacity: var(--md-comp-tabs-active-hover-state-layer-opacity);
+    opacity: var(--_tabs-active-hover-state-layer-opacity);
   }
 
   .m3-tab:focus-visible.m3-state-layer::after {
-    opacity: var(--md-comp-tabs-inactive-focus-state-layer-opacity);
+    opacity: var(--_tabs-inactive-focus-state-layer-opacity);
   }
 
   .m3-tab[data-active]:focus-visible.m3-state-layer::after {
-    opacity: var(--md-comp-tabs-active-focus-state-layer-opacity);
+    opacity: var(--_tabs-active-focus-state-layer-opacity);
   }
 
   .m3-tab:active.m3-state-layer::after {
-    opacity: var(--md-comp-tabs-inactive-pressed-state-layer-opacity);
+    opacity: var(--_tabs-inactive-pressed-state-layer-opacity);
   }
 
   .m3-tab[data-active]:active.m3-state-layer::after {
-    opacity: var(--md-comp-tabs-active-pressed-state-layer-opacity);
+    opacity: var(--_tabs-active-pressed-state-layer-opacity);
   }
 
   .m3-tab[data-disabled] {
@@ -387,7 +567,7 @@
   }
 
   .m3-tabs[data-variant='tonal'] .m3-tab-list {
-    block-size: var(--md-comp-tabs-container-height);
+    block-size: var(--_tabs-container-height);
   }
 
   .m3-tabs[data-variant='tonal'][data-orientation='vertical'] .m3-tab-list {
@@ -404,8 +584,7 @@
 
   .m3-tabs[data-variant='tonal'][data-orientation='vertical'] .m3-tab {
     min-block-size: calc(
-      var(--md-comp-tabs-container-height) - var(--md-comp-tabs-container-padding) -
-        var(--md-comp-tabs-container-padding)
+      var(--_tabs-container-height) - var(--_tabs-container-padding) - var(--_tabs-container-padding)
     );
   }
 
@@ -415,8 +594,7 @@
 
   .m3-tabs[data-variant='tonal'][data-orientation='vertical'] .m3-tab:has(.m3-tab-icon) {
     min-block-size: calc(
-      var(--md-comp-tabs-container-height) - var(--md-comp-tabs-container-padding) -
-        var(--md-comp-tabs-container-padding)
+      var(--_tabs-container-height) - var(--_tabs-container-padding) - var(--_tabs-container-padding)
     );
   }
 
@@ -426,8 +604,8 @@
 
   .m3-tabs[data-variant='tonal'] .m3-tab[data-active] {
     box-shadow:
-      var(--md-comp-tabs-active-container-elevation),
-      inset 0 0 0 var(--md-comp-tabs-active-container-outline-width) var(--md-comp-tabs-active-container-outline-color);
+      var(--_tabs-active-container-elevation),
+      inset 0 0 0 var(--_tabs-active-container-outline-width) var(--_tabs-active-container-outline-color);
   }
 
   .m3-tabs[data-variant='tonal'] .m3-tab-indicator {
@@ -439,16 +617,16 @@
     inset-block-end: 0;
     inset-inline-start: 0;
     inline-size: var(--_tabs-indicator-inline-size, 0);
-    min-inline-size: min(var(--md-comp-tabs-active-indicator-minimum-size), 100%);
-    block-size: var(--md-comp-tabs-active-indicator-height);
-    border-radius: var(--md-comp-tabs-active-indicator-shape);
-    background: var(--md-comp-tabs-active-indicator-color);
+    min-inline-size: min(var(--_tabs-active-indicator-minimum-size), 100%);
+    block-size: var(--_tabs-active-indicator-height);
+    border-radius: var(--_tabs-active-indicator-shape);
+    background: var(--_tabs-active-indicator-color);
     opacity: var(--_tabs-indicator-opacity, 0);
     translate: var(--_tabs-indicator-inline-start, 0) 0;
     transition:
-      translate var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
-      inline-size var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
-      opacity var(--md-comp-tabs-indicator-fade-duration) linear;
+      translate var(--_tabs-indicator-animation-duration) var(--_tabs-indicator-animation-easing),
+      inline-size var(--_tabs-indicator-animation-duration) var(--_tabs-indicator-animation-easing),
+      opacity var(--_tabs-indicator-fade-duration) linear;
     pointer-events: none;
     will-change: translate, inline-size;
     z-index: 2;
@@ -459,15 +637,15 @@
     inset-block-end: auto;
     inset-inline-start: auto;
     inset-inline-end: 0;
-    inline-size: var(--md-comp-tabs-active-indicator-height);
+    inline-size: var(--_tabs-active-indicator-height);
     min-inline-size: 0;
     block-size: var(--_tabs-indicator-block-size, 0);
-    border-radius: var(--md-comp-tabs-active-indicator-shape);
+    border-radius: var(--_tabs-active-indicator-shape);
     translate: 0 var(--_tabs-indicator-block-start, 0);
     transition:
-      translate var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
-      block-size var(--md-comp-tabs-indicator-animation-duration) var(--md-comp-tabs-indicator-animation-easing),
-      opacity var(--md-comp-tabs-indicator-fade-duration) linear;
+      translate var(--_tabs-indicator-animation-duration) var(--_tabs-indicator-animation-easing),
+      block-size var(--_tabs-indicator-animation-duration) var(--_tabs-indicator-animation-easing),
+      opacity var(--_tabs-indicator-fade-duration) linear;
   }
 
   .m3-tab-panel {

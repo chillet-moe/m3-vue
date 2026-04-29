@@ -48,6 +48,8 @@ DatePicker is a standalone date surface. TextField uses it automatically for `ty
 
 <ApiTable component="DatePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
 
+<StyleTokenTable component="DatePicker" />
+
 ## Examples
 
 ### Default

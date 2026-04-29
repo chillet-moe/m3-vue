@@ -59,6 +59,8 @@ Tabs is built on the `useTabs` composable — the interaction logic (keyboard na
 
 <ApiTable component="Tabs" v-model="props" />
 
+<StyleTokenTable component="Tabs" />
+
 ## Examples
 
 ### Default

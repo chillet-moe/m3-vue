@@ -44,6 +44,8 @@ Chips cover assist, suggestion, filter, and input patterns with shared selection
 
 <ApiTable component="Chip" v-model="props" :exclude="['value', 'name', 'ariaLabel']" />
 
+<StyleTokenTable component="Chip" />
+
 ## Examples
 
 ### Default

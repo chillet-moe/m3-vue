@@ -71,20 +71,20 @@ const rootStyle = computed(() => {
   const style: Record<string, string> = {};
 
   if (props.indicatorSize) {
-    style['--md-comp-loading-indicator-active-indicator-size'] = props.indicatorSize;
+    style['--md-loading-indicator-active-indicator-size'] = props.indicatorSize;
   }
 
   if (props.containerSize) {
-    style['--md-comp-loading-indicator-container-width'] = props.containerSize;
-    style['--md-comp-loading-indicator-container-height'] = props.containerSize;
+    style['--md-loading-indicator-container-width'] = props.containerSize;
+    style['--md-loading-indicator-container-height'] = props.containerSize;
   }
 
   if (props.containerWidth) {
-    style['--md-comp-loading-indicator-container-width'] = props.containerWidth;
+    style['--md-loading-indicator-container-width'] = props.containerWidth;
   }
 
   if (props.containerHeight) {
-    style['--md-comp-loading-indicator-container-height'] = props.containerHeight;
+    style['--md-loading-indicator-container-height'] = props.containerHeight;
   }
 
   return style;
