@@ -172,7 +172,6 @@ function getSectionContentId(name: string) {
   color: inherit;
   background: transparent;
   cursor: pointer;
-  margin-inline-start: -0.625rem;
 }
 
 .source-api-toggle:focus-visible {

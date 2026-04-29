@@ -239,7 +239,6 @@ function getSectionContentId(key: string) {
   color: inherit;
   background: transparent;
   cursor: pointer;
-  margin-inline-start: -0.625rem;
 }
 
 .api-table-toggle:focus-visible {
@@ -289,6 +288,8 @@ function getSectionContentId(key: string) {
 }
 
 .api-table-scroll {
+  inline-size: 100%;
+  max-inline-size: 100%;
   overflow: auto;
   border: 1px solid var(--vp-c-divider);
   border-radius: 1.25rem;
@@ -296,6 +297,7 @@ function getSectionContentId(key: string) {
 }
 
 .api-table-grid {
+  display: table;
   inline-size: 100%;
   border-collapse: collapse;
 }
@@ -326,7 +328,9 @@ function getSectionContentId(key: string) {
 
 .api-table-grid code {
   font-size: 0.8125rem;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .api-table-name-cell,

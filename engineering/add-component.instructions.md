@@ -284,6 +284,8 @@ const props = ref({});
 
 <ApiTable component="<Name>" v-model="props" />
 
+<StyleTokenTable component="<Name>" />
+
 ## Examples
 
 ### Default
@@ -293,16 +295,18 @@ const props = ref({});
 </DemoContainer>
 ```
 
-关键顺序：**DemoContainer → AnatomyTable → ApiTable → Examples**
+关键顺序：**DemoContainer → AnatomyTable → ApiTable → StyleTokenTable → Examples**
 
 注意事项：
 
 - `<AnatomyTable>` 的 `scope` 值与组件模板中的 `data-scope` 一致
 - `<ApiTable>` 的 `component` 值是 PascalCase 组件名
+- 如果组件暴露 public styling token，添加 `<StyleTokenTable component="<Name>" />`
 - `<ApiTable>` 通过 `v-model="props"` 与 DemoContainer 中的组件联动
 - 如果某些 props 不适合在 ApiTable 中交互（如回调函数、数组），用 `:exclude` 排除
 - md 文件中的 Vue 组件**不能包含换行**，否则会导致渲染错误
 - `<DemoContainer>` 的 `:src` 属性用于显示源码，通过 `?raw` 导入
+- 顶部用于联动 Props 的 `<DemoContainer>` 默认没有 `src`，会自动使用 sticky 预览；示例区带源码的 Demo 不会 sticky
 
 ### Demo 文件 `docs/demos/<name>/`
 
@@ -320,6 +324,39 @@ import { <Name> } from '@/components/<Name>';
 
 Demo 使用 `@/` 别名引入组件（而非从包名 `@chillet/m3-vue`）。
 
+### Styling metadata
+
+组件暴露 public styling token 时，在 `docs/.vitepress/components/style-tokens/<ComponentName>.ts` 中维护显式 metadata：
+
+```ts
+import type { StyleTokenMeta } from './types';
+
+export const nameStyleTokens = [
+  {
+    name: '--md-<name>-container-color',
+    description: 'Controls container color.',
+    fallback: 'var(--md-sys-color-surface)',
+    category: 'Color',
+  },
+] satisfies StyleTokenMeta[];
+```
+
+`StyleTokenTable` 的 Preview 会在顶部 demo 中临时覆盖当前 token 的值，并根据 token 名称和 Anatomy 的 `data-scope` / `data-part` 自动推断预览目标。推断不足时，在单个 token 上添加 `targets`：
+
+```ts
+{
+  name: '--md-<name>-container-color',
+  description: 'Controls container color.',
+  fallback: 'var(--md-sys-color-surface)',
+  category: 'Color',
+  preview: '#ff2d55',
+  targets: [{ scope: '<scope-name>', part: 'container' }],
+}
+```
+
+优先使用 `scope` + `part`，只在目标不是 Anatomy part 时才使用 `selector`。
+如果默认预览值不合适，可以用 `preview` 指定临时值；不可视或不适合预览的 token 使用 `preview: false`。
+
 ### 侧边栏 `docs/.vitepress/config.ts`
 
 在 `text: 'Components'` 的 `items` 数组中添加条目：
@@ -336,10 +373,10 @@ Demo 使用 `@/` 别名引入组件（而非从包名 `@chillet/m3-vue`）。
 
 ```bash
 # 类型检查 + 构建库
-pnpm prepublishOnly
+vp run prepublishOnly
 
 # 构建文档（验证 AnatomyTable、ApiTable 等是否正常）
-pnpm docs:build
+vp run docs:build
 ```
 
 ---
@@ -351,8 +388,10 @@ pnpm docs:build
 - [ ] `src/composables/use<Name>.ts` — Composable（如适用）
 - [ ] `src/index.ts` — 添加 export（组件 + composable）
 - [ ] `src/resolver.ts` — `m3VueComponentNames` 中添加名称
-- [ ] `docs/components/<name>.md` — 文档页（DemoContainer → AnatomyTable → ApiTable → Examples）
+- [ ] `docs/components/<name>.md` — 文档页（DemoContainer → AnatomyTable → ApiTable → StyleTokenTable → Examples）
 - [ ] `docs/demos/<name>/` — 至少一个 Default demo
 - [ ] `docs/.vitepress/config.ts` — 侧边栏添加条目
-- [ ] `pnpm prepublishOnly` 通过
-- [ ] `pnpm docs:build` 通过
+- [ ] `docs/.vitepress/components/style-tokens/<ComponentName>.ts` — public styling token metadata（如适用）
+- [ ] `docs/.vitepress/components/style-token-meta.ts` — 注册 styling metadata（如适用）
+- [ ] `vp run prepublishOnly` 通过
+- [ ] `vp run docs:build` 通过

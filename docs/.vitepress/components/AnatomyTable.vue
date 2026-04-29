@@ -87,7 +87,7 @@ const anatomyData = computed(() => {
 </script>
 
 <template>
-  <div v-if="anatomy" class="vp-raw anatomy-panel">
+  <div v-if="anatomy" class="vp-raw anatomy-table">
     <div class="anatomy-header">
       <button
         class="anatomy-toggle m3-state-layer"
@@ -106,47 +106,72 @@ const anatomyData = computed(() => {
       </CheckBox>
     </div>
 
-    <div v-show="!collapsed" :id="`anatomy-parts-${partSelectorId}`" class="anatomy-parts-list">
-      <div
-        v-for="part in anatomyData"
-        :key="part.part"
-        class="anatomy-part-row"
-        :data-active="highlightedPart === part.part ? 'true' : 'false'"
-        @pointerenter="onRowEnter(part.part)"
-        @pointerleave="onRowLeave()"
-      >
-        <code class="anatomy-part-element">&lt;{{ part.element }}&gt;</code>
-        <span class="anatomy-part-name">{{ part.part }}</span>
-        <span v-if="part.conditional" class="anatomy-part-conditional">conditional</span>
-        <code
-          class="anatomy-part-selector"
-          v-tooltip="`#${part.part}-${partSelectorId}`"
-          @click.prevent="onCopyPartSelector(part.selector)"
-          >{{ part.selector }}</code
-        >
-        <Tooltip :id="`${part.part}-${partSelectorId}`"
-          ><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip
-        >
+    <div v-show="!collapsed" :id="`anatomy-parts-${partSelectorId}`">
+      <p v-if="anatomyData.length === 0" class="anatomy-empty">No anatomy parts documented.</p>
+
+      <div v-else class="anatomy-scroll">
+        <table class="anatomy-grid">
+          <colgroup>
+            <col class="anatomy-element-column" />
+            <col class="anatomy-part-column" />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>Part</th>
+              <th>Selector</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="part in anatomyData"
+              :key="part.part"
+              :data-active="highlightedPart === part.part ? 'true' : 'false'"
+              @pointerenter="onRowEnter(part.part)"
+              @pointerleave="onRowLeave()"
+            >
+              <td>
+                <code class="anatomy-part-element">&lt;{{ part.element }}&gt;</code>
+              </td>
+              <td>
+                <div class="anatomy-part-cell">
+                  <span class="anatomy-part-name">{{ part.part }}</span>
+                  <span v-if="part.conditional" class="anatomy-part-conditional">conditional</span>
+                </div>
+              </td>
+              <td>
+                <code
+                  class="anatomy-part-selector"
+                  v-tooltip="`#${part.part}-${partSelectorId}`"
+                  @click.prevent="onCopyPartSelector(part.selector)"
+                  >{{ part.selector }}</code
+                >
+                <Tooltip :id="`${part.part}-${partSelectorId}`"
+                  ><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.anatomy-panel {
-  margin-block: 1rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.5rem;
-  overflow: clip;
-  background: var(--vp-c-bg-soft);
+.anatomy-table {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1.5rem;
 }
 
 .anatomy-header {
   display: flex;
+  gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
-  padding: 0.625rem 1rem;
-  border-bottom: 1px solid var(--vp-c-divider);
+  min-inline-size: 0;
 }
 
 .anatomy-toggle {
@@ -157,16 +182,11 @@ const anatomyData = computed(() => {
   margin: 0;
   border: 0;
   border-radius: 999px;
-  padding: 0.375rem 0.625rem;
+  padding-block: 0.375rem;
+  padding-inline: 0.625rem;
   color: inherit;
   background: transparent;
   cursor: pointer;
-  transition: background-color 0.15s;
-  margin-inline-start: -0.5rem;
-}
-
-.anatomy-toggle:hover {
-  background: var(--vp-c-bg-alt);
 }
 
 .anatomy-toggle:focus-visible {
@@ -185,11 +205,10 @@ const anatomyData = computed(() => {
 }
 
 .anatomy-header-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--vp-c-text-3);
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-size: 1.25rem;
+  line-height: 1.4;
 }
 
 .anatomy-part-count {
@@ -200,49 +219,101 @@ const anatomyData = computed(() => {
   block-size: 1.375rem;
   border-radius: 999px;
   padding-inline: 0.375rem;
+  color: var(--vp-c-text-2);
   font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--vp-c-text-2);
   background: var(--vp-c-bg-alt);
 }
 
-.anatomy-highlight-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  cursor: pointer;
-  user-select: none;
-}
-
 .anatomy-highlight-checkbox {
+  flex: none;
   margin: 0;
   height: 2.5rem;
 }
 
-.anatomy-parts-list {
-  display: grid;
-  gap: 0;
-  padding: 0.375rem 0.5rem;
+.anatomy-empty {
+  margin: 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 1.25rem;
+  padding-block: 1rem;
+  padding-inline: 1.125rem;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-soft);
 }
 
-.anatomy-part-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.375rem;
+.anatomy-scroll {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  overflow: auto;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 1.25rem;
+  background: var(--vp-c-bg-soft);
+}
+
+.anatomy-grid {
+  display: table;
+  inline-size: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.anatomy-element-column {
+  width: 22%;
+}
+
+.anatomy-part-column {
+  width: 26%;
+}
+
+.anatomy-grid th,
+.anatomy-grid td {
+  padding-block: 0.875rem;
+  padding-inline: 1rem;
+  border-block-end: 1px solid var(--vp-c-divider);
+  text-align: start;
+  vertical-align: top;
+}
+
+.anatomy-grid tbody tr:last-child td {
+  border-block-end: none;
+}
+
+.anatomy-grid th {
+  color: var(--vp-c-text-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: --translucent(var(--vp-c-default-soft), 0.5);
+}
+
+.anatomy-grid td {
+  color: var(--vp-c-text-1);
+}
+
+.anatomy-grid tbody tr {
   cursor: default;
   transition: background-color 0.15s;
 }
 
-.anatomy-part-row:hover,
-.anatomy-part-row[data-active='true'] {
+.anatomy-grid tbody tr:hover,
+.anatomy-grid tbody tr[data-active='true'] {
   background: var(--vp-c-bg-alt);
 }
 
+.anatomy-grid code {
+  font-size: 0.8125rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .anatomy-part-element {
-  font-size: 0.75rem;
   color: var(--vp-c-text-3);
+}
+
+.anatomy-part-cell {
+  display: grid;
+  gap: 0.5rem;
+  min-inline-size: 0;
 }
 
 .anatomy-part-name {
@@ -252,25 +323,17 @@ const anatomyData = computed(() => {
 }
 
 .anatomy-part-conditional {
+  display: inline-flex;
+  align-items: center;
+  inline-size: fit-content;
+  color: var(--vp-c-text-2);
   font-size: 0.6875rem;
-  color: var(--vp-c-text-3);
-  font-style: italic;
-  background: var(--vp-c-bg-alt);
-  padding: 0.0625rem 0.375rem;
-  border-radius: 999px;
+  line-height: 1;
 }
 
 .anatomy-part-selector {
-  margin-inline-start: auto;
-  font-size: 0.6875rem;
   color: var(--vp-c-text-3);
-  opacity: 0;
-  transition: opacity 0.15s;
   cursor: pointer;
-}
-
-.anatomy-part-row:hover .anatomy-part-selector {
-  opacity: 1;
 }
 </style>
 

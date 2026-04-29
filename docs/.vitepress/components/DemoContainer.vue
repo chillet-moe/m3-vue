@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue';
 import { codeToHtml } from 'shiki';
 
 type ViewportPreset = {
@@ -12,16 +12,21 @@ type ViewportPreset = {
 const props = withDefaults(
   defineProps<{
     src?: string;
+    sticky?: boolean;
     viewport?: boolean;
   }>(),
   {
     src: undefined,
+    sticky: undefined,
     viewport: true,
   },
 );
 
 const sourceOpen = ref(false);
 const highlightedSource = ref('');
+const container = ref<HTMLElement | null>(null);
+const isStuck = ref(false);
+let stickyUpdateFrame = 0;
 
 watchEffect((onCleanup) => {
   if (!props.src) {
@@ -52,10 +57,73 @@ watchEffect((onCleanup) => {
 const hasToolbar = computed(() => {
   return !!props.src;
 });
+
+const stickyEnabled = computed(() => {
+  return props.sticky ?? !props.src;
+});
+
+function getStickyOffset(element: HTMLElement) {
+  const styles = window.getComputedStyle(element);
+  const rawOffset = styles.insetBlockStart === 'auto' ? styles.top : styles.insetBlockStart;
+  const offset = Number.parseFloat(rawOffset);
+
+  return Number.isFinite(offset) ? offset : 0;
+}
+
+function updateStickyState() {
+  stickyUpdateFrame = 0;
+
+  if (!stickyEnabled.value || !container.value || typeof window === 'undefined') {
+    isStuck.value = false;
+    return;
+  }
+
+  const styles = window.getComputedStyle(container.value);
+
+  if (styles.position !== 'sticky') {
+    isStuck.value = false;
+    return;
+  }
+
+  isStuck.value = container.value.getBoundingClientRect().top <= getStickyOffset(container.value) + 0.5;
+}
+
+function queueStickyUpdate() {
+  if (typeof window === 'undefined' || stickyUpdateFrame !== 0) {
+    return;
+  }
+
+  stickyUpdateFrame = window.requestAnimationFrame(updateStickyState);
+}
+
+onMounted(() => {
+  queueStickyUpdate();
+  window.addEventListener('scroll', queueStickyUpdate, { passive: true });
+  window.addEventListener('resize', queueStickyUpdate);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', queueStickyUpdate);
+  window.removeEventListener('resize', queueStickyUpdate);
+
+  if (stickyUpdateFrame !== 0) {
+    window.cancelAnimationFrame(stickyUpdateFrame);
+  }
+});
+
+watch(stickyEnabled, async () => {
+  await nextTick();
+  queueStickyUpdate();
+});
 </script>
 
 <template>
-  <section class="vp-raw demo-container">
+  <section
+    ref="container"
+    class="vp-raw demo-container"
+    :data-sticky="stickyEnabled ? 'true' : undefined"
+    :data-stuck="isStuck ? 'true' : undefined"
+  >
     <div class="demo-preview">
       <div>
         <slot />
@@ -88,6 +156,18 @@ const hasToolbar = computed(() => {
   border-radius: 1.5rem;
   overflow: clip;
   background: var(--vp-c-bg-soft);
+  box-shadow: var(--md-sys-elevation-level0);
+  transition: box-shadow 160ms ease;
+}
+
+.demo-container[data-sticky='true']:first-of-type {
+  position: sticky;
+  inset-block-start: 4.75rem;
+  z-index: 9;
+}
+
+.demo-container[data-sticky='true'][data-stuck='true']:first-of-type {
+  box-shadow: 0 0.75rem 2rem --translucent(var(--md-sys-color-shadow), 0.16);
 }
 
 .demo-preview {
@@ -152,6 +232,11 @@ html.dark .demo-source :deep(.shiki span) {
 }
 
 @media (max-width: 40rem) {
+  .demo-container[data-sticky='true']:first-of-type {
+    position: static;
+    box-shadow: none;
+  }
+
   .demo-toolbar {
     align-items: stretch;
     justify-content: flex-start;
