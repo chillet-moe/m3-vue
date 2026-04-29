@@ -107,7 +107,7 @@ const slots = defineSlots<{
     />
     <slot v-else name="leading" :disabled="disabled" />
 
-    <span data-part="text">
+    <span v-if="slots.default" data-part="text">
       <slot name="default" :disabled="disabled" />
     </span>
 
