@@ -40,6 +40,7 @@ export * from './components/ChipGroup';
 export * from './components/DatePicker';
 export * from './components/Dialog';
 export * from './components/Divider';
+export * from './components/FloatingActionButton';
 export * from './components/Snackbar';
 export * from './components/Switch';
 export * from './components/Radio';

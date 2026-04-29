@@ -9,6 +9,7 @@ import { circularProgressIndicatorStyleTokens } from './style-tokens/CircularPro
 import { datePickerStyleTokens } from './style-tokens/DatePicker';
 import { dialogStyleTokens } from './style-tokens/Dialog';
 import { dividerStyleTokens } from './style-tokens/Divider';
+import { floatingActionButtonStyleTokens } from './style-tokens/FloatingActionButton';
 import { iconButtonStyleTokens } from './style-tokens/IconButton';
 import { inputOtpStyleTokens } from './style-tokens/InputOtp';
 import { linearProgressIndicatorStyleTokens } from './style-tokens/LinearProgressIndicator';
@@ -41,6 +42,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   DatePicker: datePickerStyleTokens,
   Dialog: dialogStyleTokens,
   Divider: dividerStyleTokens,
+  FloatingActionButton: floatingActionButtonStyleTokens,
   IconButton: iconButtonStyleTokens,
   InputOtp: inputOtpStyleTokens,
   LinearProgressIndicator: linearProgressIndicatorStyleTokens,

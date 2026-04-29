@@ -20,6 +20,7 @@ export const m3VueComponentNames = [
   'DatePicker',
   'Dialog',
   'Divider',
+  'FloatingActionButton',
   'Icon',
   'IconButton',
   'InputOtp',

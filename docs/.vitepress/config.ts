@@ -70,6 +70,7 @@ export default defineConfig({
                 { text: 'Button', link: '/components/button' },
                 { text: 'IconButton', link: '/components/icon-button' },
                 { text: 'ButtonGroup', link: '/components/button-group' },
+                { text: 'FloatingActionButton', link: '/components/floating-action-button' },
               ],
             },
             {
