@@ -1,8 +1,9 @@
 # Styling
 
-M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为稳定的 CSS API。你可以使用这些属性来自定义组件样式。记得使用 `:deep` 选择器来确保样式能够正确应用到组件内部元素。
+组件样式优先通过 CSS 变量定制。
 
-组件样式优先通过 CSS 变量定制。只有在变量不能表达目标效果时，才直接覆盖具体的 `data-part`。
+当变量不能表达目标效果时，覆盖具体的 `data-part`。 M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为稳定的 CSS API。
+你可以使用这些属性来自定义组件样式。记得使用 `:deep` 选择器来确保样式能够正确应用到组件内部元素。
 
 ## CSS token 分层
 
@@ -60,12 +61,12 @@ M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为�
 }
 
 /* 自定义 TextField 的 label */
-:deep([data-scope='text-field'][data-part='label']) {
+[data-scope='text-field'] :deep([data-part='label']) {
   font-weight: bold;
 }
 
 /* 自定义 Menu 中 MenuItem 的 label */
-:deep([data-scope='menu-item'][data-part='label']) {
+[data-scope='menu-item'] :deep([data-part='label']) {
   color: red;
 }
 ```
