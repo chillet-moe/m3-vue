@@ -84,76 +84,86 @@ const anatomyData = computed(() => {
     })) ?? []
   );
 });
+
+const headingId = computed(() => {
+  return `anatomy-${props.scope}-${partSelectorId}`;
+});
 </script>
 
 <template>
   <div v-if="anatomy" class="vp-raw anatomy-table">
-    <div class="anatomy-header">
-      <button
-        class="anatomy-toggle m3-state-layer"
-        type="button"
-        :aria-expanded="!collapsed"
-        :aria-controls="`anatomy-parts-${partSelectorId}`"
-        :aria-label="collapsed ? 'Expand anatomy table' : 'Collapse anatomy table'"
-        @click="toggleCollapsed"
-      >
-        <Icon class="anatomy-toggle-icon" name="expand_more" aria-hidden="true" />
-        <span class="anatomy-header-title">Anatomy</span>
-        <span class="anatomy-part-count">{{ anatomyData.length }}</span>
-      </button>
-      <CheckBox v-model:checked="highlightEnabled" :label="'Highlight'" class="anatomy-highlight-checkbox">
-        <span class="anatomy-highlight-label">Highlight</span>
-      </CheckBox>
-    </div>
+    <div class="anatomy-panel">
+      <div class="anatomy-header">
+        <h2 :id="headingId" class="anatomy-heading">
+          <span class="anatomy-header-title">Anatomy</span>
+        </h2>
 
-    <div v-show="!collapsed" :id="`anatomy-parts-${partSelectorId}`">
-      <p v-if="anatomyData.length === 0" class="anatomy-empty">No anatomy parts documented.</p>
+        <button
+          class="anatomy-toggle m3-state-layer"
+          type="button"
+          :aria-expanded="!collapsed"
+          :aria-controls="`anatomy-parts-${partSelectorId}`"
+          :aria-label="collapsed ? 'Expand anatomy table' : 'Collapse anatomy table'"
+          @click="toggleCollapsed"
+        >
+          <Icon class="anatomy-toggle-icon" name="expand_more" aria-hidden="true" />
+          <span class="anatomy-part-count">{{ anatomyData.length }}</span>
+        </button>
 
-      <div v-else class="anatomy-scroll">
-        <table class="anatomy-grid">
-          <colgroup>
-            <col class="anatomy-element-column" />
-            <col class="anatomy-part-column" />
-            <col />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Element</th>
-              <th>Part</th>
-              <th>Selector</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="part in anatomyData"
-              :key="part.part"
-              :data-active="highlightedPart === part.part ? 'true' : 'false'"
-              @pointerenter="onRowEnter(part.part)"
-              @pointerleave="onRowLeave()"
-            >
-              <td>
-                <code class="anatomy-part-element">&lt;{{ part.element }}&gt;</code>
-              </td>
-              <td>
-                <div class="anatomy-part-cell">
-                  <span class="anatomy-part-name">{{ part.part }}</span>
-                  <span v-if="part.conditional" class="anatomy-part-conditional">conditional</span>
-                </div>
-              </td>
-              <td>
-                <code
-                  class="anatomy-part-selector"
-                  v-tooltip="`#${part.part}-${partSelectorId}`"
-                  @click.prevent="onCopyPartSelector(part.selector)"
-                  >{{ part.selector }}</code
-                >
-                <Tooltip :id="`${part.part}-${partSelectorId}`"
-                  ><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip
-                >
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <CheckBox v-model:checked="highlightEnabled" :label="'Highlight'" class="anatomy-highlight-checkbox">
+          <span class="anatomy-highlight-label">Highlight</span>
+        </CheckBox>
+      </div>
+
+      <div v-show="!collapsed" :id="`anatomy-parts-${partSelectorId}`">
+        <p v-if="anatomyData.length === 0" class="anatomy-empty">No anatomy parts documented.</p>
+
+        <div v-else class="anatomy-scroll">
+          <table class="anatomy-grid">
+            <colgroup>
+              <col class="anatomy-element-column" />
+              <col class="anatomy-part-column" />
+              <col />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Element</th>
+                <th>Part</th>
+                <th>Selector</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="part in anatomyData"
+                :key="part.part"
+                :data-active="highlightedPart === part.part ? 'true' : 'false'"
+                @pointerenter="onRowEnter(part.part)"
+                @pointerleave="onRowLeave()"
+              >
+                <td>
+                  <code class="anatomy-part-element">&lt;{{ part.element }}&gt;</code>
+                </td>
+                <td>
+                  <div class="anatomy-part-cell">
+                    <span class="anatomy-part-name">{{ part.part }}</span>
+                    <span v-if="part.conditional" class="anatomy-part-conditional">conditional</span>
+                  </div>
+                </td>
+                <td>
+                  <code
+                    class="anatomy-part-selector"
+                    v-tooltip="`#${part.part}-${partSelectorId}`"
+                    @click.prevent="onCopyPartSelector(part.selector)"
+                    >{{ part.selector }}</code
+                  >
+                  <Tooltip :id="`${part.part}-${partSelectorId}`"
+                    ><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -161,29 +171,54 @@ const anatomyData = computed(() => {
 
 <style scoped>
 .anatomy-table {
-  display: grid;
-  gap: 0.75rem;
-  margin-block: 1.5rem;
+  margin-block: 0.5rem;
+}
+
+.anatomy-panel {
+  --docs-table-divider: --translucent(var(--md-sys-color-on-surface), 0.12);
+  --docs-table-header-bg: rgba(from var(--vp-c-default-soft) r g b / 0.5);
+
+  overflow: clip;
+  border: 1px solid var(--docs-table-divider);
+  border-radius: 1.25rem;
+  background: var(--vp-c-bg-soft);
 }
 
 .anatomy-header {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   align-items: center;
-  justify-content: space-between;
   min-inline-size: 0;
+  min-block-size: 3rem;
+  padding-block: 0.375rem;
+  padding-inline: 1rem 1rem;
+  border-block-end: 1px solid var(--docs-table-divider);
+  background: var(--docs-table-header-bg);
+}
+
+.anatomy-heading {
+  flex: 1;
+  margin: 0;
+  min-inline-size: 0;
+  border: 0;
+  padding: 0;
+}
+
+.anatomy-heading::before {
+  display: none;
 }
 
 .anatomy-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  flex: none;
   min-inline-size: 0;
   margin: 0;
   border: 0;
   border-radius: 999px;
-  padding-block: 0.375rem;
-  padding-inline: 0.625rem;
+  padding-block: 0.25rem;
+  padding-inline: 0.5rem;
   color: inherit;
   background: transparent;
   cursor: pointer;
@@ -207,7 +242,8 @@ const anatomyData = computed(() => {
 .anatomy-header-title {
   margin: 0;
   color: var(--vp-c-text-1);
-  font-size: 1.25rem;
+  font-size: 1rem;
+  font-weight: 650;
   line-height: 1.4;
 }
 
@@ -233,21 +269,15 @@ const anatomyData = computed(() => {
 
 .anatomy-empty {
   margin: 0;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.25rem;
   padding-block: 1rem;
   padding-inline: 1.125rem;
   color: var(--vp-c-text-2);
-  background: var(--vp-c-bg-soft);
 }
 
 .anatomy-scroll {
   inline-size: 100%;
   max-inline-size: 100%;
   overflow: auto;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.25rem;
-  background: var(--vp-c-bg-soft);
 }
 
 .anatomy-grid {
@@ -269,7 +299,7 @@ const anatomyData = computed(() => {
 .anatomy-grid td {
   padding-block: 0.875rem;
   padding-inline: 1rem;
-  border-block-end: 1px solid var(--vp-c-divider);
+  border-block-end: 1px solid var(--docs-table-divider);
   text-align: start;
   vertical-align: top;
 }
@@ -282,7 +312,7 @@ const anatomyData = computed(() => {
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
   font-weight: 600;
-  background: --translucent(var(--vp-c-default-soft), 0.5);
+  background: var(--docs-table-header-bg);
 }
 
 .anatomy-grid td {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue';
+import { computed, onMounted, ref, useId } from 'vue';
 import allMeta from 'virtual:component-meta';
 import { useLocalStorage } from '@vueuse/core';
 import { Icon } from '@/components/Icon';
@@ -34,8 +34,28 @@ const controlsEnabled = computed(() => {
 
 const collapsedSections = useLocalStorage<Record<string, boolean>>('m3-vue-docs:table-collapsed:api', {});
 const tableId = useId();
+const appendToEnd = ref(false);
 
-const sections = computed(() => {
+onMounted(() => {
+  appendToEnd.value = true;
+});
+
+type ApiTableSection = {
+  key: 'props' | 'events' | 'slots';
+  title: string;
+  empty: string;
+  rows: unknown[];
+};
+
+function toKebabCase(value: string) {
+  return value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+function getSectionHeadingId(key: ApiTableSection['key']) {
+  return `api-${toKebabCase(props.component)}-${key}-${tableId}`;
+}
+
+const sections = computed<ApiTableSection[]>(() => {
   if (!meta.value) {
     return [];
   }
@@ -59,7 +79,15 @@ const sections = computed(() => {
       empty: 'No slots documented.',
       rows: meta.value.slots,
     },
-  ] as const;
+  ];
+});
+
+const inlineSections = computed(() => {
+  return sections.value.filter((section) => section.key === 'props');
+});
+
+const appendixSections = computed(() => {
+  return sections.value.filter((section) => section.key !== 'props');
 });
 
 function updatePropValue(name: string, value: unknown) {
@@ -98,118 +126,147 @@ function getSectionContentId(key: string) {
     <p v-if="!meta" class="api-table-empty">No API metadata found for {{ component }}.</p>
 
     <template v-else>
-      <section v-for="section in sections" :key="section.key" class="api-table-section">
-        <button
-          class="api-table-toggle m3-state-layer"
-          type="button"
-          :aria-expanded="!isSectionCollapsed(section.key)"
-          :aria-controls="getSectionContentId(section.key)"
-          :aria-label="
-            isSectionCollapsed(section.key) ? `Expand ${section.title} table` : `Collapse ${section.title} table`
-          "
-          @click="toggleSection(section.key)"
-        >
-          <Icon class="api-table-toggle-icon" name="expand_more" aria-hidden="true" />
-          <span class="api-table-title">{{ section.title }}</span>
-          <span class="api-table-count">{{ section.rows.length }}</span>
-        </button>
+      <template v-for="section in inlineSections" :key="section.key">
+        <section class="api-table-section">
+          <div class="api-table-panel">
+            <div class="api-table-heading">
+              <h2 :id="getSectionHeadingId(section.key)" class="api-table-title">
+                {{ section.title }}
+              </h2>
+              <button
+                class="api-table-toggle m3-state-layer"
+                type="button"
+                :aria-expanded="!isSectionCollapsed(section.key)"
+                :aria-controls="getSectionContentId(section.key)"
+                :aria-label="
+                  isSectionCollapsed(section.key) ? `Expand ${section.title} table` : `Collapse ${section.title} table`
+                "
+                @click="toggleSection(section.key)"
+              >
+                <Icon class="api-table-toggle-icon ignore-header" name="expand_more" aria-hidden="true" />
+                <span class="api-table-count ignore-header">{{ section.rows.length }}</span>
+              </button>
+            </div>
 
-        <div v-show="!isSectionCollapsed(section.key)" :id="getSectionContentId(section.key)">
-          <p v-if="section.rows.length === 0" class="api-table-empty">
-            {{ section.empty }}
-          </p>
+            <div v-show="!isSectionCollapsed(section.key)" :id="getSectionContentId(section.key)">
+              <p v-if="section.rows.length === 0" class="api-table-empty">
+                {{ section.empty }}
+              </p>
 
-          <div v-else class="api-table-scroll">
-            <table class="api-table-grid">
-              <thead>
-                <tr v-if="section.key === 'props'">
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Default</th>
-                  <th v-if="controlsEnabled">Control</th>
-                </tr>
-                <tr v-else-if="section.key === 'events'">
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                </tr>
-                <tr v-else>
-                  <th>Name</th>
-                  <th>Parameters</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-if="section.key === 'props'">
-                  <tr v-for="prop in meta.props" :key="prop.name">
-                    <td>
-                      <div class="api-table-name-cell">
-                        <code>{{ prop.name }}</code>
-                        <span class="api-table-badge" :data-required="prop.required ? 'true' : 'false'">
-                          {{ prop.required ? 'Required' : 'Optional' }}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="api-table-description">
-                        <p v-if="prop.description" class="api-table-copy">{{ prop.description }}</p>
-                        <p v-else class="api-table-copy api-table-muted">-</p>
-                        <div class="api-table-type">
-                          <template v-if="prop.options?.length">
-                            <code v-for="option in prop.options" :key="option">{{ option }}</code>
-                          </template>
-                          <code v-else>{{ prop.type }}</code>
+              <div v-else class="api-table-scroll">
+                <table class="api-table-grid">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Description</th>
+                      <th>Default</th>
+                      <th v-if="controlsEnabled">Control</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="prop in meta.props" :key="prop.name">
+                      <td>
+                        <div class="api-table-name-cell">
+                          <code>{{ prop.name }}</code>
+                          <span class="api-table-badge" :data-required="prop.required ? 'true' : 'false'">
+                            {{ prop.required ? 'Required' : 'Optional' }}
+                          </span>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <code v-if="prop.default">{{ prop.default }}</code>
-                      <span v-else class="api-table-muted">-</span>
-                    </td>
-                    <td v-if="controlsEnabled">
-                      <div class="api-table-control">
-                        <ControlItem
-                          v-if="isControlVisible(prop)"
-                          :prop="prop"
-                          :model-value="modelValue?.[prop.name]"
-                          @update:model-value="updatePropValue(prop.name, $event)"
-                        />
+                      </td>
+                      <td>
+                        <div class="api-table-description">
+                          <p v-if="prop.description" class="api-table-copy">{{ prop.description }}</p>
+                          <p v-else class="api-table-copy api-table-muted">-</p>
+                          <div class="api-table-type">
+                            <template v-if="prop.options?.length">
+                              <code v-for="option in prop.options" :key="option">{{ option }}</code>
+                            </template>
+                            <code v-else>{{ prop.type }}</code>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <code v-if="prop.default">{{ prop.default }}</code>
                         <span v-else class="api-table-muted">-</span>
-                      </div>
-                    </td>
-                  </tr>
-                </template>
-
-                <template v-else-if="section.key === 'events'">
-                  <tr v-for="event in meta.events" :key="event.name">
-                    <td>
-                      <code>{{ event.name }}</code>
-                    </td>
-                    <td>
-                      <code v-if="event.type">{{ event.type }}</code>
-                      <span v-else class="api-table-muted">-</span>
-                    </td>
-                    <td>{{ event.description || '-' }}</td>
-                  </tr>
-                </template>
-
-                <template v-else>
-                  <tr v-for="slot in meta.slots" :key="slot.name">
-                    <td>
-                      <code>{{ slot.name }}</code>
-                    </td>
-                    <td>
-                      <code v-if="slot.params">{{ slot.params }}</code>
-                      <span v-else class="api-table-muted">-</span>
-                    </td>
-                    <td>{{ slot.description || '-' }}</td>
-                  </tr>
-                </template>
-              </tbody>
-            </table>
+                      </td>
+                      <td v-if="controlsEnabled">
+                        <div class="api-table-control">
+                          <ControlItem
+                            v-if="isControlVisible(prop)"
+                            :prop="prop"
+                            :model-value="modelValue?.[prop.name]"
+                            @update:model-value="updatePropValue(prop.name, $event)"
+                          />
+                          <span v-else class="api-table-muted">-</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </template>
+
+      <Teleport to="#docs-api-appendix" defer :disabled="!appendToEnd">
+        <section v-for="section in appendixSections" :key="section.key" class="vp-raw api-table api-table-section">
+          <div class="api-table-panel">
+            <h2 :id="getSectionHeadingId(section.key)" class="api-table-heading">
+              <span class="api-table-static-title">{{ section.title }}</span>
+              <span class="api-table-count ignore-header">{{ section.rows.length }}</span>
+            </h2>
+
+            <p v-if="section.rows.length === 0" class="api-table-empty">
+              {{ section.empty }}
+            </p>
+
+            <div v-else class="api-table-scroll">
+              <table class="api-table-grid">
+                <thead>
+                  <tr v-if="section.key === 'events'">
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                  <tr v-else>
+                    <th>Name</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-if="section.key === 'events'">
+                    <tr v-for="event in meta.events" :key="event.name">
+                      <td>
+                        <code>{{ event.name }}</code>
+                      </td>
+                      <td>
+                        <code v-if="event.type">{{ event.type }}</code>
+                        <span v-else class="api-table-muted">-</span>
+                      </td>
+                      <td>{{ event.description || '-' }}</td>
+                    </tr>
+                  </template>
+
+                  <template v-else>
+                    <tr v-for="slot in meta.slots" :key="slot.name">
+                      <td>
+                        <code>{{ slot.name }}</code>
+                      </td>
+                      <td>
+                        <code v-if="slot.params">{{ slot.params }}</code>
+                        <span v-else class="api-table-muted">-</span>
+                      </td>
+                      <td>{{ slot.description || '-' }}</td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </Teleport>
     </template>
   </div>
 </template>
@@ -221,21 +278,49 @@ function getSectionContentId(key: string) {
 }
 
 .api-table-section {
-  display: grid;
-  gap: 0.75rem;
+  margin-block: 0.5rem;
+}
+
+.api-table-panel {
+  --docs-table-divider: --translucent(var(--md-sys-color-on-surface), 0.12);
+  --docs-table-header-bg: rgba(from var(--vp-c-default-soft) r g b / 0.5);
+
+  overflow: clip;
+  border: 1px solid var(--docs-table-divider);
+  border-radius: 1.25rem;
+  background: var(--vp-c-bg-soft);
+}
+
+.api-table-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: space-between;
+  min-block-size: 3rem;
+  margin: 0;
+  padding-block: 0.375rem;
+  padding-inline: 1rem;
+  border-block-end: 1px solid var(--docs-table-divider);
+  color: var(--vp-c-text-1);
+  background: var(--docs-table-header-bg);
+}
+
+.api-table-title::before {
+  display: none;
 }
 
 .api-table-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  flex: none;
   inline-size: fit-content;
   min-inline-size: 0;
   margin: 0;
   border: 0;
   border-radius: 999px;
-  padding-block: 0.375rem;
-  padding-inline: 0.625rem;
+  padding-block: 0.25rem;
+  padding-inline: 0.5rem;
   color: inherit;
   background: transparent;
   cursor: pointer;
@@ -258,8 +343,19 @@ function getSectionContentId(key: string) {
 
 .api-table-title {
   margin: 0;
+  min-inline-size: 0;
+  border: 0;
+  padding: 0;
   color: var(--vp-c-text-1);
-  font-size: 1.25rem;
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.api-table-static-title {
+  margin-inline-start: 0.5rem;
+  font-size: 1rem;
+  font-weight: 650;
   line-height: 1.4;
 }
 
@@ -279,21 +375,15 @@ function getSectionContentId(key: string) {
 
 .api-table-empty {
   margin: 0;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.25rem;
   padding-block: 1rem;
   padding-inline: 1.125rem;
   color: var(--vp-c-text-2);
-  background: var(--vp-c-bg-soft);
 }
 
 .api-table-scroll {
   inline-size: 100%;
   max-inline-size: 100%;
   overflow: auto;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.25rem;
-  background: var(--vp-c-bg-soft);
 }
 
 .api-table-grid {
@@ -306,7 +396,7 @@ function getSectionContentId(key: string) {
 .api-table-grid td {
   padding-block: 0.875rem;
   padding-inline: 1rem;
-  border-block-end: 1px solid var(--vp-c-divider);
+  border-block-end: 1px solid var(--docs-table-divider);
   text-align: start;
   vertical-align: start;
 }
@@ -319,7 +409,7 @@ function getSectionContentId(key: string) {
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
   font-weight: 600;
-  background: --translucent(var(--vp-c-default-soft), 0.5);
+  background: var(--docs-table-header-bg);
 }
 
 .api-table-grid td {

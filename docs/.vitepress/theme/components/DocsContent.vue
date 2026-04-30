@@ -10,6 +10,7 @@ import DocsPager from './DocsPager.vue';
     <main class="docs-main">
       <article class="docs-page-card vp-doc">
         <Content />
+        <div id="docs-api-appendix" class="docs-api-appendix" />
       </article>
 
       <DocsPager />
@@ -41,6 +42,27 @@ import DocsPager from './DocsPager.vue';
   padding: 1.25rem;
   border-radius: 1.75rem;
   background: var(--vp-c-bg);
+}
+
+.docs-api-appendix:empty {
+  display: none;
+}
+
+.docs-api-appendix:not(:empty) {
+  margin-block-start: 2rem;
+  padding-block-start: 2.75rem;
+  border-block-start: 1px solid --translucent(var(--md-sys-color-on-surface), 0.12);
+}
+
+.docs-api-appendix:not(:empty)::before {
+  display: block;
+  margin-block: -1.75rem 1.25rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  content: 'API Reference';
 }
 
 @media (max-width: 80rem) {

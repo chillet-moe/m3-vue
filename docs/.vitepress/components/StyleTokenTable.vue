@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, useId, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
 import allAnatomy from 'virtual:component-anatomy';
 import { useLocalStorage } from '@vueuse/core';
 import { CheckBox } from '@/components/CheckBox';
-import { Icon } from '@/components/Icon';
 import { styleTokenMeta } from './style-token-meta';
 import type { ComponentAnatomy } from '../plugins/component-anatomy.ts';
 import type { StyleTokenMeta, StyleTokenTarget } from './style-tokens/types';
@@ -16,11 +15,11 @@ const tokens = computed(() => {
   return styleTokenMeta[props.component] ?? [];
 });
 
-const collapsed = useLocalStorage('m3-vue-docs:table-collapsed:styling', false);
 const previewEnabled = useLocalStorage('m3-vue-docs:styling-preview-enabled', false);
 const previewedToken = ref<string | null>(null);
 const tableId = useId();
 const tableRoot = ref<HTMLElement | null>(null);
+const appendToEnd = ref(false);
 const anatomyByScope = allAnatomy as Record<string, ComponentAnatomy | undefined>;
 
 type PreviewMutation = {
@@ -38,18 +37,13 @@ const componentScopeOverrides: Record<string, string> = {
   ListItem: 'item',
 };
 
-function toggleCollapsed() {
-  collapsed.value = !collapsed.value;
-
-  if (collapsed.value) {
-    clearPreview();
-    previewedToken.value = null;
-  }
-}
-
 function toKebabCase(value: string) {
   return value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
+
+const headingId = computed(() => {
+  return `styling-${toKebabCase(props.component)}-${tableId}`;
+});
 
 function getDefaultScope() {
   return componentScopeOverrides[props.component] ?? toKebabCase(props.component);
@@ -300,127 +294,118 @@ watch(previewEnabled, (enabled) => {
 });
 
 onBeforeUnmount(clearPreview);
+
+onMounted(() => {
+  appendToEnd.value = true;
+});
 </script>
 
 <template>
-  <section ref="tableRoot" class="vp-raw style-token-table">
-    <div class="style-token-table-header">
-      <button
-        class="style-token-table-toggle m3-state-layer"
-        type="button"
-        :aria-expanded="!collapsed"
-        :aria-controls="`style-token-table-content-${tableId}`"
-        :aria-label="collapsed ? 'Expand styling table' : 'Collapse styling table'"
-        @click="toggleCollapsed"
-      >
-        <Icon class="style-token-table-toggle-icon" name="expand_more" aria-hidden="true" />
-        <span class="style-token-table-title">Styling</span>
-        <span class="style-token-table-count">{{ tokens.length }}</span>
-      </button>
+  <Teleport to="#docs-api-appendix" defer :disabled="!appendToEnd">
+    <section ref="tableRoot" class="vp-raw style-token-table">
+      <div class="style-token-table-panel">
+        <div class="style-token-table-header">
+          <h2 :id="headingId" class="style-token-table-heading">
+            <span class="style-token-table-title">Styling</span>
+            <span class="style-token-table-count ignore-header">{{ tokens.length }}</span>
+          </h2>
 
-      <CheckBox v-model:checked="previewEnabled" :label="'Preview'" class="style-token-table-preview-checkbox">
-        <span class="style-token-table-preview-label">Preview</span>
-      </CheckBox>
-    </div>
+          <CheckBox v-model:checked="previewEnabled" :label="'Preview'" class="style-token-table-preview-checkbox">
+            <span class="style-token-table-preview-label">Preview</span>
+          </CheckBox>
+        </div>
 
-    <div v-show="!collapsed" :id="`style-token-table-content-${tableId}`">
-      <p v-if="tokens.length === 0" class="style-token-table-empty">
-        No styling tokens documented for {{ component }}.
-      </p>
+        <p v-if="tokens.length === 0" class="style-token-table-empty">
+          No styling tokens documented for {{ component }}.
+        </p>
 
-      <div v-else class="style-token-table-scroll">
-        <table class="style-token-table-grid">
-          <colgroup>
-            <col class="style-token-table-token-column" />
-            <col />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Token</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="token in tokens"
-              :key="token.name"
-              :data-active="previewedToken === token.name ? 'true' : 'false'"
-              @pointerenter="onRowEnter(token)"
-              @pointerleave="onRowLeave()"
-            >
-              <td>
-                <div class="style-token-table-token-cell">
-                  <div class="style-token-table-token-row">
-                    <code>{{ token.name }}</code>
-                    <span v-if="token.category" class="style-token-table-badge">{{ token.category }}</span>
+        <div v-else class="style-token-table-scroll">
+          <table class="style-token-table-grid">
+            <colgroup>
+              <col class="style-token-table-token-column" />
+              <col />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="token in tokens"
+                :key="token.name"
+                :data-active="previewedToken === token.name ? 'true' : 'false'"
+                @pointerenter="onRowEnter(token)"
+                @pointerleave="onRowLeave()"
+              >
+                <td>
+                  <div class="style-token-table-token-cell">
+                    <div class="style-token-table-token-row">
+                      <code>{{ token.name }}</code>
+                      <span v-if="token.category" class="style-token-table-badge">{{ token.category }}</span>
+                    </div>
+                    <div class="style-token-table-token-row">
+                      <span class="style-token-table-label">Fallback</span>
+                      <code>{{ token.fallback }}</code>
+                    </div>
                   </div>
-                  <div class="style-token-table-token-row">
-                    <span class="style-token-table-label">Fallback</span>
-                    <code>{{ token.fallback }}</code>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <p class="style-token-table-description">{{ token.description }}</p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td>
+                  <p class="style-token-table-description">{{ token.description }}</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </Teleport>
 </template>
 
 <style scoped>
 .style-token-table {
-  display: grid;
-  gap: 0.75rem;
-  margin-block: 1.5rem;
+  margin-block: 0.5rem;
+}
+
+.style-token-table-panel {
+  --docs-table-divider: --translucent(var(--md-sys-color-on-surface), 0.12);
+  --docs-table-header-bg: rgba(from var(--vp-c-default-soft) r g b / 0.5);
+
+  overflow: clip;
+  border: 1px solid var(--docs-table-divider);
+  border-radius: 1.25rem;
+  background: var(--vp-c-bg-soft);
 }
 
 .style-token-table-header {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   align-items: center;
   justify-content: space-between;
   min-inline-size: 0;
+  min-block-size: 3rem;
+  padding-block: 0.375rem;
+  padding-inline: 1rem;
+  border-block-end: 1px solid var(--docs-table-divider);
+  background: var(--docs-table-header-bg);
 }
 
-.style-token-table-toggle {
-  display: inline-flex;
+.style-token-table-heading {
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  inline-size: fit-content;
   min-inline-size: 0;
   margin: 0;
   border: 0;
-  border-radius: 999px;
-  padding-block: 0.375rem;
-  padding-inline: 0.625rem;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
-}
-
-.style-token-table-toggle:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 2px;
-}
-
-.style-token-table-toggle-icon {
-  font-size: 1.125rem;
-  color: var(--vp-c-text-3);
-  transition: transform 0.15s;
-}
-
-.style-token-table-toggle[aria-expanded='true'] .style-token-table-toggle-icon {
-  transform: rotate(180deg);
+  padding: 0;
 }
 
 .style-token-table-title {
   margin: 0;
   color: var(--vp-c-text-1);
-  font-size: 1.25rem;
+  font-size: 1rem;
+  font-weight: 650;
   line-height: 1.4;
 }
 
@@ -446,21 +431,15 @@ onBeforeUnmount(clearPreview);
 
 .style-token-table-empty {
   margin: 0;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.25rem;
   padding-block: 1rem;
   padding-inline: 1.125rem;
   color: var(--vp-c-text-2);
-  background: var(--vp-c-bg-soft);
 }
 
 .style-token-table-scroll {
   inline-size: 100%;
   max-inline-size: 100%;
   overflow: auto;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.25rem;
-  background: var(--vp-c-bg-soft);
 }
 
 .style-token-table-grid {
@@ -478,7 +457,7 @@ onBeforeUnmount(clearPreview);
 .style-token-table-grid td {
   padding-block: 0.875rem;
   padding-inline: 1rem;
-  border-block-end: 1px solid var(--vp-c-divider);
+  border-block-end: 1px solid var(--docs-table-divider);
   text-align: start;
   vertical-align: top;
 }
@@ -491,7 +470,7 @@ onBeforeUnmount(clearPreview);
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
   font-weight: 600;
-  background: --translucent(var(--vp-c-default-soft), 0.5);
+  background: var(--docs-table-header-bg);
 }
 
 .style-token-table-grid td {
