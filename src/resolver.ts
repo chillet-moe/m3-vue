@@ -21,6 +21,8 @@ export const m3VueComponentNames = [
   'Dialog',
   'Divider',
   'FloatingActionButton',
+  'FloatingActionButtonMenu',
+  'FloatingActionButtonMenuItem',
   'Icon',
   'IconButton',
   'InputOtp',
