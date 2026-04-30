@@ -447,7 +447,8 @@
   .m3-text-field:focus-within .m3-text-field-label,
   .m3-text-field[data-visually-focused='true'] .m3-text-field-label,
   .m3-text-field[data-populated='true'] .m3-text-field-label,
-  .m3-text-field[data-has-placeholder='true'] .m3-text-field-label {
+  .m3-text-field[data-has-placeholder='true'] .m3-text-field-label,
+  .m3-text-field[data-always-float-label='true'] .m3-text-field-label {
     inset-block-start: 0;
     translate: 0 calc(-0.5 * var(--_outlined-text-field-label-text-populated-line-height));
     padding-inline: 0.25rem;
@@ -460,12 +461,13 @@
   .m3-text-field:focus-within .m3-text-field-outline legend,
   .m3-text-field[data-visually-focused='true'] .m3-text-field-outline legend,
   .m3-text-field[data-populated='true'] .m3-text-field-outline legend,
-  .m3-text-field[data-has-placeholder='true'] .m3-text-field-outline legend {
+  .m3-text-field[data-has-placeholder='true'] .m3-text-field-outline legend,
+  .m3-text-field[data-always-float-label='true'] .m3-text-field-outline legend {
     max-inline-size: 100%;
     padding-inline: 0.25rem;
   }
 
-  .m3-text-field[data-has-leading='true'][data-populated='false'][data-has-placeholder='false'][data-visually-focused='false']:not(
+  .m3-text-field[data-has-leading='true'][data-populated='false'][data-has-placeholder='false'][data-visually-focused='false'][data-always-float-label='false']:not(
       :focus-within
     )
     .m3-text-field-label {

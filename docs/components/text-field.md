@@ -19,6 +19,7 @@ const props = ref({
   required: false,
   description: 'Supporting text',
   placeholder: '',
+  alwaysFloatLabel: false,
   error: '',
 });
 

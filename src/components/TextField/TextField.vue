@@ -51,6 +51,9 @@ export type TextFieldProps = {
   /** Placeholder shown when value is empty. */
   placeholder?: string;
 
+  /** Always render the label in the floating position. */
+  alwaysFloatLabel?: boolean;
+
   /** Forces the visual focused state without requiring DOM focus. */
   visuallyFocused?: boolean;
 
@@ -77,6 +80,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   min: undefined,
   max: undefined,
   placeholder: undefined,
+  alwaysFloatLabel: false,
   visuallyFocused: false,
   datePickerVariant: 'auto',
 });
@@ -266,6 +270,7 @@ defineExpose({
     :data-populated="hasValue ? 'true' : 'false'"
     :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
+    :data-always-float-label="props.alwaysFloatLabel ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
     :data-has-date-picker="hasDatePicker ? 'true' : 'false'"
   >

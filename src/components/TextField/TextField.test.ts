@@ -145,6 +145,29 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('marks the label to always float when requested', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TextField, {
+        label: 'Amount',
+        alwaysFloatLabel: true,
+        modelValue: '',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const root = container.querySelector<HTMLElement>('.m3-text-field');
+
+    expect(root?.dataset.alwaysFloatLabel).toBe('true');
+    expect(root?.dataset.populated).toBe('false');
+
+    app.unmount();
+  });
+
   it('opens the library DatePicker for date inputs and updates the date value on confirmation', async () => {
     installPopoverPolyfill();
 
