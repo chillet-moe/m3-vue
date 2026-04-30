@@ -13,6 +13,7 @@ import CheckBoxStatesSrc from '../demos/checkbox/CheckBoxStates.vue?raw';
 
 const props = ref({
   disabled: false,
+  presentation: false,
 });
 
 const checked = ref(false);
@@ -21,6 +22,7 @@ const checked = ref(false);
 # CheckBox
 
 Checkboxes let people confirm independent selections while preserving clear unchecked, checked, and disabled states.
+Use `presentation` when the checkbox is only a visual indicator inside another accessible control, such as a clickable [ListItem](/guides/selection-controls-in-list-items).
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">

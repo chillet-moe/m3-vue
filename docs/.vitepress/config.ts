@@ -59,6 +59,7 @@ export default defineConfig({
             { text: 'Styling', link: '/guides/styling' },
             { text: 'Composables', link: '/guides/composables' },
             { text: 'Component Categories', link: '/guides/component-categories' },
+            { text: 'Selection Controls in List Items', link: '/guides/selection-controls-in-list-items' },
           ],
         },
         {

@@ -3,6 +3,9 @@ export type RadioProps = {
   /** Whether the radio is disabled. */
   disabled?: boolean;
 
+  /** Render only the visual radio. The parent must provide interaction semantics. */
+  presentation?: boolean;
+
   /** Name attribute for the native radio input. */
   name?: string;
 
@@ -13,7 +16,7 @@ export type RadioProps = {
   ariaLabel?: string;
 };
 
-const { disabled = false, name, value, ariaLabel } = defineProps<RadioProps>();
+const { disabled = false, presentation = false, name, value, ariaLabel } = defineProps<RadioProps>();
 
 const checked = defineModel<boolean>('checked', { required: true });
 
@@ -24,14 +27,20 @@ defineSlots<{
 </script>
 
 <template>
-  <label
+  <component
+    :is="presentation ? 'span' : 'label'"
     :class="'m3-radio'"
     data-scope="radio"
     data-part="root"
-    :aria-disabled="disabled ? 'true' : 'false'"
+    :data-checked="checked ? 'true' : 'false'"
+    :data-disabled="disabled ? 'true' : 'false'"
+    :data-presentation="presentation ? 'true' : 'false'"
+    :aria-disabled="presentation ? undefined : disabled ? 'true' : 'false'"
+    :aria-hidden="presentation ? 'true' : undefined"
     data-state-layer-hover-target
   >
     <input
+      v-if="!presentation"
       v-model="checked"
       :class="'m3-radio-input'"
       data-scope="radio"
@@ -55,7 +64,7 @@ defineSlots<{
     </span>
 
     <span v-if="$slots.default" :class="'m3-radio-label'" data-scope="radio" data-part="label"><slot /></span>
-  </label>
+  </component>
 </template>
 
 <style src="./Radio.css"></style>

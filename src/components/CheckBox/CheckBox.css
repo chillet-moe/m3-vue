@@ -83,12 +83,16 @@
     --md-state-layer-color: var(--_unselected-state-layer-color);
   }
 
-  .m3-checkbox:has(.m3-checkbox-input:checked) {
+  .m3-checkbox[data-checked='true'] {
     --md-state-layer-color: var(--_selected-state-layer-color);
   }
 
-  .m3-checkbox[aria-disabled='true'] {
+  .m3-checkbox[data-disabled='true'] {
     cursor: default;
+  }
+
+  .m3-checkbox[data-presentation='true'] {
+    cursor: inherit;
   }
 
   .m3-checkbox-input {
@@ -138,12 +142,12 @@
     transition: all var(--md-easing-fast-spatial);
   }
 
-  .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-box {
+  .m3-checkbox[data-checked='true'] .m3-checkbox-control .m3-checkbox-box {
     background-color: var(--_selected-container-color);
     box-shadow: none;
   }
 
-  .m3-checkbox-input:checked + .m3-checkbox-control .m3-checkbox-icon {
+  .m3-checkbox[data-checked='true'] .m3-checkbox-control .m3-checkbox-icon {
     border-color: var(--_selected-icon-color);
     opacity: 1;
     transform: translate(-50%, calc(-50% - --dp(1))) rotate(-45deg) scale(1);
@@ -167,12 +171,12 @@
     border-radius: var(--_state-layer-shape);
   }
 
-  .m3-checkbox-input:disabled + .m3-checkbox-control .m3-checkbox-box {
+  .m3-checkbox[data-disabled='true'] .m3-checkbox-control .m3-checkbox-box {
     box-shadow: inset 0 0 0 var(--_outline-width)
       --translucent(var(--_disabled-unselected-outline-color), var(--_disabled-unselected-outline-opacity));
   }
 
-  .m3-checkbox-input:disabled:checked + .m3-checkbox-control .m3-checkbox-box {
+  .m3-checkbox[data-disabled='true'][data-checked='true'] .m3-checkbox-control .m3-checkbox-box {
     background-color: --translucent(
       var(--_disabled-selected-container-color),
       var(--_disabled-selected-container-opacity)
@@ -180,7 +184,7 @@
     box-shadow: none;
   }
 
-  .m3-checkbox-input:disabled:checked + .m3-checkbox-control .m3-checkbox-icon {
+  .m3-checkbox[data-disabled='true'][data-checked='true'] .m3-checkbox-control .m3-checkbox-icon {
     border-color: --translucent(var(--_disabled-selected-icon-color), var(--_disabled-selected-icon-opacity));
   }
 

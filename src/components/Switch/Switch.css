@@ -164,12 +164,16 @@
     user-select: none;
   }
 
-  .m3-switch:has(.m3-switch-input:checked) {
+  .m3-switch[data-checked='true'] {
     --md-state-layer-color: var(--md-sys-color-primary);
   }
 
-  .m3-switch[aria-disabled='true'] {
+  .m3-switch[data-disabled='true'] {
     cursor: default;
+  }
+
+  .m3-switch[data-presentation='true'] {
+    cursor: inherit;
   }
 
   .m3-switch-input {
@@ -242,18 +246,18 @@
     --switch-handle-base-height: var(--_switch-with-icon-handle-height);
   }
 
-  .m3-switch-input:checked + .m3-switch-control::before {
+  .m3-switch[data-checked='true'] .m3-switch-control::before {
     background-color: var(--_switch-selected-track-color);
     box-shadow: none;
   }
 
-  .m3-switch-input:checked + .m3-switch-control {
+  .m3-switch[data-checked='true'] .m3-switch-control {
     --switch-handle-center: var(--switch-handle-center-checked);
     --switch-handle-width: var(--_switch-selected-handle-width);
     --switch-handle-height: var(--_switch-selected-handle-height);
   }
 
-  .m3-switch-input:checked + .m3-switch-control .m3-switch-handle {
+  .m3-switch[data-checked='true'] .m3-switch-control .m3-switch-handle {
     background-color: var(--_switch-selected-handle-color);
   }
 
@@ -309,7 +313,7 @@
     border-radius: var(--_switch-track-shape);
   }
 
-  .m3-switch-input:disabled + .m3-switch-control::before {
+  .m3-switch[data-disabled='true'] .m3-switch-control::before {
     background-color: --translucent(
       var(--_switch-disabled-unselected-track-color),
       var(--_switch-disabled-track-opacity)
@@ -318,14 +322,14 @@
       --translucent(var(--_switch-disabled-unselected-track-outline-color), var(--_switch-disabled-track-opacity));
   }
 
-  .m3-switch-input:disabled + .m3-switch-control .m3-switch-handle {
+  .m3-switch[data-disabled='true'] .m3-switch-control .m3-switch-handle {
     background-color: --translucent(
       var(--_switch-disabled-unselected-handle-color),
       var(--_switch-disabled-unselected-handle-opacity)
     );
   }
 
-  .m3-switch-input:disabled:checked + .m3-switch-control::before {
+  .m3-switch[data-disabled='true'][data-checked='true'] .m3-switch-control::before {
     background-color: --translucent(
       var(--_switch-disabled-selected-track-color),
       var(--_switch-disabled-track-opacity)
@@ -333,7 +337,7 @@
     box-shadow: none;
   }
 
-  .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-handle {
+  .m3-switch[data-disabled='true'][data-checked='true'] .m3-switch-control .m3-switch-handle {
     background-color: --translucent(
       var(--_switch-disabled-selected-handle-color),
       var(--_switch-disabled-selected-handle-opacity)
@@ -347,19 +351,19 @@
     color: var(--_switch-unselected-icon-color);
   }
 
-  .m3-switch-input:checked + .m3-switch-control .m3-switch-icon {
+  .m3-switch[data-checked='true'] .m3-switch-control .m3-switch-icon {
     color: var(--_switch-selected-icon-color);
     font-size: var(--_switch-selected-icon-size);
   }
 
-  .m3-switch-input:disabled + .m3-switch-control .m3-switch-icon {
+  .m3-switch[data-disabled='true'] .m3-switch-control .m3-switch-icon {
     color: --translucent(
       var(--_switch-disabled-unselected-icon-color),
       var(--_switch-disabled-unselected-icon-opacity)
     );
   }
 
-  .m3-switch-input:disabled:checked + .m3-switch-control .m3-switch-icon {
+  .m3-switch[data-disabled='true'][data-checked='true'] .m3-switch-control .m3-switch-icon {
     color: --translucent(var(--_switch-disabled-selected-icon-color), var(--_switch-disabled-selected-icon-opacity));
   }
 

@@ -5,6 +5,9 @@ export type SwitchProps = {
   /** Whether the switch is disabled. */
   disabled?: boolean;
 
+  /** Render only the visual switch. The parent must provide interaction semantics. */
+  presentation?: boolean;
+
   /** Icon name displayed when checked. */
   checkedIcon?: string;
 
@@ -21,7 +24,15 @@ export type SwitchProps = {
   ariaLabel?: string;
 };
 
-const { disabled = false, checkedIcon = 'check', uncheckedIcon, name, value, ariaLabel } = defineProps<SwitchProps>();
+const {
+  disabled = false,
+  presentation = false,
+  checkedIcon = 'check',
+  uncheckedIcon,
+  name,
+  value,
+  ariaLabel,
+} = defineProps<SwitchProps>();
 
 const checked = defineModel<boolean>('checked', { required: true });
 
@@ -36,14 +47,20 @@ defineSlots<{
 </script>
 
 <template>
-  <label
+  <component
+    :is="presentation ? 'span' : 'label'"
     :class="'m3-switch'"
     data-scope="switch"
     data-part="root"
-    :aria-disabled="disabled ? 'true' : 'false'"
+    :data-checked="checked ? 'true' : 'false'"
+    :data-disabled="disabled ? 'true' : 'false'"
+    :data-presentation="presentation ? 'true' : 'false'"
+    :aria-disabled="presentation ? undefined : disabled ? 'true' : 'false'"
+    :aria-hidden="presentation ? 'true' : undefined"
     data-state-layer-hover-target
   >
     <input
+      v-if="!presentation"
       v-model="checked"
       :class="'m3-switch-input'"
       data-scope="switch"
@@ -75,7 +92,7 @@ defineSlots<{
     </span>
 
     <span v-if="$slots.default" :class="'m3-switch-label'" data-scope="switch" data-part="label"><slot /></span>
-  </label>
+  </component>
 </template>
 
 <style src="./Switch.css"></style>

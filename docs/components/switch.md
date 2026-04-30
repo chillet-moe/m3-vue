@@ -15,6 +15,7 @@ import SwitchStatesSrc from '../demos/switch/SwitchStates.vue?raw';
 
 const props = ref({
   disabled: false,
+  presentation: false,
   checkedIcon: 'check',
   uncheckedIcon: undefined,
 });
@@ -25,6 +26,7 @@ const checked = ref(false);
 # Switch
 
 Switches communicate an immediate on or off state and support optional checked and unchecked icon affordances.
+Use `presentation` when the switch is only a visual indicator inside another accessible control, such as a clickable [ListItem](/guides/selection-controls-in-list-items).
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">

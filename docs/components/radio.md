@@ -13,6 +13,7 @@ import RadioStatesSrc from '../demos/radio/RadioStates.vue?raw';
 
 const props = ref({
   disabled: false,
+  presentation: false,
 });
 
 const checked = ref(false);
@@ -21,6 +22,7 @@ const checked = ref(false);
 # Radio
 
 Radio buttons present mutually exclusive choices with Material 3 state styling and accessible native form semantics.
+Use `presentation` when the radio is only a visual indicator inside another accessible control, such as a clickable [ListItem](/guides/selection-controls-in-list-items).
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">
