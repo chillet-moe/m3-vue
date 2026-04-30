@@ -37,7 +37,7 @@ defineSlots<{
     :data-presentation="presentation ? 'true' : 'false'"
     :aria-disabled="presentation ? undefined : disabled ? 'true' : 'false'"
     :aria-hidden="presentation ? 'true' : undefined"
-    data-state-layer-hover-target
+    :data-state-layer-hover-target="presentation ? undefined : ''"
   >
     <input
       v-if="!presentation"
@@ -53,10 +53,10 @@ defineSlots<{
     />
 
     <span
-      :class="['m3-state-layer', 'm3-checkbox-control']"
+      :class="[presentation ? undefined : 'm3-state-layer', 'm3-checkbox-control']"
       data-scope="checkbox"
       data-part="control"
-      data-state-layer-hover-from="target"
+      :data-state-layer-hover-from="presentation ? undefined : 'target'"
       aria-hidden="true"
     >
       <span :class="'m3-checkbox-box'" data-scope="checkbox" data-part="box" />

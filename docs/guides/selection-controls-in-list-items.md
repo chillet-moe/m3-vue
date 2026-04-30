@@ -11,7 +11,7 @@ import SelectionControlsInListItemsSrc from '../demos/selection-controls-in-list
 
 `CheckBox`, `Radio`, and `Switch` can appear inside a list item as state indicators. In that layout the row is usually the larger, easier target, while the selection control only communicates the current state.
 
-Use the control's `presentation` prop for this case. Presentation mode keeps the Material 3 visual state, but removes the nested native input and hides the visual control from assistive technology. The parent row must provide the accessible name, role, checked state, disabled state, and interaction.
+Use the control's `presentation` prop for this case. Presentation mode keeps the Material 3 visual state, but removes the nested native input, hides the visual control from assistive technology, and disables the control's own state-layer effect. The parent row must provide the accessible name, role, checked state, disabled state, and interaction feedback.
 
 ## Pattern
 

@@ -44,6 +44,8 @@ describe('CheckBox', () => {
     expect(root?.dataset.presentation).toBe('true');
     expect(root?.dataset.checked).toBe('true');
     expect(root?.getAttribute('aria-hidden')).toBe('true');
+    expect(root?.hasAttribute('data-state-layer-hover-target')).toBe(false);
+    expect(container.querySelector('.m3-state-layer')).toBeNull();
     expect(container.querySelector('.m3-checkbox-input')).toBeNull();
 
     app.unmount();

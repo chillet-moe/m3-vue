@@ -57,7 +57,7 @@ defineSlots<{
     :data-presentation="presentation ? 'true' : 'false'"
     :aria-disabled="presentation ? undefined : disabled ? 'true' : 'false'"
     :aria-hidden="presentation ? 'true' : undefined"
-    data-state-layer-hover-target
+    :data-state-layer-hover-target="presentation ? undefined : ''"
   >
     <input
       v-if="!presentation"
@@ -80,10 +80,10 @@ defineSlots<{
       aria-hidden="true"
     >
       <span
-        :class="['m3-state-layer', 'm3-switch-handle']"
+        :class="[presentation ? undefined : 'm3-state-layer', 'm3-switch-handle']"
         data-scope="switch"
         data-part="handle"
-        data-state-layer-hover-from="target"
+        :data-state-layer-hover-from="presentation ? undefined : 'target'"
       >
         <span v-if="withIcon" :class="'m3-switch-icon'" data-scope="switch" data-part="icon">{{
           checked ? checkedIcon : uncheckedIcon
