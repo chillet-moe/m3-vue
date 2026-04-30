@@ -428,7 +428,7 @@
       var(--md-sys-shape-corner-medium)
     );
 
-    --_button-small-outlined-outline-width: var(--md-button-small-outlined-outline-width, 0.0625rem);
+    --_button-small-outlined-outline-width: var(--md-button-small-outlined-outline-width, --dp(1.25));
     --_button-small-icon-size: var(--md-button-small-icon-size, 1.25rem);
     --_button-small-container-shape-square: var(
       --md-button-small-container-shape-square,
@@ -444,7 +444,7 @@
       var(--md-sys-shape-corner-medium)
     );
 
-    --_button-medium-outlined-outline-width: var(--md-button-medium-outlined-outline-width, 0.0625rem);
+    --_button-medium-outlined-outline-width: var(--md-button-medium-outlined-outline-width, --dp(1.5));
     --_button-medium-icon-size: var(--md-button-medium-icon-size, 1.5rem);
     --_button-medium-container-shape-square: var(
       --md-button-medium-container-shape-square,

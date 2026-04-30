@@ -97,7 +97,7 @@
     );
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,
-      var(--md-button-medium-outlined-outline-width, 0.0625rem)
+      var(--md-button-medium-outlined-outline-width, --dp(1.5))
     );
     --_outlined-text-field-outline-color: var(
       --md-outlined-text-field-outline-color,
@@ -206,7 +206,7 @@
       var(--md-sys-color-on-surface-variant)
     );
     --_outlined-text-field-caret-color: var(--md-outlined-text-field-caret-color, var(--md-sys-color-primary));
-    --_outlined-text-field-disabled-outline-width: var(--md-outlined-text-field-disabled-outline-width, 0.0625rem);
+    --_outlined-text-field-disabled-outline-width: var(--md-outlined-text-field-disabled-outline-width, --dp(1.5));
     --_outlined-text-field-disabled-outline-color: var(
       --md-outlined-text-field-disabled-outline-color,
       var(--md-sys-color-on-surface)
@@ -242,7 +242,7 @@
       --md-outlined-text-field-hover-trailing-icon-color,
       var(--md-sys-color-on-surface-variant)
     );
-    --_outlined-text-field-hover-outline-width: var(--md-outlined-text-field-hover-outline-width, 0.0625rem);
+    --_outlined-text-field-hover-outline-width: var(--md-outlined-text-field-hover-outline-width, --dp(1.75));
     --_outlined-text-field-hover-outline-color: var(
       --md-outlined-text-field-hover-outline-color,
       var(--md-sys-color-on-surface)
