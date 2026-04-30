@@ -3,6 +3,8 @@
     /* Low-specificity public token placeholders; private tokens own defaults. */
     --md-outlined-text-field-caret-color: initial;
     --md-outlined-text-field-container-shape: initial;
+    --md-outlined-text-field-container-shape-round: initial;
+    --md-outlined-text-field-container-shape-square: initial;
     --md-outlined-text-field-disabled-input-text-color: initial;
     --md-outlined-text-field-disabled-input-text-opacity: initial;
     --md-outlined-text-field-disabled-label-text-color: initial;
@@ -83,10 +85,24 @@
   :where(.m3-text-field) {
     --_outlined-text-field-container-shape: var(
       --md-outlined-text-field-container-shape,
-      var(--md-sys-shape-corner-medium)
+      var(--_outlined-text-field-container-shape-round)
     );
-    --_outlined-text-field-outline-width: var(--md-outlined-text-field-outline-width, 0.0625rem);
-    --_outlined-text-field-outline-color: var(--md-outlined-text-field-outline-color, var(--md-sys-color-outline));
+    --_outlined-text-field-container-shape-round: var(
+      --md-outlined-text-field-container-shape-round,
+      var(--md-button-container-shape-round, var(--md-sys-shape-corner-large))
+    );
+    --_outlined-text-field-container-shape-square: var(
+      --md-outlined-text-field-container-shape-square,
+      var(--md-button-medium-container-shape-square, var(--md-sys-shape-corner-medium))
+    );
+    --_outlined-text-field-outline-width: var(
+      --md-outlined-text-field-outline-width,
+      var(--md-button-medium-outlined-outline-width, 0.0625rem)
+    );
+    --_outlined-text-field-outline-color: var(
+      --md-outlined-text-field-outline-color,
+      var(--md-button-outlined-outline-color, var(--md-sys-color-outline-variant))
+    );
     --_outlined-text-field-label-text-color: var(
       --md-outlined-text-field-label-text-color,
       var(--md-sys-color-on-surface-variant)
@@ -373,6 +389,20 @@
     display: grid;
     gap: 0.25rem;
     min-inline-size: 0;
+  }
+
+  .m3-text-field[data-shape='rounded'] {
+    --_outlined-text-field-container-shape: var(
+      --md-outlined-text-field-container-shape,
+      var(--_outlined-text-field-container-shape-round)
+    );
+  }
+
+  .m3-text-field[data-shape='square'] {
+    --_outlined-text-field-container-shape: var(
+      --md-outlined-text-field-container-shape,
+      var(--_outlined-text-field-container-shape-square)
+    );
   }
 
   .m3-text-field-container {

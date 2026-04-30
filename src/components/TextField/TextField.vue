@@ -21,6 +21,9 @@ export type TextFieldProps = {
   /** Native input type. Date and datetime-local use the library DatePicker. */
   type?: string;
 
+  /** The shape of the text field. Matches Button shape sizes. */
+  shape?: 'rounded' | 'square';
+
   /** Rows when rendered as textarea. */
   rows?: number;
 
@@ -70,6 +73,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   id: undefined,
   as: 'input',
   type: 'text',
+  shape: 'square',
   rows: 3,
   description: undefined,
   error: undefined,
@@ -267,6 +271,7 @@ defineExpose({
     data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
+    :data-shape="props.shape"
     :data-populated="hasValue ? 'true' : 'false'"
     :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"

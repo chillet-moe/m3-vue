@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { TextField } from '@/components/TextField';
+import { Button } from '@/components/Button';
 
 const empty = ref('');
 const input = ref('Input');
@@ -25,5 +26,6 @@ const multiline = ref('This is a long input in a multi-line text field that wrap
       </template>
     </TextField>
     <TextField label="Label" v-model="multiline" as="textarea" :rows="4" />
+    <Button shape="square">Button</Button>
   </div>
 </template>

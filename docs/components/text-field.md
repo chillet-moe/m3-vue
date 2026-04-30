@@ -15,6 +15,7 @@ import TextFieldPasswordSrc from '../demos/text-field/TextFieldPassword.vue?raw'
 
 const props = ref({
   label: 'Label',
+  shape: 'square',
   disabled: false,
   required: false,
   description: 'Supporting text',

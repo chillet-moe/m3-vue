@@ -168,6 +168,45 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('exposes the requested shape state', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TextField, {
+        label: 'Amount',
+        shape: 'square',
+        modelValue: '',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector<HTMLElement>('.m3-text-field')?.dataset.shape).toBe('square');
+
+    app.unmount();
+  });
+
+  it('uses square shape by default', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TextField, {
+        label: 'Amount',
+        modelValue: '',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector<HTMLElement>('.m3-text-field')?.dataset.shape).toBe('square');
+
+    app.unmount();
+  });
+
   it('opens the library DatePicker for date inputs and updates the date value on confirmation', async () => {
     installPopoverPolyfill();
 
