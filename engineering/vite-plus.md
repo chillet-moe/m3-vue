@@ -82,4 +82,5 @@ For GitHub Actions, consider using [`voidzero-dev/setup-vp`](https://github.com/
 ## Review Checklist for Agents
 
 - [ ] Run `vp install` after pulling remote changes and before getting started.
-- [ ] Run `vp check` and `vp test` to validate changes.
+- [ ] Choose validation scope by risk: for behavior changes and bug fixes, run focused tests first and broaden as needed; for trivial default-value, docs, or pure CSS/token changes, type/format checks or review may be enough.
+- [ ] Use `vp check`, `vp test`, or focused `vp test run <file>` when the change warrants automated validation.
