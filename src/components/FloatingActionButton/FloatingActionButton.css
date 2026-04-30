@@ -74,6 +74,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     vertical-align: middle;
 
     block-size: var(--_fab-container-height);

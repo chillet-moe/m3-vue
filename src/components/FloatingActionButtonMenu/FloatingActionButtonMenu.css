@@ -150,6 +150,7 @@
     display: inline-flex;
     align-items: flex-end;
     justify-content: flex-end;
+    flex-shrink: 0;
     vertical-align: middle;
     inline-size: var(--_fab-menu-trigger-container-width);
     block-size: var(--_fab-menu-trigger-container-height);

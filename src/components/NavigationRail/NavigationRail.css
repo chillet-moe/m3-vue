@@ -40,6 +40,7 @@
 
     all: unset;
     box-sizing: border-box;
+    flex-shrink: 0;
     inline-size: var(--_navigation-rail-current-width);
     min-inline-size: 0;
     min-block-size: 100%;

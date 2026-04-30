@@ -41,6 +41,7 @@
 @layer components {
   .m3-circular-progress-indicator {
     display: inline-block;
+    flex-shrink: 0;
     inline-size: var(--_current-size);
     block-size: var(--_current-size);
     color: var(--_active-indicator-color);

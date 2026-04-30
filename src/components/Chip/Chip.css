@@ -941,8 +941,10 @@
     display: inline-flex;
     align-items: center;
     gap: var(--_chip-icon-gap);
+    flex-shrink: 0;
     user-select: none;
-    min-inline-size: 0;
+    inline-size: max-content;
+    min-inline-size: max-content;
     max-inline-size: 100%;
 
     border: none;

@@ -57,6 +57,7 @@
     --_caret-color: var(--_input-otp-caret-color);
 
     display: inline-grid;
+    flex-shrink: 0;
     min-inline-size: 0;
   }
 

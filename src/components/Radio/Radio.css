@@ -62,6 +62,7 @@
     display: inline-flex;
     align-items: center;
     gap: --dp(4);
+    flex-shrink: 0;
     position: relative;
     inline-size: fit-content;
     cursor: pointer;

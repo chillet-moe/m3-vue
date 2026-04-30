@@ -232,6 +232,7 @@
   .m3-button-group {
     all: unset;
     display: inline-flex;
+    flex-shrink: 0;
 
     height: var(--_button-group-height);
     gap: var(--_button-group-between-space);

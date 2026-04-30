@@ -1052,6 +1052,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 
     transition:
       border-radius var(--md-easing-fast-spatial),
