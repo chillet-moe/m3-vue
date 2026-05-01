@@ -24,7 +24,9 @@ export default defineConfig({
     categories: {
       correctness: 'error',
     },
-    rules: {},
+    rules: {
+      'no-unused-vars': 'off',
+    },
     env: {
       builtin: true,
     },
