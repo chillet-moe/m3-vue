@@ -298,4 +298,61 @@ describe('TextField', () => {
 
     app.unmount();
   });
+
+  it('opens the library TimePicker for time inputs and updates the time value on confirmation', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const value = ref('09:30');
+
+        return () =>
+          h(TextField, {
+            label: 'Time',
+            type: 'time',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = nextValue as string;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector<HTMLInputElement>('.m3-text-field-input');
+    const timePicker = container.querySelector<HTMLElement>('.m3-time-picker');
+
+    expect(input?.type).toBe('text');
+
+    input?.click();
+    await nextTick();
+    await nextTick();
+
+    expect(isPopoverOpen(timePicker)).toBe(true);
+
+    const hourInput = container.querySelector<HTMLInputElement>('[data-part="hour-input"]');
+    const minuteInput = container.querySelector<HTMLInputElement>('[data-part="minute-input"]');
+
+    if (hourInput && minuteInput) {
+      hourInput.value = '14';
+      hourInput.dispatchEvent(new Event('input', { bubbles: true }));
+      minuteInput.value = '45';
+      minuteInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    Array.from(container.querySelectorAll<HTMLButtonElement>('button'))
+      .find((button) => button.textContent?.trim() === 'OK')
+      ?.click();
+    await nextTick();
+
+    expect(input?.value).toBe('14:45');
+    expect(isPopoverOpen(timePicker)).toBe(false);
+
+    app.unmount();
+  });
 });

@@ -1,0 +1,511 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  :where(:root) {
+    --md-time-picker-container-color: initial;
+    --md-time-picker-container-elevation: initial;
+    --md-time-picker-container-shape: initial;
+    --md-time-picker-container-width: initial;
+    --md-time-picker-clock-dial-container-color: initial;
+    --md-time-picker-clock-hand-color: initial;
+    --md-time-picker-clock-label-text-color: initial;
+    --md-time-picker-clock-selected-label-text-color: initial;
+    --md-time-picker-selector-container-color: initial;
+    --md-time-picker-selector-selected-container-color: initial;
+    --md-time-picker-selector-selected-label-text-color: initial;
+    --md-time-picker-selector-unselected-label-text-color: initial;
+    --md-time-picker-period-selector-outline-color: initial;
+    --md-time-picker-title-text-color: initial;
+  }
+
+  :where(.m3-time-picker) {
+    --_time-picker-container-color: var(--md-time-picker-container-color, var(--md-sys-color-surface-container-high));
+    --_time-picker-container-elevation: var(--md-time-picker-container-elevation, var(--md-sys-elevation-level3));
+    --_time-picker-container-shape: var(--md-time-picker-container-shape, var(--md-sys-shape-corner-extra-large));
+    --_time-picker-container-width: var(--md-time-picker-container-width, 22.5rem);
+    --_time-picker-clock-dial-container-color: var(
+      --md-time-picker-clock-dial-container-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_time-picker-clock-hand-color: var(--md-time-picker-clock-hand-color, var(--md-sys-color-primary));
+    --_time-picker-clock-label-text-color: var(--md-time-picker-clock-label-text-color, var(--md-sys-color-on-surface));
+    --_time-picker-clock-selected-label-text-color: var(
+      --md-time-picker-clock-selected-label-text-color,
+      var(--md-sys-color-on-primary)
+    );
+    --_time-picker-selector-container-color: var(
+      --md-time-picker-selector-container-color,
+      var(--md-sys-color-surface-container-highest)
+    );
+    --_time-picker-selector-selected-container-color: var(
+      --md-time-picker-selector-selected-container-color,
+      var(--md-sys-color-primary-container)
+    );
+    --_time-picker-selector-selected-label-text-color: var(
+      --md-time-picker-selector-selected-label-text-color,
+      var(--md-sys-color-on-primary-container)
+    );
+    --_time-picker-selector-unselected-label-text-color: var(
+      --md-time-picker-selector-unselected-label-text-color,
+      var(--md-sys-color-on-surface)
+    );
+    --_time-picker-period-selector-outline-color: var(
+      --md-time-picker-period-selector-outline-color,
+      var(--md-sys-color-outline)
+    );
+    --_time-picker-title-text-color: var(--md-time-picker-title-text-color, var(--md-sys-color-on-surface-variant));
+  }
+}
+
+@layer components {
+  .m3-time-picker {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    border: none;
+    padding: 0.5rem 0 0;
+    box-sizing: border-box;
+    inline-size: min(var(--_time-picker-container-width), calc(100vw - 2rem));
+    overflow: visible;
+    background: transparent;
+    color: inherit;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    position-visibility: anchors-visible;
+
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 100ms var(--md-timing-function-emphasized-decel),
+      overlay var(--md-duration-fast) allow-discrete,
+      display var(--md-duration-fast) allow-discrete;
+
+    --md-color-container: var(--_time-picker-container-color);
+    --md-color-on-container: var(--md-sys-color-on-surface);
+    --md-state-layer-color: var(--md-sys-color-on-surface);
+  }
+
+  .m3-time-picker:popover-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .m3-time-picker::backdrop {
+    background-color: transparent;
+    transition: background-color var(--md-duration-spatial) var(--md-timing-function-spatial);
+  }
+
+  .m3-time-picker-surface {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    box-sizing: border-box;
+    inline-size: 100%;
+    overflow: hidden;
+    border-radius: var(--_time-picker-container-shape);
+    background: var(--md-color-container);
+    color: var(--md-color-on-container);
+    box-shadow: var(--_time-picker-container-elevation);
+    transform: scale(0.98, 0.9);
+    transform-origin: top center;
+    transition: transform 120ms var(--md-timing-function-emphasized-accel);
+  }
+
+  .m3-time-picker:popover-open .m3-time-picker-surface {
+    transform: scale(1);
+    transition-duration: 220ms;
+    transition-timing-function: var(--md-timing-function-fast-spatial);
+  }
+
+  .m3-time-picker-header {
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1.5rem 0.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  .m3-time-picker-title {
+    color: var(--_time-picker-title-text-color);
+    font-family:
+      var(--md-sys-typescale-label-medium-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-sys-typescale-label-medium-size);
+    line-height: var(--md-sys-typescale-label-medium-line-height);
+    font-weight: var(--md-sys-typescale-label-medium-weight);
+    letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  }
+
+  .m3-time-picker-display {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .m3-time-picker[data-format='24h'] .m3-time-picker-display {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .m3-time-picker-display-field {
+    border: none;
+    display: grid;
+    place-items: center;
+    min-inline-size: 0;
+    min-block-size: 5rem;
+    border-radius: var(--md-sys-shape-corner-extra-small);
+    background: var(--_time-picker-selector-container-color);
+    color: var(--_time-picker-selector-unselected-label-text-color);
+    font-family:
+      var(--md-sys-typescale-display-large-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: clamp(2.75rem, 16vw, var(--md-sys-typescale-display-large-size));
+    line-height: 1;
+    font-weight: var(--md-sys-typescale-display-large-weight);
+    letter-spacing: 0;
+    cursor: pointer;
+  }
+
+  .m3-time-picker-display-field[data-selected='true'] {
+    background: var(--_time-picker-selector-selected-container-color);
+    color: var(--_time-picker-selector-selected-label-text-color);
+  }
+
+  .m3-time-picker-display-separator,
+  .m3-time-picker-input-separator {
+    align-self: center;
+    color: var(--md-sys-color-on-surface);
+    font-family:
+      var(--md-sys-typescale-display-large-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-sys-typescale-display-large-size);
+    line-height: 1;
+    font-weight: var(--md-sys-typescale-display-large-weight);
+  }
+
+  .m3-time-picker-period {
+    display: grid;
+    min-inline-size: 4.5rem;
+    overflow: hidden;
+    border: 1px solid var(--_time-picker-period-selector-outline-color);
+    border-radius: var(--md-sys-shape-corner-small);
+  }
+
+  .m3-time-picker-period-button {
+    border: none;
+    min-block-size: 2.5rem;
+    padding-inline: 0.75rem;
+    color: var(--_time-picker-selector-unselected-label-text-color);
+    font-family:
+      var(--md-sys-typescale-title-medium-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    letter-spacing: var(--md-sys-typescale-title-medium-tracking);
+    cursor: pointer;
+  }
+
+  .m3-time-picker-period-button + .m3-time-picker-period-button {
+    border-block-start: 1px solid var(--_time-picker-period-selector-outline-color);
+  }
+
+  .m3-time-picker-period-button[data-selected='true'] {
+    background: var(--_time-picker-selector-selected-container-color);
+    color: var(--_time-picker-selector-selected-label-text-color);
+  }
+
+  .m3-time-picker-clock {
+    display: grid;
+    place-items: center;
+    padding-block: 1rem 0.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  .m3-time-picker-clock-face {
+    position: relative;
+    inline-size: min(16rem, calc(100vw - 5rem));
+    aspect-ratio: 1;
+    border-radius: var(--md-sys-shape-corner-full);
+    background: var(--_time-picker-clock-dial-container-color);
+    touch-action: none;
+    user-select: none;
+  }
+
+  .m3-time-picker-clock-hand {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: 0.125rem;
+    block-size: var(--_time-picker-hand-radius, 42%);
+    background: var(--_time-picker-clock-hand-color);
+    transform-origin: 50% 0;
+    transform: rotate(var(--_time-picker-hand-angle, 0deg)) translateY(-100%);
+    z-index: 0;
+  }
+
+  .m3-time-picker-clock-hand::before,
+  .m3-time-picker-clock-hand::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 50%;
+    border-radius: var(--md-sys-shape-corner-full);
+    background: var(--_time-picker-clock-hand-color);
+    transform: translateX(-50%);
+  }
+
+  .m3-time-picker-clock-hand::before {
+    inset-block-start: -0.625rem;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  .m3-time-picker-clock-hand::after {
+    inset-block-end: -0.25rem;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+  }
+
+  .m3-time-picker-clock-option {
+    position: absolute;
+    border: none;
+    display: grid;
+    place-items: center;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: var(--md-sys-shape-corner-full);
+    color: var(--_time-picker-clock-label-text-color);
+    font-family:
+      var(--md-sys-typescale-body-large-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    font-weight: var(--md-sys-typescale-body-large-weight);
+    letter-spacing: var(--md-sys-typescale-body-large-tracking);
+    cursor: pointer;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  .m3-time-picker-clock-option[data-selected='true'] {
+    background: var(--_time-picker-clock-hand-color);
+    color: var(--_time-picker-clock-selected-label-text-color);
+  }
+
+  .m3-time-picker-inputs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 4.5rem;
+    align-items: start;
+    gap: 0.75rem;
+    padding-block: 1.75rem 1rem;
+    padding-inline: 1.5rem;
+  }
+
+  .m3-time-picker[data-format='24h'] .m3-time-picker-inputs {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .m3-time-picker-input-field {
+    display: grid;
+    gap: 0.375rem;
+    min-inline-size: 0;
+  }
+
+  .m3-time-picker-input-label {
+    color: var(--md-sys-color-on-surface-variant);
+    font-family:
+      var(--md-sys-typescale-label-medium-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-sys-typescale-label-medium-size);
+    line-height: var(--md-sys-typescale-label-medium-line-height);
+    font-weight: var(--md-sys-typescale-label-medium-weight);
+    letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  }
+
+  .m3-time-picker-input-error {
+    color: var(--md-sys-color-error);
+    font-family:
+      var(--md-sys-typescale-label-small-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: var(--md-sys-typescale-label-small-size);
+    line-height: var(--md-sys-typescale-label-small-line-height);
+    font-weight: var(--md-sys-typescale-label-small-weight);
+    letter-spacing: var(--md-sys-typescale-label-small-tracking);
+  }
+
+  .m3-time-picker-input {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: 5rem;
+    border: 2px solid transparent;
+    border-radius: var(--md-sys-shape-corner-extra-small);
+    padding-inline: 0.75rem;
+    background: var(--_time-picker-selector-container-color);
+    color: var(--_time-picker-selector-unselected-label-text-color);
+    font-family:
+      var(--md-sys-typescale-display-large-font),
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      sans-serif;
+    font-size: clamp(2.75rem, 16vw, var(--md-sys-typescale-display-large-size));
+    line-height: 1;
+    font-weight: var(--md-sys-typescale-display-large-weight);
+    letter-spacing: 0;
+    text-align: center;
+  }
+
+  .m3-time-picker-inputs .m3-time-picker-input-separator {
+    align-self: start;
+    display: grid;
+    place-items: center;
+    block-size: 5rem;
+  }
+
+  .m3-time-picker-inputs .m3-time-picker-period {
+    align-self: start;
+    block-size: 5rem;
+  }
+
+  .m3-time-picker-inputs .m3-time-picker-period-button {
+    min-block-size: 0;
+  }
+
+  .m3-time-picker-input:focus {
+    border-color: var(--md-sys-color-primary);
+    outline: none;
+    background: var(--_time-picker-selector-selected-container-color);
+    color: var(--_time-picker-selector-selected-label-text-color);
+  }
+
+  .m3-time-picker-input[aria-invalid='true'] {
+    border-color: var(--md-sys-color-error);
+  }
+
+  .m3-time-picker-display-field:focus-visible,
+  .m3-time-picker-period-button:focus-visible,
+  .m3-time-picker-clock-option:focus-visible,
+  .m3-time-picker-actions :is(button, .m3-icon-button):focus-visible {
+    outline-offset: 0.125rem;
+    outline: var(--md-sys-color-secondary) solid var(--md-sys-state-focus-indicator-thickness);
+  }
+
+  .m3-time-picker-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.5rem 0.75rem;
+    padding-inline: 1rem;
+  }
+
+  .m3-time-picker-actions-spacer {
+    flex: 1;
+  }
+
+  .m3-time-picker[data-variant='modal'] {
+    inset: 0;
+    margin: auto;
+    padding: 0;
+    inline-size: min(var(--_time-picker-container-width), calc(100vw - 2rem));
+    block-size: fit-content;
+    position-area: none;
+    position-try-fallbacks: none;
+  }
+
+  .m3-time-picker[data-variant='modal']::backdrop {
+    background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+  }
+
+  .m3-time-picker[data-variant='modal'] .m3-time-picker-surface {
+    transform-origin: center;
+  }
+
+  @media (width < 40rem), (pointer: coarse) {
+    .m3-time-picker[data-variant='auto'] {
+      inset: 0;
+      margin: auto;
+      padding: 0;
+      inline-size: min(var(--_time-picker-container-width), calc(100vw - 2rem));
+      block-size: fit-content;
+      position-area: none;
+      position-try-fallbacks: none;
+    }
+
+    .m3-time-picker[data-variant='auto']::backdrop {
+      background-color: --translucent(var(--md-sys-color-scrim), 0.3);
+    }
+
+    .m3-time-picker[data-variant='auto'] .m3-time-picker-surface {
+      transform-origin: center;
+    }
+  }
+
+  @starting-style {
+    .m3-time-picker:popover-open {
+      opacity: 0;
+    }
+
+    .m3-time-picker:popover-open .m3-time-picker-surface {
+      transform: scale(0.98, 0.9);
+    }
+  }
+
+  @media (width < 26rem) {
+    .m3-time-picker {
+      inline-size: calc(100vw - 1rem);
+    }
+
+    .m3-time-picker-header,
+    .m3-time-picker-clock,
+    .m3-time-picker-inputs {
+      padding-inline: 1rem;
+    }
+
+    .m3-time-picker-display {
+      gap: 0.375rem;
+    }
+
+    .m3-time-picker-period {
+      min-inline-size: 4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m3-time-picker,
+    .m3-time-picker::backdrop,
+    .m3-time-picker-surface {
+      transition-duration: 0ms;
+    }
+  }
+}

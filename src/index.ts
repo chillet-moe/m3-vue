@@ -58,6 +58,7 @@ export * from './components/Select';
 export * from './components/SideSheet';
 export * from './components/Combobox';
 export * from './components/Tabs';
+export * from './components/TimePicker';
 
 // Resolver
 export { M3VueResolver } from './resolver';

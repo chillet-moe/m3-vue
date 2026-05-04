@@ -57,6 +57,7 @@ export const m3VueComponentNames = [
   'TabPanel',
   'Tabs',
   'TextField',
+  'TimePicker',
   'Tooltip',
 ] as const;
 

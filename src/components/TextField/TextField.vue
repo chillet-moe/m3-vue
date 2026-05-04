@@ -7,6 +7,14 @@ import {
   normalizeIsoDate,
 } from '@/components/DatePicker';
 import IconButton from '@/components/IconButton/IconButton.vue';
+import {
+  normalizeTimeValue,
+  TimePicker,
+  type TimePickerFormat,
+  type TimePickerInputMode,
+  type TimePickerModelValue,
+  type TimePickerVariant,
+} from '@/components/TimePicker';
 
 export type TextFieldProps = {
   /** Visible label. If omitted, provide aria-label via attrs. */
@@ -18,7 +26,7 @@ export type TextFieldProps = {
   /** Render either a single-line input or multiline textarea. */
   as?: 'input' | 'textarea';
 
-  /** Native input type. Date and datetime-local use the library DatePicker. */
+  /** Native input type. Date and datetime-local use DatePicker. Time uses TimePicker. */
   type?: string;
 
   /** The shape of the text field. Matches Button shape sizes. */
@@ -62,6 +70,15 @@ export type TextFieldProps = {
 
   /** DatePicker variant when type is date or datetime-local. */
   datePickerVariant?: DatePickerVariant;
+
+  /** TimePicker variant when type is time. */
+  timePickerVariant?: TimePickerVariant;
+
+  /** TimePicker format when type is time. */
+  timePickerFormat?: TimePickerFormat;
+
+  /** TimePicker input mode when type is time. */
+  timePickerInputMode?: TimePickerInputMode;
 };
 
 const generatedId = useId();
@@ -87,6 +104,9 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   alwaysFloatLabel: false,
   visuallyFocused: false,
   datePickerVariant: 'auto',
+  timePickerVariant: 'auto',
+  timePickerFormat: '24h',
+  timePickerInputMode: undefined,
 });
 
 const emit = defineEmits<{
@@ -131,7 +151,9 @@ const rootRef = ref<HTMLDivElement>();
 const containerRef = ref<HTMLDivElement>();
 const controlRef = ref<HTMLInputElement | HTMLTextAreaElement>();
 const datePickerOpen = ref(false);
+const timePickerOpen = ref(false);
 const datePickerAnchorName = `--m3-text-field-date-picker-anchor-${generatedId}`;
+const timePickerAnchorName = `--m3-text-field-time-picker-anchor-${generatedId}`;
 
 const normalizedInputType = computed(() => {
   return props.type.toLowerCase();
@@ -143,8 +165,16 @@ const hasDatePicker = computed(() => {
   );
 });
 
+const hasTimePicker = computed(() => {
+  return props.as === 'input' && normalizedInputType.value === 'time';
+});
+
+const hasPicker = computed(() => {
+  return hasDatePicker.value || hasTimePicker.value;
+});
+
 const nativeInputType = computed(() => {
-  return hasDatePicker.value ? 'text' : props.type;
+  return hasPicker.value ? 'text' : props.type;
 });
 
 const datePickerMin = computed(() => {
@@ -175,6 +205,27 @@ const datePickerValue = computed<DatePickerModelValue>({
   },
 });
 
+const timePickerValue = computed<TimePickerModelValue>({
+  get() {
+    return normalizeTimeValue(modelValue.value);
+  },
+  set(nextValue) {
+    modelValue.value = nextValue ?? '';
+  },
+});
+
+const pickerId = computed(() => {
+  if (hasDatePicker.value) {
+    return `${inputId.value}-date-picker`;
+  }
+
+  if (hasTimePicker.value) {
+    return `${inputId.value}-time-picker`;
+  }
+
+  return undefined;
+});
+
 const controlAttrs = computed(() => {
   const forwarded = { ...attrs };
   delete forwarded.class;
@@ -183,7 +234,15 @@ const controlAttrs = computed(() => {
 });
 
 const containerStyle = computed(() => {
-  return hasDatePicker.value ? { 'anchor-name': datePickerAnchorName } : undefined;
+  if (hasDatePicker.value) {
+    return { 'anchor-name': datePickerAnchorName };
+  }
+
+  if (hasTimePicker.value) {
+    return { 'anchor-name': timePickerAnchorName };
+  }
+
+  return undefined;
 });
 
 function normalizeDateLikeValue(value: string | undefined) {
@@ -211,15 +270,15 @@ const handleBlur = (event: FocusEvent) => {
 };
 
 const handleKeydown = (event: KeyboardEvent) => {
-  if (hasDatePicker.value && !props.disabled && !props.readonly) {
+  if (hasPicker.value && !props.disabled && !props.readonly) {
     if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      datePickerOpen.value = true;
+      openPicker();
       return;
     }
 
     if (event.key === 'Escape') {
-      datePickerOpen.value = false;
+      closePicker();
     }
   }
 
@@ -227,14 +286,30 @@ const handleKeydown = (event: KeyboardEvent) => {
 };
 
 const handleControlClick = () => {
-  if (!hasDatePicker.value || props.disabled || props.readonly) {
+  if (!hasPicker.value || props.disabled || props.readonly) {
     return;
   }
 
-  datePickerOpen.value = true;
+  openPicker();
 };
 
-const handleDatePickerButtonClick = () => {
+function openPicker() {
+  if (hasDatePicker.value) {
+    datePickerOpen.value = true;
+    return;
+  }
+
+  if (hasTimePicker.value) {
+    timePickerOpen.value = true;
+  }
+}
+
+function closePicker() {
+  datePickerOpen.value = false;
+  timePickerOpen.value = false;
+}
+
+const handlePickerButtonClick = () => {
   controlRef.value?.focus();
   handleControlClick();
 };
@@ -278,6 +353,7 @@ defineExpose({
     :data-always-float-label="props.alwaysFloatLabel ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
     :data-has-date-picker="hasDatePicker ? 'true' : 'false'"
+    :data-has-time-picker="hasTimePicker ? 'true' : 'false'"
   >
     <div
       ref="containerRef"
@@ -344,9 +420,19 @@ defineExpose({
           :readonly="props.readonly"
           :aria-invalid="invalid ? 'true' : undefined"
           :aria-describedby="supportingId"
-          :aria-controls="hasDatePicker ? `${inputId}-date-picker` : undefined"
-          :aria-expanded="hasDatePicker ? (datePickerOpen ? 'true' : 'false') : undefined"
-          :aria-haspopup="hasDatePicker ? 'dialog' : undefined"
+          :aria-controls="pickerId"
+          :aria-expanded="
+            hasDatePicker
+              ? datePickerOpen
+                ? 'true'
+                : 'false'
+              : hasTimePicker
+                ? timePickerOpen
+                  ? 'true'
+                  : 'false'
+                : undefined
+          "
+          :aria-haspopup="hasPicker ? 'dialog' : undefined"
           v-bind="controlAttrs"
           @click="handleControlClick"
           @input="handleInput"
@@ -360,21 +446,21 @@ defineExpose({
           <slot name="suffix" />
         </span>
         <span
-          v-if="slots.trailing || hasDatePicker"
+          v-if="slots.trailing || hasPicker"
           :class="'m3-text-field-trailing-slot'"
           data-scope="text-field"
           data-part="trailing"
         >
           <slot name="trailing" />
           <IconButton
-            v-if="hasDatePicker"
+            v-if="hasPicker"
             class="m3-text-field-date-picker-button m3-state-layer"
-            icon="calendar_today"
+            :icon="hasTimePicker ? 'schedule' : 'calendar_today'"
             color="standard"
             size="small"
             :disabled="props.disabled || props.readonly"
-            aria-label="Choose date"
-            @click.stop="handleDatePickerButtonClick"
+            :aria-label="hasTimePicker ? 'Choose time' : 'Choose date'"
+            @click.stop="handlePickerButtonClick"
           />
         </span>
       </span>
@@ -408,6 +494,21 @@ defineExpose({
       :min="datePickerMin"
       :max="datePickerMax"
       :aria-label="props.label ? `Choose ${props.label}` : 'Choose date'"
+    />
+
+    <TimePicker
+      v-if="hasTimePicker"
+      :id="`${inputId}-time-picker`"
+      v-model="timePickerValue"
+      v-model:open="timePickerOpen"
+      data-scope="text-field"
+      data-part="time-picker"
+      :variant="props.timePickerVariant"
+      :format="props.timePickerFormat"
+      :input-mode="props.timePickerInputMode"
+      :anchor-name="timePickerAnchorName"
+      :anchor-element="containerRef"
+      :aria-label="props.label ? `Choose ${props.label}` : 'Choose time'"
     />
   </div>
 </template>

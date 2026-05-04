@@ -26,6 +26,7 @@ import { snackbarStyleTokens } from './style-tokens/Snackbar';
 import { switchStyleTokens } from './style-tokens/Switch';
 import { tabsStyleTokens } from './style-tokens/Tabs';
 import { textFieldStyleTokens } from './style-tokens/TextField';
+import { timePickerStyleTokens } from './style-tokens/TimePicker';
 import { tooltipStyleTokens } from './style-tokens/Tooltip';
 import type { StyleTokenMeta } from './style-tokens/types';
 
@@ -60,5 +61,6 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   Switch: switchStyleTokens,
   Tabs: tabsStyleTokens,
   TextField: textFieldStyleTokens,
+  TimePicker: timePickerStyleTokens,
   Tooltip: tooltipStyleTokens,
 };

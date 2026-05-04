@@ -114,6 +114,7 @@ export default defineConfig({
                 { text: 'InputOtp', link: '/components/input-otp' },
                 { text: 'Select', link: '/components/select' },
                 { text: 'TextField', link: '/components/text-field' },
+                { text: 'TimePicker', link: '/components/time-picker' },
               ],
             },
             {
