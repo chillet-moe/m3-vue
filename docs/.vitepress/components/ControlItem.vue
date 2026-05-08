@@ -36,7 +36,26 @@ const textValue = computed({
   },
 });
 
-const numberTextValue = computed({
+function normalizeNumberControlValue(value: unknown) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : undefined;
+  }
+
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  const trimmedValue = value.trim();
+
+  if (trimmedValue === '') {
+    return undefined;
+  }
+
+  const nextValue = Number(trimmedValue);
+  return Number.isNaN(nextValue) ? undefined : nextValue;
+}
+
+const numberTextValue = computed<string, string | number | undefined>({
   get() {
     if (typeof props.modelValue === 'number' && Number.isFinite(props.modelValue)) {
       return String(props.modelValue);
@@ -44,16 +63,8 @@ const numberTextValue = computed({
 
     return '';
   },
-  set(value: string) {
-    const trimmedValue = value.trim();
-
-    if (trimmedValue === '') {
-      emit('update:modelValue', undefined);
-      return;
-    }
-
-    const nextValue = Number(trimmedValue);
-    emit('update:modelValue', Number.isNaN(nextValue) ? undefined : nextValue);
+  set(value) {
+    emit('update:modelValue', normalizeNumberControlValue(value));
   },
 });
 
