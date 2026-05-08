@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { Chip, ChipGroup, Switch, TextField } from '@/index';
 import type { PropMeta } from '../plugins/component-meta';
@@ -55,6 +55,34 @@ function normalizeNumberControlValue(value: unknown) {
   return Number.isNaN(nextValue) ? undefined : nextValue;
 }
 
+function formatNumberArrayControlValue(value: unknown) {
+  return Array.isArray(value) && value.every((item) => typeof item === 'number' && Number.isFinite(item))
+    ? value.join(', ')
+    : '';
+}
+
+function normalizeNumberArrayControlValue(value: string) {
+  const trimmedValue = value.trim();
+
+  if (!trimmedValue) {
+    return { valid: true, value: undefined };
+  }
+
+  const parts = trimmedValue.split(',').map((part) => part.trim());
+
+  if (parts.some((part) => !part)) {
+    return { valid: false, value: undefined };
+  }
+
+  const values = parts.map((part) => Number(part));
+
+  if (values.some((item) => !Number.isFinite(item))) {
+    return { valid: false, value: undefined };
+  }
+
+  return { valid: true, value: values };
+}
+
 const numberTextValue = computed<string, string | number | undefined>({
   get() {
     if (typeof props.modelValue === 'number' && Number.isFinite(props.modelValue)) {
@@ -67,6 +95,40 @@ const numberTextValue = computed<string, string | number | undefined>({
     emit('update:modelValue', normalizeNumberControlValue(value));
   },
 });
+
+const isNumberArrayFocused = ref(false);
+const numberArrayTextValue = ref(formatNumberArrayControlValue(props.modelValue));
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (!isNumberArrayFocused.value) {
+      numberArrayTextValue.value = formatNumberArrayControlValue(value);
+    }
+  },
+);
+
+function updateNumberArrayValue(value: string) {
+  numberArrayTextValue.value = value;
+
+  const nextValue = normalizeNumberArrayControlValue(value);
+  if (nextValue.valid) {
+    emit('update:modelValue', nextValue.value);
+  }
+}
+
+function handleNumberArrayInput(event: Event) {
+  updateNumberArrayValue((event.target as HTMLInputElement | HTMLTextAreaElement).value);
+}
+
+function handleNumberArrayFocus() {
+  isNumberArrayFocused.value = true;
+}
+
+function handleNumberArrayBlur() {
+  isNumberArrayFocused.value = false;
+  numberArrayTextValue.value = formatNumberArrayControlValue(props.modelValue);
+}
 
 const optionValue = computed({
   get() {
@@ -114,6 +176,18 @@ const inputLabel = computed(() => {
     inputmode="decimal"
     type="number"
     step="any"
+  />
+
+  <TextField
+    v-else-if="controlType === 'number-array'"
+    v-model="numberArrayTextValue"
+    class="control-item-field"
+    :aria-label="inputLabel"
+    :placeholder="prop.name"
+    inputmode="decimal"
+    @input="handleNumberArrayInput"
+    @focus="handleNumberArrayFocus"
+    @blur="handleNumberArrayBlur"
   />
 
   <span v-else class="control-item-unsupported">Unsupported</span>

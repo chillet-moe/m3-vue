@@ -34,12 +34,13 @@ const props = ref({
   disabled: false,
   valueIndicator: true,
   valueIndicatorPlacement: undefined,
+  stopIndicators: undefined as number[] | undefined,
 });
 
 const value = ref(2);
 
 const stopIndicators = computed(() => {
-  return createStops(props.value.min, props.value.max, props.value.step);
+  return props.value.stopIndicators ?? createStops(props.value.min, props.value.max, props.value.step);
 });
 
 watch(
@@ -68,7 +69,7 @@ Slider handles horizontal and vertical range input, inset icons, value indicator
 
 <AnatomyTable scope="slider" />
 
-<ApiTable component="Slider" v-model="props" :exclude="['formatter', 'stopIndicators', 'lowerLimit', 'upperLimit', 'wheelStep']" />
+<ApiTable component="Slider" v-model="props" :exclude="['formatter', 'lowerLimit', 'upperLimit', 'wheelStep']" />
 
 <StyleTokenTable component="Slider" />
 

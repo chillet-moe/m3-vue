@@ -228,6 +228,7 @@ const valueIndicatorBinding = computed(() => {
 });
 
 const cleanupValueIndicatorTooltip = () => {
+  valueIndicatorTooltip.value?.hide();
   valueIndicatorTooltip.value?.cleanup();
   valueIndicatorTooltip.value = null;
 };
