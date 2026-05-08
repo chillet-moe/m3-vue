@@ -295,6 +295,7 @@ const syncInsetIconPlacement = () => {
     return;
   }
 
+  // Absolute-positioned slider parts are laid out against the root padding box.
   const inlineSize = vertical ? slider.clientHeight : slider.clientWidth;
   if (inlineSize <= 0) {
     isStartInsetIconFlipped.value = false;
@@ -510,20 +511,18 @@ const onWindowScrollOrResize = () => {
   }
 };
 
-const syncSliderInlineSize = (entry?: ResizeObserverEntry) => {
+const syncSliderInlineSize = () => {
   const slider = sliderRef.value;
   if (!slider) {
     return;
   }
 
-  const inlineSize = vertical
-    ? (entry?.contentRect.height ?? slider.clientHeight)
-    : (entry?.contentRect.width ?? slider.clientWidth);
+  const inlineSize = vertical ? slider.clientHeight : slider.clientWidth;
   slider.style.setProperty('--slider-inline-size', `${Math.max(0, inlineSize)}px`);
 };
 
-const syncSliderMeasurements = (entry?: ResizeObserverEntry) => {
-  syncSliderInlineSize(entry);
+const syncSliderMeasurements = () => {
+  syncSliderInlineSize();
   syncInsetIconPlacement();
   if (isValueIndicatorVisible.value) {
     syncValueIndicatorPosition();
@@ -538,8 +537,8 @@ const syncSliderResizeObserver = () => {
     return;
   }
 
-  sliderResizeObserver = new ResizeObserver(([entry]) => {
-    syncSliderMeasurements(entry);
+  sliderResizeObserver = new ResizeObserver(() => {
+    syncSliderMeasurements();
   });
   sliderResizeObserver.observe(sliderRef.value);
 };

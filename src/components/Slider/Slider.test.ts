@@ -276,7 +276,7 @@ describe('Slider', () => {
     app.unmount();
   });
 
-  it('publishes the slider inline size for transform-based animation', async () => {
+  it('publishes the slider padding-box inline size for transform-based animation', async () => {
     let resizeCallback: ResizeObserverCallback | null = null;
 
     vi.stubGlobal(
@@ -315,20 +315,22 @@ describe('Slider', () => {
     expect(slider).not.toBeNull();
     expect(resizeCallback).not.toBeNull();
 
+    setSliderClientSize(slider!, { width: 256, height: 96 });
     resizeCallback!(
       [{ contentRect: createRect({ width: 240, height: 80 }) } as ResizeObserverEntry],
       {} as ResizeObserver,
     );
-    expect(slider!.style.getPropertyValue('--slider-inline-size')).toBe('240px');
+    expect(slider!.style.getPropertyValue('--slider-inline-size')).toBe('256px');
 
     vertical.value = true;
     await nextTick();
 
+    setSliderClientSize(slider!, { width: 256, height: 96 });
     resizeCallback!(
       [{ contentRect: createRect({ width: 240, height: 80 }) } as ResizeObserverEntry],
       {} as ResizeObserver,
     );
-    expect(slider!.style.getPropertyValue('--slider-inline-size')).toBe('80px');
+    expect(slider!.style.getPropertyValue('--slider-inline-size')).toBe('96px');
 
     app.unmount();
   });
