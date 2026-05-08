@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { TextField } from '@/components/TextField';
 import { Button } from '@/components/Button';
+import { IconButton } from '@/components/IconButton';
 
 const empty = ref('');
 const input = ref('Input');
@@ -22,7 +23,7 @@ const multiline = ref('This is a long input in a multi-line text field that wrap
       <template #prefix>$</template>
       <template #suffix>USD</template>
       <template #trailing>
-        <button type="button" style="all: unset; cursor: pointer">Clear</button>
+        <IconButton icon="close" aria-label="Clear" @click="amount = ''" color="standard" />
       </template>
     </TextField>
     <TextField label="Label" v-model="multiline" as="textarea" :rows="4" />
