@@ -196,6 +196,8 @@ let syncValueIndicatorFocusFrame = 0;
 let activePointerId: number | null = null;
 let pointerDownPosition: { x: number; y: number } | null = null;
 let sliderResizeObserver: ResizeObserver | null = null;
+let isWindowPointerMoveListenerActive = false;
+let isWindowPointerEndListenerActive = false;
 
 const pointerDragStartDistance = 3;
 
@@ -393,6 +395,8 @@ const stopValueIndicatorDragging = (event?: Event) => {
     activePointerId = null;
     pointerDownPosition = null;
   }
+
+  syncWindowPointerListeners();
 };
 
 const onWindowPointerMove = (event: PointerEvent) => {
@@ -401,17 +405,55 @@ const onWindowPointerMove = (event: PointerEvent) => {
   }
 
   if (event.pointerId !== activePointerId || !pointerDownPosition || isValueDragging.value) {
+    syncWindowPointerListeners();
     return;
   }
 
   const diffX = event.clientX - pointerDownPosition.x;
   const diffY = event.clientY - pointerDownPosition.y;
   if (diffX * diffX + diffY * diffY < pointerDragStartDistance * pointerDragStartDistance) {
+    syncWindowPointerListeners();
     return;
   }
 
   isValueDragging.value = true;
+  syncWindowPointerListeners();
 };
+
+const shouldListenToWindowPointerMove = () => {
+  return (
+    (!disabled && valueIndicator && isValueIndicatorHovered.value) ||
+    isValueIndicatorDragging.value ||
+    activePointerId !== null ||
+    pointerDownPosition !== null
+  );
+};
+
+const shouldListenToWindowPointerEnd = () => {
+  return isValueIndicatorDragging.value || activePointerId !== null || pointerDownPosition !== null;
+};
+
+function syncWindowPointerListeners() {
+  const shouldListenPointerMove = shouldListenToWindowPointerMove();
+  if (shouldListenPointerMove && !isWindowPointerMoveListenerActive) {
+    window.addEventListener('pointermove', onWindowPointerMove);
+    isWindowPointerMoveListenerActive = true;
+  } else if (!shouldListenPointerMove && isWindowPointerMoveListenerActive) {
+    window.removeEventListener('pointermove', onWindowPointerMove);
+    isWindowPointerMoveListenerActive = false;
+  }
+
+  const shouldListenPointerEnd = shouldListenToWindowPointerEnd();
+  if (shouldListenPointerEnd && !isWindowPointerEndListenerActive) {
+    window.addEventListener('pointerup', stopValueIndicatorDragging);
+    window.addEventListener('pointercancel', stopValueIndicatorDragging);
+    isWindowPointerEndListenerActive = true;
+  } else if (!shouldListenPointerEnd && isWindowPointerEndListenerActive) {
+    window.removeEventListener('pointerup', stopValueIndicatorDragging);
+    window.removeEventListener('pointercancel', stopValueIndicatorDragging);
+    isWindowPointerEndListenerActive = false;
+  }
+}
 
 const onValueIndicatorPointerEnter = () => {
   if (disabled) {
@@ -419,10 +461,12 @@ const onValueIndicatorPointerEnter = () => {
   }
 
   isValueIndicatorHovered.value = true;
+  syncWindowPointerListeners();
 };
 
 const onValueIndicatorPointerLeave = () => {
   isValueIndicatorHovered.value = false;
+  syncWindowPointerListeners();
 };
 
 const onValueIndicatorFocus = () => {
@@ -453,6 +497,7 @@ const onValueIndicatorPointerDown = (event: PointerEvent) => {
           y: event.clientY,
         }
       : null;
+  syncWindowPointerListeners();
 };
 
 const onValueIndicatorKeyDown = () => {
@@ -553,9 +598,6 @@ watch(
 );
 
 onMounted(() => {
-  window.addEventListener('pointermove', onWindowPointerMove);
-  window.addEventListener('pointerup', stopValueIndicatorDragging);
-  window.addEventListener('pointercancel', stopValueIndicatorDragging);
   window.addEventListener('scroll', onWindowScrollOrResize, { capture: true, passive: true });
   window.addEventListener('resize', onWindowScrollOrResize);
   refreshValueDisplayedStyleElements();
@@ -569,9 +611,13 @@ onBeforeUnmount(() => {
   }
   stopSyncValueDisplayed();
   sliderResizeObserver?.disconnect();
-  window.removeEventListener('pointermove', onWindowPointerMove);
-  window.removeEventListener('pointerup', stopValueIndicatorDragging);
-  window.removeEventListener('pointercancel', stopValueIndicatorDragging);
+  if (isWindowPointerMoveListenerActive) {
+    window.removeEventListener('pointermove', onWindowPointerMove);
+  }
+  if (isWindowPointerEndListenerActive) {
+    window.removeEventListener('pointerup', stopValueIndicatorDragging);
+    window.removeEventListener('pointercancel', stopValueIndicatorDragging);
+  }
   window.removeEventListener('scroll', onWindowScrollOrResize, true);
   window.removeEventListener('resize', onWindowScrollOrResize);
 });

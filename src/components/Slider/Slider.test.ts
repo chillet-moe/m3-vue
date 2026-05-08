@@ -644,6 +644,56 @@ describe('Slider', () => {
     app.unmount();
   });
 
+  it('only listens for window pointer movement while hover or drag tracking is active', async () => {
+    const addEventListener = vi.spyOn(window, 'addEventListener');
+    const removeEventListener = vi.spyOn(window, 'removeEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const currentValue = ref(2);
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector('input');
+    expect(input).not.toBeNull();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointermove')).toHaveLength(0);
+
+    input!.dispatchEvent(new Event('pointerenter', { bubbles: true }));
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointermove')).toHaveLength(1);
+
+    input!.dispatchEvent(new Event('pointerleave', { bubbles: true }));
+    expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointermove')).toHaveLength(1);
+
+    input!.dispatchEvent(
+      createPointerEvent('pointerdown', { bubbles: true, clientX: 180, clientY: 120, pointerId: 7 }),
+    );
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointermove')).toHaveLength(2);
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerup')).toHaveLength(1);
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointercancel')).toHaveLength(1);
+
+    window.dispatchEvent(createPointerEvent('pointerup', { clientX: 180, clientY: 120, pointerId: 7 }));
+    expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointermove')).toHaveLength(2);
+    expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointerup')).toHaveLength(1);
+    expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointercancel')).toHaveLength(1);
+
+    app.unmount();
+  });
+
   it('does not keep the value indicator open from pointer-induced focus after dragging', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
