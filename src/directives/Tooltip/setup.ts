@@ -173,6 +173,15 @@ export function setupTooltip(
     applyOffsetCSS(effectivePlacement);
   };
 
+  const syncOpenPosition = () => {
+    if (canAnchor) {
+      applyOffsetCSS(opts.placement);
+      return;
+    }
+
+    updatePositionIfNeeded();
+  };
+
   const openNow = () => {
     clearTimers();
     cancelDeferredOffset();
@@ -187,7 +196,7 @@ export function setupTooltip(
         (tip as HTMLElement & { showPopover: () => void }).showPopover();
       } catch {}
       requestAnimationFrame(() => {
-        updatePositionIfNeeded();
+        syncOpenPosition();
         tip.style.visibility = '';
       });
       return;
@@ -197,7 +206,7 @@ export function setupTooltip(
     tip.dataset.vttOpen = '0';
     requestAnimationFrame(() => {
       tip.dataset.vttOpen = '1';
-      updatePositionIfNeeded();
+      syncOpenPosition();
     });
   };
 
@@ -303,7 +312,11 @@ export function setupTooltip(
     if (isOpen) ev.preventDefault();
   };
 
-  const onScrollOrResize = () => updatePositionIfNeeded();
+  const onScrollOrResize = () => {
+    if (!canAnchor) {
+      updatePositionIfNeeded();
+    }
+  };
 
   const ac = new AbortController();
   const on = <T extends Event>(
@@ -387,6 +400,7 @@ export function setupTooltip(
       state.show = rebuilt.show;
       state.hide = rebuilt.hide;
       state.reposition = rebuilt.reposition;
+      state.usesAnchorPositioning = rebuilt.usesAnchorPositioning;
       return;
     }
 
@@ -408,7 +422,7 @@ export function setupTooltip(
     }
 
     if (isOpen) {
-      updatePositionIfNeeded();
+      syncOpenPosition();
       return;
     }
 
@@ -417,6 +431,7 @@ export function setupTooltip(
 
   state = {
     tip,
+    usesAnchorPositioning: canAnchor,
     cleanup,
     update,
     show: openNow,

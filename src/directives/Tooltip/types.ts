@@ -62,6 +62,7 @@ export type NormalizedTooltipOptions = {
 
 export type State = {
   tip: HTMLElement;
+  usesAnchorPositioning: boolean;
   cleanup: () => void;
   update: (next: TooltipBindingValue) => void;
   show: () => void;

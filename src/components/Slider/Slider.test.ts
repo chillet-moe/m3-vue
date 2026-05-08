@@ -37,6 +37,12 @@ function setSliderClientSize(slider: HTMLDivElement, { width, height }: { width:
   });
 }
 
+function getDisplayedPercent(slider: Element): string {
+  const handle = slider.querySelector('[data-part="handle"]') as HTMLElement | null;
+  expect(handle).not.toBeNull();
+  return handle!.style.getPropertyValue('--percent');
+}
+
 async function setSliderInputValue(input: HTMLInputElement, value: number) {
   input.value = `${value}`;
   Object.defineProperty(input, 'valueAsNumber', {
@@ -75,6 +81,7 @@ function mockAnimationFrame() {
 describe('Slider', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     document.body.innerHTML = '';
   });
 
@@ -112,18 +119,18 @@ describe('Slider', () => {
       raf.flush(index * 50);
       await nextTick();
 
-      const percent = Number(slider!.style.getPropertyValue('--percent'));
+      const percent = Number(getDisplayedPercent(slider!));
       expect(Number.isFinite(percent)).toBe(true);
       expect(percent).toBeGreaterThanOrEqual(0);
       expect(percent).toBeLessThanOrEqual(1);
     }
 
-    expect(Number(slider!.style.getPropertyValue('--percent'))).toBeCloseTo(1, 3);
+    expect(Number(getDisplayedPercent(slider!))).toBeCloseTo(1, 3);
 
     app.unmount();
   });
 
-  it('syncs the displayed percent immediately for direct input changes', async () => {
+  it('animates direct input changes when pointer dragging has not started', async () => {
     const raf = mockAnimationFrame();
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -154,12 +161,174 @@ describe('Slider', () => {
 
     await setSliderInputValue(input!, 2500);
 
-    expect(slider!.style.getPropertyValue('--percent')).toBe('0.5');
+    expect(getDisplayedPercent(slider!)).toBe('0');
 
     raf.flush(16);
     await nextTick();
 
-    expect(slider!.style.getPropertyValue('--percent')).toBe('0.5');
+    const percentAfterFirstFrame = Number(getDisplayedPercent(slider!));
+    expect(percentAfterFirstFrame).toBeGreaterThan(0);
+    expect(percentAfterFirstFrame).toBeLessThan(0.5);
+
+    for (let index = 2; index <= 80; index += 1) {
+      raf.flush(index * 16);
+      await nextTick();
+    }
+
+    expect(Number(getDisplayedPercent(slider!))).toBeCloseTo(0.5, 3);
+
+    app.unmount();
+  });
+
+  it('syncs the displayed percent immediately while pointer dragging', async () => {
+    const raf = mockAnimationFrame();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(0);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 5000,
+            step: 1,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    const input = container.querySelector('input') as HTMLInputElement | null;
+    expect(slider).not.toBeNull();
+    expect(input).not.toBeNull();
+
+    input!.dispatchEvent(
+      createPointerEvent('pointerdown', { bubbles: true, clientX: 100, clientY: 120, pointerId: 7 }),
+    );
+    window.dispatchEvent(createPointerEvent('pointermove', { clientX: 110, clientY: 120, pointerId: 7 }));
+    await setSliderInputValue(input!, 2500);
+
+    expect(getDisplayedPercent(slider!)).toBe('0.5');
+
+    raf.flush(16);
+    await nextTick();
+
+    expect(getDisplayedPercent(slider!)).toBe('0.5');
+
+    app.unmount();
+  });
+
+  it('animates wheel-triggered value changes when pointer dragging has not started', async () => {
+    const raf = mockAnimationFrame();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(0);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    const input = container.querySelector('input') as HTMLInputElement | null;
+    expect(slider).not.toBeNull();
+    expect(input).not.toBeNull();
+
+    input!.dispatchEvent(new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY: -100 }));
+    await nextTick();
+
+    expect(getDisplayedPercent(slider!)).toBe('0');
+
+    raf.flush(16);
+    await nextTick();
+
+    const percentAfterFirstFrame = Number(getDisplayedPercent(slider!));
+    expect(percentAfterFirstFrame).toBeGreaterThan(0);
+    expect(percentAfterFirstFrame).toBeLessThan(0.1);
+
+    for (let index = 2; index <= 80; index += 1) {
+      raf.flush(index * 16);
+      await nextTick();
+    }
+
+    expect(Number(getDisplayedPercent(slider!))).toBeCloseTo(0.1, 3);
+
+    app.unmount();
+  });
+
+  it('publishes the slider inline size for transform-based animation', async () => {
+    let resizeCallback: ResizeObserverCallback | null = null;
+
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: ResizeObserverCallback) {
+          resizeCallback = callback;
+        }
+
+        observe = vi.fn();
+        disconnect = vi.fn();
+      },
+    );
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const vertical = ref(false);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            vertical: vertical.value,
+            min: 0,
+            max: 10,
+            step: 1,
+            value: 0,
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    expect(slider).not.toBeNull();
+    expect(resizeCallback).not.toBeNull();
+
+    resizeCallback!(
+      [{ contentRect: createRect({ width: 240, height: 80 }) } as ResizeObserverEntry],
+      {} as ResizeObserver,
+    );
+    expect(slider!.style.getPropertyValue('--slider-inline-size')).toBe('240px');
+
+    vertical.value = true;
+    await nextTick();
+
+    resizeCallback!(
+      [{ contentRect: createRect({ width: 240, height: 80 }) } as ResizeObserverEntry],
+      {} as ResizeObserver,
+    );
+    expect(slider!.style.getPropertyValue('--slider-inline-size')).toBe('80px');
 
     app.unmount();
   });
@@ -221,7 +390,7 @@ describe('Slider', () => {
     app.unmount();
   });
 
-  it('uses the shared tooltip popover implementation for the value indicator', async () => {
+  it('uses a manual popover for the value indicator without anchor positioning', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -253,6 +422,11 @@ describe('Slider', () => {
     expect(indicator).not.toBeNull();
     expect(indicator?.getAttribute('role')).toBe('tooltip');
     expect(input?.getAttribute('aria-controls')).toBe(indicator?.id ?? null);
+    expect(input?.getAttribute('aria-expanded')).toBe('false');
+    expect(input?.getAttribute('aria-haspopup')).toBe('true');
+    expect(indicator!.getAttribute('popover')).toBe('manual');
+    expect(indicator!.classList.contains('vtt-popover')).toBe(true);
+    expect(indicator!.dataset.valueIndicatorPlacement).toBe('top');
 
     Object.defineProperty(handle!, 'getBoundingClientRect', {
       configurable: true,
@@ -267,18 +441,82 @@ describe('Slider', () => {
     await nextTick();
     await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
-    expect(indicator!.getAttribute('popover')).toBe('manual');
-    expect(indicator!.classList.contains('vtt-popover')).toBe(true);
-    expect(indicator!.dataset.vttFallback).toBe('1');
     expect(indicator!.dataset.vttOpen).toBe('1');
-    expect(indicator!.style.left).toBe('198px');
-    expect(indicator!.style.top).toBe('78px');
-    expect(indicator!.style.getPropertyValue('translate')).toBe('0 calc(-1 * 0.25rem)');
+    expect(input?.getAttribute('aria-expanded')).toBe('true');
+    expect(indicator!.style.getPropertyValue('--value-indicator-slider-left')).toBe('0px');
+    expect(indicator!.style.getPropertyValue('--value-indicator-slider-top')).toBe('0px');
 
     input!.dispatchEvent(new Event('pointerleave', { bubbles: true }));
     await nextTick();
 
     expect(indicator!.dataset.vttOpen).toBe('0');
+    expect(input?.getAttribute('aria-expanded')).toBe('false');
+
+    app.unmount();
+  });
+
+  it('does not read value indicator layout on animated frames', async () => {
+    const raf = mockAnimationFrame();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(0);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector('input');
+    const handle = container.querySelector('[data-value-indicator-anchor="true"]');
+    const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
+
+    expect(input).not.toBeNull();
+    expect(handle).not.toBeNull();
+    expect(indicator).not.toBeNull();
+
+    const handleRect = vi.fn(() => createRect({ top: 120, bottom: 152, left: 220, right: 224, width: 4, height: 32 }));
+    const indicatorRect = vi.fn(() =>
+      createRect({ top: 78, bottom: 110, left: 198, right: 246, width: 48, height: 32 }),
+    );
+
+    Object.defineProperty(handle!, 'getBoundingClientRect', {
+      configurable: true,
+      value: handleRect,
+    });
+    Object.defineProperty(indicator!, 'getBoundingClientRect', {
+      configurable: true,
+      value: indicatorRect,
+    });
+
+    input!.dispatchEvent(new Event('pointerenter', { bubbles: true }));
+    await nextTick();
+    raf.flush(16);
+    await nextTick();
+
+    expect(handleRect).not.toHaveBeenCalled();
+    expect(indicatorRect).not.toHaveBeenCalled();
+
+    currentValue.value = 10;
+    await nextTick();
+
+    raf.flush(32);
+    await nextTick();
+
+    expect(handleRect).not.toHaveBeenCalled();
+    expect(indicatorRect).not.toHaveBeenCalled();
 
     app.unmount();
   });
@@ -512,7 +750,7 @@ describe('Slider', () => {
     const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
 
     expect(indicator).not.toBeNull();
-    expect(indicator!.style.getPropertyValue('translate')).toBe('0.25rem 0');
+    expect(indicator!.dataset.valueIndicatorPlacement).toBe('end');
     app.unmount();
   });
 
@@ -594,7 +832,7 @@ describe('Slider', () => {
     const indicator = container.querySelector('[data-value-indicator="true"]') as HTMLDivElement | null;
 
     expect(indicator).not.toBeNull();
-    expect(indicator!.style.getPropertyValue('translate')).toBe('calc(-1 * 0.25rem) 0');
+    expect(indicator!.dataset.valueIndicatorPlacement).toBe('start');
 
     app.unmount();
   });

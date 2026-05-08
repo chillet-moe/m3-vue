@@ -60,6 +60,8 @@ watch(
 
 Slider handles horizontal and vertical range input, inset icons, value indicators, and directional layouts with keyboard-friendly behavior.
 
+The value indicator is rendered as a manual popover so it stays in the browser top layer instead of being clipped by parent overflow. Its animated position is driven by Slider CSS variables and transform-style movement; avoid overriding the animated `--percent` path from app code.
+
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 1rem;">
     <Slider v-bind="props" v-model:value="value" :formatter="numericFormatter" :stop-indicators="stopIndicators" />
