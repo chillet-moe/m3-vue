@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import LinearProgressIndicator from './LinearProgressIndicator.vue';
 
@@ -35,8 +35,34 @@ async function nextAnimationFrame() {
   await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 }
 
+function mockAnimationFrame() {
+  let requestId = 0;
+  const callbacks = new Map<number, FrameRequestCallback>();
+
+  vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+    requestId += 1;
+    callbacks.set(requestId, callback);
+    return requestId;
+  });
+
+  vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+    callbacks.delete(id);
+  });
+
+  return {
+    flush(timestamp: number) {
+      const pendingCallbacks = [...callbacks.values()];
+      callbacks.clear();
+      for (const callback of pendingCallbacks) {
+        callback(timestamp);
+      }
+    },
+  };
+}
+
 describe('LinearProgressIndicator', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     document.body.innerHTML = '';
   });
 
@@ -109,6 +135,31 @@ describe('LinearProgressIndicator', () => {
     const displayedProgress = Number(root?.style.getPropertyValue('--_progress'));
     expect(displayedProgress).toBeGreaterThan(0);
     expect(displayedProgress).not.toBe(1);
+
+    app.unmount();
+  });
+
+  it('keeps the displayed determinate progress bounded during delayed animation frames', async () => {
+    const raf = mockAnimationFrame();
+    const { app, root, updateProps } = await mountLinearProgressIndicator({
+      value: 0,
+      min: 0,
+      max: 1,
+    });
+
+    await updateProps({ value: 1 });
+
+    for (let index = 1; index <= 80; index += 1) {
+      raf.flush(index * 50);
+      await nextTick();
+
+      const displayedProgress = Number(root?.style.getPropertyValue('--_progress'));
+      expect(Number.isFinite(displayedProgress)).toBe(true);
+      expect(displayedProgress).toBeGreaterThanOrEqual(0);
+      expect(displayedProgress).toBeLessThanOrEqual(1);
+    }
+
+    expect(Number(root?.style.getPropertyValue('--_progress'))).toBeCloseTo(1, 3);
 
     app.unmount();
   });

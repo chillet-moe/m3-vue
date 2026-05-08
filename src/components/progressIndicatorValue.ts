@@ -4,9 +4,22 @@ const PROGRESS_DISPLAY_SETTLE_DISTANCE = 0.0005;
 const PROGRESS_DISPLAY_SETTLE_VELOCITY = 0.0005;
 const PROGRESS_DISPLAY_STIFFNESS = 420;
 const PROGRESS_DISPLAY_DAMPING = 36;
+const PROGRESS_DISPLAY_MAX_STEP_SECONDS = 1 / 120;
+
+function clampProgressDisplayValue(value: number) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  } else if (value < 0) {
+    return 0;
+  } else if (value > 1) {
+    return 1;
+  } else {
+    return value;
+  }
+}
 
 export function useProgressDisplayedValue(target: MaybeRefOrGetter<number>, enabled: MaybeRefOrGetter<boolean>) {
-  const displayedValue = ref(toValue(target));
+  const displayedValue = ref(clampProgressDisplayValue(toValue(target)));
   let animationFrame = 0;
   let animationTime = 0;
   let velocity = 0;
@@ -21,7 +34,7 @@ export function useProgressDisplayedValue(target: MaybeRefOrGetter<number>, enab
 
   const finishAnimation = () => {
     stopAnimation();
-    displayedValue.value = toValue(target);
+    displayedValue.value = clampProgressDisplayValue(toValue(target));
     velocity = 0;
   };
 
@@ -32,16 +45,27 @@ export function useProgressDisplayedValue(target: MaybeRefOrGetter<number>, enab
       return;
     }
 
-    const deltaSeconds = Math.min((timestamp - animationTime) / 1000, 0.05);
+    let remainingSeconds = Math.min(Math.max((timestamp - animationTime) / 1000, 0), 0.05);
     animationTime = timestamp;
 
-    const targetValue = toValue(target);
-    const distance = targetValue - displayedValue.value;
-    const acceleration = distance * PROGRESS_DISPLAY_STIFFNESS - velocity * PROGRESS_DISPLAY_DAMPING;
+    while (remainingSeconds > 0) {
+      const deltaSeconds = Math.min(remainingSeconds, PROGRESS_DISPLAY_MAX_STEP_SECONDS);
+      const targetValue = clampProgressDisplayValue(toValue(target));
+      const distance = targetValue - displayedValue.value;
+      const acceleration = distance * PROGRESS_DISPLAY_STIFFNESS - velocity * PROGRESS_DISPLAY_DAMPING;
 
-    velocity += acceleration * deltaSeconds;
-    displayedValue.value += velocity * deltaSeconds;
+      velocity += acceleration * deltaSeconds;
 
+      const nextValue = displayedValue.value + velocity * deltaSeconds;
+      const clampedValue = clampProgressDisplayValue(nextValue);
+      if (clampedValue !== nextValue) {
+        velocity = 0;
+      }
+      displayedValue.value = clampedValue;
+      remainingSeconds -= deltaSeconds;
+    }
+
+    const targetValue = clampProgressDisplayValue(toValue(target));
     if (
       Math.abs(targetValue - displayedValue.value) <= PROGRESS_DISPLAY_SETTLE_DISTANCE &&
       Math.abs(velocity) <= PROGRESS_DISPLAY_SETTLE_VELOCITY
@@ -59,7 +83,7 @@ export function useProgressDisplayedValue(target: MaybeRefOrGetter<number>, enab
       return;
     }
 
-    const targetValue = toValue(target);
+    const targetValue = clampProgressDisplayValue(toValue(target));
     if (Math.abs(targetValue - displayedValue.value) <= PROGRESS_DISPLAY_SETTLE_DISTANCE && velocity === 0) {
       displayedValue.value = targetValue;
       return;

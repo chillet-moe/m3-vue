@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import Slider from './Slider.vue';
 
@@ -47,9 +47,80 @@ async function setSliderInputValue(input: HTMLInputElement, value: number) {
   await nextTick();
 }
 
+function mockAnimationFrame() {
+  let requestId = 0;
+  const callbacks = new Map<number, FrameRequestCallback>();
+
+  vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+    requestId += 1;
+    callbacks.set(requestId, callback);
+    return requestId;
+  });
+
+  vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+    callbacks.delete(id);
+  });
+
+  return {
+    flush(timestamp: number) {
+      const pendingCallbacks = [...callbacks.values()];
+      callbacks.clear();
+      for (const callback of pendingCallbacks) {
+        callback(timestamp);
+      }
+    },
+  };
+}
+
 describe('Slider', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     document.body.innerHTML = '';
+  });
+
+  it('keeps the displayed percent bounded during delayed animation frames', async () => {
+    const raf = mockAnimationFrame();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(0);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    expect(slider).not.toBeNull();
+
+    currentValue.value = 10;
+    await nextTick();
+
+    for (let index = 1; index <= 80; index += 1) {
+      raf.flush(index * 50);
+      await nextTick();
+
+      const percent = Number(slider!.style.getPropertyValue('--percent'));
+      expect(Number.isFinite(percent)).toBe(true);
+      expect(percent).toBeGreaterThanOrEqual(0);
+      expect(percent).toBeLessThanOrEqual(1);
+    }
+
+    expect(Number(slider!.style.getPropertyValue('--percent'))).toBeCloseTo(1, 3);
+
+    app.unmount();
   });
 
   it('uses the shared tooltip popover implementation for the value indicator', async () => {

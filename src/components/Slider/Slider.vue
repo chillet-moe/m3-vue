@@ -73,15 +73,25 @@ const valueIndicatorPlacement = computed(() => {
 
 const value = defineModel<number>('value', { required: true });
 
-const getValuePercent = (currentValue: number) => {
-  const percent = (currentValue - min) / (max - min);
-  if (percent < 0) {
+const clampPercent = (percent: number) => {
+  if (!Number.isFinite(percent)) {
+    return 0;
+  } else if (percent < 0) {
     return 0;
   } else if (percent > 1) {
     return 1;
   } else {
     return percent;
   }
+};
+
+const getValuePercent = (currentValue: number) => {
+  const range = max - min;
+  if (!Number.isFinite(currentValue) || !Number.isFinite(min) || !Number.isFinite(max) || range <= 0) {
+    return 0;
+  }
+
+  return clampPercent((currentValue - min) / range);
 };
 
 const valueCurrent = ref(value.value);
@@ -185,6 +195,7 @@ let insetIconResizeObserver: ResizeObserver | null = null;
 const pointerDragStartDistance = 3;
 const valueDisplaySettleDistance = 0.0005;
 const valueDisplaySettleVelocity = 0.0005;
+const valueDisplayMaxStepSeconds = 1 / 120;
 
 const isCurrentPointerEvent = (event?: Event) => {
   if (!event) {
@@ -279,19 +290,31 @@ const syncValueDisplayedFrameStep = (timestamp: number) => {
     return;
   }
 
-  const deltaSeconds = Math.min((timestamp - syncValueDisplayedTime) / 1000, 0.05);
+  let remainingSeconds = Math.min(Math.max((timestamp - syncValueDisplayedTime) / 1000, 0), 0.05);
   syncValueDisplayedTime = timestamp;
 
-  const targetPercent = getValuePercent(valueCurrent.value);
-  const stiffness = isValueDragging.value ? 900 : 420;
-  const damping = isValueDragging.value ? 60 : 36;
-  const distance = targetPercent - valueDisplayed.value;
-  const acceleration = distance * stiffness - valueDisplayedVelocity * damping;
+  while (remainingSeconds > 0) {
+    const deltaSeconds = Math.min(remainingSeconds, valueDisplayMaxStepSeconds);
+    const targetPercent = getValuePercent(valueCurrent.value);
+    const stiffness = isValueDragging.value ? 900 : 420;
+    const damping = isValueDragging.value ? 60 : 36;
+    const distance = targetPercent - valueDisplayed.value;
+    const acceleration = distance * stiffness - valueDisplayedVelocity * damping;
 
-  valueDisplayedVelocity += acceleration * deltaSeconds;
-  valueDisplayed.value += valueDisplayedVelocity * deltaSeconds;
+    valueDisplayedVelocity += acceleration * deltaSeconds;
+
+    const nextPercent = valueDisplayed.value + valueDisplayedVelocity * deltaSeconds;
+    const clampedPercent = clampPercent(nextPercent);
+    if (clampedPercent !== nextPercent) {
+      valueDisplayedVelocity = 0;
+    }
+    valueDisplayed.value = clampedPercent;
+    remainingSeconds -= deltaSeconds;
+  }
+
   syncValuePresentation();
 
+  const targetPercent = getValuePercent(valueCurrent.value);
   if (
     Math.abs(targetPercent - valueDisplayed.value) <= valueDisplaySettleDistance &&
     Math.abs(valueDisplayedVelocity) <= valueDisplaySettleVelocity
@@ -489,7 +512,7 @@ watch(value, (newValue) => {
 });
 
 watch(
-  valueCurrent,
+  [valueCurrent, () => min, () => max],
   () => {
     startSyncValueDisplayed();
   },
@@ -622,7 +645,7 @@ onBeforeUnmount(() => {
           aria-hidden="true"
           class="m3-slider-stop-indicator m3-slider-stop-indicator-active"
           :style="{
-            '--percent': (stop - min) / (max - min),
+            '--percent': getValuePercent(stop),
           }"
         />
       </div>
@@ -633,7 +656,7 @@ onBeforeUnmount(() => {
           aria-hidden="true"
           class="m3-slider-stop-indicator m3-slider-stop-indicator-inactive"
           :style="{
-            '--percent': (stop - min) / (max - min),
+            '--percent': getValuePercent(stop),
           }"
         />
       </div>
