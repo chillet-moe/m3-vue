@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useKeyModifier } from '@vueuse/core';
+import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
 import { setupTooltip } from '@/directives/Tooltip/setup';
 import { Icon } from '@/components/Icon';
 
@@ -95,7 +96,7 @@ const getValuePercent = (currentValue: number) => {
 };
 
 const valueCurrent = ref(value.value);
-const valueDisplayed = ref(getValuePercent(value.value));
+const valuePercent = computed(() => getValuePercent(valueCurrent.value));
 const valueText = computed(() => {
   return formatter ? formatter.valueToText(valueCurrent.value) : valueCurrent.value;
 });
@@ -135,6 +136,7 @@ const onInput = (event: Event) => {
   const [clamped, clampedValue] = clampValue(target.valueAsNumber);
 
   valueCurrent.value = clampedValue;
+  syncValueDisplayedToTarget();
   if (clamped) {
     event.preventDefault();
     event.stopPropagation();
@@ -162,6 +164,7 @@ const onWheel = (event: WheelEvent) => {
   const newValue = valueCurrent.value + dir * targetStep;
   const [, clampedValue] = clampValue(newValue);
   valueCurrent.value = clampedValue;
+  syncValueDisplayedToTarget();
   value.value = clampedValue;
 };
 
@@ -185,17 +188,11 @@ const isValueIndicatorFocused = ref(false);
 const isValueIndicatorDragging = ref(false);
 const isValueDragging = ref(false);
 let syncValueIndicatorFocusFrame = 0;
-let syncValueDisplayedFrame = 0;
-let syncValueDisplayedTime = 0;
-let valueDisplayedVelocity = 0;
 let activePointerId: number | null = null;
 let pointerDownPosition: { x: number; y: number } | null = null;
 let insetIconResizeObserver: ResizeObserver | null = null;
 
 const pointerDragStartDistance = 3;
-const valueDisplaySettleDistance = 0.0005;
-const valueDisplaySettleVelocity = 0.0005;
-const valueDisplayMaxStepSeconds = 1 / 120;
 
 const isCurrentPointerEvent = (event?: Event) => {
   if (!event) {
@@ -268,78 +265,14 @@ const syncValuePresentation = () => {
   syncInsetIconPlacement();
 };
 
-const stopSyncValueDisplayed = () => {
-  if (syncValueDisplayedFrame) {
-    window.cancelAnimationFrame(syncValueDisplayedFrame);
-    syncValueDisplayedFrame = 0;
-  }
-  syncValueDisplayedTime = 0;
-};
-
-const finishSyncValueDisplayed = () => {
-  stopSyncValueDisplayed();
-  valueDisplayed.value = getValuePercent(valueCurrent.value);
-  valueDisplayedVelocity = 0;
-  syncValuePresentation();
-};
-
-const syncValueDisplayedFrameStep = (timestamp: number) => {
-  if (!syncValueDisplayedTime) {
-    syncValueDisplayedTime = timestamp;
-    syncValuePresentation();
-    syncValueDisplayedFrame = window.requestAnimationFrame(syncValueDisplayedFrameStep);
-    return;
-  }
-
-  let remainingSeconds = Math.min(Math.max((timestamp - syncValueDisplayedTime) / 1000, 0), 0.05);
-  syncValueDisplayedTime = timestamp;
-
-  while (remainingSeconds > 0) {
-    const deltaSeconds = Math.min(remainingSeconds, valueDisplayMaxStepSeconds);
-    const targetPercent = getValuePercent(valueCurrent.value);
-    const stiffness = isValueDragging.value ? 900 : 420;
-    const damping = isValueDragging.value ? 60 : 36;
-    const distance = targetPercent - valueDisplayed.value;
-    const acceleration = distance * stiffness - valueDisplayedVelocity * damping;
-
-    valueDisplayedVelocity += acceleration * deltaSeconds;
-
-    const nextPercent = valueDisplayed.value + valueDisplayedVelocity * deltaSeconds;
-    const clampedPercent = clampPercent(nextPercent);
-    if (clampedPercent !== nextPercent) {
-      valueDisplayedVelocity = 0;
-    }
-    valueDisplayed.value = clampedPercent;
-    remainingSeconds -= deltaSeconds;
-  }
-
-  syncValuePresentation();
-
-  const targetPercent = getValuePercent(valueCurrent.value);
-  if (
-    Math.abs(targetPercent - valueDisplayed.value) <= valueDisplaySettleDistance &&
-    Math.abs(valueDisplayedVelocity) <= valueDisplaySettleVelocity
-  ) {
-    finishSyncValueDisplayed();
-    return;
-  }
-
-  syncValueDisplayedFrame = window.requestAnimationFrame(syncValueDisplayedFrameStep);
-};
-
-const startSyncValueDisplayed = () => {
-  const targetPercent = getValuePercent(valueCurrent.value);
-  if (Math.abs(targetPercent - valueDisplayed.value) <= valueDisplaySettleDistance && valueDisplayedVelocity === 0) {
-    valueDisplayed.value = targetPercent;
-    syncValuePresentation();
-    return;
-  }
-
-  if (!syncValueDisplayedFrame) {
-    syncValueDisplayedTime = 0;
-    syncValueDisplayedFrame = window.requestAnimationFrame(syncValueDisplayedFrameStep);
-  }
-};
+const {
+  displayedValue: valueDisplayed,
+  stopAnimation: stopSyncValueDisplayed,
+  syncToTarget: syncValueDisplayedToTarget,
+} = useAnimatedNumber(valuePercent, {
+  clamp: clampPercent,
+  onUpdate: syncValuePresentation,
+});
 
 const syncValueIndicatorVisibility = () => {
   const tooltip = valueIndicatorTooltip.value;
@@ -515,7 +448,7 @@ watch(value, (newValue) => {
 watch(
   [valueCurrent, () => min, () => max],
   () => {
-    startSyncValueDisplayed();
+    syncValuePresentation();
   },
   { flush: 'sync' },
 );

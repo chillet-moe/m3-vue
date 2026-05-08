@@ -123,6 +123,47 @@ describe('Slider', () => {
     app.unmount();
   });
 
+  it('syncs the displayed percent immediately for direct input changes', async () => {
+    const raf = mockAnimationFrame();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(0);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 5000,
+            step: 1,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const slider = container.firstElementChild as HTMLDivElement | null;
+    const input = container.querySelector('input') as HTMLInputElement | null;
+    expect(slider).not.toBeNull();
+    expect(input).not.toBeNull();
+
+    await setSliderInputValue(input!, 2500);
+
+    expect(slider!.style.getPropertyValue('--percent')).toBe('0.5');
+
+    raf.flush(16);
+    await nextTick();
+
+    expect(slider!.style.getPropertyValue('--percent')).toBe('0.5');
+
+    app.unmount();
+  });
+
   it('removes an open value indicator when the prop is disabled', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

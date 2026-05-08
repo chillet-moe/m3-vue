@@ -18,6 +18,8 @@ export { useMenu } from './composables/useMenu';
 export type { UseMenuOptions, UseMenuReturn } from './composables/useMenu';
 export { useSelect } from './composables/useSelect';
 export type { UseSelectOptions, UseSelectReturn } from './composables/useSelect';
+export { useAnimatedNumber } from './composables/useAnimatedNumber';
+export type { UseAnimatedNumberOptions, UseAnimatedNumberReturn } from './composables/useAnimatedNumber';
 
 // Directives
 export * from './directives';

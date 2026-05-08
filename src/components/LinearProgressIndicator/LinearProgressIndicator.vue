@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
 import { clamp, createLinearWavePath } from '../progressIndicatorPath';
-import { useProgressDisplayedValue } from '../progressIndicatorValue';
 
 export type LinearProgressIndicatorProps = {
   /** Whether the progress value is unknown. */
@@ -84,7 +84,10 @@ const progressRatio = computed(() => {
   return clamp((clampedValue.value - props.min) / range, 0, 1);
 });
 
-const progressRatioDisplayed = useProgressDisplayedValue(progressRatio, isDeterminate);
+const { displayedValue: progressRatioDisplayed } = useAnimatedNumber(progressRatio, {
+  enabled: isDeterminate,
+  clamp: (value) => clamp(value, 0, 1),
+});
 const progressPercent = computed(() => progressRatio.value * 100);
 const progressState = computed(() => {
   if (progressRatioDisplayed.value <= 0) {
