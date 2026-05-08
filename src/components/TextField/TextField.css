@@ -554,6 +554,13 @@
     font-size: var(--_outlined-text-field-trailing-icon-size);
   }
 
+  .m3-text-field[data-has-date-picker='true'] .m3-text-field-trailing-slot,
+  .m3-text-field[data-has-time-picker='true'] .m3-text-field-trailing-slot {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   .m3-text-field-date-picker-button {
     margin-block: -0.75rem;
     margin-inline-end: -0.75rem;
