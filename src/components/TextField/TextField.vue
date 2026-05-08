@@ -454,7 +454,7 @@ defineExpose({
           <slot name="trailing" />
           <IconButton
             v-if="hasPicker"
-            class="m3-text-field-date-picker-button m3-state-layer"
+            class="m3-text-field-date-picker-button"
             :icon="hasTimePicker ? 'schedule' : 'calendar_today'"
             color="standard"
             size="small"
