@@ -71,7 +71,7 @@ The value indicator is rendered as a manual popover so it stays in the browser t
 
 <AnatomyTable scope="slider" />
 
-<ApiTable component="Slider" v-model="props" :exclude="['formatter', 'lowerLimit', 'upperLimit', 'wheelStep']" />
+<ApiTable component="Slider" v-model="props" />
 
 <StyleTokenTable component="Slider" />
 
