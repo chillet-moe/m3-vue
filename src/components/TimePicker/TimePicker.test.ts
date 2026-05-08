@@ -82,8 +82,8 @@ function isPopoverOpen(element: HTMLElement | null) {
   return element ? popoverOpenElements.has(element) : false;
 }
 
-function getButton(container: HTMLElement, label: string) {
-  return Array.from(container.querySelectorAll<HTMLButtonElement>('button')).find(
+function getButton(_container: HTMLElement, label: string) {
+  return Array.from(document.body.querySelectorAll<HTMLButtonElement>('button')).find(
     (button) => button.textContent?.trim() === label,
   );
 }
@@ -136,11 +136,11 @@ describe('TimePicker', () => {
     await nextTick();
     await nextTick();
 
-    const popover = container.querySelector<HTMLElement>('.m3-time-picker');
+    const popover = document.body.querySelector<HTMLElement>('.m3-time-picker');
 
     expect(isPopoverOpen(popover)).toBe(true);
-    expect(container.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('09');
-    expect(container.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('30');
+    expect(document.body.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('09');
+    expect(document.body.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('30');
     expect(getButton(container, 'PM')?.dataset.selected).toBe('true');
 
     app.unmount();
@@ -177,14 +177,14 @@ describe('TimePicker', () => {
     await nextTick();
 
     expect(updates).toEqual([]);
-    expect(container.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('10');
-    expect(container.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('45');
+    expect(document.body.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('10');
+    expect(document.body.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('45');
 
     getButton(container, 'OK')?.click();
     await nextTick();
 
     expect(updates).toEqual(['10:45']);
-    expect(isPopoverOpen(container.querySelector<HTMLElement>('.m3-time-picker'))).toBe(false);
+    expect(isPopoverOpen(document.body.querySelector<HTMLElement>('.m3-time-picker'))).toBe(false);
 
     app.unmount();
   });
@@ -233,7 +233,7 @@ describe('TimePicker', () => {
     await nextTick();
     await nextTick();
 
-    const clockFace = container.querySelector<HTMLElement>('[data-part="clock-face"]')!;
+    const clockFace = document.body.querySelector<HTMLElement>('[data-part="clock-face"]')!;
     Object.defineProperty(clockFace, 'getBoundingClientRect', {
       configurable: true,
       value: () => ({
@@ -254,15 +254,15 @@ describe('TimePicker', () => {
     dispatchPointerEvent(clockFace, 'pointerup', { button: 0, clientX: 200, clientY: 100 });
     await nextTick();
 
-    expect(container.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('03');
-    expect(container.querySelector('[data-part="minute-display"]')?.dataset.selected).toBe('true');
+    expect(document.body.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('03');
+    expect(document.body.querySelector('[data-part="minute-display"]')?.dataset.selected).toBe('true');
 
     dispatchPointerEvent(clockFace, 'pointerdown', { button: 0, clientX: 100, clientY: 0 });
     dispatchPointerEvent(clockFace, 'pointermove', { button: 0, clientX: 200, clientY: 100 });
     dispatchPointerEvent(clockFace, 'pointerup', { button: 0, clientX: 200, clientY: 100 });
     await nextTick();
 
-    expect(container.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('15');
+    expect(document.body.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('15');
 
     app.unmount();
   });
@@ -293,11 +293,11 @@ describe('TimePicker', () => {
     await nextTick();
     await nextTick();
 
-    expect(container.querySelector<HTMLElement>('.m3-time-picker')?.dataset.inputMode).toBe('keyboard');
-    expect(container.querySelector('[data-part="period-selector"]')).toBeNull();
+    expect(document.body.querySelector<HTMLElement>('.m3-time-picker')?.dataset.inputMode).toBe('keyboard');
+    expect(document.body.querySelector('[data-part="period-selector"]')).toBeNull();
 
-    setInputValue(container.querySelector<HTMLInputElement>('[data-part="hour-input"]'), '7');
-    setInputValue(container.querySelector<HTMLInputElement>('[data-part="minute-input"]'), '8');
+    setInputValue(document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]'), '7');
+    setInputValue(document.body.querySelector<HTMLInputElement>('[data-part="minute-input"]'), '8');
     getButton(container, 'OK')?.click();
     await nextTick();
 
@@ -322,15 +322,113 @@ describe('TimePicker', () => {
     await nextTick();
     await nextTick();
 
-    const inputRow = container.querySelector('[data-part="inputs"]');
+    const inputRow = document.body.querySelector('[data-part="inputs"]');
     const periodSelector = inputRow?.querySelector('[data-part="period-selector"]');
-    const display = container.querySelector('[data-part="display"]');
+    const display = document.body.querySelector('[data-part="display"]');
 
     expect(display).toBeNull();
     expect(periodSelector).not.toBeNull();
     expect(inputRow?.querySelector('[data-part="hour-input"]')).not.toBeNull();
     expect(inputRow?.querySelector('[data-part="minute-input"]')).not.toBeNull();
     expect(periodSelector?.querySelectorAll('[data-part="period-option"]')).toHaveLength(2);
+
+    app.unmount();
+  });
+
+  it('moves focus to minute input after typing two hour digits', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TimePicker, {
+        open: true,
+        inputMode: 'keyboard',
+        modelValue: '07:00',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const hourInput = document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]');
+    const minuteInput = document.body.querySelector<HTMLInputElement>('[data-part="minute-input"]');
+
+    hourInput?.focus();
+    setInputValue(hourInput, '08');
+    await nextTick();
+    await nextTick();
+
+    expect(document.activeElement).toBe(minuteInput);
+
+    app.unmount();
+  });
+
+  it('moves focus to minute input when pressing Enter in the hour input', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TimePicker, {
+        open: true,
+        inputMode: 'keyboard',
+        modelValue: '07:00',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const hourInput = document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]');
+    const minuteInput = document.body.querySelector<HTMLInputElement>('[data-part="minute-input"]');
+
+    hourInput?.focus();
+    hourInput?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+    await nextTick();
+    await nextTick();
+
+    expect(document.activeElement).toBe(minuteInput);
+
+    app.unmount();
+  });
+
+  it('confirms keyboard input when pressing Enter in the minute input', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const updates: TimePickerModelValue[] = [];
+    const app = createApp({
+      setup() {
+        const value = ref<TimePickerModelValue>('08:15');
+
+        return () =>
+          h(TimePicker, {
+            open: true,
+            inputMode: 'keyboard',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = nextValue as TimePickerModelValue;
+              updates.push(value.value);
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const hourInput = document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]');
+    const minuteInput = document.body.querySelector<HTMLInputElement>('[data-part="minute-input"]');
+
+    setInputValue(hourInput, '09');
+    setInputValue(minuteInput, '45');
+    minuteInput?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+    await nextTick();
+
+    expect(updates).toEqual(['09:45']);
+    expect(isPopoverOpen(document.body.querySelector<HTMLElement>('.m3-time-picker'))).toBe(false);
 
     app.unmount();
   });
@@ -361,19 +459,58 @@ describe('TimePicker', () => {
     await nextTick();
     await nextTick();
 
-    setInputValue(container.querySelector<HTMLInputElement>('[data-part="hour-input"]'), '13');
+    setInputValue(document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]'), '13');
     await nextTick();
 
-    expect(container.querySelector<HTMLInputElement>('[data-part="hour-input"]')?.getAttribute('aria-invalid')).toBe(
-      'true',
-    );
     expect(
-      container.querySelector<HTMLInputElement>('[data-part="hour-input"]')?.getAttribute('aria-describedby'),
-    ).toBe(container.querySelector('[data-part="input-error"]')?.id);
-    expect(container.querySelector('[data-part="input-error"]')?.textContent?.trim()).toBe('Use 1-12');
+      document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]')?.getAttribute('aria-invalid'),
+    ).toBe('true');
+    expect(
+      document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]')?.getAttribute('aria-describedby'),
+    ).toBe(document.body.querySelector('[data-part="input-error"]')?.id);
+    expect(document.body.querySelector('[data-part="input-error"]')?.textContent?.trim()).toBe('Use 1-12');
     expect(getButton(container, 'OK')?.disabled).toBe(true);
     expect(updates).toEqual([]);
-    expect(isPopoverOpen(container.querySelector<HTMLElement>('.m3-time-picker'))).toBe(true);
+    expect(isPopoverOpen(document.body.querySelector<HTMLElement>('.m3-time-picker'))).toBe(true);
+
+    app.unmount();
+  });
+
+  it('keeps the picker open when pressing Enter with invalid minute input', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const updates: TimePickerModelValue[] = [];
+    const app = createApp({
+      setup() {
+        const value = ref<TimePickerModelValue>('08:15');
+
+        return () =>
+          h(TimePicker, {
+            open: true,
+            inputMode: 'keyboard',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = nextValue as TimePickerModelValue;
+              updates.push(value.value);
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    setInputValue(document.body.querySelector<HTMLInputElement>('[data-part="minute-input"]'), '60');
+    document.body
+      .querySelector<HTMLInputElement>('[data-part="minute-input"]')
+      ?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+    await nextTick();
+
+    expect(updates).toEqual([]);
+    expect(document.body.querySelector('[data-part="input-error"]')?.textContent?.trim()).toBe('Use 0-59');
+    expect(isPopoverOpen(document.body.querySelector<HTMLElement>('.m3-time-picker'))).toBe(true);
 
     app.unmount();
   });
@@ -394,11 +531,11 @@ describe('TimePicker', () => {
     await nextTick();
     await nextTick();
 
-    setInputValue(container.querySelector<HTMLInputElement>('[data-part="hour-input"]'), '24');
-    setInputValue(container.querySelector<HTMLInputElement>('[data-part="minute-input"]'), '60');
+    setInputValue(document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]'), '24');
+    setInputValue(document.body.querySelector<HTMLInputElement>('[data-part="minute-input"]'), '60');
     await nextTick();
 
-    const errors = Array.from(container.querySelectorAll('[data-part="input-error"]'), (error) =>
+    const errors = Array.from(document.body.querySelectorAll('[data-part="input-error"]'), (error) =>
       error.textContent?.trim(),
     );
 

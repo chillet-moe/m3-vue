@@ -76,6 +76,7 @@ const generatedId = useId();
 const popoverRef = ref<HTMLDivElement>();
 const surfaceRef = ref<HTMLElement>();
 const hourInputRef = ref<HTMLInputElement>();
+const minuteInputRef = ref<HTMLInputElement>();
 const localInputMode = ref<TimePickerInputMode>();
 const activePointerId = ref<number>();
 const pointerStart = ref<{ x: number; y: number }>();
@@ -122,6 +123,12 @@ function getClockOptionStyle(option: ClockOption) {
 
 function roundClockCoordinate(value: number) {
   return Math.round(value * 1000) / 1000;
+}
+
+async function focusMinuteInput() {
+  await nextTick();
+  minuteInputRef.value?.focus();
+  minuteInputRef.value?.select();
 }
 
 async function focusFirstControl() {
@@ -175,6 +182,32 @@ function handleConfirm() {
 function toggleInputMode() {
   localInputMode.value = picker.inputMode.value === 'clock' ? 'keyboard' : 'clock';
   void focusFirstControl();
+}
+
+function handleHourInput(event: Event) {
+  picker.setInputHourText((event.target as HTMLInputElement).value);
+
+  if (picker.inputHourText.value.length === 2) {
+    void focusMinuteInput();
+  }
+}
+
+function handleHourInputKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Enter') {
+    return;
+  }
+
+  event.preventDefault();
+  void focusMinuteInput();
+}
+
+function handleMinuteInputKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Enter') {
+    return;
+  }
+
+  event.preventDefault();
+  handleConfirm();
 }
 
 function getClockPointerState(event: PointerEvent) {
@@ -536,8 +569,9 @@ defineExpose({
               :value="picker.inputHourText.value"
               :aria-invalid="picker.hourInputInvalid.value ? 'true' : undefined"
               :aria-describedby="picker.hourInputError.value ? hourErrorId : undefined"
-              @input="picker.setInputHourText(($event.target as HTMLInputElement).value)"
+              @input="handleHourInput"
               @focus="picker.activeSelection.value = 'hour'"
+              @keydown="handleHourInputKeydown"
               @blur="
                 picker.touchInput('hour');
                 picker.applyInputText();
@@ -559,6 +593,7 @@ defineExpose({
 
           <label class="m3-time-picker-input-field" data-scope="time-picker" data-part="minute-input-field">
             <input
+              ref="minuteInputRef"
               class="m3-time-picker-input"
               data-scope="time-picker"
               data-part="minute-input"
@@ -569,6 +604,7 @@ defineExpose({
               :aria-describedby="picker.minuteInputError.value ? minuteErrorId : undefined"
               @input="picker.setInputMinuteText(($event.target as HTMLInputElement).value)"
               @focus="picker.activeSelection.value = 'minute'"
+              @keydown="handleMinuteInputKeydown"
               @blur="
                 picker.touchInput('minute');
                 picker.applyInputText();
