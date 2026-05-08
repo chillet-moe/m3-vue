@@ -56,8 +56,8 @@ function isPopoverOpen(element: HTMLElement | null) {
   return element ? popoverOpenElements.has(element) : false;
 }
 
-function getDatePickerButton(container: HTMLElement, date: string) {
-  return container.querySelector<HTMLButtonElement>(`.m3-date-picker-day[data-date="${date}"]`);
+function getDatePickerButton(_container: HTMLElement, date: string) {
+  return document.body.querySelector<HTMLButtonElement>(`.m3-date-picker-day[data-date="${date}"]`);
 }
 
 describe('TextField', () => {
@@ -233,7 +233,7 @@ describe('TextField', () => {
     await nextTick();
 
     const input = container.querySelector<HTMLInputElement>('.m3-text-field-input');
-    const datePicker = container.querySelector<HTMLElement>('.m3-date-picker');
+    const datePicker = document.body.querySelector<HTMLElement>('.m3-date-picker');
 
     expect(input?.type).toBe('text');
 
@@ -246,7 +246,7 @@ describe('TextField', () => {
     getDatePickerButton(container, '2026-04-30')?.click();
     await nextTick();
 
-    Array.from(container.querySelectorAll<HTMLButtonElement>('button'))
+    Array.from(document.body.querySelectorAll<HTMLButtonElement>('button'))
       .find((button) => button.textContent?.trim() === 'OK')
       ?.click();
     await nextTick();
@@ -289,7 +289,7 @@ describe('TextField', () => {
     getDatePickerButton(container, '2026-04-30')?.click();
     await nextTick();
 
-    Array.from(container.querySelectorAll<HTMLButtonElement>('button'))
+    Array.from(document.body.querySelectorAll<HTMLButtonElement>('button'))
       .find((button) => button.textContent?.trim() === 'OK')
       ?.click();
     await nextTick();
@@ -325,7 +325,7 @@ describe('TextField', () => {
     await nextTick();
 
     const input = container.querySelector<HTMLInputElement>('.m3-text-field-input');
-    const timePicker = container.querySelector<HTMLElement>('.m3-time-picker');
+    const timePicker = document.body.querySelector<HTMLElement>('.m3-time-picker');
 
     expect(input?.type).toBe('text');
 
@@ -335,8 +335,8 @@ describe('TextField', () => {
 
     expect(isPopoverOpen(timePicker)).toBe(true);
 
-    const hourInput = container.querySelector<HTMLInputElement>('[data-part="hour-input"]');
-    const minuteInput = container.querySelector<HTMLInputElement>('[data-part="minute-input"]');
+    const hourInput = document.body.querySelector<HTMLInputElement>('[data-part="hour-input"]');
+    const minuteInput = document.body.querySelector<HTMLInputElement>('[data-part="minute-input"]');
 
     if (hourInput && minuteInput) {
       hourInput.value = '14';
@@ -345,7 +345,7 @@ describe('TextField', () => {
       minuteInput.dispatchEvent(new Event('input', { bubbles: true }));
     }
 
-    Array.from(container.querySelectorAll<HTMLButtonElement>('button'))
+    Array.from(document.body.querySelectorAll<HTMLButtonElement>('button'))
       .find((button) => button.textContent?.trim() === 'OK')
       ?.click();
     await nextTick();

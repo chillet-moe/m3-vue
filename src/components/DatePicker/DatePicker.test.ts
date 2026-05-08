@@ -56,12 +56,12 @@ function isPopoverOpen(element: HTMLElement | null) {
   return element ? popoverOpenElements.has(element) : false;
 }
 
-function getDay(container: HTMLElement, date: string) {
-  return container.querySelector<HTMLButtonElement>(`.m3-date-picker-day[data-date="${date}"]`);
+function getDay(_container: HTMLElement, date: string) {
+  return document.body.querySelector<HTMLButtonElement>(`.m3-date-picker-day[data-date="${date}"]`);
 }
 
-function getButton(container: HTMLElement, label: string) {
-  return Array.from(container.querySelectorAll<HTMLButtonElement>('button')).find(
+function getButton(_container: HTMLElement, label: string) {
+  return Array.from(document.body.querySelectorAll<HTMLButtonElement>('button')).find(
     (button) => button.textContent?.trim() === label,
   );
 }
@@ -91,7 +91,7 @@ describe('DatePicker', () => {
     await nextTick();
     await nextTick();
 
-    const popover = container.querySelector<HTMLElement>('.m3-date-picker');
+    const popover = document.body.querySelector<HTMLElement>('.m3-date-picker');
     const selectedDay = getDay(container, '2026-04-28');
 
     expect(isPopoverOpen(popover)).toBe(true);
@@ -137,7 +137,7 @@ describe('DatePicker', () => {
     await nextTick();
 
     expect(updates).toEqual(['2026-04-30']);
-    expect(isPopoverOpen(container.querySelector<HTMLElement>('.m3-date-picker'))).toBe(false);
+    expect(isPopoverOpen(document.body.querySelector<HTMLElement>('.m3-date-picker'))).toBe(false);
 
     app.unmount();
   });
@@ -185,10 +185,12 @@ describe('DatePicker', () => {
     await nextTick();
     await nextTick();
 
-    container.querySelector<HTMLButtonElement>('[data-part="month-switch"]')?.click();
+    document.body.querySelector<HTMLButtonElement>('[data-part="month-switch"]')?.click();
     await nextTick();
 
-    const selectedMonth = container.querySelector<HTMLButtonElement>('.m3-date-picker-list-item[data-selected="true"]');
+    const selectedMonth = document.body.querySelector<HTMLButtonElement>(
+      '.m3-date-picker-list-item[data-selected="true"]',
+    );
     expect(selectedMonth?.textContent?.trim()).toBe('checkAugust');
 
     getButton(container, 'May')?.click();
