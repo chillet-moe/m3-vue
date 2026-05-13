@@ -1,5 +1,9 @@
 packages:
   - packages/*
+allowBuilds:
+  esbuild: false
+  sharp: false
+  workerd: false
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plus: ^0.1.20
