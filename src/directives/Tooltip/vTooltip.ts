@@ -1,4 +1,5 @@
 import type { TooltipDirective } from './types';
+import '../../components/Tooltip/Tooltip.css';
 import './vTooltip.css';
 import { setupTooltip } from './setup';
 

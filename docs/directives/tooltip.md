@@ -27,12 +27,13 @@ import { Tooltip } from '@/components/Tooltip';
 
 ## Generate A Tooltip
 
-Pass a config object with `content` to let the directive create and clean up a tooltip element for you.
+Pass a config object with `content` to let the directive create and clean up a Tooltip surface for you.
 
 ```vue
 <button
   v-tooltip="{
     content: 'Helpful text',
+    variant: 'plain',
     placement: 'top',
     interactive: false,
   }"
@@ -41,7 +42,7 @@ Pass a config object with `content` to let the directive create and clean up a t
 </button>
 ```
 
-Use this form for plain text tips. A bare string binding is treated as a target selector, not inline content.
+Use this form for plain text tips. Generated tips use the same DOM contract and CSS as the `Tooltip` component. A bare string binding is treated as a target selector, not inline content.
 
 ## Reuse An Existing Tooltip
 

@@ -78,6 +78,10 @@ describe('vTooltip directive', () => {
 
     const tip = document.body.querySelector('.vtt-popover');
     expect(tip).not.toBeNull();
+    expect(tip?.classList.contains('m3-tooltip')).toBe(true);
+    expect(tip?.getAttribute('data-scope')).toBe('tooltip');
+    expect(tip?.getAttribute('data-part')).toBe('root');
+    expect(tip?.getAttribute('data-variant')).toBe('plain');
     expect(el.getAttribute('aria-controls')).toBe(tip?.id);
 
     vTooltip.unmounted?.(el);
@@ -111,6 +115,19 @@ describe('vTooltip directive', () => {
 
     expect(state.tip).toBe(tip);
     expect(tip.textContent).toBe('New content');
+
+    state.cleanup();
+  });
+
+  it('updates generated tooltip variant without rebuilding the element', () => {
+    const el = createTrigger();
+    const state = setupTooltip(el, { content: 'Tooltip content' }, { manual: true });
+    const tip = state.tip;
+
+    state.update({ content: 'Tooltip content', variant: 'rich' });
+
+    expect(state.tip).toBe(tip);
+    expect(tip.getAttribute('data-variant')).toBe('rich');
 
     state.cleanup();
   });

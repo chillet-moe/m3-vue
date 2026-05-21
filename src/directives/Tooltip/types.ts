@@ -8,6 +8,11 @@ export type TooltipConfig = {
   /** Text used when the directive creates the tooltip element. */
   content?: string;
   /**
+   * Visual treatment used when the directive creates the tooltip element.
+   * @default plain
+   */
+  variant?: 'plain' | 'rich';
+  /**
    * Logical placement around the trigger.
    * @default top
    */
@@ -58,6 +63,7 @@ export type NormalizedTooltipOptions = {
   animDuration: number;
   target?: string | HTMLElement;
   content?: string;
+  variant: 'plain' | 'rich';
 };
 
 export type State = {

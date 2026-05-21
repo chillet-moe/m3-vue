@@ -414,6 +414,7 @@ export function setupTooltip(
     }
 
     if (created) {
+      tip.dataset.variant = opts.variant;
       tip.textContent = opts.content ?? '';
     }
 

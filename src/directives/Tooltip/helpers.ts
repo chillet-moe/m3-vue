@@ -17,6 +17,7 @@ export function normalizeBinding(binding: TooltipBindingValue): NormalizedToolti
     closeDelay: 80,
     longpressDelay: 450,
     animDuration: 120,
+    variant: 'plain',
   };
 
   if (typeof binding === 'string') {
@@ -45,7 +46,8 @@ export function areNormalizedTooltipOptionsEqual(a: NormalizedTooltipOptions, b:
     a.openDelay === b.openDelay &&
     a.closeDelay === b.closeDelay &&
     a.longpressDelay === b.longpressDelay &&
-    a.animDuration === b.animDuration
+    a.animDuration === b.animDuration &&
+    a.variant === b.variant
   );
 }
 
@@ -233,7 +235,10 @@ export function ensureTipElement(opts: NormalizedTooltipOptions, trigger: HTMLEl
 
   if (!tip) {
     tip = document.createElement('div');
-    tip.className = 'vtt-popover';
+    tip.className = 'm3-tooltip vtt-popover';
+    tip.dataset.scope = 'tooltip';
+    tip.dataset.part = 'root';
+    tip.dataset.variant = opts.variant;
     tip.textContent = opts.content ?? '';
     document.body.appendChild(tip);
   }
