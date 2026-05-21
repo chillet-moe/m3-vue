@@ -255,7 +255,7 @@ describe('TimePicker', () => {
     await nextTick();
 
     expect(document.body.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('03');
-    expect(document.body.querySelector('[data-part="minute-display"]')?.dataset.selected).toBe('true');
+    expect(document.body.querySelector<HTMLElement>('[data-part="minute-display"]')?.dataset.selected).toBe('true');
 
     dispatchPointerEvent(clockFace, 'pointerdown', { button: 0, clientX: 100, clientY: 0 });
     dispatchPointerEvent(clockFace, 'pointermove', { button: 0, clientX: 200, clientY: 100 });
