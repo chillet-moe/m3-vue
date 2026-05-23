@@ -3,6 +3,7 @@ import { useData, withBase } from 'vitepress';
 import { VPNavBarSearch } from 'vitepress/theme';
 
 import { Button, Card, IconButton } from '@/index';
+import ShapeTokenControls from '../../components/ShapeTokenControls.vue';
 import { useHero, useNav, useSiteInfo } from '../composables/nav';
 import { mapHeroActionColor, resolveSocialLabel } from '../utils';
 
@@ -56,6 +57,8 @@ function toggleAppearance() {
           >
             {{ resolveSocialLabel(link.link) }}
           </Button>
+
+          <ShapeTokenControls />
 
           <IconButton
             color="standard"

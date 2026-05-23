@@ -4,6 +4,7 @@ import { VPNavBarSearch } from 'vitepress/theme';
 import { computed } from 'vue';
 
 import { Button, IconButton } from '@/index';
+import ShapeTokenControls from '../../components/ShapeTokenControls.vue';
 import { useNav } from '../composables/nav';
 import { useStickyPreviewPreference } from '../composables/preferences';
 import { useSidebar, useSidebarControl } from '../composables/sidebar';
@@ -88,6 +89,8 @@ function toggleStickyPreview() {
           :data-active="stickyPreviewEnabled ? 'true' : 'false'"
           @click="toggleStickyPreview"
         />
+
+        <ShapeTokenControls />
 
         <IconButton
           color="standard"

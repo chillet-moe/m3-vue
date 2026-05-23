@@ -29,9 +29,9 @@
     /* Keep action finite so border-radius animations do not interpolate from 9999px. */
     --md-shape-action: var(--md-sys-shape-corner-extra-large);
     --md-shape-action-square: initial;
-    --md-shape-action-square-small: var(--md-shape-action-square, var(--md-sys-shape-corner-medium));
-    --md-shape-action-square-medium: var(--md-shape-action-square, var(--md-sys-shape-corner-large));
-    --md-shape-action-square-large: var(--md-shape-action-square, var(--md-sys-shape-corner-extra-large));
+    --md-shape-action-square-small: var(--md-shape-action-square, calc(var(--md-shape-action) * 0.428571));
+    --md-shape-action-square-medium: var(--md-shape-action-square, calc(var(--md-shape-action) * 0.571429));
+    --md-shape-action-square-large: var(--md-shape-action-square, var(--md-shape-action));
     --md-shape-action-pressed: initial;
     --md-shape-action-pressed-small: var(--md-shape-action-pressed, var(--md-sys-shape-corner-small));
     --md-shape-action-pressed-medium: var(--md-shape-action-pressed, var(--md-sys-shape-corner-medium));

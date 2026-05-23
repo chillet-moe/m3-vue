@@ -27,7 +27,7 @@
 
 如果只是想统一整套组件的圆角风格，优先覆盖少量 `--md-shape-*` 语义 token，而不是逐个组件改 `--md-<component>-*` 或 `data-part`。
 
-<ShapeTokenPreview />
+文档右上角的 Shape 控制器会把这些变量写到文档根节点，因此调整会直接作用到整站组件。
 
 ```css
 :root {
@@ -47,6 +47,7 @@
 需要统一 action 的 square、pressed 或 selected 形变时，可以覆盖对应的 action 语义 token：
 
 `--md-shape-action` 建议使用有限圆角值，不要设为 `--md-sys-shape-corner-full`，否则 Button、IconButton 等组件在圆角动画中可能出现抖动。
+Square action 默认按比例派生自 `--md-shape-action`，只有需要让 square、pressed 或 selected 形变偏离 action 基准时，才需要覆盖下面这些 token。
 
 ```css
 :root {
