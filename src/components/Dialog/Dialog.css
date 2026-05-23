@@ -34,7 +34,7 @@
   .m3-dialog {
     --_dialog-container-color: var(--md-dialog-container-color, var(--md-sys-color-surface-container-high));
     --_dialog-container-elevation: var(--md-dialog-container-elevation, var(--md-sys-elevation-level3));
-    --_dialog-container-shape: var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large));
+    --_dialog-container-shape: var(--md-dialog-container-shape, var(--md-shape-overlay));
     --_dialog-action-label-text-font: var(--md-dialog-action-label-text-font, var(--md-sys-typescale-label-large-font));
     --_dialog-action-label-text-line-height: var(
       --md-dialog-action-label-text-line-height,

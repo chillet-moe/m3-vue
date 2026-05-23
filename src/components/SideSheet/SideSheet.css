@@ -46,15 +46,12 @@
       var(--md-sys-elevation-level0)
     );
     --_sheet-side-docked-container-height: var(--md-sheet-side-docked-container-height, 100%);
-    --_sheet-side-docked-container-shape: var(--md-sheet-side-docked-container-shape, var(--md-sys-shape-corner-none));
-    --_sheet-side-detached-container-shape: var(
-      --md-sheet-side-detached-container-shape,
-      var(--md-sys-shape-corner-large)
-    );
+    --_sheet-side-docked-container-shape: var(--md-sheet-side-docked-container-shape, var(--md-shape-docked));
+    --_sheet-side-detached-container-shape: var(--md-sheet-side-detached-container-shape, var(--md-shape-popover));
     --_sheet-side-docked-container-width: var(--md-sheet-side-docked-container-width, 16rem);
     --_sheet-side-docked-modal-container-shape: var(
       --md-sheet-side-docked-modal-container-shape,
-      var(--md-sys-shape-corner-large-start)
+      var(--md-shape-docked-modal)
     );
     --_sheet-side-docked-headline-color: var(
       --md-sheet-side-docked-headline-color,
@@ -198,7 +195,7 @@
   }
 
   .m3-side-sheet[data-side='start'] .m3-side-sheet-surface {
-    border-radius: var(--md-sys-shape-corner-large-end);
+    border-radius: var(--md-shape-docked-modal-end);
   }
 
   .m3-side-sheet[data-side='end'] .m3-side-sheet-surface {

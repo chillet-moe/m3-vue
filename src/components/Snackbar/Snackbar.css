@@ -31,7 +31,7 @@
     --_snackbar-container-color: var(--md-snackbar-container-color, var(--md-sys-color-inverse-surface));
     --_snackbar-container-shadow-color: var(--md-snackbar-container-shadow-color, var(--md-sys-color-shadow));
     --_snackbar-container-elevation: var(--md-snackbar-container-elevation, var(--md-sys-elevation-level3));
-    --_snackbar-container-shape: var(--md-snackbar-container-shape, var(--md-sys-shape-corner-extra-small));
+    --_snackbar-container-shape: var(--md-snackbar-container-shape, var(--md-shape-compact));
     --_snackbar-container-padding-inline-start: var(--md-snackbar-container-padding-inline-start, 1rem);
     --_snackbar-container-padding-inline-end: var(--md-snackbar-container-padding-inline-end, 0.5rem);
     --_snackbar-container-padding-block: var(--md-snackbar-container-padding-block, 1rem);

@@ -16,13 +16,13 @@ export const menuStyleTokens = [
   {
     name: '--md-menus-active-container-shape',
     description: 'Controls active container shape.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-popover)',
     category: 'Shape',
   },
   {
     name: '--md-menus-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-popover)',
     category: 'Shape',
   },
   {
@@ -40,7 +40,7 @@ export const menuStyleTokens = [
   {
     name: '--md-menus-inactive-container-shape',
     description: 'Controls inactive container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-chip)',
     category: 'Shape',
   },
   {
@@ -58,7 +58,7 @@ export const menuStyleTokens = [
   {
     name: '--md-menus-menu-item-first-child-shape',
     description: 'Controls menu item first child shape.',
-    fallback: 'calc(var(--md-menus-container-shape,var(--md-sys-shape-corner-large))- --dp(3))',
+    fallback: 'calc(var(--md-menus-container-shape,var(--md-shape-popover))- --dp(3))',
     category: 'Shape',
   },
   {
@@ -100,7 +100,7 @@ export const menuStyleTokens = [
   {
     name: '--md-menus-menu-item-last-child-shape',
     description: 'Controls menu item last child shape.',
-    fallback: 'calc(var(--md-menus-container-shape,var(--md-sys-shape-corner-large))- --dp(3))',
+    fallback: 'calc(var(--md-menus-container-shape,var(--md-shape-popover))- --dp(3))',
     category: 'Shape',
   },
   {
@@ -118,7 +118,7 @@ export const menuStyleTokens = [
   {
     name: '--md-menus-menu-item-shape',
     description: 'Controls menu item shape.',
-    fallback: 'var(--md-sys-shape-corner-extra-small)',
+    fallback: 'var(--md-shape-popover-item)',
     category: 'Shape',
   },
   {

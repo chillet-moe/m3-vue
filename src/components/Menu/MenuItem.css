@@ -32,7 +32,7 @@
     padding-block: var(--_menus-menu-item-top-space, 0.5rem) var(--_menus-menu-item-bottom-space, 0.5rem);
     padding-inline: var(--_menus-menu-item-leading-space, 1rem) var(--_menus-menu-item-trailing-space, 1rem);
 
-    border-radius: var(--_menus-menu-item-shape, var(--md-sys-shape-corner-extra-small));
+    border-radius: var(--_menus-menu-item-shape, var(--md-shape-popover-item));
     cursor: pointer;
 
     color: var(--_menu-item-current-label-color);

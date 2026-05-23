@@ -28,7 +28,7 @@ export const tabsStyleTokens = [
   {
     name: '--md-tabs-active-container-shape',
     description: 'Controls active container shape.',
-    fallback: 'var(--md-sys-shape-corner-none)',
+    fallback: 'var(--md-shape-docked)',
     category: 'Shape',
   },
   {
@@ -172,7 +172,7 @@ export const tabsStyleTokens = [
   {
     name: '--md-tabs-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-none)',
+    fallback: 'var(--md-shape-docked)',
     category: 'Shape',
   },
   {
@@ -202,7 +202,7 @@ export const tabsStyleTokens = [
   {
     name: '--md-tabs-focus-indicator-shape',
     description: 'Controls focus indicator shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-card)',
     category: 'Focus',
   },
   {
@@ -382,7 +382,7 @@ export const tabsStyleTokens = [
   {
     name: '--md-tabs-tonal-active-container-shape',
     description: 'Controls tonal active container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-chip)',
     category: 'Shape',
   },
   {
@@ -442,7 +442,7 @@ export const tabsStyleTokens = [
   {
     name: '--md-tabs-tonal-container-shape',
     description: 'Controls tonal container shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-card)',
     category: 'Shape',
   },
   {

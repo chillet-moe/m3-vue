@@ -16,19 +16,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-icon-button-container-shape-round,var(--md-sys-shape-corner-full))',
+    fallback: 'var(--md-icon-button-container-shape-round,var(--md-shape-action))',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-container-shape-round',
     description: 'Controls container shape round.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-container-shape-square',
     description: 'Controls container shape square.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-action-square-small)',
     category: 'Shape',
   },
   {
@@ -328,13 +328,13 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-large-container-shape-round',
     description: 'Controls large container shape round.',
-    fallback: 'calc(var(--md-icon-button-large-container-height,6rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-large-container-shape-square',
     description: 'Controls large container shape square.',
-    fallback: 'var(--md-sys-shape-corner-extra-large)',
+    fallback: 'var(--md-shape-action-square-large)',
     category: 'Shape',
   },
   {
@@ -388,19 +388,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-large-pressed-container-shape',
     description: 'Controls large pressed container shape.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-action-pressed-large)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-large-selected-container-shape-round',
     description: 'Controls large selected container shape round.',
-    fallback: 'var(--md-sys-shape-corner-extra-large)',
+    fallback: 'var(--md-shape-action-selected-large)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-large-selected-container-shape-square',
     description: 'Controls large selected container shape square.',
-    fallback: 'calc(var(--md-icon-button-large-container-height,6rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -430,13 +430,13 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-medium-container-shape-round',
     description: 'Controls medium container shape round.',
-    fallback: 'calc(var(--md-icon-button-medium-container-height,3.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-medium-container-shape-square',
     description: 'Controls medium container shape square.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-action-square-medium)',
     category: 'Shape',
   },
   {
@@ -490,19 +490,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-medium-pressed-container-shape',
     description: 'Controls medium pressed container shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-action-pressed-medium)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-medium-selected-container-shape-round',
     description: 'Controls medium selected container shape round.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-action-selected-medium)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-medium-selected-container-shape-square',
     description: 'Controls medium selected container shape square.',
-    fallback: 'calc(var(--md-icon-button-medium-container-height,3.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -742,7 +742,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-pressed-container-shape',
     description: 'Controls pressed container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-action-pressed-small)',
     category: 'Shape',
   },
   {
@@ -772,19 +772,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-selected-container-shape',
     description: 'Controls selected container shape.',
-    fallback: 'var(--md-icon-button-xsmall-selected-container-shape-round,var(--md-sys-shape-corner-medium))',
+    fallback: 'var(--md-icon-button-xsmall-selected-container-shape-round,var(--md-shape-action-selected-small))',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-selected-container-shape-round',
     description: 'Controls selected container shape round.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-action-selected-small)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-selected-container-shape-square',
     description: 'Controls selected container shape square.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -838,13 +838,13 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-small-container-shape-round',
     description: 'Controls small container shape round.',
-    fallback: 'calc(var(--md-icon-button-small-container-height,2.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-small-container-shape-square',
     description: 'Controls small container shape square.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-action-square-small)',
     category: 'Shape',
   },
   {
@@ -898,19 +898,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-small-pressed-container-shape',
     description: 'Controls small pressed container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-action-pressed-small)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-small-selected-container-shape-round',
     description: 'Controls small selected container shape round.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-action-selected-small)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-small-selected-container-shape-square',
     description: 'Controls small selected container shape square.',
-    fallback: 'calc(var(--md-icon-button-small-container-height,2.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -1342,13 +1342,13 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xlarge-container-shape-round',
     description: 'Controls xlarge container shape round.',
-    fallback: 'calc(var(--md-icon-button-xlarge-container-height,8.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-xlarge-container-shape-square',
     description: 'Controls xlarge container shape square.',
-    fallback: 'var(--md-sys-shape-corner-extra-large)',
+    fallback: 'var(--md-shape-action-square-large)',
     category: 'Shape',
   },
   {
@@ -1402,19 +1402,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xlarge-pressed-container-shape',
     description: 'Controls xlarge pressed container shape.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-action-pressed-large)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-xlarge-selected-container-shape-round',
     description: 'Controls xlarge selected container shape round.',
-    fallback: 'var(--md-sys-shape-corner-extra-large)',
+    fallback: 'var(--md-shape-action-selected-large)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-xlarge-selected-container-shape-square',
     description: 'Controls xlarge selected container shape square.',
-    fallback: 'calc(var(--md-icon-button-xlarge-container-height,8.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -1438,13 +1438,13 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xsmall-container-shape-round',
     description: 'Controls xsmall container shape round.',
-    fallback: 'calc(var(--md-icon-button-xsmall-container-height,2rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-xsmall-container-shape-square',
     description: 'Controls xsmall container shape square.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-action-square-small)',
     category: 'Shape',
   },
   {
@@ -1498,19 +1498,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xsmall-pressed-container-shape',
     description: 'Controls xsmall pressed container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-action-pressed-small)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-xsmall-selected-container-shape-round',
     description: 'Controls xsmall selected container shape round.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-action-selected-small)',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-xsmall-selected-container-shape-square',
     description: 'Controls xsmall selected container shape square.',
-    fallback: 'calc(var(--md-icon-button-xsmall-container-height,2rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {

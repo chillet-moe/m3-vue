@@ -82,7 +82,7 @@ export const listItemStyleTokens = [
   {
     name: '--md-item-indicator-shape',
     description: 'Controls indicator shape.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-indicator)',
     category: 'Shape',
   },
   {

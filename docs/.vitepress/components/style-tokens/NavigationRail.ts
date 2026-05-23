@@ -40,7 +40,7 @@ export const navigationRailStyleTokens = [
   {
     name: '--md-navigation-rail-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-none)',
+    fallback: 'var(--md-shape-docked)',
     category: 'Shape',
   },
   {
@@ -220,7 +220,7 @@ export const navigationRailStyleTokens = [
   {
     name: '--md-navigation-rail-item-indicator-shape',
     description: 'Controls item indicator shape.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-indicator)',
     category: 'Shape',
   },
   {

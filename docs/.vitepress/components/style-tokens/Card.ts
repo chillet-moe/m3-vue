@@ -22,7 +22,7 @@ export const cardStyleTokens = [
   {
     name: '--md-elevated-card-container-shape',
     description: 'Controls card container shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-card)',
     category: 'Shape',
   },
   {
@@ -166,7 +166,7 @@ export const cardStyleTokens = [
   {
     name: '--md-filled-card-container-shape',
     description: 'Controls card container shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-card)',
     category: 'Shape',
   },
   {
@@ -310,7 +310,7 @@ export const cardStyleTokens = [
   {
     name: '--md-outlined-card-container-shape',
     description: 'Controls card container shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-card)',
     category: 'Shape',
   },
   {

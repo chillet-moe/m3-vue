@@ -10,7 +10,7 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-container-shape',
     description: 'Controls text field container shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-field-square)',
     category: 'Shape',
   },
   {

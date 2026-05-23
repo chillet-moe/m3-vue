@@ -10,8 +10,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-container-shape',
     description: 'Controls connected container shape.',
-    fallback:
-      'var(--md-button-group-connected-medium-container-shape,calc(var(--md-button-group-connected-medium-container-height,3.5rem)/ 2))',
+    fallback: 'var(--md-button-group-connected-medium-container-shape,var(--md-shape-action))',
     category: 'Shape',
   },
   {
@@ -35,7 +34,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-large-container-shape',
     description: 'Controls connected large container shape.',
-    fallback: 'calc(var(--md-button-group-connected-large-container-height,6rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -53,7 +52,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-large-selected-inner-corner-corner-size',
     description: 'Controls connected large selected inner corner corner size.',
-    fallback: 'calc(var(--md-button-group-connected-large-container-height,6rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -71,7 +70,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-medium-container-shape',
     description: 'Controls connected medium container shape.',
-    fallback: 'calc(var(--md-button-group-connected-medium-container-height,3.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -89,7 +88,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-medium-selected-inner-corner-corner-size',
     description: 'Controls connected medium selected inner corner corner size.',
-    fallback: 'calc(var(--md-button-group-connected-medium-container-height,3.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -102,8 +101,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-selected-inner-corner-corner-size',
     description: 'Controls connected selected inner corner corner size.',
-    fallback:
-      'var(--md-button-group-connected-medium-selected-inner-corner-corner-size,calc(var(--md-button-group-connected-medium-container-height,3.5rem)/ 2))',
+    fallback: 'var(--md-button-group-connected-medium-selected-inner-corner-corner-size,var(--md-shape-action))',
     category: 'Shape',
   },
   {
@@ -121,7 +119,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-small-container-shape',
     description: 'Controls connected small container shape.',
-    fallback: 'calc(var(--md-button-group-connected-small-container-height,2.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -139,7 +137,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-small-selected-inner-corner-corner-size',
     description: 'Controls connected small selected inner corner corner size.',
-    fallback: 'calc(var(--md-button-group-connected-small-container-height,2.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -157,7 +155,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-xlarge-container-shape',
     description: 'Controls connected xlarge container shape.',
-    fallback: 'calc(var(--md-button-group-connected-xlarge-container-height,8.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -175,7 +173,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-xlarge-selected-inner-corner-corner-size',
     description: 'Controls connected xlarge selected inner corner corner size.',
-    fallback: 'calc(var(--md-button-group-connected-xlarge-container-height,8.5rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -193,7 +191,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-xsmall-container-shape',
     description: 'Controls connected xsmall container shape.',
-    fallback: 'calc(var(--md-button-group-connected-xsmall-container-height,2rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {
@@ -211,7 +209,7 @@ export const buttonGroupStyleTokens = [
   {
     name: '--md-button-group-connected-xsmall-selected-inner-corner-corner-size',
     description: 'Controls connected xsmall selected inner corner corner size.',
-    fallback: 'calc(var(--md-button-group-connected-xsmall-container-height,2rem)/ 2)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {

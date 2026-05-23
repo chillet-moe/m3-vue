@@ -90,9 +90,9 @@
   }
 
   .m3-menu {
-    --_menus-container-shape: var(--md-menus-container-shape, var(--md-sys-shape-corner-large));
-    --_menus-active-container-shape: var(--md-menus-active-container-shape, var(--md-sys-shape-corner-large));
-    --_menus-inactive-container-shape: var(--md-menus-inactive-container-shape, var(--md-sys-shape-corner-small));
+    --_menus-container-shape: var(--md-menus-container-shape, var(--md-shape-popover));
+    --_menus-active-container-shape: var(--md-menus-active-container-shape, var(--md-shape-popover));
+    --_menus-inactive-container-shape: var(--md-menus-inactive-container-shape, var(--md-shape-chip));
     --_menus-menu-item-first-child-shape: var(
       --md-menus-menu-item-first-child-shape,
       calc(var(--_menus-container-shape) - --dp(3))
@@ -173,7 +173,7 @@
     --_menus-menu-item-between-space: var(--md-menus-menu-item-between-space, --dp(12));
     --_menus-menu-item-leading-icon-size: var(--md-menus-menu-item-leading-icon-size, --dp(20));
     --_menus-menu-item-trailing-icon-size: var(--md-menus-menu-item-trailing-icon-size, --dp(20));
-    --_menus-menu-item-shape: var(--md-menus-menu-item-shape, var(--md-sys-shape-corner-extra-small));
+    --_menus-menu-item-shape: var(--md-menus-menu-item-shape, var(--md-shape-popover-item));
     --_menus-gap: var(--md-menus-gap, 0.125rem);
     --_menus-group-padding: var(--md-menus-group-padding, --dp(4));
     --_menus-popover-padding: var(--md-menus-popover-padding, 0.25rem);

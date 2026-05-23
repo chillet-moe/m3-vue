@@ -26,7 +26,7 @@
     --_loading-indicator-active-indicator-size: var(--md-loading-indicator-active-indicator-size, --dp(38));
     --_loading-indicator-container-height: var(--md-loading-indicator-container-height, --dp(48));
     --_loading-indicator-container-width: var(--md-loading-indicator-container-width, --dp(48));
-    --_loading-indicator-container-shape: var(--md-loading-indicator-container-shape, var(--md-sys-shape-corner-full));
+    --_loading-indicator-container-shape: var(--md-loading-indicator-container-shape, var(--md-shape-indicator));
   }
 }
 

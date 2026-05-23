@@ -281,7 +281,7 @@
     --_chip-icon-gap: var(--md-chip-icon-gap, 0.5rem);
     --_chip-with-icon-side-space: var(--md-chip-with-icon-side-space, 0.5rem);
 
-    --_assist-chip-container-shape: var(--md-assist-chip-container-shape, var(--md-sys-shape-corner-small));
+    --_assist-chip-container-shape: var(--md-assist-chip-container-shape, var(--md-shape-chip));
     --_assist-chip-container-height: var(--md-assist-chip-container-height, 2rem);
     --_assist-chip-flat-container-elevation: var(
       --md-assist-chip-flat-container-elevation,
@@ -380,7 +380,7 @@
       var(--md-sys-color-primary)
     );
 
-    --_filter-chip-container-shape: var(--md-filter-chip-container-shape, var(--md-sys-shape-corner-small));
+    --_filter-chip-container-shape: var(--md-filter-chip-container-shape, var(--md-shape-chip));
     --_filter-chip-container-height: var(--md-filter-chip-container-height, 2rem);
     --_filter-chip-flat-container-elevation: var(
       --md-filter-chip-flat-container-elevation,
@@ -621,7 +621,7 @@
       var(--md-sys-color-on-surface-variant)
     );
 
-    --_input-chip-container-shape: var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small));
+    --_input-chip-container-shape: var(--md-input-chip-container-shape, var(--md-shape-chip));
     --_input-chip-container-height: var(--md-input-chip-container-height, 2rem);
     --_input-chip-container-elevation: var(--md-input-chip-container-elevation, var(--md-sys-elevation-level0));
     --_input-chip-unselected-outline-color: var(
@@ -805,7 +805,7 @@
       var(--md-sys-color-on-secondary-container)
     );
 
-    --_suggestion-chip-container-shape: var(--md-suggestion-chip-container-shape, var(--md-sys-shape-corner-small));
+    --_suggestion-chip-container-shape: var(--md-suggestion-chip-container-shape, var(--md-shape-chip));
     --_suggestion-chip-container-height: var(--md-suggestion-chip-container-height, 2rem);
     --_suggestion-chip-flat-container-elevation: var(
       --md-suggestion-chip-flat-container-elevation,
@@ -970,7 +970,7 @@
     border-end-start-radius: var(--_chip-container-shape);
 
     --_chip-container-height: var(--md-chip-container-height, 2rem);
-    --_chip-container-shape: var(--md-chip-container-shape, var(--md-sys-shape-corner-small));
+    --_chip-container-shape: var(--md-chip-container-shape, var(--md-shape-chip));
     --_chip-flat-container-elevation: var(--md-chip-flat-container-elevation, var(--md-sys-elevation-level0));
     --_chip-elevated-container-elevation: var(--md-chip-elevated-container-elevation, var(--md-sys-elevation-level1));
     --_chip-elevated-container-color: var(

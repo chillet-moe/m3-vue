@@ -236,7 +236,7 @@
     inset-inline-start: 50%;
     inline-size: 2.5rem;
     block-size: 2.5rem;
-    border-radius: 1.25rem;
+    border-radius: var(--md-sys-shape-corner-full);
     transform: translate(-50%, -50%);
   }
 

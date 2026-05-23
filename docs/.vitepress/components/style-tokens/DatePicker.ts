@@ -16,7 +16,7 @@ export const datePickerStyleTokens = [
   {
     name: '--md-date-picker-docked-container-shape',
     description: 'Controls docked container shape.',
-    fallback: 'var(--md-sys-shape-corner-extra-large)',
+    fallback: 'var(--md-shape-overlay)',
     category: 'Shape',
   },
   {
@@ -34,7 +34,7 @@ export const datePickerStyleTokens = [
   {
     name: '--md-date-picker-docked-date-container-shape',
     description: 'Controls docked date container shape.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-indicator)',
     category: 'Shape',
   },
   {
@@ -142,7 +142,7 @@ export const datePickerStyleTokens = [
   {
     name: '--md-date-picker-docked-menu-button-container-shape',
     description: 'Controls docked menu button container shape.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
   },
   {

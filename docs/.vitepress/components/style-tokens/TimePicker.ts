@@ -16,7 +16,7 @@ export const timePickerStyleTokens = [
   {
     name: '--md-time-picker-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-extra-large)',
+    fallback: 'var(--md-shape-overlay)',
     category: 'Shape',
   },
   {

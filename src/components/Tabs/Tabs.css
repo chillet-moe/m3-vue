@@ -96,7 +96,7 @@
     );
     --_tabs-container-padding: var(--md-tabs-container-padding, 0rem);
     --_tabs-container-gap: var(--md-tabs-container-gap, 0rem);
-    --_tabs-container-shape: var(--md-tabs-container-shape, var(--md-sys-shape-corner-none));
+    --_tabs-container-shape: var(--md-tabs-container-shape, var(--md-shape-docked));
     --_tabs-divider-color: var(--md-tabs-divider-color, var(--md-sys-color-surface-variant));
     --_tabs-divider-thickness: var(--md-tabs-divider-thickness, 0.0625rem);
 
@@ -104,7 +104,7 @@
     --_tabs-active-container-elevation: var(--md-tabs-active-container-elevation, var(--md-sys-elevation-level0));
     --_tabs-active-container-outline-color: var(--md-tabs-active-container-outline-color, transparent);
     --_tabs-active-container-outline-width: var(--md-tabs-active-container-outline-width, 0rem);
-    --_tabs-active-container-shape: var(--md-tabs-active-container-shape, var(--md-sys-shape-corner-none));
+    --_tabs-active-container-shape: var(--md-tabs-active-container-shape, var(--md-shape-docked));
 
     --_tabs-active-label-color: var(--md-tabs-active-label-color, var(--md-sys-color-primary));
     --_tabs-inactive-label-color: var(--md-tabs-inactive-label-color, var(--md-sys-color-on-surface-variant));
@@ -194,7 +194,7 @@
       --md-tabs-focus-indicator-outline-offset,
       var(--md-sys-state-focus-indicator-inner-offset)
     );
-    --_tabs-focus-indicator-shape: var(--md-tabs-focus-indicator-shape, var(--md-sys-shape-corner-medium));
+    --_tabs-focus-indicator-shape: var(--md-tabs-focus-indicator-shape, var(--md-shape-card));
 
     --_tabs-indicator-animation-duration: var(--md-tabs-indicator-animation-duration, 250ms);
     --_tabs-indicator-animation-easing: var(--md-tabs-indicator-animation-easing, cubic-bezier(0.2, 0, 0, 1));
@@ -206,7 +206,7 @@
     --_tabs-tonal-container-padding: var(--md-tabs-tonal-container-padding, 0.25rem);
     --_tabs-tonal-compact-container-padding: var(--md-tabs-tonal-compact-container-padding, 0.1875rem);
     --_tabs-tonal-container-gap: var(--md-tabs-tonal-container-gap, 0.125rem);
-    --_tabs-tonal-container-shape: var(--md-tabs-tonal-container-shape, var(--md-sys-shape-corner-medium));
+    --_tabs-tonal-container-shape: var(--md-tabs-tonal-container-shape, var(--md-shape-card));
     --_tabs-tonal-active-container-color: var(
       --md-tabs-tonal-active-container-color,
       var(--md-sys-color-surface-container-lowest)
@@ -220,7 +220,7 @@
       rgb(from var(--md-sys-color-outline-variant) r g b / 0.6)
     );
     --_tabs-tonal-active-container-outline-width: var(--md-tabs-tonal-active-container-outline-width, 0.0625rem);
-    --_tabs-tonal-active-container-shape: var(--md-tabs-tonal-active-container-shape, var(--md-sys-shape-corner-small));
+    --_tabs-tonal-active-container-shape: var(--md-tabs-tonal-active-container-shape, var(--md-shape-chip));
     --_tabs-tonal-active-label-color: var(--md-tabs-tonal-active-label-color, var(--md-sys-color-on-surface));
     --_tabs-tonal-inactive-label-color: var(
       --md-tabs-tonal-inactive-label-color,

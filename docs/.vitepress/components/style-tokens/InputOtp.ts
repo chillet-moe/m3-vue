@@ -10,7 +10,7 @@ export const inputOtpStyleTokens = [
   {
     name: '--md-input-otp-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-medium)',
+    fallback: 'var(--md-shape-field-square)',
     category: 'Shape',
   },
   {

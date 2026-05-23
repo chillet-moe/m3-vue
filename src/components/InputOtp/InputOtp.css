@@ -24,7 +24,7 @@
   }
 
   .m3-input-otp {
-    --_input-otp-container-shape: var(--md-input-otp-container-shape, var(--md-sys-shape-corner-medium));
+    --_input-otp-container-shape: var(--md-input-otp-container-shape, var(--md-shape-field-square));
     --_input-otp-small-container-size: var(--md-input-otp-small-container-size, 2.5rem);
     --_input-otp-medium-container-size: var(--md-input-otp-medium-container-size, 3rem);
     --_input-otp-large-container-size: var(--md-input-otp-large-container-size, 3.5rem);

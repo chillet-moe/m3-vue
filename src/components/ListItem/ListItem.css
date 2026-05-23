@@ -49,10 +49,7 @@
     );
     --_item-inactive-state-layer-color: var(--md-item-inactive-state-layer-color, var(--md-color-on-container));
     --_item-motion: var(--md-item-motion, var(--md-easing-spatial));
-    --_item-indicator-shape: var(
-      --md-item-indicator-shape,
-      var(--_button-container-shape, var(--md-sys-shape-corner-full))
-    );
+    --_item-indicator-shape: var(--md-item-indicator-shape, var(--_button-container-shape, var(--md-shape-indicator)));
     --_item-indicator-collapsed-visual-width: var(--md-item-indicator-collapsed-visual-width, --dp(12));
   }
 }

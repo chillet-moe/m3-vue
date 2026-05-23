@@ -202,8 +202,9 @@ const headlineId = `dialog-headline-${useId()}`;
 
 CSS 注意事项：
 
-- CSS token 分四层：
+- CSS token 分五层：
   - `--md-sys-*` 是主题级 token，不建议在单个组件实例上局部覆盖。
+  - `--md-shape-*` 是库级语义 shape token。新增组件的容器、弹层、紧凑项、指示器等默认 shape 应优先回落到这些 token，再由它们映射到 `--md-sys-shape-corner-*`。
   - `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color` 是父子组件传递语义色的上下文 token。
   - `--md-<component>-*` 是组件 public token，只暴露有明确语义的部件或稳定状态。
   - `--_*` 是组件 private token，外部不应依赖。

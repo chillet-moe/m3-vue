@@ -74,7 +74,7 @@ export const floatingActionButtonStyleTokens = [
   {
     name: '--md-fab-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-fab-regular), var(--md-shape-fab-medium), or var(--md-shape-fab-large) depending on size',
     category: 'Shape',
     targets: [{ scope: 'floating-action-button', part: 'root' }],
   },

@@ -76,7 +76,7 @@ export const snackbarStyleTokens = [
   {
     name: '--md-snackbar-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-extra-small)',
+    fallback: 'var(--md-shape-compact)',
     category: 'Shape',
   },
   {

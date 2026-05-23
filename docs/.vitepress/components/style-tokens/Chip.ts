@@ -10,7 +10,7 @@ export const chipStyleTokens = [
   {
     name: '--md-assist-chip-container-shape',
     description: 'Controls chip container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-chip)',
     category: 'Shape',
   },
   {
@@ -250,7 +250,7 @@ export const chipStyleTokens = [
   {
     name: '--md-chip-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-chip)',
     category: 'Shape',
   },
   {
@@ -712,7 +712,7 @@ export const chipStyleTokens = [
   {
     name: '--md-filter-chip-container-shape',
     description: 'Controls chip container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-chip)',
     category: 'Shape',
   },
   {
@@ -1114,7 +1114,7 @@ export const chipStyleTokens = [
   {
     name: '--md-input-chip-container-shape',
     description: 'Controls chip container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-chip)',
     category: 'Shape',
   },
   {
@@ -1432,7 +1432,7 @@ export const chipStyleTokens = [
   {
     name: '--md-suggestion-chip-container-shape',
     description: 'Controls chip container shape.',
-    fallback: 'var(--md-sys-shape-corner-small)',
+    fallback: 'var(--md-shape-chip)',
     category: 'Shape',
   },
   {

@@ -59,13 +59,10 @@
       --md-date-picker-docked-container-elevation,
       var(--md-sys-elevation-level3)
     );
-    --_date-picker-docked-container-shape: var(
-      --md-date-picker-docked-container-shape,
-      var(--md-sys-shape-corner-extra-large)
-    );
+    --_date-picker-docked-container-shape: var(--md-date-picker-docked-container-shape, var(--md-shape-overlay));
     --_date-picker-docked-date-container-shape: var(
       --md-date-picker-docked-date-container-shape,
-      var(--md-sys-shape-corner-full)
+      var(--md-shape-indicator)
     );
     --_date-picker-docked-date-today-container-outline-color: var(
       --md-date-picker-docked-date-today-container-outline-color,
@@ -152,7 +149,7 @@
     );
     --_date-picker-docked-menu-button-container-shape: var(
       --md-date-picker-docked-menu-button-container-shape,
-      var(--md-sys-shape-corner-full)
+      var(--md-shape-action)
     );
     --_date-picker-docked-menu-button-label-text-color: var(
       --md-date-picker-docked-menu-button-label-text-color,

@@ -151,7 +151,7 @@ export const floatingActionButtonMenuStyleTokens = [
   {
     name: '--md-fab-menu-trigger-container-shape',
     description: 'Controls trigger FAB container shape.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-fab-regular), var(--md-shape-fab-medium), or var(--md-shape-fab-large) depending on size',
     category: 'Shape',
     targets: [{ scope: 'floating-action-button-menu', part: 'trigger' }],
   },
@@ -179,7 +179,7 @@ export const floatingActionButtonMenuStyleTokens = [
   {
     name: '--md-fab-menu-close-button-container-shape',
     description: 'Controls close button container shape.',
-    fallback: '28px',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
     targets: [{ scope: 'floating-action-button-menu', part: 'trigger' }],
   },
@@ -207,7 +207,7 @@ export const floatingActionButtonMenuStyleTokens = [
   {
     name: '--md-fab-menu-item-container-shape',
     description: 'Controls menu item container shape.',
-    fallback: '28px',
+    fallback: 'var(--md-shape-action)',
     category: 'Shape',
     targets: [{ scope: 'floating-action-button-menu', part: 'item' }],
   },

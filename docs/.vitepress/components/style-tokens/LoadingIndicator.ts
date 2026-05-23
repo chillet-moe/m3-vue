@@ -34,7 +34,7 @@ export const loadingIndicatorStyleTokens = [
   {
     name: '--md-loading-indicator-container-shape',
     description: 'Controls container shape.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-indicator)',
     category: 'Shape',
   },
   {

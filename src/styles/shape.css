@@ -24,5 +24,38 @@
     --md-sys-shape-corner-value-extra-large: 1.75rem;
     --md-sys-shape-corner-value-extra-large-increased: 2rem;
     --md-sys-shape-corner-value-extra-extra-large: 3rem;
+
+    /* Semantic shape tokens */
+    --md-shape-action: var(--md-sys-shape-corner-full);
+    --md-shape-action-square: initial;
+    --md-shape-action-square-small: var(--md-shape-action-square, var(--md-sys-shape-corner-medium));
+    --md-shape-action-square-medium: var(--md-shape-action-square, var(--md-sys-shape-corner-large));
+    --md-shape-action-square-large: var(--md-shape-action-square, var(--md-sys-shape-corner-extra-large));
+    --md-shape-action-pressed: initial;
+    --md-shape-action-pressed-small: var(--md-shape-action-pressed, var(--md-sys-shape-corner-small));
+    --md-shape-action-pressed-medium: var(--md-shape-action-pressed, var(--md-sys-shape-corner-medium));
+    --md-shape-action-pressed-large: var(--md-shape-action-pressed, var(--md-sys-shape-corner-large));
+    --md-shape-action-selected: initial;
+    --md-shape-action-selected-small: var(--md-shape-action-selected, var(--md-sys-shape-corner-medium));
+    --md-shape-action-selected-medium: var(--md-shape-action-selected, var(--md-sys-shape-corner-large));
+    --md-shape-action-selected-large: var(--md-shape-action-selected, var(--md-sys-shape-corner-extra-large));
+    --md-shape-field: var(--md-sys-shape-corner-large);
+    --md-shape-field-square: var(--md-sys-shape-corner-medium);
+    --md-shape-chip: var(--md-sys-shape-corner-small);
+    --md-shape-card: var(--md-sys-shape-corner-medium);
+    --md-shape-popover: var(--md-sys-shape-corner-large);
+    --md-shape-popover-item: var(--md-sys-shape-corner-extra-small);
+    --md-shape-compact: var(--md-sys-shape-corner-extra-small);
+    --md-shape-overlay: var(--md-sys-shape-corner-extra-large);
+    --md-shape-overlay-top: var(--md-sys-shape-corner-extra-large-top);
+    --md-shape-docked: var(--md-sys-shape-corner-none);
+    --md-shape-docked-modal: var(--md-sys-shape-corner-large-start);
+    --md-shape-docked-modal-start: var(--md-sys-shape-corner-large-start);
+    --md-shape-docked-modal-end: var(--md-sys-shape-corner-large-end);
+    --md-shape-indicator: var(--md-sys-shape-corner-full);
+    --md-shape-fab: initial;
+    --md-shape-fab-regular: var(--md-shape-fab, var(--md-sys-shape-corner-large));
+    --md-shape-fab-medium: var(--md-shape-fab, var(--md-sys-shape-corner-large-increased));
+    --md-shape-fab-large: var(--md-shape-fab, var(--md-sys-shape-corner-extra-large));
   }
 }

@@ -34,7 +34,7 @@ export const bottomSheetStyleTokens = [
   {
     name: '--md-sheet-bottom-docked-container-shape',
     description: 'Controls bottom docked container shape.',
-    fallback: 'var(--md-sys-shape-corner-extra-large-top)',
+    fallback: 'var(--md-shape-overlay-top)',
     category: 'Shape',
   },
   {
@@ -58,7 +58,7 @@ export const bottomSheetStyleTokens = [
   {
     name: '--md-sheet-bottom-docked-minimized-container-shape',
     description: 'Controls bottom docked minimized container shape.',
-    fallback: 'var(--md-sys-shape-corner-none)',
+    fallback: 'var(--md-shape-docked)',
     category: 'Shape',
   },
   {

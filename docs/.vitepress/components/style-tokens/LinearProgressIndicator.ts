@@ -58,7 +58,7 @@ export const linearProgressIndicatorStyleTokens = [
   {
     name: '--md-linear-progress-indicator-shape',
     description: 'Corner radius for track, active segment, and stop indicator.',
-    fallback: 'var(--md-sys-shape-corner-full)',
+    fallback: 'var(--md-shape-indicator)',
     category: 'Shape',
   },
   {

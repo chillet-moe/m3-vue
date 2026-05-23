@@ -21,7 +21,7 @@
   :where(.m3-time-picker) {
     --_time-picker-container-color: var(--md-time-picker-container-color, var(--md-sys-color-surface-container-high));
     --_time-picker-container-elevation: var(--md-time-picker-container-elevation, var(--md-sys-elevation-level3));
-    --_time-picker-container-shape: var(--md-time-picker-container-shape, var(--md-sys-shape-corner-extra-large));
+    --_time-picker-container-shape: var(--md-time-picker-container-shape, var(--md-shape-overlay));
     --_time-picker-container-width: var(--md-time-picker-container-width, 22.5rem);
     --_time-picker-clock-dial-container-color: var(
       --md-time-picker-clock-dial-container-color,
@@ -158,7 +158,7 @@
     place-items: center;
     min-inline-size: 0;
     min-block-size: 5rem;
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--md-shape-chip);
     background: var(--_time-picker-selector-container-color);
     color: var(--_time-picker-selector-unselected-label-text-color);
     font-family:
@@ -201,7 +201,7 @@
     min-inline-size: 4.5rem;
     overflow: hidden;
     border: 1px solid var(--_time-picker-period-selector-outline-color);
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--md-shape-chip);
   }
 
   .m3-time-picker-period-button {
@@ -368,7 +368,7 @@
     min-inline-size: 0;
     block-size: 5rem;
     border: 2px solid transparent;
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--md-shape-chip);
     padding-inline: 0.75rem;
     background: var(--_time-picker-selector-container-color);
     color: var(--_time-picker-selector-unselected-label-text-color);

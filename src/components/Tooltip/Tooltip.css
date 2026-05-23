@@ -50,7 +50,7 @@
 
   .m3-tooltip {
     --_plain-tooltip-container-color: var(--md-plain-tooltip-container-color, var(--md-sys-color-inverse-surface));
-    --_plain-tooltip-container-shape: var(--md-plain-tooltip-container-shape, var(--md-sys-shape-corner-extra-small));
+    --_plain-tooltip-container-shape: var(--md-plain-tooltip-container-shape, var(--md-shape-compact));
     --_plain-tooltip-supporting-text-font: var(
       --md-plain-tooltip-supporting-text-font,
       var(--md-sys-typescale-body-small-font)
@@ -83,7 +83,7 @@
     --_rich-tooltip-container-color: var(--md-rich-tooltip-container-color, var(--md-sys-color-surface-container));
     --_rich-tooltip-container-elevation: var(--md-rich-tooltip-container-elevation, var(--md-sys-elevation-level2));
     --_rich-tooltip-container-shadow-color: var(--md-rich-tooltip-container-shadow-color, var(--md-sys-color-shadow));
-    --_rich-tooltip-container-shape: var(--md-rich-tooltip-container-shape, var(--md-sys-shape-corner-medium));
+    --_rich-tooltip-container-shape: var(--md-rich-tooltip-container-shape, var(--md-shape-card));
     --_rich-tooltip-action-label-text-font: var(
       --md-rich-tooltip-action-label-text-font,
       var(--md-sys-typescale-label-large-font)

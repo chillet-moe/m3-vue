@@ -4,7 +4,7 @@ export const sideSheetStyleTokens = [
   {
     name: '--md-sheet-side-detached-container-shape',
     description: 'Controls side detached container shape.',
-    fallback: 'var(--md-sys-shape-corner-large)',
+    fallback: 'var(--md-shape-popover)',
     category: 'Shape',
   },
   {
@@ -16,7 +16,7 @@ export const sideSheetStyleTokens = [
   {
     name: '--md-sheet-side-docked-container-shape',
     description: 'Controls side docked container shape.',
-    fallback: 'var(--md-sys-shape-corner-none)',
+    fallback: 'var(--md-shape-docked)',
     category: 'Shape',
   },
   {
@@ -106,7 +106,7 @@ export const sideSheetStyleTokens = [
   {
     name: '--md-sheet-side-docked-modal-container-shape',
     description: 'Controls side docked modal container shape.',
-    fallback: 'var(--md-sys-shape-corner-large-start)',
+    fallback: 'var(--md-shape-docked-modal)',
     category: 'Shape',
   },
   {

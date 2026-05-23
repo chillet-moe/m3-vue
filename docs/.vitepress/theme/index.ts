@@ -15,6 +15,7 @@ import DemoContainer from '../components/DemoContainer.vue';
 import AnatomyTable from '../components/AnatomyTable.vue';
 import SourceApiTable from '../components/SourceApiTable.vue';
 import StyleTokenTable from '../components/StyleTokenTable.vue';
+import ShapeTokenPreview from '../components/ShapeTokenPreview.vue';
 
 export default {
   extends: DefaultTheme,
@@ -27,5 +28,6 @@ export default {
     app.component('AnatomyTable', AnatomyTable);
     app.component('SourceApiTable', SourceApiTable);
     app.component('StyleTokenTable', StyleTokenTable);
+    app.component('ShapeTokenPreview', ShapeTokenPreview);
   },
 } satisfies Theme;

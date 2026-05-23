@@ -89,11 +89,11 @@
     );
     --_outlined-text-field-container-shape-round: var(
       --md-outlined-text-field-container-shape-round,
-      var(--md-button-container-shape-round, var(--md-sys-shape-corner-large))
+      var(--md-button-container-shape-round, var(--md-shape-field))
     );
     --_outlined-text-field-container-shape-square: var(
       --md-outlined-text-field-container-shape-square,
-      var(--md-button-medium-container-shape-square, var(--md-sys-shape-corner-medium))
+      var(--md-button-medium-container-shape-square, var(--md-shape-field-square))
     );
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,

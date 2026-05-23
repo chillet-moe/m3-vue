@@ -173,7 +173,7 @@
     --_fab-size-container-height: --dp(56);
     --_fab-size-container-width: --dp(56);
     --_fab-size-icon-size: --dp(24);
-    --_fab-size-container-shape: var(--md-sys-shape-corner-large);
+    --_fab-size-container-shape: var(--md-shape-fab-regular);
     --_fab-size-leading-space: --dp(16);
     --_fab-size-icon-label-space: --dp(8);
     --_fab-size-trailing-space: --dp(16);
@@ -183,7 +183,7 @@
     --_fab-size-container-height: --dp(80);
     --_fab-size-container-width: --dp(80);
     --_fab-size-icon-size: --dp(28);
-    --_fab-size-container-shape: var(--md-sys-shape-corner-large-increased);
+    --_fab-size-container-shape: var(--md-shape-fab-medium);
     --_fab-size-leading-space: --dp(26);
     --_fab-size-icon-label-space: --dp(12);
     --_fab-size-trailing-space: --dp(26);
@@ -193,7 +193,7 @@
     --_fab-size-container-height: --dp(96);
     --_fab-size-container-width: --dp(96);
     --_fab-size-icon-size: --dp(36);
-    --_fab-size-container-shape: var(--md-sys-shape-corner-extra-large);
+    --_fab-size-container-shape: var(--md-shape-fab-large);
     --_fab-size-leading-space: --dp(28);
     --_fab-size-icon-label-space: --dp(16);
     --_fab-size-trailing-space: --dp(28);

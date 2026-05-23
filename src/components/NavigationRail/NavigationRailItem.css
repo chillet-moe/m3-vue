@@ -35,10 +35,7 @@
   .m3-navigation-rail-item {
     --_navigation-rail-item-icon-size: var(--md-navigation-rail-item-icon-size, --dp(24));
     --_navigation-rail-item-icon-touch-target-size: var(--md-navigation-rail-item-icon-touch-target-size, --dp(32));
-    --_navigation-rail-item-indicator-shape: var(
-      --md-navigation-rail-item-indicator-shape,
-      var(--md-sys-shape-corner-full)
-    );
+    --_navigation-rail-item-indicator-shape: var(--md-navigation-rail-item-indicator-shape, var(--md-shape-indicator));
 
     --_navigation-rail-item-collapsed-indicator-width: var(
       --md-navigation-rail-item-collapsed-indicator-width,

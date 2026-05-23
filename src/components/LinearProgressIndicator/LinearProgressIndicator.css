@@ -60,7 +60,7 @@
     --_wave-wavelength: var(--md-linear-progress-indicator-wave-wavelength, --dp(40));
     --_indeterminate-wave-wavelength: var(--md-linear-progress-indicator-indeterminate-wave-wavelength, --dp(20));
     --_with-wave-height: var(--md-linear-progress-indicator-with-wave-height, --dp(10));
-    --_shape: var(--md-linear-progress-indicator-shape, var(--md-sys-shape-corner-full));
+    --_shape: var(--md-linear-progress-indicator-shape, var(--md-shape-indicator));
   }
 }
 
