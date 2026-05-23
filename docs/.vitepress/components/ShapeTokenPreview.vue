@@ -58,7 +58,6 @@ const shapeRoles: ShapeRole[] = [
     min: 0,
     max: 32,
     step: 1,
-    full: true,
   },
   {
     key: 'field',
@@ -148,7 +147,7 @@ const presets: ShapePreset[] = [
   {
     label: 'Material',
     values: {
-      action: { full: true, px: 32 },
+      action: { full: false, px: 28 },
       field: { full: false, px: 16 },
       fieldSquare: { full: false, px: 12 },
       chip: { full: false, px: 8 },
@@ -163,7 +162,7 @@ const presets: ShapePreset[] = [
   {
     label: 'Soft',
     values: {
-      action: { full: true, px: 32 },
+      action: { full: false, px: 30 },
       field: { full: false, px: 20 },
       fieldSquare: { full: false, px: 16 },
       chip: { full: false, px: 12 },

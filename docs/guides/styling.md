@@ -31,7 +31,7 @@
 
 ```css
 :root {
-  --md-shape-action: var(--md-sys-shape-corner-full);
+  --md-shape-action: var(--md-sys-shape-corner-extra-large);
   --md-shape-field: var(--md-sys-shape-corner-large);
   --md-shape-field-square: var(--md-sys-shape-corner-medium);
   --md-shape-chip: var(--md-sys-shape-corner-small);
@@ -45,6 +45,8 @@
 ```
 
 需要统一 action 的 square、pressed 或 selected 形变时，可以覆盖对应的 action 语义 token：
+
+`--md-shape-action` 建议使用有限圆角值，不要设为 `--md-sys-shape-corner-full`，否则 Button、IconButton 等组件在圆角动画中可能出现抖动。
 
 ```css
 :root {

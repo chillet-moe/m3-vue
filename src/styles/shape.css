@@ -26,7 +26,8 @@
     --md-sys-shape-corner-value-extra-extra-large: 3rem;
 
     /* Semantic shape tokens */
-    --md-shape-action: var(--md-sys-shape-corner-full);
+    /* Keep action finite so border-radius animations do not interpolate from 9999px. */
+    --md-shape-action: var(--md-sys-shape-corner-extra-large);
     --md-shape-action-square: initial;
     --md-shape-action-square-small: var(--md-shape-action-square, var(--md-sys-shape-corner-medium));
     --md-shape-action-square-medium: var(--md-shape-action-square, var(--md-sys-shape-corner-large));
