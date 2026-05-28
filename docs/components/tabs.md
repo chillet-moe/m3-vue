@@ -10,8 +10,6 @@ import TabsDefault from '../demos/tabs/TabsDefault.vue';
 import TabsDefaultSrc from '../demos/tabs/TabsDefault.vue?raw';
 import TabsLine from '../demos/tabs/TabsLine.vue';
 import TabsLineSrc from '../demos/tabs/TabsLine.vue?raw';
-import TabsCompact from '../demos/tabs/TabsCompact.vue';
-import TabsCompactSrc from '../demos/tabs/TabsCompact.vue?raw';
 import TabsDisabled from '../demos/tabs/TabsDisabled.vue';
 import TabsDisabledSrc from '../demos/tabs/TabsDisabled.vue?raw';
 import TabsWithIcons from '../demos/tabs/TabsWithIcons.vue';
@@ -22,8 +20,8 @@ import TabsHeadless from '../demos/tabs/TabsHeadless.vue';
 import TabsHeadlessSrc from '../demos/tabs/TabsHeadless.vue?raw';
 
 const props = ref({
-  variant: 'tonal',
-  density: 'default',
+  variant: 'navigation',
+  size: 'medium',
   mode: 'auto',
 });
 
@@ -34,7 +32,7 @@ const value = ref('overview');
 
 Tabs organize content into separate views where only one view is visible at a time. Each tab acts as a trigger for its associated panel.
 
-The default `tonal` variant is a desktop-oriented interpretation of Material 3: it keeps Material tokens, state layers, and restrained surfaces, but uses a stronger selected container than the official mobile-first tab bar. Use `line` when you want a closer Material 3 tab bar with a bottom indicator.
+The default `navigation` variant is a desktop-oriented navigation treatment with a contained shell and selected container. Use `line` when you want a closer Material 3 tab bar with a bottom indicator.
 
 Tabs use content width by default. Use `mode="fixed"` only when tabs should divide and fill the available width, or `mode="scrollable"` when each tab should keep a minimum touch target and overflow horizontally.
 
@@ -73,12 +71,6 @@ Tabs is built on the `useTabs` composable — the interaction logic (keyboard na
 
 <DemoContainer :src="TabsLineSrc">
   <TabsLine />
-</DemoContainer>
-
-### Compact Density
-
-<DemoContainer :src="TabsCompactSrc">
-  <TabsCompact />
 </DemoContainer>
 
 ### Disabled Tab

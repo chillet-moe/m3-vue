@@ -65,27 +65,38 @@ function mountTabs(
 }
 
 describe('Tab', () => {
-  it('uses tonal tabs with default density by default', async () => {
+  it('uses navigation tabs by default', async () => {
     const mounted = mountTabs({});
     await nextTick();
 
     const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
 
-    expect(root?.dataset.variant).toBe('tonal');
-    expect(root?.dataset.density).toBe('default');
+    expect(root?.dataset.variant).toBe('navigation');
+    expect(root?.dataset.size).toBe('medium');
     expect(root?.dataset.mode).toBe('auto');
 
     mounted.app.unmount();
   });
 
-  it('applies line variant and compact density attributes', async () => {
-    const mounted = mountTabs({}, 'overview', { variant: 'line', density: 'compact' });
+  it('applies the line variant attribute', async () => {
+    const mounted = mountTabs({}, 'overview', { variant: 'line', size: 'large' });
     await nextTick();
 
     const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
 
     expect(root?.dataset.variant).toBe('line');
-    expect(root?.dataset.density).toBe('compact');
+    expect(root?.dataset.size).toBe('large');
+
+    mounted.app.unmount();
+  });
+
+  it('keeps tonal as a navigation variant alias', async () => {
+    const mounted = mountTabs({}, 'overview', { variant: 'tonal' });
+    await nextTick();
+
+    const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
+
+    expect(root?.dataset.variant).toBe('navigation');
 
     mounted.app.unmount();
   });
