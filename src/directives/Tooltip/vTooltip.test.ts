@@ -4,10 +4,104 @@ import vTooltip, { normalizeBinding } from './vTooltip';
 import { inferPlacementFromRects, placementToTranslate, positionFallback, resolveFallbackPlacement } from './helpers';
 import { setupTooltip } from './setup';
 
+const popoverOpenElements = new WeakSet<HTMLElement>();
+const hoveredElements = new WeakSet<HTMLElement>();
+const focusVisibleElements = new WeakSet<HTMLElement>();
+let popoverTestSupportInstalled = false;
+
+function createToggleEvent(oldState: 'open' | 'closed', newState: 'open' | 'closed') {
+  const event = new Event('toggle');
+
+  Object.defineProperties(event, {
+    oldState: { value: oldState },
+    newState: { value: newState },
+  });
+
+  return event;
+}
+
+function createBeforeToggleEvent(oldState: 'open' | 'closed', newState: 'open' | 'closed') {
+  const event = new Event('beforetoggle', { cancelable: true });
+
+  Object.defineProperties(event, {
+    oldState: { value: oldState },
+    newState: { value: newState },
+  });
+
+  return event;
+}
+
+function installPopoverTestSupport() {
+  if (popoverTestSupportInstalled) return;
+  popoverTestSupportInstalled = true;
+
+  const prototype = HTMLElement.prototype as HTMLElement & {
+    showPopover?: () => void;
+    hidePopover?: () => void;
+  };
+  const originalMatches = HTMLElement.prototype.matches;
+
+  HTMLElement.prototype.matches = function matches(this: HTMLElement, selector: string) {
+    if (selector === ':popover-open') {
+      return popoverOpenElements.has(this);
+    }
+
+    if (selector === ':hover') {
+      return hoveredElements.has(this);
+    }
+
+    if (selector === ':focus-visible') {
+      return focusVisibleElements.has(this);
+    }
+
+    return originalMatches.call(this, selector);
+  } as typeof HTMLElement.prototype.matches;
+
+  if (typeof prototype.showPopover !== 'function') {
+    Object.defineProperty(prototype, 'showPopover', {
+      configurable: true,
+      value(this: HTMLElement) {
+        if (popoverOpenElements.has(this)) return;
+        if (!this.dispatchEvent(createBeforeToggleEvent('closed', 'open'))) return;
+        popoverOpenElements.add(this);
+        this.dispatchEvent(createToggleEvent('closed', 'open'));
+      },
+    });
+  }
+
+  if (typeof prototype.hidePopover !== 'function') {
+    Object.defineProperty(prototype, 'hidePopover', {
+      configurable: true,
+      value(this: HTMLElement) {
+        if (!popoverOpenElements.has(this)) return;
+        if (!this.dispatchEvent(createBeforeToggleEvent('open', 'closed'))) return;
+        popoverOpenElements.delete(this);
+        this.dispatchEvent(createToggleEvent('open', 'closed'));
+      },
+    });
+  }
+}
+
 function createTrigger() {
   const el = document.createElement('button');
   document.body.appendChild(el);
   return el;
+}
+
+function setHovered(element: HTMLElement, value: boolean) {
+  if (value) {
+    hoveredElements.add(element);
+  } else {
+    hoveredElements.delete(element);
+  }
+}
+
+function setFocusVisible(element: HTMLElement, value: boolean) {
+  if (value) {
+    focusVisibleElements.add(element);
+  } else {
+    focusVisibleElements.delete(element);
+  }
 }
 
 function createRect(rect: Partial<DOMRect> = {}): DOMRect {
@@ -55,6 +149,7 @@ describe('vTooltip directive', () => {
   let requestAnimationFrameSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
+    installPopoverTestSupport();
     vi.useFakeTimers();
     requestAnimationFrameSpy = vi
       .spyOn(window, 'requestAnimationFrame')
@@ -85,6 +180,26 @@ describe('vTooltip directive', () => {
     expect(el.getAttribute('aria-controls')).toBe(tip?.id);
 
     vTooltip.unmounted?.(el);
+
+    expect(document.body.querySelector('.vtt-popover')).toBeNull();
+    expect(el.hasAttribute('aria-controls')).toBe(false);
+  });
+
+  it('does not let another component owner clear an existing tooltip instance', () => {
+    const el = createTrigger();
+    const owner = {};
+    const otherOwner = {};
+
+    vTooltip.mounted?.(el, { value: { content: 'Tooltip content' }, instance: owner } as never);
+    const tip = document.body.querySelector('.vtt-popover');
+    expect(tip).not.toBeNull();
+
+    vTooltip.updated?.(el, { value: undefined, oldValue: undefined, instance: otherOwner } as never);
+
+    expect(document.body.querySelector('.vtt-popover')).toBe(tip);
+    expect(el.hasAttribute('aria-controls')).toBe(true);
+
+    vTooltip.updated?.(el, { value: undefined, oldValue: { content: 'Tooltip content' }, instance: owner } as never);
 
     expect(document.body.querySelector('.vtt-popover')).toBeNull();
     expect(el.hasAttribute('aria-controls')).toBe(false);
@@ -194,6 +309,66 @@ describe('vTooltip directive', () => {
     expect(setAttributeSpy).not.toHaveBeenCalled();
 
     setAttributeSpy.mockRestore();
+    state.cleanup();
+  });
+
+  it('reopens after the browser closes a native popover during pointer focus', () => {
+    const el = createTrigger();
+    const state = setupTooltip(el, { content: 'Tooltip content' });
+
+    setHovered(el, true);
+    el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true, pointerType: 'mouse' }));
+    vi.advanceTimersByTime(60);
+    expect(state.tip.matches(':popover-open')).toBe(true);
+
+    el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    (state.tip as HTMLElement & { hidePopover: () => void }).hidePopover();
+    expect(state.tip.matches(':popover-open')).toBe(false);
+
+    vi.runOnlyPendingTimers();
+    expect(state.tip.matches(':popover-open')).toBe(true);
+    expect(el.getAttribute('aria-expanded')).toBe('true');
+
+    state.cleanup();
+  });
+
+  it('closes on pointer leave after mouse focus', () => {
+    const el = createTrigger();
+    const state = setupTooltip(el, { content: 'Tooltip content' });
+
+    setHovered(el, true);
+    el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true, pointerType: 'mouse' }));
+    vi.advanceTimersByTime(60);
+    expect(state.tip.matches(':popover-open')).toBe(true);
+
+    el.focus();
+    el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    setHovered(el, false);
+    el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true, pointerType: 'mouse' }));
+    vi.advanceTimersByTime(80);
+
+    expect(state.tip.matches(':popover-open')).toBe(false);
+    expect(el.getAttribute('aria-expanded')).toBe('false');
+
+    state.cleanup();
+  });
+
+  it('keeps open on pointer leave while the trigger has keyboard focus', () => {
+    const el = createTrigger();
+    const state = setupTooltip(el, { content: 'Tooltip content' });
+
+    setFocusVisible(el, true);
+    el.focus();
+    el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    vi.runOnlyPendingTimers();
+    expect(state.tip.matches(':popover-open')).toBe(true);
+
+    el.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true, pointerType: 'mouse' }));
+    vi.advanceTimersByTime(80);
+
+    expect(state.tip.matches(':popover-open')).toBe(true);
+    expect(el.getAttribute('aria-expanded')).toBe('true');
+
     state.cleanup();
   });
 

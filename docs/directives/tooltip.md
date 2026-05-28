@@ -5,6 +5,8 @@ title: v-tooltip
 <script setup lang="ts">
 import { Button } from '@/components/Button';
 import { Tooltip } from '@/components/Tooltip';
+import TooltipDynamicContent from '../demos/tooltip/TooltipDynamicContent.vue';
+import TooltipDynamicContentSrc from '../demos/tooltip/TooltipDynamicContent.vue?raw';
 
 </script>
 
@@ -73,5 +75,15 @@ Pass a selector or an element reference when the tooltip surface is already rend
 - The directive repositions on scroll and resize.
 - When CSS anchor positioning is unavailable, it falls back to JavaScript positioning.
 - Updating the binding updates the same tooltip instance when possible.
+
+## Dynamic Content
+
+The directive keeps its internal open state synchronized with native popover state, so a tooltip can stay usable when a mouse click changes the trigger content and tooltip text.
+
+When an action component already exposes a `title` tooltip, treat that as the component's default tooltip. For dynamic or authored tooltip content, attach `v-tooltip` to the component and render a separate `Tooltip` surface instead of combining it with `title`.
+
+<DemoContainer :src="TooltipDynamicContentSrc" :viewport="false">
+  <TooltipDynamicContent />
+</DemoContainer>
 
 For tooltip surface styling and authored rich content, see [Tooltip](/components/tooltip).

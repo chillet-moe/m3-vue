@@ -146,6 +146,25 @@ export function setupTooltip(
   let longPressTimer = 0;
   let suppressClickUntil = 0;
   let isOpen = false;
+  let internalClosePending = false;
+
+  const syncClosedPopoverState = () => {
+    if (isOpen) {
+      isOpen = false;
+    }
+
+    setExpanded(false);
+    scheduleDeferredOffset();
+  };
+
+  const syncOpenPopoverState = () => {
+    if (!isOpen) {
+      isOpen = true;
+    }
+
+    setExpanded(true);
+    cancelDeferredOffset();
+  };
 
   const clearTimers = () => {
     if (openTimer) window.clearTimeout(openTimer);
@@ -158,6 +177,20 @@ export function setupTooltip(
 
   const setExpanded = (value: boolean) => {
     trigger.setAttribute('aria-expanded', value ? 'true' : 'false');
+  };
+
+  const hasKeyboardFocus = () => {
+    const activeElement = document.activeElement as Element | null;
+    return Boolean(activeElement && trigger.contains(activeElement) && trigger.matches(':focus-visible'));
+  };
+
+  const tipHasFocus = () => {
+    const activeElement = document.activeElement as Element | null;
+    return Boolean(activeElement && tip.contains(activeElement));
+  };
+
+  const hasOpenReason = () => {
+    return trigger.matches(':hover') || tip.matches(':hover') || hasKeyboardFocus() || tipHasFocus();
   };
 
   const updatePositionIfNeeded = () => {
@@ -218,9 +251,12 @@ export function setupTooltip(
     setExpanded(false);
 
     if (canPopover) {
+      internalClosePending = true;
       try {
         (tip as HTMLElement & { hidePopover: () => void }).hidePopover();
-      } catch {}
+      } catch {
+        internalClosePending = false;
+      }
       scheduleDeferredOffset();
       return;
     }
@@ -241,8 +277,7 @@ export function setupTooltip(
   const scheduleClose = (delay: number) => {
     clearTimers();
     closeTimer = window.setTimeout(() => {
-      const ae = document.activeElement as Element | null;
-      if (ae && (trigger.contains(ae) || tip.contains(ae))) return;
+      if (hasOpenReason()) return;
       closeNow();
     }, delay);
   };
@@ -312,6 +347,35 @@ export function setupTooltip(
     if (isOpen) ev.preventDefault();
   };
 
+  const onPopoverBeforeToggle = (ev: Event) => {
+    const toggleEvent = ev as Event & { newState?: 'open' | 'closed' };
+
+    if (toggleEvent.newState === 'closed') {
+      syncClosedPopoverState();
+      return;
+    }
+
+    if (toggleEvent.newState === 'open') {
+      syncOpenPopoverState();
+    }
+  };
+
+  const onPopoverToggle = () => {
+    if (tip.matches(':popover-open')) {
+      internalClosePending = false;
+      syncOpenPopoverState();
+      return;
+    }
+
+    const closedByTooltip = internalClosePending;
+    internalClosePending = false;
+    syncClosedPopoverState();
+
+    if (!closedByTooltip && hasOpenReason()) {
+      scheduleOpen(0);
+    }
+  };
+
   const onScrollOrResize = () => {
     if (!canAnchor) {
       updatePositionIfNeeded();
@@ -346,6 +410,11 @@ export function setupTooltip(
     on(tip, 'keydown', onKeyDown);
 
     on(document, 'pointerdown', onDocPointerDown, { capture: true });
+  }
+
+  if (canPopover) {
+    on(tip, 'beforetoggle', onPopoverBeforeToggle);
+    on(tip, 'toggle', onPopoverToggle);
   }
 
   on(window, 'scroll', onScrollOrResize, { passive: true });
