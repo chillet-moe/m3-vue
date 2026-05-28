@@ -79,13 +79,13 @@ describe('Tab', () => {
   });
 
   it('applies the line variant attribute', async () => {
-    const mounted = mountTabs({}, 'overview', { variant: 'line', size: 'large' });
+    const mounted = mountTabs({}, 'overview', { variant: 'line', size: 'extra-large' });
     await nextTick();
 
     const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
 
     expect(root?.dataset.variant).toBe('line');
-    expect(root?.dataset.size).toBe('large');
+    expect(root?.dataset.size).toBe('extra-large');
 
     mounted.app.unmount();
   });

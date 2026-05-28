@@ -4,7 +4,7 @@ import { useTabs } from '@/composables/useTabs';
 import { tabsContextKey } from './TabsContext';
 
 export type TabsVariant = 'navigation' | 'line' | 'tonal';
-export type TabsSize = 'small' | 'medium' | 'large';
+export type TabsSize = 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
 export type TabsMode = 'auto' | 'fixed' | 'scrollable';
 
 export type TabsProps = {
