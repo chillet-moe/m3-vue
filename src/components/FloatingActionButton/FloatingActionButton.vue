@@ -5,7 +5,6 @@ import { useActionTitleTooltip } from '@/composables/useActionTitleTooltip';
 import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { Icon } from '@/components/Icon';
-import vTooltip from '@/directives/Tooltip/vTooltip';
 
 defineOptions({
   inheritAttrs: false,
@@ -55,7 +54,7 @@ const hasIcon = computed(() => Boolean(props.icon || slots.icon));
 const extended = computed(() => Boolean(slots.default));
 
 const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
-const { rootAttrs, titleTooltip } = useActionTitleTooltip({ ariaLabelFallback: true });
+const { rootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
 const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttrs.value));
 </script>
 
@@ -74,8 +73,8 @@ const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttr
     :aria-disabled="ariaDisabled"
     :tabindex="tabIndex"
     :type="type"
+    ref="rootRef"
     v-bind="rootProps"
-    v-tooltip="titleTooltip"
   >
     <span
       v-if="hasIcon"

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
-import { createApp, h, nextTick } from 'vue';
+import { createApp, h, nextTick, ref } from 'vue';
 import Button from './Button.vue';
 
 function createPointerEvent(type: string, init: EventInit & { pointerId?: number } = {}): Event {
@@ -155,6 +155,70 @@ describe('Button', () => {
     expect(button?.getAttribute('aria-haspopup')).toBe('true');
     expect(tooltip?.textContent).toBe('Save changes');
     expect(tooltip?.getAttribute('role')).toBe('tooltip');
+
+    app.unmount();
+  });
+
+  it('updates the component tooltip when title changes', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const title = ref('Save changes');
+
+    const app = createApp({
+      setup() {
+        return () =>
+          h(
+            Button,
+            {
+              title: title.value,
+            },
+            {
+              default: () => 'Save',
+            },
+          );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    let tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
+    expect(tooltip?.textContent).toBe('Save changes');
+
+    title.value = 'Discard changes';
+    await nextTick();
+
+    tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
+    expect(tooltip?.textContent).toBe('Discard changes');
+
+    title.value = '';
+    await nextTick();
+
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
+
+    app.unmount();
+  });
+
+  it('does not install a title tooltip when title is absent', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      render() {
+        return h(Button, undefined, {
+          default: () => 'Button',
+        });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const button = container.querySelector('button') as HTMLButtonElement | null;
+
+    expect(button?.hasAttribute('aria-controls')).toBe(false);
+    expect(button?.hasAttribute('aria-haspopup')).toBe(false);
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
   });

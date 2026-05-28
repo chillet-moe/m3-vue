@@ -6,7 +6,6 @@ import { computed, inject, mergeProps, unref } from 'vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 import { Icon } from '@/components/Icon';
-import vTooltip from '@/directives/Tooltip/vTooltip';
 
 defineOptions({
   inheritAttrs: false,
@@ -69,7 +68,7 @@ const { pressShapeMorphAttrs } = usePressShapeMorph({
   disabled,
 });
 
-const { rootAttrs, titleTooltip } = useActionTitleTooltip();
+const { rootAttrs, rootRef } = useActionTitleTooltip();
 const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttrs.value));
 
 const slots = defineSlots<{
@@ -104,8 +103,8 @@ const slots = defineSlots<{
     :aria-disabled="ariaDisabled"
     :tabindex="tabIndex"
     :type="type"
+    ref="rootRef"
     v-bind="rootProps"
-    v-tooltip="titleTooltip"
   >
     <Icon
       v-if="props.leadingIcon"
