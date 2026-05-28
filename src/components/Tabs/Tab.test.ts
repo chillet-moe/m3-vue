@@ -90,17 +90,6 @@ describe('Tab', () => {
     mounted.app.unmount();
   });
 
-  it('keeps tonal as a navigation variant alias', async () => {
-    const mounted = mountTabs({}, 'overview', { variant: 'tonal' });
-    await nextTick();
-
-    const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
-
-    expect(root?.dataset.variant).toBe('navigation');
-
-    mounted.app.unmount();
-  });
-
   it('renders as an anchor when href is provided', async () => {
     const mounted = mountTabs({ href: '/settings/details' });
     await nextTick();

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed, provide } from 'vue';
+import { provide } from 'vue';
 import { useTabs } from '@/composables/useTabs';
 import { tabsContextKey } from './TabsContext';
 
-export type TabsVariant = 'navigation' | 'line' | 'tonal';
+export type TabsVariant = 'navigation' | 'line';
 export type TabsSize = 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
 export type TabsMode = 'auto' | 'fixed' | 'scrollable';
 
 export type TabsProps = {
-  /** Visual variant of the tabs. `tonal` is kept as a deprecated alias of `navigation`. @default 'navigation' */
+  /** Visual variant of the tabs. @default 'navigation' */
   variant?: TabsVariant;
 
   /** Size of the tab triggers. @default 'medium' */
@@ -54,8 +54,6 @@ const tabs = useTabs({
 });
 
 provide(tabsContextKey, tabs);
-
-const variant = computed(() => (props.variant === 'tonal' ? 'navigation' : props.variant));
 </script>
 
 <template>
@@ -63,7 +61,7 @@ const variant = computed(() => (props.variant === 'tonal' ? 'navigation' : props
     class="m3-tabs"
     data-scope="tabs"
     data-part="root"
-    :data-variant="variant"
+    :data-variant="props.variant"
     :data-size="props.size"
     :data-mode="props.mode"
     :data-orientation="tabs.orientation.value"

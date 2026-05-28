@@ -100,22 +100,6 @@
     --md-tabs-navigation-small-tab-padding-inline: initial;
     --md-tabs-navigation-state-layer-color: initial;
     --md-tabs-navigation-tab-padding-inline: initial;
-    --md-tabs-tonal-active-container-color: initial;
-    --md-tabs-tonal-active-container-elevation: initial;
-    --md-tabs-tonal-active-container-outline-color: initial;
-    --md-tabs-tonal-active-container-outline-width: initial;
-    --md-tabs-tonal-active-container-shape: initial;
-    --md-tabs-tonal-active-label-color: initial;
-    --md-tabs-tonal-active-state-layer-color: initial;
-    --md-tabs-tonal-container-color: initial;
-    --md-tabs-tonal-container-gap: initial;
-    --md-tabs-tonal-container-height: initial;
-    --md-tabs-tonal-container-padding: initial;
-    --md-tabs-tonal-container-shape: initial;
-    --md-tabs-tonal-hover-label-color: initial;
-    --md-tabs-tonal-inactive-label-color: initial;
-    --md-tabs-tonal-state-layer-color: initial;
-    --md-tabs-tonal-tab-padding-inline: initial;
     --md-tabs-with-icon-and-label-container-height: initial;
   }
 
@@ -240,67 +224,49 @@
 
     --_tabs-navigation-container-color: var(
       --md-tabs-navigation-container-color,
-      var(--md-tabs-tonal-container-color, var(--md-sys-color-surface-container-low))
+      var(--md-sys-color-surface-container-low)
     );
     --_tabs-navigation-container-height: var(
       --md-tabs-navigation-container-height,
-      var(--md-tabs-tonal-container-height, var(--_tabs-navigation-size-container-height))
+      var(--_tabs-navigation-size-container-height)
     );
-    --_tabs-navigation-container-padding: var(
-      --md-tabs-navigation-container-padding,
-      var(--md-tabs-tonal-container-padding, 0rem)
-    );
-    --_tabs-navigation-container-gap: var(
-      --md-tabs-navigation-container-gap,
-      var(--md-tabs-tonal-container-gap, 0.125rem)
-    );
-    --_tabs-navigation-container-shape: var(
-      --md-tabs-navigation-container-shape,
-      var(--md-tabs-tonal-container-shape, var(--md-sys-shape-corner-medium))
-    );
+    --_tabs-navigation-container-padding: var(--md-tabs-navigation-container-padding, 0rem);
+    --_tabs-navigation-container-gap: var(--md-tabs-navigation-container-gap, 0.125rem);
+    --_tabs-navigation-container-shape: var(--md-tabs-navigation-container-shape, var(--md-sys-shape-corner-medium));
     --_tabs-navigation-active-container-color: var(
       --md-tabs-navigation-active-container-color,
-      var(--md-tabs-tonal-active-container-color, var(--md-sys-color-primary-container))
+      var(--md-sys-color-primary-container)
     );
     --_tabs-navigation-active-container-elevation: var(
       --md-tabs-navigation-active-container-elevation,
-      var(--md-tabs-tonal-active-container-elevation, var(--md-sys-elevation-level0))
+      var(--md-sys-elevation-level0)
     );
     --_tabs-navigation-active-container-outline-color: var(
       --md-tabs-navigation-active-container-outline-color,
-      var(--md-tabs-tonal-active-container-outline-color, transparent)
+      transparent
     );
-    --_tabs-navigation-active-container-outline-width: var(
-      --md-tabs-navigation-active-container-outline-width,
-      var(--md-tabs-tonal-active-container-outline-width, 0rem)
-    );
+    --_tabs-navigation-active-container-outline-width: var(--md-tabs-navigation-active-container-outline-width, 0rem);
     --_tabs-navigation-active-container-shape: var(
       --md-tabs-navigation-active-container-shape,
-      var(--md-tabs-tonal-active-container-shape, var(--md-sys-shape-corner-medium))
+      var(--md-sys-shape-corner-medium)
     );
     --_tabs-navigation-active-label-color: var(
       --md-tabs-navigation-active-label-color,
-      var(--md-tabs-tonal-active-label-color, var(--md-sys-color-on-primary-container))
+      var(--md-sys-color-on-primary-container)
     );
     --_tabs-navigation-inactive-label-color: var(
       --md-tabs-navigation-inactive-label-color,
-      var(--md-tabs-tonal-inactive-label-color, var(--md-sys-color-on-surface))
+      var(--md-sys-color-on-surface)
     );
-    --_tabs-navigation-hover-label-color: var(
-      --md-tabs-navigation-hover-label-color,
-      var(--md-tabs-tonal-hover-label-color, var(--md-sys-color-on-surface))
-    );
-    --_tabs-navigation-state-layer-color: var(
-      --md-tabs-navigation-state-layer-color,
-      var(--md-tabs-tonal-state-layer-color, var(--md-sys-color-on-surface))
-    );
+    --_tabs-navigation-hover-label-color: var(--md-tabs-navigation-hover-label-color, var(--md-sys-color-on-surface));
+    --_tabs-navigation-state-layer-color: var(--md-tabs-navigation-state-layer-color, var(--md-sys-color-on-surface));
     --_tabs-navigation-active-state-layer-color: var(
       --md-tabs-navigation-active-state-layer-color,
-      var(--md-tabs-tonal-active-state-layer-color, var(--md-sys-color-on-primary-container))
+      var(--md-sys-color-on-primary-container)
     );
     --_tabs-navigation-tab-padding-inline: var(
       --md-tabs-navigation-tab-padding-inline,
-      var(--md-tabs-tonal-tab-padding-inline, var(--_tabs-navigation-size-tab-padding-inline))
+      var(--_tabs-navigation-size-tab-padding-inline)
     );
   }
 
