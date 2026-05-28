@@ -1,5 +1,7 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import fg from 'fast-glob';
+import ts from 'typescript';
 import { createChecker, type MetaCheckerOptions } from 'vue-component-meta';
 import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr';
 
@@ -39,7 +41,6 @@ export interface ComponentMeta {
   slots: SlotMeta[];
 }
 
-/** 从类型字符串提取字面量联合选项，如 `"filled" | "tonal" | undefined` → `['filled', 'tonal']` */
 function parseUnionOptions(type: string): string[] | undefined {
   const parts = type
     .split('|')
@@ -61,65 +62,74 @@ function parseUnionOptions(type: string): string[] | undefined {
   return [...new Set(optionParts.map((part) => part.slice(1, -1)))];
 }
 
-type MetaTypeObject = {
-  checker?: {
-    typeToString?: (type: unknown) => string;
-  };
-  types?: unknown[];
-  value?: unknown;
-};
+function parseStringLiteralUnionTypeNode(typeNode: ts.TypeNode): string[] | undefined {
+  const nodes = ts.isUnionTypeNode(typeNode) ? typeNode.types : [typeNode];
+  const options: string[] = [];
 
-/**
- * 从 vue-component-meta 的类型对象提取字符串字面量联合选项。
- * 支持类型别名场景（如 `MenuColor | undefined`）。
- */
-function parseUnionOptionsFromTypeObject(typeObject: unknown): string[] | undefined {
-  if (!typeObject || typeof typeObject !== 'object') {
+  for (const node of nodes) {
+    if (!ts.isLiteralTypeNode(node) || !ts.isStringLiteral(node.literal)) {
+      return undefined;
+    }
+
+    options.push(node.literal.text);
+  }
+
+  return options.length ? [...new Set(options)] : undefined;
+}
+
+function collectLocalTypeAliasOptions(file: string): Map<string, string[]> {
+  const source = fs.readFileSync(file, 'utf8');
+  const script = Array.from(source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g), (match) => match[1]).join('\n');
+  const aliases = new Map<string, string[]>();
+
+  if (!script) {
+    return aliases;
+  }
+
+  const sourceFile = ts.createSourceFile(file, script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+
+  function visit(node: ts.Node) {
+    if (ts.isTypeAliasDeclaration(node)) {
+      const options = parseStringLiteralUnionTypeNode(node.type);
+
+      if (options?.length) {
+        aliases.set(node.name.text, options);
+      }
+    }
+
+    ts.forEachChild(node, visit);
+  }
+
+  visit(sourceFile);
+
+  return aliases;
+}
+
+function parseUnionOptionsFromLocalTypeAliases(type: string, aliases: Map<string, string[]>): string[] | undefined {
+  const parts = type
+    .split('|')
+    .map((part) => part.trim())
+    .filter((part) => part && part !== 'undefined' && part !== 'null');
+
+  if (!parts.length) {
     return undefined;
   }
 
-  const pending: unknown[] = [typeObject];
-  let pendingIndex = 0;
-  const visited = new Set<object>();
-  const options = new Set<string>();
-  let hasLiteralOption = false;
-  let hasWidePrimitiveLeaf = false;
-  const widePrimitiveLeafSet = new Set(['string', 'number', 'boolean', 'bigint', 'symbol', 'any', 'unknown', 'object']);
+  const options: string[] = [];
 
-  while (pendingIndex < pending.length) {
-    const current = pending[pendingIndex++];
-    if (!current || typeof current !== 'object') {
-      continue;
-    }
-    if (visited.has(current)) {
-      continue;
-    }
-    visited.add(current);
-
-    const node = current as MetaTypeObject;
-    if (Array.isArray(node.types) && node.types.length > 0) {
-      pending.push(...node.types);
+  for (const part of parts) {
+    if (/^"[^"]*"|'[^']*'$/.test(part)) {
+      options.push(part.slice(1, -1));
       continue;
     }
 
-    if (typeof node.value === 'string') {
-      hasLiteralOption = true;
-      options.add(node.value);
-      continue;
+    const aliasOptions = aliases.get(part);
+
+    if (!aliasOptions) {
+      return undefined;
     }
 
-    const typeText = typeof node.checker?.typeToString === 'function' ? node.checker.typeToString(current).trim() : '';
-    if (typeText === 'undefined' || typeText === 'null' || typeText === 'void') {
-      continue;
-    }
-
-    if (typeText && widePrimitiveLeafSet.has(typeText)) {
-      hasWidePrimitiveLeaf = true;
-    }
-  }
-
-  if (!hasLiteralOption || hasWidePrimitiveLeaf) {
-    return undefined;
+    options.push(...aliasOptions);
   }
 
   return [...options];
@@ -153,11 +163,14 @@ export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
     for (const file of files) {
       const meta = checker.getComponentMeta(file);
       const baseName = meta.name || path.parse(file).name;
+      const localTypeAliasOptions = collectLocalTypeAliasOptions(file);
 
       const props: PropMeta[] = (meta.props ?? [])
         .filter((p) => !p.global)
         .map((p) => ({
-          options: parseUnionOptionsFromTypeObject(p.getTypeObject?.()) ?? parseUnionOptions(p.type ?? ''),
+          options:
+            parseUnionOptions(p.type ?? '') ??
+            parseUnionOptionsFromLocalTypeAliases(p.type ?? '', localTypeAliasOptions),
           default: p.default,
           description: p.description,
           name: p.name,
