@@ -22,6 +22,8 @@ import ButtonLeadingIcons from '../demos/button/ButtonLeadingIcons.vue';
 import ButtonLeadingIconsSrc from '../demos/button/ButtonLeadingIcons.vue?raw';
 import ButtonTrailingIcons from '../demos/button/ButtonTrailingIcons.vue';
 import ButtonTrailingIconsSrc from '../demos/button/ButtonTrailingIcons.vue?raw';
+import ButtonTooltip from '../demos/button/ButtonTooltip.vue';
+import ButtonTooltipSrc from '../demos/button/ButtonTooltip.vue?raw';
 import ButtonRouterLink from '../demos/button/ButtonRouterLink.vue';
 import ButtonRouterLinkSrc from '../demos/button/ButtonRouterLink.vue?raw';
 
@@ -41,6 +43,8 @@ const props = ref({
 # Button
 
 Buttons let people trigger primary, secondary, or low-emphasis actions with Material 3 visual treatments.
+
+Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior.
 
 <DemoContainer>
   <Button v-bind="props">
@@ -103,6 +107,14 @@ Buttons let people trigger primary, secondary, or low-emphasis actions with Mate
 
 <DemoContainer :src="ButtonTrailingIconsSrc">
   <ButtonTrailingIcons />
+</DemoContainer>
+
+### Tooltip
+
+Use `title` for a simple text tooltip.
+
+<DemoContainer :src="ButtonTooltipSrc">
+  <ButtonTooltip />
 </DemoContainer>
 
 ### Vue Router

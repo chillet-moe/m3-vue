@@ -20,6 +20,8 @@ import IconButtonDisabled from '../demos/icon-button/IconButtonDisabled.vue';
 import IconButtonDisabledSrc from '../demos/icon-button/IconButtonDisabled.vue?raw';
 import IconButtonToggleable from '../demos/icon-button/IconButtonToggleable.vue';
 import IconButtonToggleableSrc from '../demos/icon-button/IconButtonToggleable.vue?raw';
+import IconButtonTooltip from '../demos/icon-button/IconButtonTooltip.vue';
+import IconButtonTooltipSrc from '../demos/icon-button/IconButtonTooltip.vue?raw';
 import IconButtonRouterLink from '../demos/icon-button/IconButtonRouterLink.vue';
 import IconButtonRouterLinkSrc from '../demos/icon-button/IconButtonRouterLink.vue?raw';
 
@@ -38,6 +40,8 @@ const props = ref({
 # IconButton
 
 Icon buttons expose compact, icon-first actions with the same Material 3 shape, color, and size variants as the library component.
+
+Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior and accessible-name fallback.
 
 <DemoContainer :viewport="false">
   <IconButton v-bind="props">
@@ -93,6 +97,14 @@ Icon buttons expose compact, icon-first actions with the same Material 3 shape, 
 
 <DemoContainer :src="IconButtonToggleableSrc" :viewport="false">
   <IconButtonToggleable />
+</DemoContainer>
+
+### Tooltip
+
+Use `title` for a simple text tooltip.
+
+<DemoContainer :src="IconButtonTooltipSrc" :viewport="false">
+  <IconButtonTooltip />
 </DemoContainer>
 
 ### Vue Router

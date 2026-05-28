@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, mergeProps } from 'vue';
 
+import { useActionTitleTooltip } from '@/composables/useActionTitleTooltip';
 import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { Icon } from '@/components/Icon';
+import vTooltip from '@/directives/Tooltip/vTooltip';
+
+defineOptions({
+  inheritAttrs: false,
+});
 
 export type FloatingActionButtonProps = {
   /** The color style of the FAB. */
@@ -49,6 +55,8 @@ const hasIcon = computed(() => Boolean(props.icon || slots.icon));
 const extended = computed(() => Boolean(slots.default));
 
 const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
+const { rootAttrs, titleTooltip } = useActionTitleTooltip({ ariaLabelFallback: true });
+const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttrs.value));
 </script>
 
 <template>
@@ -66,7 +74,8 @@ const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
     :aria-disabled="ariaDisabled"
     :tabindex="tabIndex"
     :type="type"
-    v-bind="pressShapeMorphAttrs"
+    v-bind="rootProps"
+    v-tooltip="titleTooltip"
   >
     <span
       v-if="hasIcon"

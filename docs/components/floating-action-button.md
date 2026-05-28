@@ -16,6 +16,8 @@ import FloatingActionButtonColors from '../demos/floating-action-button/Floating
 import FloatingActionButtonColorsSrc from '../demos/floating-action-button/FloatingActionButtonColors.vue?raw';
 import FloatingActionButtonDisabled from '../demos/floating-action-button/FloatingActionButtonDisabled.vue';
 import FloatingActionButtonDisabledSrc from '../demos/floating-action-button/FloatingActionButtonDisabled.vue?raw';
+import FloatingActionButtonTooltip from '../demos/floating-action-button/FloatingActionButtonTooltip.vue';
+import FloatingActionButtonTooltipSrc from '../demos/floating-action-button/FloatingActionButtonTooltip.vue?raw';
 
 const props = ref({
   color: 'primary-container',
@@ -29,6 +31,8 @@ const props = ref({
 # FloatingActionButton
 
 Floating action buttons represent the primary action on a screen. This component implements the M3 Expressive FAB sizes and color styles; label content turns it into an extended FAB.
+
+Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior and accessible-name fallback.
 
 <DemoContainer>
   <FloatingActionButton v-bind="props" aria-label="Edit" />
@@ -70,4 +74,12 @@ Floating action buttons represent the primary action on a screen. This component
 
 <DemoContainer :src="FloatingActionButtonDisabledSrc">
   <FloatingActionButtonDisabled />
+</DemoContainer>
+
+### Tooltip
+
+`title` is converted into the library tooltip instead of rendering a native HTML tooltip. It is also used as the fallback `aria-label` when no explicit accessible name is provided.
+
+<DemoContainer :src="FloatingActionButtonTooltipSrc">
+  <FloatingActionButtonTooltip />
 </DemoContainer>

@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
-import { computed, inject, unref } from 'vue';
+import { useActionTitleTooltip } from '@/composables/useActionTitleTooltip';
+import { computed, inject, mergeProps, unref } from 'vue';
 import { Icon } from '@/components/Icon';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext.ts';
+import vTooltip from '@/directives/Tooltip/vTooltip';
+
+defineOptions({
+  inheritAttrs: false,
+});
 
 export type IconButtonProps = {
   /** Whether the button is toggleable (like a checkbox).
@@ -55,6 +61,9 @@ const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
 
 const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
 
+const { rootAttrs, titleTooltip } = useActionTitleTooltip({ ariaLabelFallback: true });
+const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttrs.value));
+
 const slots = defineSlots<{
   /** Default slot for the main content of the icon button. Receives `disabled` as a prop. */
   default(props: { disabled: boolean }): any;
@@ -77,7 +86,8 @@ const slots = defineSlots<{
     :aria-disabled="ariaDisabled"
     :tabindex="tabIndex"
     :type="type"
-    v-bind="pressShapeMorphAttrs"
+    v-bind="rootProps"
+    v-tooltip="titleTooltip"
   >
     <Icon
       v-if="props.icon"

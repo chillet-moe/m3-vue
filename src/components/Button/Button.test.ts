@@ -125,4 +125,37 @@ describe('Button', () => {
 
     app.unmount();
   });
+
+  it('uses title as a component tooltip instead of a native tooltip', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      render() {
+        return h(
+          Button,
+          {
+            title: 'Save changes',
+          },
+          {
+            default: () => 'Save',
+          },
+        );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const button = container.querySelector('button') as HTMLButtonElement | null;
+    const tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
+
+    expect(button?.hasAttribute('title')).toBe(false);
+    expect(button?.getAttribute('aria-controls')).toBe(tooltip?.id);
+    expect(button?.getAttribute('aria-haspopup')).toBe('true');
+    expect(tooltip?.textContent).toBe('Save changes');
+    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+
+    app.unmount();
+  });
 });
