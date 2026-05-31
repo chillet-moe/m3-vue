@@ -172,10 +172,9 @@
 
   .m3-side-sheet-surface {
     box-sizing: border-box;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr) auto;
-    align-content: start;
-    row-gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
     inline-size: min(var(--_side-sheet-width), 100vi);
     block-size: var(--_sheet-side-docked-container-height);
@@ -235,6 +234,7 @@
   .m3-side-sheet-content {
     @apply body-medium;
 
+    flex: 1 1 auto;
     min-block-size: 0;
     overflow: auto;
     color: var(--md-sys-color-on-surface-variant);
