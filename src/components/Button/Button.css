@@ -95,6 +95,8 @@
     --md-button-text-hovered-label-text-color: initial;
     --md-button-text-label-text-color: initial;
     --md-button-text-pressed-label-text-color: initial;
+    --md-button-text-selected-container-color: initial;
+    --md-button-text-selected-label-text-color: initial;
     --md-button-tonal-container-color: initial;
     --md-button-tonal-container-elevation: initial;
     --md-button-tonal-disabled-container-color: initial;
@@ -410,6 +412,14 @@
     --_button-text-pressed-label-text-color: var(
       --md-button-text-pressed-label-text-color,
       var(--md-sys-color-primary)
+    );
+    --_button-text-selected-container-color: var(
+      --md-button-text-selected-container-color,
+      var(--md-sys-color-primary-container)
+    );
+    --_button-text-selected-label-text-color: var(
+      --md-button-text-selected-label-text-color,
+      var(--md-sys-color-on-primary-container)
     );
 
     --_button-xsmall-outlined-outline-width: var(--md-button-xsmall-outlined-outline-width, 0.0625rem);
@@ -799,7 +809,14 @@
       var(--_button-text-disabled-label-text-color)
     );
     --_button-unselected-container-color: var(--md-button-unselected-container-color, transparent);
-    --_button-selected-container-color: var(--md-button-selected-container-color, transparent);
+    --_button-selected-container-color: var(
+      --md-button-selected-container-color,
+      var(--_button-text-selected-container-color)
+    );
+    --_button-label-text-selected-color: var(
+      --md-button-label-text-selected-color,
+      var(--_button-text-selected-label-text-color)
+    );
     --_button-unselected-label-text-color: var(
       --md-button-unselected-label-text-color,
       var(--_button-text-label-text-color)
