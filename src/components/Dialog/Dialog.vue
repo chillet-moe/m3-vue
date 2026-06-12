@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
-import { computed, onUnmounted, useId, useSlots, useTemplateRef, watch } from 'vue';
+import { computed, onUnmounted, type CSSProperties, useId, useSlots, useTemplateRef, watch } from 'vue';
 
 export type DialogProps = {
   /** Whether clicking the backdrop closes the dialog. */
   closeOnBackdrop?: boolean;
+
+  /** Dialog surface width. Such as '28rem'. */
+  width?: string;
 };
 
-const { closeOnBackdrop = true } = defineProps<DialogProps>();
+const props = withDefaults(defineProps<DialogProps>(), {
+  closeOnBackdrop: true,
+  width: undefined,
+});
 
 const open = defineModel<boolean>('open', { default: false });
 
@@ -44,6 +50,16 @@ const hasHeadline = computed(() => Boolean(slots.headline));
 const hasContent = computed(() => Boolean(slots.default));
 const hasActions = computed(() => Boolean(slots.actions));
 let releaseScrollLock: (() => void) | undefined;
+
+const rootStyle = computed<CSSProperties>(() => {
+  const style: Record<string, string> = {};
+
+  if (props.width) {
+    style['--md-dialog-container-width'] = props.width;
+  }
+
+  return style as CSSProperties;
+});
 
 const showDialog = () => {
   const dialog = dialogRef.value;
@@ -113,7 +129,7 @@ const onClose = (event: Event) => {
 };
 
 const onClick = (event: MouseEvent) => {
-  if (!closeOnBackdrop || event.target !== dialogRef.value) {
+  if (!props.closeOnBackdrop || event.target !== dialogRef.value) {
     return;
   }
 
@@ -150,6 +166,7 @@ onUnmounted(() => {
     :data-has-icon="hasIcon ? 'true' : 'false'"
     :data-has-headline="hasHeadline ? 'true' : 'false'"
     :data-has-actions="hasActions ? 'true' : 'false'"
+    :style="rootStyle"
     :aria-labelledby="hasHeadline ? headlineId : undefined"
     :aria-describedby="hasContent ? contentId : undefined"
     @cancel="onCancel"

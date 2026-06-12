@@ -14,6 +14,7 @@ import DialogWithIconSrc from '../demos/dialog/DialogWithIcon.vue?raw';
 
 const props = ref({
   closeOnBackdrop: true,
+  width: undefined,
 });
 
 const open = ref(false);
@@ -41,6 +42,26 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
 <ApiTable component="Dialog" v-model="props" />
 
 <StyleTokenTable component="Dialog" />
+
+## Width
+
+Use the `width` prop for the dialog surface width.
+
+```vue
+<Dialog width="28rem" />
+```
+
+For stylesheet-level customization, set `--md-dialog-container-width` on the `Dialog` root. The root native `<dialog>` remains fullscreen so backdrop clicks and modal positioning keep working, while the token controls the inner surface.
+
+```vue
+<Dialog class="wide-dialog" />
+```
+
+```css
+.wide-dialog {
+  --md-dialog-container-width: 40rem;
+}
+```
 
 ## Examples
 

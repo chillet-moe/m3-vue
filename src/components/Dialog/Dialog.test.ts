@@ -218,4 +218,36 @@ describe('Dialog', () => {
 
     app.unmount();
   });
+
+  it('exposes the surface width on the root element', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        return () =>
+          h(
+            Dialog,
+            {
+              open: true,
+              width: '28rem',
+            },
+            {
+              headline: () => 'Custom width',
+              default: () => 'The width token is applied from the dialog root.',
+            },
+          );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
+
+    expect(dialog).not.toBeNull();
+    expect(dialog?.style.getPropertyValue('--md-dialog-container-width')).toBe('28rem');
+
+    app.unmount();
+  });
 });
