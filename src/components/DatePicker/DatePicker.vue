@@ -8,6 +8,7 @@ import {
   type DatePickerVariant,
   useDatePicker,
 } from '@/components/DatePicker/useDatePicker';
+import { usePickerPopover } from '@/composables/usePickerPopover';
 
 export type { DatePickerModelValue, DatePickerVariant };
 
@@ -137,72 +138,28 @@ async function handleCalendarKeydown(event: KeyboardEvent, date: string) {
   await focusDate(nextDate);
 }
 
-function show() {
-  open.value = true;
-}
-
-function hide() {
-  open.value = false;
-}
-
-function toggle() {
-  if (open.value) {
-    hide();
-    return;
-  }
-
-  show();
-}
-
-function handlePopoverToggle(event: Event) {
-  const toggleEvent = event as ToggleEvent;
-
-  if (toggleEvent.newState === 'closed' && open.value) {
-    open.value = false;
-  }
-}
+const popover = usePickerPopover({
+  open,
+  popoverRef,
+  anchorElement: () => props.anchorElement,
+  onBeforeOpen: () => {
+    picker.resetDraftFromModel();
+  },
+  onAfterOpen: focusActiveDate,
+  onBeforeClose: () => {
+    picker.calendarView.value = 'days';
+  },
+});
 
 function handleCancel() {
   picker.cancelDraft();
-  hide();
+  popover.hide();
 }
 
 function handleConfirm() {
   picker.confirmDraft();
-  hide();
+  popover.hide();
 }
-
-watch(
-  [open, popoverRef],
-  async ([nextOpen]) => {
-    const popover = popoverRef.value;
-
-    if (nextOpen) {
-      picker.resetDraftFromModel();
-
-      if (popover && !popover.matches(':popover-open')) {
-        if (props.anchorElement) {
-          popover.showPopover({ source: props.anchorElement });
-        } else {
-          popover.showPopover();
-        }
-      }
-
-      await focusActiveDate();
-      return;
-    }
-
-    picker.calendarView.value = 'days';
-
-    if (popover?.matches(':popover-open')) {
-      popover.hidePopover();
-    }
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
 
 watch(
   () => modelValue.value,
@@ -215,9 +172,9 @@ watch(
 
 defineExpose({
   popoverEl: popoverRef,
-  show,
-  hide,
-  toggle,
+  show: popover.show,
+  hide: popover.hide,
+  toggle: popover.toggle,
 });
 </script>
 
@@ -234,7 +191,7 @@ defineExpose({
       :data-variant="props.variant"
       :aria-label="props.ariaLabel"
       :style="popoverStyle"
-      @toggle="handlePopoverToggle"
+      @toggle="popover.handlePopoverToggle"
     >
       <div ref="surfaceRef" class="m3-date-picker-surface" data-scope="date-picker" data-part="surface">
         <div class="m3-date-picker-header" data-scope="date-picker" data-part="header">

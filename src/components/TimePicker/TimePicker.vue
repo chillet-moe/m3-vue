@@ -10,6 +10,7 @@ import {
   type TimePickerVariant,
   useTimePicker,
 } from '@/components/TimePicker/useTimePicker';
+import { usePickerPopover } from '@/composables/usePickerPopover';
 
 export type { TimePickerFormat, TimePickerInputMode, TimePickerModelValue, TimePickerVariant };
 
@@ -143,39 +144,25 @@ async function focusFirstControl() {
   surfaceRef.value?.querySelector<HTMLElement>('[data-selected="true"]')?.focus();
 }
 
-function show() {
-  open.value = true;
-}
-
-function hide() {
-  open.value = false;
-}
-
-function toggle() {
-  if (open.value) {
-    hide();
-    return;
-  }
-
-  show();
-}
-
-function handlePopoverToggle(event: Event) {
-  const toggleEvent = event as ToggleEvent;
-
-  if (toggleEvent.newState === 'closed' && open.value) {
-    open.value = false;
-  }
-}
+const popover = usePickerPopover({
+  open,
+  popoverRef,
+  anchorElement: () => props.anchorElement,
+  onBeforeOpen: () => {
+    localInputMode.value = undefined;
+    picker.resetDraftFromModel();
+  },
+  onAfterOpen: focusFirstControl,
+});
 
 function handleCancel() {
   picker.cancelDraft();
-  hide();
+  popover.hide();
 }
 
 function handleConfirm() {
   if (picker.confirmDraft()) {
-    hide();
+    popover.hide();
   }
 }
 
@@ -374,37 +361,6 @@ function handleClockKeydown(event: KeyboardEvent) {
 }
 
 watch(
-  [open, popoverRef],
-  async ([nextOpen]) => {
-    const popover = popoverRef.value;
-
-    if (nextOpen) {
-      localInputMode.value = undefined;
-      picker.resetDraftFromModel();
-
-      if (popover && !popover.matches(':popover-open')) {
-        if (props.anchorElement) {
-          popover.showPopover({ source: props.anchorElement });
-        } else {
-          popover.showPopover();
-        }
-      }
-
-      await focusFirstControl();
-      return;
-    }
-
-    if (popover?.matches(':popover-open')) {
-      popover.hidePopover();
-    }
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
-
-watch(
   () => modelValue.value,
   () => {
     if (!open.value) {
@@ -415,9 +371,9 @@ watch(
 
 defineExpose({
   popoverEl: popoverRef,
-  show,
-  hide,
-  toggle,
+  show: popover.show,
+  hide: popover.hide,
+  toggle: popover.toggle,
 });
 </script>
 
@@ -437,7 +393,7 @@ defineExpose({
       :aria-label="props.ariaLabel"
       :aria-labelledby="titleId"
       :style="popoverStyle"
-      @toggle="handlePopoverToggle"
+      @toggle="popover.handlePopoverToggle"
     >
       <div ref="surfaceRef" class="m3-time-picker-surface" data-scope="time-picker" data-part="surface">
         <header class="m3-time-picker-header" data-scope="time-picker" data-part="header">
