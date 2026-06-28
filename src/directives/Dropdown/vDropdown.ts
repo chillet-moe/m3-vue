@@ -1,5 +1,6 @@
 import type { Directive, DirectiveBinding } from 'vue';
 import './vDropdown.css';
+import { acquireAnchorName } from '@/internal/anchorName';
 import {
   hideDropdownElement,
   resolveDropdownAnchor,
@@ -17,9 +18,8 @@ type CleanupRecord = {
   onDropdownKeydown: (event: KeyboardEvent) => void;
   onKeydown: (event: KeyboardEvent) => void;
   onDocPointerDown?: (event: PointerEvent) => void;
-  previousAnchorAnchorName: string;
   previousDropdownPositionAnchor: string;
-  previousTriggerAnchorName: string;
+  releaseAnchorName: () => void;
   source: HTMLElement;
 };
 
@@ -42,19 +42,7 @@ function teardownDropdown(trigger: HTMLElement) {
     document.removeEventListener('pointerdown', record.onDocPointerDown, true);
   }
 
-  if (record.previousTriggerAnchorName) {
-    trigger.style.setProperty('anchor-name', record.previousTriggerAnchorName);
-  } else {
-    trigger.style.removeProperty('anchor-name');
-  }
-
-  if (record.source !== trigger) {
-    if (record.previousAnchorAnchorName) {
-      record.source.style.setProperty('anchor-name', record.previousAnchorAnchorName);
-    } else {
-      record.source.style.removeProperty('anchor-name');
-    }
-  }
+  record.releaseAnchorName();
 
   if (record.previousDropdownPositionAnchor) {
     record.dropdown.style.setProperty('position-anchor', record.previousDropdownPositionAnchor);
@@ -88,10 +76,8 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
   teardownDropdown(trigger);
   dropdown.classList.add('m3-dropdown');
   const anchorName = `--m3-dropdown-anchor-${dropdownAnchorId++}`;
-  const previousTriggerAnchorName = trigger.style.getPropertyValue('anchor-name');
-  const previousAnchorAnchorName = anchor.style.getPropertyValue('anchor-name');
   const previousDropdownPositionAnchor = dropdown.style.getPropertyValue('position-anchor');
-  anchor.style.setProperty('anchor-name', anchorName);
+  const releaseAnchorName = acquireAnchorName(anchor, anchorName);
   dropdown.style.setProperty('position-anchor', anchorName);
 
   let ignoreSyntheticClickUntil = 0;
@@ -178,9 +164,8 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
     onDropdownClick,
     onDropdownKeydown,
     onDocPointerDown,
-    previousAnchorAnchorName,
     previousDropdownPositionAnchor,
-    previousTriggerAnchorName,
+    releaseAnchorName,
     source: anchor,
   });
 }

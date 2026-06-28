@@ -9,6 +9,7 @@ import {
   supportsAnchorPositioning,
   supportsPopover,
 } from './helpers';
+import { acquireAnchorName } from '@/internal/anchorName';
 import type { Placement, State, TooltipBindingValue } from './types';
 
 function placementToArea(p: Placement) {
@@ -34,6 +35,7 @@ export function setupTooltip(
   const canPopover = supportsPopover(tip);
   const canAnchor = supportsAnchorPositioning();
   const anchorName = `--vtt-anchor-${tip.id}`;
+  const releaseAnchorName = acquireAnchorName(anchor, anchorName);
   const animMs = opts.animDuration;
   type DeferredOffsetHandle = { kind: 'idle'; id: number } | { kind: 'timeout'; id: number } | null;
   const fallbackPlacements = new Map<Placement, ReturnType<typeof resolveFallbackPlacement>>();
@@ -117,7 +119,6 @@ export function setupTooltip(
     };
   };
 
-  anchor.style.setProperty('anchor-name', anchorName);
   tip.style.setProperty('position-anchor', anchorName);
 
   function applyAnchorCSS() {
@@ -433,7 +434,7 @@ export function setupTooltip(
     trigger.removeAttribute('aria-controls');
     trigger.removeAttribute('aria-expanded');
     trigger.removeAttribute('aria-haspopup');
-    anchor.style.removeProperty('anchor-name');
+    releaseAnchorName();
 
     tip.style.removeProperty('position-anchor');
     tip.style.removeProperty('position-area');
