@@ -420,6 +420,32 @@ describe('Select', () => {
     app.unmount();
   });
 
+  it('preserves existing TextField container anchor names', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(Select, {
+        label: 'Coffee',
+        options,
+        type: 'date',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const textFieldContainer = container.querySelector<HTMLElement>('.m3-select-field .m3-text-field-container');
+    const anchorNames = textFieldContainer?.style.getPropertyValue('anchor-name') ?? '';
+
+    expect(anchorNames).toContain('--m3-text-field-date-picker-anchor-');
+    expect(anchorNames).toContain('--m3-select-anchor-');
+
+    app.unmount();
+  });
+
   it('forces selected items to use the check icon', async () => {
     installPopoverPolyfill();
 

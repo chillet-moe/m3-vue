@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useAttrs, useId, useSlots } from 'vue';
+import { computed, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
 import {
   DatePicker,
   type DatePickerModelValue,
@@ -15,6 +15,7 @@ import {
   type TimePickerModelValue,
   type TimePickerVariant,
 } from '@/components/TimePicker';
+import { acquireAnchorName } from '@/internal/anchorName';
 
 export type TextFieldProps = {
   /** Visible label. If omitted, provide aria-label via attrs. */
@@ -154,6 +155,7 @@ const datePickerOpen = ref(false);
 const timePickerOpen = ref(false);
 const datePickerAnchorName = `--m3-text-field-date-picker-anchor-${generatedId}`;
 const timePickerAnchorName = `--m3-text-field-time-picker-anchor-${generatedId}`;
+let releasePickerAnchorName: (() => void) | undefined;
 
 const normalizedInputType = computed(() => {
   return props.type.toLowerCase();
@@ -233,16 +235,33 @@ const controlAttrs = computed(() => {
   return forwarded;
 });
 
-const containerStyle = computed(() => {
+const pickerAnchorName = computed(() => {
   if (hasDatePicker.value) {
-    return { 'anchor-name': datePickerAnchorName };
+    return datePickerAnchorName;
   }
 
   if (hasTimePicker.value) {
-    return { 'anchor-name': timePickerAnchorName };
+    return timePickerAnchorName;
   }
 
   return undefined;
+});
+
+watch(
+  [containerRef, pickerAnchorName],
+  ([nextContainer, nextAnchorName]) => {
+    releasePickerAnchorName?.();
+    releasePickerAnchorName =
+      nextContainer && nextAnchorName ? acquireAnchorName(nextContainer, nextAnchorName) : undefined;
+  },
+  {
+    immediate: true,
+    flush: 'post',
+  },
+);
+
+onBeforeUnmount(() => {
+  releasePickerAnchorName?.();
 });
 
 function normalizeDateLikeValue(value: string | undefined) {
@@ -355,13 +374,7 @@ defineExpose({
     :data-has-date-picker="hasDatePicker ? 'true' : 'false'"
     :data-has-time-picker="hasTimePicker ? 'true' : 'false'"
   >
-    <div
-      ref="containerRef"
-      :class="'m3-text-field-container'"
-      data-scope="text-field"
-      data-part="container"
-      :style="containerStyle"
-    >
+    <div ref="containerRef" :class="'m3-text-field-container'" data-scope="text-field" data-part="container">
       <label
         v-if="props.label"
         :class="'m3-text-field-label'"

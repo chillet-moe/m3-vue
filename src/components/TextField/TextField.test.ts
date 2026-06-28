@@ -257,6 +257,28 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('uses the field container as the picker anchor', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TextField, {
+        label: 'Date',
+        type: 'date',
+        modelValue: '2026-04-28',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const textFieldContainer = container.querySelector<HTMLElement>('.m3-text-field-container');
+
+    expect(textFieldContainer?.style.getPropertyValue('anchor-name')).toContain('--m3-text-field-date-picker-anchor-');
+
+    app.unmount();
+  });
+
   it('preserves the time segment when datetime-local inputs pick a new date', async () => {
     installPopoverPolyfill();
 

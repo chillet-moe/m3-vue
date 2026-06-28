@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { TransitionGroup, computed, ref, useAttrs, useId, useSlots, watch } from 'vue';
+import { TransitionGroup, computed, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
 import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
 import MenuItem from '@/components/Menu/MenuItem.vue';
 import TextField from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
+import { acquireAnchorName } from '@/internal/anchorName';
 
 export type SelectOptionValue = string | number;
 
@@ -145,6 +146,7 @@ const triggerRef = ref<HTMLElement>();
 const menuRef = ref<SelectExposed>();
 const textFieldRef = ref<TextFieldExposed>();
 const anchorName = `--m3-select-anchor-${generatedId}`;
+let releaseAnchorName: (() => void) | undefined;
 
 const triggerId = computed(() => {
   return props.id ?? `m3-select-${generatedId}`;
@@ -229,8 +231,11 @@ function handleBlur(event: FocusEvent) {
 watch(
   () => textFieldRef.value?.containerEl,
   (nextContainer, previousContainer) => {
-    previousContainer?.style.removeProperty('anchor-name');
-    nextContainer?.style.setProperty('anchor-name', anchorName);
+    if (nextContainer !== previousContainer) {
+      releaseAnchorName?.();
+      releaseAnchorName = nextContainer ? acquireAnchorName(nextContainer, anchorName) : undefined;
+    }
+
     triggerRef.value = nextContainer ?? undefined;
   },
   {
@@ -238,6 +243,10 @@ watch(
     flush: 'post',
   },
 );
+
+onBeforeUnmount(() => {
+  releaseAnchorName?.();
+});
 
 defineExpose({
   el: textFieldRef,
