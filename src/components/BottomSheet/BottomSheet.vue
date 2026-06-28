@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
+import { useNativeDialog } from '@/composables/useNativeDialog';
 import {
   computed,
   nextTick,
@@ -10,7 +10,6 @@ import {
   useId,
   useSlots,
   useTemplateRef,
-  watch,
 } from 'vue';
 
 export type BottomSheetProps = {
@@ -74,7 +73,6 @@ let dragVelocity = 0;
 let dragStartedInContent = false;
 let dragActive = false;
 let touchDragActive = false;
-let releaseScrollLock: (() => void) | undefined;
 let removeTouchListeners: (() => void) | undefined;
 
 const rootStyle = computed<CSSProperties>(() => {
@@ -91,35 +89,6 @@ const rootStyle = computed<CSSProperties>(() => {
   return style as CSSProperties;
 });
 
-const showDialog = () => {
-  const dialog = dialogRef.value;
-
-  if (!dialog || dialog.open) {
-    return;
-  }
-
-  dialog.showModal();
-};
-
-const closeDialog = (returnValue?: string) => {
-  const dialog = dialogRef.value;
-
-  if (!dialog || !dialog.open) {
-    return;
-  }
-
-  dialog.close(returnValue);
-};
-
-const acquireScrollLock = () => {
-  releaseScrollLock ??= lockPageScroll();
-};
-
-const releaseScrollLockIfNeeded = () => {
-  releaseScrollLock?.();
-  releaseScrollLock = undefined;
-};
-
 const resetDrag = () => {
   dragOffset.value = 0;
   dragging.value = false;
@@ -133,63 +102,17 @@ const resetDrag = () => {
   touchDragActive = false;
 };
 
-watch(
-  [dialogRef, open],
-  ([dialog]) => {
-    if (!dialog) {
-      return;
-    }
-
-    if (open.value) {
-      resetDrag();
-      acquireScrollLock();
-      showDialog();
-      return;
-    }
-
-    releaseScrollLockIfNeeded();
-    closeDialog();
+const { showModal, close, onCancel, onClose, onBackdropClick } = useNativeDialog({
+  dialogRef,
+  open,
+  closeOnBackdrop: () => props.closeOnBackdrop,
+  onBeforeOpen: resetDrag,
+  onCancel: (event) => emit('cancel', event),
+  onClose: (returnValue) => {
+    resetDrag();
+    emit('close', returnValue);
   },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
-
-const onCancel = (event: Event) => {
-  emit('cancel', event);
-};
-
-const onClose = (event: Event) => {
-  const dialog = event.currentTarget as HTMLDialogElement;
-
-  resetDrag();
-  releaseScrollLockIfNeeded();
-
-  if (open.value) {
-    open.value = false;
-  }
-
-  emit('close', dialog.returnValue);
-};
-
-const onClick = (event: MouseEvent) => {
-  if (!props.closeOnBackdrop || event.target !== dialogRef.value) {
-    return;
-  }
-
-  closeDialog();
-};
-
-const showModal = () => {
-  open.value = true;
-  showDialog();
-};
-
-const close = (returnValue?: string) => {
-  open.value = false;
-  closeDialog(returnValue);
-};
+});
 
 const getEventTime = () => (typeof performance === 'undefined' ? Date.now() : performance.now());
 
@@ -364,7 +287,6 @@ defineExpose({
 });
 
 onUnmounted(() => {
-  releaseScrollLockIfNeeded();
   removeTouchListeners?.();
 });
 
@@ -404,7 +326,7 @@ onMounted(() => {
     :aria-describedby="hasContent ? contentId : undefined"
     @cancel="onCancel"
     @close="onClose"
-    @click="onClick"
+    @click="onBackdropClick"
   >
     <div
       ref="surface"

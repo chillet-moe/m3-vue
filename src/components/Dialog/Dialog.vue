@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
-import { computed, onUnmounted, type CSSProperties, useId, useSlots, useTemplateRef, watch } from 'vue';
+import { useNativeDialog } from '@/composables/useNativeDialog';
+import { computed, type CSSProperties, useId, useSlots, useTemplateRef } from 'vue';
 
 export type DialogProps = {
   /** Whether clicking the backdrop closes the dialog. */
@@ -49,7 +49,6 @@ const hasIcon = computed(() => Boolean(slots.icon));
 const hasHeadline = computed(() => Boolean(slots.headline));
 const hasContent = computed(() => Boolean(slots.default));
 const hasActions = computed(() => Boolean(slots.actions));
-let releaseScrollLock: (() => void) | undefined;
 
 const rootStyle = computed<CSSProperties>(() => {
   const style: Record<string, string> = {};
@@ -61,99 +60,18 @@ const rootStyle = computed<CSSProperties>(() => {
   return style as CSSProperties;
 });
 
-const showDialog = () => {
-  const dialog = dialogRef.value;
-
-  if (!dialog || dialog.open) {
-    return;
-  }
-
-  dialog.showModal();
-};
-
-const closeDialog = (returnValue?: string) => {
-  const dialog = dialogRef.value;
-
-  if (!dialog || !dialog.open) {
-    return;
-  }
-
-  dialog.close(returnValue);
-};
-
-const acquireScrollLock = () => {
-  releaseScrollLock ??= lockPageScroll();
-};
-
-const releaseScrollLockIfNeeded = () => {
-  releaseScrollLock?.();
-  releaseScrollLock = undefined;
-};
-
-watch(
-  [dialogRef, open],
-  ([dialog]) => {
-    if (!dialog) {
-      return;
-    }
-
-    if (open.value) {
-      acquireScrollLock();
-      showDialog();
-      return;
-    }
-
-    releaseScrollLockIfNeeded();
-    closeDialog();
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-);
-
-const onCancel = (event: Event) => {
-  emit('cancel', event);
-};
-
-const onClose = (event: Event) => {
-  const dialog = event.currentTarget as HTMLDialogElement;
-
-  releaseScrollLockIfNeeded();
-
-  if (open.value) {
-    open.value = false;
-  }
-
-  emit('close', dialog.returnValue);
-};
-
-const onClick = (event: MouseEvent) => {
-  if (!props.closeOnBackdrop || event.target !== dialogRef.value) {
-    return;
-  }
-
-  closeDialog();
-};
-
-const showModal = () => {
-  open.value = true;
-  showDialog();
-};
-
-const close = (returnValue?: string) => {
-  open.value = false;
-  closeDialog(returnValue);
-};
+const { showModal, close, onCancel, onClose, onBackdropClick } = useNativeDialog({
+  dialogRef,
+  open,
+  closeOnBackdrop: () => props.closeOnBackdrop,
+  onCancel: (event) => emit('cancel', event),
+  onClose: (returnValue) => emit('close', returnValue),
+});
 
 defineExpose({
   showModal,
   close,
   dialogRef,
-});
-
-onUnmounted(() => {
-  releaseScrollLockIfNeeded();
 });
 </script>
 
@@ -171,7 +89,7 @@ onUnmounted(() => {
     :aria-describedby="hasContent ? contentId : undefined"
     @cancel="onCancel"
     @close="onClose"
-    @click="onClick"
+    @click="onBackdropClick"
   >
     <div class="m3-dialog-surface" data-scope="dialog" data-part="surface">
       <div v-if="hasIcon" :class="'m3-dialog-icon'" data-scope="dialog" data-part="icon">
