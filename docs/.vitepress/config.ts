@@ -95,6 +95,7 @@ export default defineConfig({
             {
               text: 'Containment',
               items: [
+                { text: 'Accordion', link: '/components/accordion' },
                 { text: 'BottomSheet', link: '/components/bottom-sheet' },
                 { text: 'Card', link: '/components/card' },
                 { text: 'Dialog', link: '/components/dialog' },
@@ -122,6 +123,7 @@ export default defineConfig({
             {
               text: 'Navigation',
               items: [
+                { text: 'Breadcrumb', link: '/components/breadcrumb' },
                 { text: 'Menu', link: '/components/menu' },
                 { text: 'NavigationRail', link: '/components/navigation-rail' },
                 { text: 'Pagination', link: '/components/pagination' },

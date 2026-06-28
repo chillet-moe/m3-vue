@@ -22,6 +22,14 @@ export { useAnimatedNumber } from './composables/useAnimatedNumber';
 export type { UseAnimatedNumberOptions, UseAnimatedNumberReturn } from './composables/useAnimatedNumber';
 export { usePopover } from './composables/usePopover';
 export type { UsePopoverOptions, UsePopoverReturn, UsePopoverShowOptions } from './composables/usePopover';
+export { useAccordion } from './composables/useAccordion';
+export type {
+  AccordionItemOptions,
+  AccordionItemValue,
+  AccordionModelValue,
+  UseAccordionOptions,
+  UseAccordionReturn,
+} from './composables/useAccordion';
 
 // Directives
 export * from './directives';
@@ -30,6 +38,7 @@ export * from './plugin';
 // Components
 export * from './components/Badge';
 export * from './components/BottomSheet';
+export * from './components/Breadcrumb';
 export * from './components/Button';
 export * from './components/ButtonGroup';
 export * from './components/SelectionGroup';

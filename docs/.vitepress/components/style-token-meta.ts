@@ -1,5 +1,6 @@
 import { badgeStyleTokens } from './style-tokens/Badge';
 import { bottomSheetStyleTokens } from './style-tokens/BottomSheet';
+import { breadcrumbStyleTokens } from './style-tokens/Breadcrumb';
 import { buttonStyleTokens } from './style-tokens/Button';
 import { buttonGroupStyleTokens } from './style-tokens/ButtonGroup';
 import { cardStyleTokens } from './style-tokens/Card';
@@ -36,6 +37,7 @@ export type { StyleTokenMeta } from './style-tokens/types';
 export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   Badge: badgeStyleTokens,
   BottomSheet: bottomSheetStyleTokens,
+  Breadcrumb: breadcrumbStyleTokens,
   Button: buttonStyleTokens,
   ButtonGroup: buttonGroupStyleTokens,
   Card: cardStyleTokens,

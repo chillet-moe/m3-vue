@@ -15,6 +15,7 @@ M3 Vue 将复杂组件的**交互逻辑**与**视觉呈现**分离。每个复�
 | Composable           | 用途                                  | 对应组件                                           |
 | -------------------- | ------------------------------------- | -------------------------------------------------- |
 | `useTabs`            | 标签页切换、键盘导航、ARIA            | `Tabs`, `Tab`, `TabList`, `TabPanel`               |
+| `useAccordion`       | 折叠区状态、键盘导航、ARIA            | 无，Accordion 只提供 headless 逻辑                 |
 | `useMenu`            | 菜单打开/关闭、键盘导航、子菜单、选择 | `Menu`                                             |
 | `useSelect`          | 选项过滤、值管理、菜单控制            | `Select`, `Combobox`                               |
 | `usePressShapeMorph` | 按压变形属性、禁用拦截和释放状态管理  | `Button`, `IconButton`, `Chip`, `Card`, `ListItem` |

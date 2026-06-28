@@ -1,0 +1,139 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-breadcrumb-current-page-color: initial;
+    --md-breadcrumb-ellipsis-color: initial;
+    --md-breadcrumb-item-height: initial;
+    --md-breadcrumb-item-space: initial;
+    --md-breadcrumb-link-color: initial;
+    --md-breadcrumb-link-padding-inline: initial;
+    --md-breadcrumb-link-shape: initial;
+    --md-breadcrumb-separator-color: initial;
+    --md-breadcrumb-separator-icon-size: initial;
+    --md-breadcrumb-state-layer-color: initial;
+  }
+
+  .m3-breadcrumb {
+    --_breadcrumb-link-color: var(
+      --md-breadcrumb-link-color,
+      var(--md-color-on-container, var(--md-sys-color-primary))
+    );
+    --_breadcrumb-current-page-color: var(
+      --md-breadcrumb-current-page-color,
+      var(--md-color-on-container, var(--md-sys-color-on-surface))
+    );
+    --_breadcrumb-separator-color: var(
+      --md-breadcrumb-separator-color,
+      var(--md-color-on-container, var(--md-sys-color-on-surface-variant))
+    );
+    --_breadcrumb-ellipsis-color: var(
+      --md-breadcrumb-ellipsis-color,
+      var(--md-color-on-container, var(--md-sys-color-on-surface-variant))
+    );
+    --_breadcrumb-state-layer-color: var(
+      --md-breadcrumb-state-layer-color,
+      var(--md-state-layer-color, var(--_breadcrumb-link-color))
+    );
+    --_breadcrumb-item-space: var(--md-breadcrumb-item-space, --dp(4));
+    --_breadcrumb-item-height: var(--md-breadcrumb-item-height, --dp(32));
+    --_breadcrumb-link-padding-inline: var(--md-breadcrumb-link-padding-inline, --dp(8));
+    --_breadcrumb-link-shape: var(--md-breadcrumb-link-shape, var(--md-shape-action));
+    --_breadcrumb-separator-icon-size: var(--md-breadcrumb-separator-icon-size, --dp(18));
+  }
+}
+
+@layer components {
+  .m3-breadcrumb {
+    inline-size: 100%;
+    display: block;
+  }
+
+  .m3-breadcrumb-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--_breadcrumb-item-space);
+    min-block-size: var(--_breadcrumb-item-height);
+  }
+
+  .m3-breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--_breadcrumb-item-height);
+  }
+
+  .m3-breadcrumb-link,
+  .m3-breadcrumb-page,
+  .m3-breadcrumb-ellipsis,
+  .m3-breadcrumb-separator {
+    @apply label-large;
+    min-block-size: var(--_breadcrumb-item-height);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .m3-breadcrumb-link {
+    --md-state-layer-color: var(--_breadcrumb-state-layer-color);
+    --md-color-container: transparent;
+    --md-color-on-container: var(--_breadcrumb-link-color);
+
+    appearance: none;
+    border: 0;
+    border-radius: var(--_breadcrumb-link-shape);
+    background: transparent;
+    color: var(--_breadcrumb-link-color);
+    cursor: pointer;
+    font: inherit;
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--_breadcrumb-link-padding-inline);
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:focus-visible {
+      outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+      outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
+    }
+  }
+
+  .m3-breadcrumb-link[data-disabled='true'] {
+    color: --translucent(var(--md-sys-color-on-surface), 0.38);
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+  }
+
+  .m3-breadcrumb-page {
+    color: var(--_breadcrumb-current-page-color);
+    padding-inline: var(--_breadcrumb-link-padding-inline);
+  }
+
+  .m3-breadcrumb-separator {
+    color: var(--_breadcrumb-separator-color);
+    pointer-events: none;
+  }
+
+  .m3-breadcrumb-separator-icon {
+    inline-size: var(--_breadcrumb-separator-icon-size);
+    block-size: var(--_breadcrumb-separator-icon-size);
+    font-size: var(--_breadcrumb-separator-icon-size);
+  }
+
+  .m3-breadcrumb-ellipsis {
+    color: var(--_breadcrumb-ellipsis-color);
+    padding-inline: var(--_breadcrumb-link-padding-inline);
+  }
+
+  .m3-breadcrumb-ellipsis-icon {
+    inline-size: var(--_breadcrumb-separator-icon-size);
+    block-size: var(--_breadcrumb-separator-icon-size);
+    font-size: var(--_breadcrumb-separator-icon-size);
+  }
+}
