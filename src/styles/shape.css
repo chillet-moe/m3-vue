@@ -44,7 +44,7 @@
     --md-shape-field-square: var(--md-sys-shape-corner-medium);
     --md-shape-chip: var(--md-sys-shape-corner-small);
     --md-shape-card: var(--md-sys-shape-corner-medium);
-    --md-shape-popover: var(--md-sys-shape-corner-large);
+    --md-shape-popover: var(--md-sys-shape-corner-medium);
     --md-shape-popover-item: var(--md-sys-shape-corner-extra-small);
     --md-shape-compact: var(--md-sys-shape-corner-extra-small);
     --md-shape-overlay: var(--md-sys-shape-corner-extra-large);

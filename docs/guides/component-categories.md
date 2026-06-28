@@ -11,15 +11,15 @@
 
 ## 当前分类
 
-| 分类          | 标准                         | 组件                                                                |
-| ------------- | ---------------------------- | ------------------------------------------------------------------- |
-| `Actions`     | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`                               |
-| `Feedback`    | 传达状态、提示、反馈或进度   | `Badge`, `Snackbar`, `Tooltip`, `ProgressIndicator`                 |
-| `Containment` | 承载、分隔、组织或覆盖内容   | `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `SideSheet` |
-| `Display`     | 展示基础视觉内容             | `Icon`                                                              |
-| `Inputs`      | 输入文本、结构化值或选项查询 | `Combobox`, `InputOtp`, `Select`, `TextField`                       |
-| `Navigation`  | 在页面、视图或内容范围间移动 | `Menu`, `NavigationRail`, `Pagination`, `Tabs`                      |
-| `Selection`   | 选择、切换或调整一个已有值   | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`        |
+| 分类          | 标准                         | 组件                                                                           |
+| ------------- | ---------------------------- | ------------------------------------------------------------------------------ |
+| `Actions`     | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`                                          |
+| `Feedback`    | 传达状态、提示、反馈或进度   | `Badge`, `Snackbar`, `Tooltip`, `ProgressIndicator`                            |
+| `Containment` | 承载、分隔、组织或覆盖内容   | `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet` |
+| `Display`     | 展示基础视觉内容             | `Icon`                                                                         |
+| `Inputs`      | 输入文本、结构化值或选项查询 | `Combobox`, `InputOtp`, `Select`, `TextField`                                  |
+| `Navigation`  | 在页面、视图或内容范围间移动 | `Menu`, `NavigationRail`, `Pagination`, `Tabs`                                 |
+| `Selection`   | 选择、切换或调整一个已有值   | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`                   |
 
 ## ProgressIndicator
 

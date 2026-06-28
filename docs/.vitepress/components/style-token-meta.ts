@@ -19,6 +19,7 @@ import { loadingIndicatorStyleTokens } from './style-tokens/LoadingIndicator';
 import { menuStyleTokens } from './style-tokens/Menu';
 import { navigationRailStyleTokens } from './style-tokens/NavigationRail';
 import { paginationStyleTokens } from './style-tokens/Pagination';
+import { popoverStyleTokens } from './style-tokens/Popover';
 import { radioStyleTokens } from './style-tokens/Radio';
 import { sideSheetStyleTokens } from './style-tokens/SideSheet';
 import { sliderStyleTokens } from './style-tokens/Slider';
@@ -54,6 +55,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   Menu: menuStyleTokens,
   NavigationRail: navigationRailStyleTokens,
   Pagination: paginationStyleTokens,
+  Popover: popoverStyleTokens,
   Radio: radioStyleTokens,
   SideSheet: sideSheetStyleTokens,
   Slider: sliderStyleTokens,

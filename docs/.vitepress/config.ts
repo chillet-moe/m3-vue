@@ -100,6 +100,7 @@ export default defineConfig({
                 { text: 'Dialog', link: '/components/dialog' },
                 { text: 'Divider', link: '/components/divider' },
                 { text: 'ListItem', link: '/components/item' },
+                { text: 'Popover', link: '/components/popover' },
                 { text: 'SideSheet', link: '/components/side-sheet' },
               ],
             },

@@ -20,6 +20,8 @@ export { useSelect } from './composables/useSelect';
 export type { UseSelectOptions, UseSelectReturn } from './composables/useSelect';
 export { useAnimatedNumber } from './composables/useAnimatedNumber';
 export type { UseAnimatedNumberOptions, UseAnimatedNumberReturn } from './composables/useAnimatedNumber';
+export { usePopover } from './composables/usePopover';
+export type { UsePopoverOptions, UsePopoverReturn, UsePopoverShowOptions } from './composables/usePopover';
 
 // Directives
 export * from './directives';
@@ -55,6 +57,7 @@ export * from './components/LoadingIndicator';
 export * from './components/Menu';
 export * from './components/NavigationRail';
 export * from './components/Pagination';
+export * from './components/Popover';
 export * from './components/TextField';
 export * from './components/Select';
 export * from './components/SideSheet';
