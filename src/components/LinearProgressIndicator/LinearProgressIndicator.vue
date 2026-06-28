@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
-import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
-import { clamp, createLinearWavePath } from '../progressIndicatorPath';
+import { useProgressIndicatorState } from '@/composables/useProgressIndicatorState';
+import { readCssLength } from '@/utils/cssLength';
+import { createLinearWavePath } from '../progressIndicatorPath';
 
 export type LinearProgressIndicatorProps = {
   /** Whether the progress value is unknown. */
@@ -60,46 +61,16 @@ const props = withDefaults(defineProps<LinearProgressIndicatorProps>(), {
   stopIndicator: true,
 });
 
-const isDeterminate = computed(() => !props.indeterminate);
 const isWavy = computed(() => props.shape === 'wavy');
 
-const clampedValue = computed(() => {
-  if (!Number.isFinite(props.value)) {
-    return props.min;
-  }
-
-  if (props.max <= props.min) {
-    return props.min;
-  }
-
-  return clamp(props.value, props.min, props.max);
-});
-
-const progressRatio = computed(() => {
-  const range = props.max - props.min;
-  if (!Number.isFinite(range) || range <= 0) {
-    return 0;
-  }
-
-  return clamp((clampedValue.value - props.min) / range, 0, 1);
-});
-
-const { displayedValue: progressRatioDisplayed } = useAnimatedNumber(progressRatio, {
-  enabled: isDeterminate,
-  clamp: (value) => clamp(value, 0, 1),
-});
-const progressPercent = computed(() => progressRatio.value * 100);
-const progressState = computed(() => {
-  if (progressRatioDisplayed.value <= 0) {
-    return 'empty';
-  }
-
-  if (progressRatioDisplayed.value >= 1) {
-    return 'complete';
-  }
-
-  return 'partial';
-});
+const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, ariaValueTextResolved } =
+  useProgressIndicatorState({
+    indeterminate: () => props.indeterminate,
+    value: () => props.value,
+    min: () => props.min,
+    max: () => props.max,
+    ariaValueText: () => props.ariaValueText,
+  });
 
 const isTrackGapVisible = computed(() => isDeterminate.value && progressState.value === 'partial');
 const isStopIndicatorVisible = computed(() => isDeterminate.value && props.stopIndicator);
@@ -114,29 +85,6 @@ const layout = ref({
 });
 
 let resizeObserver: ResizeObserver | null = null;
-
-const parseCssLength = (value: string | undefined, fallback: number, fontSize = 16) => {
-  if (!value) {
-    return fallback;
-  }
-
-  const trimmed = value.trim();
-  const numericValue = Number.parseFloat(trimmed);
-  if (!Number.isFinite(numericValue)) {
-    return fallback;
-  }
-
-  if (trimmed.endsWith('rem') || trimmed.endsWith('em')) {
-    return numericValue * fontSize;
-  }
-
-  return numericValue;
-};
-
-const readCssLength = (styles: CSSStyleDeclaration, token: string, propValue: string | undefined, fallback: number) => {
-  const fontSize = parseCssLength(styles.fontSize, 16);
-  return parseCssLength(propValue ?? styles.getPropertyValue(token), fallback, fontSize);
-};
 
 const syncLayout = () => {
   const root = rootRef.value;
@@ -172,14 +120,6 @@ const syncLayout = () => {
     wavelengthIndeterminate,
   };
 };
-
-const ariaValueTextResolved = computed(() => {
-  if (!isDeterminate.value) {
-    return props.ariaValueText;
-  }
-
-  return props.ariaValueText ?? `${Math.round(progressPercent.value)}%`;
-});
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {
