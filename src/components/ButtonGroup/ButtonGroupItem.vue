@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, inject, unref } from 'vue';
-
 import Button from '@/components/Button/Button.vue';
-import { selectionGroupContextKey, type SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
+import type { SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
+import { useSelectionGroupItem } from '@/components/SelectionGroup/useSelectionGroupItem';
 
 export type ButtonGroupItemProps = {
   value: SelectionGroupValue;
@@ -12,37 +11,16 @@ export type ButtonGroupItemProps = {
 
 const { value, disabled = false, ariaLabel } = defineProps<ButtonGroupItemProps>();
 
-const context = inject(selectionGroupContextKey, undefined);
-
-const isChecked = computed(() => {
-  const currentValue = unref(context?.modelValue);
-
-  if (Array.isArray(currentValue)) {
-    return currentValue.includes(value);
-  }
-
-  return currentValue === value;
+const selectionItem = useSelectionGroupItem({
+  value: () => value,
+  disabled: () => disabled,
+  fallbackInputType: 'radio',
 });
-
-const inputType = computed(() => {
-  if (unref(context?.selectionMode) === 'multiple') {
-    return 'checkbox';
-  }
-
-  return 'radio';
-});
-
-const inputName = computed(() => {
-  return unref(context?.name);
-});
-
-const mergedDisabled = computed(() => {
-  return disabled || unref(context?.disabled) || false;
-});
+const { isSelected: isChecked, inputType, inputName, inputValue, mergedDisabled, selectFromInput } = selectionItem;
 
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  context?.select(value, target.checked);
+  selectFromInput(target.checked);
 };
 
 defineSlots<{
@@ -55,7 +33,7 @@ defineSlots<{
     <input
       :type="inputType"
       :name="inputName"
-      :value="String(value)"
+      :value="inputValue"
       :checked="isChecked"
       :disabled="mergedDisabled"
       :aria-label="ariaLabel"

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, inject, unref } from 'vue';
+import { computed } from 'vue';
 
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { Icon } from '@/components/Icon';
-import { selectionGroupContextKey, type SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
+import type { SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
+import { useSelectionGroupItem } from '@/components/SelectionGroup/useSelectionGroupItem';
 
 export type ChipProps = {
   /** Material 3 chip variant. */
@@ -52,15 +53,17 @@ const props = withDefaults(defineProps<ChipProps>(), {
 
 const selected = defineModel<boolean>({ default: false });
 
-const groupContext = inject(selectionGroupContextKey, undefined);
-
 const selectableVariant = computed(() => {
   return props.variant === 'filter' || props.variant === 'input';
 });
 
-const participatesInGroup = computed(() => {
-  return groupContext !== undefined && props.value !== undefined;
+const selectionItem = useSelectionGroupItem({
+  value: () => props.value,
+  selected,
+  name: () => props.name,
+  disabled: () => props.disabled,
 });
+const { participatesInGroup, inputType, inputName, inputValue, mergedDisabled, selectFromInput } = selectionItem;
 
 const selectable = computed(() => {
   return selectableVariant.value || participatesInGroup.value;
@@ -71,41 +74,7 @@ const isSelected = computed(() => {
     return false;
   }
 
-  if (participatesInGroup.value) {
-    const currentValue = unref(groupContext?.modelValue);
-
-    if (Array.isArray(currentValue)) {
-      return currentValue.includes(props.value as SelectionGroupValue);
-    }
-
-    return currentValue === props.value;
-  }
-
-  return selected.value;
-});
-
-const inputType = computed(() => {
-  if (participatesInGroup.value && unref(groupContext?.selectionMode) === 'single') {
-    return 'radio';
-  }
-
-  return 'checkbox';
-});
-
-const inputName = computed(() => {
-  return unref(groupContext?.name) ?? props.name;
-});
-
-const inputValue = computed(() => {
-  if (props.value !== undefined) {
-    return String(props.value);
-  }
-
-  return 'on';
-});
-
-const mergedDisabled = computed(() => {
-  return props.disabled || unref(groupContext?.disabled) || false;
+  return selectionItem.isSelected.value;
 });
 
 const showAvatar = computed(() => {
@@ -184,13 +153,7 @@ const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled: mergedDisabled }
 
 const handleChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
-
-  if (participatesInGroup.value) {
-    groupContext?.select(props.value as SelectionGroupValue, target.checked);
-    return;
-  }
-
-  selected.value = target.checked;
+  selectFromInput(target.checked);
 };
 
 defineSlots<{
