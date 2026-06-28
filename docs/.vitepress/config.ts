@@ -80,6 +80,7 @@ export default defineConfig({
               text: 'Feedback',
               items: [
                 { text: 'Badge', link: '/components/badge' },
+                { text: 'Skeleton', link: '/components/skeleton' },
                 { text: 'Snackbar', link: '/components/snackbar' },
                 { text: 'Tooltip', link: '/components/tooltip' },
                 {

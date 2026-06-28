@@ -48,6 +48,7 @@ export const m3VueComponentNames = [
   'PaginationPrevious',
   'Popover',
   'Radio',
+  'Skeleton',
   'Slider',
   'Snackbar',
   'Select',

@@ -14,7 +14,7 @@
 | 分类          | 标准                         | 组件                                                                           |
 | ------------- | ---------------------------- | ------------------------------------------------------------------------------ |
 | `Actions`     | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`                                          |
-| `Feedback`    | 传达状态、提示、反馈或进度   | `Badge`, `Snackbar`, `Tooltip`, `ProgressIndicator`                            |
+| `Feedback`    | 传达状态、提示、反馈或进度   | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`                |
 | `Containment` | 承载、分隔、组织或覆盖内容   | `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet` |
 | `Display`     | 展示基础视觉内容             | `Icon`                                                                         |
 | `Inputs`      | 输入文本、结构化值或选项查询 | `Combobox`, `InputOtp`, `Select`, `TextField`                                  |

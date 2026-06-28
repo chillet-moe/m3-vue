@@ -45,6 +45,7 @@ export * from './components/SelectionGroup';
 export * from './components/IconButton';
 export * from './components/InputOtp';
 export * from './components/Slider';
+export * from './components/Skeleton';
 export * from './components/Icon';
 export * from './components/Tooltip';
 export * from './components/Card';

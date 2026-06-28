@@ -24,6 +24,7 @@ import { popoverStyleTokens } from './style-tokens/Popover';
 import { radioStyleTokens } from './style-tokens/Radio';
 import { sideSheetStyleTokens } from './style-tokens/SideSheet';
 import { sliderStyleTokens } from './style-tokens/Slider';
+import { skeletonStyleTokens } from './style-tokens/Skeleton';
 import { snackbarStyleTokens } from './style-tokens/Snackbar';
 import { switchStyleTokens } from './style-tokens/Switch';
 import { tabsStyleTokens } from './style-tokens/Tabs';
@@ -61,6 +62,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   Radio: radioStyleTokens,
   SideSheet: sideSheetStyleTokens,
   Slider: sliderStyleTokens,
+  Skeleton: skeletonStyleTokens,
   Snackbar: snackbarStyleTokens,
   Switch: switchStyleTokens,
   Tabs: tabsStyleTokens,
