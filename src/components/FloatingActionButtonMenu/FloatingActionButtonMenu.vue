@@ -2,7 +2,9 @@
 import { computed, nextTick, onUnmounted, provide, ref, useId, useTemplateRef, watch } from 'vue';
 
 import { Icon } from '@/components/Icon';
+import type { MenuModelValue } from '@/components/Menu/MenuTypes';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { useMenu } from '@/composables/useMenu';
 import { floatingActionButtonMenuContextKey } from './FloatingActionButtonMenuContext';
 
 export type FloatingActionButtonMenuProps = {
@@ -55,6 +57,7 @@ const triggerId = `${menuId}-trigger`;
 const rootRef = useTemplateRef<HTMLDivElement>('root');
 const triggerRef = useTemplateRef<HTMLButtonElement>('trigger');
 const menuRef = useTemplateRef<HTMLDivElement>('menu');
+const modelValue = ref<MenuModelValue>();
 const restoreFocusAfterClose = ref(false);
 const effectiveAlignment = ref<FloatingActionButtonMenuProps['alignment']>(props.alignment);
 
@@ -67,23 +70,6 @@ provide(floatingActionButtonMenuContextKey, {
 
 function isPopoverOpen(menu: HTMLElement) {
   return menu.matches(':popover-open');
-}
-
-function getMenuItemElements() {
-  const menu = menuRef.value;
-  if (!menu) return [] as HTMLElement[];
-
-  return Array.from(
-    menu.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled]):not([aria-disabled="true"])'),
-  ).filter((item) => item.dataset.menuOwner === menuId);
-}
-
-function focusItem(index: number) {
-  const items = getMenuItemElements();
-  if (!items.length) return;
-
-  const normalizedIndex = (index + items.length) % items.length;
-  items[normalizedIndex]?.focus();
 }
 
 function toPixelValue(value: string | undefined, relativeTo?: Element | null) {
@@ -168,11 +154,24 @@ function updatePopoverPosition() {
   menu.style.setProperty('--_fab-menu-popover-block-end', `${Math.max(0, blockEnd)}px`);
 }
 
+const menuActions = useMenu({
+  menuId,
+  menuRef: menuRef as any,
+  open,
+  modelValue,
+  multiple: () => false,
+  onSelect: (event, itemElement) => emit('select', event, itemElement),
+});
+
 function showPopover() {
   const menu = menuRef.value;
-  if (!menu || isPopoverOpen(menu)) return;
+  if (!menu) return;
 
   updatePopoverPosition();
+  if (isPopoverOpen(menu)) {
+    updatePopoverPosition();
+    return;
+  }
 
   try {
     menu.showPopover({ source: triggerRef.value } as any);
@@ -194,12 +193,13 @@ async function show(focusFirst = false) {
   if (props.disabled) return;
 
   open.value = true;
-  await nextTick();
   showPopover();
+  await nextTick();
+  updatePopoverPosition();
 
   if (focusFirst) {
     await nextTick();
-    focusItem(0);
+    menuActions.focusItem(0);
   }
 }
 
@@ -242,13 +242,12 @@ function handleMenuToggle(event: Event) {
   const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
   const nextOpen = nextState === 'open' ? true : nextState === 'closed' ? false : isPopoverOpen(menu);
 
+  menuActions.onMenuToggle(event);
+
   if (nextOpen) {
-    open.value = true;
     updatePopoverPosition();
     return;
   }
-
-  open.value = false;
 
   if (restoreFocusAfterClose.value) {
     restoreFocusAfterClose.value = false;
@@ -256,57 +255,12 @@ function handleMenuToggle(event: Event) {
   }
 }
 
-function handleMenuClick(event: MouseEvent) {
-  const target = event.target as HTMLElement | null;
-  if (!target) return;
-
-  const item = target.closest<HTMLElement>('[role="menuitem"]');
-  if (!item || item.dataset.menuOwner !== menuId || item.matches('[disabled], [aria-disabled="true"]')) return;
-
-  emit('select', event, item);
-
-  if (item.dataset.closeOnSelect !== 'false') {
-    hide();
-  }
-}
-
 function handleMenuKeydown(event: KeyboardEvent) {
-  const items = getMenuItemElements();
-  const currentIndex = items.findIndex((item) => item === document.activeElement);
-
-  if (event.key === 'ArrowDown') {
-    event.preventDefault();
-    event.stopPropagation();
-    focusItem(currentIndex + 1);
-    return;
-  }
-
-  if (event.key === 'ArrowUp') {
-    event.preventDefault();
-    event.stopPropagation();
-    focusItem(currentIndex - 1);
-    return;
-  }
-
-  if (event.key === 'Home') {
-    event.preventDefault();
-    event.stopPropagation();
-    focusItem(0);
-    return;
-  }
-
-  if (event.key === 'End') {
-    event.preventDefault();
-    event.stopPropagation();
-    focusItem(items.length - 1);
-    return;
-  }
-
   if (event.key === 'Escape') {
-    event.preventDefault();
-    event.stopPropagation();
-    hide({ restoreFocus: true });
+    restoreFocusAfterClose.value = true;
   }
+
+  menuActions.onMenuKeydown(event);
 }
 
 function handleDocumentPointerDown(event: PointerEvent) {
@@ -358,7 +312,7 @@ defineExpose({
   show,
   hide,
   toggle,
-  focusItem,
+  focusItem: menuActions.focusItem,
   menuRef,
   triggerRef,
 });
@@ -424,8 +378,9 @@ defineExpose({
       :data-alignment="alignment"
       :data-effective-alignment="effectiveAlignment"
       @toggle="handleMenuToggle"
-      @click="handleMenuClick"
+      @click="menuActions.onMenuClick"
       @keydown="handleMenuKeydown"
+      @focusin="menuActions.onMenuFocusIn"
     >
       <div class="m3-fab-menu-surface" data-scope="floating-action-button-menu" data-part="surface">
         <div class="m3-fab-menu-items" data-scope="floating-action-button-menu" data-part="items">
