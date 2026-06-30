@@ -12,6 +12,7 @@
     --md-navigation-rail-expanded-padding-inline: initial;
     --md-navigation-rail-expanded-top-space: initial;
     --md-navigation-rail-expanded-width: initial;
+    --md-navigation-rail-layout-motion: initial;
     --md-navigation-rail-motion: initial;
   }
 
@@ -27,7 +28,10 @@
     --_navigation-rail-expanded-padding-inline: var(--md-navigation-rail-expanded-padding-inline, --dp(8));
     --_navigation-rail-container-shape: var(--md-navigation-rail-container-shape, var(--md-shape-docked));
     --_navigation-rail-container-color: var(--md-navigation-rail-container-color, var(--md-sys-color-surface));
-    --_navigation-rail-motion: var(--md-navigation-rail-motion, var(--md-easing-spatial));
+    --_navigation-rail-layout-motion: var(
+      --md-navigation-rail-layout-motion,
+      var(--md-navigation-rail-motion, var(--md-easing))
+    );
   }
 }
 
@@ -53,8 +57,8 @@
     background-color: var(--_navigation-rail-container-color);
     overflow-x: clip;
     transition:
-      inline-size var(--_navigation-rail-motion),
-      padding var(--_navigation-rail-motion);
+      inline-size var(--_navigation-rail-layout-motion),
+      padding var(--_navigation-rail-layout-motion);
   }
 
   .m3-navigation-rail[data-state='expanded'] {
@@ -70,7 +74,7 @@
     align-items: center;
     inline-size: 100%;
     gap: var(--_navigation-rail-current-item-gap);
-    transition: gap var(--_navigation-rail-motion);
+    transition: gap var(--_navigation-rail-layout-motion);
   }
 
   .m3-navigation-rail[data-state='expanded'] .m3-navigation-rail-items {

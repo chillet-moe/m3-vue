@@ -79,15 +79,21 @@ describe('NavigationRail', () => {
 
     const rail = mounted.container.querySelector<HTMLElement>('[data-scope="navigation-rail"][data-part="root"]');
     const item = mounted.container.querySelector<HTMLElement>('[data-scope="navigation-rail-item"][data-part="root"]');
+    const expandedLabel = item?.querySelector<HTMLElement>('.m3-navigation-rail-item-label-expanded');
+    const collapsedLabel = item?.querySelector<HTMLElement>('.m3-navigation-rail-item-label-collapsed');
 
     expect(rail?.dataset.state).toBe('collapsed');
     expect(item?.dataset.state).toBe('collapsed');
+    expect(expandedLabel?.getAttribute('aria-hidden')).toBe('true');
+    expect(collapsedLabel?.getAttribute('aria-hidden')).toBeNull();
 
     mounted.currentState.value = 'expanded';
     await nextTick();
 
     expect(rail?.dataset.state).toBe('expanded');
     expect(item?.dataset.state).toBe('expanded');
+    expect(expandedLabel?.getAttribute('aria-hidden')).toBeNull();
+    expect(collapsedLabel?.getAttribute('aria-hidden')).toBe('true');
 
     mounted.app.unmount();
   });

@@ -179,20 +179,22 @@ const handleKeydown = (event: KeyboardEvent) => {
       </span>
 
       <span
-        v-if="hasLabel && isExpanded"
-        class="m3-navigation-rail-item-label m3-text-morph"
+        v-if="hasLabel"
+        class="m3-navigation-rail-item-label m3-navigation-rail-item-label-expanded m3-text-morph"
         data-scope="navigation-rail-item"
         data-part="label"
+        :aria-hidden="isExpanded ? undefined : 'true'"
       >
         <slot v-bind="slotProps">{{ props.label }}</slot>
       </span>
     </span>
 
     <span
-      v-if="hasLabel && !isExpanded"
-      class="m3-navigation-rail-item-label m3-text-morph"
+      v-if="hasLabel"
+      class="m3-navigation-rail-item-label m3-navigation-rail-item-label-collapsed m3-text-morph"
       data-scope="navigation-rail-item"
       data-part="label"
+      :aria-hidden="isExpanded ? 'true' : undefined"
     >
       <slot v-bind="slotProps">{{ props.label }}</slot>
     </span>

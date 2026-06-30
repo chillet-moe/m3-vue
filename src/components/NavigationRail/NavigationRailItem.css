@@ -29,7 +29,9 @@
     --md-navigation-rail-item-inactive-state-layer-color: initial;
     --md-navigation-rail-item-indicator-collapsed-visual-width: initial;
     --md-navigation-rail-item-indicator-shape: initial;
+    --md-navigation-rail-item-layout-motion: initial;
     --md-navigation-rail-item-motion: initial;
+    --md-navigation-rail-item-selection-motion: initial;
   }
 
   .m3-navigation-rail-item {
@@ -106,7 +108,14 @@
       var(--md-sys-state-focus-indicator-outer-offset)
     );
     --_navigation-rail-item-disabled-opacity: var(--md-navigation-rail-item-disabled-opacity, 0.38);
-    --_navigation-rail-item-motion: var(--md-navigation-rail-item-motion, var(--md-easing-spatial));
+    --_navigation-rail-item-layout-motion: var(
+      --md-navigation-rail-item-layout-motion,
+      var(--md-navigation-rail-item-motion, var(--md-easing))
+    );
+    --_navigation-rail-item-selection-motion: var(
+      --md-navigation-rail-item-selection-motion,
+      var(--md-navigation-rail-item-motion, var(--md-easing-spatial))
+    );
     --_navigation-rail-item-indicator-collapsed-visual-width: var(
       --md-navigation-rail-item-indicator-collapsed-visual-width,
       --dp(12)
@@ -139,6 +148,7 @@
     display: grid;
     justify-items: center;
     align-content: center;
+    interpolate-size: allow-keywords;
     inline-size: 100%;
     min-inline-size: 0;
     min-block-size: var(--_navigation-rail-item-current-height);
@@ -149,9 +159,9 @@
     cursor: pointer;
     transition:
       color var(--md-easing-fast),
-      min-block-size var(--_navigation-rail-item-motion),
-      padding var(--_navigation-rail-item-motion),
-      row-gap var(--_navigation-rail-item-motion);
+      min-block-size var(--_navigation-rail-item-layout-motion),
+      padding var(--_navigation-rail-item-layout-motion),
+      row-gap var(--_navigation-rail-item-layout-motion);
   }
 
   .m3-navigation-rail-item-indicator {
@@ -159,15 +169,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    interpolate-size: allow-keywords;
     box-sizing: border-box;
     inline-size: var(--_navigation-rail-item-current-indicator-width);
     block-size: var(--_navigation-rail-item-current-indicator-height);
     border-radius: var(--_navigation-rail-item-indicator-shape);
     overflow: hidden;
     transition:
-      inline-size var(--_navigation-rail-item-motion),
-      block-size var(--_navigation-rail-item-motion),
-      padding var(--_navigation-rail-item-motion);
+      inline-size var(--_navigation-rail-item-layout-motion),
+      block-size var(--_navigation-rail-item-layout-motion),
+      padding var(--_navigation-rail-item-layout-motion);
   }
 
   .m3-navigation-rail-item-state-layer {
@@ -195,7 +206,7 @@
     background-color: var(--_navigation-rail-item-current-indicator-color);
     opacity: var(--_navigation-rail-item-current-indicator-opacity);
     transition:
-      inline-size var(--_navigation-rail-item-motion),
+      inline-size var(--_navigation-rail-item-selection-motion),
       opacity var(--md-easing-fast) var(--_navigation-rail-item-current-indicator-opacity-delay),
       background-color var(--md-easing-fast);
   }
@@ -235,15 +246,34 @@
 
     position: relative;
     z-index: 1;
+    min-inline-size: 0;
     color: var(--_navigation-rail-item-current-label-color);
     text-align: center;
     white-space: normal;
     text-overflow: clip;
     overflow-wrap: anywhere;
+    interpolate-size: allow-keywords;
     transition:
       color var(--md-easing-fast),
+      inline-size var(--_navigation-rail-item-layout-motion),
       opacity var(--md-easing-fast),
-      transform var(--_navigation-rail-item-motion);
+      transform var(--_navigation-rail-item-layout-motion);
+    transition-delay: 0ms, 0ms, var(--_navigation-rail-item-label-opacity-delay, 0ms), 0ms;
+  }
+
+  .m3-navigation-rail-item-label-expanded {
+    flex: 0 1 auto;
+    inline-size: 0;
+    opacity: 0;
+    overflow: hidden;
+    overflow-wrap: normal;
+    text-align: start;
+    white-space: nowrap;
+    animation: none;
+  }
+
+  .m3-navigation-rail-item-label-collapsed {
+    opacity: 1;
   }
 
   .m3-navigation-rail-item[data-selected='true'] {
@@ -256,7 +286,7 @@
   }
 
   .m3-navigation-rail-item[data-state='expanded'] {
-    --_navigation-rail-item-current-indicator-height: auto;
+    --_navigation-rail-item-current-indicator-height: var(--_navigation-rail-item-expanded-indicator-height);
     --_navigation-rail-item-current-indicator-width: 100%;
     --_navigation-rail-item-current-height: var(--_navigation-rail-item-expanded-height);
     --_navigation-rail-item-current-padding-block: 0;
@@ -269,7 +299,6 @@
 
   .m3-navigation-rail-item[data-state='expanded'] .m3-navigation-rail-item-indicator {
     justify-content: flex-start;
-    min-block-size: var(--_navigation-rail-item-expanded-indicator-height);
     min-inline-size: 0;
     max-inline-size: 100%;
     column-gap: var(--_navigation-rail-item-expanded-icon-label-space);
@@ -277,19 +306,21 @@
       var(--_navigation-rail-item-expanded-trailing-space);
   }
 
-  .m3-navigation-rail-item[data-state='expanded'] .m3-navigation-rail-item-label {
+  .m3-navigation-rail-item[data-state='expanded'] .m3-navigation-rail-item-label-expanded {
     flex: 1 1 auto;
-    position: static;
-    transform: none;
+    inline-size: auto;
+    opacity: 0;
+    overflow: visible;
     text-align: start;
+    animation: m3-navigation-rail-item-expanded-label-in var(--md-duration-fast) var(--md-timing-function-fast) 120ms
+      forwards;
   }
 
-  .m3-navigation-rail-item[data-state='collapsed'] .m3-navigation-rail-item-label {
-    opacity: 1;
-  }
-
-  .m3-navigation-rail-item[data-state='expanded'] .m3-navigation-rail-item-label {
-    opacity: 1;
+  .m3-navigation-rail-item[data-state='expanded'] .m3-navigation-rail-item-label-collapsed {
+    position: absolute;
+    inline-size: var(--_navigation-rail-item-collapsed-indicator-width);
+    opacity: 0;
+    pointer-events: none;
   }
 
   .m3-navigation-rail-item:focus-visible {
@@ -305,6 +336,12 @@
     opacity: var(--_navigation-rail-item-disabled-opacity);
   }
 
+  @keyframes m3-navigation-rail-item-expanded-label-in {
+    to {
+      opacity: 1;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .m3-navigation-rail-item,
     .m3-navigation-rail-item-indicator,
@@ -312,6 +349,11 @@
     .m3-navigation-rail-item-icon,
     .m3-navigation-rail-item-label {
       transition-duration: 0ms;
+    }
+
+    .m3-navigation-rail-item-label-expanded {
+      animation-delay: 0ms;
+      animation-duration: 0ms;
     }
   }
 }
