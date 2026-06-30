@@ -94,6 +94,8 @@
     --_side-sheet-detached-gap: var(--md-side-sheet-detached-gap, 1rem);
     --_side-sheet-width: var(--md-side-sheet-width, var(--_sheet-side-docked-container-width));
     --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, 100%);
+    --_side-sheet-container-padding-block: 1.5rem;
+    --_side-sheet-container-padding-inline: 1.5rem;
   }
 }
 
@@ -181,7 +183,7 @@
     max-block-size: 100vb;
     overflow: hidden;
 
-    padding: 1.5rem;
+    padding: 0;
     background-color: var(--_sheet-side-docked-modal-container-color);
     box-shadow: var(--_sheet-side-docked-modal-container-elevation);
 
@@ -216,7 +218,9 @@
   }
 
   .m3-side-sheet-headline {
+    box-sizing: border-box;
     margin: 0;
+    padding-inline: var(--_side-sheet-container-padding-inline);
     color: var(--_sheet-side-docked-headline-color);
     font-family:
       var(--_sheet-side-docked-headline-font),
@@ -234,17 +238,29 @@
   .m3-side-sheet-content {
     @apply body-medium;
 
+    box-sizing: border-box;
     flex: 1 1 auto;
     min-block-size: 0;
+    padding-inline: var(--_side-sheet-container-padding-inline);
     overflow: auto;
     color: var(--md-sys-color-on-surface-variant);
   }
 
   .m3-side-sheet-actions {
+    box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     justify-content: end;
     gap: 0.5rem;
+    padding-inline: var(--_side-sheet-container-padding-inline);
+  }
+
+  .m3-side-sheet-surface > :first-child {
+    padding-block-start: var(--_side-sheet-container-padding-block);
+  }
+
+  .m3-side-sheet-surface > :last-child {
+    padding-block-end: var(--_side-sheet-container-padding-block);
   }
 
   @starting-style {

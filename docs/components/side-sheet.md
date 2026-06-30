@@ -47,6 +47,10 @@ Side sheets present modal supporting content from the side of the viewport using
 
 <StyleTokenTable component="SideSheet" />
 
+## Layout
+
+The sheet surface owns the background, shape, elevation, and motion. Default spacing is applied to the `headline`, `content`, and `actions` parts instead of the surface, so custom full-bleed content can opt out by overriding the relevant part padding.
+
 ## Examples
 
 ### Default

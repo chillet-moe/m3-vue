@@ -57,6 +57,9 @@
     --_bottom-sheet-drag-offset: var(--md-bottom-sheet-drag-offset, 0px);
     --_bottom-sheet-translate-offset: var(--md-bottom-sheet-translate-offset, 0px);
     --_bottom-sheet-background-extension: var(--md-bottom-sheet-background-extension, 0px);
+    --_bottom-sheet-container-padding-block-start: 1rem;
+    --_bottom-sheet-container-padding-block-end: 1.5rem;
+    --_bottom-sheet-container-padding-inline: 1.5rem;
   }
 }
 
@@ -121,7 +124,7 @@
     max-block-size: min(calc(var(--_bottom-sheet-max-height) + var(--_bottom-sheet-background-extension)), 100vb);
     overflow: hidden;
 
-    padding: 1rem 1.5rem calc(1.5rem + var(--_bottom-sheet-background-extension));
+    padding: 0 0 var(--_bottom-sheet-background-extension);
     border-radius: var(--_sheet-bottom-docked-container-shape);
 
     background-color: var(--_sheet-bottom-docked-container-color);
@@ -161,23 +164,45 @@
   .m3-bottom-sheet-headline {
     @apply title-large;
 
+    box-sizing: border-box;
     margin: 0;
+    padding-inline: var(--_bottom-sheet-container-padding-inline);
     color: var(--md-sys-color-on-surface);
   }
 
   .m3-bottom-sheet-content {
     @apply body-medium;
 
+    box-sizing: border-box;
     min-block-size: 0;
+    padding-inline: var(--_bottom-sheet-container-padding-inline);
     overflow: auto;
     color: var(--md-sys-color-on-surface-variant);
   }
 
   .m3-bottom-sheet-actions {
+    box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     justify-content: end;
     gap: 0.5rem;
+    padding-inline: var(--_bottom-sheet-container-padding-inline);
+  }
+
+  .m3-bottom-sheet-surface > :first-child:not(.m3-bottom-sheet-drag-handle) {
+    padding-block-start: var(--_bottom-sheet-container-padding-block-start);
+  }
+
+  .m3-bottom-sheet-surface > :last-child:not(.m3-bottom-sheet-drag-handle) {
+    padding-block-end: var(--_bottom-sheet-container-padding-block-end);
+  }
+
+  .m3-bottom-sheet-drag-handle:first-child {
+    margin-block-start: var(--_bottom-sheet-container-padding-block-start);
+  }
+
+  .m3-bottom-sheet-drag-handle:last-child {
+    margin-block-end: var(--_bottom-sheet-container-padding-block-end);
   }
 
   @starting-style {
