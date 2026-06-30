@@ -19,6 +19,7 @@ export const m3VueComponentNames = [
   'CircularProgressIndicator',
   'Combobox',
   'DatePicker',
+  'DateRangePicker',
   'Dialog',
   'Divider',
   'FloatingActionButton',

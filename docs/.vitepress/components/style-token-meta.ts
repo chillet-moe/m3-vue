@@ -8,6 +8,7 @@ import { checkBoxStyleTokens } from './style-tokens/CheckBox';
 import { chipStyleTokens } from './style-tokens/Chip';
 import { circularProgressIndicatorStyleTokens } from './style-tokens/CircularProgressIndicator';
 import { datePickerStyleTokens } from './style-tokens/DatePicker';
+import { dateRangePickerStyleTokens } from './style-tokens/DateRangePicker';
 import { dialogStyleTokens } from './style-tokens/Dialog';
 import { dividerStyleTokens } from './style-tokens/Divider';
 import { floatingActionButtonStyleTokens } from './style-tokens/FloatingActionButton';
@@ -46,6 +47,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   Chip: chipStyleTokens,
   CircularProgressIndicator: circularProgressIndicatorStyleTokens,
   DatePicker: datePickerStyleTokens,
+  DateRangePicker: dateRangePickerStyleTokens,
   Dialog: dialogStyleTokens,
   Divider: dividerStyleTokens,
   FloatingActionButton: floatingActionButtonStyleTokens,

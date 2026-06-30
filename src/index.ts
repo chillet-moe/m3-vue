@@ -52,6 +52,7 @@ export * from './components/Card';
 export * from './components/Chip';
 export * from './components/ChipGroup';
 export * from './components/DatePicker';
+export * from './components/DateRangePicker';
 export * from './components/Dialog';
 export * from './components/Divider';
 export * from './components/FloatingActionButton';
