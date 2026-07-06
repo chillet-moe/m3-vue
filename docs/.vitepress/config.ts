@@ -127,6 +127,7 @@ export default defineConfig({
               items: [
                 { text: 'Breadcrumb', link: '/components/breadcrumb' },
                 { text: 'Menu', link: '/components/menu' },
+                { text: 'NavigationDrawer', link: '/components/navigation-drawer' },
                 { text: 'NavigationRail', link: '/components/navigation-rail' },
                 { text: 'Pagination', link: '/components/pagination' },
                 { text: 'Tabs', link: '/components/tabs' },

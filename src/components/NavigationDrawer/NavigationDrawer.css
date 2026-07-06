@@ -1,0 +1,68 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  :where(:root) {
+    /* Low-specificity public token placeholders; private tokens own defaults. */
+    --md-navigation-drawer-container-color: initial;
+    --md-navigation-drawer-container-shape: initial;
+    --md-navigation-drawer-container-width: initial;
+    --md-navigation-drawer-content-gap: initial;
+    --md-navigation-drawer-padding-block: initial;
+    --md-navigation-drawer-padding-inline: initial;
+    --md-navigation-drawer-section-content-indent: initial;
+  }
+
+  .m3-navigation-drawer {
+    --_navigation-drawer-container-width: var(--md-navigation-drawer-container-width, --dp(360));
+    --_navigation-drawer-container-shape: var(--md-navigation-drawer-container-shape, var(--md-shape-docked));
+    --_navigation-drawer-container-color: var(
+      --md-navigation-drawer-container-color,
+      var(--md-color-container, var(--md-sys-color-surface-container-low))
+    );
+    --_navigation-drawer-on-container-color: var(--md-color-on-container, var(--md-sys-color-on-surface));
+    --_navigation-drawer-padding-block: var(--md-navigation-drawer-padding-block, --dp(12));
+    --_navigation-drawer-padding-inline: var(--md-navigation-drawer-padding-inline, --dp(12));
+    --_navigation-drawer-content-gap: var(--md-navigation-drawer-content-gap, --dp(4));
+    --_navigation-drawer-section-content-indent: var(--md-navigation-drawer-section-content-indent, 0);
+  }
+}
+
+@layer components {
+  .m3-navigation-drawer {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    inline-size: var(--_navigation-drawer-container-width);
+    max-inline-size: 100%;
+    min-block-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--_navigation-drawer-content-gap);
+    padding-block: var(--_navigation-drawer-padding-block);
+    padding-inline: var(--_navigation-drawer-padding-inline);
+    border-radius: var(--_navigation-drawer-container-shape);
+    color: var(--_navigation-drawer-on-container-color);
+    background-color: var(--_navigation-drawer-container-color);
+    overflow-x: clip;
+
+    --md-color-container: var(--_navigation-drawer-container-color);
+    --md-color-on-container: var(--_navigation-drawer-on-container-color);
+  }
+
+  .m3-navigation-drawer[data-icon-space='root'],
+  .m3-navigation-drawer[data-icon-space='all'] {
+    --_navigation-drawer-section-content-indent: var(--md-navigation-drawer-section-content-indent, --dp(36));
+  }
+
+  .m3-navigation-drawer-items {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--_navigation-drawer-content-gap);
+    min-block-size: 0;
+  }
+
+  .m3-navigation-drawer-header,
+  .m3-navigation-drawer-footer {
+    min-inline-size: 0;
+  }
+}

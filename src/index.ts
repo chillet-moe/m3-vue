@@ -66,6 +66,7 @@ export * from './components/ListItem';
 export * from './components/LinearProgressIndicator';
 export * from './components/LoadingIndicator';
 export * from './components/Menu';
+export * from './components/NavigationDrawer';
 export * from './components/NavigationRail';
 export * from './components/Pagination';
 export * from './components/Popover';

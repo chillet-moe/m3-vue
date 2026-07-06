@@ -1,0 +1,148 @@
+import type { StyleTokenMeta } from './types';
+
+export const navigationDrawerStyleTokens = [
+  {
+    name: '--md-navigation-drawer-container-color',
+    description: 'Controls container color.',
+    fallback: 'var(--md-sys-color-surface-container-low)',
+    category: 'Color',
+  },
+  {
+    name: '--md-navigation-drawer-container-shape',
+    description: 'Controls container shape.',
+    fallback: 'var(--md-shape-docked)',
+    category: 'Shape',
+  },
+  {
+    name: '--md-navigation-drawer-container-width',
+    description: 'Controls container width.',
+    fallback: '--dp(360)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-content-gap',
+    description: 'Controls item gap.',
+    fallback: '--dp(4)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-padding-block',
+    description: 'Controls block padding.',
+    fallback: '--dp(12)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-padding-inline',
+    description: 'Controls inline padding.',
+    fallback: '--dp(12)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-item-active-icon-color',
+    description: 'Controls item active icon color.',
+    fallback: 'var(--md-sys-color-on-secondary-container)',
+    category: 'Color',
+  },
+  {
+    name: '--md-navigation-drawer-item-active-indicator-color',
+    description: 'Controls item active indicator color.',
+    fallback: 'var(--md-sys-color-secondary-container)',
+    category: 'Color',
+  },
+  {
+    name: '--md-navigation-drawer-item-active-label-color',
+    description: 'Controls item active label color.',
+    fallback: 'var(--md-sys-color-on-secondary-container)',
+    category: 'Color',
+  },
+  {
+    name: '--md-navigation-drawer-item-active-state-layer-color',
+    description: 'Controls item active state layer color.',
+    fallback: 'var(--md-sys-color-on-secondary-container)',
+    category: 'State',
+  },
+  {
+    name: '--md-navigation-drawer-item-disabled-opacity',
+    description: 'Controls item disabled opacity.',
+    fallback: '0.38',
+    category: 'Disabled',
+  },
+  {
+    name: '--md-navigation-drawer-item-focus-indicator-color',
+    description: 'Controls item focus indicator color.',
+    fallback: 'var(--md-sys-color-secondary)',
+    category: 'Focus',
+  },
+  {
+    name: '--md-navigation-drawer-item-focus-indicator-offset',
+    description: 'Controls item focus indicator offset.',
+    fallback: 'var(--md-sys-state-focus-indicator-outer-offset)',
+    category: 'Focus',
+  },
+  {
+    name: '--md-navigation-drawer-item-focus-indicator-thickness',
+    description: 'Controls item focus indicator thickness.',
+    fallback: 'var(--md-sys-state-focus-indicator-thickness)',
+    category: 'Focus',
+  },
+  {
+    name: '--md-navigation-drawer-item-gap',
+    description: 'Controls item content gap.',
+    fallback: '--dp(12)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-item-height',
+    description: 'Controls item minimum height.',
+    fallback: '--dp(56)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-item-icon-size',
+    description: 'Controls item icon size.',
+    fallback: '--dp(24)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-item-inactive-icon-color',
+    description: 'Controls item inactive icon color.',
+    fallback: 'var(--md-color-on-container)',
+    category: 'Color',
+  },
+  {
+    name: '--md-navigation-drawer-item-inactive-label-color',
+    description: 'Controls item inactive label color.',
+    fallback: 'var(--md-color-on-container)',
+    category: 'Color',
+  },
+  {
+    name: '--md-navigation-drawer-item-inactive-state-layer-color',
+    description: 'Controls item inactive state layer color.',
+    fallback: 'var(--md-state-layer-color, var(--md-color-on-container))',
+    category: 'State',
+  },
+  {
+    name: '--md-navigation-drawer-item-indicator-shape',
+    description: 'Controls item indicator shape.',
+    fallback: 'var(--md-shape-indicator)',
+    category: 'Shape',
+  },
+  {
+    name: '--md-navigation-drawer-item-motion',
+    description: 'Controls item and section motion.',
+    fallback: 'var(--md-easing-spatial)',
+    category: 'Motion',
+  },
+  {
+    name: '--md-navigation-drawer-item-padding-inline',
+    description: 'Controls item inline padding.',
+    fallback: '--dp(16)',
+    category: 'Layout',
+  },
+  {
+    name: '--md-navigation-drawer-section-content-indent',
+    description: 'Controls nested section content indent when iconSpace is root or all.',
+    fallback: '0; --dp(36) with iconSpace root/all',
+    category: 'Layout',
+  },
+] satisfies StyleTokenMeta[];

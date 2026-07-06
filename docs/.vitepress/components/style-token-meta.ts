@@ -19,6 +19,7 @@ import { linearProgressIndicatorStyleTokens } from './style-tokens/LinearProgres
 import { listItemStyleTokens } from './style-tokens/ListItem';
 import { loadingIndicatorStyleTokens } from './style-tokens/LoadingIndicator';
 import { menuStyleTokens } from './style-tokens/Menu';
+import { navigationDrawerStyleTokens } from './style-tokens/NavigationDrawer';
 import { navigationRailStyleTokens } from './style-tokens/NavigationRail';
 import { paginationStyleTokens } from './style-tokens/Pagination';
 import { popoverStyleTokens } from './style-tokens/Popover';
@@ -58,6 +59,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   ListItem: listItemStyleTokens,
   LoadingIndicator: loadingIndicatorStyleTokens,
   Menu: menuStyleTokens,
+  NavigationDrawer: navigationDrawerStyleTokens,
   NavigationRail: navigationRailStyleTokens,
   Pagination: paginationStyleTokens,
   Popover: popoverStyleTokens,
