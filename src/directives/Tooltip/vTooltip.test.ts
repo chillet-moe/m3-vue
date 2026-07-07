@@ -185,6 +185,30 @@ describe('vTooltip directive', () => {
     expect(el.hasAttribute('aria-controls')).toBe(false);
   });
 
+  it('can describe an existing trigger without replacing its controlled region', () => {
+    const el = createTrigger();
+    el.setAttribute('aria-controls', 'section-content');
+    el.setAttribute('aria-expanded', 'true');
+
+    vTooltip.mounted?.(el, {
+      value: { content: 'Projects', triggerAria: 'describedby', interactive: false },
+    } as never);
+
+    const tip = document.body.querySelector('.vtt-popover');
+
+    expect(tip).not.toBeNull();
+    expect(tip?.getAttribute('role')).toBe('tooltip');
+    expect(el.getAttribute('aria-controls')).toBe('section-content');
+    expect(el.getAttribute('aria-expanded')).toBe('true');
+    expect(el.getAttribute('aria-describedby')).toBe(tip?.id);
+
+    vTooltip.unmounted?.(el);
+
+    expect(el.getAttribute('aria-controls')).toBe('section-content');
+    expect(el.getAttribute('aria-expanded')).toBe('true');
+    expect(el.hasAttribute('aria-describedby')).toBe(false);
+  });
+
   it('does not let another component owner clear an existing tooltip instance', () => {
     const el = createTrigger();
     const owner = {};

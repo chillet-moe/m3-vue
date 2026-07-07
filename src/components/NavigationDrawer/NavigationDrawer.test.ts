@@ -124,6 +124,79 @@ describe('NavigationDrawer', () => {
     app.unmount();
   });
 
+  it('supports icon-only state with accessible destination labels', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref('home');
+    const defaultSlotIconOnlyValues: boolean[] = [];
+    const app = createApp({
+      setup() {
+        return () =>
+          h(
+            NavigationDrawer,
+            {
+              modelValue: currentValue.value,
+              iconOnly: true,
+              'onUpdate:modelValue': (value: string | undefined) => {
+                if (value !== undefined) {
+                  currentValue.value = value;
+                }
+              },
+            },
+            {
+              default: ({ iconOnly }: { iconOnly: boolean }) => {
+                defaultSlotIconOnlyValues.push(iconOnly);
+
+                return [
+                  h(NavigationDrawerItem, { value: 'home', icon: 'home', label: 'Home' }),
+                  h(
+                    NavigationDrawerSection,
+                    { icon: 'folder', label: 'Projects', expanded: true },
+                    {
+                      default: () => [
+                        h(NavigationDrawerItem, { value: 'settings', icon: 'settings', label: 'Settings' }),
+                      ],
+                    },
+                  ),
+                ];
+              },
+            },
+          );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const root = container.querySelector<HTMLElement>('[data-scope="navigation-drawer"][data-part="root"]');
+    const home = container.querySelector<HTMLElement>('[data-item-value="home"]');
+    const settings = container.querySelector<HTMLElement>('[data-item-value="settings"]');
+    const sectionTrigger = container.querySelector<HTMLButtonElement>('[data-part="trigger"]');
+    const tooltips = Array.from(document.body.querySelectorAll<HTMLElement>('.m3-tooltip'));
+    const projectsTooltip = tooltips.find((tooltip) => tooltip.textContent === 'Projects');
+
+    expect(root?.dataset.iconOnly).toBe('true');
+    expect(home?.getAttribute('aria-label')).toBe('Home');
+    expect(settings?.getAttribute('aria-label')).toBe('Settings');
+    expect(sectionTrigger?.getAttribute('aria-label')).toBe('Projects');
+    expect(tooltips.map((tooltip) => tooltip.textContent)).toEqual(
+      expect.arrayContaining(['Home', 'Projects', 'Settings']),
+    );
+    expect(sectionTrigger?.getAttribute('aria-controls')).toMatch(/^navigation-drawer-section-content-/);
+    expect(sectionTrigger?.getAttribute('aria-expanded')).toBe('true');
+    expect(sectionTrigger?.getAttribute('aria-describedby')).toBe(projectsTooltip?.id);
+    expect(defaultSlotIconOnlyValues).toContain(true);
+
+    settings?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await nextTick();
+
+    expect(currentValue.value).toBe('settings');
+    expect(settings?.dataset.selected).toBe('true');
+
+    app.unmount();
+  });
+
   it('prevents disabled drawer items from activating', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

@@ -10,7 +10,7 @@ import {
   supportsPopover,
 } from './helpers';
 import { acquireAnchorName } from '@/internal/anchorName';
-import type { Placement, State, TooltipBindingValue } from './types';
+import type { Placement, State, TooltipBindingValue, TooltipTriggerAriaMode } from './types';
 
 function placementToArea(p: Placement) {
   if (p === 'top') return 'block-start';
@@ -26,10 +26,12 @@ export function setupTooltip(
   options: {
     anchor?: HTMLElement;
     manual?: boolean;
+    triggerAria?: TooltipTriggerAriaMode;
   } = {},
 ): State {
   let opts = normalizeBinding(binding);
-  let { tip, created } = ensureTipElement(opts, trigger);
+  let triggerAria = options.triggerAria ?? opts.triggerAria;
+  let { tip, created, cleanupTriggerAttributes } = ensureTipElement(opts, trigger, triggerAria);
 
   const anchor = options.anchor ?? trigger;
   const canPopover = supportsPopover(tip);
@@ -177,6 +179,10 @@ export function setupTooltip(
   };
 
   const setExpanded = (value: boolean) => {
+    if (triggerAria !== 'controls') {
+      return;
+    }
+
     trigger.setAttribute('aria-expanded', value ? 'true' : 'false');
   };
 
@@ -431,9 +437,7 @@ export function setupTooltip(
     ac.abort();
 
     trigger.classList.remove('vtt-trigger');
-    trigger.removeAttribute('aria-controls');
-    trigger.removeAttribute('aria-expanded');
-    trigger.removeAttribute('aria-haspopup');
+    cleanupTriggerAttributes();
     releaseAnchorName();
 
     tip.style.removeProperty('position-anchor');
@@ -453,15 +457,17 @@ export function setupTooltip(
 
   const update = (next: TooltipBindingValue) => {
     const nextOpts = normalizeBinding(next);
+    const nextTriggerAria = options.triggerAria ?? nextOpts.triggerAria;
     if (areNormalizedTooltipOptionsEqual(opts, nextOpts)) {
       return;
     }
 
     const targetChanged = opts.target !== nextOpts.target;
+    const triggerAriaChanged = triggerAria !== nextTriggerAria;
     opts = nextOpts;
     invalidateFallbackPlacements();
 
-    if (targetChanged) {
+    if (targetChanged || triggerAriaChanged) {
       cleanup();
       const rebuilt = setupTooltip(trigger, next, options);
       state.tip = rebuilt.tip;
@@ -474,13 +480,19 @@ export function setupTooltip(
       return;
     }
 
+    triggerAria = nextTriggerAria;
+
     tip.setAttribute('popover', opts.popoverType);
     if (opts.interactive) {
       tip.setAttribute('role', 'dialog');
-      trigger.setAttribute('aria-haspopup', 'dialog');
+      if (triggerAria === 'controls') {
+        trigger.setAttribute('aria-haspopup', 'dialog');
+      }
     } else {
       tip.setAttribute('role', 'tooltip');
-      trigger.setAttribute('aria-haspopup', 'true');
+      if (triggerAria === 'controls') {
+        trigger.setAttribute('aria-haspopup', 'true');
+      }
     }
 
     if (created) {

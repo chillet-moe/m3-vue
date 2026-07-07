@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
+import vTooltip from '@/directives/Tooltip/vTooltip';
+import type { VTooltipBinding } from '@/directives/Tooltip/types';
 import { computed, inject, useSlots } from 'vue';
 import { navigationDrawerContextKey } from './NavigationDrawerContext';
 
@@ -39,18 +41,19 @@ const props = withDefaults(defineProps<NavigationDrawerItemProps>(), {
 
 defineSlots<{
   /** Label content. */
-  default(props: { selected: boolean; disabled: boolean }): any;
+  default(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Icon content. */
-  icon(props: { selected: boolean; disabled: boolean }): any;
+  icon(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Optional trailing content. */
-  trailing(props: { selected: boolean; disabled: boolean }): any;
+  trailing(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
 }>();
 
 const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 
+const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
 const mergedDisabled = computed(() => props.disabled || drawer?.disabled.value || false);
 const hasValue = computed(() => props.value !== undefined);
 
@@ -71,6 +74,10 @@ const resolvedAriaLabel = computed(() => {
     return props.ariaLabel;
   }
 
+  if (isIconOnly.value && props.label) {
+    return props.label;
+  }
+
   if (hasLabel.value) {
     return undefined;
   }
@@ -88,7 +95,21 @@ const { tag, isAnchorTag, nativeDisabled, ariaDisabled, href, tabIndex, type } =
 const slotProps = computed(() => ({
   selected: isSelected.value,
   disabled: mergedDisabled.value,
+  iconOnly: isIconOnly.value,
 }));
+
+const tooltipContent = computed(() => props.label ?? props.ariaLabel);
+const tooltip = computed<VTooltipBinding>(() => {
+  if (!isIconOnly.value || !tooltipContent.value) {
+    return undefined;
+  }
+
+  return {
+    content: tooltipContent.value,
+    placement: 'end',
+    interactive: false,
+  };
+});
 
 const guardDisabledInteraction = (event: Event) => {
   if (!mergedDisabled.value) {
@@ -146,6 +167,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     :aria-label="resolvedAriaLabel"
     :tabindex="tabIndex"
     :type="type"
+    v-tooltip="tooltip"
     class="m3-navigation-drawer-item m3-state-layer m3-morph-host"
     data-scope="navigation-drawer-item"
     data-part="root"

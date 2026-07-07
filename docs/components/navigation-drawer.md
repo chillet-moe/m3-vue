@@ -8,6 +8,8 @@ import { NavigationDrawer, NavigationDrawerItem, NavigationDrawerSection } from 
 
 import NavigationDrawerDefault from '../demos/navigation-drawer/NavigationDrawerDefault.vue';
 import NavigationDrawerDefaultSrc from '../demos/navigation-drawer/NavigationDrawerDefault.vue?raw';
+import NavigationDrawerIconOnly from '../demos/navigation-drawer/NavigationDrawerIconOnly.vue';
+import NavigationDrawerIconOnlySrc from '../demos/navigation-drawer/NavigationDrawerIconOnly.vue?raw';
 import NavigationDrawerPlain from '../demos/navigation-drawer/NavigationDrawerPlain.vue';
 import NavigationDrawerPlainSrc from '../demos/navigation-drawer/NavigationDrawerPlain.vue?raw';
 
@@ -15,6 +17,7 @@ const props = ref({
   ariaLabel: 'Primary destinations',
   disabled: false,
   iconSpace: 'root',
+  iconOnly: false,
 });
 
 const value = ref('home');
@@ -24,8 +27,9 @@ const value = ref('home');
 
 NavigationDrawer provides vertical navigation destinations with selectable items and expandable sections.
 Use `iconSpace="root"` when top-level icon and text-only items should share the same label column.
+Use `iconOnly` for compact drawers that show leading icons, keep labels available to assistive technologies, and expose labels as tooltips.
 
-<DemoContainer><NavigationDrawer v-model="value" v-bind="props" style="block-size: 30rem"><NavigationDrawerItem value="home" icon="home" label="Home" /><NavigationDrawerItem value="inbox" icon="inbox" label="Inbox" /><NavigationDrawerSection icon="folder" label="Projects"><NavigationDrawerItem value="active" icon="task_alt" label="Active" /><NavigationDrawerItem value="archived" label="Archived" /></NavigationDrawerSection><NavigationDrawerSection label="Teams"><NavigationDrawerItem value="design" icon="palette" label="Design" /><NavigationDrawerItem value="engineering" label="Engineering" /></NavigationDrawerSection><NavigationDrawerSection label="Plain"><NavigationDrawerItem value="drafts" label="Drafts" /><NavigationDrawerItem value="sent" label="Sent" /></NavigationDrawerSection><NavigationDrawerItem value="settings" icon="settings" label="Settings" /></NavigationDrawer></DemoContainer>
+<DemoContainer><NavigationDrawer v-model="value" v-bind="props" style="block-size: 30rem"><NavigationDrawerItem value="home" icon="home" label="Home" /><NavigationDrawerItem value="inbox" icon="inbox" label="Inbox" /><NavigationDrawerSection icon="folder" label="Projects"><NavigationDrawerItem value="active" icon="task_alt" label="Active" /><NavigationDrawerItem value="archived" icon="archive" label="Archived" /></NavigationDrawerSection><NavigationDrawerSection icon="groups" label="Teams"><NavigationDrawerItem value="design" icon="palette" label="Design" /><NavigationDrawerItem value="engineering" icon="engineering" label="Engineering" /></NavigationDrawerSection><NavigationDrawerSection icon="list" label="Plain"><NavigationDrawerItem value="drafts" icon="draft" label="Drafts" /><NavigationDrawerItem value="sent" icon="send" label="Sent" /></NavigationDrawerSection><NavigationDrawerItem value="settings" icon="settings" label="Settings" /></NavigationDrawer></DemoContainer>
 
 <AnatomyTable scope="navigation-drawer" />
 
@@ -46,6 +50,10 @@ Use `iconSpace="root"` when top-level icon and text-only items should share the 
 ### Without Icons
 
 <DemoContainer :src="NavigationDrawerPlainSrc"><NavigationDrawerPlain /></DemoContainer>
+
+### Icon Only
+
+<DemoContainer :src="NavigationDrawerIconOnlySrc"><NavigationDrawerIconOnly /></DemoContainer>
 
 ## API
 

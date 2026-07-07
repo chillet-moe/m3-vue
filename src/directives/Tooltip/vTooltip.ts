@@ -30,7 +30,7 @@ function ownsEntry(
   return Boolean(entry && entry.owner === binding.instance);
 }
 
-export type { Placement, TooltipConfig, TooltipDirective, VTooltipBinding } from './types';
+export type { Placement, TooltipConfig, TooltipDirective, TooltipTriggerAriaMode, VTooltipBinding } from './types';
 export { normalizeBinding } from './helpers';
 
 export default {

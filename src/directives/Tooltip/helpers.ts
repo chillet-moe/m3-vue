@@ -1,4 +1,4 @@
-import type { NormalizedTooltipOptions, Placement, TooltipBindingValue } from './types';
+import type { NormalizedTooltipOptions, Placement, TooltipBindingValue, TooltipTriggerAriaMode } from './types';
 
 let uid = 0;
 export type PhysicalPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -18,6 +18,7 @@ export function normalizeBinding(binding: TooltipBindingValue): NormalizedToolti
     longpressDelay: 450,
     animDuration: 120,
     variant: 'plain',
+    triggerAria: 'controls',
   };
 
   if (typeof binding === 'string') {
@@ -47,7 +48,8 @@ export function areNormalizedTooltipOptionsEqual(a: NormalizedTooltipOptions, b:
     a.closeDelay === b.closeDelay &&
     a.longpressDelay === b.longpressDelay &&
     a.animDuration === b.animDuration &&
-    a.variant === b.variant
+    a.variant === b.variant &&
+    a.triggerAria === b.triggerAria
   );
 }
 
@@ -229,7 +231,28 @@ export function positionFallback(
   return nextPlacement;
 }
 
-export function ensureTipElement(opts: NormalizedTooltipOptions, trigger: HTMLElement) {
+function addTokenAttr(el: HTMLElement, name: string, token: string) {
+  const tokens = new Set((el.getAttribute(name) ?? '').split(/\s+/).filter(Boolean));
+  tokens.add(token);
+  el.setAttribute(name, Array.from(tokens).join(' '));
+}
+
+function removeTokenAttr(el: HTMLElement, name: string, token: string) {
+  const tokens = (el.getAttribute(name) ?? '').split(/\s+/).filter((item) => item && item !== token);
+
+  if (tokens.length > 0) {
+    el.setAttribute(name, tokens.join(' '));
+    return;
+  }
+
+  el.removeAttribute(name);
+}
+
+export function ensureTipElement(
+  opts: NormalizedTooltipOptions,
+  trigger: HTMLElement,
+  triggerAria: TooltipTriggerAriaMode = 'controls',
+) {
   let tip = getTipFromTarget(opts.target);
   const created = !tip;
 
@@ -251,15 +274,32 @@ export function ensureTipElement(opts: NormalizedTooltipOptions, trigger: HTMLEl
 
   if (opts.interactive) {
     tip.setAttribute('role', 'dialog');
-    trigger.setAttribute('aria-haspopup', 'dialog');
   } else {
     tip.setAttribute('role', 'tooltip');
-    trigger.setAttribute('aria-haspopup', 'true');
   }
 
   if (!tip.id) tip.id = `vtt-${++uid}`;
-  trigger.setAttribute('aria-controls', tip.id);
+  const cleanupTriggerAttributes = () => {
+    if (triggerAria === 'controls') {
+      trigger.removeAttribute('aria-controls');
+      trigger.removeAttribute('aria-expanded');
+      trigger.removeAttribute('aria-haspopup');
+      return;
+    }
+
+    if (triggerAria === 'describedby') {
+      removeTokenAttr(trigger, 'aria-describedby', tip.id);
+    }
+  };
+
+  if (triggerAria === 'controls') {
+    trigger.setAttribute('aria-haspopup', opts.interactive ? 'dialog' : 'true');
+    trigger.setAttribute('aria-controls', tip.id);
+  } else if (triggerAria === 'describedby') {
+    addTokenAttr(trigger, 'aria-describedby', tip.id);
+  }
+
   trigger.classList.add('vtt-trigger');
 
-  return { tip, created };
+  return { tip, created, cleanupTriggerAttributes };
 }

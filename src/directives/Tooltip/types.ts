@@ -1,6 +1,7 @@
 import type { ObjectDirective } from 'vue';
 
 export type Placement = 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
+export type TooltipTriggerAriaMode = 'controls' | 'describedby' | 'none';
 
 export type TooltipConfig = {
   /** Existing tooltip element to control. */
@@ -27,6 +28,11 @@ export type TooltipConfig = {
    * @default true
    */
   interactive?: boolean;
+  /**
+   * ARIA relationship applied to the trigger.
+   * @default controls
+   */
+  triggerAria?: TooltipTriggerAriaMode;
   /**
    * Popover mode of the tooltip element.
    * @default hint
@@ -64,6 +70,7 @@ export type NormalizedTooltipOptions = {
   target?: string | HTMLElement;
   content?: string;
   variant: 'plain' | 'rich';
+  triggerAria: TooltipTriggerAriaMode;
 };
 
 export type State = {

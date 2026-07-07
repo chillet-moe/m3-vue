@@ -11,15 +11,15 @@ const value = ref('home');
     <NavigationDrawerItem value="inbox" icon="inbox" label="Inbox" />
     <NavigationDrawerSection icon="folder" label="Projects">
       <NavigationDrawerItem value="active" icon="task_alt" label="Active" />
-      <NavigationDrawerItem value="archived" label="Archived" />
+      <NavigationDrawerItem value="archived" icon="archive" label="Archived" />
     </NavigationDrawerSection>
-    <NavigationDrawerSection label="Teams">
+    <NavigationDrawerSection icon="groups" label="Teams">
       <NavigationDrawerItem value="design" icon="palette" label="Design" />
-      <NavigationDrawerItem value="engineering" label="Engineering" />
+      <NavigationDrawerItem value="engineering" icon="engineering" label="Engineering" />
     </NavigationDrawerSection>
-    <NavigationDrawerSection label="Plain">
-      <NavigationDrawerItem value="drafts" label="Drafts" />
-      <NavigationDrawerItem value="sent" label="Sent" />
+    <NavigationDrawerSection icon="list" label="Plain">
+      <NavigationDrawerItem value="drafts" icon="draft" label="Drafts" />
+      <NavigationDrawerItem value="sent" icon="send" label="Sent" />
     </NavigationDrawerSection>
     <NavigationDrawerItem value="settings" icon="settings" label="Settings" />
   </NavigationDrawer>

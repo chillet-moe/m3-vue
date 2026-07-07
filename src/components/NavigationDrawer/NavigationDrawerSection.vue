@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@/components/Icon';
+import vTooltip from '@/directives/Tooltip/vTooltip';
+import type { VTooltipBinding } from '@/directives/Tooltip/types';
 import { computed, inject, provide, useId, useSlots } from 'vue';
 import { navigationDrawerContextKey } from './NavigationDrawerContext';
 
@@ -30,25 +32,30 @@ const expanded = defineModel<boolean>('expanded', {
 
 defineSlots<{
   /** Nested navigation destinations. */
-  default(props: { expanded: boolean; disabled: boolean }): any;
+  default(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Section label content. */
-  label(props: { expanded: boolean; disabled: boolean }): any;
+  label(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Icon content. */
-  icon(props: { expanded: boolean; disabled: boolean }): any;
+  icon(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
 }>();
 
 const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 const contentId = `navigation-drawer-section-content-${useId()}`;
 
+const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
 const mergedDisabled = computed(() => props.disabled || drawer?.disabled.value || false);
 const hasLabel = computed(() => Boolean(props.label || slots.label));
 
 const resolvedAriaLabel = computed(() => {
   if (props.ariaLabel) {
     return props.ariaLabel;
+  }
+
+  if (isIconOnly.value && props.label) {
+    return props.label;
   }
 
   if (hasLabel.value) {
@@ -61,11 +68,27 @@ const resolvedAriaLabel = computed(() => {
 const slotProps = computed(() => ({
   expanded: expanded.value,
   disabled: mergedDisabled.value,
+  iconOnly: isIconOnly.value,
 }));
+
+const tooltipContent = computed(() => props.label ?? props.ariaLabel);
+const tooltip = computed<VTooltipBinding>(() => {
+  if (!isIconOnly.value || !tooltipContent.value) {
+    return undefined;
+  }
+
+  return {
+    content: tooltipContent.value,
+    placement: 'end',
+    interactive: false,
+    triggerAria: 'describedby',
+  };
+});
 
 provide(navigationDrawerContextKey, {
   value: computed(() => drawer?.value.value),
   disabled: mergedDisabled,
+  iconOnly: isIconOnly,
   activate: (value) => drawer?.activate(value),
 });
 
@@ -95,6 +118,7 @@ const toggle = () => {
       :aria-expanded="expanded ? 'true' : 'false'"
       :aria-controls="contentId"
       :aria-label="resolvedAriaLabel"
+      v-tooltip="tooltip"
       @click="toggle"
     >
       <span
