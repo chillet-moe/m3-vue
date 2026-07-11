@@ -121,6 +121,39 @@ describe('Select', () => {
     document.body.innerHTML = '';
   });
 
+  it('uses medium size by default and forwards every size to its TextField', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h('div', [
+        h(Select, { options, modelValue: undefined }),
+        h(Select, { options, modelValue: 'espresso', size: 'extra-small', clearable: true }),
+        h(Select, { options, modelValue: undefined, size: 'small', filterable: true, disabled: true }),
+        h(Select, { options, modelValue: undefined, size: 'medium', error: 'Required' }),
+      ]),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const selects = Array.from(container.querySelectorAll<HTMLElement>('.m3-select'));
+
+    expect(selects.map((select) => select.dataset.size)).toEqual(['medium', 'extra-small', 'small', 'medium']);
+    expect(selects.map((select) => select.querySelector<HTMLElement>('.m3-select-field')?.dataset.size)).toEqual([
+      'medium',
+      'extra-small',
+      'small',
+      'medium',
+    ]);
+    expect(selects[1]?.querySelector('.m3-select-clear-button')).not.toBeNull();
+    expect(selects[2]?.dataset.filterable).toBe('true');
+    expect(selects[2]?.querySelector('input')?.disabled).toBe(true);
+    expect(selects[3]?.dataset.invalid).toBe('true');
+
+    app.unmount();
+  });
+
   it('renders the selected label and updates a single value on selection', async () => {
     installPopoverPolyfill();
 

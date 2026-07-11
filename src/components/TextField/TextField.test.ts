@@ -207,6 +207,59 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('uses medium size by default and exposes each single-line size across field states', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h('div', [
+        h(TextField, { modelValue: '', label: 'Default' }),
+        h(TextField, { modelValue: '', label: 'Compact', size: 'extra-small', disabled: true }),
+        h(TextField, { modelValue: 'value', label: 'Toolbar', size: 'small', readonly: true }),
+        h(TextField, { modelValue: '', label: 'Standard', size: 'medium', error: 'Invalid' }),
+      ]),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const fields = Array.from(container.querySelectorAll<HTMLElement>('.m3-text-field'));
+
+    expect(fields.map((field) => field.dataset.size)).toEqual(['medium', 'extra-small', 'small', 'medium']);
+    expect(fields[1]?.dataset.disabled).toBe('true');
+    expect(fields[2]?.dataset.populated).toBe('true');
+    expect(fields[2]?.querySelector('input')?.readOnly).toBe(true);
+    expect(fields[3]?.dataset.invalid).toBe('true');
+
+    app.unmount();
+  });
+
+  it('keeps multiline fields at medium size', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TextField, {
+        as: 'textarea',
+        // Exercise the runtime safeguard for untyped consumers.
+        size: 'extra-small' as 'medium',
+        rows: 4,
+        modelValue: 'Multiline value',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const field = container.querySelector<HTMLElement>('.m3-text-field');
+
+    expect(field?.dataset.size).toBe('medium');
+    expect(field?.dataset.multiline).toBe('true');
+    expect(field?.querySelector('textarea')?.rows).toBe(4);
+
+    app.unmount();
+  });
+
   it('opens the library DatePicker for date inputs and updates the date value on confirmation', async () => {
     installPopoverPolyfill();
 

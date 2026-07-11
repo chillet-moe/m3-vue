@@ -12,10 +12,13 @@ import TextFieldConfigurations from '../demos/text-field/TextFieldConfigurations
 import TextFieldConfigurationsSrc from '../demos/text-field/TextFieldConfigurations.vue?raw';
 import TextFieldPassword from '../demos/text-field/TextFieldPassword.vue';
 import TextFieldPasswordSrc from '../demos/text-field/TextFieldPassword.vue?raw';
+import FieldSizes from '../demos/shared/FieldSizes.vue';
+import FieldSizesSrc from '../demos/shared/FieldSizes.vue?raw';
 
 const props = ref({
   label: 'Label',
   shape: 'square',
+  size: 'medium',
   disabled: false,
   required: false,
   description: 'Supporting text',
@@ -44,6 +47,14 @@ Text fields cover baseline Material 3 input cases including supporting text, val
 <StyleTokenTable component="TextField" />
 
 ## Examples
+
+### Sizes and toolbar alignment
+
+Single-line fields support `extra-small` (32px), `small` (40px), and `medium` (56px), matching Button size names. The default is `medium`, preserving the original 56px field. Multiline fields only support `medium`; their content and `rows` continue to determine the final height.
+
+<DemoContainer :src="FieldSizesSrc">
+  <FieldSizes />
+</DemoContainer>
 
 ### Default
 

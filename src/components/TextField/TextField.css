@@ -2,9 +2,12 @@
   :where(:root) {
     /* Low-specificity public token placeholders; private tokens own defaults. */
     --md-outlined-text-field-caret-color: initial;
+    --md-outlined-text-field-container-height: initial;
+    --md-outlined-text-field-container-horizontal-padding: initial;
     --md-outlined-text-field-container-shape: initial;
     --md-outlined-text-field-container-shape-round: initial;
     --md-outlined-text-field-container-shape-square: initial;
+    --md-outlined-text-field-container-vertical-padding: initial;
     --md-outlined-text-field-disabled-input-text-color: initial;
     --md-outlined-text-field-disabled-input-text-opacity: initial;
     --md-outlined-text-field-disabled-label-text-color: initial;
@@ -37,6 +40,9 @@
     --md-outlined-text-field-error-outline-color: initial;
     --md-outlined-text-field-error-supporting-text-color: initial;
     --md-outlined-text-field-error-trailing-icon-color: initial;
+    --md-outlined-text-field-extra-small-container-height: initial;
+    --md-outlined-text-field-extra-small-container-horizontal-padding: initial;
+    --md-outlined-text-field-extra-small-container-vertical-padding: initial;
     --md-outlined-text-field-focus-input-text-color: initial;
     --md-outlined-text-field-focus-label-text-color: initial;
     --md-outlined-text-field-focus-leading-icon-color: initial;
@@ -72,6 +78,12 @@
     --md-outlined-text-field-leading-icon-size: initial;
     --md-outlined-text-field-outline-color: initial;
     --md-outlined-text-field-outline-width: initial;
+    --md-outlined-text-field-medium-container-height: initial;
+    --md-outlined-text-field-medium-container-horizontal-padding: initial;
+    --md-outlined-text-field-medium-container-vertical-padding: initial;
+    --md-outlined-text-field-small-container-height: initial;
+    --md-outlined-text-field-small-container-horizontal-padding: initial;
+    --md-outlined-text-field-small-container-vertical-padding: initial;
     --md-outlined-text-field-supporting-text-color: initial;
     --md-outlined-text-field-supporting-text-font: initial;
     --md-outlined-text-field-supporting-text-line-height: initial;
@@ -83,6 +95,36 @@
   }
 
   :where(.m3-text-field) {
+    --_outlined-text-field-extra-small-container-height: var(
+      --md-outlined-text-field-extra-small-container-height,
+      2rem
+    );
+    --_outlined-text-field-extra-small-container-horizontal-padding: var(
+      --md-outlined-text-field-extra-small-container-horizontal-padding,
+      0.5rem
+    );
+    --_outlined-text-field-extra-small-container-vertical-padding: var(
+      --md-outlined-text-field-extra-small-container-vertical-padding,
+      0.25rem
+    );
+    --_outlined-text-field-small-container-height: var(--md-outlined-text-field-small-container-height, 2.5rem);
+    --_outlined-text-field-small-container-horizontal-padding: var(
+      --md-outlined-text-field-small-container-horizontal-padding,
+      0.75rem
+    );
+    --_outlined-text-field-small-container-vertical-padding: var(
+      --md-outlined-text-field-small-container-vertical-padding,
+      0.5rem
+    );
+    --_outlined-text-field-medium-container-height: var(--md-outlined-text-field-medium-container-height, 3.5rem);
+    --_outlined-text-field-medium-container-horizontal-padding: var(
+      --md-outlined-text-field-medium-container-horizontal-padding,
+      1rem
+    );
+    --_outlined-text-field-medium-container-vertical-padding: var(
+      --md-outlined-text-field-medium-container-vertical-padding,
+      0.5rem
+    );
     --_outlined-text-field-container-shape: var(
       --md-outlined-text-field-container-shape,
       var(--_outlined-text-field-container-shape-round)
@@ -385,10 +427,83 @@
     --_leading-icon-color: var(--_outlined-text-field-leading-icon-color);
     --_trailing-icon-color: var(--_outlined-text-field-trailing-icon-color);
     --_caret-color: var(--_outlined-text-field-caret-color);
+    --_container-height: var(
+      --md-outlined-text-field-container-height,
+      var(--_outlined-text-field-medium-container-height)
+    );
+    --_container-horizontal-padding: var(
+      --md-outlined-text-field-container-horizontal-padding,
+      var(--_outlined-text-field-medium-container-horizontal-padding)
+    );
+    --_container-vertical-padding: var(
+      --md-outlined-text-field-container-vertical-padding,
+      var(--_outlined-text-field-medium-container-vertical-padding)
+    );
+    --_picker-button-height: 3rem;
+    --_picker-button-space: 0.75rem;
+    --_picker-button-margin-block: -0.75rem;
+    --_picker-button-margin-inline-end: -0.75rem;
+    --_trailing-action-size: 2rem;
+    --_trailing-action-margin-block: -0.25rem;
 
     display: grid;
     gap: 0.25rem;
     min-inline-size: 0;
+  }
+
+  .m3-text-field[data-size='extra-small'] {
+    --_container-height: var(
+      --md-outlined-text-field-container-height,
+      var(--_outlined-text-field-extra-small-container-height)
+    );
+    --_container-horizontal-padding: var(
+      --md-outlined-text-field-container-horizontal-padding,
+      var(--_outlined-text-field-extra-small-container-horizontal-padding)
+    );
+    --_container-vertical-padding: var(
+      --md-outlined-text-field-container-vertical-padding,
+      var(--_outlined-text-field-extra-small-container-vertical-padding)
+    );
+    --_picker-button-height: 2rem;
+    --_picker-button-space: 0.25rem;
+    --_picker-button-margin-block: -0.25rem;
+    --_picker-button-margin-inline-end: -0.25rem;
+    --_trailing-action-size: 1.5rem;
+    --_trailing-action-margin-block: 0;
+  }
+
+  .m3-text-field[data-size='small'] {
+    --_container-height: var(
+      --md-outlined-text-field-container-height,
+      var(--_outlined-text-field-small-container-height)
+    );
+    --_container-horizontal-padding: var(
+      --md-outlined-text-field-container-horizontal-padding,
+      var(--_outlined-text-field-small-container-horizontal-padding)
+    );
+    --_container-vertical-padding: var(
+      --md-outlined-text-field-container-vertical-padding,
+      var(--_outlined-text-field-small-container-vertical-padding)
+    );
+    --_picker-button-height: 2.5rem;
+    --_picker-button-space: 0.5rem;
+    --_picker-button-margin-block: -0.5rem;
+    --_picker-button-margin-inline-end: -0.5rem;
+  }
+
+  .m3-text-field[data-size='medium'] {
+    --_container-height: var(
+      --md-outlined-text-field-container-height,
+      var(--_outlined-text-field-medium-container-height)
+    );
+    --_container-horizontal-padding: var(
+      --md-outlined-text-field-container-horizontal-padding,
+      var(--_outlined-text-field-medium-container-horizontal-padding)
+    );
+    --_container-vertical-padding: var(
+      --md-outlined-text-field-container-vertical-padding,
+      var(--_outlined-text-field-medium-container-vertical-padding)
+    );
   }
 
   .m3-text-field[data-shape='rounded'] {
@@ -409,10 +524,10 @@
     position: relative;
     display: flex;
 
-    min-block-size: 3.5rem;
+    min-block-size: var(--_container-height);
     min-inline-size: 0;
-    padding-block: 0.5rem;
-    padding-inline: 1rem;
+    padding-block: var(--_container-vertical-padding);
+    padding-inline: var(--_container-horizontal-padding);
 
     border-radius: var(--_outlined-text-field-container-shape);
     background: transparent;
@@ -453,7 +568,7 @@
 
   .m3-text-field-label {
     position: absolute;
-    inset-inline-start: 1rem;
+    inset-inline-start: var(--_container-horizontal-padding);
     inset-block-start: 50%;
     translate: 0 -50%;
     padding-inline: 0;
@@ -501,7 +616,9 @@
       :focus-within
     )
     .m3-text-field-label {
-    inset-inline-start: 3rem;
+    inset-inline-start: calc(
+      var(--_container-horizontal-padding) + var(--_outlined-text-field-leading-icon-size) + 0.5rem
+    );
   }
 
   .m3-text-field-content {
@@ -562,13 +679,13 @@
   }
 
   .m3-text-field-date-picker-button {
-    margin-block: -0.75rem;
-    margin-inline-end: -0.75rem;
+    margin-block: var(--_picker-button-margin-block);
+    margin-inline-end: var(--_picker-button-margin-inline-end);
 
-    --md-icon-button-small-container-height: 3rem;
+    --md-icon-button-small-container-height: var(--_picker-button-height);
     --md-icon-button-small-icon-size: var(--_outlined-text-field-trailing-icon-size);
-    --md-icon-button-small-default-leading-space: 0.75rem;
-    --md-icon-button-small-default-trailing-space: 0.75rem;
+    --md-icon-button-small-default-leading-space: var(--_picker-button-space);
+    --md-icon-button-small-default-trailing-space: var(--_picker-button-space);
     --md-icon-button-filled-container-color: --translucent(var(--md-sys-color-on-surface-variant), 0.08);
     --md-icon-button-filled-icon-color: var(--_trailing-icon-color);
     --md-icon-button-filled-hovered-icon-color: var(--_trailing-icon-color);
@@ -587,7 +704,7 @@
   }
 
   .m3-text-field-supporting {
-    padding-inline: 1rem;
+    padding-inline: var(--_container-horizontal-padding);
     color: var(--_supporting-color);
     font-family: var(--_outlined-text-field-supporting-text-font), sans-serif;
     font-size: var(--_outlined-text-field-supporting-text-size);

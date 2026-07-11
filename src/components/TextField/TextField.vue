@@ -17,15 +17,14 @@ import {
 } from '@/components/TimePicker';
 import { acquireAnchorName } from '@/internal/anchorName';
 
-export type TextFieldProps = {
+export type TextFieldSize = 'extra-small' | 'small' | 'medium';
+
+type TextFieldSharedProps = {
   /** Visible label. If omitted, provide aria-label via attrs. */
   label?: string;
 
   /** Optional explicit id for native control element. */
   id?: string;
-
-  /** Render either a single-line input or multiline textarea. */
-  as?: 'input' | 'textarea';
 
   /** Native input type. Date and datetime-local use DatePicker. Time uses TimePicker. */
   type?: string;
@@ -82,6 +81,27 @@ export type TextFieldProps = {
   timePickerInputMode?: TimePickerInputMode;
 };
 
+export type TextFieldSingleLineProps = TextFieldSharedProps & {
+  as?: 'input';
+  size?: TextFieldSize;
+};
+
+export type TextFieldMultilineProps = TextFieldSharedProps & {
+  as: 'textarea';
+  size?: 'medium';
+};
+
+export type TextFieldProps = TextFieldSharedProps & {
+  /** Render either a single-line input or multiline textarea. */
+  as?: 'input' | 'textarea';
+
+  /**
+   * The field height. Matches the 32px, 40px, and 56px Button sizes.
+   * Multiline fields only support medium; TextFieldMultilineProps expresses that constraint for typed wrappers.
+   */
+  size?: TextFieldSize;
+};
+
 const generatedId = useId();
 const attrs = useAttrs();
 const slots = useSlots();
@@ -90,6 +110,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   label: undefined,
   id: undefined,
   as: 'input',
+  size: 'medium',
   type: 'text',
   shape: 'square',
   rows: 3,
@@ -126,6 +147,10 @@ const inputId = computed(() => {
 
 const hasValue = computed(() => {
   return modelValue.value.length > 0;
+});
+
+const effectiveSize = computed<TextFieldSize>(() => {
+  return props.as === 'textarea' ? 'medium' : props.size;
 });
 
 const supportingMessage = computed(() => {
@@ -366,6 +391,8 @@ defineExpose({
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-shape="props.shape"
+    :data-size="effectiveSize"
+    :data-multiline="props.as === 'textarea' ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
     :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"

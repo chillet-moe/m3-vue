@@ -16,9 +16,12 @@ import SelectFiltering from '../demos/select/SelectFiltering.vue';
 import SelectFilteringSrc from '../demos/select/SelectFiltering.vue?raw';
 import SelectConfigurations from '../demos/select/SelectConfigurations.vue';
 import SelectConfigurationsSrc from '../demos/select/SelectConfigurations.vue?raw';
+import FieldSizes from '../demos/shared/FieldSizes.vue';
+import FieldSizesSrc from '../demos/shared/FieldSizes.vue?raw';
 
 const props = ref({
   label: 'Coffee',
+  size: 'medium',
   disabled: false,
   required: false,
   placeholder: 'Choose an option',
@@ -44,6 +47,14 @@ Select provides an anchored menu for choosing one or many options, with optional
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
 ## Examples
+
+### Sizes and toolbar alignment
+
+Select uses the same `extra-small` (32px), `small` (40px), and `medium` (56px) trigger sizes as TextField. The default remains `medium`.
+
+<DemoContainer :src="FieldSizesSrc">
+  <FieldSizes />
+</DemoContainer>
 
 ### Default
 

@@ -33,9 +33,9 @@
     flex: 0 0 auto;
     align-items: center;
     justify-content: center;
-    inline-size: 2rem;
-    block-size: 2rem;
-    margin-block: -0.25rem;
+    inline-size: var(--_trailing-action-size);
+    block-size: var(--_trailing-action-size);
+    margin-block: var(--_trailing-action-margin-block);
     padding: 0;
     border: 0;
     border-radius: var(--md-shape-action);
