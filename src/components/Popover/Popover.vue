@@ -45,7 +45,7 @@ export type PopoverProps = {
   /** Element id that labels the popover surface. */
   ariaLabelledBy?: string;
 
-  /** Teleport target. Set to false to render in place. */
+  /** Optional Teleport target. Native popovers render in place by default because the top layer handles clipping. */
   teleport?: boolean | string;
 };
 
@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<PopoverProps>(), {
   role: undefined,
   ariaLabel: undefined,
   ariaLabelledBy: undefined,
-  teleport: 'body',
+  teleport: false,
 });
 
 const open = defineModel<boolean>('open', { default: false });

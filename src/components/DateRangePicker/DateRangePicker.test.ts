@@ -158,6 +158,7 @@ describe('DateRangePicker', () => {
     const popover = document.body.querySelector<HTMLElement>('.m3-date-range-picker');
 
     expect(isPopoverOpen(popover)).toBe(true);
+    expect(popover?.parentElement).toBe(container);
     expect(getDay('2026-04-10')?.dataset.selectedStart).toBe('true');
     expect(getDay('2026-04-14')?.dataset.selectedEnd).toBe('true');
     expect(getDay('2026-04-12')?.dataset.inRange).toBe('true');

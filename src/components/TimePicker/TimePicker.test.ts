@@ -139,6 +139,7 @@ describe('TimePicker', () => {
     const popover = document.body.querySelector<HTMLElement>('.m3-time-picker');
 
     expect(isPopoverOpen(popover)).toBe(true);
+    expect(popover?.parentElement).toBe(container);
     expect(document.body.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('09');
     expect(document.body.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('30');
     expect(getButton(container, 'PM')?.dataset.selected).toBe('true');

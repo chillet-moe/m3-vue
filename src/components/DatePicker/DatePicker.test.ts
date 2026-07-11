@@ -95,6 +95,7 @@ describe('DatePicker', () => {
     const selectedDay = getDay(container, '2026-04-28');
 
     expect(isPopoverOpen(popover)).toBe(true);
+    expect(popover?.parentElement).toBe(container);
     expect(selectedDay?.dataset.selected).toBe('true');
     expect(selectedDay?.getAttribute('aria-current')).toBe('date');
 

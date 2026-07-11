@@ -378,205 +378,59 @@ defineExpose({
 </script>
 
 <template>
-  <teleport to="body">
-    <div
-      :id="pickerId"
-      ref="popoverRef"
-      class="m3-time-picker"
-      popover="auto"
-      role="dialog"
-      data-scope="time-picker"
-      data-part="root"
-      :data-variant="props.variant"
-      :data-format="picker.format.value"
-      :data-input-mode="picker.inputMode.value"
-      :aria-label="props.ariaLabel"
-      :aria-labelledby="titleId"
-      :style="popoverStyle"
-      @toggle="popover.handlePopoverToggle"
-    >
-      <div ref="surfaceRef" class="m3-time-picker-surface" data-scope="time-picker" data-part="surface">
-        <header class="m3-time-picker-header" data-scope="time-picker" data-part="header">
-          <div :id="titleId" class="m3-time-picker-title" data-scope="time-picker" data-part="title">
-            {{ props.titleText }}
-          </div>
-
-          <div
-            v-if="picker.inputMode.value === 'clock'"
-            class="m3-time-picker-display"
-            data-scope="time-picker"
-            data-part="display"
-          >
-            <button
-              type="button"
-              class="m3-time-picker-display-field m3-state-layer"
-              data-scope="time-picker"
-              data-part="hour-display"
-              :data-selected="picker.activeSelection.value === 'hour' ? 'true' : undefined"
-              :aria-pressed="picker.activeSelection.value === 'hour' ? 'true' : 'false'"
-              @click="picker.activeSelection.value = 'hour'"
-            >
-              {{ picker.displayHour.value }}
-            </button>
-
-            <span class="m3-time-picker-display-separator" data-scope="time-picker" data-part="display-separator"
-              >:</span
-            >
-
-            <button
-              type="button"
-              class="m3-time-picker-display-field m3-state-layer"
-              data-scope="time-picker"
-              data-part="minute-display"
-              :data-selected="picker.activeSelection.value === 'minute' ? 'true' : undefined"
-              :aria-pressed="picker.activeSelection.value === 'minute' ? 'true' : 'false'"
-              @click="picker.activeSelection.value = 'minute'"
-            >
-              {{ picker.displayMinute.value }}
-            </button>
-
-            <div
-              v-if="picker.format.value === '12h'"
-              class="m3-time-picker-period"
-              data-scope="time-picker"
-              data-part="period-selector"
-              role="group"
-              aria-label="Select AM or PM"
-            >
-              <button
-                type="button"
-                class="m3-time-picker-period-button m3-state-layer"
-                data-scope="time-picker"
-                data-part="period-option"
-                :data-selected="picker.period.value === 'AM' ? 'true' : undefined"
-                :aria-pressed="picker.period.value === 'AM' ? 'true' : 'false'"
-                @click="picker.setPeriod('AM')"
-              >
-                AM
-              </button>
-              <button
-                type="button"
-                class="m3-time-picker-period-button m3-state-layer"
-                data-scope="time-picker"
-                data-part="period-option"
-                :data-selected="picker.period.value === 'PM' ? 'true' : undefined"
-                :aria-pressed="picker.period.value === 'PM' ? 'true' : 'false'"
-                @click="picker.setPeriod('PM')"
-              >
-                PM
-              </button>
-            </div>
-          </div>
-        </header>
+  <div
+    :id="pickerId"
+    ref="popoverRef"
+    class="m3-time-picker"
+    popover="auto"
+    role="dialog"
+    data-scope="time-picker"
+    data-part="root"
+    :data-variant="props.variant"
+    :data-format="picker.format.value"
+    :data-input-mode="picker.inputMode.value"
+    :aria-label="props.ariaLabel"
+    :aria-labelledby="titleId"
+    :style="popoverStyle"
+    @toggle="popover.handlePopoverToggle"
+  >
+    <div ref="surfaceRef" class="m3-time-picker-surface" data-scope="time-picker" data-part="surface">
+      <header class="m3-time-picker-header" data-scope="time-picker" data-part="header">
+        <div :id="titleId" class="m3-time-picker-title" data-scope="time-picker" data-part="title">
+          {{ props.titleText }}
+        </div>
 
         <div
           v-if="picker.inputMode.value === 'clock'"
-          class="m3-time-picker-clock"
+          class="m3-time-picker-display"
           data-scope="time-picker"
-          data-part="clock"
+          data-part="display"
         >
-          <div
-            class="m3-time-picker-clock-face"
+          <button
+            type="button"
+            class="m3-time-picker-display-field m3-state-layer"
             data-scope="time-picker"
-            data-part="clock-face"
-            :aria-label="picker.activeSelection.value === 'hour' ? 'Select hour' : 'Select minute'"
-            @pointerdown="handleClockPointerDown"
-            @pointermove="handleClockPointerMove"
-            @pointerup="handleClockPointerUp"
-            @pointercancel="handleClockPointerCancel"
-            @keydown="handleClockKeydown"
+            data-part="hour-display"
+            :data-selected="picker.activeSelection.value === 'hour' ? 'true' : undefined"
+            :aria-pressed="picker.activeSelection.value === 'hour' ? 'true' : 'false'"
+            @click="picker.activeSelection.value = 'hour'"
           >
-            <div
-              class="m3-time-picker-clock-hand"
-              data-scope="time-picker"
-              data-part="clock-hand"
-              aria-hidden="true"
-              :style="clockHandStyle"
-            />
+            {{ picker.displayHour.value }}
+          </button>
 
-            <button
-              v-for="option in picker.clockOptions.value"
-              :key="`${picker.activeSelection.value}-${option.value}`"
-              type="button"
-              class="m3-time-picker-clock-option m3-state-layer"
-              data-scope="time-picker"
-              data-part="clock-option"
-              :data-selected="option.selected ? 'true' : undefined"
-              :data-ring="option.ring"
-              :style="getClockOptionStyle(option)"
-              :aria-pressed="option.selected ? 'true' : 'false'"
-              @click.stop="handleClockOptionClick($event, option)"
-              @keydown="handleClockKeydown"
-            >
-              {{ option.label }}
-            </button>
-          </div>
-        </div>
+          <span class="m3-time-picker-display-separator" data-scope="time-picker" data-part="display-separator">:</span>
 
-        <div v-else class="m3-time-picker-inputs" data-scope="time-picker" data-part="inputs">
-          <label class="m3-time-picker-input-field" data-scope="time-picker" data-part="hour-input-field">
-            <input
-              ref="hourInputRef"
-              class="m3-time-picker-input"
-              data-scope="time-picker"
-              data-part="hour-input"
-              inputmode="numeric"
-              autocomplete="off"
-              :value="picker.inputHourText.value"
-              :aria-invalid="picker.hourInputInvalid.value ? 'true' : undefined"
-              :aria-describedby="picker.hourInputError.value ? hourErrorId : undefined"
-              @input="handleHourInput"
-              @focus="picker.activeSelection.value = 'hour'"
-              @keydown="handleHourInputKeydown"
-              @blur="
-                picker.touchInput('hour');
-                picker.applyInputText();
-              "
-            />
-            <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">Hour</span>
-            <span
-              v-if="picker.hourInputError.value"
-              :id="hourErrorId"
-              class="m3-time-picker-input-error"
-              data-scope="time-picker"
-              data-part="input-error"
-            >
-              {{ picker.hourInputError.value }}
-            </span>
-          </label>
-
-          <span class="m3-time-picker-input-separator" data-scope="time-picker" data-part="input-separator">:</span>
-
-          <label class="m3-time-picker-input-field" data-scope="time-picker" data-part="minute-input-field">
-            <input
-              ref="minuteInputRef"
-              class="m3-time-picker-input"
-              data-scope="time-picker"
-              data-part="minute-input"
-              inputmode="numeric"
-              autocomplete="off"
-              :value="picker.inputMinuteText.value"
-              :aria-invalid="picker.minuteInputInvalid.value ? 'true' : undefined"
-              :aria-describedby="picker.minuteInputError.value ? minuteErrorId : undefined"
-              @input="picker.setInputMinuteText(($event.target as HTMLInputElement).value)"
-              @focus="picker.activeSelection.value = 'minute'"
-              @keydown="handleMinuteInputKeydown"
-              @blur="
-                picker.touchInput('minute');
-                picker.applyInputText();
-              "
-            />
-            <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">Minute</span>
-            <span
-              v-if="picker.minuteInputError.value"
-              :id="minuteErrorId"
-              class="m3-time-picker-input-error"
-              data-scope="time-picker"
-              data-part="input-error"
-            >
-              {{ picker.minuteInputError.value }}
-            </span>
-          </label>
+          <button
+            type="button"
+            class="m3-time-picker-display-field m3-state-layer"
+            data-scope="time-picker"
+            data-part="minute-display"
+            :data-selected="picker.activeSelection.value === 'minute' ? 'true' : undefined"
+            :aria-pressed="picker.activeSelection.value === 'minute' ? 'true' : 'false'"
+            @click="picker.activeSelection.value = 'minute'"
+          >
+            {{ picker.displayMinute.value }}
+          </button>
 
           <div
             v-if="picker.format.value === '12h'"
@@ -610,26 +464,168 @@ defineExpose({
             </button>
           </div>
         </div>
+      </header>
 
-        <div class="m3-time-picker-actions" data-scope="time-picker" data-part="actions">
-          <IconButton
-            :icon="picker.inputMode.value === 'clock' ? 'keyboard' : 'schedule'"
-            color="standard"
-            size="small"
-            :aria-label="picker.inputMode.value === 'clock' ? 'Switch to text input' : 'Switch to clock input'"
+      <div
+        v-if="picker.inputMode.value === 'clock'"
+        class="m3-time-picker-clock"
+        data-scope="time-picker"
+        data-part="clock"
+      >
+        <div
+          class="m3-time-picker-clock-face"
+          data-scope="time-picker"
+          data-part="clock-face"
+          :aria-label="picker.activeSelection.value === 'hour' ? 'Select hour' : 'Select minute'"
+          @pointerdown="handleClockPointerDown"
+          @pointermove="handleClockPointerMove"
+          @pointerup="handleClockPointerUp"
+          @pointercancel="handleClockPointerCancel"
+          @keydown="handleClockKeydown"
+        >
+          <div
+            class="m3-time-picker-clock-hand"
             data-scope="time-picker"
-            data-part="mode-toggle"
-            @click="toggleInputMode"
+            data-part="clock-hand"
+            aria-hidden="true"
+            :style="clockHandStyle"
           />
-          <span class="m3-time-picker-actions-spacer" data-scope="time-picker" data-part="actions-spacer" />
-          <Button color="text" @click="handleCancel">{{ props.cancelText }}</Button>
-          <Button color="text" :disabled="picker.inputInvalid.value" @click="handleConfirm">{{
-            props.confirmText
-          }}</Button>
+
+          <button
+            v-for="option in picker.clockOptions.value"
+            :key="`${picker.activeSelection.value}-${option.value}`"
+            type="button"
+            class="m3-time-picker-clock-option m3-state-layer"
+            data-scope="time-picker"
+            data-part="clock-option"
+            :data-selected="option.selected ? 'true' : undefined"
+            :data-ring="option.ring"
+            :style="getClockOptionStyle(option)"
+            :aria-pressed="option.selected ? 'true' : 'false'"
+            @click.stop="handleClockOptionClick($event, option)"
+            @keydown="handleClockKeydown"
+          >
+            {{ option.label }}
+          </button>
         </div>
       </div>
+
+      <div v-else class="m3-time-picker-inputs" data-scope="time-picker" data-part="inputs">
+        <label class="m3-time-picker-input-field" data-scope="time-picker" data-part="hour-input-field">
+          <input
+            ref="hourInputRef"
+            class="m3-time-picker-input"
+            data-scope="time-picker"
+            data-part="hour-input"
+            inputmode="numeric"
+            autocomplete="off"
+            :value="picker.inputHourText.value"
+            :aria-invalid="picker.hourInputInvalid.value ? 'true' : undefined"
+            :aria-describedby="picker.hourInputError.value ? hourErrorId : undefined"
+            @input="handleHourInput"
+            @focus="picker.activeSelection.value = 'hour'"
+            @keydown="handleHourInputKeydown"
+            @blur="
+              picker.touchInput('hour');
+              picker.applyInputText();
+            "
+          />
+          <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">Hour</span>
+          <span
+            v-if="picker.hourInputError.value"
+            :id="hourErrorId"
+            class="m3-time-picker-input-error"
+            data-scope="time-picker"
+            data-part="input-error"
+          >
+            {{ picker.hourInputError.value }}
+          </span>
+        </label>
+
+        <span class="m3-time-picker-input-separator" data-scope="time-picker" data-part="input-separator">:</span>
+
+        <label class="m3-time-picker-input-field" data-scope="time-picker" data-part="minute-input-field">
+          <input
+            ref="minuteInputRef"
+            class="m3-time-picker-input"
+            data-scope="time-picker"
+            data-part="minute-input"
+            inputmode="numeric"
+            autocomplete="off"
+            :value="picker.inputMinuteText.value"
+            :aria-invalid="picker.minuteInputInvalid.value ? 'true' : undefined"
+            :aria-describedby="picker.minuteInputError.value ? minuteErrorId : undefined"
+            @input="picker.setInputMinuteText(($event.target as HTMLInputElement).value)"
+            @focus="picker.activeSelection.value = 'minute'"
+            @keydown="handleMinuteInputKeydown"
+            @blur="
+              picker.touchInput('minute');
+              picker.applyInputText();
+            "
+          />
+          <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">Minute</span>
+          <span
+            v-if="picker.minuteInputError.value"
+            :id="minuteErrorId"
+            class="m3-time-picker-input-error"
+            data-scope="time-picker"
+            data-part="input-error"
+          >
+            {{ picker.minuteInputError.value }}
+          </span>
+        </label>
+
+        <div
+          v-if="picker.format.value === '12h'"
+          class="m3-time-picker-period"
+          data-scope="time-picker"
+          data-part="period-selector"
+          role="group"
+          aria-label="Select AM or PM"
+        >
+          <button
+            type="button"
+            class="m3-time-picker-period-button m3-state-layer"
+            data-scope="time-picker"
+            data-part="period-option"
+            :data-selected="picker.period.value === 'AM' ? 'true' : undefined"
+            :aria-pressed="picker.period.value === 'AM' ? 'true' : 'false'"
+            @click="picker.setPeriod('AM')"
+          >
+            AM
+          </button>
+          <button
+            type="button"
+            class="m3-time-picker-period-button m3-state-layer"
+            data-scope="time-picker"
+            data-part="period-option"
+            :data-selected="picker.period.value === 'PM' ? 'true' : undefined"
+            :aria-pressed="picker.period.value === 'PM' ? 'true' : 'false'"
+            @click="picker.setPeriod('PM')"
+          >
+            PM
+          </button>
+        </div>
+      </div>
+
+      <div class="m3-time-picker-actions" data-scope="time-picker" data-part="actions">
+        <IconButton
+          :icon="picker.inputMode.value === 'clock' ? 'keyboard' : 'schedule'"
+          color="standard"
+          size="small"
+          :aria-label="picker.inputMode.value === 'clock' ? 'Switch to text input' : 'Switch to clock input'"
+          data-scope="time-picker"
+          data-part="mode-toggle"
+          @click="toggleInputMode"
+        />
+        <span class="m3-time-picker-actions-spacer" data-scope="time-picker" data-part="actions-spacer" />
+        <Button color="text" @click="handleCancel">{{ props.cancelText }}</Button>
+        <Button color="text" :disabled="picker.inputInvalid.value" @click="handleConfirm">{{
+          props.confirmText
+        }}</Button>
+      </div>
     </div>
-  </teleport>
+  </div>
 </template>
 
 <style src="./TimePicker.css"></style>

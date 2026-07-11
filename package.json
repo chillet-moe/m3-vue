@@ -65,13 +65,16 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
-    "vue": "^3.5.33"
+    "vue": "^3.5.39"
   },
   "devDependencies": {
+    "@chillet/vue-scope-boundary": "^0.1.0",
     "@chillet/postcss-custom-mixins": "^0.2.1",
     "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vitest/coverage-v8": "4.1.9",
+    "@vue/compiler-core": "^3.5.39",
+    "@vue/compiler-sfc": "^3.5.39",
     "@vue/tsconfig": "^0.9.1",
     "@yuheiy/postcss-custom-functions": "^0.1.1",
     "browserslist": "^4.28.2",
@@ -81,6 +84,7 @@
     "lightningcss": "^1.32.0",
     "oxc-minify": "^0.124.0",
     "playwright": "^1.59.1",
+    "postcss": "^8.5.16",
     "shiki": "4.0.2",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",

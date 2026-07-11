@@ -110,6 +110,7 @@ describe('Popover', () => {
 
     const popover = document.body.querySelector<HTMLElement>('.m3-popover');
     expect(popover?.textContent).toContain('Popover content');
+    expect(popover?.parentElement).toBe(container);
     expect(isPopoverOpen(popover)).toBe(true);
 
     popover?.hidePopover();
@@ -117,6 +118,25 @@ describe('Popover', () => {
 
     expect(open.value).toBe(false);
     expect(isPopoverOpen(popover)).toBe(false);
+
+    app.unmount();
+  });
+
+  it('supports an explicit Teleport target when DOM relocation is requested', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    const target = document.createElement('div');
+    target.id = 'popover-target';
+    document.body.append(container, target);
+
+    const app = createApp(() => h(Popover, { teleport: '#popover-target' }, () => 'Teleported content'));
+
+    app.mount(container);
+    await flushPopover();
+
+    expect(target.querySelector('.m3-popover')?.textContent).toContain('Teleported content');
+    expect(container.querySelector('.m3-popover')).toBeNull();
 
     app.unmount();
   });

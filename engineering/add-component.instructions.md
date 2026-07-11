@@ -110,6 +110,8 @@ export { default as MenuItem } from './MenuItem.vue';
 
 ```vue
 <script setup lang="ts">
+// Scope-boundary markers are injected globally by the Vue compiler plugin.
+// Do not add component-specific scope inheritance options.
 // Props 类型直接在 setup 中以 export type 定义
 export type <Name>Props = {
   variant?: 'filled' | 'outlined';

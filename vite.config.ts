@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite-plus';
-import vue from '@vitejs/plugin-vue';
+import vue, { type Options as VuePluginOptions } from '@vitejs/plugin-vue';
+import { createScopeBoundaryVueOptions } from '@chillet/vue-scope-boundary/vite';
 import { fileURLToPath } from 'url';
 import pkg from './package.json' with { type: 'json' };
 import { webTypesFromVueComponentMeta } from './scripts/web-types-gen/index.ts';
@@ -9,6 +10,10 @@ import { browserslistToTargets, Features } from 'lightningcss';
 import browserslist from 'browserslist';
 
 const externalPackages = [...new Set([...Object.keys(pkg.peerDependencies), '@nuxt/kit'])];
+
+function vueWithScopeBoundary(options: VuePluginOptions = {}) {
+  return vue(createScopeBoundaryVueOptions(options));
+}
 
 export default defineConfig({
   staged: {
@@ -32,7 +37,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    vue(),
+    vueWithScopeBoundary(),
     webTypesFromVueComponentMeta({
       tsconfigPath: 'tsconfig.types.json',
       components: ['src/components/**/*.vue'],
@@ -115,7 +120,7 @@ export default defineConfig({
     entry: {
       index: './src/index.ts',
     },
-    plugins: [vue({ isProduction: true })],
+    plugins: [vueWithScopeBoundary({ isProduction: true })],
     platform: 'neutral',
     format: ['esm'],
     tsconfig: './tsconfig.app.json',

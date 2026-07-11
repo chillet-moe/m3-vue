@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import { createScopeBoundaryVueOptions } from '@chillet/vue-scope-boundary/vite';
 import { fileURLToPath } from 'url';
 import { componentMetaPlugin } from './plugins/component-meta';
 import { componentAnatomyPlugin } from './plugins/component-anatomy';
@@ -12,6 +13,7 @@ export default defineConfig({
   title: 'M3 Vue',
   description: 'Material Design 3 components for Vue',
   appearance: true,
+  vue: createScopeBoundaryVueOptions(),
 
   // 构建输出目录（默认就是 .vitepress/dist）
   // 保持默认即可
@@ -57,6 +59,7 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Styling', link: '/guides/styling' },
+            { text: 'Vue Scope Boundaries', link: '/guides/vue-scope-isolation' },
             { text: 'Composables', link: '/guides/composables' },
             { text: 'Component Categories', link: '/guides/component-categories' },
             { text: 'Action Tooltips', link: '/guides/action-tooltips' },

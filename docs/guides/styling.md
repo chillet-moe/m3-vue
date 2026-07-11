@@ -2,8 +2,10 @@
 
 组件样式优先通过 CSS 变量定制。
 
-当变量不能表达目标效果时，覆盖具体的 `data-part`。 M3 Vue 的每个组件都暴露了 `data-scope` 和 `data-part` 属性，作为稳定的 CSS API。
-你可以使用这些属性来自定义组件样式。记得使用 `:deep` 选择器来确保样式能够正确应用到组件内部元素。
+当变量不能表达目标效果时，再覆盖具体的 `data-part`。M3 Vue 组件通过
+`data-scope` 和 `data-part` 暴露稳定的 CSS API。全局样式可以直接使用这些
+属性选择器；在 SFC 的 `<style scoped>` 中，只有确实需要跨越组件边界访问
+内部部件时才使用 `:deep()`。
 
 ## CSS token 分层
 
@@ -91,11 +93,20 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
 - **`data-scope`**：标识组件的类型，例如 `button`、`text-field`、`menu-item`。
 - **`data-part`**：标识组件内部的具体元素，例如 `root`、`label`、`leading`。
 
-每个组件的根元素都有 `data-part="root"`，而根元素不能使用 `:deep`。
+组件根元素使用 `data-part="root"`。给单个组件实例传入 class 是定制根元素
+的首选方式；从父组件访问内部 `data-part` 则是显式的深层定制。
 
 ## 用法
 
-使用属性选择器来定位组件的特定部分：
+在全局样式中，可以直接使用属性选择器：
+
+```css
+[data-scope='text-field'] [data-part='label'] {
+  font-weight: bold;
+}
+```
+
+在 scoped SFC 中，使用 `:deep()` 明确表示有意跨越组件边界：
 
 ```css
 /* 自定义 TextField 的 label */

@@ -12,6 +12,13 @@ Install the package, import the shared stylesheet, and register the plugin once 
 pnpm add @chillet/m3-vue
 ```
 
+m3-vue's build enables `@chillet/vue-scope-boundary` for scoped SFC styles; it
+does not patch Vue. To prevent your own scoped SFC styles from gaining
+unintended access to m3-vue component roots, enable the compiler integration in
+the consuming Vite application. See
+[Vue Scope Boundaries](/guides/vue-scope-isolation) for installation, behavior,
+and limitations.
+
 ## Register The Plugin
 
 ```ts
