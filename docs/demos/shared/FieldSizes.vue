@@ -21,7 +21,14 @@ const selections = ref<Record<TextFieldSize, SelectModelValue>>({
 <template>
   <div class="field-size-demo">
     <div v-for="size in sizes" :key="size" class="field-size-toolbar">
-      <TextField v-model="queries[size]" class="field-size-control" label="Search" :size="size" />
+      <TextField v-model="queries[size]" class="field-size-control" aria-label="Search" :size="size">
+        <template #leading>
+          <span class="m3-icon" aria-hidden="true">search</span>
+        </template>
+        <template #trailing>
+          <span class="m3-icon" aria-hidden="true">close</span>
+        </template>
+      </TextField>
       <Select
         v-model="selections[size]"
         class="field-size-control"

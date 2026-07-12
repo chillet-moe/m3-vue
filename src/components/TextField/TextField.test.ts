@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import TextField from './TextField.vue';
+
+const textFieldStyles = readFileSync('src/components/TextField/TextField.css', 'utf8');
 
 const popoverOpenElements = new WeakSet<HTMLElement>();
 
@@ -230,6 +233,43 @@ describe('TextField', () => {
     expect(fields[2]?.dataset.populated).toBe('true');
     expect(fields[2]?.querySelector('input')?.readOnly).toBe(true);
     expect(fields[3]?.dataset.invalid).toBe('true');
+
+    app.unmount();
+  });
+
+  it('keeps leading and trailing slot wrappers compact at every single-line size', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        'div',
+        (['extra-small', 'small', 'medium'] as const).map((size) =>
+          h(
+            TextField,
+            { modelValue: '', size, 'aria-label': `${size} search` },
+            {
+              leading: () => h('span', { class: 'm3-icon' }, 'search'),
+              trailing: () => h('span', { class: 'm3-icon' }, 'close'),
+            },
+          ),
+        ),
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const fields = Array.from(container.querySelectorAll<HTMLElement>('.m3-text-field'));
+    const adornmentRule = textFieldStyles.match(
+      /\.m3-text-field-leading-slot,\s*\.m3-text-field-trailing-slot\s*\{([^}]*)\}/,
+    )?.[1];
+    expect(fields.map((field) => field.dataset.size)).toEqual(['extra-small', 'small', 'medium']);
+    expect(fields.every((field) => field.querySelector('.m3-text-field-leading-slot .m3-icon'))).toBe(true);
+    expect(fields.every((field) => field.querySelector('.m3-text-field-trailing-slot .m3-icon'))).toBe(true);
+    expect(adornmentRule).toContain('display: inline-flex');
+    expect(adornmentRule).toContain('align-items: center');
+    expect(adornmentRule).toContain('line-height: 1');
 
     app.unmount();
   });

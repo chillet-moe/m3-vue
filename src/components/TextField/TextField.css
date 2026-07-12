@@ -661,6 +661,13 @@
     transition: opacity var(--md-duration-fast) var(--md-timing-function-fast);
   }
 
+  .m3-text-field-leading-slot,
+  .m3-text-field-trailing-slot {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+
   .m3-text-field-leading-slot {
     color: var(--_leading-icon-color);
     font-size: var(--_outlined-text-field-leading-icon-size);
@@ -673,8 +680,6 @@
 
   .m3-text-field[data-has-date-picker='true'] .m3-text-field-trailing-slot,
   .m3-text-field[data-has-time-picker='true'] .m3-text-field-trailing-slot {
-    display: inline-flex;
-    align-items: center;
     gap: 0.5rem;
   }
 

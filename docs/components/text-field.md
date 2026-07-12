@@ -50,7 +50,7 @@ Text fields cover baseline Material 3 input cases including supporting text, val
 
 ### Sizes and toolbar alignment
 
-Single-line fields support `extra-small` (32px), `small` (40px), and `medium` (56px), matching Button size names. The default is `medium`, preserving the original 56px field. Multiline fields only support `medium`; their content and `rows` continue to determine the final height.
+Single-line fields support `extra-small` (32px), `small` (40px), and `medium` (56px), matching Button size names. Leading and trailing icon slots preserve those container heights. The default is `medium`, preserving the original 56px field. Multiline fields only support `medium`; their content and `rows` continue to determine the final height.
 
 <DemoContainer :src="FieldSizesSrc">
   <FieldSizes />

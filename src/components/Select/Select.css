@@ -15,8 +15,6 @@
   }
 
   .m3-select-field .m3-text-field-trailing-slot {
-    display: inline-flex;
-    align-items: center;
     gap: 0.5rem;
   }
 
