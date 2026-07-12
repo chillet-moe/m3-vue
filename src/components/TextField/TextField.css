@@ -653,9 +653,25 @@
 
   .m3-text-field-prefix-slot,
   .m3-text-field-suffix-slot {
-    color: var(--_outlined-text-field-input-text-prefix-color);
+    display: inline-flex;
+    align-items: center;
     opacity: 0;
+    white-space: nowrap;
+
+    font-family: var(--_outlined-text-field-input-text-font), sans-serif;
+    font-size: var(--_outlined-text-field-input-text-size);
+    line-height: var(--_outlined-text-field-input-text-line-height);
+    font-weight: var(--_outlined-text-field-input-text-weight);
+    letter-spacing: var(--_outlined-text-field-input-text-tracking);
     transition: opacity var(--md-duration-fast) var(--md-timing-function-fast);
+  }
+
+  .m3-text-field-prefix-slot {
+    color: var(--_outlined-text-field-input-text-prefix-color);
+  }
+
+  .m3-text-field-suffix-slot {
+    color: var(--_outlined-text-field-input-text-suffix-color);
   }
 
   .m3-text-field-leading-slot,

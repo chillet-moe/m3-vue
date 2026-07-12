@@ -275,6 +275,50 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('keeps prefix and suffix typography within every single-line size contract', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        'div',
+        (['extra-small', 'small', 'medium'] as const).map((size) =>
+          h(
+            TextField,
+            { modelValue: '12', size, 'aria-label': `${size} amount` },
+            {
+              prefix: () => '$',
+              suffix: () => 'USD',
+            },
+          ),
+        ),
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const fields = Array.from(container.querySelectorAll<HTMLElement>('.m3-text-field'));
+    const affixRule = textFieldStyles.match(
+      /\.m3-text-field-prefix-slot,\s*\.m3-text-field-suffix-slot\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(fields.map((field) => field.dataset.size)).toEqual(['extra-small', 'small', 'medium']);
+    expect(fields.every((field) => field.querySelector('.m3-text-field-prefix-slot')?.textContent === '$')).toBe(true);
+    expect(fields.every((field) => field.querySelector('.m3-text-field-suffix-slot')?.textContent === 'USD')).toBe(
+      true,
+    );
+    expect(affixRule).toContain('display: inline-flex');
+    expect(affixRule).toContain('align-items: center');
+    expect(affixRule).toContain('font-size: var(--_outlined-text-field-input-text-size)');
+    expect(affixRule).toContain('line-height: var(--_outlined-text-field-input-text-line-height)');
+    expect(textFieldStyles).toMatch(
+      /\.m3-text-field-suffix-slot\s*\{\s*color: var\(--_outlined-text-field-input-text-suffix-color\)/,
+    );
+
+    app.unmount();
+  });
+
   it('integrates direct slot IconButtons without changing the field size contract', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

@@ -52,6 +52,8 @@ Text fields cover baseline Material 3 input cases including supporting text, val
 
 Single-line fields support `extra-small` (32px), `small` (40px), and `medium` (56px), matching Button size names. Leading and trailing icon slots preserve those container heights. The default is `medium`, preserving the original 56px field. Multiline fields only support `medium`; their content and `rows` continue to determine the final height.
 
+Prefix and suffix content uses the input typography and preserves the selected single-line height.
+
 Place an `IconButton` directly in the `leading` or `trailing` slot for interactive adornments. TextField automatically sizes and aligns its touch target without changing the field height; plain icons and text remain unchanged.
 
 <DemoContainer :src="FieldSizesSrc">
