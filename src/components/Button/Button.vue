@@ -106,29 +106,29 @@ const slots = defineSlots<{
     ref="rootRef"
     v-bind="rootProps"
   >
-    <Icon
-      v-if="props.leadingIcon"
-      :name="props.leadingIcon"
+    <span
+      v-if="props.leadingIcon || slots.leading"
       :class="['m3-button-leading', 'm3-button-icon']"
       data-scope="button"
       data-part="leading"
-      :disabled="disabled"
-    />
-    <slot v-else name="leading" :disabled="disabled" />
+    >
+      <Icon v-if="props.leadingIcon" :name="props.leadingIcon" :disabled="disabled" />
+      <slot v-else name="leading" :disabled="disabled" />
+    </span>
 
     <span v-if="slots.default" data-part="text">
       <slot name="default" :disabled="disabled" />
     </span>
 
-    <Icon
-      v-if="props.trailingIcon"
-      :name="props.trailingIcon"
+    <span
+      v-if="props.trailingIcon || slots.trailing"
       :class="['m3-button-trailing', 'm3-button-icon']"
       data-scope="button"
       data-part="trailing"
-      :disabled="disabled"
-    />
-    <slot v-else name="trailing" :disabled="disabled" />
+    >
+      <Icon v-if="props.trailingIcon" :name="props.trailingIcon" :disabled="disabled" />
+      <slot v-else name="trailing" :disabled="disabled" />
+    </span>
   </component>
 </template>
 

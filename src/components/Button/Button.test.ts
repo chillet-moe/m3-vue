@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
+import Icon from '@/components/Icon/Icon.vue';
 import Button from './Button.vue';
 
 function createPointerEvent(type: string, init: EventInit & { pointerId?: number } = {}): Event {
@@ -18,6 +19,49 @@ afterEach(() => {
 });
 
 describe('Button', () => {
+  it('uses the same icon layout wrappers for props and custom slots', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h('div', [
+        h(
+          Button,
+          { leadingIcon: 'search', trailingIcon: 'close' },
+          {
+            default: () => 'Prop icons',
+          },
+        ),
+        h(
+          Button,
+          {},
+          {
+            leading: () => h(Icon, { name: 'search' }),
+            default: () => 'Slot icons',
+            trailing: () => h(Icon, { name: 'close' }),
+          },
+        ),
+      ]),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('.m3-button'));
+
+    for (const button of buttons) {
+      const leading = button.querySelector<HTMLElement>('.m3-button-leading.m3-button-icon');
+      const trailing = button.querySelector<HTMLElement>('.m3-button-trailing.m3-button-icon');
+
+      expect(leading?.dataset.part).toBe('leading');
+      expect(leading?.querySelector('.m3-icon')).not.toBeNull();
+      expect(trailing?.dataset.part).toBe('trailing');
+      expect(trailing?.querySelector('.m3-icon')).not.toBeNull();
+    }
+
+    app.unmount();
+  });
+
   it('clears the pressed state when the pointer is released outside the button', async () => {
     vi.useFakeTimers();
 

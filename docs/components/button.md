@@ -99,11 +99,15 @@ Action components convert `title` into the library tooltip. See [Action Tooltips
 
 ### Leading Icons
 
+The `leadingIcon` prop and `leading` slot share the same size and label spacing. Use the slot when the icon content needs custom rendering.
+
 <DemoContainer :src="ButtonLeadingIconsSrc">
   <ButtonLeadingIcons />
 </DemoContainer>
 
 ### Trailing Icons
+
+The `trailingIcon` prop and `trailing` slot use the same trailing alignment contract.
 
 <DemoContainer :src="ButtonTrailingIconsSrc">
   <ButtonTrailingIcons />
