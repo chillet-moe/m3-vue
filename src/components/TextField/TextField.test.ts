@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
+import IconButton from '@/components/IconButton/IconButton.vue';
 import TextField from './TextField.vue';
 
 const textFieldStyles = readFileSync('src/components/TextField/TextField.css', 'utf8');
@@ -270,6 +271,71 @@ describe('TextField', () => {
     expect(adornmentRule).toContain('display: inline-flex');
     expect(adornmentRule).toContain('align-items: center');
     expect(adornmentRule).toContain('line-height: 1');
+
+    app.unmount();
+  });
+
+  it('integrates direct slot IconButtons without changing the field size contract', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        'div',
+        (['extra-small', 'small', 'medium'] as const).map((size) =>
+          h(
+            TextField,
+            { modelValue: '', size, 'aria-label': `${size} search` },
+            {
+              leading: () => h(IconButton, { icon: 'search', color: 'standard', 'aria-label': 'Search' }),
+              trailing: () => h(IconButton, { icon: 'close', color: 'standard', 'aria-label': 'Clear' }),
+            },
+          ),
+        ),
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const fields = Array.from(container.querySelectorAll<HTMLElement>('.m3-text-field'));
+    const actionRule = textFieldStyles.match(
+      /\.m3-text-field-leading-slot > \.m3-icon-button,\s*\.m3-text-field-trailing-slot > \.m3-icon-button\s*\{([^}]*)\}/,
+    )?.[1];
+    const leadingIconButtonRule = textFieldStyles.match(
+      /\.m3-text-field-leading-slot > \.m3-icon-button\s*\{([^}]*)\}/,
+    )?.[1];
+    const trailingIconButtonRule = Array.from(
+      textFieldStyles.matchAll(/\.m3-text-field-trailing-slot > \.m3-icon-button\s*\{([^}]*)\}/g),
+    ).at(-1)?.[1];
+    const leadingEdgeRule = textFieldStyles.match(
+      /\.m3-text-field-leading-slot > \.m3-icon-button:first-child\s*\{([^}]*)\}/,
+    )?.[1];
+    const trailingEdgeRule = textFieldStyles.match(
+      /\.m3-text-field-trailing-slot > \.m3-icon-button:last-child\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(fields.map((field) => field.dataset.size)).toEqual(['extra-small', 'small', 'medium']);
+    expect(fields.every((field) => field.querySelector('.m3-text-field-leading-slot > .m3-icon-button'))).toBe(true);
+    expect(fields.every((field) => field.querySelector('.m3-text-field-trailing-slot > .m3-icon-button'))).toBe(true);
+    expect(
+      fields.every((field) => field.querySelector('.m3-text-field-leading-slot > .m3-icon-button:first-child')),
+    ).toBe(true);
+    expect(
+      fields.every((field) => field.querySelector('.m3-text-field-trailing-slot > .m3-icon-button:last-child')),
+    ).toBe(true);
+    expect(actionRule).toContain('margin-block: var(--_slot-action-margin)');
+    expect(actionRule).toContain('--md-icon-button-container-height: var(--_slot-action-height)');
+    expect(actionRule).toContain('--md-icon-button-default-leading-space: var(--_slot-action-space)');
+    expect(actionRule).toContain('--md-icon-button-default-trailing-space: var(--_slot-action-space)');
+    expect(leadingIconButtonRule).toContain(
+      '--md-icon-button-icon-size: var(--_outlined-text-field-leading-icon-size)',
+    );
+    expect(trailingIconButtonRule).toContain(
+      '--md-icon-button-icon-size: var(--_outlined-text-field-trailing-icon-size)',
+    );
+    expect(leadingEdgeRule).toContain('margin-inline-start: var(--_slot-action-margin)');
+    expect(trailingEdgeRule).toContain('margin-inline-end: var(--_slot-action-margin)');
 
     app.unmount();
   });
