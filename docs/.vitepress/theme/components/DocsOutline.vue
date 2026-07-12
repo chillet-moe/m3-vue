@@ -68,11 +68,11 @@ function isActiveOutlineLink(link: string) {
   color: var(--md-sys-color-primary);
 }
 
-.docs-outline-link[data-active='true'].m3-button {
+.docs-outline-link[data-active='true'] {
   background: --translucent(var(--md-sys-color-primary), 0.12);
 }
 
-.docs-outline-link.m3-button {
+.docs-outline-link {
   justify-content: flex-start;
   inline-size: 100%;
   padding-inline-start: calc(0.75rem + var(--outline-depth) * 0.75rem);

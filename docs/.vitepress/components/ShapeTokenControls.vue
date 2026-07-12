@@ -519,8 +519,8 @@ onBeforeUnmount(() => {
   margin-block-end: 0.875rem;
 }
 
-.shape-token-controls-preset[data-active='true']:deep(.m3-button),
-.shape-token-controls-full[data-active='true']:deep(.m3-button) {
+.shape-token-controls-preset[data-active='true'],
+.shape-token-controls-full[data-active='true'] {
   background: --translucent(var(--md-sys-color-primary), 0.12);
   color: var(--md-sys-color-primary);
 }

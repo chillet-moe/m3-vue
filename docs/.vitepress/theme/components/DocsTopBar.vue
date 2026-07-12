@@ -149,7 +149,7 @@ function toggleStickyPreview() {
   gap: 0.5rem;
 }
 
-.docs-nav-link[data-active='true']:deep(.m3-button) {
+.docs-nav-link[data-active='true'] {
   color: var(--md-sys-color-primary);
   background: --translucent(var(--md-sys-color-primary), 0.12);
 }

@@ -21,8 +21,14 @@ const selections = ref<Record<TextFieldSize, SelectModelValue>>({
 <template>
   <div class="field-size-demo">
     <div v-for="size in sizes" :key="size" class="field-size-toolbar">
-      <TextField v-model="queries[size]" label="Search" :size="size" />
-      <Select v-model="selections[size]" label="Coffee" :options="coffeeOptions" :size="size" />
+      <TextField v-model="queries[size]" class="field-size-control" label="Search" :size="size" />
+      <Select
+        v-model="selections[size]"
+        class="field-size-control"
+        label="Coffee"
+        :options="coffeeOptions"
+        :size="size"
+      />
       <Button :size="size">Apply</Button>
     </div>
   </div>
@@ -41,7 +47,7 @@ const selections = ref<Record<TextFieldSize, SelectModelValue>>({
   gap: 0.5rem;
 }
 
-.field-size-toolbar > :is(.m3-text-field, .m3-select) {
+.field-size-toolbar > .field-size-control {
   flex: 1 1 10rem;
 }
 </style>
