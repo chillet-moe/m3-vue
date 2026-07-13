@@ -113,8 +113,8 @@ const {
   type,
 } = useLinkTag({
   defaultTag: 'button',
-  href,
-  disabled,
+  href: () => href,
+  disabled: () => disabled,
   ariaDisabledMode: 'non-button',
 });
 

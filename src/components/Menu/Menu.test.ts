@@ -649,6 +649,149 @@ describe('Menu', () => {
     app.unmount();
   });
 
+  it('keeps native disabled state and interaction in sync when MenuItem is updated', async () => {
+    const disabled = ref(true);
+    let clickCount = 0;
+    const container = document.createElement('div');
+    container.addEventListener('click', () => {
+      clickCount += 1;
+    });
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        return () => h(MenuItem, { disabled: disabled.value }, { default: () => 'Disconnect device' });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const menuItem = container.querySelector<HTMLButtonElement>('button[role="menuitem"]');
+
+    expect(menuItem?.disabled).toBe(true);
+    expect(menuItem?.hasAttribute('disabled')).toBe(true);
+    expect(menuItem?.hasAttribute('aria-disabled')).toBe(false);
+
+    menuItem?.click();
+    expect(clickCount).toBe(0);
+
+    disabled.value = false;
+    await nextTick();
+
+    expect(menuItem?.disabled).toBe(false);
+    expect(menuItem?.hasAttribute('disabled')).toBe(false);
+    expect(menuItem?.hasAttribute('aria-disabled')).toBe(false);
+
+    menuItem?.click();
+    expect(clickCount).toBe(1);
+
+    disabled.value = true;
+    await nextTick();
+
+    expect(menuItem?.disabled).toBe(true);
+    expect(menuItem?.hasAttribute('disabled')).toBe(true);
+
+    menuItem?.click();
+    expect(clickCount).toBe(1);
+
+    app.unmount();
+  });
+
+  it('keeps anchor accessibility and interaction in sync with MenuItem disabled updates', async () => {
+    const disabled = ref(false);
+    let clickCount = 0;
+    let clickDefaultPrevented: boolean | undefined;
+    const container = document.createElement('div');
+    container.addEventListener('click', (event) => {
+      clickCount += 1;
+      clickDefaultPrevented = event.defaultPrevented;
+      event.preventDefault();
+    });
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        return () => h(MenuItem, { disabled: disabled.value, href: '#account' }, { default: () => 'Account settings' });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const menuItem = container.querySelector<HTMLAnchorElement>('a[role="menuitem"]');
+    const enabledClick = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+    expect(menuItem?.getAttribute('href')).toBe('#account');
+    expect(menuItem?.hasAttribute('disabled')).toBe(false);
+    expect(menuItem?.hasAttribute('aria-disabled')).toBe(false);
+    expect(menuItem?.hasAttribute('tabindex')).toBe(false);
+
+    menuItem?.dispatchEvent(enabledClick);
+    expect(clickDefaultPrevented).toBe(false);
+    expect(clickCount).toBe(1);
+
+    disabled.value = true;
+    await nextTick();
+
+    const disabledClick = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+    expect(menuItem?.hasAttribute('href')).toBe(false);
+    expect(menuItem?.hasAttribute('disabled')).toBe(false);
+    expect(menuItem?.getAttribute('aria-disabled')).toBe('true');
+    expect(menuItem?.getAttribute('tabindex')).toBe('-1');
+
+    menuItem?.dispatchEvent(disabledClick);
+    expect(disabledClick.defaultPrevented).toBe(true);
+    expect(clickCount).toBe(1);
+
+    disabled.value = false;
+    await nextTick();
+
+    const reenabledClick = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+    expect(menuItem?.getAttribute('href')).toBe('#account');
+    expect(menuItem?.hasAttribute('aria-disabled')).toBe(false);
+    expect(menuItem?.hasAttribute('tabindex')).toBe(false);
+
+    menuItem?.dispatchEvent(reenabledClick);
+    expect(clickDefaultPrevented).toBe(false);
+    expect(clickCount).toBe(2);
+
+    app.unmount();
+  });
+
+  it('updates the MenuItem element semantics when href changes', async () => {
+    const href = ref<string>();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        return () => h(MenuItem, { href: href.value }, { default: () => 'Account settings' });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector('button[role="menuitem"]')).not.toBeNull();
+
+    href.value = '#account';
+    await nextTick();
+
+    expect(container.querySelector('button[role="menuitem"]')).toBeNull();
+    expect(container.querySelector('a[role="menuitem"]')?.getAttribute('href')).toBe('#account');
+
+    href.value = undefined;
+    await nextTick();
+
+    expect(container.querySelector('a[role="menuitem"]')).toBeNull();
+    expect(container.querySelector('button[role="menuitem"]')).not.toBeNull();
+
+    app.unmount();
+  });
+
   it('supports vibrant color option', async () => {
     installPopoverPolyfill();
 
