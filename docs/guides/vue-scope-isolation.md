@@ -4,38 +4,86 @@ title: Vue Scope Boundaries
 
 # Vue Scope Boundaries
 
-Vue intentionally copies a parent's scoped-style ID onto a child component's
-root element. That makes parent styles useful for child layout, but it also lets
-unrelated parent type, ID, attribute, or coincident class selectors match the
-child root.
+Vue intentionally copies a parent component's scoped-style ID onto a child
+component's root element. This lets a parent style that root for layout, but it
+also means a selector such as `button` can accidentally depend on a child's
+private root tag.
 
-m3-vue uses `@chillet/vue-scope-boundary` at compile time. The integration gives
-native elements an ownership marker and lets only a class explicitly passed to
-a component act as a child-root styling capability. Vue's client and server
-runtimes remain unmodified.
+m3-vue uses `@chillet/vue-scope-boundary` at compile time. Version 0.2 gives
+elements written directly in an SFC an ownership marker, then restricts scoped
+selectors whose subject contains a positive HTML type selector to those owned
+elements. Vue's client and server runtimes remain unmodified.
 
-## What m3-vue already provides
+## Exact boundary
 
-The m3-vue Vite, test, and documentation build pipelines enable the boundary
-compiler integration. Scoped styles authored in those pipelines receive the
-ownership and class-capability transforms without adding a runtime dependency.
+The boundary is deliberately narrow:
 
-This does not turn the library's unscoped component CSS into isolated CSS. The
-current component styles are primarily shipped as ordinary global CSS and keep
-normal cascade and inheritance behavior. Use the documented CSS tokens and
-`data-part` APIs to customize them.
+| Parent usage                             | Parent scoped selector | Can match the child root? |
+| ---------------------------------------- | ---------------------- | ------------------------- |
+| `<Child />` with a `<button>` root       | `button`               | No                        |
+| `<Child class="primary" />`              | `button.primary`       | No                        |
+| `<Child class="primary" />`              | `.primary`             | Yes                       |
+| `<Child id="save" />`                    | `#save`                | Yes                       |
+| `<Child role="button" />`                | `[role='button']`      | Yes                       |
+| Child internally uses root class `.item` | `.item`                | Yes, if it collides       |
 
-A consuming application's SFCs are compiled separately. To prevent a scoped
-style in your application from gaining unintended access to an m3-vue root, the
-application must enable the same compiler integration.
+In other words, the plugin prevents unintentional dependencies on private HTML
+tags. It does **not** isolate pure class, ID, attribute, universal, or
+pseudo-only selectors. Passing a class to a component remains ordinary Vue
+attribute fallthrough; the plugin neither grants nor removes that behavior.
+
+For example:
+
+```vue
+<template>
+  <button class="action">Owned button</button>
+  <Button id="save" class="action" />
+</template>
+
+<style scoped>
+button,
+button.action {
+  /* Matches only the <button> written in this SFC. */
+  color: red;
+}
+
+.action,
+#save {
+  /* Keeps Vue's normal behavior and may match the Button root. */
+  margin-inline: 1rem;
+}
+</style>
+```
+
+Ordinary Vue scoped CSS already prevents `.btn span` from reaching a `span`
+inside a child component, because that internal element lacks the parent's
+scope ID. Version 0.2 preserves this behavior and compiles the positive `span`
+subject against the ownership marker as well. A pure-class subject such as
+`.btn .label` receives no new boundary and can still match a child root with a
+colliding `.label` class; it does not gain general access to deeper child DOM.
+
+## What m3-vue provides
+
+The m3-vue Vite, test, package-build, and documentation pipelines enable the
+0.2 compiler integration. Scoped SFC styles compiled by those pipelines gain
+the type-selector boundary without a runtime dependency.
+
+Most m3-vue component styles are shipped as ordinary unscoped CSS. The plugin
+does not turn those styles into isolated CSS and does not stop inheritance or
+the normal cascade. Use documented props, `--md-*` tokens, and `data-part`
+contracts to customize components.
+
+A consuming application's SFCs are compiled separately. To apply the boundary
+to selectors authored by the application, that application must enable the
+same compiler integration.
 
 ## Vite setup
 
-Install the plugin alongside the Vue plugin and compiler packages used by the
-application:
+Install version 0.2 or newer alongside the Vue plugin and compiler packages
+used by the application:
 
 ```bash
-pnpm add -D @chillet/vue-scope-boundary @vitejs/plugin-vue @vue/compiler-core @vue/compiler-sfc postcss
+pnpm add -D @chillet/vue-scope-boundary@^0.2.0 @vitejs/plugin-vue @vue/compiler-core @vue/compiler-sfc postcss
 ```
 
 Use the preset instead of creating a second `@vitejs/plugin-vue` instance:
@@ -64,7 +112,7 @@ vueScopeBoundary({
 });
 ```
 
-When a framework owns the Vue plugin, compose its options rather than adding a
+When a framework owns the Vue plugin, compose its options instead of adding a
 second plugin. VitePress supports this directly:
 
 ```ts
@@ -77,73 +125,50 @@ export default defineConfig({
 });
 ```
 
-The current plugin version targets Vue 3.5 and Vite 8. Nuxt integration is not
-provided yet. A Nuxt consumer still receives m3-vue's precompiled internal
-markers, but the consumer's own SFC styles retain normal Vue semantics until a
-Nuxt integration is added.
+The 0.2 line targets Vue 3.5 and Vite 8. Nuxt integration is not currently
+provided. A Nuxt consumer receives m3-vue's precompiled markers, but its own
+SFC styles retain normal Vue semantics until its build enables the transform.
 
-## Result
+## Authoring rules
 
-Given a parent SFC:
+- Use `button`, `.toolbar > button`, or `button.primary` only when the subject is
+  an element written in the same SFC. The type is part of the ownership
+  boundary, not a way to style a child component root.
+- Use a meaningful class passed to a component and a pure class selector when
+  intentionally styling its fallthrough root.
+- Treat class naming as an application responsibility. Prefer component or
+  feature prefixes, BEM, CSS Modules, or another collision-resistant scheme;
+  the plugin does not protect short class names.
+- Do not depend on m3-vue's private `.m3-*` classes or root tags. Prefer props,
+  documented tokens, and a parent-owned wrapper for layout.
+- Use an explicit `:deep([data-part='...'])` selector only when a documented
+  `data-part` contract permits deep customization.
 
-```vue
-<template>
-  <Button class="action" />
-</template>
+Semantic classes that improve an API or make a demo maintainable are still
+useful, but they are not required by this plugin and are not an authorization
+marker.
 
-<style scoped>
-.action {
-  margin-inline: 1rem;
-}
+## Limitations
 
-button,
-[disabled] {
-  color: red;
-}
-</style>
-```
+This integration is not Shadow DOM or general Light DOM isolation. It does not
+block:
 
-The explicitly supplied `.action` rule can match the `Button` fallthrough root.
-The `button` and `[disabled]` rules cannot match that root solely because Vue
-copied the parent's scope ID. A class used only inside `Button` does not become
-a parent styling capability.
-
-For general customization, continue to prefer component props and documented
-`--md-*` tokens. Use a parent-owned wrapper for layout when passing a class to
-the component root is not appropriate.
-
-## Supported boundary
-
-This integration narrowly changes how a copied parent scope ID is interpreted;
-it is not Shadow DOM or general subtree isolation. It does not block:
-
+- pure class, ID, attribute, universal, or pseudo-only selectors;
 - global or unscoped selectors;
 - normal inheritance such as `color`, `font-family`, and custom properties;
-- explicit `:deep()` or `:global()` selectors;
-- ordinary Light DOM styling outside scoped SFC compilation.
+- explicit `:deep()`, `:global()`, or `:slotted()` behavior;
+- ordinary cascade outside scoped SFC compilation.
 
-Additional compiler limitations:
-
-- `class` hidden inside `v-bind="object"` is opaque; put `class` or `:class`
-  directly on the component when it should be a capability;
-- render functions and JSX do not receive ownership markers automatically;
-- precompiled third-party SFCs keep the semantics they were built with;
-- `inheritAttrs: false` components must forward `class` to preserve an explicit
-  class capability;
-- fragment roots cannot receive fallthrough classes;
-- transition classes added at runtime are not external class capabilities.
-
-Vue 3.5 also anchors selectors whose rightmost compound is pseudo-only on an
-earlier subject. For example, `.container :hover`, `.container :is(...)`, and
-`.container *` can retain Vue's existing descendant behavior. Prefer a concrete
-rightmost type, class, or attribute, such as `.container button:hover`; expand a
-terminal `:is()`/`:where()` selector list when necessary. Use `:deep()` when
+Selectors with no positive type subject, including negative type tests such as
+`:not(button)`, do not gain an ownership boundary. Vue's existing treatment of
+terminal universal and pseudo-only compounds is also preserved. Prefer a
+concrete positive type when ownership is intended, and use `:deep()` when
 cross-component traversal is intentional.
 
-Ordinary `.btn span` remains safe under Vue scoped CSS: Vue scopes `span`, and a
-child-internal `span` does not carry the parent's ownership marker.
+Render functions and JSX do not receive ownership markers automatically, and
+precompiled third-party SFCs keep the semantics they were built with. Fragment
+roots and `inheritAttrs: false` continue to follow Vue's normal fallthrough
+rules.
 
-The integration is provided by
-[`@chillet/vue-scope-boundary`](https://www.npmjs.com/package/@chillet/vue-scope-boundary).
-Its implementation, limitations, and validation fixtures are maintained in the
+The integration is maintained in the
 [`vue-scope-boundary` repository](https://github.com/chillet-moe/vue-scope-boundary).

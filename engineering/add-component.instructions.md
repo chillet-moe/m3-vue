@@ -110,8 +110,9 @@ export { default as MenuItem } from './MenuItem.vue';
 
 ```vue
 <script setup lang="ts">
-// Scope-boundary markers are injected globally by the Vue compiler plugin.
-// Do not add component-specific scope inheritance options.
+// Scope-boundary ownership markers for positive type selectors are injected
+// globally by the Vue compiler plugin. It does not isolate class/ID/attribute
+// selectors. Do not add component-specific scope inheritance options.
 // Props 类型直接在 setup 中以 export type 定义
 export type <Name>Props = {
   variant?: 'filled' | 'outlined';
@@ -203,6 +204,15 @@ const headlineId = `dialog-headline-${useId()}`;
 ```
 
 CSS 注意事项：
+
+- 在 scoped SFC 或文档 demo 中，`button`、`button.primary` 等正向 type
+  selector 只用于本 SFC 自己写出的原生元素。它们不会命中子组件根元素。
+- 纯 class、ID、attribute selector 仍保留 Vue 的父 scope ID 语义。组件和
+  demo 的 class 使用稳定、带上下文的命名；短 class 名需要通过 BEM、组件
+  前缀或 CSS Modules 避免碰撞。
+- 有意定制子组件根元素时传入语义 class 并使用纯 class selector；不要附加
+  子组件的 private 根 tag 或 `.m3-*` class。访问内部部件时使用明确的
+  `:deep([data-part='...'])` 契约。
 
 - CSS token 分五层：
   - `--md-sys-*` 是主题级 token，不建议在单个组件实例上局部覆盖。

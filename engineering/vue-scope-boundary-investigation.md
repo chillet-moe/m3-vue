@@ -2,93 +2,143 @@
 
 ## Status
 
-Implemented with `@chillet/vue-scope-boundary`. The earlier
-`inheritParentScopeId: false` experiment and Vue runtime/server-renderer patches
-have been removed.
+m3-vue has migrated its integration and tests to the published 0.2 semantics of
+`@chillet/vue-scope-boundary`. The dependency and lockfile resolve the npm
+registry package at version 0.2.0.
+
+The earlier `inheritParentScopeId: false` runtime/server-renderer patch remains
+removed.
 
 ## Problem
 
 Vue gives a child component root both the child's scope ID and its parent's
-scope ID. Consequently, unrelated parent scoped selectors can match that root.
-Ordinary descendant selectors do not normally enter the child's internal DOM;
-the original problem is specifically the extra styling capability granted to
-the root.
+scope ID. Ordinary scoped descendant selectors do not generally enter the
+child's private DOM, but the copied parent ID can make a parent selector match
+the child root.
 
-The required behavior is:
+The current goal is intentionally limited to accidental dependencies on that
+root's private HTML tag:
 
-| Parent usage                               | Parent scoped selector  | Child root |
-| ------------------------------------------ | ----------------------- | ---------- |
-| `<Child />`                                | `button`, `#id`, `[x]`  | no match   |
-| `<Child class="item" />`                   | `.item`                 | match      |
-| `<Child class="item" />`                   | `button`                | no match   |
-| `<Child />`, child internally uses `.item` | `.item`                 | no match   |
-| `<Child :class="dynamic" />`               | matching class selector | reactive   |
+| Parent usage                               | Parent scoped selector | Desired child-root result |
+| ------------------------------------------ | ---------------------- | ------------------------- |
+| `<Child />`, root happens to be `<button>` | `button`               | no match                  |
+| `<Child class="item" />`                   | `button.item`          | no match                  |
+| `<Child class="item" />`                   | `.item`                | normal Vue match          |
+| `<Child id="item" />`                      | `#item`                | normal Vue match          |
+| `<Child role="button" />`                  | `[role='button']`      | normal Vue match          |
+| Child root privately uses `.item`          | `.item`                | normal Vue collision      |
 
-Passing a fallthrough class is treated as an explicit request to style the
-component root. It must not restore every parent scoped selector.
+Pure class, ID, attribute, universal, and pseudo-only selectors are not part of
+the isolation promise. Their collision risk belongs to naming conventions,
+CSS Modules, or a stronger isolation mechanism such as Shadow DOM.
 
-## Selected implementation
+## Selected 0.2 implementation
 
 The plugin composes two official compiler extension paths:
 
-1. a Vue template `nodeTransform` adds an owned marker to native elements and
-   synthetic capability classes for direct component `class`/`:class` values;
-2. a post-Vue selector transform replaces the ordinary scope attribute with an
-   owned branch and, for positive class subjects, an external-class capability
-   branch.
+1. a Vue template `nodeTransform` adds an owned marker to native and recognized
+   custom elements authored directly by the SFC;
+2. a post-Vue selector transform replaces the normal scope attribute with that
+   owned marker only when the selector subject contains a positive type
+   selector.
 
-Capability provenance travels in `class`, rather than a separate `data-*`
-attribute, because Vue's no-props functional components only fall through
-`class`, `style`, and listeners. Static and dynamic class sources are normalized
-together, so functional roots, transparent roots, CSR, SSR, and hydration use
-the same carrier.
+Examples for scope ID `data-v-example`:
 
-The Vite preset creates one official Vue plugin instance. Frameworks such as
-VitePress use `createScopeBoundaryVueOptions()` to compose with the Vue plugin
-they already own. m3-vue applies the integration to its normal Vite/Vitest path,
-library pack path, and VitePress path.
+| Authored selector | Compiled selector                      |
+| ----------------- | -------------------------------------- |
+| `button`          | `button[data-v-example-owned]`         |
+| `button.primary`  | `button.primary[data-v-example-owned]` |
+| `.primary`        | `.primary[data-v-example]`             |
+| `#save`           | `#save[data-v-example]`                |
+| `[role='button']` | `[role='button'][data-v-example]`      |
 
-## Why the runtime patch was removed
+Component `class` values remain ordinary Vue input. The only additional DOM
+attribute is the owned marker on elements authored by the current SFC.
+
+The Vite preset still creates one official Vue plugin instance. Frameworks
+such as VitePress use `createScopeBoundaryVueOptions()` to compose with the Vue
+plugin they already own. m3-vue applies the integration to its normal
+Vite/Vitest path, library build path, and VitePress path.
+
+## Why the 0.1 semantics were retired
+
+The 0.1 design attempted broader selector isolation and made component class
+values part of a compiler protocol. That expanded the transform well beyond the
+root-tag leak that motivated the project.
+
+Version 0.2 accepts ordinary Vue class behavior and confines the plugin to the
+case it can express cleanly: positive type ownership. Existing semantic classes
+may remain where they improve API clarity or maintenance, but they are not
+plugin requirements and must not be documented as authorization tokens.
+
+## Why the runtime patch remains rejected
 
 The runtime patch prevented all parent scope ID inheritance for opted-out
-components. It required exact Vue-version patches in both runtime-core and
-server-renderer, per-component options, consumer patch installation, and
-upgrade regeneration. It also removed the intentional case where a class
-passed by the parent should style the child root.
+components. It required exact Vue-version patches in runtime-core and
+server-renderer, per-component or global policy, consumer patch installation,
+and upgrade regeneration. It also removed Vue's intentional ability to style a
+child root with a passed class.
 
-The compiler integration leaves Vue's runtime behavior intact and changes only
-what generated scoped CSS treats as ownership or an explicit class capability.
+The compiler integration leaves Vue runtime behavior intact. It changes only
+positive type selectors, so class-based root layout remains possible without a
+dual-scope or runtime protocol.
 
-## Accepted scope
+## m3-vue source audit
 
-The plugin only fixes child-root matches enabled by Vue's copied parent scope
-ID. It does not claim general scoped-CSS subtree isolation. Vue 3.5's existing
-handling of pseudo-only rightmost compounds and universal descendants is
-preserved because post-Vue output can be indistinguishable from intentional
-`:deep()` output.
+At migration time, the library source contained only the dedicated integration
+fixture with scoped styles. The documentation contained 51 scoped style blocks;
+37 rule blocks used a positive type selector. Production occurrences target
+native elements authored by the same SFC, such as documentation table cells,
+code blocks, headings, SVG paths, and captions. None intentionally relied on a
+child component's private root tag.
 
-Other accepted limits include opaque `v-bind="object"` classes, render
-functions/JSX, precompiled third-party SFCs, fragment fallthrough, runtime
-transition classes, and normal Light DOM inheritance.
+Most shipped component CSS is external and unscoped, so 0.2 does not alter its
+selector matching. Existing `docs-outline-link`, field-size, top-bar, and shape
+preview classes remain useful semantic implementation details, independent of
+the retired 0.1 model.
 
-## Validation
+Component and demo authors must now follow these explicit rules:
 
-The standalone plugin covers compiler output, PostCSS selectors, CSR, SSR,
-hydration, functional and transparent roots, Vite builds, source maps, HMR, and
-real-browser matching. m3-vue adds an integration fixture compiled through its
-actual Vite Plus config and verifies ownership, copied parent scope IDs,
-explicit/unpassed/dynamic class capabilities, SSR, and hydration. Production
-and VitePress builds verify that the configured plugin compiles the complete
-library and documentation codebases.
+- positive type selectors describe elements owned by the current scoped SFC;
+- pure class, ID, and attribute selectors retain Vue behavior;
+- short class collisions are prevented through naming conventions, BEM, CSS
+  Modules, or equivalent project policy;
+- a passed semantic class plus a pure class selector is the supported way to
+  style a child root intentionally;
+- documented `:deep()` and `data-part` contracts remain the mechanism for
+  intentional access to component internals.
 
-After installing the CSS adapter required by `vp pack`, packaging currently
-stops before scope-boundary processing because the Vite Plus/tsdown pipeline
-passes Vue external `<style src="./Component.css">` references to
-`@vitejs/plugin-vue` without a resolvable absolute filename. The result is an
-`ENOENT` for the relative CSS path. Replacing the boundary preset with this
-repository's plain Vue plugin produces the same failure, while the normal
-`vp build` path succeeds, so this is tracked as an independent packaging
-integration issue rather than a scope-boundary regression.
+## Validation contract
+
+The m3-vue integration fixture is compiled by the actual project config and
+verifies both CSR and SSR/hydration. It must prove that:
+
+- owned elements receive `data-v-*-owned`;
+- a child root keeps the ordinary parent scope ID but not the parent's owned
+  marker;
+- `button` and `button.foo` compile against the owned marker;
+- `.foo`, `#id`, and `[attr]` compile against the ordinary Vue scope ID;
+- static and dynamic component classes remain unchanged;
+- no `data-v-*-class--*` marker appears.
+
+Type checking, the full test suite, production build, documentation build, and
+built-artifact searches are required before completing the migration.
+
+## Packaging note
+
+After installing the CSS adapter required by `vp pack`, packaging previously
+stopped before scope-boundary processing because the Vite Plus/tsdown pipeline
+passed Vue external `<style src="./Component.css">` references to
+`@vitejs/plugin-vue` without a resolvable absolute filename. The same failure
+occurred with the repository's plain Vue plugin, while `vp build` succeeded, so
+this remains an independent packaging integration issue rather than a boundary
+regression.
+
+## Release state
+
+Version 0.2.0 is published. m3-vue uses the registry range `^0.2.0`; local
+plugin development may temporarily use a `link:` dependency, but release and CI
+validation use the registry package.
 
 ## References
 

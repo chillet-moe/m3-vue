@@ -68,7 +68,7 @@
     "vue": "^3.5.39"
   },
   "devDependencies": {
-    "@chillet/vue-scope-boundary": "^0.1.0",
+    "@chillet/vue-scope-boundary": "^0.2.0",
     "@chillet/postcss-custom-mixins": "^0.2.1",
     "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.6",

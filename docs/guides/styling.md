@@ -94,7 +94,14 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
 - **`data-part`**：标识组件内部的具体元素，例如 `root`、`label`、`leading`。
 
 组件根元素使用 `data-part="root"`。给单个组件实例传入 class 是定制根元素
-的首选方式；从父组件访问内部 `data-part` 则是显式的深层定制。
+的首选方式；这属于普通 Vue class fallthrough，不是 scope-boundary
+提供的授权机制。从父组件访问内部 `data-part` 则是显式的深层定制。
+
+在启用了 `@chillet/vue-scope-boundary` 的 scoped SFC 中，正向 HTML type
+selector（如 `button`、`.toolbar > button`、`button.primary`）只匹配本 SFC
+写出的原生元素。纯 class、ID 和 attribute selector 仍遵循 Vue 原生规则，
+可以命中子组件根元素。因此短 class 名碰撞仍需通过组件前缀、BEM、CSS
+Modules 或其他命名约定避免。
 
 ## 用法
 
@@ -119,6 +126,23 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
   color: red;
 }
 ```
+
+如果只需要定制组件根元素，给实例传入语义明确的 class，并使用纯 class
+selector：
+
+```vue
+<Button class="checkout-action">Checkout</Button>
+
+<style scoped>
+.checkout-action {
+  inline-size: 100%;
+}
+</style>
+```
+
+不要给这类规则附加组件内部的根标签或 private class。`button.checkout-action`
+会被视为对私有根标签的依赖，只匹配本 SFC 自己写出的 `<button>`；
+`.m3-button.checkout-action` 则依赖组件内部实现。
 
 ## 查看组件的 Anatomy
 

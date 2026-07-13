@@ -2,7 +2,7 @@
 
 A Vue 3 component library implementing Material Design 3 (Material You).
 
-> m3-vue's build enables `@chillet/vue-scope-boundary` for scoped SFC styles. Vite consumers should enable the same compiler integration to prevent their own scoped styles from gaining unintended access to m3-vue component roots. No Vue runtime patch is required. See [`docs/guides/vue-scope-isolation.md`](docs/guides/vue-scope-isolation.md).
+> m3-vue's build enables `@chillet/vue-scope-boundary` for scoped SFC styles. It prevents positive HTML type selectors such as `button` and `button.primary` from matching child component roots through Vue's copied parent scope ID. Class, ID, and attribute selectors keep Vue's normal behavior. No Vue runtime patch is required. See [`docs/guides/vue-scope-isolation.md`](docs/guides/vue-scope-isolation.md).
 
 ## Installation
 

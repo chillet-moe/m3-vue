@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { createScopeBoundaryVueOptions } from '@chillet/vue-scope-boundary/vite';
 import { createApp, createSSRApp, defineComponent, h, nextTick, ref } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import BoundaryParent from './vueScopeBoundary/BoundaryParent.vue';
@@ -8,20 +9,12 @@ function marker(element: Element, suffix: string) {
   return element.getAttributeNames().find((name) => name.endsWith(suffix));
 }
 
-function capabilityPrefix(parentOwnedMarker: string) {
-  return parentOwnedMarker.replace(/-owned$/, '-class--');
-}
-
-function hasCapability(element: Element, prefix: string, className: string) {
-  return element.classList.contains(`${prefix}${className}`);
-}
-
 afterEach(() => {
   document.body.innerHTML = '';
 });
 
 describe('Vue scope boundary compiler integration', () => {
-  it('isolates child roots while retaining explicit and dynamic class capabilities', async () => {
+  it('isolates positive type selectors while preserving normal Vue selectors and classes', async () => {
     const dynamicClass = ref<unknown>(['dynamic', { active: true }]);
     const Root = defineComponent({
       setup: () => () => h(BoundaryParent, { dynamicClass: dynamicClass.value }),
@@ -34,40 +27,68 @@ describe('Vue scope boundary compiler integration', () => {
     const parentOwnedMarker = marker(owned, '-owned');
     expect(parentOwnedMarker).toBeTruthy();
     const parentScopeId = parentOwnedMarker!.replace(/-owned$/, '');
-    const prefix = capabilityPrefix(parentOwnedMarker!);
 
     expect(container.querySelector('#owned-content')?.hasAttribute(parentOwnedMarker!)).toBe(true);
+    const ownedButton = container.querySelector('#owned-button')!;
+    expect(ownedButton.hasAttribute(parentOwnedMarker!)).toBe(true);
 
     const plain = container.querySelector('#plain')!;
     expect(plain.hasAttribute(parentScopeId)).toBe(true);
     expect(plain.hasAttribute(parentOwnedMarker!)).toBe(false);
-    expect([...plain.classList].some((name) => name.startsWith(prefix))).toBe(false);
 
     const explicit = container.querySelector('#explicit')!;
-    expect(hasCapability(explicit, prefix, 'explicit')).toBe(true);
+    expect(explicit.hasAttribute(parentScopeId)).toBe(true);
+    expect(explicit.hasAttribute(parentOwnedMarker!)).toBe(false);
+    expect(explicit.classList.contains('explicit')).toBe(true);
 
     const coincident = container.querySelector('#coincident')!;
+    expect(coincident.hasAttribute(parentScopeId)).toBe(true);
+    expect(coincident.hasAttribute(parentOwnedMarker!)).toBe(false);
     expect(coincident.classList.contains('coincident')).toBe(true);
-    expect(hasCapability(coincident, prefix, 'coincident')).toBe(false);
 
     const dynamic = container.querySelector('#dynamic')!;
-    expect(hasCapability(dynamic, prefix, 'dynamic')).toBe(true);
-    expect(hasCapability(dynamic, prefix, 'active')).toBe(true);
+    expect(dynamic.classList.contains('dynamic')).toBe(true);
+    expect(dynamic.classList.contains('active')).toBe(true);
 
     dynamicClass.value = ['next', { active: false, ready: true }];
     await nextTick();
-    expect(hasCapability(dynamic, prefix, 'dynamic')).toBe(false);
-    expect(hasCapability(dynamic, prefix, 'active')).toBe(false);
-    expect(hasCapability(dynamic, prefix, 'next')).toBe(true);
-    expect(hasCapability(dynamic, prefix, 'ready')).toBe(true);
+    expect(dynamic.classList.contains('dynamic')).toBe(false);
+    expect(dynamic.classList.contains('active')).toBe(false);
+    expect(dynamic.classList.contains('next')).toBe(true);
+    expect(dynamic.classList.contains('ready')).toBe(true);
 
     const childOwnedMarker = marker(plain, '-owned');
     expect(childOwnedMarker).toBeTruthy();
     expect(childOwnedMarker).not.toBe(parentOwnedMarker);
     expect(container.querySelector('#child-content')?.hasAttribute(childOwnedMarker!)).toBe(true);
     expect(container.querySelector('#child-content')?.hasAttribute(parentOwnedMarker!)).toBe(false);
+    expect(container.innerHTML).not.toContain('-class--');
 
     app.unmount();
+  });
+
+  it('rewrites only positive type subjects in scoped CSS', async () => {
+    const options = createScopeBoundaryVueOptions();
+    const compiled = await options.compiler!.compileStyleAsync({
+      source: `
+        button { --type: yes; }
+        button.explicit { --type-class: yes; }
+        .explicit { --class: yes; }
+        #plain { --id: yes; }
+        [role='button'] { --attribute: yes; }
+      `,
+      filename: 'BoundaryParent.vue',
+      id: 'data-v-test',
+      scoped: true,
+    });
+
+    expect(compiled.errors).toEqual([]);
+    expect(compiled.code).toContain('button[data-v-test-owned]');
+    expect(compiled.code).toContain('button.explicit[data-v-test-owned]');
+    expect(compiled.code).toContain('.explicit[data-v-test]');
+    expect(compiled.code).toContain('#plain[data-v-test]');
+    expect(compiled.code).toContain("[role='button'][data-v-test]");
+    expect(compiled.code).not.toContain('-class--');
   });
 
   it('keeps boundary markers stable through SSR and hydration', async () => {
@@ -76,9 +97,9 @@ describe('Vue scope boundary compiler integration', () => {
     });
     const html = await renderToString(createSSRApp(Root));
     expect(html).toContain('-owned');
-    expect(html).toContain('-class--explicit');
-    expect(html).toContain('-class--dynamic');
-    expect(html).toContain('-class--active');
+    expect(html).not.toContain('-class--');
+    expect(html).toContain('class="coincident explicit"');
+    expect(html).toContain('class="coincident dynamic active"');
 
     const container = document.createElement('div');
     container.innerHTML = html;

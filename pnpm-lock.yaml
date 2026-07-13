@@ -28,8 +28,8 @@ importers:
         version: 3.5.39(typescript@6.0.3)
     devDependencies:
       '@chillet/vue-scope-boundary':
-        specifier: ^0.1.0
-        version: 0.1.0(@vitejs/plugin-vue@6.0.6(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(vue@3.5.39(typescript@6.0.3)))(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(@vue/compiler-core@3.5.39)(@vue/compiler-sfc@3.5.39)(postcss@8.5.16)(vue@3.5.39(typescript@6.0.3))
+        specifier: ^0.2.0
+        version: 0.2.0(@vitejs/plugin-vue@6.0.6(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(vue@3.5.39(typescript@6.0.3)))(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(@vue/compiler-core@3.5.39)(@vue/compiler-sfc@3.5.39)(postcss@8.5.16)(vue@3.5.39(typescript@6.0.3))
       '@chillet/postcss-custom-mixins':
         specifier: ^0.2.1
         version: 0.2.1(postcss@8.5.16)
@@ -178,8 +178,8 @@ packages:
   '@blazediff/core@1.9.1':
     resolution: {integrity: sha512-ehg3jIkYKulZh+8om/O25vkvSsXXwC+skXmyA87FFx6A/45eqOkZsBltMw/TVteb0mloiGT8oGRTcjRAz66zaA==}
 
-  '@chillet/vue-scope-boundary@0.1.0':
-    resolution: {integrity: sha512-R0kleJBFTKmv1FgR0SiiaD4w9VkkzVzxStwwryWD50QTZqKwftkfZKL+tswQBOyas57A9LgGUuxnJFUKKDmG6A==}
+  '@chillet/vue-scope-boundary@0.2.0':
+    resolution: {integrity: sha512-BauyAj5Cb0DyZYaaFMje76tw82xGwZ0eN2MuZ0Vdsf7GKC8TAfendaLEt1Hy5JxfFuJy2dGP/AOVKNRAOjMMaw==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@vitejs/plugin-vue': '>=6.0.0 <7.0.0'
@@ -2834,7 +2834,7 @@ snapshots:
 
   '@blazediff/core@1.9.1': {}
 
-  '@chillet/vue-scope-boundary@0.1.0(@vitejs/plugin-vue@6.0.6(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(vue@3.5.39(typescript@6.0.3)))(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(@vue/compiler-core@3.5.39)(@vue/compiler-sfc@3.5.39)(postcss@8.5.16)(vue@3.5.39(typescript@6.0.3))':
+  '@chillet/vue-scope-boundary@0.2.0(@vitejs/plugin-vue@6.0.6(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(vue@3.5.39(typescript@6.0.3)))(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(@vue/compiler-core@3.5.39)(@vue/compiler-sfc@3.5.39)(postcss@8.5.16)(vue@3.5.39(typescript@6.0.3))':
     dependencies:
       '@vitejs/plugin-vue': 6.0.6(@voidzero-dev/vite-plus-core@0.2.1(@types/node@25.6.0)(esbuild@0.27.7)(tsx@4.21.0)(typescript@6.0.3))(vue@3.5.39(typescript@6.0.3))
       '@vue/compiler-core': 3.5.39
