@@ -117,31 +117,75 @@ const insetIconPopThreshold = computed(() => {
 const startInsetIconName = computed(() => startIcon ?? '');
 const endInsetIconName = computed(() => endIcon ?? '');
 
+// Native range inputs derive their step grid from min and discard an off-grid max. Keep the input
+// continuous and normalize values here so effective limits and shortened final intervals stay selectable.
+const valueMinimum = computed(() => Math.min(max, Math.max(min, lowerLimit ?? min)));
+const valueMaximum = computed(() => Math.max(valueMinimum.value, Math.max(min, Math.min(max, upperLimit ?? max))));
+const isValidStep = (valueStep: number) => Number.isFinite(valueStep) && valueStep > 0;
+const hasValidStep = computed(() => isValidStep(step));
+
+const normalizeValuePrecision = (nextValue: number) => {
+  const normalizedValue = Number(nextValue.toPrecision(15));
+  return Object.is(normalizedValue, -0) ? 0 : normalizedValue;
+};
+
 const clampValue = (nextValue: number) => {
-  if (lowerLimit !== undefined && nextValue < lowerLimit) {
-    return [true, lowerLimit] as const;
-  } else if (upperLimit !== undefined && nextValue > upperLimit) {
-    return [true, upperLimit] as const;
-  } else if (nextValue < min) {
-    return [true, min] as const;
-  } else if (nextValue > max) {
-    return [true, max] as const;
+  if (nextValue < valueMinimum.value) {
+    return [true, valueMinimum.value] as const;
+  } else if (nextValue > valueMaximum.value) {
+    return [true, valueMaximum.value] as const;
   }
   return [false, nextValue] as const;
 };
 
+const snapValueToStep = (nextValue: number) => {
+  const [, clampedValue] = clampValue(nextValue);
+  if (!hasValidStep.value || valueMinimum.value === valueMaximum.value) {
+    return clampedValue;
+  }
+
+  const stepIndex = Math.round((clampedValue - valueMinimum.value) / step);
+  const steppedValue = normalizeValuePrecision(valueMinimum.value + stepIndex * step);
+  const steppedCandidate = Math.min(valueMaximum.value, Math.max(valueMinimum.value, steppedValue));
+
+  // The upper endpoint is always selectable, even when the final interval is shorter than one step.
+  return Math.abs(valueMaximum.value - clampedValue) <= Math.abs(steppedCandidate - clampedValue)
+    ? valueMaximum.value
+    : steppedCandidate;
+};
+
+const getAdjacentStepValue = (currentValue: number, direction: -1 | 1, valueStep: number) => {
+  const [, clampedValue] = clampValue(currentValue);
+  if (!isValidStep(valueStep) || valueMinimum.value === valueMaximum.value) {
+    return clampedValue;
+  }
+
+  const stepIndex = (clampedValue - valueMinimum.value) / valueStep;
+  const nextStepIndex = direction > 0 ? Math.floor(stepIndex + 1e-10) + 1 : Math.ceil(stepIndex - 1e-10) - 1;
+  const steppedValue = normalizeValuePrecision(valueMinimum.value + nextStepIndex * valueStep);
+  return Math.min(valueMaximum.value, Math.max(valueMinimum.value, steppedValue));
+};
+
+const setValueFromInteraction = (nextValue: number, target: HTMLInputElement) => {
+  const normalizedValue = normalizeValuePrecision(nextValue);
+  target.value = `${normalizedValue}`;
+  valueCurrent.value = normalizedValue;
+  value.value = normalizedValue;
+};
+
 const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  const [clamped, clampedValue] = clampValue(target.valueAsNumber);
+  const inputValue = target.valueAsNumber;
+  const snappedValue = snapValueToStep(inputValue);
 
-  valueCurrent.value = clampedValue;
+  valueCurrent.value = snappedValue;
   if (isValueDragging.value) {
     syncValueDisplayedToTarget();
   }
-  if (clamped) {
+  if (snappedValue !== inputValue) {
     event.preventDefault();
     event.stopPropagation();
-    target.value = `${clampedValue}`;
+    target.value = `${snappedValue}`;
   }
 };
 
@@ -157,15 +201,9 @@ const onWheel = (event: WheelEvent) => {
   }
 
   const dir = event.deltaY < 0 ? 1 : -1;
-  let targetStep = wheelStep ?? step;
-  if (altState.value) {
-    targetStep = step;
-  }
-
-  const newValue = valueCurrent.value + dir * targetStep;
-  const [, clampedValue] = clampValue(newValue);
-  valueCurrent.value = clampedValue;
-  value.value = clampedValue;
+  const valueStep = altState.value ? step : (wheelStep ?? step);
+  const nextValue = getAdjacentStepValue(valueCurrent.value, dir, valueStep);
+  setValueFromInteraction(nextValue, event.currentTarget as HTMLInputElement);
 };
 
 const stopIndicatorsFiltered = computed(() => {
@@ -501,8 +539,51 @@ const onValueIndicatorPointerDown = (event: PointerEvent) => {
   syncWindowPointerListeners();
 };
 
-const onValueIndicatorKeyDown = () => {
+const onValueIndicatorKeyDown = (event: KeyboardEvent) => {
   scheduleSyncValueIndicatorFocusedState();
+
+  if (disabled) {
+    return;
+  }
+
+  let nextValue: number | undefined;
+  let stepDirection: -1 | 1 | undefined;
+
+  // Preserve native range directions across horizontal, vertical, LTR, and RTL writing modes.
+  switch (event.key) {
+    case 'Home':
+      nextValue = valueMinimum.value;
+      break;
+    case 'End':
+      nextValue = valueMaximum.value;
+      break;
+    case 'ArrowLeft':
+      stepDirection = vertical ? -1 : direction === 'rtl' ? 1 : -1;
+      break;
+    case 'ArrowRight':
+      stepDirection = vertical ? 1 : direction === 'rtl' ? -1 : 1;
+      break;
+    case 'ArrowUp':
+      stepDirection = vertical ? (direction === 'rtl' ? 1 : -1) : 1;
+      break;
+    case 'ArrowDown':
+      stepDirection = vertical ? (direction === 'rtl' ? -1 : 1) : -1;
+      break;
+  }
+
+  if (stepDirection !== undefined) {
+    if (!hasValidStep.value) {
+      return;
+    }
+    nextValue = getAdjacentStepValue(valueCurrent.value, stepDirection, step);
+  }
+
+  if (nextValue === undefined) {
+    return;
+  }
+
+  event.preventDefault();
+  setValueFromInteraction(nextValue, event.currentTarget as HTMLInputElement);
 };
 
 const onWindowScrollOrResize = () => {
@@ -641,9 +722,12 @@ onBeforeUnmount(() => {
       type="range"
       :min="min"
       :max="max"
-      :step="step"
+      step="any"
       :disabled="disabled"
       :value="valueCurrent"
+      :aria-valuemin="valueMinimum"
+      :aria-valuemax="valueMaximum"
+      :aria-valuenow="valueCurrent"
       :aria-controls="valueIndicator ? valueIndicatorId : undefined"
       :aria-expanded="valueIndicator ? (isValueIndicatorVisible ? 'true' : 'false') : undefined"
       :aria-haspopup="valueIndicator ? 'true' : undefined"

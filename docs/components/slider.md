@@ -62,6 +62,17 @@ Slider handles horizontal and vertical range input, inset icons, value indicator
 
 The value indicator is rendered as a manual popover so it stays in the browser top layer instead of being clipped by parent overflow. Its animated position is driven by Slider CSS variables and transform-style movement; avoid overriding the animated `--percent` path from app code.
 
+## Value quantization
+
+Slider preserves externally supplied `value` values as-is, including values between step marks. This allows a Slider to display a more precise value entered through a paired text or number input without silently changing it.
+
+Values produced by Slider interaction are quantized consistently:
+
+- Pointer dragging and keyboard arrows use the `step` grid.
+- The mouse wheel uses the `wheelStep` grid when provided, or the `step` grid otherwise. Holding Alt uses the `step` grid.
+- Grids start at the effective lower limit, `max(min, lowerLimit)`. The effective upper limit, `min(max, upperLimit)`, is always selectable even when the final interval is shorter than one step.
+- Home and End select the exact effective lower and upper limits.
+
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 1rem;">
     <Slider v-bind="props" v-model:value="value" :formatter="numericFormatter" :stop-indicators="stopIndicators" />

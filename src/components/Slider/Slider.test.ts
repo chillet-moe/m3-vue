@@ -53,6 +53,13 @@ async function setSliderInputValue(input: HTMLInputElement, value: number) {
   await nextTick();
 }
 
+async function pressSliderKey(input: HTMLInputElement, key: string) {
+  const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key });
+  input.dispatchEvent(event);
+  await nextTick();
+  return event;
+}
+
 function mockAnimationFrame() {
   let requestId = 0;
   const callbacks = new Map<number, FrameRequestCallback>();
@@ -272,6 +279,199 @@ describe('Slider', () => {
     }
 
     expect(Number(getDisplayedPercent(slider!))).toBeCloseTo(0.1, 3);
+
+    app.unmount();
+  });
+
+  it('makes constrained endpoints reachable through input, keyboard, and wheel interaction', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(1750);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 5,
+            max: 1800,
+            step: 50,
+            lowerLimit: 300,
+            upperLimit: 4000,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector('input') as HTMLInputElement | null;
+    const valueIndicatorText = container.querySelector('[data-part="value-indicator-text"]');
+    expect(input).not.toBeNull();
+    expect(valueIndicatorText).not.toBeNull();
+    expect(input!.step).toBe('any');
+    expect(input!.getAttribute('aria-valuemin')).toBe('300');
+    expect(input!.getAttribute('aria-valuemax')).toBe('1800');
+
+    await setSliderInputValue(input!, 1799);
+    expect(valueIndicatorText!.textContent).toBe('1800');
+    input!.dispatchEvent(new Event('change', { bubbles: true }));
+    await nextTick();
+    expect(currentValue.value).toBe(1800);
+
+    currentValue.value = 1750;
+    await nextTick();
+    const endEvent = await pressSliderKey(input!, 'End');
+    expect(endEvent.defaultPrevented).toBe(true);
+    expect(currentValue.value).toBe(1800);
+
+    await pressSliderKey(input!, 'ArrowLeft');
+    expect(currentValue.value).toBe(1750);
+    await pressSliderKey(input!, 'ArrowRight');
+    expect(currentValue.value).toBe(1800);
+
+    currentValue.value = 1750;
+    await nextTick();
+    input!.dispatchEvent(new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY: -100 }));
+    await nextTick();
+    expect(currentValue.value).toBe(1800);
+
+    const homeEvent = await pressSliderKey(input!, 'Home');
+    expect(homeEvent.defaultPrevented).toBe(true);
+    expect(currentValue.value).toBe(300);
+
+    app.unmount();
+  });
+
+  it('preserves external off-step values until the slider is operated', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(333);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 5,
+            max: 1800,
+            step: 50,
+            wheelStep: 10,
+            lowerLimit: 300,
+            upperLimit: 4000,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector('input') as HTMLInputElement | null;
+    const valueIndicatorText = container.querySelector('[data-part="value-indicator-text"]');
+    expect(input).not.toBeNull();
+    expect(valueIndicatorText).not.toBeNull();
+    expect(input!.value).toBe('333');
+    expect(valueIndicatorText!.textContent).toBe('333');
+
+    currentValue.value = 337;
+    await nextTick();
+    expect(input!.value).toBe('337');
+    expect(valueIndicatorText!.textContent).toBe('337');
+
+    input!.dispatchEvent(new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY: -100 }));
+    await nextTick();
+    expect(currentValue.value).toBe(340);
+
+    currentValue.value = 333;
+    await nextTick();
+    await pressSliderKey(input!, 'ArrowRight');
+    expect(currentValue.value).toBe(350);
+
+    await setSliderInputValue(input!, 326);
+    expect(input!.value).toBe('350');
+
+    app.unmount();
+  });
+
+  it.each([
+    { vertical: false, direction: 'ltr' as const, key: 'ArrowRight', expected: 550 },
+    { vertical: false, direction: 'rtl' as const, key: 'ArrowRight', expected: 450 },
+    { vertical: true, direction: 'ltr' as const, key: 'ArrowUp', expected: 450 },
+    { vertical: true, direction: 'rtl' as const, key: 'ArrowUp', expected: 550 },
+  ])('preserves native arrow direction for $direction/$vertical with $key', async (testCase) => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(500);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 300,
+            max: 1800,
+            step: 50,
+            vertical: testCase.vertical,
+            direction: testCase.direction,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector('input') as HTMLInputElement | null;
+    expect(input).not.toBeNull();
+
+    const keyEvent = await pressSliderKey(input!, testCase.key);
+    expect(keyEvent.defaultPrevented).toBe(true);
+    expect(currentValue.value).toBe(testCase.expected);
+
+    app.unmount();
+  });
+
+  it('treats a shortened final interval as an adjacent step', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const currentValue = ref(90);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 100,
+            step: 30,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector('input') as HTMLInputElement | null;
+    expect(input).not.toBeNull();
+
+    await pressSliderKey(input!, 'ArrowRight');
+    expect(currentValue.value).toBe(100);
+    await pressSliderKey(input!, 'ArrowLeft');
+    expect(currentValue.value).toBe(90);
+
+    await setSliderInputValue(input!, 96);
+    expect(input!.value).toBe('100');
 
     app.unmount();
   });
