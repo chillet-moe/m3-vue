@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { readFileSync } from 'node:fs';
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, expectTypeOf, it } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
 import TextField from './TextField.vue';
@@ -103,6 +103,191 @@ describe('TextField', () => {
     expect(supporting?.textContent?.trim()).toBe('Custom supporting text');
     expect(input?.getAttribute('aria-describedby')).toBeTruthy();
     expect(supporting?.id).toBe(input?.getAttribute('aria-describedby'));
+
+    app.unmount();
+  });
+
+  it('keeps the public model and update event typed as strings', () => {
+    type Props = InstanceType<typeof TextField>['$props'];
+    type UpdateModelValue = NonNullable<Props['onUpdate:modelValue']>;
+
+    expectTypeOf<Props['modelValue']>().toEqualTypeOf<string>();
+    expectTypeOf<Parameters<UpdateModelValue>>().toEqualTypeOf<[value: string]>();
+  });
+
+  it('emits the native string value for number inputs across empty, zero, and decimal values', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const updates: unknown[] = [];
+
+    const app = createApp({
+      setup() {
+        const value = ref('');
+
+        return () =>
+          h(TextField, {
+            label: 'Amount',
+            type: 'number',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              updates.push(nextValue);
+              value.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector<HTMLInputElement>('.m3-text-field-input');
+
+    for (const nextValue of ['0', '12.50', '']) {
+      if (input) {
+        input.value = nextValue;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      await nextTick();
+    }
+
+    expect(updates).toEqual(['0', '12.50', '']);
+    expect(updates.every((value) => typeof value === 'string')).toBe(true);
+
+    app.unmount();
+  });
+
+  it('keeps the floating-label population state in sync with number input', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const value = ref('');
+
+        return () =>
+          h(TextField, {
+            label: 'Amount',
+            type: 'number',
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              value.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const field = container.querySelector<HTMLElement>('.m3-text-field');
+    const input = container.querySelector<HTMLInputElement>('.m3-text-field-input');
+
+    expect(field?.dataset.populated).toBe('false');
+
+    if (input) {
+      input.value = '0';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    await nextTick();
+
+    expect(field?.dataset.populated).toBe('true');
+
+    if (input) {
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    await nextTick();
+
+    expect(field?.dataset.populated).toBe('false');
+
+    app.unmount();
+  });
+
+  it.each([
+    ['text input', {}],
+    ['textarea', { as: 'textarea' as const }],
+  ])('preserves string model updates for a regular %s', async (_name, fieldProps) => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const updates: unknown[] = [];
+    const inputEvents: Event[] = [];
+
+    const app = createApp({
+      setup() {
+        const value = ref('');
+
+        return () =>
+          h(TextField, {
+            ...fieldProps,
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              updates.push(nextValue);
+              value.value = nextValue;
+            },
+            onInput: (event) => {
+              inputEvents.push(event);
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const control = container.querySelector<HTMLInputElement | HTMLTextAreaElement>('.m3-text-field-input');
+
+    if (control) {
+      control.value = 'Updated value';
+      control.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    await nextTick();
+
+    expect(updates).toEqual(['Updated value']);
+    expect(control?.value).toBe('Updated value');
+    expect(inputEvents).toHaveLength(1);
+    expect(inputEvents[0]?.target).toBe(control);
+
+    app.unmount();
+  });
+
+  it('waits for text composition to finish before updating the model', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const updates: string[] = [];
+
+    const app = createApp({
+      setup() {
+        const value = ref('');
+
+        return () =>
+          h(TextField, {
+            modelValue: value.value,
+            'onUpdate:modelValue': (nextValue) => {
+              updates.push(nextValue);
+              value.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const input = container.querySelector<HTMLInputElement>('.m3-text-field-input');
+
+    input?.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }));
+    if (input) {
+      input.value = '拼';
+      input.dispatchEvent(new InputEvent('input', { bubbles: true, data: '拼', isComposing: true }));
+    }
+    await nextTick();
+
+    expect(updates).toEqual([]);
+
+    input?.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
+    await nextTick();
+
+    expect(updates).toEqual(['拼']);
 
     app.unmount();
   });

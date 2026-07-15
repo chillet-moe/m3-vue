@@ -140,6 +140,18 @@ const emit = defineEmits<{
 }>();
 
 const modelValue = defineModel<string>({ required: true });
+const controlRef = ref<HTMLInputElement | HTMLTextAreaElement>();
+
+// Vue's dynamic native v-model parses type="number" values before invoking the setter. Read the control's textual value
+// at that boundary so the model preserves native input.value semantics while retaining v-model's composition handling.
+const nativeControlValue = computed<string, string | number>({
+  get() {
+    return modelValue.value;
+  },
+  set(nextValue) {
+    modelValue.value = controlRef.value?.value ?? String(nextValue);
+  },
+});
 
 const inputId = computed(() => {
   return props.id ?? `m3-text-field-${generatedId}`;
@@ -175,7 +187,6 @@ const hasLeading = computed(() => {
 
 const rootRef = ref<HTMLDivElement>();
 const containerRef = ref<HTMLDivElement>();
-const controlRef = ref<HTMLInputElement | HTMLTextAreaElement>();
 const datePickerOpen = ref(false);
 const timePickerOpen = ref(false);
 const datePickerAnchorName = `--m3-text-field-date-picker-anchor-${generatedId}`;
@@ -423,7 +434,7 @@ defineExpose({
           v-if="props.as === 'textarea'"
           :id="inputId"
           ref="controlRef"
-          v-model="modelValue"
+          v-model="nativeControlValue"
           :class="['m3-text-field-input', 'm3-text-field-textarea']"
           data-scope="text-field"
           data-part="input"
@@ -446,7 +457,7 @@ defineExpose({
           v-else
           :id="inputId"
           ref="controlRef"
-          v-model="modelValue"
+          v-model="nativeControlValue"
           :class="'m3-text-field-input'"
           data-scope="text-field"
           data-part="input"

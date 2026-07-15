@@ -20,6 +20,14 @@ const { disabled = false, presentation = false, name, value, ariaLabel } = defin
 
 const checked = defineModel<boolean>('checked', { required: true });
 
+function handleChange(event: Event) {
+  const input = event.currentTarget;
+
+  if (input instanceof HTMLInputElement) {
+    checked.value = input.checked;
+  }
+}
+
 defineSlots<{
   /** Optional label content rendered next to radio. */
   default(): any;
@@ -41,15 +49,16 @@ defineSlots<{
   >
     <input
       v-if="!presentation"
-      v-model="checked"
       :class="'m3-radio-input'"
       data-scope="radio"
       data-part="input"
       type="radio"
+      :checked="checked"
       :disabled="disabled"
       :name="name"
       :value="value"
       :aria-label="ariaLabel"
+      @change="handleChange"
     />
 
     <span

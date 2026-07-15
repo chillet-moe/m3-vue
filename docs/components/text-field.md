@@ -34,6 +34,10 @@ const modelValue = ref('');
 
 Text fields cover baseline Material 3 input cases including supporting text, validation, adornments, and multiline entry.
 
+`TextField` always uses a string model, including when `type="number"`. Number inputs retain the native numeric keyboard,
+validation behavior, and textual `input.value` representation, while parsing the model into a numeric value remains the
+application's responsibility.
+
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <TextField v-bind="props" v-model="modelValue" />
