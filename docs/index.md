@@ -2,13 +2,13 @@
 layout: home
 hero:
   name: M3 Vue
-  text: Material Design 3 for Vue
-  tagline: A Vue 3 component library implementing Material Design 3
+  text: M3 Vue
+  tagline: Material Design 3 components for Vue 3.
   actions:
     - theme: brand
-      text: Get Started
+      text: Get started
       link: /getting-started
     - theme: alt
-      text: Components
+      text: Browse components
       link: /components/button
 ---
