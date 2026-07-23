@@ -1,10 +1,8 @@
-import type { ComputedRef, InjectionKey, Ref } from 'vue';
+import type { ComputedRef, InjectionKey } from 'vue';
+import type { NavigationItemContext } from '@/composables/useNavigationItem';
 
-export interface NavigationRailContext {
-  value: ComputedRef<string | undefined>;
+export type NavigationRailContext = NavigationItemContext & {
   state: ComputedRef<'collapsed' | 'expanded'>;
-  disabled: Readonly<Ref<boolean>>;
-  activate: (value: string) => void;
-}
+};
 
 export const navigationRailContextKey: InjectionKey<NavigationRailContext> = Symbol('NavigationRailContext');

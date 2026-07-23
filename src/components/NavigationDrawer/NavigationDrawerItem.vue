@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@/components/Icon';
-import { useLinkTag } from '@/composables/useLinkTag';
+import { useNavigationItem } from '@/composables/useNavigationItem';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
 import { computed, inject, useSlots } from 'vue';
@@ -54,18 +54,25 @@ const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
-const mergedDisabled = computed(() => props.disabled || drawer?.disabled.value || false);
-const hasValue = computed(() => props.value !== undefined);
-
-const selectedFromDrawer = computed(() => {
-  if (!drawer || !hasValue.value || props.value === undefined) {
-    return false;
-  }
-
-  return drawer.value.value === props.value;
+const {
+  mergedDisabled,
+  isSelected,
+  tag,
+  nativeDisabled,
+  ariaDisabled,
+  href,
+  tabIndex,
+  type,
+  handleClick,
+  handleKeydown,
+} = useNavigationItem({
+  context: drawer,
+  value: () => props.value,
+  href: () => props.href,
+  disabled: () => props.disabled,
+  selected: () => props.selected,
 });
 
-const isSelected = computed(() => props.selected ?? selectedFromDrawer.value);
 const hasLabel = computed(() => Boolean(props.label || slots.default));
 const hasTrailing = computed(() => Boolean(slots.trailing));
 
@@ -83,13 +90,6 @@ const resolvedAriaLabel = computed(() => {
   }
 
   return props.label ?? props.value;
-});
-
-const { tag, isAnchorTag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
-  defaultTag: 'button',
-  href: computed(() => props.href),
-  disabled: mergedDisabled,
-  ariaDisabledMode: 'non-button',
 });
 
 const slotProps = computed(() => ({
@@ -110,51 +110,6 @@ const tooltip = computed<VTooltipBinding>(() => {
     interactive: false,
   };
 });
-
-const guardDisabledInteraction = (event: Event) => {
-  if (!mergedDisabled.value) {
-    return false;
-  }
-
-  event.preventDefault();
-  event.stopPropagation();
-  return true;
-};
-
-const activate = () => {
-  if (!drawer || !hasValue.value || props.value === undefined) {
-    return;
-  }
-
-  drawer.activate(props.value);
-};
-
-const handleClick = (event: MouseEvent) => {
-  if (guardDisabledInteraction(event)) {
-    return;
-  }
-
-  activate();
-};
-
-const handleKeydown = (event: KeyboardEvent) => {
-  if (guardDisabledInteraction(event)) {
-    return;
-  }
-
-  if (event.key !== ' ') {
-    return;
-  }
-
-  const currentTarget = event.currentTarget;
-
-  if (!(currentTarget instanceof HTMLElement) || !isAnchorTag.value) {
-    return;
-  }
-
-  event.preventDefault();
-  currentTarget.click();
-};
 </script>
 
 <template>

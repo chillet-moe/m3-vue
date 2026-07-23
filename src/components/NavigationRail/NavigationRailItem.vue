@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@/components/Icon';
-import { useLinkTag } from '@/composables/useLinkTag';
+import { useNavigationItem } from '@/composables/useNavigationItem';
 import { computed, inject, useSlots } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
 
@@ -50,23 +50,23 @@ const rail = inject(navigationRailContextKey, null);
 
 const railState = computed<'collapsed' | 'expanded'>(() => rail?.state.value ?? 'collapsed');
 const isExpanded = computed(() => railState.value === 'expanded');
-const mergedDisabled = computed(() => props.disabled || rail?.disabled.value || false);
-const hasValue = computed(() => props.value !== undefined);
-
-const selectedFromRail = computed(() => {
-  if (!rail || !hasValue.value || props.value === undefined) {
-    return false;
-  }
-
-  return rail.value.value === props.value;
-});
-
-const isSelected = computed(() => {
-  if (props.selected !== undefined) {
-    return props.selected;
-  }
-
-  return selectedFromRail.value;
+const {
+  mergedDisabled,
+  isSelected,
+  tag,
+  nativeDisabled,
+  ariaDisabled,
+  href,
+  tabIndex,
+  type,
+  handleClick,
+  handleKeydown,
+} = useNavigationItem({
+  context: rail,
+  value: () => props.value,
+  href: () => props.href,
+  disabled: () => props.disabled,
+  selected: () => props.selected,
 });
 
 const hasLabel = computed(() => Boolean(props.label || slots.default));
@@ -83,63 +83,11 @@ const resolvedAriaLabel = computed(() => {
   return props.label ?? props.value;
 });
 
-const { tag, isAnchorTag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
-  defaultTag: 'button',
-  href: computed(() => props.href),
-  disabled: mergedDisabled,
-  ariaDisabledMode: 'non-button',
-});
-
 const slotProps = computed(() => ({
   selected: isSelected.value,
   disabled: mergedDisabled.value,
   state: railState.value,
 }));
-
-const guardDisabledInteraction = (event: Event) => {
-  if (!mergedDisabled.value) {
-    return false;
-  }
-
-  event.preventDefault();
-  event.stopPropagation();
-  return true;
-};
-
-const activate = () => {
-  if (!rail || !hasValue.value || props.value === undefined) {
-    return;
-  }
-
-  rail.activate(props.value);
-};
-
-const handleClick = (event: MouseEvent) => {
-  if (guardDisabledInteraction(event)) {
-    return;
-  }
-
-  activate();
-};
-
-const handleKeydown = (event: KeyboardEvent) => {
-  if (guardDisabledInteraction(event)) {
-    return;
-  }
-
-  if (event.key !== ' ') {
-    return;
-  }
-
-  const currentTarget = event.currentTarget;
-
-  if (!(currentTarget instanceof HTMLElement) || !isAnchorTag.value) {
-    return;
-  }
-
-  event.preventDefault();
-  currentTarget.click();
-};
 </script>
 
 <template>
