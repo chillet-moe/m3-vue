@@ -2,17 +2,7 @@
 import { computed, inject, nextTick, onUnmounted, provide, ref, useTemplateRef, watch } from 'vue';
 import Menu, { type MenuColor } from './Menu.vue';
 import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
-
-type Point = {
-  x: number;
-  y: number;
-};
-
-type Triangle = {
-  origin: Point;
-  sideStart: Point;
-  sideEnd: Point;
-};
+import { createMenuSafeTriangle, isPointInsideTriangle, type Point, type Triangle } from './menuSafeTriangle';
 
 type MenuSubMenuProps = {
   /** Visual color style of the nested menu surface. Defaults to the parent menu color. */
@@ -153,27 +143,6 @@ function isWithinWrapper(target: EventTarget | null) {
   return target instanceof Node && wrapperRef.value?.contains(target);
 }
 
-function isPointInsideTriangle(point: Point, triangle: Triangle) {
-  const { origin, sideStart, sideEnd } = triangle;
-
-  const denominator =
-    (sideStart.y - sideEnd.y) * (origin.x - sideEnd.x) + (sideEnd.x - sideStart.x) * (origin.y - sideEnd.y);
-
-  if (denominator === 0) {
-    return false;
-  }
-
-  const first =
-    ((sideStart.y - sideEnd.y) * (point.x - sideEnd.x) + (sideEnd.x - sideStart.x) * (point.y - sideEnd.y)) /
-    denominator;
-  const second =
-    ((sideEnd.y - origin.y) * (point.x - sideEnd.x) + (origin.x - sideEnd.x) * (point.y - sideEnd.y)) / denominator;
-  const third = 1 - first - second;
-  const tolerance = 0.001;
-
-  return first >= -tolerance && second >= -tolerance && third >= -tolerance;
-}
-
 function createSafeTriangle(origin: Point) {
   const submenuMenu = submenuMenuRef.value?.menuRef;
 
@@ -181,37 +150,7 @@ function createSafeTriangle(origin: Point) {
     return null;
   }
 
-  const submenuRect = submenuMenu.getBoundingClientRect();
-
-  if (!submenuRect.width || !submenuRect.height) {
-    return null;
-  }
-
-  const submenuNearEdgeX =
-    Math.abs(origin.x - submenuRect.left) <= Math.abs(origin.x - submenuRect.right)
-      ? submenuRect.left
-      : submenuRect.right;
-  const expansion = 12;
-
-  if (submenuNearEdgeX === submenuRect.left && origin.x > submenuNearEdgeX) {
-    return null;
-  }
-
-  if (submenuNearEdgeX === submenuRect.right && origin.x < submenuNearEdgeX) {
-    return null;
-  }
-
-  return {
-    origin,
-    sideStart: {
-      x: submenuNearEdgeX,
-      y: submenuRect.top - expansion,
-    },
-    sideEnd: {
-      x: submenuNearEdgeX,
-      y: submenuRect.bottom + expansion,
-    },
-  } satisfies Triangle;
+  return createMenuSafeTriangle(origin, submenuMenu.getBoundingClientRect());
 }
 
 function updatePreviewTriangle(event: PointerEvent) {
