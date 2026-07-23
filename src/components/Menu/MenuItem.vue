@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useLinkTag } from '@/composables/useLinkTag';
 import { computed, inject, useId, useSlots } from 'vue';
-import { menuContextKey, menuSelectionContextKey } from './MenuContext';
+import { menuItemOwnerContextKey, menuSelectionContextKey } from './MenuContext';
 import type { MenuItemValue } from './MenuTypes';
 
 export type MenuItemProps = {
@@ -46,7 +46,7 @@ const {
 } = defineProps<MenuItemProps>();
 
 const slots = useSlots();
-const menuContext = inject(menuContextKey, null);
+const menuItemOwner = inject(menuItemOwnerContextKey, null);
 const menuSelection = inject(menuSelectionContextKey, null);
 
 defineSlots<{
@@ -201,7 +201,7 @@ function hasSuffix() {
     :tabindex="tabIndex"
     :type="type"
     :data-selected="resolvedSelected ? 'true' : undefined"
-    :data-menu-owner="menuContext?.id"
+    :data-menu-owner="menuItemOwner?.id"
     :data-has-supporting="hasSupporting() ? 'true' : undefined"
     :data-close-on-select="closeOnSelect ? undefined : 'false'"
     :data-submenu="submenu ? 'true' : undefined"

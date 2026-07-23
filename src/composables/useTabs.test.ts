@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vite-plus/test';
+import { ref } from 'vue';
 import { useTabs } from './useTabs';
 
 describe('useTabs', () => {
@@ -28,6 +29,23 @@ describe('useTabs', () => {
 
     tabs.setValue('tab2');
     expect(changes).toEqual(['tab2']);
+  });
+
+  it('keeps a reactive value as the canonical controlled source', () => {
+    const value = ref('tab1');
+    const changes: string[] = [];
+    const tabs = useTabs({
+      value,
+      onValueChange: (nextValue) => changes.push(nextValue),
+    });
+
+    tabs.setValue('tab2');
+
+    expect(changes).toEqual(['tab2']);
+    expect(tabs.value.value).toBe('tab1');
+
+    value.value = 'tab2';
+    expect(tabs.value.value).toBe('tab2');
   });
 
   it('defaults orientation to horizontal', () => {

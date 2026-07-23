@@ -1,8 +1,13 @@
 import type { InjectionKey } from 'vue';
 import type { MenuColor, MenuItemValue } from './MenuTypes';
 
-export type MenuContext = {
+export type MenuItemOwnerContext = {
   id: string;
+};
+
+export const menuItemOwnerContextKey: InjectionKey<MenuItemOwnerContext> = Symbol('MenuItemOwnerContext');
+
+export type MenuContext = {
   getColor: () => MenuColor;
   notifySelect: (event: MouseEvent, itemElement: HTMLElement) => void;
   closeAll: () => void;

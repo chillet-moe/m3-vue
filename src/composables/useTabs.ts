@@ -1,4 +1,4 @@
-import { type ComputedRef, type Ref, computed, getCurrentInstance, ref, toValue, useId, watch } from 'vue';
+import { type ComputedRef, type Ref, computed, getCurrentInstance, isRef, ref, toValue, useId } from 'vue';
 import type { MaybeRefOrGetter } from 'vue';
 
 export type UseTabsOptions<T extends string = string> = {
@@ -77,25 +77,16 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
   const loop = computed(() => toValue(options.loop) ?? true);
   const selectWhenFocused = computed(() => toValue(options.selectWhenFocused) ?? true);
 
-  const isReactive =
-    typeof options.value === 'function' || (options.value !== null && typeof options.value === 'object');
-
+  const isControlled = isRef(options.value) || typeof options.value === 'function';
   const internalValue = ref<T | undefined>(toValue(options.value)) as Ref<T | undefined>;
 
-  // When the external value is reactive, sync changes to internal
-  if (isReactive) {
-    watch(
-      () => toValue(options.value),
-      (v) => {
-        internalValue.value = v;
-      },
-    );
-  }
-
-  const currentValue = computed(() => (isReactive ? toValue(options.value) : internalValue.value));
+  // Reactive inputs remain the canonical controlled source; static values initialize local state.
+  const currentValue = computed(() => (isControlled ? toValue(options.value) : internalValue.value));
 
   function setValue(value: T) {
-    internalValue.value = value;
+    if (!isControlled) {
+      internalValue.value = value;
+    }
     options.onValueChange?.(value);
   }
 

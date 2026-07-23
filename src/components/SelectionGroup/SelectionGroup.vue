@@ -22,6 +22,17 @@ const props = withDefaults(defineProps<SelectionGroupProps>(), {
 });
 
 const modelValue = defineModel<SelectionGroupModelValue>('modelValue');
+const inputType = toRef(() => (props.selectionMode === 'multiple' ? 'checkbox' : 'radio'));
+
+const isSelected = (value: SelectionGroupValue) => {
+  const currentValue = modelValue.value;
+
+  if (Array.isArray(currentValue)) {
+    return currentValue.includes(value);
+  }
+
+  return currentValue === value;
+};
 
 const select = (value: SelectionGroupValue, checked: boolean) => {
   if (props.selectionMode === 'multiple') {
@@ -49,8 +60,8 @@ const select = (value: SelectionGroupValue, checked: boolean) => {
 provide(selectionGroupContextKey, {
   name: toRef(() => props.name),
   disabled: toRef(() => props.disabled),
-  selectionMode: toRef(() => props.selectionMode),
-  modelValue,
+  inputType,
+  isSelected,
   select,
 });
 </script>

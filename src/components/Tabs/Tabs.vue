@@ -53,7 +53,13 @@ const tabs = useTabs({
   selectWhenFocused: () => props.selectWhenFocused,
 });
 
-provide(tabsContextKey, tabs);
+provide(tabsContextKey, {
+  value: tabs.value,
+  orientation: tabs.orientation,
+  triggerListAttrs: tabs.triggerListAttrs,
+  getTriggerAttrs: tabs.getTriggerAttrs,
+  getPanelAttrs: tabs.getPanelAttrs,
+});
 </script>
 
 <template>

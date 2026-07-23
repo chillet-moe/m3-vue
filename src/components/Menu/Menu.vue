@@ -2,7 +2,7 @@
 import { inject, provide, useId, useTemplateRef } from 'vue';
 import { useMenu } from '@/composables/useMenu';
 import MenuContentRenderer from './MenuContentRenderer.vue';
-import { menuContextKey, menuSelectionContextKey, menuSubmenuContextKey } from './MenuContext';
+import { menuContextKey, menuItemOwnerContextKey, menuSelectionContextKey, menuSubmenuContextKey } from './MenuContext';
 import type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue } from './MenuTypes';
 
 export type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue };
@@ -40,33 +40,32 @@ const parentSubmenu = inject(menuSubmenuContextKey, null);
 const parentMenu = parentSubmenu ? ambientParentMenu : null;
 const menuId = `menu-${useId()}`;
 
+const notifySelect = (event: MouseEvent, itemElement: HTMLElement) => {
+  if (parentMenu) {
+    parentMenu.notifySelect(event, itemElement);
+    return;
+  }
+  emit('select', event, itemElement);
+};
+
 const menuActions = useMenu({
   menuId,
   menuRef: menuRef as any,
   open,
   modelValue,
   multiple: () => multiple,
-  onSelect: (event, itemElement) => {
-    if (parentMenu) {
-      parentMenu.notifySelect(event, itemElement);
-      return;
-    }
-    emit('select', event, itemElement);
-  },
+  onSelect: notifySelect,
   parentCloseAll: parentMenu?.closeAll,
   parentSubmenu,
 });
 
-provide(menuContextKey, {
+provide(menuItemOwnerContextKey, {
   id: menuId,
+});
+
+provide(menuContextKey, {
   getColor: () => color,
-  notifySelect: (event, itemElement) => {
-    if (parentMenu) {
-      parentMenu.notifySelect(event, itemElement);
-      return;
-    }
-    emit('select', event, itemElement);
-  },
+  notifySelect,
   closeAll: menuActions.closeMenuChain,
   registerSubmenu: menuActions.registerSubmenu,
   closeSubmenus: menuActions.closeSubmenus,

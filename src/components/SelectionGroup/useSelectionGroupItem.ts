@@ -1,7 +1,9 @@
 import { computed, inject, unref, type ComputedRef, type Ref } from 'vue';
-import { selectionGroupContextKey, type SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
-
-export type SelectionGroupInputType = 'checkbox' | 'radio';
+import {
+  selectionGroupContextKey,
+  type SelectionGroupInputType,
+  type SelectionGroupValue,
+} from '@/components/SelectionGroup/SelectionGroupContext';
 
 export type UseSelectionGroupItemOptions = {
   /** Item value used when participating in a selection group. */
@@ -43,23 +45,18 @@ export function useSelectionGroupItem({
   const participatesInGroup = computed(() => context !== undefined && itemValue.value !== undefined);
 
   const isSelected = computed(() => {
-    if (participatesInGroup.value) {
-      const currentValue = unref(context?.modelValue);
-      const currentItemValue = itemValue.value as SelectionGroupValue;
+    const currentItemValue = itemValue.value;
 
-      if (Array.isArray(currentValue)) {
-        return currentValue.includes(currentItemValue);
-      }
-
-      return currentValue === currentItemValue;
+    if (context && currentItemValue !== undefined) {
+      return context.isSelected(currentItemValue);
     }
 
     return selected?.value ?? false;
   });
 
   const inputType = computed<SelectionGroupInputType>(() => {
-    if (participatesInGroup.value) {
-      return unref(context?.selectionMode) === 'multiple' ? 'checkbox' : 'radio';
+    if (context && itemValue.value !== undefined) {
+      return unref(context.inputType);
     }
 
     return fallbackInputType;
