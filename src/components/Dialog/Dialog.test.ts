@@ -62,6 +62,7 @@ describe('Dialog', () => {
             Dialog,
             {
               open: open.value,
+              width: '28rem',
               'onUpdate:open': (value: boolean) => {
                 open.value = value;
               },
@@ -81,6 +82,7 @@ describe('Dialog', () => {
 
     expect(dialog).not.toBeNull();
     expect(dialog?.open).toBe(true);
+    expect(dialog?.style.getPropertyValue('--md-dialog-container-width')).toBe('28rem');
     expect(document.body.style.overflow).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).not.toBe('');
@@ -215,38 +217,6 @@ describe('Dialog', () => {
     expect(dialog?.open).toBe(false);
     expect(document.body.style.overflow).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
-
-    app.unmount();
-  });
-
-  it('exposes the surface width on the root element', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp({
-      setup() {
-        return () =>
-          h(
-            Dialog,
-            {
-              open: true,
-              width: '28rem',
-            },
-            {
-              headline: () => 'Custom width',
-              default: () => 'The width token is applied from the dialog root.',
-            },
-          );
-      },
-    });
-
-    app.mount(container);
-    await nextTick();
-
-    const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
-
-    expect(dialog).not.toBeNull();
-    expect(dialog?.style.getPropertyValue('--md-dialog-container-width')).toBe('28rem');
 
     app.unmount();
   });

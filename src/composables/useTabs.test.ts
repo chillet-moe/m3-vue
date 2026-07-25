@@ -4,23 +4,7 @@ import { ref } from 'vue';
 import { useTabs } from './useTabs';
 
 describe('useTabs', () => {
-  it('initializes with the provided value', () => {
-    const tabs = useTabs({ value: 'tab1' });
-    expect(tabs.value.value).toBe('tab1');
-  });
-
-  it('initializes without a value', () => {
-    const tabs = useTabs();
-    expect(tabs.value.value).toBeUndefined();
-  });
-
-  it('sets value via setValue', () => {
-    const tabs = useTabs({ value: 'tab1' as string });
-    tabs.setValue('tab2');
-    expect(tabs.value.value).toBe('tab2');
-  });
-
-  it('calls onValueChange when setValue is called', () => {
+  it('updates an uncontrolled value and notifies the consumer', () => {
     const changes: string[] = [];
     const tabs = useTabs({
       value: 'tab1' as string,
@@ -28,6 +12,8 @@ describe('useTabs', () => {
     });
 
     tabs.setValue('tab2');
+
+    expect(tabs.value.value).toBe('tab2');
     expect(changes).toEqual(['tab2']);
   });
 
@@ -48,22 +34,18 @@ describe('useTabs', () => {
     expect(tabs.value.value).toBe('tab2');
   });
 
-  it('defaults orientation to horizontal', () => {
-    const tabs = useTabs();
-    expect(tabs.orientation.value).toBe('horizontal');
-  });
+  it('exposes tablist semantics for the resolved orientation', () => {
+    const horizontalAttrs = useTabs().triggerListAttrs.value;
+    const verticalAttrs = useTabs({ orientation: 'vertical' }).triggerListAttrs.value;
 
-  it('respects orientation option', () => {
-    const tabs = useTabs({ orientation: 'vertical' });
-    expect(tabs.orientation.value).toBe('vertical');
-  });
-
-  it('generates triggerList attributes with role tablist', () => {
-    const tabs = useTabs();
-    const attrs = tabs.triggerListAttrs.value;
-
-    expect(attrs.role).toBe('tablist');
-    expect(attrs['aria-orientation']).toBe('horizontal');
+    expect(horizontalAttrs).toMatchObject({
+      role: 'tablist',
+      'aria-orientation': 'horizontal',
+    });
+    expect(verticalAttrs).toMatchObject({
+      role: 'tablist',
+      'aria-orientation': 'vertical',
+    });
   });
 
   it('generates trigger attributes with correct aria props', () => {

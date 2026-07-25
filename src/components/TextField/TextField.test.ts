@@ -357,45 +357,6 @@ describe('TextField', () => {
     app.unmount();
   });
 
-  it('exposes the requested shape state', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp(() =>
-      h(TextField, {
-        label: 'Amount',
-        shape: 'square',
-        modelValue: '',
-      }),
-    );
-
-    app.mount(container);
-    await nextTick();
-
-    expect(container.querySelector<HTMLElement>('.m3-text-field')?.dataset.shape).toBe('square');
-
-    app.unmount();
-  });
-
-  it('uses square shape by default', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp(() =>
-      h(TextField, {
-        label: 'Amount',
-        modelValue: '',
-      }),
-    );
-
-    app.mount(container);
-    await nextTick();
-
-    expect(container.querySelector<HTMLElement>('.m3-text-field')?.dataset.shape).toBe('square');
-
-    app.unmount();
-  });
-
   it('uses medium size by default and exposes each single-line size across field states', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

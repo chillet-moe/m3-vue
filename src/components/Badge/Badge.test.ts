@@ -4,24 +4,37 @@ import { createApp, h, nextTick } from 'vue';
 import Badge from './Badge.vue';
 
 describe('Badge', () => {
-  it('renders a small badge by default', async () => {
+  it('derives accessible state from content, labels, and visibility', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
     const app = createApp({
       render() {
-        return h(Badge);
+        return h('div', [
+          h(Badge),
+          h(Badge, { variant: 'large', content: 8 }),
+          h(Badge, {
+            variant: 'large',
+            content: 8,
+            ariaLabel: 'Unread notifications',
+            hidden: true,
+          }),
+        ]);
       },
     });
 
     app.mount(container);
     await nextTick();
 
-    const badge = container.querySelector('.m3-badge') as HTMLElement | null;
+    const badges = container.querySelectorAll<HTMLElement>('.m3-badge');
 
-    expect(badge).not.toBeNull();
-    expect(badge?.dataset.variant).toBe('small');
-    expect(container.querySelector('.m3-badge-label')).toBeNull();
+    expect(badges[0]?.getAttribute('aria-hidden')).toBe('true');
+    expect(badges[0]?.querySelector('.m3-badge-label')).toBeNull();
+    expect(badges[1]?.getAttribute('aria-label')).toBe('8');
+    expect(badges[1]?.getAttribute('aria-hidden')).toBeNull();
+    expect(badges[2]?.getAttribute('aria-label')).toBe('Unread notifications');
+    expect(badges[2]?.getAttribute('aria-hidden')).toBe('true');
+    expect(badges[2]?.dataset.hidden).toBe('true');
 
     app.unmount();
   });

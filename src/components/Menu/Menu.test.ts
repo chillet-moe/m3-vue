@@ -177,6 +177,7 @@ describe('Menu', () => {
           h(
             Menu,
             {
+              color: 'vibrant',
               open: open.value,
               'onUpdate:open': (nextOpen: boolean) => {
                 open.value = nextOpen;
@@ -199,6 +200,7 @@ describe('Menu', () => {
     const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
 
     expect(menu).not.toBeNull();
+    expect(menu?.dataset.color).toBe('vibrant');
     expect(isPopoverOpen(menu)).toBe(false);
 
     app.unmount();
@@ -788,38 +790,6 @@ describe('Menu', () => {
 
     expect(container.querySelector('a[role="menuitem"]')).toBeNull();
     expect(container.querySelector('button[role="menuitem"]')).not.toBeNull();
-
-    app.unmount();
-  });
-
-  it('supports vibrant color option', async () => {
-    installPopoverPolyfill();
-
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp(() =>
-      h(
-        Menu,
-        {
-          color: 'vibrant',
-          open: true,
-        },
-        {
-          default: () => [
-            h(MenuContainer, null, {
-              default: () => [h(MenuItem, null, { default: () => 'Edit' })],
-            }),
-          ],
-        },
-      ),
-    );
-
-    app.mount(container);
-    await nextTick();
-
-    const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
-    expect(menu?.dataset.color).toBe('vibrant');
 
     app.unmount();
   });

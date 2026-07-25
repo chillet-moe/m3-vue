@@ -8,52 +8,36 @@ afterEach(() => {
 });
 
 describe('Tooltip', () => {
-  it('uses hint popover by default', async () => {
+  it('uses hint popover by default and accepts an explicit popover mode', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
     const app = createApp({
       render() {
-        return h(Tooltip, undefined, {
-          default: () => 'Tooltip',
-        });
+        return h('div', [
+          h(Tooltip, undefined, {
+            default: () => 'Hint tooltip',
+          }),
+          h(
+            Tooltip,
+            {
+              popover: 'manual',
+            },
+            {
+              default: () => 'Manual tooltip',
+            },
+          ),
+        ]);
       },
     });
 
     app.mount(container);
     await nextTick();
 
-    const tooltip = container.querySelector('.m3-tooltip');
+    const tooltips = container.querySelectorAll('.m3-tooltip');
 
-    expect(tooltip?.getAttribute('popover')).toBe('hint');
-
-    app.unmount();
-  });
-
-  it('uses the provided popover value', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp({
-      render() {
-        return h(
-          Tooltip,
-          {
-            popover: 'manual',
-          },
-          {
-            default: () => 'Tooltip',
-          },
-        );
-      },
-    });
-
-    app.mount(container);
-    await nextTick();
-
-    const tooltip = container.querySelector('.m3-tooltip');
-
-    expect(tooltip?.getAttribute('popover')).toBe('manual');
+    expect(tooltips[0]?.getAttribute('popover')).toBe('hint');
+    expect(tooltips[1]?.getAttribute('popover')).toBe('manual');
 
     app.unmount();
   });

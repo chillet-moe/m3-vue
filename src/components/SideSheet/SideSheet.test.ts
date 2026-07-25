@@ -144,6 +144,7 @@ describe('SideSheet', () => {
           h(SideSheet, {
             open: open.value,
             side: 'start',
+            variant: 'detached',
             width: '24rem',
             'onUpdate:open': (value: boolean) => {
               open.value = value;
@@ -158,6 +159,7 @@ describe('SideSheet', () => {
     const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
 
     expect(dialog?.dataset.side).toBe('start');
+    expect(dialog?.dataset.variant).toBe('detached');
     expect(dialog?.style.getPropertyValue('--md-side-sheet-width')).toBe('24rem');
 
     dialog?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
@@ -208,30 +210,6 @@ describe('SideSheet', () => {
 
     expect(document.body.style.overflow).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
-
-    app.unmount();
-  });
-
-  it('supports the detached visual variant', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp({
-      setup() {
-        return () =>
-          h(SideSheet, {
-            open: true,
-            variant: 'detached',
-          });
-      },
-    });
-
-    app.mount(container);
-    await nextTick();
-
-    const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
-
-    expect(dialog?.dataset.variant).toBe('detached');
 
     app.unmount();
   });

@@ -21,6 +21,7 @@ describe('Snackbar', () => {
             Snackbar,
             {
               actionLabel: 'Undo',
+              actionOnNewLine: true,
               dismissible: true,
               onAction,
               onDismiss,
@@ -43,32 +44,6 @@ describe('Snackbar', () => {
 
     expect(onAction).toHaveBeenCalledTimes(1);
     expect(onDismiss).toHaveBeenCalledTimes(1);
-
-    app.unmount();
-  });
-
-  it('marks the action as a separate line when requested', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp({
-      setup() {
-        return () =>
-          h(
-            Snackbar,
-            {
-              actionLabel: 'Review details',
-              actionOnNewLine: true,
-            },
-            {
-              default: () => 'Project settings updated.',
-            },
-          );
-      },
-    });
-
-    app.mount(container);
-
     expect(container.querySelector('[data-action-layout="new-line"]')).not.toBeNull();
 
     app.unmount();

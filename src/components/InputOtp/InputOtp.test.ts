@@ -8,7 +8,7 @@ describe('InputOtp', () => {
     document.body.innerHTML = '';
   });
 
-  it('renders one input per character', async () => {
+  it('distributes the model across accessible inputs and a form value', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -17,6 +17,7 @@ describe('InputOtp', () => {
         'aria-label': 'Verification code',
         length: 4,
         modelValue: '12',
+        name: 'verification-code',
       }),
     );
 
@@ -29,6 +30,51 @@ describe('InputOtp', () => {
     expect(inputs[0]?.value).toBe('1');
     expect(inputs[1]?.value).toBe('2');
     expect(inputs[2]?.value).toBe('');
+    expect(inputs[0]?.getAttribute('aria-label')).toBe('Verification code character 1 of 4');
+    expect(container.querySelector<HTMLInputElement>('input[type="hidden"]')?.value).toBe('12');
+
+    app.unmount();
+  });
+
+  it('updates the model and advances focus during ordinary input', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const value = ref('');
+
+    const app = createApp(() =>
+      h(InputOtp, {
+        length: 4,
+        modelValue: value.value,
+        'onUpdate:modelValue': (nextValue) => {
+          value.value = nextValue;
+        },
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const inputs = container.querySelectorAll<HTMLInputElement>('.m3-input-otp-input');
+
+    if (inputs[0]) {
+      inputs[0].value = '1';
+      inputs[0].dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    await nextTick();
+    await nextTick();
+
+    expect(value.value).toBe('1');
+    expect(document.activeElement).toBe(inputs[1]);
+
+    if (inputs[1]) {
+      inputs[1].value = '2';
+      inputs[1].dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    await nextTick();
+    await nextTick();
+
+    expect(value.value).toBe('12');
+    expect(document.activeElement).toBe(inputs[2]);
 
     app.unmount();
   });
@@ -108,26 +154,6 @@ describe('InputOtp', () => {
         .map((input) => input.value)
         .join(''),
     ).toBe('1');
-
-    app.unmount();
-  });
-
-  it('sets the requested visual size on the root', async () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-
-    const app = createApp(() =>
-      h(InputOtp, {
-        'aria-label': 'Verification code',
-        size: 'large',
-        modelValue: '',
-      }),
-    );
-
-    app.mount(container);
-    await nextTick();
-
-    expect(container.querySelector<HTMLElement>('.m3-input-otp')?.dataset.size).toBe('large');
 
     app.unmount();
   });

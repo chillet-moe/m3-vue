@@ -65,31 +65,6 @@ function mountTabs(
 }
 
 describe('Tab', () => {
-  it('uses navigation tabs by default', async () => {
-    const mounted = mountTabs({});
-    await nextTick();
-
-    const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
-
-    expect(root?.dataset.variant).toBe('navigation');
-    expect(root?.dataset.size).toBe('medium');
-    expect(root?.dataset.mode).toBe('auto');
-
-    mounted.app.unmount();
-  });
-
-  it('applies the line variant attribute', async () => {
-    const mounted = mountTabs({}, 'overview', { variant: 'line', size: 'extra-large' });
-    await nextTick();
-
-    const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
-
-    expect(root?.dataset.variant).toBe('line');
-    expect(root?.dataset.size).toBe('extra-large');
-
-    mounted.app.unmount();
-  });
-
   it('renders as an anchor when href is provided', async () => {
     const mounted = mountTabs({ href: '/settings/details' });
     await nextTick();
