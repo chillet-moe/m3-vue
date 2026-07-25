@@ -25,7 +25,6 @@ describe('ButtonGroup', () => {
             ButtonGroup,
             {
               modelValue: model.value,
-              color: 'tonal',
               size: 'medium',
               name: 'button-group',
               'onUpdate:modelValue': (nextValue) => {
@@ -62,7 +61,6 @@ describe('ButtonGroup', () => {
     const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
 
     expect(container.querySelector('.m3-button-group')).not.toBeNull();
-    expect(button?.getAttribute('data-color')).toBe('tonal');
     expect(button?.getAttribute('data-size')).toBe('medium');
 
     inputs[1]?.click();

@@ -611,7 +611,7 @@ defineExpose({
       <div class="m3-time-picker-actions" data-scope="time-picker" data-part="actions">
         <IconButton
           :icon="picker.inputMode.value === 'clock' ? 'keyboard' : 'schedule'"
-          color="standard"
+          variant="standard"
           size="small"
           :aria-label="picker.inputMode.value === 'clock' ? 'Switch to text input' : 'Switch to clock input'"
           data-scope="time-picker"
@@ -619,8 +619,8 @@ defineExpose({
           @click="toggleInputMode"
         />
         <span class="m3-time-picker-actions-spacer" data-scope="time-picker" data-part="actions-spacer" />
-        <Button color="text" @click="handleCancel">{{ props.cancelText }}</Button>
-        <Button color="text" :disabled="picker.inputInvalid.value" @click="handleConfirm">{{
+        <Button variant="text" @click="handleCancel">{{ props.cancelText }}</Button>
+        <Button variant="text" :disabled="picker.inputInvalid.value" @click="handleConfirm">{{
           props.confirmText
         }}</Button>
       </div>

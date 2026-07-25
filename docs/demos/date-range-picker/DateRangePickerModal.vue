@@ -16,7 +16,7 @@ const buttonLabel = computed(() => {
 
 <template>
   <div>
-    <Button color="outlined" @click="open = true">{{ buttonLabel }}</Button>
+    <Button variant="outlined" @click="open = true">{{ buttonLabel }}</Button>
     <DateRangePicker v-model="modelValue" v-model:open="open" variant="modal" aria-label="Choose travel dates" />
   </div>
 </template>

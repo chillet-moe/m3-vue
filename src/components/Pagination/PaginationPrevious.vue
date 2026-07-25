@@ -13,7 +13,7 @@ export type PaginationPreviousProps = Omit<PaginationLinkProps, 'isActive'> & {
 const props = withDefaults(defineProps<PaginationPreviousProps>(), {
   text: 'Previous',
   ariaLabel: 'Go to previous page',
-  color: undefined,
+  variant: undefined,
   size: 'small',
   shape: 'rounded',
   href: undefined,
@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<PaginationPreviousProps>(), {
     data-scope="pagination"
     data-part="previous"
     :aria-label="props.ariaLabel"
-    :color="props.color"
+    :variant="props.variant"
     :size="props.size"
     :shape="props.shape"
     :href="props.href"

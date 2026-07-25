@@ -4,7 +4,7 @@ import { ListItem } from '@/components/ListItem';
 
 <template>
   <div class="item-demo-column">
-    <ListItem color="text" href="/components/button">
+    <ListItem href="/components/button">
       <template #leading>
         <span class="item-demo-avatar">M3</span>
       </template>

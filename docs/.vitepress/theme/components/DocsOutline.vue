@@ -19,7 +19,7 @@ function isActiveOutlineLink(link: string) {
           v-for="item in items"
           :key="item.link"
           class="docs-outline-link"
-          color="text"
+          variant="text"
           size="small"
           :href="item.link"
           :style="{ '--outline-depth': item.depth }"

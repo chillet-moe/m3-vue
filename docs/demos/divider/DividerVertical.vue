@@ -5,8 +5,8 @@ import { Divider } from '@/components/Divider';
 
 <template>
   <div style="display: inline-flex; align-items: stretch; gap: 0.75rem">
-    <Button color="text">Cancel</Button>
+    <Button variant="text">Cancel</Button>
     <Divider orientation="vertical" />
-    <Button color="text">Save</Button>
+    <Button variant="text">Save</Button>
   </div>
 </template>

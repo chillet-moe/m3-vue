@@ -6,7 +6,7 @@ const shapes = ['rounded', 'square'] as const;
 
 <template>
   <div class="button-demo-row">
-    <Button v-for="shape in shapes" :key="shape" color="tonal" :shape="shape">
+    <Button v-for="shape in shapes" :key="shape" variant="tonal" :shape="shape">
       {{ shape }}
     </Button>
   </div>

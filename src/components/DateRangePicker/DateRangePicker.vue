@@ -280,7 +280,7 @@ defineExpose({
       <div class="m3-date-picker-header" data-scope="date-range-picker" data-part="header">
         <IconButton
           icon="chevron_left"
-          color="standard"
+          variant="standard"
           size="small"
           :disabled="!picker.canGoPreviousMonth.value"
           aria-label="Previous month"
@@ -291,7 +291,7 @@ defineExpose({
 
         <Button
           class="m3-date-picker-switch m3-state-layer"
-          color="text"
+          variant="text"
           size="small"
           :press-shape-morph="false"
           :trailing-icon="picker.calendarView.value === 'months' ? 'arrow_drop_up' : 'arrow_drop_down'"
@@ -305,7 +305,7 @@ defineExpose({
 
         <IconButton
           icon="chevron_right"
-          color="standard"
+          variant="standard"
           size="small"
           :disabled="!picker.canGoNextMonth.value"
           aria-label="Next month"
@@ -316,7 +316,7 @@ defineExpose({
 
         <IconButton
           icon="chevron_left"
-          color="standard"
+          variant="standard"
           size="small"
           :disabled="!picker.canGoPreviousYear.value"
           aria-label="Previous year"
@@ -327,7 +327,7 @@ defineExpose({
 
         <Button
           class="m3-date-picker-switch m3-state-layer"
-          color="text"
+          variant="text"
           size="small"
           :press-shape-morph="false"
           :trailing-icon="picker.calendarView.value === 'years' ? 'arrow_drop_up' : 'arrow_drop_down'"
@@ -341,7 +341,7 @@ defineExpose({
 
         <IconButton
           icon="chevron_right"
-          color="standard"
+          variant="standard"
           size="small"
           :disabled="!picker.canGoNextYear.value"
           aria-label="Next year"
@@ -493,8 +493,8 @@ defineExpose({
       </div>
 
       <div class="m3-date-picker-actions" data-scope="date-range-picker" data-part="actions">
-        <Button color="text" @click="handleCancel">{{ props.cancelText }}</Button>
-        <Button color="text" @click="handleConfirm">{{ props.confirmText }}</Button>
+        <Button variant="text" @click="handleCancel">{{ props.cancelText }}</Button>
+        <Button variant="text" @click="handleConfirm">{{ props.confirmText }}</Button>
       </div>
     </div>
   </div>

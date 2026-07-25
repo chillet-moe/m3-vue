@@ -13,8 +13,8 @@ const open = ref(false);
     <template #headline>Share</template>
     Choose where this item should be shared.
     <template #actions>
-      <Button color="text" @click="open = false">Cancel</Button>
-      <Button color="text" @click="open = false">Copy link</Button>
+      <Button variant="text" @click="open = false">Cancel</Button>
+      <Button variant="text" @click="open = false">Copy link</Button>
     </template>
   </BottomSheet>
 </template>

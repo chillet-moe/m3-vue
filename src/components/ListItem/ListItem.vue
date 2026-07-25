@@ -6,7 +6,7 @@ import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { computed, inject, unref, useSlots } from 'vue';
 import type { ButtonProps } from '@/components/Button';
 
-type ListItemButtonProps = Omit<ButtonProps, 'toggleable' | 'color' | 'size' | 'pressShapeMorph'>;
+type ListItemButtonProps = Omit<ButtonProps, 'toggleable' | 'variant' | 'size' | 'pressShapeMorph'>;
 
 export type ListItemProps = ListItemButtonProps & {
   /** Highlight the item as active/selected. */
@@ -22,7 +22,6 @@ export type ListItemProps = ListItemButtonProps & {
 const props = withDefaults(defineProps<ListItemProps>(), {
   active: false,
   href: undefined,
-  color: undefined,
   size: undefined,
   shape: undefined,
   leadingIcon: undefined,
@@ -85,7 +84,7 @@ const slotProps = computed(() => ({
     class="m3-state-layer m3-button m3-item m3-morph-host"
     data-scope="item"
     data-part="root"
-    data-color="text"
+    data-variant="text"
     data-size="small"
     :data-shape="shape"
     :data-active="isSelected ? 'true' : undefined"

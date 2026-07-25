@@ -9,13 +9,13 @@ const { prevItem, nextItem } = useSidebar();
 
 <template>
   <nav v-if="prevItem || nextItem" class="docs-pager" aria-label="Page navigation">
-    <Button v-if="prevItem" color="outlined" size="medium" :href="withBase(prevItem.link)" leading-icon="arrow_back">
+    <Button v-if="prevItem" variant="outlined" size="medium" :href="withBase(prevItem.link)" leading-icon="arrow_back">
       {{ prevItem.text }}
     </Button>
 
     <span v-else class="docs-pager-spacer" />
 
-    <Button v-if="nextItem" color="tonal" size="medium" :href="withBase(nextItem.link)" trailing-icon="arrow_forward">
+    <Button v-if="nextItem" variant="tonal" size="medium" :href="withBase(nextItem.link)" trailing-icon="arrow_forward">
       {{ nextItem.text }}
     </Button>
   </nav>

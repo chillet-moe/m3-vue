@@ -9,13 +9,13 @@ import SelectionGroup, { type SelectionGroupProps } from '@/components/Selection
 export type ButtonGroupProps = SelectionGroupProps & {
   type?: 'standard' | 'connected';
   size?: ButtonProps['size'];
-  color?: ButtonProps['color'];
+  variant?: ButtonProps['variant'];
   pressShapeMorph?: ButtonProps['pressShapeMorph'];
 };
 
 const props = withDefaults(defineProps<ButtonGroupProps>(), {
   type: 'standard',
-  color: 'tonal',
+  variant: 'tonal',
   size: 'small',
   pressShapeMorph: true,
   disabled: false,
@@ -26,7 +26,7 @@ const modelValue = defineModel<SelectionGroupModelValue>('modelValue');
 
 provide(buttonContextKey, {
   size: toRef(() => props.size),
-  color: toRef(() => props.color),
+  variant: toRef(() => props.variant),
   pressShapeMorph: toRef(() => props.pressShapeMorph),
   toggleable: toRef(() => true),
   disabled: toRef(() => props.disabled),

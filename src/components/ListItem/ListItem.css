@@ -230,7 +230,7 @@
     --_item-current-state-layer-color: currentColor;
   }
 
-  .m3-button.m3-item[data-color='text'] {
+  .m3-button.m3-item[data-variant='text'] {
     --md-color-on-container: var(--md-sys-color-on-surface);
   }
 

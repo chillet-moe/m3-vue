@@ -50,7 +50,7 @@ function resolveItemKey(item: DefaultTheme.SidebarItem, index: number) {
         <Button
           v-if="item.link && item.text"
           class="docs-sidebar-link"
-          color="text"
+          variant="text"
           :size="props.depth === 0 ? 'small' : 'small'"
           :href="resolveLink(item.link)"
           :data-active="isActiveLink(item.link) ? 'true' : 'false'"
@@ -69,7 +69,7 @@ function resolveItemKey(item: DefaultTheme.SidebarItem, index: number) {
       <Button
         v-else-if="item.link && item.text"
         class="docs-sidebar-link"
-        color="text"
+        variant="text"
         :size="props.depth === 0 ? 'small' : 'small'"
         :href="resolveLink(item.link)"
         :data-active="isActiveLink(item.link) ? 'true' : 'false'"

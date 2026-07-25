@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Button } from '@/components/Button';
 
-const colors = ['elevated', 'filled', 'tonal', 'outlined', 'text'] as const;
+const variants = ['text', 'outlined', 'tonal', 'filled', 'elevated'] as const;
 </script>
 
 <template>
   <div class="button-demo-row">
-    <Button v-for="color in colors" :key="color" :color="color" toggleable>
+    <Button v-for="variant in variants" :key="variant" :variant="variant" toggleable>
       <input type="checkbox" />
-      {{ color }}
+      {{ variant }}
     </Button>
   </div>
 </template>

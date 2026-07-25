@@ -16,8 +16,6 @@ import ItemRouterLink from '../demos/item/ItemRouterLink.vue';
 import ItemRouterLinkSrc from '../demos/item/ItemRouterLink.vue?raw';
 
 const props = ref({
-  color: 'text',
-  size: 'small',
   shape: 'rounded',
   disabled: false,
   active: false,

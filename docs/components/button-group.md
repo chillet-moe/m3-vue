@@ -12,8 +12,8 @@ import ButtonGroupTypes from '../demos/button-group/ButtonGroupTypes.vue';
 import ButtonGroupTypesSrc from '../demos/button-group/ButtonGroupTypes.vue?raw';
 import ButtonGroupSizes from '../demos/button-group/ButtonGroupSizes.vue';
 import ButtonGroupSizesSrc from '../demos/button-group/ButtonGroupSizes.vue?raw';
-import ButtonGroupColors from '../demos/button-group/ButtonGroupColors.vue';
-import ButtonGroupColorsSrc from '../demos/button-group/ButtonGroupColors.vue?raw';
+import ButtonGroupVariants from '../demos/button-group/ButtonGroupVariants.vue';
+import ButtonGroupVariantsSrc from '../demos/button-group/ButtonGroupVariants.vue?raw';
 import ButtonGroupDisabled from '../demos/button-group/ButtonGroupDisabled.vue';
 import ButtonGroupDisabledSrc from '../demos/button-group/ButtonGroupDisabled.vue?raw';
 import ButtonGroupMultiple from '../demos/button-group/ButtonGroupMultiple.vue';
@@ -22,7 +22,7 @@ import ButtonGroupMultipleSrc from '../demos/button-group/ButtonGroupMultiple.vu
 const props = ref({
   type: 'standard',
   size: 'small',
-  color: 'tonal',
+  variant: 'tonal',
   disabled: false,
   selectionMode: 'single',
 });
@@ -76,10 +76,10 @@ Button groups keep a related set of options visually connected while preserving 
   <ButtonGroupSizes />
 </DemoContainer>
 
-### Colors
+### Variants
 
-<DemoContainer :src="ButtonGroupColorsSrc" :viewport="false">
-  <ButtonGroupColors />
+<DemoContainer :src="ButtonGroupVariantsSrc" :viewport="false">
+  <ButtonGroupVariants />
 </DemoContainer>
 
 ### Disabled

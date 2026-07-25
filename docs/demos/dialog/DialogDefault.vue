@@ -14,8 +14,8 @@ const open = ref(false);
     The file will be permanently removed from your workspace.
 
     <template #actions>
-      <Button color="text" @click="open = false">Cancel</Button>
-      <Button color="text" @click="open = false">Delete</Button>
+      <Button variant="text" @click="open = false">Cancel</Button>
+      <Button variant="text" @click="open = false">Delete</Button>
     </template>
   </Dialog>
 </template>

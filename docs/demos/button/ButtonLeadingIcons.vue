@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { Button } from '@/components/Button';
 
-const colors = ['elevated', 'filled', 'tonal', 'outlined', 'text'] as const;
+const variants = ['text', 'outlined', 'tonal', 'filled', 'elevated'] as const;
 const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as const;
 </script>
 
 <template>
   <div class="button-demo-grid">
     <div v-for="size in sizes" :key="size" class="button-demo-row">
-      <Button v-for="color in colors" :key="`${size}-${color}`" :color="color" :size="size" leading-icon="settings">
-        {{ color }}
+      <Button
+        v-for="variant in variants"
+        :key="`${size}-${variant}`"
+        :variant="variant"
+        :size="size"
+        leading-icon="settings"
+      >
+        {{ variant }}
       </Button>
     </div>
   </div>

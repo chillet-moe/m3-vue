@@ -6,8 +6,8 @@ export type PaginationLinkProps = {
   /** Marks the current page and applies active emphasis. */
   isActive?: boolean;
 
-  /** Button color variant. Defaults to `text` and switches to `outlined` for active pages. */
-  color?: ButtonProps['color'];
+  /** Button variant. Defaults to `text` and switches to `outlined` for active pages. */
+  variant?: ButtonProps['variant'];
 
   /** Button size variant. */
   size?: ButtonProps['size'];
@@ -24,7 +24,7 @@ export type PaginationLinkProps = {
 
 const props = withDefaults(defineProps<PaginationLinkProps>(), {
   isActive: false,
-  color: undefined,
+  variant: undefined,
   size: 'small',
   shape: 'rounded',
   href: undefined,
@@ -36,9 +36,9 @@ defineSlots<{
   default(): any;
 }>();
 
-const resolvedColor = computed<ButtonProps['color']>(() => {
-  if (props.color) {
-    return props.color;
+const resolvedVariant = computed<ButtonProps['variant']>(() => {
+  if (props.variant) {
+    return props.variant;
   }
 
   return props.isActive ? 'outlined' : 'text';
@@ -52,7 +52,7 @@ const resolvedColor = computed<ButtonProps['color']>(() => {
     data-part="link"
     :data-active="props.isActive ? 'true' : 'false'"
     :aria-current="props.isActive ? 'page' : undefined"
-    :color="resolvedColor"
+    :variant="resolvedVariant"
     :size="props.size"
     :shape="props.shape"
     :href="props.href"

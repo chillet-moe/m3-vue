@@ -13,7 +13,7 @@ const open = ref(false);
     <template #headline>Details</template>
     Side sheets display supplemental content without leaving the current page.
     <template #actions>
-      <Button color="text" @click="open = false">Close</Button>
+      <Button variant="text" @click="open = false">Close</Button>
     </template>
   </SideSheet>
 </template>

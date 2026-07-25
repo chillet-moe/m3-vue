@@ -6,6 +6,6 @@ const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as cons
 
 <template>
   <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem">
-    <IconButton v-for="size in sizes" :key="size" :size="size" color="tonal" icon="favorite" />
+    <IconButton v-for="size in sizes" :key="size" :size="size" variant="tonal" icon="favorite" />
   </div>
 </template>

@@ -6,6 +6,6 @@ const widths = ['default', 'narrow', 'wide'] as const;
 
 <template>
   <div style="display: flex; flex-wrap: wrap; gap: 0.75rem">
-    <IconButton v-for="width in widths" :key="width" :width="width" color="tonal" icon="favorite" />
+    <IconButton v-for="width in widths" :key="width" :width="width" variant="tonal" icon="favorite" />
   </div>
 </template>

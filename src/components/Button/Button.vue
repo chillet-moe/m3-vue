@@ -11,14 +11,16 @@ defineOptions({
   inheritAttrs: false,
 });
 
+export type ButtonVariant = 'text' | 'outlined' | 'tonal' | 'filled' | 'elevated';
+
 export type ButtonProps = {
   /** Whether the button is toggleable (like a checkbox).
    * When true, the button must contain an input element of type checkbox or radio.
    */
   toggleable?: boolean;
 
-  /** The color style of the button. */
-  color?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
+  /** The visual emphasis of the button. */
+  variant?: ButtonVariant;
 
   /** The size of the button. */
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
@@ -51,7 +53,7 @@ const props = withDefaults(defineProps<ButtonProps>(), {
 const context = inject(buttonContextKey, undefined);
 
 const toggleable = computed(() => props.toggleable ?? unref(context?.toggleable) ?? false);
-const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
+const variant = computed(() => props.variant ?? unref(context?.variant) ?? 'text');
 const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
 const pressShapeMorph = computed(() => props.pressShapeMorph ?? unref(context?.pressShapeMorph) ?? true);
@@ -93,7 +95,7 @@ const slots = defineSlots<{
     :class="['m3-state-layer', 'm3-button']"
     data-scope="button"
     data-part="root"
-    :data-color="color"
+    :data-variant="variant"
     :data-size="size"
     :data-shape="shape"
     :data-press-shape-morph="pressShapeMorph ? 'true' : 'false'"

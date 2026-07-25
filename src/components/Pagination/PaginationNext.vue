@@ -13,7 +13,7 @@ export type PaginationNextProps = Omit<PaginationLinkProps, 'isActive'> & {
 const props = withDefaults(defineProps<PaginationNextProps>(), {
   text: 'Next',
   ariaLabel: 'Go to next page',
-  color: undefined,
+  variant: undefined,
   size: 'small',
   shape: 'rounded',
   href: undefined,
@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<PaginationNextProps>(), {
     data-scope="pagination"
     data-part="next"
     :aria-label="props.ariaLabel"
-    :color="props.color"
+    :variant="props.variant"
     :size="props.size"
     :shape="props.shape"
     :href="props.href"

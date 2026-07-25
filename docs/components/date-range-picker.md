@@ -44,7 +44,7 @@ DateRangePicker is a standalone surface for choosing a start and end date. By de
 <DemoContainer>
   <div style="display: grid; gap: 1rem; max-inline-size: 22rem;">
     <span ref="anchorEl" :style="{ 'anchor-name': anchorName }" style="display: inline-flex;">
-      <Button color="outlined" @click="open = true">{{ buttonLabel }}</Button>
+      <Button variant="outlined" @click="open = true">{{ buttonLabel }}</Button>
     </span>
     <DateRangePicker v-bind="props" v-model="modelValue" v-model:open="open" :anchor-name="anchorName" :anchor-element="anchorEl" />
   </div>

@@ -1,5 +1,6 @@
 - 添加新组件时参照 engineering/add-component.instructions.md 中的步骤进行。
 - 如果可以，倾向于复用组件库中已有的组件，或者在其基础上进行定制，而不是从头开始开发新组件。
+- `Button` 和 `IconButton` 的视觉层级应由操作重要性决定。`filled` 仅用于当前表面或操作组中唯一的主要、最终操作；层级未知时，`Button` 使用默认的 `text` 或显式 `outlined`，`IconButton` 使用默认的 `standard`。工具栏、列表行和卡片中的 `IconButton` 不使用 `filled`。
 - 效果倾向于使用纯 css 实现。
 - 我是这个库的唯一使用者，所以适度的 API 变更修改是可以接受的。
 - 非简单的组件、Composable、provide/inject、公开 API 或状态职责边界变更必须使用 `$vue-architecture-boundaries` skill。项目是 Vue 组件库，不要套用应用项目的 Pinia/路由规范，也不要把 Composable 视为高于组件的抽象层级。

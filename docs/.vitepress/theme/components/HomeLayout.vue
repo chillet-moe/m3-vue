@@ -5,7 +5,7 @@ import { VPNavBarSearch } from 'vitepress/theme';
 import { Button, Icon, IconButton } from '@/index';
 import ShapeTokenControls from '../../components/ShapeTokenControls.vue';
 import { useHero, useNav, useSiteInfo } from '../composables/nav';
-import { mapHeroActionColor, resolveSocialLabel } from '../utils';
+import { mapHeroActionVariant, resolveSocialLabel } from '../utils';
 
 const { isDark } = useData();
 const { navItems, socialLinks } = useNav();
@@ -61,7 +61,7 @@ function toggleAppearance() {
   <div class="home-layout vp-raw">
     <header class="home-header">
       <div class="home-header-inner">
-        <Button class="home-brand" color="text" size="medium" :href="resolveLink('/')">
+        <Button class="home-brand" variant="text" size="medium" :href="resolveLink('/')">
           <span class="home-brand-mark">
             <span
               v-if="siteLogo"
@@ -74,7 +74,7 @@ function toggleAppearance() {
         </Button>
 
         <nav v-if="navItems.length" class="home-nav" aria-label="Primary">
-          <Button v-for="item in navItems" :key="item.link" color="text" size="medium" :href="resolveLink(item.link)">
+          <Button v-for="item in navItems" :key="item.link" variant="text" size="medium" :href="resolveLink(item.link)">
             {{ item.text }}
           </Button>
         </nav>
@@ -86,7 +86,7 @@ function toggleAppearance() {
             v-for="link in socialLinks"
             :key="link.link"
             class="home-social-link"
-            color="text"
+            variant="text"
             size="small"
             :href="link.link"
             trailing-icon="open_in_new"
@@ -97,7 +97,7 @@ function toggleAppearance() {
           <ShapeTokenControls />
 
           <IconButton
-            color="standard"
+            variant="standard"
             size="small"
             width="default"
             :icon="isDark ? 'light_mode' : 'dark_mode'"
@@ -119,7 +119,7 @@ function toggleAppearance() {
             <Button
               v-for="action in hero.actions ?? []"
               :key="action.link"
-              :color="mapHeroActionColor(action.theme)"
+              :variant="mapHeroActionVariant(action.theme)"
               size="medium"
               :href="resolveLink(action.link)"
             >

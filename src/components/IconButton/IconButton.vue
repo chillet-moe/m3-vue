@@ -10,14 +10,16 @@ defineOptions({
   inheritAttrs: false,
 });
 
+export type IconButtonVariant = 'standard' | 'outlined' | 'tonal' | 'filled';
+
 export type IconButtonProps = {
   /** Whether the button is toggleable (like a checkbox).
    * When true, the button must contain an input element of type checkbox or radio.
    */
   toggleable?: boolean;
 
-  /** The color style of the button. */
-  color?: 'filled' | 'tonal' | 'outlined' | 'standard';
+  /** The visual emphasis of the button. */
+  variant?: IconButtonVariant;
 
   /** The size of the button. */
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
@@ -46,7 +48,7 @@ const props = withDefaults(defineProps<IconButtonProps>(), {
 const context = inject(iconButtonContextKey, undefined);
 
 const toggleable = computed(() => props.toggleable ?? unref(context?.toggleable) ?? false);
-const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
+const variant = computed(() => props.variant ?? unref(context?.variant) ?? 'standard');
 const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
 const width = computed(() => props.width ?? unref(context?.width) ?? 'default');
@@ -75,7 +77,7 @@ const slots = defineSlots<{
     :class="['m3-state-layer', 'm3-icon-button']"
     data-scope="icon-button"
     data-part="root"
-    :data-color="color"
+    :data-variant="variant"
     :data-size="size"
     :data-shape="shape"
     :data-width="width"

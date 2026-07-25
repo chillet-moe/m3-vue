@@ -10,7 +10,7 @@ const open = ref(false);
 
 <template>
   <div>
-    <Button color="outlined" @click="open = true">{{ modelValue ?? 'Choose travel date' }}</Button>
+    <Button variant="outlined" @click="open = true">{{ modelValue ?? 'Choose travel date' }}</Button>
     <DatePicker v-model="modelValue" v-model:open="open" variant="modal" aria-label="Choose travel date" />
   </div>
 </template>

@@ -6,7 +6,7 @@ const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as cons
 
 <template>
   <div class="button-demo-row">
-    <Button v-for="size in sizes" :key="size" color="tonal" :size="size">
+    <Button v-for="size in sizes" :key="size" variant="tonal" :size="size">
       {{ size }}
     </Button>
   </div>

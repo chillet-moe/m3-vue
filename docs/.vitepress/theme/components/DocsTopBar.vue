@@ -43,7 +43,7 @@ function toggleStickyPreview() {
       <div class="docs-topbar-leading">
         <IconButton
           class="docs-menu-toggle"
-          color="standard"
+          variant="standard"
           size="small"
           width="default"
           icon="menu"
@@ -58,7 +58,7 @@ function toggleStickyPreview() {
           v-for="item in navItems"
           :key="item.link"
           class="docs-nav-link"
-          color="text"
+          variant="text"
           size="medium"
           :href="resolveLink(item.link)"
           :data-active="isActiveLink(item.link) ? 'true' : 'false'"
@@ -72,7 +72,7 @@ function toggleStickyPreview() {
           v-for="link in socialLinks"
           :key="link.link"
           class="docs-social-link"
-          color="text"
+          variant="text"
           size="small"
           :href="link.link"
           trailing-icon="open_in_new"
@@ -81,7 +81,7 @@ function toggleStickyPreview() {
         </Button>
 
         <IconButton
-          color="standard"
+          variant="standard"
           size="small"
           width="default"
           icon="push_pin"
@@ -93,7 +93,7 @@ function toggleStickyPreview() {
         <ShapeTokenControls />
 
         <IconButton
-          color="standard"
+          variant="standard"
           size="small"
           width="default"
           :icon="isDark ? 'light_mode' : 'dark_mode'"

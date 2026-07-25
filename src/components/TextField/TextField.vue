@@ -507,7 +507,7 @@ defineExpose({
             v-if="hasPicker"
             class="m3-text-field-date-picker-button"
             :icon="hasTimePicker ? 'schedule' : 'calendar_today'"
-            color="standard"
+            variant="standard"
             size="small"
             :disabled="props.disabled || props.readonly"
             :aria-label="hasTimePicker ? 'Choose time' : 'Choose date'"

@@ -3,5 +3,5 @@ import { Button } from '@/components/Button';
 </script>
 
 <template>
-  <Button color="filled" leading-icon="favorite">Button</Button>
+  <Button leading-icon="favorite">Button</Button>
 </template>

@@ -37,7 +37,7 @@ DatePicker is a standalone date surface. TextField uses it automatically for `ty
 <DemoContainer>
   <div style="display: grid; gap: 1rem; max-inline-size: 22rem;">
     <span ref="anchorEl" :style="{ 'anchor-name': anchorName }" style="display: inline-flex;">
-      <Button color="outlined" @click="open = true">{{ modelValue ?? 'Choose date' }}</Button>
+      <Button variant="outlined" @click="open = true">{{ modelValue ?? 'Choose date' }}</Button>
     </span>
     <DatePicker v-bind="props" v-model="modelValue" v-model:open="open" :anchor-name="anchorName" :anchor-element="anchorEl" />
     <TextField v-model="textFieldValue" type="date" label="TextField date" />

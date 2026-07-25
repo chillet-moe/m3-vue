@@ -35,7 +35,7 @@ onBeforeUnmount(() => {
       <CircularProgressIndicator :value="value" shape="wavy" aria-label="Wavy transfer progress" />
     </div>
     <div class="demo-circular-progress-indicator-value-animation-controls">
-      <Button color="tonal" @click="advanceValue">Next value</Button>
+      <Button variant="tonal" @click="advanceValue">Next value</Button>
       <span>{{ Math.round(value * 100) }}%</span>
     </div>
   </div>

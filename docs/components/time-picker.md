@@ -37,7 +37,7 @@ TimePicker is a standalone time selection surface. TextField uses it automatical
 <DemoContainer>
   <div style="display: grid; gap: 1rem; max-inline-size: 22rem;">
     <span ref="anchorEl" :style="{ 'anchor-name': anchorName }" style="display: inline-flex;">
-      <Button color="outlined" @click="open = true">{{ modelValue ?? 'Choose time' }}</Button>
+      <Button variant="outlined" @click="open = true">{{ modelValue ?? 'Choose time' }}</Button>
     </span>
     <TimePicker v-bind="props" v-model="modelValue" v-model:open="open" :anchor-name="anchorName" :anchor-element="anchorEl" />
     <TextField v-model="textFieldValue" type="time" label="TextField time" />

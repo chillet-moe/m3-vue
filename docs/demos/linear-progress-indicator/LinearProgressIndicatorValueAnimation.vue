@@ -28,7 +28,7 @@ onBeforeUnmount(() => {
     <LinearProgressIndicator :value="value" aria-label="Transfer progress" />
     <LinearProgressIndicator :value="value" shape="wavy" aria-label="Wavy transfer progress" />
     <div class="demo-linear-progress-indicator-value-animation-controls">
-      <Button color="tonal" @click="advanceValue">Next value</Button>
+      <Button variant="tonal" @click="advanceValue">Next value</Button>
       <span>{{ Math.round(value * 100) }}%</span>
     </div>
   </div>

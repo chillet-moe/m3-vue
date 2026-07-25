@@ -12,7 +12,7 @@ const open = ref(false);
       <Button size="small" @click="open = !open">
         {{ open ? 'Close' : 'Open' }}
       </Button>
-      <Button size="small" color="tonal" @click="open = false">Reset</Button>
+      <Button size="small" variant="tonal" @click="open = false">Reset</Button>
     </div>
 
     <FloatingActionButtonMenu v-model:open="open" color="tertiary" aria-label="Controlled actions">

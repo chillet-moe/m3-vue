@@ -31,8 +31,8 @@ Dialog provides a modal surface with headline, body, icon, and action slots buil
     <template #headline>Delete file?</template>
     The file will be permanently removed from your workspace.
     <template #actions>
-      <Button color="text" @click="open = false">Cancel</Button>
-      <Button color="text" @click="open = false">Delete</Button>
+      <Button variant="text" @click="open = false">Cancel</Button>
+      <Button variant="text" @click="open = false">Delete</Button>
     </template>
   </Dialog>
 </DemoContainer>

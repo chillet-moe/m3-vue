@@ -8,8 +8,8 @@ import { Button } from '@/components/Button';
 
 import ButtonDefault from '../demos/button/ButtonDefault.vue';
 import ButtonDefaultSrc from '../demos/button/ButtonDefault.vue?raw';
-import ButtonColors from '../demos/button/ButtonColors.vue';
-import ButtonColorsSrc from '../demos/button/ButtonColors.vue?raw';
+import ButtonVariants from '../demos/button/ButtonVariants.vue';
+import ButtonVariantsSrc from '../demos/button/ButtonVariants.vue?raw';
 import ButtonSizes from '../demos/button/ButtonSizes.vue';
 import ButtonSizesSrc from '../demos/button/ButtonSizes.vue?raw';
 import ButtonShapes from '../demos/button/ButtonShapes.vue';
@@ -29,7 +29,7 @@ import ButtonRouterLinkSrc from '../demos/button/ButtonRouterLink.vue?raw';
 
 const props = ref({
   toggleable: false,
-  color: 'filled',
+  variant: 'text',
   size: 'medium',
   shape: 'rounded',
   pressShapeMorph: true,
@@ -45,6 +45,10 @@ const props = ref({
 Buttons let people trigger primary, secondary, or low-emphasis actions with Material 3 visual treatments.
 
 Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior.
+
+`text` is the safe default when an action's hierarchy is not known. Use `filled` only for the single primary,
+flow-completing action in a surface or action group. Use `outlined` for important secondary actions and `tonal`
+when they need more emphasis than an outline.
 
 <DemoContainer>
   <Button v-bind="props">
@@ -67,10 +71,10 @@ Action components convert `title` into the library tooltip. See [Action Tooltips
   <ButtonDefault />
 </DemoContainer>
 
-### Colors
+### Variants
 
-<DemoContainer :src="ButtonColorsSrc">
-  <ButtonColors />
+<DemoContainer :src="ButtonVariantsSrc">
+  <ButtonVariants />
 </DemoContainer>
 
 ### Sizes

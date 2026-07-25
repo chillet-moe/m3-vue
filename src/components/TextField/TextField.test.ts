@@ -516,8 +516,8 @@ describe('TextField', () => {
             TextField,
             { modelValue: '', size, 'aria-label': `${size} search` },
             {
-              leading: () => h(IconButton, { icon: 'search', color: 'standard', 'aria-label': 'Search' }),
-              trailing: () => h(IconButton, { icon: 'close', color: 'standard', 'aria-label': 'Clear' }),
+              leading: () => h(IconButton, { icon: 'search', 'aria-label': 'Search' }),
+              trailing: () => h(IconButton, { icon: 'close', 'aria-label': 'Clear' }),
             },
           ),
         ),

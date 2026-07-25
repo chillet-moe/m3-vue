@@ -10,7 +10,7 @@ import { Button, Card } from '@/index';
       <span class="docs-not-found-icon material-symbols-outlined" aria-hidden="true">search_off</span>
       <h1 class="docs-not-found-title">Page Not Found</h1>
       <p class="docs-not-found-text">The page you're looking for doesn't exist or has been moved.</p>
-      <Button color="filled" size="medium" :href="withBase('/')" leading-icon="home"> Back to Home </Button>
+      <Button variant="filled" size="medium" :href="withBase('/')" leading-icon="home"> Back to Home </Button>
     </Card>
   </div>
 </template>

@@ -8,8 +8,8 @@ import { IconButton } from '@/components/IconButton';
 
 import IconButtonDefault from '../demos/icon-button/IconButtonDefault.vue';
 import IconButtonDefaultSrc from '../demos/icon-button/IconButtonDefault.vue?raw';
-import IconButtonColors from '../demos/icon-button/IconButtonColors.vue';
-import IconButtonColorsSrc from '../demos/icon-button/IconButtonColors.vue?raw';
+import IconButtonVariants from '../demos/icon-button/IconButtonVariants.vue';
+import IconButtonVariantsSrc from '../demos/icon-button/IconButtonVariants.vue?raw';
 import IconButtonSizes from '../demos/icon-button/IconButtonSizes.vue';
 import IconButtonSizesSrc from '../demos/icon-button/IconButtonSizes.vue?raw';
 import IconButtonShapes from '../demos/icon-button/IconButtonShapes.vue';
@@ -27,7 +27,7 @@ import IconButtonRouterLinkSrc from '../demos/icon-button/IconButtonRouterLink.v
 
 const props = ref({
   toggleable: false,
-  color: 'filled',
+  variant: 'standard',
   size: 'small',
   shape: 'rounded',
   width: 'default',
@@ -39,9 +39,12 @@ const props = ref({
 
 # IconButton
 
-Icon buttons expose compact, icon-first actions with the same Material 3 shape, color, and size variants as the library component.
+Icon buttons expose compact, icon-first actions with the same Material 3 shape, emphasis, and size variants as the library component.
 
 Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior and accessible-name fallback.
+
+`standard` is the default for supplementary actions, including toolbar, list-row, and card actions. Reserve `filled`
+for a high-emphasis icon action; use `outlined` or `tonal` for intermediate emphasis.
 
 <DemoContainer :viewport="false">
   <IconButton v-bind="props">
@@ -63,10 +66,10 @@ Action components convert `title` into the library tooltip. See [Action Tooltips
   <IconButtonDefault />
 </DemoContainer>
 
-### Colors
+### Variants
 
-<DemoContainer :src="IconButtonColorsSrc" :viewport="false">
-  <IconButtonColors />
+<DemoContainer :src="IconButtonVariantsSrc" :viewport="false">
+  <IconButtonVariants />
 </DemoContainer>
 
 ### Sizes

@@ -18,8 +18,8 @@ const open = ref(false);
     Changes are saved locally and will upload automatically when the network is available again.
 
     <template #actions>
-      <Button color="text" @click="open = false">Dismiss</Button>
-      <Button color="text" @click="open = false">Retry now</Button>
+      <Button variant="text" @click="open = false">Dismiss</Button>
+      <Button variant="text" @click="open = false">Retry now</Button>
     </template>
   </Dialog>
 </template>

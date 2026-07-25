@@ -45,7 +45,7 @@ import { Button } from '@chillet/m3-vue';
 </script>
 
 <template>
-  <Button color="filled" leading-icon="favorite">Button</Button>
+  <Button leading-icon="favorite">Button</Button>
 </template>
 ```
 

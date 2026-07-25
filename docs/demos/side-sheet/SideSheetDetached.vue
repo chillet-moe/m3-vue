@@ -13,7 +13,7 @@ const open = ref(false);
     <template #headline>Places</template>
     Detached side sheets keep space around the surface while staying aligned to the viewport side.
     <template #actions>
-      <Button color="text" @click="open = false">Decline</Button>
+      <Button variant="text" @click="open = false">Decline</Button>
       <Button @click="open = false">Reserve</Button>
     </template>
   </SideSheet>

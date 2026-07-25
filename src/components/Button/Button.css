@@ -574,7 +574,7 @@
   }
 
   /* elevated */
-  .m3-button[data-color='elevated'] {
+  .m3-button[data-variant='elevated'] {
     --_button-container-color: var(--md-button-container-color, var(--_button-elevated-container-color));
     --_button-container-elevation: var(--md-button-container-elevation, var(--_button-elevated-container-elevation));
     --_button-label-text-color: var(--md-button-label-text-color, var(--_button-elevated-label-text-color));
@@ -633,7 +633,7 @@
   }
 
   /* filled */
-  .m3-button[data-color='filled'] {
+  .m3-button[data-variant='filled'] {
     --_button-container-color: var(--md-button-container-color, var(--_button-filled-container-color));
     --_button-container-elevation: var(--md-button-container-elevation, var(--_button-filled-container-elevation));
     --_button-label-text-color: var(--md-button-label-text-color, var(--_button-filled-label-text-color));
@@ -692,7 +692,7 @@
   }
 
   /* tonal */
-  .m3-button[data-color='tonal'] {
+  .m3-button[data-variant='tonal'] {
     --_button-container-color: var(--md-button-container-color, var(--_button-tonal-container-color));
     --_button-container-elevation: var(--md-button-container-elevation, var(--_button-tonal-container-elevation));
     --_button-label-text-color: var(--md-button-label-text-color, var(--_button-tonal-label-text-color));
@@ -751,7 +751,7 @@
   }
 
   /* outlined */
-  .m3-button[data-color='outlined'] {
+  .m3-button[data-variant='outlined'] {
     --_button-container-color: var(--md-button-container-color, transparent);
     --_button-label-text-color: var(--md-button-label-text-color, var(--_button-outlined-label-text-color));
     --button-outline-color: var(--_button-outlined-outline-color);
@@ -788,7 +788,7 @@
   }
 
   /* text */
-  .m3-button[data-color='text'] {
+  .m3-button[data-variant='text'] {
     --_button-container-color: var(--md-button-container-color, transparent);
     --_button-label-text-color: var(--md-button-label-text-color, var(--_button-text-label-text-color));
     --_button-hovered-label-text-color: var(
@@ -948,7 +948,7 @@
     --_button-icon-label-space: var(--md-button-icon-label-space, var(--_button-xlarge-icon-label-space));
   }
 
-  .m3-button[data-color='outlined'] {
+  .m3-button[data-variant='outlined'] {
     &[data-size='extra-small'] {
       --button-outline-width: var(--_button-xsmall-outlined-outline-width);
     }

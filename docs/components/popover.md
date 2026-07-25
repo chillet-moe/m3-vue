@@ -31,7 +31,7 @@ Popover is optional. Use it when you need a small anchored panel with simple ope
 <DemoContainer :viewport="false">
   <div style="padding: 2rem; min-block-size: 12rem">
     <span ref="previewAnchor" style="display: inline-flex">
-      <Button color="outlined" @click="previewOpen = !previewOpen">Toggle popover</Button>
+      <Button variant="outlined" @click="previewOpen = !previewOpen">Toggle popover</Button>
     </span>
     <Popover v-bind="props" v-model:open="previewOpen" :anchor-element="previewAnchor" role="dialog" aria-label="Popover preview">
       <div style="display: grid; gap: 0.5rem; min-inline-size: 12rem">

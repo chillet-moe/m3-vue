@@ -23,7 +23,7 @@ const multiline = ref('This is a long input in a multi-line text field that wrap
       <template #prefix>$</template>
       <template #suffix>USD</template>
       <template #trailing>
-        <IconButton icon="close" aria-label="Clear" @click="amount = ''" color="standard" />
+        <IconButton icon="close" aria-label="Clear" @click="amount = ''" variant="standard" />
       </template>
     </TextField>
     <TextField label="Label" v-model="multiline" as="textarea" :rows="4" />

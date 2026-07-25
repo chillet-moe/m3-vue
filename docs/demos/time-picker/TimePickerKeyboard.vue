@@ -10,7 +10,7 @@ const open = ref(false);
 
 <template>
   <div>
-    <Button color="outlined" @click="open = true">{{ modelValue ?? 'Enter time' }}</Button>
+    <Button variant="outlined" @click="open = true">{{ modelValue ?? 'Enter time' }}</Button>
     <TimePicker v-model="modelValue" v-model:open="open" input-mode="keyboard" />
   </div>
 </template>

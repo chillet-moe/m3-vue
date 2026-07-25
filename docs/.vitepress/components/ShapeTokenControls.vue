@@ -380,7 +380,7 @@ onBeforeUnmount(() => {
   <div class="shape-token-controls vp-raw">
     <IconButton
       v-dropdown="dropdownBinding"
-      color="standard"
+      variant="standard"
       size="small"
       width="default"
       icon="rounded_corner"
@@ -402,14 +402,14 @@ onBeforeUnmount(() => {
     >
       <div class="shape-token-controls-header">
         <h2>Shape</h2>
-        <Button color="text" size="small" leading-icon="restart_alt" @click="resetShapeTokens">Reset</Button>
+        <Button variant="text" size="small" leading-icon="restart_alt" @click="resetShapeTokens">Reset</Button>
       </div>
 
       <div class="shape-token-controls-presets" aria-label="Shape presets">
         <Button
           v-for="preset in presets"
           :key="preset.label"
-          color="text"
+          variant="text"
           size="small"
           class="shape-token-controls-preset"
           :data-active="activePreset === preset.label ? 'true' : undefined"
@@ -447,7 +447,7 @@ onBeforeUnmount(() => {
 
             <Button
               v-if="role.full"
-              color="text"
+              variant="text"
               size="small"
               class="shape-token-controls-full"
               :aria-pressed="roleValues[role.key].full ? 'true' : 'false'"
@@ -463,7 +463,7 @@ onBeforeUnmount(() => {
       <div class="shape-token-controls-code">
         <div class="shape-token-controls-code-header">
           <span>CSS</span>
-          <Button color="text" size="small" :leading-icon="copied ? 'check' : 'content_copy'" @click="copyCssSnippet">
+          <Button variant="text" size="small" :leading-icon="copied ? 'check' : 'content_copy'" @click="copyCssSnippet">
             {{ copied ? 'Copied' : 'Copy' }}
           </Button>
         </div>

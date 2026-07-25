@@ -13,7 +13,7 @@ const anchorName = '--date-picker-default-anchor';
 <template>
   <div>
     <span ref="anchorEl" :style="{ 'anchor-name': anchorName }" style="display: inline-flex">
-      <Button color="outlined" @click="open = true">{{ modelValue ?? 'Choose date' }}</Button>
+      <Button variant="outlined" @click="open = true">{{ modelValue ?? 'Choose date' }}</Button>
     </span>
     <DatePicker v-model="modelValue" v-model:open="open" :anchor-name="anchorName" :anchor-element="anchorEl" />
   </div>

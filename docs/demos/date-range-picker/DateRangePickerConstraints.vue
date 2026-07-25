@@ -22,7 +22,7 @@ const buttonLabel = computed(() => {
 <template>
   <div>
     <span ref="anchorEl" :style="{ 'anchor-name': anchorName }" style="display: inline-flex">
-      <Button color="outlined" @click="open = true">{{ buttonLabel }}</Button>
+      <Button variant="outlined" @click="open = true">{{ buttonLabel }}</Button>
     </span>
     <DateRangePicker
       v-model="modelValue"

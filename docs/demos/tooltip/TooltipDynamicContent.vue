@@ -11,7 +11,7 @@ const confirming = ref(false);
     <Button
       v-tooltip="'#dynamic-tooltip'"
       :class="{ confirm: confirming }"
-      :color="confirming ? 'filled' : 'text'"
+      :variant="confirming ? 'filled' : 'text'"
       size="extra-small"
       shape="square"
       @click="confirming = !confirming"

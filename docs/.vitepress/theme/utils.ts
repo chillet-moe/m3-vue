@@ -50,7 +50,7 @@ export function resolveSocialLabel(link: string) {
   return 'External';
 }
 
-export function mapHeroActionColor(actionTheme?: 'brand' | 'alt') {
+export function mapHeroActionVariant(actionTheme?: 'brand' | 'alt') {
   if (actionTheme === 'brand') {
     return 'filled';
   }

@@ -38,7 +38,7 @@ const DemoRouterLink = defineComponent({
       <DemoRouterLink custom to="/search" v-slot="{ href, navigate, isActive }">
         <IconButton
           :href="href"
-          :color="isActive ? 'filled' : 'outlined'"
+          :variant="isActive ? 'filled' : 'outlined'"
           icon="search"
           aria-label="Search"
           @click="navigate"
@@ -48,7 +48,7 @@ const DemoRouterLink = defineComponent({
       <DemoRouterLink custom to="/favorites" v-slot="{ href, navigate, isActive }">
         <IconButton
           :href="href"
-          :color="isActive ? 'filled' : 'outlined'"
+          :variant="isActive ? 'filled' : 'outlined'"
           icon="favorite"
           aria-label="Favorites"
           @click="navigate"

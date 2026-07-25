@@ -13,7 +13,7 @@ export type DialogAction = {
   value?: string;
 
   /** Visual style forwarded to the Button component. */
-  color?: ButtonProps['color'];
+  variant?: ButtonProps['variant'];
 
   /** Whether the action button is disabled. */
   disabled?: boolean;
@@ -49,7 +49,7 @@ const DEFAULT_ACTIONS: DialogAction[] = [
   {
     label: 'OK',
     value: 'confirm',
-    color: 'text',
+    variant: 'text',
   },
 ];
 
@@ -228,7 +228,7 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
                     Button,
                     {
                       key: `${action.value ?? action.label}-${index}`,
-                      color: action.color ?? 'text',
+                      variant: action.variant ?? 'text',
                       disabled: action.disabled,
                       autofocus: action.autofocus,
                       onClick: () => {

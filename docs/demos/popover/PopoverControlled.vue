@@ -10,7 +10,7 @@ const anchorEl = ref<HTMLElement>();
 <template>
   <div style="padding: 2rem; min-block-size: 14rem">
     <span ref="anchorEl" style="display: inline-flex">
-      <Button color="tonal" @click="open = !open">Toggle filters</Button>
+      <Button variant="tonal" @click="open = !open">Toggle filters</Button>
     </span>
 
     <Popover
@@ -31,7 +31,7 @@ const anchorEl = ref<HTMLElement>();
           </select>
         </label>
 
-        <Button color="text" size="small" @click="open = false">Apply</Button>
+        <Button variant="text" size="small" @click="open = false">Apply</Button>
       </div>
     </Popover>
   </div>

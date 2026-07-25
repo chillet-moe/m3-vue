@@ -36,11 +36,11 @@ const DemoRouterLink = defineComponent({
   <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start">
     <div style="display: flex; gap: 0.75rem; flex-wrap: wrap">
       <DemoRouterLink custom to="/inbox" v-slot="{ href, navigate, isActive }">
-        <Button :href="href" :color="isActive ? 'filled' : 'outlined'" @click="navigate">Inbox</Button>
+        <Button :href="href" :variant="isActive ? 'filled' : 'outlined'" @click="navigate">Inbox</Button>
       </DemoRouterLink>
 
       <DemoRouterLink custom to="/archive" v-slot="{ href, navigate, isActive }">
-        <Button :href="href" :color="isActive ? 'filled' : 'outlined'" @click="navigate">Archive</Button>
+        <Button :href="href" :variant="isActive ? 'filled' : 'outlined'" @click="navigate">Archive</Button>
       </DemoRouterLink>
     </div>
 
