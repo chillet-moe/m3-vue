@@ -36,6 +36,8 @@ const result = await showDialog({
 ```
 
 The promise resolves to the clicked action value. If no explicit `value` is provided, the action label is used instead.
+All actions render as text buttons, including primary and destructive actions. Their hierarchy comes from labels,
+order, and position rather than a filled, tonal, or outlined variant.
 
 ## Options
 

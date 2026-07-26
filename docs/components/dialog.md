@@ -24,6 +24,9 @@ const open = ref(false);
 
 Dialog provides a modal surface with headline, body, icon, and action slots built on the native `<dialog>` element.
 
+Dialog actions use text buttons, including the primary, confirmation, final, and destructive actions. Express their
+hierarchy through clear labels, order, and position rather than filled, tonal, or outlined containers.
+
 <DemoContainer :viewport="false">
   <Button @click="open = true">Open dialog</Button>
 

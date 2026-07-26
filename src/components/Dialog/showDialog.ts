@@ -1,6 +1,5 @@
 import { h, nextTick, ref } from 'vue';
 import { Button } from '@/components/Button';
-import type { ButtonProps } from '@/components/Button/Button.vue';
 import { Icon } from '@/components/Icon';
 import { showOverlayEntry, type OverlayEntryHandle } from '@/internal/overlayHost/overlayHost';
 import Dialog from './Dialog.vue';
@@ -12,9 +11,6 @@ export type DialogAction = {
 
   /** Value returned when this action closes the dialog. */
   value?: string;
-
-  /** Visual style forwarded to the Button component. */
-  variant?: ButtonProps['variant'];
 
   /** Whether the action button is disabled. */
   disabled?: boolean;
@@ -54,7 +50,6 @@ const DEFAULT_ACTIONS: DialogAction[] = [
   {
     label: 'OK',
     value: 'confirm',
-    variant: 'text',
   },
 ];
 
@@ -236,7 +231,7 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
                   Button,
                   {
                     key: `${action.value ?? action.label}-${index}`,
-                    variant: action.variant ?? 'text',
+                    variant: 'text',
                     disabled: action.disabled,
                     autofocus: action.autofocus,
                     onClick: () => {
