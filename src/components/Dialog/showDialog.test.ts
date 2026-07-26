@@ -1,7 +1,24 @@
 // @vitest-environment jsdom
-import { afterEach, beforeAll, describe, expect, it } from 'vite-plus/test';
-import { nextTick } from 'vue';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vite-plus/test';
+import { createApp, h, nextTick, type App } from 'vue';
+import { buttonContextKey } from '@/components/Button';
+import { OverlayHost } from '@/components/OverlayHost';
 import { showDialog } from './showDialog';
+
+let app: App<Element> | null = null;
+
+function mountOverlayHost(buttonShape?: 'rounded' | 'square') {
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+
+  app = createApp(() => h(OverlayHost));
+
+  if (buttonShape) {
+    app.provide(buttonContextKey, { shape: buttonShape });
+  }
+
+  app.mount(container);
+}
 
 function installDialogPolyfill() {
   const prototype = HTMLDialogElement.prototype as HTMLDialogElement & {
@@ -42,7 +59,13 @@ beforeAll(() => {
   installDialogPolyfill();
 });
 
+beforeEach(() => {
+  mountOverlayHost();
+});
+
 afterEach(() => {
+  app?.unmount();
+  app = null;
   document.body.innerHTML = '';
   document.body.removeAttribute('style');
   document.body.removeAttribute('data-m3-scroll-lock');
@@ -50,6 +73,44 @@ afterEach(() => {
 });
 
 describe('showDialog', () => {
+  it('rejects when OverlayHost is not mounted', async () => {
+    app?.unmount();
+    app = null;
+
+    await expect(showDialog()).rejects.toThrow(
+      'OverlayHost must be mounted before calling a programmatic overlay function.',
+    );
+  });
+
+  it('inherits Button context from the application hosting OverlayHost', async () => {
+    app?.unmount();
+    mountOverlayHost('square');
+
+    const result = showDialog();
+
+    await nextTick();
+
+    const button = document.querySelector<HTMLButtonElement>('.m3-button');
+
+    expect(button?.dataset.shape).toBe('square');
+
+    button?.click();
+    await expect(result).resolves.toBe('confirm');
+  });
+
+  it('rejects a pending dialog when OverlayHost is unmounted', async () => {
+    const result = showDialog();
+
+    await nextTick();
+
+    app?.unmount();
+    app = null;
+
+    await expect(result).rejects.toThrow('OverlayHost was unmounted before the overlay completed.');
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
+  });
+
   it('mounts a dialog and resolves with the selected action value', async () => {
     const result = showDialog({
       headline: 'Delete file?',

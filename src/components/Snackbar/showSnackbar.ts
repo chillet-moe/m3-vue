@@ -101,6 +101,10 @@ export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string>
       dataAttributes: {
         'data-position': position,
       },
+      onHostUnmounted: (error) => {
+        clearTimer();
+        finalizeReject(error);
+      },
       render: () =>
         h(
           Snackbar,

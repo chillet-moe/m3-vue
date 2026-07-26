@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vite-plus/test';
-import { defineComponent, h, nextTick } from 'vue';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import { createApp, defineComponent, h, nextTick, type App } from 'vue';
+import { OverlayHost } from '@/components/OverlayHost';
 import { showPopoverStackItem } from './popoverStack';
+
+let app: App<Element> | null = null;
 
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
@@ -34,8 +37,19 @@ beforeAll(() => {
   installPopoverPolyfill();
 });
 
+beforeEach(() => {
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+
+  app = createApp(() => h(OverlayHost));
+  app.mount(container);
+});
+
 afterEach(() => {
+  vi.useRealTimers();
   vi.restoreAllMocks();
+  app?.unmount();
+  app = null;
   document.body.innerHTML = '';
 });
 

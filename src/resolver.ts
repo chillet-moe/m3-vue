@@ -43,6 +43,7 @@ export const m3VueComponentNames = [
   'NavigationDrawerSection',
   'NavigationRail',
   'NavigationRailItem',
+  'OverlayHost',
   'Pagination',
   'PaginationContent',
   'PaginationEllipsis',

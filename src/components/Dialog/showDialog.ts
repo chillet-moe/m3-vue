@@ -1,7 +1,8 @@
-import { createApp, defineComponent, h, nextTick, ref } from 'vue';
+import { h, nextTick, ref } from 'vue';
 import { Button } from '@/components/Button';
 import type { ButtonProps } from '@/components/Button/Button.vue';
 import { Icon } from '@/components/Icon';
+import { showOverlayEntry, type OverlayEntryHandle } from '@/internal/overlayHost/overlayHost';
 import Dialog from './Dialog.vue';
 import type { DialogProps } from './Dialog.vue';
 
@@ -43,6 +44,10 @@ export type ShowDialogOptions = DialogProps & {
 
   /** ARIA role forwarded to the root dialog element. */
   role?: 'dialog' | 'alertdialog';
+};
+
+type DialogExposed = {
+  dialogRef: HTMLDialogElement | null;
 };
 
 const DEFAULT_ACTIONS: DialogAction[] = [
@@ -98,16 +103,15 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
   }
 
   return new Promise<string>((resolve, reject) => {
-    const host = document.createElement('div');
-    document.body.appendChild(host);
-
     const actions = options.actions?.length ? options.actions : DEFAULT_ACTIONS;
+    const open = ref(true);
 
     let settled = false;
     let cleanedUp = false;
-    let app: ReturnType<typeof createApp> | null = null;
+    let dialogComponent: DialogExposed | null = null;
+    let overlayHandle: OverlayEntryHandle | null = null;
 
-    const queryDialog = () => host.querySelector('dialog') as HTMLDialogElement | null;
+    const queryDialog = () => dialogComponent?.dialogRef ?? null;
 
     const finalizeResolve = (value: string) => {
       if (settled) {
@@ -133,8 +137,9 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
       }
 
       cleanedUp = true;
-      app?.unmount();
-      host.remove();
+      dialogComponent = null;
+      overlayHandle?.remove();
+      overlayHandle = null;
     };
 
     const cleanupAfterExit = () => {
@@ -170,83 +175,82 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
       dialog.addEventListener('transitionend', onTransitionEnd);
     };
 
-    const Root = defineComponent({
-      name: 'ProgrammaticDialog',
-      setup() {
-        const open = ref(true);
+    const closeWithValue = (value = '') => {
+      const dialog = queryDialog();
 
-        const closeWithValue = (value = '') => {
-          const dialog = queryDialog();
+      if (!dialog) {
+        finalizeResolve(value);
+        cleanup();
+        return;
+      }
 
-          if (!dialog) {
-            finalizeResolve(value);
-            cleanup();
-            return;
-          }
+      dialog.close(value);
+    };
 
-          dialog.close(value);
-        };
+    const handleActionClick = async (action: DialogAction) => {
+      try {
+        const callbackResult = await action.onClick?.();
 
-        const handleActionClick = async (action: DialogAction) => {
-          try {
-            const callbackResult = await action.onClick?.();
+        if (callbackResult === false || action.closeOnClick === false) {
+          return;
+        }
 
-            if (callbackResult === false || action.closeOnClick === false) {
-              return;
-            }
+        closeWithValue(action.value ?? action.label);
+      } catch (error) {
+        finalizeReject(error);
+        closeWithValue(action.value ?? '');
+      }
+    };
 
-            closeWithValue(action.value ?? action.label);
-          } catch (error) {
-            finalizeReject(error);
-            closeWithValue(action.value ?? '');
-          }
-        };
-
-        return () =>
-          h(
-            Dialog,
-            {
-              open: open.value,
-              closeOnBackdrop: options.closeOnBackdrop,
-              role: options.role,
-              'onUpdate:open': (nextOpen: boolean) => {
-                open.value = nextOpen;
-              },
-              onClose: (returnValue: string) => {
-                open.value = false;
-                finalizeResolve(returnValue);
-                cleanupAfterExit();
-              },
-            },
-            {
-              icon: options.icon ? () => h(Icon, { name: options.icon! }) : undefined,
-              headline: options.headline ? () => options.headline : undefined,
-              default: options.content ? () => options.content : undefined,
-              actions: () =>
-                actions.map((action, index) =>
-                  h(
-                    Button,
-                    {
-                      key: `${action.value ?? action.label}-${index}`,
-                      variant: action.variant ?? 'text',
-                      disabled: action.disabled,
-                      autofocus: action.autofocus,
-                      onClick: () => {
-                        void handleActionClick(action);
-                      },
-                    },
-                    {
-                      default: () => action.label,
-                    },
-                  ),
-                ),
-            },
-          );
+    overlayHandle = showOverlayEntry({
+      onHostUnmounted: (error) => {
+        finalizeReject(error);
+        cleanup();
       },
+      render: () =>
+        h(
+          Dialog,
+          {
+            ref: (instance: unknown) => {
+              dialogComponent = instance as DialogExposed | null;
+            },
+            open: open.value,
+            closeOnBackdrop: options.closeOnBackdrop,
+            role: options.role,
+            'onUpdate:open': (nextOpen: boolean) => {
+              open.value = nextOpen;
+            },
+            onClose: (returnValue: string) => {
+              open.value = false;
+              finalizeResolve(returnValue);
+              cleanupAfterExit();
+            },
+          },
+          {
+            icon: options.icon ? () => h(Icon, { name: options.icon! }) : undefined,
+            headline: options.headline ? () => options.headline : undefined,
+            default: options.content ? () => options.content : undefined,
+            actions: () =>
+              actions.map((action, index) =>
+                h(
+                  Button,
+                  {
+                    key: `${action.value ?? action.label}-${index}`,
+                    variant: action.variant ?? 'text',
+                    disabled: action.disabled,
+                    autofocus: action.autofocus,
+                    onClick: () => {
+                      void handleActionClick(action);
+                    },
+                  },
+                  {
+                    default: () => action.label,
+                  },
+                ),
+              ),
+          },
+        ),
     });
-
-    app = createApp(Root);
-    app.mount(host);
 
     void nextTick(() => {
       const dialog = queryDialog();

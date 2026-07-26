@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Content, useData, useRoute } from 'vitepress';
 import { computed, watch } from 'vue';
+import { OverlayHost } from '@/components/OverlayHost';
 
 import DocsContent from './components/DocsContent.vue';
 import DocsSidebar from './components/DocsSidebar.vue';
@@ -24,6 +25,8 @@ const isHome = computed(() => frontmatter.value.layout === 'home');
     class="docs-app"
     :class="[frontmatter.pageClass, { 'docs-layout-home': isHome }]"
   >
+    <OverlayHost />
+
     <template v-if="page.isNotFound">
       <HomeLayout>
         <NotFoundView />
@@ -50,7 +53,10 @@ const isHome = computed(() => frontmatter.value.layout === 'home');
     </template>
   </div>
 
-  <Content v-else />
+  <template v-else>
+    <OverlayHost />
+    <Content />
+  </template>
 </template>
 
 <style scoped>

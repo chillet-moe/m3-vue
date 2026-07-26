@@ -1,7 +1,26 @@
 // @vitest-environment jsdom
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vite-plus/test';
-import { nextTick } from 'vue';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import { createApp, h, nextTick, type App } from 'vue';
+import { buttonContextKey } from '@/components/Button';
+import { iconButtonContextKey } from '@/components/IconButton';
+import { OverlayHost } from '@/components/OverlayHost';
 import { showSnackbar } from './showSnackbar';
+
+let app: App<Element> | null = null;
+
+function mountOverlayHost(actionShape?: 'rounded' | 'square') {
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+
+  app = createApp(() => h(OverlayHost));
+
+  if (actionShape) {
+    app.provide(buttonContextKey, { shape: actionShape });
+    app.provide(iconButtonContextKey, { shape: actionShape });
+  }
+
+  app.mount(container);
+}
 
 function installPopoverPolyfill() {
   const prototype = HTMLElement.prototype as HTMLElement & {
@@ -34,12 +53,63 @@ beforeAll(() => {
   installPopoverPolyfill();
 });
 
+beforeEach(() => {
+  mountOverlayHost();
+});
+
 afterEach(() => {
   vi.useRealTimers();
+  app?.unmount();
+  app = null;
   document.body.innerHTML = '';
 });
 
 describe('showSnackbar', () => {
+  it('rejects when OverlayHost is not mounted', async () => {
+    app?.unmount();
+    app = null;
+
+    await expect(showSnackbar()).rejects.toThrow(
+      'OverlayHost must be mounted before calling a programmatic overlay function.',
+    );
+  });
+
+  it('inherits action contexts from the application hosting OverlayHost', async () => {
+    app?.unmount();
+    mountOverlayHost('square');
+
+    const result = showSnackbar({
+      message: 'Draft archived.',
+      action: {
+        label: 'Undo',
+      },
+      dismissible: true,
+      duration: null,
+    });
+
+    await nextTick();
+
+    expect(document.querySelector<HTMLButtonElement>('.m3-button')?.dataset.shape).toBe('square');
+    expect(document.querySelector<HTMLButtonElement>('.m3-icon-button')?.dataset.shape).toBe('square');
+
+    document.querySelector<HTMLButtonElement>('.m3-icon-button')?.click();
+    await expect(result).resolves.toBe('dismiss');
+  });
+
+  it('rejects a pending snackbar when OverlayHost is unmounted', async () => {
+    const result = showSnackbar({
+      message: 'Draft archived.',
+      duration: null,
+    });
+
+    await nextTick();
+
+    app?.unmount();
+    app = null;
+
+    await expect(result).rejects.toThrow('OverlayHost was unmounted before the overlay completed.');
+  });
+
   it('resolves with the action value when the action button is pressed', async () => {
     const result = showSnackbar({
       message: 'Draft archived.',

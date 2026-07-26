@@ -56,6 +56,20 @@ app.mount('#app');
 
 After registration, you can use `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` directly in templates.
 
+Render one `OverlayHost` near the application root when using the programmatic `showDialog()` or `showSnackbar()`
+functions. It is not required for declaratively rendered `Dialog` or `Snackbar` components.
+
+```vue
+<script setup lang="ts">
+import { OverlayHost } from '@chillet/m3-vue';
+</script>
+
+<template>
+  <OverlayHost />
+  <!-- Your application content -->
+</template>
+```
+
 ## Nuxt
 
 ```ts

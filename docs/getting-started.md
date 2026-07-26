@@ -37,6 +37,30 @@ app.mount('#app');
 
 After registration, `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` are available globally.
 
+## Mount The Overlay Host
+
+Render one `OverlayHost` near the root of the application when using the programmatic `showDialog()` or
+`showSnackbar()` functions. The host keeps those overlays inside the application's Vue context while the native
+dialog and popover elements use the browser top layer.
+
+```vue
+<script setup lang="ts">
+import { OverlayHost } from '@chillet/m3-vue';
+</script>
+
+<template>
+  <OverlayHost />
+  <!-- Your application content -->
+</template>
+```
+
+`OverlayHost` is not required when `Dialog` and `Snackbar` are only rendered declaratively in templates.
+`M3VuePlugin` does not insert the host automatically, because doing so would create a separate Vue rendering root or
+modify the consuming application's root component.
+
+Mount exactly one host. The programmatic overlay functions reject if it is missing, and pending calls reject if it
+is unmounted.
+
 ## Use Components
 
 ```vue

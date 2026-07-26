@@ -1,6 +1,5 @@
 import {
   computed,
-  createApp,
   defineComponent,
   h,
   nextTick,
@@ -8,17 +7,18 @@ import {
   shallowRef,
   useTemplateRef,
   watch,
-  type App,
   type PropType,
   type ShallowRef,
   type VNodeChild,
 } from 'vue';
+import { showOverlayEntry, type OverlayEntryHandle } from '@/internal/overlayHost/overlayHost';
 import './PopoverStackHost.css';
 
 type PopoverStackItemRecord = {
   id: number;
   closing: boolean;
   render: () => VNodeChild;
+  onHostUnmounted?: (error: Error) => void;
 };
 
 type PopoverStackConfig = {
@@ -37,14 +37,15 @@ type PopoverStackState = {
 };
 
 type PopoverStackController = {
-  host: HTMLDivElement;
-  app: App;
+  getHost: () => HTMLDivElement | null;
+  overlayHandle: OverlayEntryHandle;
   state: PopoverStackState;
 };
 
 export type ShowPopoverStackItemOptions = PopoverStackConfig & {
   stackId: string;
   render: () => VNodeChild;
+  onHostUnmounted?: (error: Error) => void;
 };
 
 export type PopoverStackItemHandle = {
@@ -134,9 +135,13 @@ const PopoverStackHost = defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { expose }) {
     const popoverRef = useTemplateRef<HTMLDivElement>('popover');
     const hasVisibleContent = computed(() => props.state.items.value.length > 0);
+
+    expose({
+      popoverRef,
+    });
 
     watch(
       [popoverRef, hasVisibleContent],
@@ -204,8 +209,7 @@ function teardownPopoverStack(stackId: string) {
     return;
   }
 
-  controller.app.unmount();
-  controller.host.remove();
+  controller.overlayHandle.remove();
   stackControllers.delete(stackId);
 }
 
@@ -223,9 +227,6 @@ function ensurePopoverStack(options: ShowPopoverStackItemOptions) {
     return existing;
   }
 
-  const host = document.createElement('div');
-  document.body.appendChild(host);
-
   const state: PopoverStackState = {
     items: shallowRef([]),
     config: shallowReactive({
@@ -239,12 +240,28 @@ function ensurePopoverStack(options: ShowPopoverStackItemOptions) {
     }),
   };
 
-  const app = createApp(PopoverStackHost, { state });
-  app.mount(host);
+  let host: HTMLDivElement | null = null;
+
+  const overlayHandle = showOverlayEntry({
+    onHostUnmounted: (error) => {
+      stackControllers.delete(options.stackId);
+
+      for (const item of state.items.value) {
+        item.onHostUnmounted?.(error);
+      }
+    },
+    render: () =>
+      h(PopoverStackHost, {
+        ref: (instance: unknown) => {
+          host = (instance as { popoverRef?: HTMLDivElement | null } | null)?.popoverRef ?? null;
+        },
+        state,
+      }),
+  });
 
   const controller = {
-    host,
-    app,
+    getHost: () => host,
+    overlayHandle,
     state,
   };
 
@@ -267,6 +284,7 @@ export function showPopoverStackItem(options: ShowPopoverStackItemOptions): Popo
       id: itemId,
       closing: false,
       render: options.render,
+      onHostUnmounted: options.onHostUnmounted,
     },
   ];
 
@@ -302,7 +320,7 @@ export function showPopoverStackItem(options: ShowPopoverStackItemOptions): Popo
     );
 
     void nextTick(() => {
-      const itemElement = controller.host.querySelector(`[data-stack-item-id="${itemId}"]`) as HTMLElement | null;
+      const itemElement = controller.getHost()?.querySelector(`[data-stack-item-id="${itemId}"]`) as HTMLElement | null;
       const exitDuration = getExitDuration(itemElement);
 
       if (exitDuration === 0) {

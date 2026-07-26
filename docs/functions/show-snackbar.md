@@ -23,7 +23,9 @@ async function openSnackbar() {
 
 # showSnackbar
 
-`showSnackbar()` is the programmatic entry point for transient notifications. It renders a snackbar into the shared stack, waits for it to close, and resolves with the outcome.
+`showSnackbar()` is the programmatic entry point for transient notifications. It renders a snackbar into the shared
+stack owned by the application's [`OverlayHost`](/components/overlay-host), waits for it to close, and resolves with
+the outcome.
 
 <DemoContainer :viewport="false">
   <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; padding-block: 2rem;">
@@ -31,6 +33,12 @@ async function openSnackbar() {
     <div v-if="result">Result: {{ result }}</div>
   </div>
 </DemoContainer>
+
+## Prerequisite
+
+Render one `OverlayHost` near the application root before using this function. The host is only required for
+programmatic overlays; declarative `Snackbar` instances do not need it. See
+[`OverlayHost`](/components/overlay-host) for Vue and Nuxt setup.
 
 ## Basic Usage
 
@@ -50,7 +58,8 @@ The promise resolves when the snackbar closes.
 - Dismiss button resolves to `dismissValue`, or `'dismiss'` by default.
 - Auto timeout resolves to `timeoutValue`, or `'timeout'` by default.
 
-The promise rejects if the function is called outside a browser environment, or if `action.onClick` throws or rejects.
+The promise rejects if the function is called outside a browser environment, if `OverlayHost` is not mounted, or if
+`action.onClick` throws or rejects.
 
 ## Options
 
@@ -68,6 +77,7 @@ The tables below are generated from source types and stay in sync with API chang
 
 - Multiple snackbars can be shown at the same time.
 - Stacks are separated by `position`, so top and bottom placements do not interfere with each other.
+- Snackbar actions inherit application-level provides and CSS custom properties from `OverlayHost`.
 - Hovering or focusing the snackbar pauses the auto-close timer.
 - Leaving the snackbar resumes the remaining time instead of restarting the full duration.
 

@@ -70,6 +70,10 @@ export default defineConfig({
           text: 'Components',
           items: [
             {
+              text: 'Infrastructure',
+              items: [{ text: 'OverlayHost', link: '/components/overlay-host' }],
+            },
+            {
               text: 'Actions',
               items: [
                 { text: 'Button', link: '/components/button' },
