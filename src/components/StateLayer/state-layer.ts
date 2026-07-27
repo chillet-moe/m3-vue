@@ -1,24 +1,6 @@
 import './state-layer.css';
 
-const supportsAtProperty = typeof window != 'undefined' && window.CSS?.registerProperty !== undefined;
-let useJSAnimation = false;
 let initialized = false;
-
-if (!supportsAtProperty && typeof CSS != 'undefined' && typeof CSS.registerProperty === 'function') {
-  // Some browsers support runtime property registration but not the @property at-rule.
-  try {
-    CSS.registerProperty({
-      name: '--r',
-      syntax: '<percentage>',
-      inherits: false,
-      initialValue: '0%',
-    });
-  } catch {
-    // Fall back to requestAnimationFrame-driven updates when custom property animation is unavailable.
-    console.warn('Browser does not support @property, falling back to JS animation');
-    useJSAnimation = true;
-  }
-}
 
 const isEnabled = (node: Element): boolean => {
   // Anchors and custom trigger wrappers communicate disabled state via aria-disabled.
@@ -35,59 +17,6 @@ const isEnabled = (node: Element): boolean => {
   return true;
 };
 
-const createRippleCSS = (
-  node: Element,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  duration: number,
-): void => {
-  const ripple = document.createElement('div');
-  ripple.className = 'ripple';
-  ripple.style.setProperty('--x', `${x}px`);
-  ripple.style.setProperty('--y', `${y}px`);
-  ripple.style.setProperty('--duration', `${duration}ms`);
-
-  node.appendChild(ripple);
-
-  // Remove the helper node after both the spread and fade-out finish.
-  setTimeout(() => ripple.remove(), duration + 650);
-};
-
-const createRippleJS = (node: Element, x: number, y: number, width: number, height: number, duration: number): void => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const ripple = document.createElement('div');
-  ripple.className = 'ripple';
-  ripple.style.setProperty('--x', `${x}px`);
-  ripple.style.setProperty('--y', `${y}px`);
-  ripple.style.setProperty('--r', '0%');
-
-  node.appendChild(ripple);
-
-  const startTime = performance.now();
-
-  function animate(now: number) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    // Approximate Material's standard emphasized easing curve.
-    const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-    const currentRadius = ease * 120;
-
-    ripple.style.setProperty('--r', `${currentRadius}%`);
-
-    if (progress < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      ripple.style.opacity = '0';
-      setTimeout(() => ripple.remove(), 650);
-    }
-  }
-
-  requestAnimationFrame(animate);
-};
-
 const createRipple = (node: Element, x: number, y: number, width: number, height: number): void => {
   // Use the furthest corner from the interaction point so the ripple fully covers the control.
   const maxDist = Math.max(
@@ -100,11 +29,16 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
   // Scale duration with ripple travel distance while keeping it within a Material-like range.
   const duration = Math.max(Math.min(Math.log(maxDist) * 100, 600), 200);
 
-  if (useJSAnimation) {
-    createRippleJS(node, x, y, width, height, duration);
-  } else {
-    createRippleCSS(node, x, y, width, height, duration);
-  }
+  const ripple = document.createElement('div');
+  ripple.className = 'ripple';
+  ripple.style.setProperty('--x', `${x}px`);
+  ripple.style.setProperty('--y', `${y}px`);
+  ripple.style.setProperty('--duration', `${duration}ms`);
+
+  node.appendChild(ripple);
+
+  // Remove the helper node after both the spread and fade-out finish.
+  setTimeout(() => ripple.remove(), duration + 650);
 };
 
 function initStateLayer() {

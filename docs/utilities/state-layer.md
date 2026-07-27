@@ -61,7 +61,7 @@ The function is idempotent, so calling it more than once is safe.
 - Pointer presses create a ripple centered on the interaction point.
 - Keyboard activation with `Enter` and button `Space` creates a centered ripple.
 - Disabled controls and elements with `aria-disabled="true"` suppress the overlay and ripple.
-- When `@property` animation support is unavailable, the ripple falls back to a JavaScript animation path.
+- Ripple expansion uses the CSS `@property` at-rule; there is no JavaScript animation fallback.
 - `prefers-reduced-motion: reduce` disables the ripple animation.
 
 ## Nested State Layers
