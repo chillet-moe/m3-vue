@@ -13,6 +13,8 @@ import {
   normalizeIsoDate,
   parseIsoDate,
 } from '@/components/DatePicker/useDatePicker';
+import { en } from '@/locales/en';
+import type { M3Messages } from '@/locales/types';
 
 export type DateRangePickerVariant = DatePickerVariant;
 
@@ -57,6 +59,9 @@ export type UseDateRangePickerOptions = {
   today?: MaybeRefOrGetter<string | undefined>;
   locale?: MaybeRefOrGetter<string | undefined>;
   firstDayOfWeek?: MaybeRefOrGetter<0 | 1 | 2 | 3 | 4 | 5 | 6>;
+  messages?: MaybeRefOrGetter<
+    Pick<M3Messages['dateRangePicker'], 'startAndEndDate' | 'selectedStartDate' | 'selectedEndDate'>
+  >;
   onChange?: (value: DateRangePickerModelValue) => void;
   onConfirm?: (value: DateRangePickerModelValue) => void;
   onCancel?: () => void;
@@ -539,17 +544,18 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
 
   function getDateAriaLabel(date: string) {
     const formattedDate = fullDateFormatter.value.format(dateFromIso(date));
+    const messages = toValue(options.messages) ?? en.messages.dateRangePicker;
 
     if (selectedStartDate.value === date && selectedEndDate.value === date) {
-      return `Start and end date, ${formattedDate}`;
+      return messages.startAndEndDate(formattedDate);
     }
 
     if (selectedStartDate.value === date) {
-      return `Start date, ${formattedDate}`;
+      return messages.selectedStartDate(formattedDate);
     }
 
     if (selectedEndDate.value === date) {
-      return `End date, ${formattedDate}`;
+      return messages.selectedEndDate(formattedDate);
     }
 
     return formattedDate;

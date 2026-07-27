@@ -11,6 +11,7 @@ import {
   useTimePicker,
 } from '@/components/TimePicker/useTimePicker';
 import { usePickerPopover } from '@/composables/usePickerPopover';
+import { useM3Locale } from '@/locales/context';
 
 export type { TimePickerFormat, TimePickerInputMode, TimePickerModelValue, TimePickerVariant };
 
@@ -51,12 +52,12 @@ const props = withDefaults(defineProps<TimePickerProps>(), {
   variant: 'auto',
   anchorName: undefined,
   anchorElement: undefined,
-  ariaLabel: 'Choose time',
-  titleText: 'Select time',
+  ariaLabel: undefined,
+  titleText: undefined,
   format: '12h',
   inputMode: undefined,
-  confirmText: 'OK',
-  cancelText: 'Cancel',
+  confirmText: undefined,
+  cancelText: undefined,
 });
 
 const emit = defineEmits<{
@@ -83,6 +84,12 @@ const activePointerId = ref<number>();
 const pointerStart = ref<{ x: number; y: number }>();
 const movedInPointerStream = ref(false);
 const suppressNextClockClick = ref(false);
+const localeContext = useM3Locale();
+
+const messages = computed(() => localeContext.messages.value);
+const titleText = computed(() => props.titleText ?? messages.value.timePicker.selectTime);
+const confirmText = computed(() => props.confirmText ?? messages.value.common.confirm);
+const cancelText = computed(() => props.cancelText ?? messages.value.common.cancel);
 
 const pickerId = computed(() => props.id ?? `m3-time-picker-${generatedId}`);
 
@@ -102,6 +109,7 @@ const picker = useTimePicker({
   modelValue,
   format: () => props.format,
   inputMode: currentInputMode,
+  messages: () => messages.value.timePicker,
   onChange: (value) => emit('change', value),
   onCancel: () => emit('cancel'),
   onConfirm: (value) => emit('confirm', value),
@@ -390,14 +398,14 @@ defineExpose({
     :data-format="picker.format.value"
     :data-input-mode="picker.inputMode.value"
     :aria-label="props.ariaLabel"
-    :aria-labelledby="titleId"
+    :aria-labelledby="props.ariaLabel ? undefined : titleId"
     :style="popoverStyle"
     @toggle="popover.handlePopoverToggle"
   >
     <div ref="surfaceRef" class="m3-time-picker-surface" data-scope="time-picker" data-part="surface">
       <header class="m3-time-picker-header" data-scope="time-picker" data-part="header">
         <div :id="titleId" class="m3-time-picker-title" data-scope="time-picker" data-part="title">
-          {{ props.titleText }}
+          {{ titleText }}
         </div>
 
         <div
@@ -438,7 +446,7 @@ defineExpose({
             data-scope="time-picker"
             data-part="period-selector"
             role="group"
-            aria-label="Select AM or PM"
+            :aria-label="messages.timePicker.selectPeriod"
           >
             <button
               type="button"
@@ -449,7 +457,7 @@ defineExpose({
               :aria-pressed="picker.period.value === 'AM' ? 'true' : 'false'"
               @click="picker.setPeriod('AM')"
             >
-              AM
+              {{ messages.timePicker.am }}
             </button>
             <button
               type="button"
@@ -460,7 +468,7 @@ defineExpose({
               :aria-pressed="picker.period.value === 'PM' ? 'true' : 'false'"
               @click="picker.setPeriod('PM')"
             >
-              PM
+              {{ messages.timePicker.pm }}
             </button>
           </div>
         </div>
@@ -476,7 +484,9 @@ defineExpose({
           class="m3-time-picker-clock-face"
           data-scope="time-picker"
           data-part="clock-face"
-          :aria-label="picker.activeSelection.value === 'hour' ? 'Select hour' : 'Select minute'"
+          :aria-label="
+            picker.activeSelection.value === 'hour' ? messages.timePicker.selectHour : messages.timePicker.selectMinute
+          "
           @pointerdown="handleClockPointerDown"
           @pointermove="handleClockPointerMove"
           @pointerup="handleClockPointerUp"
@@ -530,7 +540,9 @@ defineExpose({
               picker.applyInputText();
             "
           />
-          <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">Hour</span>
+          <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">{{
+            messages.timePicker.hour
+          }}</span>
           <span
             v-if="picker.hourInputError.value"
             :id="hourErrorId"
@@ -563,7 +575,9 @@ defineExpose({
               picker.applyInputText();
             "
           />
-          <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">Minute</span>
+          <span class="m3-time-picker-input-label" data-scope="time-picker" data-part="input-label">{{
+            messages.timePicker.minute
+          }}</span>
           <span
             v-if="picker.minuteInputError.value"
             :id="minuteErrorId"
@@ -581,7 +595,7 @@ defineExpose({
           data-scope="time-picker"
           data-part="period-selector"
           role="group"
-          aria-label="Select AM or PM"
+          :aria-label="messages.timePicker.selectPeriod"
         >
           <button
             type="button"
@@ -592,7 +606,7 @@ defineExpose({
             :aria-pressed="picker.period.value === 'AM' ? 'true' : 'false'"
             @click="picker.setPeriod('AM')"
           >
-            AM
+            {{ messages.timePicker.am }}
           </button>
           <button
             type="button"
@@ -603,7 +617,7 @@ defineExpose({
             :aria-pressed="picker.period.value === 'PM' ? 'true' : 'false'"
             @click="picker.setPeriod('PM')"
           >
-            PM
+            {{ messages.timePicker.pm }}
           </button>
         </div>
       </div>
@@ -613,16 +627,18 @@ defineExpose({
           :icon="picker.inputMode.value === 'clock' ? 'keyboard' : 'schedule'"
           variant="standard"
           size="small"
-          :aria-label="picker.inputMode.value === 'clock' ? 'Switch to text input' : 'Switch to clock input'"
+          :aria-label="
+            picker.inputMode.value === 'clock'
+              ? messages.timePicker.switchToTextInput
+              : messages.timePicker.switchToClockInput
+          "
           data-scope="time-picker"
           data-part="mode-toggle"
           @click="toggleInputMode"
         />
         <span class="m3-time-picker-actions-spacer" data-scope="time-picker" data-part="actions-spacer" />
-        <Button variant="text" @click="handleCancel">{{ props.cancelText }}</Button>
-        <Button variant="text" :disabled="picker.inputInvalid.value" @click="handleConfirm">{{
-          props.confirmText
-        }}</Button>
+        <Button variant="text" @click="handleCancel">{{ cancelText }}</Button>
+        <Button variant="text" :disabled="picker.inputInvalid.value" @click="handleConfirm">{{ confirmText }}</Button>
       </div>
     </div>
   </div>

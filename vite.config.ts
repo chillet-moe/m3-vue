@@ -82,6 +82,9 @@ export default defineConfig({
       entry: {
         index: 'src/index.ts',
         nuxt: 'src/nuxt.ts',
+        'locales/en': 'src/locales/en.ts',
+        'locales/zh-Hans': 'src/locales/zh-Hans.ts',
+        'locales/zh-Hant': 'src/locales/zh-Hant.ts',
       },
       name: 'm3-vue',
       formats: ['es'],
@@ -119,6 +122,9 @@ export default defineConfig({
   pack: {
     entry: {
       index: './src/index.ts',
+      'locales/en': './src/locales/en.ts',
+      'locales/zh-Hans': './src/locales/zh-Hans.ts',
+      'locales/zh-Hant': './src/locales/zh-Hant.ts',
     },
     plugins: [vueWithScopeBoundary({ isProduction: true })],
     platform: 'neutral',

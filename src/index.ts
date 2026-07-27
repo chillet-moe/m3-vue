@@ -4,6 +4,9 @@ export { initStateLayer } from './components/StateLayer/state-layer';
 // Styles
 import './styles/theme.css';
 
+// Localization
+export * from './locales';
+
 // Shapes
 export * from './shapes/animatable';
 export * from './shapes/animatableSmall';

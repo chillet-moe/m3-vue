@@ -37,6 +37,18 @@
       "types": "./dist/nuxt.d.ts",
       "import": "./dist/nuxt.mjs"
     },
+    "./locales/en": {
+      "types": "./dist/locales/en.d.ts",
+      "import": "./dist/locales/en.mjs"
+    },
+    "./locales/zh-Hans": {
+      "types": "./dist/locales/zh-Hans.d.ts",
+      "import": "./dist/locales/zh-Hans.mjs"
+    },
+    "./locales/zh-Hant": {
+      "types": "./dist/locales/zh-Hant.d.ts",
+      "import": "./dist/locales/zh-Hant.mjs"
+    },
     "./style.css": "./dist/style.css",
     "./typography-classes.css": "./dist/typography-classes.css",
     "./color-classes.css": "./dist/color-classes.css",

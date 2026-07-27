@@ -48,6 +48,14 @@ describe('select model helpers', () => {
     expect(getFilteredOptionEntries(options, 'missing', false)).toHaveLength(options.length);
   });
 
+  it('uses the configured locale for case-insensitive filtering', () => {
+    const turkishOptions: UseSelectOption[] = [{ label: 'IĞDIR', value: 'igdir' }];
+
+    expect(getFilteredOptionEntries(turkishOptions, 'ığdır', true, 'tr')).toEqual([
+      { option: turkishOptions[0], index: 0 },
+    ]);
+  });
+
   it('checks selection according to the active selection mode', () => {
     expect(isOptionSelected('espresso', false, options[0]!)).toBe(true);
     expect(isOptionSelected(['espresso'], true, options[0]!)).toBe(true);

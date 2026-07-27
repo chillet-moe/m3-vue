@@ -46,8 +46,9 @@ export function getFilteredOptionEntries(
   options: UseSelectOption[],
   query: string,
   filterable: boolean,
+  locale?: string,
 ): SelectOptionEntry[] {
-  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const normalizedQuery = query.trim().toLocaleLowerCase(locale);
 
   return options
     .map((option, index) => ({ option, index }))
@@ -59,7 +60,7 @@ export function getFilteredOptionEntries(
       const searchableText = [option.label, option.supportingText, option.trailingText]
         .filter(Boolean)
         .join(' ')
-        .toLocaleLowerCase();
+        .toLocaleLowerCase(locale);
 
       return searchableText.includes(normalizedQuery);
     });

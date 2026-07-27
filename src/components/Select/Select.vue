@@ -7,6 +7,7 @@ import MenuItem from '@/components/Menu/MenuItem.vue';
 import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
 import { acquireAnchorName } from '@/internal/anchorName';
+import { useM3Locale } from '@/locales/context';
 
 export type SelectOptionValue = string | number;
 
@@ -120,13 +121,19 @@ const props = withDefaults(defineProps<SelectProps>(), {
   size: 'medium',
   multiple: false,
   clearable: false,
-  clearLabel: 'Clear selection',
+  clearLabel: undefined,
   menuColor: 'standard',
   displaySeparator: ', ',
   filterable: false,
-  filterPlaceholder: 'Filter options',
-  filterNoResultsText: 'No matching options',
+  filterPlaceholder: undefined,
+  filterNoResultsText: undefined,
 });
+
+const localeContext = useM3Locale();
+const messages = computed(() => localeContext.messages.value);
+const clearLabel = computed(() => props.clearLabel ?? messages.value.select.clearSelection);
+const filterPlaceholder = computed(() => props.filterPlaceholder ?? messages.value.select.filterOptions(props.label));
+const filterNoResultsText = computed(() => props.filterNoResultsText ?? messages.value.select.noMatchingOptions);
 
 const emit = defineEmits<{
   change: [value: SelectModelValue];
@@ -174,6 +181,7 @@ const select = useSelect({
   filterable: () => props.filterable,
   disabled: () => props.disabled,
   displaySeparator: () => props.displaySeparator,
+  locale: () => localeContext.locale.value,
   modelValue,
   open,
   onChange: (value) => emit('change', value),
@@ -184,7 +192,7 @@ const select = useSelect({
 
 const textFieldPlaceholder = computed(() => {
   if (props.filterable && open.value) {
-    return props.filterPlaceholder;
+    return filterPlaceholder.value;
   }
 
   return props.placeholder;
@@ -208,7 +216,7 @@ const textFieldValue = computed({
 });
 
 const filterAriaLabel = computed(() => {
-  return props.label ? `Filter ${props.label}` : 'Filter options';
+  return messages.value.select.filterOptions(props.label);
 });
 
 const controlAttrs = computed(() => {
@@ -322,7 +330,7 @@ defineExpose({
             data-scope="select"
             data-part="clear-button"
             type="button"
-            :aria-label="props.clearLabel"
+            :aria-label="clearLabel"
             @mousedown.stop.prevent
             @click.stop="select.clearValue"
           >
@@ -419,7 +427,7 @@ defineExpose({
             data-part="empty"
             aria-live="polite"
           >
-            {{ props.filterNoResultsText }}
+            {{ filterNoResultsText }}
           </div>
         </TransitionGroup>
       </MenuContainer>

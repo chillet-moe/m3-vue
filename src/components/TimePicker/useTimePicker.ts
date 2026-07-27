@@ -1,4 +1,6 @@
 import { type MaybeRefOrGetter, type Ref, computed, ref, toValue, watch } from 'vue';
+import { en } from '@/locales/en';
+import type { M3Messages } from '@/locales/types';
 
 export type TimePickerModelValue = string | undefined;
 
@@ -29,6 +31,9 @@ export type UseTimePickerOptions = {
   modelValue: Ref<TimePickerModelValue>;
   format?: MaybeRefOrGetter<TimePickerFormat>;
   inputMode?: MaybeRefOrGetter<TimePickerInputMode | undefined>;
+  messages?: MaybeRefOrGetter<
+    Pick<M3Messages['timePicker'], 'enterHour' | 'enterMinute' | 'hourRange12' | 'hourRange24' | 'minuteRange'>
+  >;
   onChange?: (value: TimePickerModelValue) => void;
   onConfirm?: (value: TimePickerModelValue) => void;
   onCancel?: () => void;
@@ -94,11 +99,13 @@ export function useTimePicker(options: UseTimePickerOptions) {
       return undefined;
     }
 
+    const messages = toValue(options.messages) ?? en.messages.timePicker;
+
     if (inputHourText.value.length === 0) {
-      return 'Enter hour';
+      return messages.enterHour;
     }
 
-    return format.value === '24h' ? 'Use 0-23' : 'Use 1-12';
+    return format.value === '24h' ? messages.hourRange24 : messages.hourRange12;
   });
 
   const minuteInputError = computed(() => {
@@ -106,11 +113,13 @@ export function useTimePicker(options: UseTimePickerOptions) {
       return undefined;
     }
 
+    const messages = toValue(options.messages) ?? en.messages.timePicker;
+
     if (inputMinuteText.value.length === 0) {
-      return 'Enter minute';
+      return messages.enterMinute;
     }
 
-    return 'Use 0-59';
+    return messages.minuteRange;
   });
 
   const clockOptions = computed<ClockOption[]>(() => {

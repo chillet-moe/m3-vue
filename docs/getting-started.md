@@ -36,6 +36,7 @@ app.mount('#app');
 ```
 
 After registration, `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` are available globally.
+The plugin also accepts reactive locale configuration; see [Localization](/guides/localization).
 
 ## Mount The Overlay Host
 

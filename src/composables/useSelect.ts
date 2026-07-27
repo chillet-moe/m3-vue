@@ -24,6 +24,7 @@ export function useSelect(opts: UseSelectOptions): UseSelectReturn {
     filterable,
     disabled,
     displaySeparator,
+    locale,
     modelValue,
     open,
     onChange,
@@ -49,7 +50,7 @@ export function useSelect(opts: UseSelectOptions): UseSelectReturn {
   });
 
   const filteredOptionEntries = computed(() => {
-    return getFilteredOptionEntries(options(), filterQuery.value, filterable());
+    return getFilteredOptionEntries(options(), filterQuery.value, filterable(), locale?.());
   });
 
   const hasFilteredOptions = computed(() => filteredOptionEntries.value.length > 0);

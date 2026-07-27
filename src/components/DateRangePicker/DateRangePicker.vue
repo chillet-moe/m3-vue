@@ -11,6 +11,7 @@ import {
   useDateRangePicker,
 } from '@/components/DateRangePicker/useDateRangePicker';
 import { usePickerPopover } from '@/composables/usePickerPopover';
+import { useM3Locale } from '@/locales/context';
 
 export type { DateRangePickerCalendars, DateRangePickerModelValue, DateRangePickerRangeValue, DateRangePickerVariant };
 
@@ -39,7 +40,7 @@ export type DateRangePickerProps = {
   /** Latest selectable date, formatted as YYYY-MM-DD. */
   max?: string;
 
-  /** BCP 47 locale used for month, weekday, and accessibility labels. */
+  /** BCP 47 locale used for month, weekday, and date accessibility labels. */
   locale?: string;
 
   /** First day of the week, where 0 is Sunday and 6 is Saturday. */
@@ -67,15 +68,15 @@ const props = withDefaults(defineProps<DateRangePickerProps>(), {
   calendars: 'auto',
   anchorName: undefined,
   anchorElement: undefined,
-  ariaLabel: 'Choose date range',
+  ariaLabel: undefined,
   min: undefined,
   max: undefined,
   locale: undefined,
   firstDayOfWeek: 0,
-  confirmText: 'OK',
-  cancelText: 'Cancel',
-  startText: 'Start date',
-  endText: 'End date',
+  confirmText: undefined,
+  cancelText: undefined,
+  startText: undefined,
+  endText: undefined,
   today: undefined,
 });
 
@@ -96,6 +97,15 @@ const open = defineModel<boolean>('open', { default: false });
 const generatedId = useId();
 const popoverRef = ref<HTMLDivElement>();
 const surfaceRef = ref<HTMLElement>();
+const localeContext = useM3Locale();
+
+const locale = computed(() => props.locale ?? localeContext.locale.value);
+const messages = computed(() => localeContext.messages.value);
+const ariaLabel = computed(() => props.ariaLabel ?? messages.value.dateRangePicker.chooseDateRange);
+const confirmText = computed(() => props.confirmText ?? messages.value.common.confirm);
+const cancelText = computed(() => props.cancelText ?? messages.value.common.cancel);
+const startText = computed(() => props.startText ?? messages.value.dateRangePicker.startDate);
+const endText = computed(() => props.endText ?? messages.value.dateRangePicker.endDate);
 
 const pickerId = computed(() => {
   return props.id ?? `m3-date-range-picker-${generatedId}`;
@@ -110,27 +120,28 @@ const picker = useDateRangePicker({
   min: () => props.min,
   max: () => props.max,
   today: () => props.today,
-  locale: () => props.locale,
+  locale,
   firstDayOfWeek: () => props.firstDayOfWeek,
+  messages: () => messages.value.dateRangePicker,
   onChange: (value) => emit('change', value),
   onCancel: () => emit('cancel'),
   onConfirm: (value) => emit('confirm', value),
 });
 
 const activeSelectionLabel = computed(() => {
-  return picker.activeSelection.value === 'end' ? props.endText : props.startText;
+  return picker.activeSelection.value === 'end' ? endText.value : startText.value;
 });
 
 const startValueLabel = computed(() => {
   const start = picker.selectedStartDate.value;
 
-  return start ? picker.mediumDateFormatter.value.format(picker.dateFromIso(start)) : props.startText;
+  return start ? picker.mediumDateFormatter.value.format(picker.dateFromIso(start)) : startText.value;
 });
 
 const endValueLabel = computed(() => {
   const end = picker.selectedEndDate.value;
 
-  return end ? picker.mediumDateFormatter.value.format(picker.dateFromIso(end)) : props.endText;
+  return end ? picker.mediumDateFormatter.value.format(picker.dateFromIso(end)) : endText.value;
 });
 
 const renderedCalendarCount = computed(() => {
@@ -238,7 +249,7 @@ defineExpose({
     data-part="root"
     :data-variant="props.variant"
     :data-calendars="props.calendars"
-    :aria-label="props.ariaLabel"
+    :aria-label="ariaLabel"
     :style="popoverStyle"
     @toggle="popover.handlePopoverToggle"
   >
@@ -283,7 +294,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoPreviousMonth.value"
-          aria-label="Previous month"
+          :aria-label="messages.datePicker.previousMonth"
           data-scope="date-range-picker"
           data-part="previous-month"
           @click="picker.goToPreviousMonth"
@@ -308,7 +319,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoNextMonth.value"
-          aria-label="Next month"
+          :aria-label="messages.datePicker.nextMonth"
           data-scope="date-range-picker"
           data-part="next-month"
           @click="picker.goToNextMonth"
@@ -319,7 +330,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoPreviousYear.value"
-          aria-label="Previous year"
+          :aria-label="messages.datePicker.previousYear"
           data-scope="date-range-picker"
           data-part="previous-year"
           @click="picker.goToPreviousYear"
@@ -344,7 +355,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoNextYear.value"
-          aria-label="Next year"
+          :aria-label="messages.datePicker.nextYear"
           data-scope="date-range-picker"
           data-part="next-year"
           @click="picker.goToNextYear"
@@ -493,8 +504,8 @@ defineExpose({
       </div>
 
       <div class="m3-date-picker-actions" data-scope="date-range-picker" data-part="actions">
-        <Button variant="text" @click="handleCancel">{{ props.cancelText }}</Button>
-        <Button variant="text" @click="handleConfirm">{{ props.confirmText }}</Button>
+        <Button variant="text" @click="handleCancel">{{ cancelText }}</Button>
+        <Button variant="text" @click="handleConfirm">{{ confirmText }}</Button>
       </div>
     </div>
   </div>

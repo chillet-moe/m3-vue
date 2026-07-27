@@ -16,6 +16,7 @@ import {
   type TimePickerVariant,
 } from '@/components/TimePicker';
 import { acquireAnchorName } from '@/internal/anchorName';
+import { useM3Locale } from '@/locales/context';
 
 export type TextFieldSize = 'extra-small' | 'small' | 'medium';
 
@@ -105,6 +106,7 @@ export type TextFieldProps = TextFieldSharedProps & {
 const generatedId = useId();
 const attrs = useAttrs();
 const slots = useSlots();
+const { messages } = useM3Locale();
 
 const props = withDefaults(defineProps<TextFieldProps>(), {
   label: undefined,
@@ -510,7 +512,7 @@ defineExpose({
             variant="standard"
             size="small"
             :disabled="props.disabled || props.readonly"
-            :aria-label="hasTimePicker ? 'Choose time' : 'Choose date'"
+            :aria-label="hasTimePicker ? messages.timePicker.chooseTime : messages.datePicker.chooseDate"
             @click.stop="handlePickerButtonClick"
           />
         </span>
@@ -542,7 +544,7 @@ defineExpose({
       :anchor-element="containerRef"
       :min="datePickerMin"
       :max="datePickerMax"
-      :aria-label="props.label ? `Choose ${props.label}` : 'Choose date'"
+      :aria-label="messages.textField.openDatePicker(props.label)"
     />
 
     <TimePicker
@@ -555,7 +557,7 @@ defineExpose({
       :input-mode="props.timePickerInputMode"
       :anchor-name="timePickerAnchorName"
       :anchor-element="containerRef"
-      :aria-label="props.label ? `Choose ${props.label}` : 'Choose time'"
+      :aria-label="messages.textField.openTimePicker(props.label)"
     />
   </div>
 </template>

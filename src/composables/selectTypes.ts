@@ -47,6 +47,9 @@ export type UseSelectOptions = {
   /** Separator for display text in multi-select mode. */
   displaySeparator: () => string;
 
+  /** BCP 47 locale used for locale-sensitive filtering. */
+  locale?: () => string | undefined;
+
   /** Model value ref (external). */
   modelValue: Ref<UseSelectModelValue>;
 

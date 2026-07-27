@@ -9,6 +9,7 @@ import {
   useDatePicker,
 } from '@/components/DatePicker/useDatePicker';
 import { usePickerPopover } from '@/composables/usePickerPopover';
+import { useM3Locale } from '@/locales/context';
 
 export type { DatePickerModelValue, DatePickerVariant };
 
@@ -34,7 +35,7 @@ export type DatePickerProps = {
   /** Latest selectable date, formatted as YYYY-MM-DD. */
   max?: string;
 
-  /** BCP 47 locale used for month, weekday, and accessibility labels. */
+  /** BCP 47 locale used for month, weekday, and date accessibility labels. */
   locale?: string;
 
   /** First day of the week, where 0 is Sunday and 6 is Saturday. */
@@ -55,13 +56,13 @@ const props = withDefaults(defineProps<DatePickerProps>(), {
   variant: 'auto',
   anchorName: undefined,
   anchorElement: undefined,
-  ariaLabel: 'Choose date',
+  ariaLabel: undefined,
   min: undefined,
   max: undefined,
   locale: undefined,
   firstDayOfWeek: 0,
-  confirmText: 'OK',
-  cancelText: 'Cancel',
+  confirmText: undefined,
+  cancelText: undefined,
   today: undefined,
 });
 
@@ -82,6 +83,13 @@ const open = defineModel<boolean>('open', { default: false });
 const generatedId = useId();
 const popoverRef = ref<HTMLDivElement>();
 const surfaceRef = ref<HTMLElement>();
+const localeContext = useM3Locale();
+
+const locale = computed(() => props.locale ?? localeContext.locale.value);
+const messages = computed(() => localeContext.messages.value);
+const ariaLabel = computed(() => props.ariaLabel ?? messages.value.datePicker.chooseDate);
+const confirmText = computed(() => props.confirmText ?? messages.value.common.confirm);
+const cancelText = computed(() => props.cancelText ?? messages.value.common.cancel);
 
 const pickerId = computed(() => {
   return props.id ?? `m3-date-picker-${generatedId}`;
@@ -96,7 +104,7 @@ const picker = useDatePicker({
   min: () => props.min,
   max: () => props.max,
   today: () => props.today,
-  locale: () => props.locale,
+  locale,
   firstDayOfWeek: () => props.firstDayOfWeek,
   onChange: (value) => emit('change', value),
   onCancel: () => emit('cancel'),
@@ -188,7 +196,7 @@ defineExpose({
     data-scope="date-picker"
     data-part="root"
     :data-variant="props.variant"
-    :aria-label="props.ariaLabel"
+    :aria-label="ariaLabel"
     :style="popoverStyle"
     @toggle="popover.handlePopoverToggle"
   >
@@ -199,7 +207,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoPreviousMonth.value"
-          aria-label="Previous month"
+          :aria-label="messages.datePicker.previousMonth"
           data-scope="date-picker"
           data-part="previous-month"
           @click="picker.goToPreviousMonth"
@@ -224,7 +232,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoNextMonth.value"
-          aria-label="Next month"
+          :aria-label="messages.datePicker.nextMonth"
           data-scope="date-picker"
           data-part="next-month"
           @click="picker.goToNextMonth"
@@ -235,7 +243,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoPreviousYear.value"
-          aria-label="Previous year"
+          :aria-label="messages.datePicker.previousYear"
           data-scope="date-picker"
           data-part="previous-year"
           @click="picker.goToPreviousYear"
@@ -260,7 +268,7 @@ defineExpose({
           variant="standard"
           size="small"
           :disabled="!picker.canGoNextYear.value"
-          aria-label="Next year"
+          :aria-label="messages.datePicker.nextYear"
           data-scope="date-picker"
           data-part="next-year"
           @click="picker.goToNextYear"
@@ -365,8 +373,8 @@ defineExpose({
       </div>
 
       <div class="m3-date-picker-actions" data-scope="date-picker" data-part="actions">
-        <Button variant="text" @click="handleCancel">{{ props.cancelText }}</Button>
-        <Button variant="text" @click="handleConfirm">{{ props.confirmText }}</Button>
+        <Button variant="text" @click="handleCancel">{{ cancelText }}</Button>
+        <Button variant="text" @click="handleConfirm">{{ confirmText }}</Button>
       </div>
     </div>
   </div>
