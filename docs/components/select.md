@@ -22,7 +22,7 @@ import FieldSizesSrc from '../demos/shared/FieldSizes.vue?raw';
 const props = ref({
   label: 'Coffee',
   size: 'medium',
-  margin: 'none',
+  labelClearance: undefined,
   disabled: false,
   required: false,
   placeholder: 'Choose an option',
@@ -37,8 +37,9 @@ const modelValue = ref<SelectModelValue>(undefined);
 
 Select provides an anchored menu for choosing one or many options, with optional icons, filtering, and validation text.
 
-For regularly arranged fields, use a parent `row-gap` of `16px` and leave `margin` as `none`. Use `dense` or `normal`
-only for local outer spacing; component margin adds to any parent gap. See the
+Field spacing belongs to the surrounding layout; preserve its intended density instead of normalizing every field
+group to one gap. `labelClearance` accepts a CSS length for local block-start clearance and can inherit a subtree
+default from `fieldContextKey`; it adds to any parent gap. See the
 [floating label spacing guide](../guides/floating-label-spacing-lab).
 
 <DemoContainer>

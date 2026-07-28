@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vite-plus/test';
-import { createApp, h, nextTick, ref } from 'vue';
+import { createApp, h, nextTick, provide, ref } from 'vue';
+import { fieldContextKey } from '@/components/TextField/FieldContext';
 import Select, { type SelectModelValue, type SelectOption } from './Select.vue';
 
 const options: SelectOption[] = [
@@ -121,23 +122,45 @@ describe('Select', () => {
     document.body.innerHTML = '';
   });
 
-  it('applies margin only to the public Select root', async () => {
+  it('applies context or prop label clearance only to the public Select root', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
+    const contextLabelClearance = ref('0.25rem');
 
-    const app = createApp(() =>
-      h(Select, {
-        label: 'Coffee',
-        options,
-        margin: 'dense',
-      }),
-    );
+    const app = createApp({
+      setup() {
+        provide(fieldContextKey, {
+          labelClearance: contextLabelClearance,
+        });
+
+        return () =>
+          h('div', [
+            h(Select, {
+              label: 'Coffee',
+              options,
+            }),
+            h(Select, {
+              label: 'Coffee',
+              options,
+              labelClearance: '0.5rem',
+            }),
+          ]);
+      },
+    });
 
     app.mount(container);
     await nextTick();
 
-    expect(container.querySelector('.m3-select')?.getAttribute('data-margin')).toBe('dense');
-    expect(container.querySelector('.m3-select-field')?.getAttribute('data-margin')).toBe('none');
+    const selects = Array.from(container.querySelectorAll<HTMLElement>('.m3-select'));
+    const innerFields = Array.from(container.querySelectorAll<HTMLElement>('.m3-select-field'));
+
+    expect(selects.map((select) => select.style.marginBlockStart)).toEqual(['0.25rem', '0.5rem']);
+    expect(innerFields.map((field) => field.style.marginBlockStart)).toEqual(['0rem', '0rem']);
+
+    contextLabelClearance.value = '0.75rem';
+    await nextTick();
+
+    expect(selects.map((select) => select.style.marginBlockStart)).toEqual(['0.75rem', '0.5rem']);
 
     app.unmount();
   });

@@ -19,7 +19,7 @@ const props = ref({
   label: 'Label',
   shape: 'square',
   size: 'medium',
-  margin: 'none',
+  labelClearance: undefined,
   disabled: false,
   required: false,
   description: 'Supporting text',
@@ -39,8 +39,9 @@ Text fields cover baseline Material 3 input cases including supporting text, val
 validation behavior, and textual `input.value` representation, while parsing the model into a numeric value remains the
 application's responsibility.
 
-For regularly arranged fields, use a parent `row-gap` of `16px` and leave `margin` as `none`. The opt-in `dense` and
-`normal` margins are intended for isolated fields or local boundary adjustments; they add to any parent gap. See the
+Field spacing belongs to the surrounding layout; preserve its intended density instead of normalizing every field
+group to one gap. `labelClearance` accepts a CSS length for local block-start clearance and can inherit a subtree
+default from `fieldContextKey`; it is additive with any parent gap. See the
 [floating label spacing guide](../guides/floating-label-spacing-lab).
 
 <DemoContainer>

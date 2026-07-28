@@ -4,7 +4,8 @@ import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
 import MenuItem from '@/components/Menu/MenuItem.vue';
-import TextField, { type FieldMargin, type TextFieldSize } from '@/components/TextField/TextField.vue';
+import { useFieldLabelClearanceStyle } from '@/components/TextField/FieldContext';
+import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
 import { acquireAnchorName } from '@/internal/anchorName';
 import { useM3Locale } from '@/locales/context';
@@ -64,8 +65,8 @@ export type SelectProps = {
   /** The trigger height. Matches the 32px, 40px, and 56px TextField and Button sizes. */
   size?: TextFieldSize;
 
-  /** Optional outer block margin. Use parent gap for regularly spaced field groups. */
-  margin?: FieldMargin;
+  /** CSS length reserved at block-start for the floating label. Overrides FieldContext. */
+  labelClearance?: string;
 
   /** Enables multi-select behavior. */
   multiple?: boolean;
@@ -122,7 +123,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   name: undefined,
   placeholder: undefined,
   size: 'medium',
-  margin: 'none',
+  labelClearance: undefined,
   multiple: false,
   clearable: false,
   clearLabel: undefined,
@@ -132,6 +133,8 @@ const props = withDefaults(defineProps<SelectProps>(), {
   filterPlaceholder: undefined,
   filterNoResultsText: undefined,
 });
+
+const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
 
 const localeContext = useM3Locale();
 const messages = computed(() => localeContext.messages.value);
@@ -283,11 +286,11 @@ defineExpose({
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="select.hasValue.value ? 'true' : 'false'"
     :data-size="props.size"
-    :data-margin="props.margin"
     :data-open="open ? 'true' : 'false'"
     :data-filterable="props.filterable ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
+    :style="labelClearanceStyle"
   >
     <div class="m3-select-trigger" data-scope="select" data-part="trigger" @click="select.handleFieldClick">
       <TextField
@@ -304,6 +307,7 @@ defineExpose({
         :readonly="!props.filterable"
         :placeholder="textFieldPlaceholder"
         :size="props.size"
+        label-clearance="0rem"
         :role="props.filterable ? undefined : 'button'"
         :aria-controls="menuId"
         :aria-expanded="open ? 'true' : 'false'"

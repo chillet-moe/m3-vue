@@ -15,11 +15,11 @@ import {
   type TimePickerModelValue,
   type TimePickerVariant,
 } from '@/components/TimePicker';
+import { useFieldLabelClearanceStyle } from '@/components/TextField/FieldContext';
 import { acquireAnchorName } from '@/internal/anchorName';
 import { useM3Locale } from '@/locales/context';
 
 export type TextFieldSize = 'extra-small' | 'small' | 'medium';
-export type FieldMargin = 'none' | 'dense' | 'normal';
 
 type TextFieldSharedProps = {
   /** Visible label. If omitted, provide aria-label via attrs. */
@@ -34,8 +34,8 @@ type TextFieldSharedProps = {
   /** The shape of the text field. Matches Button shape sizes. */
   shape?: 'rounded' | 'square';
 
-  /** Optional outer block margin. Use parent gap for regularly spaced field groups. */
-  margin?: FieldMargin;
+  /** CSS length reserved at block-start for the floating label. Overrides FieldContext. */
+  labelClearance?: string;
 
   /** Rows when rendered as textarea. */
   rows?: number;
@@ -119,7 +119,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   size: 'medium',
   type: 'text',
   shape: 'square',
-  margin: 'none',
+  labelClearance: undefined,
   rows: 3,
   description: undefined,
   error: undefined,
@@ -137,6 +137,8 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   timePickerFormat: '24h',
   timePickerInputMode: undefined,
 });
+
+const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
 
 const emit = defineEmits<{
   input: [event: Event];
@@ -410,7 +412,6 @@ defineExpose({
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-shape="props.shape"
     :data-size="effectiveSize"
-    :data-margin="props.margin"
     :data-multiline="props.as === 'textarea' ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
     :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"
@@ -419,6 +420,7 @@ defineExpose({
     :data-has-leading="hasLeading ? 'true' : 'false'"
     :data-has-date-picker="hasDatePicker ? 'true' : 'false'"
     :data-has-time-picker="hasTimePicker ? 'true' : 'false'"
+    :style="labelClearanceStyle"
   >
     <div ref="containerRef" :class="'m3-text-field-container'" data-scope="text-field" data-part="container">
       <label

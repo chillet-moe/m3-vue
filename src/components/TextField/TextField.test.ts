@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, expectTypeOf, it } from 'vite-plus/test';
-import { createApp, h, nextTick, ref } from 'vue';
+import { createApp, h, nextTick, provide, ref } from 'vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
+import { fieldContextKey } from './FieldContext';
 import TextField from './TextField.vue';
 
 const textFieldStyles = readFileSync('src/components/TextField/TextField.css', 'utf8');
@@ -69,29 +70,61 @@ describe('TextField', () => {
     document.body.innerHTML = '';
   });
 
-  it('applies the selected outer margin mode to its public root', async () => {
+  it('does not add inline label clearance by default', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
     const app = createApp(() =>
       h(TextField, {
         modelValue: '',
-        margin: 'normal',
       }),
     );
 
     app.mount(container);
     await nextTick();
 
-    expect(container.querySelector('[data-scope="text-field"][data-part="root"]')?.getAttribute('data-margin')).toBe(
-      'normal',
-    );
-    expect(textFieldStyles).toContain(".m3-text-field[data-margin='dense']");
-    expect(textFieldStyles).toContain('margin-block-start: 0.5rem');
-    expect(textFieldStyles).toContain('margin-block-end: 0.25rem');
-    expect(textFieldStyles).toContain(".m3-text-field[data-margin='normal']");
-    expect(textFieldStyles).toContain('margin-block-start: 1rem');
-    expect(textFieldStyles).toContain('margin-block-end: 0.5rem');
+    expect(
+      container.querySelector<HTMLElement>('[data-scope="text-field"][data-part="root"]')?.style.marginBlockStart,
+    ).toBe('');
+
+    app.unmount();
+  });
+
+  it('uses context label clearance and lets the component prop override it', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const contextLabelClearance = ref('0.5rem');
+
+    const app = createApp({
+      setup() {
+        provide(fieldContextKey, {
+          labelClearance: contextLabelClearance,
+        });
+
+        return () =>
+          h('div', [
+            h(TextField, {
+              modelValue: '',
+            }),
+            h(TextField, {
+              modelValue: '',
+              labelClearance: '0.75rem',
+            }),
+          ]);
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    const fields = Array.from(container.querySelectorAll<HTMLElement>('[data-scope="text-field"][data-part="root"]'));
+
+    expect(fields.map((field) => field.style.marginBlockStart)).toEqual(['0.5rem', '0.75rem']);
+
+    contextLabelClearance.value = '1rem';
+    await nextTick();
+
+    expect(fields.map((field) => field.style.marginBlockStart)).toEqual(['1rem', '0.75rem']);
 
     app.unmount();
   });

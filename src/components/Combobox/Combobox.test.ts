@@ -78,7 +78,7 @@ describe('Combobox', () => {
     document.body.innerHTML = '';
   });
 
-  it('forwards margin to the public Select root without applying it twice', async () => {
+  it('forwards label clearance to the public Select root without applying it twice', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -86,15 +86,15 @@ describe('Combobox', () => {
       h(Combobox, {
         label: 'State',
         options: stateOptions,
-        margin: 'normal',
+        labelClearance: '0.75rem',
       }),
     );
 
     app.mount(container);
     await nextTick();
 
-    expect(container.querySelector('.m3-select')?.getAttribute('data-margin')).toBe('normal');
-    expect(container.querySelector('.m3-select-field')?.getAttribute('data-margin')).toBe('none');
+    expect(container.querySelector<HTMLElement>('.m3-select')?.style.marginBlockStart).toBe('0.75rem');
+    expect(container.querySelector<HTMLElement>('.m3-select-field')?.style.marginBlockStart).toBe('0rem');
 
     app.unmount();
   });
