@@ -59,6 +59,7 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Styling', link: '/guides/styling' },
+            { text: 'Floating Label Spacing Lab', link: '/guides/floating-label-spacing-lab' },
             { text: 'Vue Scope Boundaries', link: '/guides/vue-scope-isolation' },
             { text: 'Composables', link: '/guides/composables' },
             { text: 'Component Categories', link: '/guides/component-categories' },

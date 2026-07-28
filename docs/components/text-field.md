@@ -19,6 +19,7 @@ const props = ref({
   label: 'Label',
   shape: 'square',
   size: 'medium',
+  margin: 'none',
   disabled: false,
   required: false,
   description: 'Supporting text',
@@ -37,6 +38,10 @@ Text fields cover baseline Material 3 input cases including supporting text, val
 `TextField` always uses a string model, including when `type="number"`. Number inputs retain the native numeric keyboard,
 validation behavior, and textual `input.value` representation, while parsing the model into a numeric value remains the
 application's responsibility.
+
+For regularly arranged fields, use a parent `row-gap` of `16px` and leave `margin` as `none`. The opt-in `dense` and
+`normal` margins are intended for isolated fields or local boundary adjustments; they add to any parent gap. See the
+[floating label spacing guide](../guides/floating-label-spacing-lab).
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">

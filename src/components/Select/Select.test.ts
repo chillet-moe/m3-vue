@@ -121,6 +121,27 @@ describe('Select', () => {
     document.body.innerHTML = '';
   });
 
+  it('applies margin only to the public Select root', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(Select, {
+        label: 'Coffee',
+        options,
+        margin: 'dense',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector('.m3-select')?.getAttribute('data-margin')).toBe('dense');
+    expect(container.querySelector('.m3-select-field')?.getAttribute('data-margin')).toBe('none');
+
+    app.unmount();
+  });
+
   it('uses medium size by default and forwards every size to its TextField', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

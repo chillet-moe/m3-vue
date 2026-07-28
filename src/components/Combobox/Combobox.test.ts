@@ -78,6 +78,27 @@ describe('Combobox', () => {
     document.body.innerHTML = '';
   });
 
+  it('forwards margin to the public Select root without applying it twice', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(Combobox, {
+        label: 'State',
+        options: stateOptions,
+        margin: 'normal',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector('.m3-select')?.getAttribute('data-margin')).toBe('normal');
+    expect(container.querySelector('.m3-select-field')?.getAttribute('data-margin')).toBe('none');
+
+    app.unmount();
+  });
+
   it('enables filtering by default', async () => {
     installPopoverPolyfill();
 

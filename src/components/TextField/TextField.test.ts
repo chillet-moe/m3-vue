@@ -69,6 +69,33 @@ describe('TextField', () => {
     document.body.innerHTML = '';
   });
 
+  it('applies the selected outer margin mode to its public root', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(TextField, {
+        modelValue: '',
+        margin: 'normal',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector('[data-scope="text-field"][data-part="root"]')?.getAttribute('data-margin')).toBe(
+      'normal',
+    );
+    expect(textFieldStyles).toContain(".m3-text-field[data-margin='dense']");
+    expect(textFieldStyles).toContain('margin-block-start: 0.5rem');
+    expect(textFieldStyles).toContain('margin-block-end: 0.25rem');
+    expect(textFieldStyles).toContain(".m3-text-field[data-margin='normal']");
+    expect(textFieldStyles).toContain('margin-block-start: 1rem');
+    expect(textFieldStyles).toContain('margin-block-end: 0.5rem');
+
+    app.unmount();
+  });
+
   it('renders the supporting slot and wires it to aria-describedby', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

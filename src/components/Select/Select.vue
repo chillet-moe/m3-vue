@@ -4,7 +4,7 @@ import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
 import MenuItem from '@/components/Menu/MenuItem.vue';
-import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
+import TextField, { type FieldMargin, type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
 import { acquireAnchorName } from '@/internal/anchorName';
 import { useM3Locale } from '@/locales/context';
@@ -64,6 +64,9 @@ export type SelectProps = {
   /** The trigger height. Matches the 32px, 40px, and 56px TextField and Button sizes. */
   size?: TextFieldSize;
 
+  /** Optional outer block margin. Use parent gap for regularly spaced field groups. */
+  margin?: FieldMargin;
+
   /** Enables multi-select behavior. */
   multiple?: boolean;
 
@@ -119,6 +122,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   name: undefined,
   placeholder: undefined,
   size: 'medium',
+  margin: 'none',
   multiple: false,
   clearable: false,
   clearLabel: undefined,
@@ -279,6 +283,7 @@ defineExpose({
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="select.hasValue.value ? 'true' : 'false'"
     :data-size="props.size"
+    :data-margin="props.margin"
     :data-open="open ? 'true' : 'false'"
     :data-filterable="props.filterable ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"

@@ -15,6 +15,7 @@ import ComboboxMultiSelectSrc from '../demos/combobox/ComboboxMultiSelect.vue?ra
 
 const props = ref({
   label: 'State',
+  margin: 'none',
   disabled: false,
   required: false,
   placeholder: 'Choose a state',
@@ -27,6 +28,10 @@ const modelValue = ref<SelectModelValue>(undefined);
 # Combobox
 
 Combobox combines free-form text entry with option picking, making it useful for searchable single- and multi-select flows.
+
+Combobox shares Select's `margin` behavior. Prefer a parent `row-gap` of `16px` for regular field layouts, and reserve
+`dense` or `normal` for local outer spacing. See the
+[floating label spacing guide](../guides/floating-label-spacing-lab).
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">

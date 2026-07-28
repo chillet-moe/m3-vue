@@ -19,6 +19,7 @@ import { acquireAnchorName } from '@/internal/anchorName';
 import { useM3Locale } from '@/locales/context';
 
 export type TextFieldSize = 'extra-small' | 'small' | 'medium';
+export type FieldMargin = 'none' | 'dense' | 'normal';
 
 type TextFieldSharedProps = {
   /** Visible label. If omitted, provide aria-label via attrs. */
@@ -32,6 +33,9 @@ type TextFieldSharedProps = {
 
   /** The shape of the text field. Matches Button shape sizes. */
   shape?: 'rounded' | 'square';
+
+  /** Optional outer block margin. Use parent gap for regularly spaced field groups. */
+  margin?: FieldMargin;
 
   /** Rows when rendered as textarea. */
   rows?: number;
@@ -115,6 +119,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   size: 'medium',
   type: 'text',
   shape: 'square',
+  margin: 'none',
   rows: 3,
   description: undefined,
   error: undefined,
@@ -405,6 +410,7 @@ defineExpose({
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-shape="props.shape"
     :data-size="effectiveSize"
+    :data-margin="props.margin"
     :data-multiline="props.as === 'textarea' ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
     :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"

@@ -450,6 +450,16 @@
     min-inline-size: 0;
   }
 
+  .m3-text-field[data-margin='dense'] {
+    margin-block-start: 0.5rem;
+    margin-block-end: 0.25rem;
+  }
+
+  .m3-text-field[data-margin='normal'] {
+    margin-block-start: 1rem;
+    margin-block-end: 0.5rem;
+  }
+
   .m3-text-field[data-size='extra-small'] {
     --_container-height: var(
       --md-outlined-text-field-container-height,
