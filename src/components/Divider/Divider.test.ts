@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vite-plus/test';
 import { createApp, h, nextTick } from 'vue';
 import Divider from './Divider.vue';
+
+const dividerStyles = readFileSync('src/components/Divider/Divider.css', 'utf8');
 
 async function mountDivider(props: Record<string, unknown> = {}) {
   const container = document.createElement('div');
@@ -37,6 +40,8 @@ describe('Divider', () => {
     expect(root?.dataset.inset).toBe('none');
     expect(root?.getAttribute('role')).toBe('separator');
     expect(root?.getAttribute('aria-orientation')).toBe('horizontal');
+    expect(dividerStyles).toContain('--_divider-thickness: var(--md-divider-thickness, 0.0625rem)');
+    expect(dividerStyles.match(/--_divider-thickness:/g)).toHaveLength(1);
 
     app.unmount();
   });

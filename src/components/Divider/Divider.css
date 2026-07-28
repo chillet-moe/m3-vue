@@ -16,7 +16,6 @@
 
 @layer components {
   .m3-divider {
-    --_divider-thickness: var(--md-divider-thickness, initial);
     --_divider-spacing: var(--md-divider-spacing, 0);
 
     flex: none;
