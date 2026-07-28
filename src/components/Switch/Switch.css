@@ -31,6 +31,7 @@
     --md-switch-selected-pressed-handle-color: initial;
     --md-switch-selected-pressed-track-color: initial;
     --md-switch-selected-track-color: initial;
+    --md-switch-target-size: initial;
     --md-switch-track-height: initial;
     --md-switch-track-outline-width: initial;
     --md-switch-track-shape: initial;
@@ -58,6 +59,7 @@
       var(--md-sys-color-surface-container-highest)
     );
     --_switch-unselected-icon-size: var(--md-switch-unselected-icon-size, 1rem);
+    --_switch-target-size: var(--md-switch-target-size, 2.5rem);
     --_switch-track-height: var(--md-switch-track-height, 2rem);
     --_switch-track-width: var(--md-switch-track-width, 3.25rem);
     --_switch-unselected-track-outline-color: var(
@@ -188,7 +190,7 @@
   .m3-switch-control {
     position: relative;
     inline-size: var(--_switch-track-width);
-    block-size: var(--_switch-track-height);
+    block-size: max(var(--_switch-target-size), var(--_switch-track-height));
     display: inline-flex;
     align-items: center;
 
@@ -205,7 +207,10 @@
   .m3-switch-control::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset-block-start: 50%;
+    inset-inline: 0;
+    block-size: var(--_switch-track-height);
+    transform: translateY(-50%);
     border-radius: var(--_switch-track-shape);
     background-color: var(--_switch-unselected-track-color);
     box-shadow: inset 0 0 0 var(--_switch-track-outline-width) var(--_switch-unselected-track-outline-color);
@@ -308,10 +313,9 @@
     background-color: var(--_switch-unselected-pressed-handle-color);
   }
 
-  .m3-switch-input:focus-visible + .m3-switch-control {
+  .m3-switch-input:focus-visible + .m3-switch-control::before {
     outline: var(--_switch-focus-indicator-thickness) solid var(--_switch-focus-indicator-color);
     outline-offset: var(--_switch-focus-indicator-offset);
-    border-radius: var(--_switch-track-shape);
   }
 
   .m3-switch[data-disabled='true'] .m3-switch-control::before {

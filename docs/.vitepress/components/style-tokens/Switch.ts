@@ -170,6 +170,12 @@ export const switchStyleTokens = [
     category: 'State',
   },
   {
+    name: '--md-switch-target-size',
+    description: 'Controls the minimum interaction target height.',
+    fallback: '2.5rem',
+    category: 'Layout',
+  },
+  {
     name: '--md-switch-track-height',
     description: 'Controls track height.',
     fallback: '2rem',
