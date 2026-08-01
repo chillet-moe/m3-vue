@@ -44,9 +44,6 @@ export type PopoverProps = {
 
   /** Element id that labels the popover surface. */
   ariaLabelledBy?: string;
-
-  /** Optional Teleport target. Native popovers render in place by default because the top layer handles clipping. */
-  teleport?: boolean | string;
 };
 
 const props = withDefaults(defineProps<PopoverProps>(), {
@@ -59,7 +56,6 @@ const props = withDefaults(defineProps<PopoverProps>(), {
   role: undefined,
   ariaLabel: undefined,
   ariaLabelledBy: undefined,
-  teleport: false,
 });
 
 const open = defineModel<boolean>('open', { default: false });
@@ -71,8 +67,6 @@ const popoverId = computed(() => props.id ?? `m3-popover-${generatedId}`);
 const resolvedAnchorName = computed(
   () => props.anchorName ?? (props.anchorElement ? `--m3-popover-${cssId.value}` : undefined),
 );
-const teleportTarget = computed(() => (props.teleport === true || props.teleport === false ? 'body' : props.teleport));
-const teleportDisabled = computed(() => props.teleport === false);
 const popoverStyle = computed(() => {
   if (!resolvedAnchorName.value) {
     return undefined;
@@ -123,27 +117,25 @@ defineExpose({
 </script>
 
 <template>
-  <Teleport :to="teleportTarget" :disabled="teleportDisabled">
-    <div
-      :id="popoverId"
-      ref="popoverRef"
-      class="m3-popover"
-      data-scope="popover"
-      data-part="root"
-      :data-placement="placement"
-      :data-match-anchor-width="matchAnchorWidth ? 'true' : 'false'"
-      :popover="props.popover"
-      :role="role"
-      :aria-label="ariaLabel"
-      :aria-labelledby="ariaLabelledBy"
-      :style="popoverStyle"
-      @toggle="popover.handlePopoverToggle"
-    >
-      <div class="m3-popover-surface" data-scope="popover" data-part="surface">
-        <slot :open="open" :show="popover.show" :hide="popover.hide" :toggle="popover.toggle" />
-      </div>
+  <div
+    :id="popoverId"
+    ref="popoverRef"
+    class="m3-popover"
+    data-scope="popover"
+    data-part="root"
+    :data-placement="placement"
+    :data-match-anchor-width="matchAnchorWidth ? 'true' : 'false'"
+    :popover="props.popover"
+    :role="role"
+    :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
+    :style="popoverStyle"
+    @toggle="popover.handlePopoverToggle"
+  >
+    <div class="m3-popover-surface" data-scope="popover" data-part="surface">
+      <slot :open="open" :show="popover.show" :hide="popover.hide" :toggle="popover.toggle" />
     </div>
-  </Teleport>
+  </div>
 </template>
 
 <style src="./Popover.css"></style>

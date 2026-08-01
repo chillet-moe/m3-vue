@@ -122,25 +122,6 @@ describe('Popover', () => {
     app.unmount();
   });
 
-  it('supports an explicit Teleport target when DOM relocation is requested', async () => {
-    installPopoverPolyfill();
-
-    const container = document.createElement('div');
-    const target = document.createElement('div');
-    target.id = 'popover-target';
-    document.body.append(container, target);
-
-    const app = createApp(() => h(Popover, { teleport: '#popover-target' }, () => 'Teleported content'));
-
-    app.mount(container);
-    await flushPopover();
-
-    expect(target.querySelector('.m3-popover')?.textContent).toContain('Teleported content');
-    expect(container.querySelector('.m3-popover')).toBeNull();
-
-    app.unmount();
-  });
-
   it('can be opened by the dropdown directive', async () => {
     installPopoverPolyfill();
 
