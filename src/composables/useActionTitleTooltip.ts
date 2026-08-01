@@ -1,5 +1,5 @@
-import { onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, shallowRef, useAttrs } from 'vue';
-import { setupTooltip } from '@/directives/Tooltip/setup';
+import { onBeforeUnmount, onBeforeUpdate, onMounted, ref, shallowRef, useAttrs } from 'vue';
+import { actionTitleTooltipAttribute, registerActionTitleTooltip } from '@/internal/actionTitleTooltip';
 
 /**
  * Turns an action component's `title` attr into the library tooltip.
@@ -8,7 +8,7 @@ import { setupTooltip } from '@/directives/Tooltip/setup';
 export function useActionTitleTooltip(options: { ariaLabelFallback?: boolean } = {}) {
   const attrs = useAttrs();
   const rootRef = ref<HTMLElement | null>(null);
-  let state: ReturnType<typeof setupTooltip> | null = null;
+  let unregister: (() => void) | undefined;
 
   const resolveTitleTooltip = () => {
     const value = attrs.title;
@@ -18,6 +18,7 @@ export function useActionTitleTooltip(options: { ariaLabelFallback?: boolean } =
   const resolveRootAttrs = () => {
     const { title: _title, ...rest } = attrs;
     const titleTooltip = resolveTitleTooltip();
+    const tooltipAttrs = titleTooltip ? { [actionTitleTooltipAttribute]: titleTooltip.content } : undefined;
 
     if (
       options.ariaLabelFallback &&
@@ -27,45 +28,29 @@ export function useActionTitleTooltip(options: { ariaLabelFallback?: boolean } =
     ) {
       return {
         ...rest,
+        ...tooltipAttrs,
         'aria-label': titleTooltip.content,
       };
     }
 
-    return rest;
+    return {
+      ...rest,
+      ...tooltipAttrs,
+    };
   };
 
   const rootAttrs = shallowRef(resolveRootAttrs());
 
-  const cleanup = () => {
-    state?.cleanup();
-    state = null;
-  };
-
-  const syncTitleTooltip = () => {
-    const root = rootRef.value;
-    const tooltip = resolveTitleTooltip();
-
-    if (!root || !tooltip) {
-      cleanup();
-      return;
-    }
-
-    if (state) {
-      state.update(tooltip);
-      return;
-    }
-
-    state = setupTooltip(root, tooltip);
-  };
-
-  const syncRootAttrs = () => {
+  onMounted(() => {
+    if (rootRef.value) unregister = registerActionTitleTooltip(rootRef.value);
+  });
+  onBeforeUpdate(() => {
     rootAttrs.value = resolveRootAttrs();
-  };
-
-  onMounted(syncTitleTooltip);
-  onBeforeUpdate(syncRootAttrs);
-  onUpdated(syncTitleTooltip);
-  onBeforeUnmount(cleanup);
+  });
+  onBeforeUnmount(() => {
+    unregister?.();
+    unregister = undefined;
+  });
 
   return {
     rootRef,

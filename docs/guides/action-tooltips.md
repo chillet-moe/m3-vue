@@ -6,6 +6,11 @@ title: Action Tooltips
 
 Action components use `title` as the simple text tooltip entry point. The title is rendered with the library tooltip behavior and is not forwarded to the DOM, so native HTML tooltips do not appear.
 
+Simple action titles use one shared, non-interactive tooltip surface. The surface and its anchor are created lazily
+when an action is first hovered, keyboard-focused, or long-pressed, so unopened actions do not allocate tooltip DOM
+or per-trigger event listeners. The shared surface follows the active action and is released when its action tree is
+unmounted.
+
 ```vue
 <Button title="Save changes">Save</Button>
 
@@ -29,7 +34,9 @@ For icon-only actions, `title` is also used as the fallback accessible name when
 <IconButton icon="settings" aria-label="Open settings" title="Settings" />
 ```
 
-Use `v-tooltip` when you need rich content, a referenced tooltip surface, custom placement, or different interaction options.
+Use `v-tooltip` when you need rich or interactive content, a referenced tooltip surface, custom placement, or
+different interaction options. Authored rich surfaces keep their own DOM, focus, and interaction lifecycle rather
+than using the shared simple-title runtime.
 
 ```vue
 <Button v-tooltip="'#save-tip'">Save</Button>

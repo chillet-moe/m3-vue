@@ -126,13 +126,11 @@ describe('FloatingActionButton', () => {
     await nextTick();
 
     const button = container.querySelector('button') as HTMLButtonElement | null;
-    const tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
-
     expect(button?.hasAttribute('title')).toBe(false);
     expect(button?.getAttribute('aria-label')).toBe('Compose');
-    expect(button?.getAttribute('aria-controls')).toBe(tooltip?.id);
-    expect(tooltip?.textContent).toBe('Compose');
-    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Compose');
+    expect(button?.hasAttribute('aria-controls')).toBe(false);
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
   });
@@ -155,11 +153,10 @@ describe('FloatingActionButton', () => {
     await nextTick();
 
     const button = container.querySelector('button') as HTMLButtonElement | null;
-    const tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
-
     expect(button?.hasAttribute('title')).toBe(false);
     expect(button?.getAttribute('aria-label')).toBe('Create post');
-    expect(tooltip?.textContent).toBe('Compose tooltip');
+    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Compose tooltip');
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
   });

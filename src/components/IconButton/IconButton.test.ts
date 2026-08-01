@@ -26,13 +26,11 @@ describe('IconButton', () => {
     await nextTick();
 
     const button = container.querySelector('button') as HTMLButtonElement | null;
-    const tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
-
     expect(button?.hasAttribute('title')).toBe(false);
     expect(button?.getAttribute('aria-label')).toBe('Settings');
-    expect(button?.getAttribute('aria-controls')).toBe(tooltip?.id);
-    expect(tooltip?.textContent).toBe('Settings');
-    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Settings');
+    expect(button?.hasAttribute('aria-controls')).toBe(false);
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
   });
@@ -55,11 +53,10 @@ describe('IconButton', () => {
     await nextTick();
 
     const button = container.querySelector('button') as HTMLButtonElement | null;
-    const tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
-
     expect(button?.hasAttribute('title')).toBe(false);
     expect(button?.getAttribute('aria-label')).toBe('Open settings');
-    expect(tooltip?.textContent).toBe('Settings tooltip');
+    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Settings tooltip');
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
   });
@@ -85,6 +82,9 @@ describe('IconButton', () => {
     await nextTick();
 
     const button = container.querySelector('button') as HTMLButtonElement | null;
+    button?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+
     const tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
     const buttonAnchorNames = button?.style.getPropertyValue('anchor-name') ?? '';
     const tooltipAnchorName = tooltip?.style.getPropertyValue('position-anchor') ?? '';

@@ -177,6 +177,7 @@ describe('vTooltip directive', () => {
     expect(tip?.getAttribute('data-scope')).toBe('tooltip');
     expect(tip?.getAttribute('data-part')).toBe('root');
     expect(tip?.getAttribute('data-variant')).toBe('plain');
+    expect(tip?.getAttribute('role')).toBe('dialog');
     expect(el.getAttribute('aria-controls')).toBe(tip?.id);
 
     vTooltip.unmounted?.(el);

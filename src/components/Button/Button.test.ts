@@ -192,13 +192,11 @@ describe('Button', () => {
     await nextTick();
 
     const button = container.querySelector('button') as HTMLButtonElement | null;
-    const tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
-
     expect(button?.hasAttribute('title')).toBe(false);
-    expect(button?.getAttribute('aria-controls')).toBe(tooltip?.id);
-    expect(button?.getAttribute('aria-haspopup')).toBe('true');
-    expect(tooltip?.textContent).toBe('Save changes');
-    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Save changes');
+    expect(button?.hasAttribute('aria-controls')).toBe(false);
+    expect(button?.hasAttribute('aria-haspopup')).toBe(false);
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
   });
@@ -226,18 +224,20 @@ describe('Button', () => {
     app.mount(container);
     await nextTick();
 
-    let tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
-    expect(tooltip?.textContent).toBe('Save changes');
+    const button = container.querySelector('button');
+    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Save changes');
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     title.value = 'Discard changes';
     await nextTick();
 
-    tooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
-    expect(tooltip?.textContent).toBe('Discard changes');
+    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Discard changes');
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     title.value = '';
     await nextTick();
 
+    expect(button?.hasAttribute('data-m3-action-title-tooltip')).toBe(false);
     expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
