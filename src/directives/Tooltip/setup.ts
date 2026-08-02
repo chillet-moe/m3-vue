@@ -10,6 +10,7 @@ import {
   supportsPopover,
 } from './helpers';
 import { acquireAnchorName } from '@/internal/anchorName';
+import { registerSharedViewportChange } from '@/internal/sharedViewportChange';
 import type { Placement, State, TooltipBindingValue, TooltipTriggerAriaMode } from './types';
 
 function placementToArea(p: Placement) {
@@ -150,22 +151,17 @@ export function setupTooltip(
   let suppressClickUntil = 0;
   let isOpen = false;
   let internalClosePending = false;
-  let fallbackPositionAbortController: AbortController | null = null;
+  let removeFallbackPositionListener: (() => void) | null = null;
 
   const removeFallbackPositionListeners = () => {
-    fallbackPositionAbortController?.abort();
-    fallbackPositionAbortController = null;
+    removeFallbackPositionListener?.();
+    removeFallbackPositionListener = null;
   };
 
   const addFallbackPositionListeners = () => {
-    if (canAnchor || fallbackPositionAbortController) return;
+    if (canAnchor || removeFallbackPositionListener) return;
 
-    fallbackPositionAbortController = new AbortController();
-    window.addEventListener('scroll', onScrollOrResize, {
-      passive: true,
-      signal: fallbackPositionAbortController.signal,
-    });
-    window.addEventListener('resize', onScrollOrResize, { signal: fallbackPositionAbortController.signal });
+    removeFallbackPositionListener = registerSharedViewportChange(trigger.ownerDocument, onScrollOrResize);
   };
 
   const syncClosedPopoverState = () => {
