@@ -50,6 +50,9 @@ function mockAnimationFrame() {
   });
 
   return {
+    get pendingCount() {
+      return callbacks.size;
+    },
     flush(timestamp: number) {
       const pendingCallbacks = [...callbacks.values()];
       callbacks.clear();
@@ -179,6 +182,54 @@ describe('CircularProgressIndicator', () => {
     expect(root?.getAttribute('aria-valuetext')).toBe('Loading');
     expect(container.querySelector('.m3-circular-progress-indicator-track')).not.toBeNull();
     expect(active?.classList.contains('m3-circular-progress-indicator-active-indeterminate')).toBe(true);
+
+    app.unmount();
+  });
+
+  it('shares one browser frame across many indeterminate instances and writes paths directly', async () => {
+    const raf = mockAnimationFrame();
+    const indeterminate = ref(true);
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const app = createApp({
+      render: () =>
+        h(
+          'div',
+          Array.from({ length: 100 }, () => h(CircularProgressIndicator, { indeterminate: indeterminate.value })),
+        ),
+    });
+
+    app.mount(container);
+    await nextTick();
+    expect(raf.pendingCount).toBe(1);
+
+    const active = container.querySelector<SVGPathElement>('.m3-circular-progress-indicator-active')!;
+    const initialPath = active.getAttribute('d');
+    raf.flush(100);
+    raf.flush(400);
+
+    expect(active.getAttribute('d')).not.toBe(initialPath);
+    expect(raf.pendingCount).toBe(1);
+
+    indeterminate.value = false;
+    await nextTick();
+    expect(raf.pendingCount).toBe(0);
+
+    app.unmount();
+  });
+
+  it('uses current wavy geometry in the direct indeterminate presentation', async () => {
+    const raf = mockAnimationFrame();
+    const { app, container, updateProps } = await mountCircularProgressIndicator({ indeterminate: true });
+    const active = container.querySelector<SVGPathElement>('.m3-circular-progress-indicator-active')!;
+
+    raf.flush(100);
+    raf.flush(400);
+    expect(active.getAttribute('d')).toContain('A');
+
+    await updateProps({ shape: 'wavy', size: '3rem' });
+    raf.flush(700);
+    expect(active.getAttribute('d')).toContain('C');
 
     app.unmount();
   });

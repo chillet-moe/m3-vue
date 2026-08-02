@@ -26,7 +26,66 @@ async function mountLoadingIndicator(props: Record<string, unknown> = {}) {
 describe('LoadingIndicator', () => {
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     document.body.innerHTML = '';
+  });
+
+  it('shares one animation frame and motion preference listener across many instances', async () => {
+    let requestId = 0;
+    const callbacks = new Map<number, FrameRequestCallback>();
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      const id = ++requestId;
+      callbacks.set(id, callback);
+      return id;
+    });
+    vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => callbacks.delete(id));
+    const addMotionListener = vi.fn();
+    const removeMotionListener = vi.fn();
+    const matchMedia = vi.fn(() => ({
+      matches: false,
+      addEventListener: addMotionListener,
+      removeEventListener: removeMotionListener,
+    }));
+    vi.stubGlobal('matchMedia', matchMedia);
+    const visible = reactive({ value: true });
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const app = createApp({
+      render: () =>
+        h(
+          'div',
+          Array.from({ length: 100 }, () => h(LoadingIndicator, { visible: visible.value })),
+        ),
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    expect(callbacks.size).toBe(1);
+    expect(matchMedia).toHaveBeenCalledTimes(1);
+    expect(addMotionListener).toHaveBeenCalledTimes(1);
+
+    const paths = Array.from(container.querySelectorAll<SVGPathElement>('[data-part="active-indicator"]'));
+    const initialTransform = paths[0]?.style.transform;
+    const flush = (timestamp: number) => {
+      const current = [...callbacks.values()];
+      callbacks.clear();
+      current.forEach((callback) => callback(timestamp));
+    };
+    flush(100);
+    flush(400);
+
+    expect(paths.every((path) => path.getAttribute('d') === paths[0]?.getAttribute('d'))).toBe(true);
+    expect(paths[0]?.style.transform).not.toBe(initialTransform);
+    expect(callbacks.size).toBe(1);
+
+    visible.value = false;
+    await nextTick();
+    expect(callbacks.size).toBe(0);
+
+    app.unmount();
+    expect(removeMotionListener).toHaveBeenCalledTimes(1);
   });
 
   it('renders an indeterminate uncontained progressbar by default', async () => {

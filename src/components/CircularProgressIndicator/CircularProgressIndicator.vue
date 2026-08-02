@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useProgressIndicatorState } from '@/composables/useProgressIndicatorState';
+import { registerSharedAnimationFrame } from '@/internal/sharedAnimationFrame';
 import { parseCssLength, readCssLength, readCssToken } from '@/utils/cssLength';
 import {
   createCircularArcPath,
@@ -72,6 +73,8 @@ const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, aria
   });
 
 const rootRef = useTemplateRef<HTMLDivElement>('root');
+const activePathRef = useTemplateRef<SVGPathElement>('activePath');
+const trackPathRef = useTemplateRef<SVGPathElement>('trackPath');
 const layout = ref({
   size: 40,
   thickness: 4,
@@ -79,11 +82,10 @@ const layout = ref({
   waveAmplitude: 1.6,
   wavelength: 15,
 });
-const indeterminateState = ref<CircularIndeterminateState>(getCircularIndeterminateState(0));
+const initialIndeterminateState: CircularIndeterminateState = getCircularIndeterminateState(0);
 
 let resizeObserver: ResizeObserver | null = null;
-let animationFrame = 0;
-let animationStartTime = 0;
+let animationController: ReturnType<typeof registerSharedAnimationFrame> | undefined;
 
 const syncLayout = () => {
   const root = rootRef.value;
@@ -152,9 +154,9 @@ const rootStyle = computed(() => {
 const center = computed(() => layout.value.size / 2);
 const radius = computed(() => Math.max(1, (layout.value.size - layout.value.thickness) / 2));
 const viewBox = computed(() => `0 0 ${layout.value.size} ${layout.value.size}`);
-const activeStartDegrees = computed(() => (isDeterminate.value ? 0 : indeterminateState.value.startDegrees));
+const activeStartDegrees = computed(() => (isDeterminate.value ? 0 : initialIndeterminateState.startDegrees));
 const activeEndDegrees = computed(() =>
-  isDeterminate.value ? progressRatioDisplayed.value * 360 : indeterminateState.value.endDegrees,
+  isDeterminate.value ? progressRatioDisplayed.value * 360 : initialIndeterminateState.endDegrees,
 );
 const activePath = computed(() => {
   if (isDeterminate.value && progressRatioDisplayed.value <= 0) {
@@ -197,33 +199,37 @@ const trackPath = computed(() => {
   return createCircularArcPath(center.value, radius.value, startDegrees, endDegrees);
 });
 
-const stopAnimation = () => {
-  if (animationFrame) {
-    window.cancelAnimationFrame(animationFrame);
-    animationFrame = 0;
-  }
-  animationStartTime = 0;
-};
+const syncIndeterminatePresentation = (elapsed: number) => {
+  const state = getCircularIndeterminateState(elapsed);
+  const currentCenter = center.value;
+  const currentRadius = radius.value;
+  const active = isWavy.value
+    ? createCircularWaveArcPath(
+        currentCenter,
+        currentRadius,
+        state.startDegrees,
+        state.endDegrees,
+        layout.value.waveAmplitude,
+        layout.value.wavelength,
+      )
+    : createCircularArcPath(currentCenter, currentRadius, state.startDegrees, state.endDegrees);
+  const gapDegrees = getCircularTrackGapDegrees(layout.value.trackGap, layout.value.thickness, currentRadius);
+  const track = createCircularArcPath(
+    currentCenter,
+    currentRadius,
+    state.endDegrees + gapDegrees,
+    state.startDegrees + 360 - gapDegrees,
+  );
 
-const animationStep = (timestamp: number) => {
-  if (!animationStartTime) {
-    animationStartTime = timestamp;
-  }
-
-  indeterminateState.value = getCircularIndeterminateState(timestamp - animationStartTime);
-  animationFrame = window.requestAnimationFrame(animationStep);
+  if (activePathRef.value?.getAttribute('d') !== active) activePathRef.value?.setAttribute('d', active);
+  if (trackPathRef.value?.getAttribute('d') !== track) trackPathRef.value?.setAttribute('d', track);
 };
 
 const syncAnimation = () => {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  stopAnimation();
   if (props.indeterminate) {
-    animationFrame = window.requestAnimationFrame(animationStep);
+    animationController?.start();
   } else {
-    indeterminateState.value = getCircularIndeterminateState(0);
+    animationController?.stop();
   }
 };
 
@@ -246,6 +252,9 @@ watch(() => props.indeterminate, syncAnimation);
 
 onMounted(() => {
   syncLayout();
+  if (rootRef.value) {
+    animationController = registerSharedAnimationFrame(rootRef.value.ownerDocument, syncIndeterminatePresentation);
+  }
   syncAnimation();
   if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
     resizeObserver = new ResizeObserver(syncLayout);
@@ -256,7 +265,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   resizeObserver?.disconnect();
   resizeObserver = null;
-  stopAnimation();
+  animationController?.cleanup();
+  animationController = undefined;
 });
 </script>
 
@@ -287,6 +297,7 @@ onBeforeUnmount(() => {
       aria-hidden="true"
     >
       <path
+        ref="trackPath"
         v-if="trackPath"
         class="m3-circular-progress-indicator-track"
         data-scope="circular-progress-indicator"
@@ -294,6 +305,7 @@ onBeforeUnmount(() => {
         :d="trackPath"
       />
       <path
+        ref="activePath"
         v-if="activePath"
         class="m3-circular-progress-indicator-active"
         :class="{

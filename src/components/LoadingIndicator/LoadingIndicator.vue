@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { getLoadingIndicatorFrame, getStaticLoadingIndicatorFrame } from './loadingIndicatorPath';
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { getStaticLoadingIndicatorFrame } from './loadingIndicatorPath';
+import { registerLoadingIndicatorAnimation } from './loadingIndicatorAnimation';
 
 export type LoadingIndicatorProps = {
   /** Visual configuration of the loading indicator. */
@@ -39,16 +40,14 @@ const props = withDefaults(defineProps<LoadingIndicatorProps>(), {
 });
 
 const maxHideDelay = 1000;
-const elapsed = ref(0);
 const isShown = ref(props.visible);
-const prefersReducedMotion = ref(false);
+const activeIndicatorRef = useTemplateRef<SVGPathElement>('activeIndicator');
+const initialFrame = getStaticLoadingIndicatorFrame();
 
-let animationFrame = 0;
-let animationStartTime = 0;
 let showTimer = 0;
 let hideTimer = 0;
 let shownAt = 0;
-let motionMediaQuery: MediaQueryList | null = null;
+let animationRegistration: ReturnType<typeof registerLoadingIndicatorAnimation> | undefined;
 
 const now = () => {
   if (typeof window !== 'undefined' && window.performance) {
@@ -90,18 +89,6 @@ const rootStyle = computed(() => {
   return style;
 });
 
-const frame = computed(() => {
-  if (prefersReducedMotion.value) {
-    return getStaticLoadingIndicatorFrame();
-  }
-
-  return getLoadingIndicatorFrame(elapsed.value);
-});
-
-const activeIndicatorStyle = computed(() => ({
-  transform: `rotate(${frame.value.rotation}deg)`,
-}));
-
 const clearShowTimer = () => {
   if (showTimer) {
     window.clearTimeout(showTimer);
@@ -116,35 +103,8 @@ const clearHideTimer = () => {
   }
 };
 
-const stopAnimation = () => {
-  if (animationFrame) {
-    window.cancelAnimationFrame(animationFrame);
-    animationFrame = 0;
-  }
-  animationStartTime = 0;
-};
-
-const animationStep = (timestamp: number) => {
-  if (!animationStartTime) {
-    animationStartTime = timestamp;
-  }
-
-  elapsed.value = timestamp - animationStartTime;
-  animationFrame = window.requestAnimationFrame(animationStep);
-};
-
 const syncAnimation = () => {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  stopAnimation();
-  if (isShown.value && !prefersReducedMotion.value) {
-    elapsed.value = 0;
-    animationFrame = window.requestAnimationFrame(animationStep);
-  } else if (!isShown.value) {
-    elapsed.value = 0;
-  }
+  animationRegistration?.setActive(isShown.value);
 };
 
 const showNow = () => {
@@ -198,34 +158,23 @@ const syncVisibility = () => {
   }
 };
 
-const syncReducedMotion = () => {
-  prefersReducedMotion.value = motionMediaQuery?.matches ?? false;
-  syncAnimation();
-};
-
 watch(() => props.visible, syncVisibility);
 watch([normalizedShowDelay, normalizedMinHideDelay], syncVisibility);
 
 onMounted(() => {
   shownAt = isShown.value ? now() : 0;
-
-  if (typeof window.matchMedia === 'function') {
-    motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    syncReducedMotion();
-    motionMediaQuery.addEventListener('change', syncReducedMotion);
-  } else {
-    syncAnimation();
+  if (activeIndicatorRef.value) {
+    animationRegistration = registerLoadingIndicatorAnimation(activeIndicatorRef.value);
   }
-
+  syncAnimation();
   syncVisibility();
 });
 
 onBeforeUnmount(() => {
   clearShowTimer();
   clearHideTimer();
-  stopAnimation();
-  motionMediaQuery?.removeEventListener('change', syncReducedMotion);
-  motionMediaQuery = null;
+  animationRegistration?.cleanup();
+  animationRegistration = undefined;
 });
 </script>
 
@@ -257,11 +206,11 @@ onBeforeUnmount(() => {
         aria-hidden="true"
       >
         <path
+          ref="activeIndicator"
           class="m3-loading-indicator-active"
           data-scope="loading-indicator"
           data-part="active-indicator"
-          :d="frame.path"
-          :style="activeIndicatorStyle"
+          :d="initialFrame.path"
         />
       </svg>
     </span>
