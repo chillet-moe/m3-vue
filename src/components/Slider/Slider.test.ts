@@ -399,6 +399,47 @@ describe('Slider', () => {
     app.unmount();
   });
 
+  it('uses the wheel event modifier instead of global keyboard listeners', async () => {
+    const addDocumentEventListener = vi.spyOn(document, 'addEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const currentValue = ref(0);
+    const app = createApp({
+      setup() {
+        return () =>
+          h(Slider, {
+            min: 0,
+            max: 100,
+            step: 1,
+            wheelStep: 10,
+            value: currentValue.value,
+            'onUpdate:value': (nextValue: number) => {
+              currentValue.value = nextValue;
+            },
+          });
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+    const input = container.querySelector('input')!;
+
+    input.dispatchEvent(new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY: -1 }));
+    await nextTick();
+    expect(currentValue.value).toBe(10);
+
+    input.dispatchEvent(new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY: -1, altKey: true }));
+    await nextTick();
+    expect(currentValue.value).toBe(11);
+    expect(
+      addDocumentEventListener.mock.calls.filter(([type]) =>
+        ['mousedown', 'mouseup', 'keydown', 'keyup'].includes(type),
+      ),
+    ).toHaveLength(0);
+
+    app.unmount();
+  });
+
   it.each([
     { vertical: false, direction: 'ltr' as const, key: 'ArrowRight', expected: 550 },
     { vertical: false, direction: 'rtl' as const, key: 'ArrowRight', expected: 450 },
@@ -892,6 +933,32 @@ describe('Slider', () => {
     expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointermove')).toHaveLength(2);
     expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointerup')).toHaveLength(1);
     expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointercancel')).toHaveLength(1);
+
+    app.unmount();
+  });
+
+  it('only listens for viewport changes while the value indicator is visible', async () => {
+    const addEventListener = vi.spyOn(window, 'addEventListener');
+    const removeEventListener = vi.spyOn(window, 'removeEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const app = createApp({
+      setup: () => () => h(Slider, { min: 0, max: 10, step: 1, value: 2 }),
+    });
+
+    app.mount(container);
+    await nextTick();
+    const input = container.querySelector('input')!;
+
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'scroll' || type === 'resize')).toHaveLength(0);
+
+    input.dispatchEvent(new Event('pointerenter', { bubbles: true }));
+    await nextTick();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'scroll' || type === 'resize')).toHaveLength(2);
+
+    input.dispatchEvent(new Event('pointerleave', { bubbles: true }));
+    await nextTick();
+    expect(removeEventListener.mock.calls.filter(([type]) => type === 'scroll' || type === 'resize')).toHaveLength(2);
 
     app.unmount();
   });

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, useTemplateRef, watch } from 'vue';
-import { useKeyModifier } from '@vueuse/core';
 import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
 import { Icon } from '@/components/Icon';
 
@@ -193,15 +192,13 @@ const onChange = () => {
   value.value = valueCurrent.value;
 };
 
-const altState = useKeyModifier('Alt');
-
 const onWheel = (event: WheelEvent) => {
   if (disabled) {
     return;
   }
 
   const dir = event.deltaY < 0 ? 1 : -1;
-  const valueStep = altState.value ? step : (wheelStep ?? step);
+  const valueStep = event.altKey ? step : (wheelStep ?? step);
   const nextValue = getAdjacentStepValue(valueCurrent.value, dir, valueStep);
   setValueFromInteraction(nextValue, event.currentTarget as HTMLInputElement);
 };
@@ -236,6 +233,7 @@ let pointerDownPosition: { x: number; y: number } | null = null;
 let sliderResizeObserver: ResizeObserver | null = null;
 let isWindowPointerMoveListenerActive = false;
 let isWindowPointerEndListenerActive = false;
+let isWindowViewportListenerActive = false;
 
 const pointerDragStartDistance = 3;
 
@@ -592,6 +590,18 @@ const onWindowScrollOrResize = () => {
   }
 };
 
+const syncWindowViewportListeners = () => {
+  if (isValueIndicatorVisible.value && !isWindowViewportListenerActive) {
+    window.addEventListener('scroll', onWindowScrollOrResize, { capture: true, passive: true });
+    window.addEventListener('resize', onWindowScrollOrResize);
+    isWindowViewportListenerActive = true;
+  } else if (!isValueIndicatorVisible.value && isWindowViewportListenerActive) {
+    window.removeEventListener('scroll', onWindowScrollOrResize, true);
+    window.removeEventListener('resize', onWindowScrollOrResize);
+    isWindowViewportListenerActive = false;
+  }
+};
+
 const syncSliderInlineSize = () => {
   const slider = sliderRef.value;
   if (!slider) {
@@ -653,6 +663,7 @@ watch(
 watch(
   isValueIndicatorVisible,
   async () => {
+    syncWindowViewportListeners();
     await nextTick();
     syncValueIndicatorPopover();
   },
@@ -678,8 +689,6 @@ watch(
 );
 
 onMounted(() => {
-  window.addEventListener('scroll', onWindowScrollOrResize, { capture: true, passive: true });
-  window.addEventListener('resize', onWindowScrollOrResize);
   refreshValueDisplayedStyleElements();
   syncSliderMeasurements();
 });
@@ -698,8 +707,10 @@ onBeforeUnmount(() => {
     window.removeEventListener('pointerup', stopValueIndicatorDragging);
     window.removeEventListener('pointercancel', stopValueIndicatorDragging);
   }
-  window.removeEventListener('scroll', onWindowScrollOrResize, true);
-  window.removeEventListener('resize', onWindowScrollOrResize);
+  if (isWindowViewportListenerActive) {
+    window.removeEventListener('scroll', onWindowScrollOrResize, true);
+    window.removeEventListener('resize', onWindowScrollOrResize);
+  }
 });
 </script>
 
