@@ -72,12 +72,9 @@ describe('usePressShapeMorph', () => {
             {
               ...attrs,
               href: '/blocked',
-              onClick: [
-                attrs.onClick,
-                () => {
-                  clickCount += 1;
-                },
-              ],
+              onClick: () => {
+                clickCount += 1;
+              },
             },
             'Disabled link',
           );
@@ -137,6 +134,38 @@ describe('usePressShapeMorph', () => {
     await nextTick();
 
     expect(button?.dataset.pressed).toBe('false');
+
+    app.unmount();
+  });
+
+  it('shares delegated DOM listeners across many mounted instances', async () => {
+    const addEventListener = vi.spyOn(document, 'addEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const instances = Array.from({ length: 100 }, () => usePressShapeMorph());
+        return () =>
+          h(
+            'div',
+            instances.map(({ pressShapeMorphAttrs }, index) =>
+              h('button', {
+                ...pressShapeMorphAttrs.value,
+                key: index,
+              }),
+            ),
+          );
+      },
+    });
+
+    app.mount(container);
+    await nextTick();
+
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(1);
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerup')).toHaveLength(1);
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointercancel')).toHaveLength(1);
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'click')).toHaveLength(1);
 
     app.unmount();
   });
