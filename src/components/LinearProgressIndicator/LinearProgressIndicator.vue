@@ -121,6 +121,22 @@ const syncLayout = () => {
   };
 };
 
+const stopLayoutTracking = () => {
+  resizeObserver?.disconnect();
+  resizeObserver = null;
+};
+
+const startLayoutTracking = () => {
+  stopLayoutTracking();
+  if (!isWavy.value) return;
+
+  syncLayout();
+  if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
+    resizeObserver = new ResizeObserver(syncLayout);
+    resizeObserver.observe(rootRef.value);
+  }
+};
+
 const rootStyle = computed(() => {
   const style: Record<string, string> = {
     '--_progress': progressRatioDisplayed.value.toString(),
@@ -171,31 +187,26 @@ const waveSvgStyle = computed(() => {
   };
 });
 
+watch(isWavy, async () => {
+  await nextTick();
+  startLayoutTracking();
+});
+
 watch(
-  [
-    () => props.shape,
-    () => props.thickness,
-    () => props.waveAmplitude,
-    () => props.wavelength,
-    () => props.indeterminateWavelength,
-  ],
+  [() => props.thickness, () => props.waveAmplitude, () => props.wavelength, () => props.indeterminateWavelength],
   async () => {
+    if (!isWavy.value) return;
     await nextTick();
     syncLayout();
   },
 );
 
 onMounted(() => {
-  syncLayout();
-  if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
-    resizeObserver = new ResizeObserver(syncLayout);
-    resizeObserver.observe(rootRef.value);
-  }
+  startLayoutTracking();
 });
 
 onBeforeUnmount(() => {
-  resizeObserver?.disconnect();
-  resizeObserver = null;
+  stopLayoutTracking();
 });
 </script>
 

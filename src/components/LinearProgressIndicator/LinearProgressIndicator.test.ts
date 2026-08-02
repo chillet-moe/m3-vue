@@ -63,7 +63,56 @@ function mockAnimationFrame() {
 describe('LinearProgressIndicator', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     document.body.innerHTML = '';
+  });
+
+  it('skips layout reads and resize observation for the default flat shape', async () => {
+    const ResizeObserver = vi.fn(
+      class {
+        observe = vi.fn();
+        disconnect = vi.fn();
+      },
+    );
+    vi.stubGlobal('ResizeObserver', ResizeObserver);
+    const getComputedStyle = vi.spyOn(window, 'getComputedStyle');
+    const getBoundingClientRect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect');
+
+    const { app } = await mountLinearProgressIndicator({ value: 0.5 });
+    await nextTick();
+
+    expect(ResizeObserver).not.toHaveBeenCalled();
+    expect(getComputedStyle).not.toHaveBeenCalled();
+    expect(getBoundingClientRect).not.toHaveBeenCalled();
+
+    app.unmount();
+  });
+
+  it('tracks layout only while dynamically using the wavy shape', async () => {
+    const disconnect = vi.fn();
+    const observe = vi.fn();
+    const ResizeObserver = vi.fn(
+      class {
+        observe = observe;
+        disconnect = disconnect;
+      },
+    );
+    vi.stubGlobal('ResizeObserver', ResizeObserver);
+    const getBoundingClientRect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect');
+
+    const { app, root, updateProps } = await mountLinearProgressIndicator({ value: 0.5 });
+
+    await updateProps({ shape: 'wavy' });
+    await nextTick();
+    expect(ResizeObserver).toHaveBeenCalledTimes(1);
+    expect(observe).toHaveBeenCalledWith(root);
+    expect(getBoundingClientRect).toHaveBeenCalled();
+
+    await updateProps({ shape: 'flat' });
+    await nextTick();
+    expect(disconnect).toHaveBeenCalled();
+
+    app.unmount();
   });
 
   it('renders a determinate progressbar by default', async () => {
