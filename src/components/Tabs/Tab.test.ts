@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import Tab from './Tab.vue';
 import TabList from './TabList.vue';
@@ -7,6 +7,8 @@ import TabPanel from './TabPanel.vue';
 import Tabs from './Tabs.vue';
 
 afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   document.body.innerHTML = '';
 });
 
@@ -195,5 +197,114 @@ describe('Tab', () => {
     expect(mounted.updates).toEqual(['details']);
 
     mounted.app.unmount();
+  });
+
+  it('keeps one ResizeObserver while tabs update and observes child changes incrementally', async () => {
+    const resizeCallbacks: ResizeObserverCallback[] = [];
+    const mutationCallbacks: MutationCallback[] = [];
+    const observe = vi.fn();
+    const unobserve = vi.fn();
+    const disconnect = vi.fn();
+    const ResizeObserver = vi.fn(
+      class {
+        constructor(callback: ResizeObserverCallback) {
+          resizeCallbacks.push(callback);
+        }
+        observe = observe;
+        unobserve = unobserve;
+        disconnect = disconnect;
+      },
+    );
+    vi.stubGlobal('ResizeObserver', ResizeObserver);
+    vi.stubGlobal(
+      'MutationObserver',
+      class {
+        constructor(callback: MutationCallback) {
+          mutationCallbacks.push(callback);
+        }
+        observe = vi.fn();
+        disconnect = vi.fn();
+      },
+    );
+    const addWindowEventListener = vi.spyOn(window, 'addEventListener');
+    const currentValue = ref('tab-0');
+    const orientation = ref<'horizontal' | 'vertical'>('horizontal');
+    const tabCount = ref(3);
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const app = createApp({
+      render: () =>
+        h(
+          Tabs,
+          {
+            modelValue: currentValue.value,
+            orientation: orientation.value,
+            'onUpdate:modelValue': (value: string | undefined) => {
+              if (value !== undefined) currentValue.value = value;
+            },
+          },
+          {
+            default: () =>
+              h(TabList, null, {
+                default: () =>
+                  Array.from({ length: tabCount.value }, (_, index) =>
+                    h(Tab, { value: `tab-${index}` }, { default: () => `Tab ${index}` }),
+                  ),
+              }),
+          },
+        ),
+    });
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    expect(ResizeObserver).toHaveBeenCalledTimes(1);
+    expect(observe).toHaveBeenCalledTimes(4);
+    expect(addWindowEventListener.mock.calls.filter(([type]) => type === 'resize')).toHaveLength(0);
+    expect(resizeCallbacks).toHaveLength(1);
+
+    currentValue.value = 'tab-2';
+    await nextTick();
+    await nextTick();
+    orientation.value = 'vertical';
+    await nextTick();
+    await nextTick();
+    mutationCallbacks[0]?.([{ type: 'characterData' } as MutationRecord], {} as MutationObserver);
+
+    expect(ResizeObserver).toHaveBeenCalledTimes(1);
+    expect(observe).toHaveBeenCalledTimes(4);
+    expect(disconnect).not.toHaveBeenCalled();
+
+    tabCount.value = 4;
+    await nextTick();
+    mutationCallbacks[0]?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
+
+    expect(ResizeObserver).toHaveBeenCalledTimes(1);
+    expect(observe).toHaveBeenCalledTimes(5);
+    expect(unobserve).not.toHaveBeenCalled();
+
+    tabCount.value = 2;
+    await nextTick();
+    mutationCallbacks[0]?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
+
+    expect(unobserve).toHaveBeenCalledTimes(2);
+
+    app.unmount();
+    expect(disconnect).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses window resize only when ResizeObserver is unavailable', async () => {
+    vi.stubGlobal('ResizeObserver', undefined);
+    const addWindowEventListener = vi.spyOn(window, 'addEventListener');
+    const removeWindowEventListener = vi.spyOn(window, 'removeEventListener');
+    const mounted = mountTabs({});
+    await nextTick();
+    await nextTick();
+
+    expect(addWindowEventListener.mock.calls.filter(([type]) => type === 'resize')).toHaveLength(1);
+
+    mounted.app.unmount();
+    expect(removeWindowEventListener.mock.calls.filter(([type]) => type === 'resize')).toHaveLength(1);
   });
 });

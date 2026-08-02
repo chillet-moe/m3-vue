@@ -22,7 +22,9 @@ const indicatorMinimumSize = 24;
 
 let resizeObserver: ResizeObserver | undefined;
 let mutationObserver: MutationObserver | undefined;
+let observedTabs = new Set<HTMLElement>();
 let animationFrame = 0;
+let usesWindowResizeFallback = false;
 
 const hideIndicator = () => {
   indicatorStyle.value = { '--_tabs-indicator-opacity': '0' };
@@ -75,44 +77,61 @@ const queueIndicatorUpdate = () => {
     return;
   }
 
-  if (typeof window.cancelAnimationFrame === 'function' && animationFrame) {
-    window.cancelAnimationFrame(animationFrame);
-  }
+  if (animationFrame) return;
 
   if (typeof window.requestAnimationFrame === 'function') {
-    animationFrame = window.requestAnimationFrame(updateIndicator);
+    animationFrame = window.requestAnimationFrame(() => {
+      animationFrame = 0;
+      updateIndicator();
+    });
     return;
   }
 
   updateIndicator();
 };
 
-const observeTabGeometry = () => {
-  resizeObserver?.disconnect();
-
+const syncObservedTabGeometry = () => {
   const list = listElement.value;
-  if (!list || typeof ResizeObserver === 'undefined') {
+  if (!list || !resizeObserver) return;
+
+  const nextTabs = new Set(list.querySelectorAll<HTMLElement>('[role="tab"]'));
+
+  for (const tab of observedTabs) {
+    if (!nextTabs.has(tab)) resizeObserver.unobserve(tab);
+  }
+
+  for (const tab of nextTabs) {
+    if (!observedTabs.has(tab)) resizeObserver.observe(tab);
+  }
+
+  observedTabs = nextTabs;
+};
+
+const startTabGeometryObservation = () => {
+  const list = listElement.value;
+  if (!list) return;
+
+  if (typeof ResizeObserver === 'undefined') {
+    window.addEventListener('resize', queueIndicatorUpdate);
+    usesWindowResizeFallback = true;
     return;
   }
 
   resizeObserver = new ResizeObserver(queueIndicatorUpdate);
   resizeObserver.observe(list);
-
-  for (const tab of list.querySelectorAll<HTMLElement>('[role="tab"]')) {
-    resizeObserver.observe(tab);
-  }
+  syncObservedTabGeometry();
 };
 
 onMounted(() => {
   void nextTick(() => {
     const list = listElement.value;
 
-    observeTabGeometry();
+    startTabGeometryObservation();
     updateIndicator();
 
     if (list && typeof MutationObserver !== 'undefined') {
-      mutationObserver = new MutationObserver(() => {
-        observeTabGeometry();
+      mutationObserver = new MutationObserver((records) => {
+        if (records.some((record) => record.type === 'childList')) syncObservedTabGeometry();
         queueIndicatorUpdate();
       });
       mutationObserver.observe(list, {
@@ -122,15 +141,12 @@ onMounted(() => {
       });
     }
   });
-
-  window.addEventListener('resize', queueIndicatorUpdate);
 });
 
 watch(
   () => [tabs?.value.value, tabs?.orientation.value],
   () => {
     void nextTick(() => {
-      observeTabGeometry();
       queueIndicatorUpdate();
     });
   },
@@ -139,7 +155,7 @@ watch(
 
 onBeforeUnmount(() => {
   if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', queueIndicatorUpdate);
+    if (usesWindowResizeFallback) window.removeEventListener('resize', queueIndicatorUpdate);
 
     if (typeof window.cancelAnimationFrame === 'function' && animationFrame) {
       window.cancelAnimationFrame(animationFrame);
@@ -148,6 +164,7 @@ onBeforeUnmount(() => {
 
   resizeObserver?.disconnect();
   mutationObserver?.disconnect();
+  observedTabs.clear();
 });
 </script>
 
