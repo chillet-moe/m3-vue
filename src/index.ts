@@ -33,6 +33,8 @@ export type {
   UseAccordionOptions,
   UseAccordionReturn,
 } from './composables/useAccordion';
+export { useDelegatedTooltip } from './composables/useDelegatedTooltip';
+export type { DelegatedTooltipSlot, DelegatedTooltipSlotState } from './composables/useDelegatedTooltip';
 
 // Directives
 export * from './directives';

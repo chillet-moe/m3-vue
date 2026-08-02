@@ -24,15 +24,17 @@ when it owns a browser resource whose natural lifetime and consumer set span mul
 
 ## Runtime Inventory
 
-| Area                     | Owner                                                            | Lifetime and responsibility                                                                                                                |
-| ------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Action title Tooltip     | `src/internal/actionTitleTooltip.ts` and `sharedPlainTooltip.ts` | One lazy plain Tooltip per document; only the active trigger owns an anchor and tooltip setup state.                                       |
-| Plain `v-tooltip`        | `src/internal/sharedPlainTooltip.ts`                             | Generated, plain, non-interactive tooltips share delegated events and lazy DOM. Interactive, rich, or authored targets remain independent. |
-| Press shape morph        | `src/internal/pressShapeMorph.ts`                                | One delegated listener set per document; window pointer-end listeners exist only during an active press.                                   |
-| Manual outside dismissal | `src/internal/outsidePointerDown.ts`                             | One capture listener per document while at least one manual popover is open.                                                               |
-| Shared animation frames  | `src/internal/sharedAnimationFrame.ts`                           | One browser rAF per document for all active registered animation controllers.                                                              |
-| Loading animation        | `src/components/LoadingIndicator/loadingIndicatorAnimation.ts`   | One reduced-motion query and one shape calculation per simultaneous-start cohort and frame.                                                |
-| Tab geometry             | `src/components/Tabs/TabList.vue`                                | One persistent ResizeObserver and MutationObserver per TabList; target membership changes incrementally.                                   |
+| Area                     | Owner                                                            | Lifetime and responsibility                                                                                                                              |
+| ------------------------ | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Action title Tooltip     | `src/internal/actionTitleTooltip.ts` and `sharedPlainTooltip.ts` | One lazy plain Tooltip per document; only the active trigger owns an anchor and tooltip setup state.                                                     |
+| Plain `v-tooltip`        | `src/internal/sharedPlainTooltip.ts`                             | Generated, plain, non-interactive tooltips share delegated events and lazy DOM. Interactive, rich, or authored targets remain independent.               |
+| Delegated rich Tooltip   | `src/composables/useDelegatedTooltip.ts`                         | High-cardinality non-interactive rich content uses a bounded Vue slot pool and container event delegation; interactive rich surfaces remain independent. |
+| Fallback viewport        | `src/internal/sharedViewportChange.ts`                           | Non-anchor Tooltip instances share one document scroll/resize listener pair and one pending rAF.                                                         |
+| Press shape morph        | `src/internal/pressShapeMorph.ts`                                | One delegated listener set per document; window pointer-end listeners exist only during an active press.                                                 |
+| Manual outside dismissal | `src/internal/outsidePointerDown.ts`                             | One capture listener per document while at least one manual popover is open.                                                                             |
+| Shared animation frames  | `src/internal/sharedAnimationFrame.ts`                           | One browser rAF per document for all active registered animation controllers.                                                                            |
+| Loading animation        | `src/components/LoadingIndicator/loadingIndicatorAnimation.ts`   | One reduced-motion query and one shape calculation per simultaneous-start cohort and frame.                                                              |
+| Tab geometry             | `src/components/Tabs/TabList.vue`                                | One persistent ResizeObserver and MutationObserver per TabList; target membership changes incrementally.                                                 |
 
 All runtimes must delete their per-document entry when their last registration is cleaned up. Tests should cover the
 first registration, multiple consumers, active/inactive transitions, last cleanup, and re-registration after cleanup.
@@ -75,6 +77,15 @@ the caller.
 
 Fallback scroll and resize positioning listeners are installed only while a Tooltip is open. CSS anchor positioning
 does not need those listeners.
+
+For high-cardinality dynamic content that needs Vue markup but does not accept focus or pointer interaction inside the
+surface, use `useDelegatedTooltip`. It owns a bounded slot pool and delegates pointer/focus handling from the list
+container. Do not use it for rich surfaces containing buttons, inputs, or other focusable content: those surfaces keep
+independent `v-tooltip` instances so trigger and surface lifetimes remain coupled.
+
+When CSS anchor positioning is unavailable, open Tooltip instances register with a document-scoped viewport runtime.
+The runtime coalesces scroll and resize events into one animation frame and removes its listeners after the last open
+instance closes.
 
 ## 3. Slider Global Listeners
 
@@ -167,6 +178,23 @@ unmount:
 
 The isolated ten-batch Tooltip memory benchmark leaves zero Tooltip elements and anchors after cleanup.
 
+The delegated rich Tooltip benchmark is documented in
+[`benchmarks/delegated-tooltip/README.md`](../benchmarks/delegated-tooltip/README.md), with recorded results in
+[`benchmarks/delegated-tooltip/RESULTS.md`](../benchmarks/delegated-tooltip/RESULTS.md). For 1,000 non-interactive
+dynamic triggers and three keyed-list recycle rounds, a five-load headless Chrome sample produced:
+
+| Metric                           | Bounded delegated slot pool | Per-instance target Tooltip |
+| -------------------------------- | --------------------------: | --------------------------: |
+| Mount                            |                      5.8 ms |                     77.0 ms |
+| Three recycle rounds             |                      8.7 ms |                    257.0 ms |
+| Unmount                          |                      0.7 ms |                     26.8 ms |
+| Listener registrations           |                           7 |                      76,000 |
+| Tooltip elements after mount     |                           3 |                       1,000 |
+| Anchored triggers after mount    |                           0 |                       1,000 |
+| `aria-describedby` after recycle |                           0 |                       1,000 |
+
+The timing sample is directional; the deterministic DOM and listener counts are the primary regression signals.
+
 Instrumentation used during progress investigation showed the following deterministic scaling before the shared frame
 runtime:
 
@@ -192,7 +220,9 @@ Run focused behavioral and lifecycle tests while changing these paths:
 ```sh
 vp test run \
   src/internal/actionTitleTooltip.test.ts \
+  src/internal/sharedViewportChange.test.ts \
   src/internal/sharedAnimationFrame.test.ts \
+  src/composables/useDelegatedTooltip.test.ts \
   src/composables/usePressShapeMorph.test.ts \
   src/directives/Tooltip/vTooltip.test.ts \
   src/components/LoadingIndicator/LoadingIndicator.test.ts \

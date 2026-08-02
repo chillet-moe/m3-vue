@@ -26,6 +26,7 @@ export function setupTooltip(
   binding: TooltipBindingValue,
   options: {
     anchor?: HTMLElement;
+    anchorName?: string;
     manual?: boolean;
     triggerAria?: TooltipTriggerAriaMode;
   } = {},
@@ -37,7 +38,7 @@ export function setupTooltip(
   const anchor = options.anchor ?? trigger;
   const canPopover = supportsPopover(tip);
   const canAnchor = supportsAnchorPositioning();
-  const anchorName = `--vtt-anchor-${tip.id}`;
+  const anchorName = options.anchorName ?? `--vtt-anchor-${tip.id}`;
   const releaseAnchorName = acquireAnchorName(anchor, anchorName);
   const animMs = opts.animDuration;
   type DeferredOffsetHandle = { kind: 'idle'; id: number } | { kind: 'timeout'; id: number } | null;

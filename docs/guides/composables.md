@@ -12,14 +12,15 @@ M3 Vue 将复杂组件的**交互逻辑**与**视觉呈现**分离。每个复�
 
 ## 可用的 Composables
 
-| Composable           | 用途                                  | 对应组件                                           |
-| -------------------- | ------------------------------------- | -------------------------------------------------- |
-| `useTabs`            | 标签页切换、键盘导航、ARIA            | `Tabs`, `Tab`, `TabList`, `TabPanel`               |
-| `useAccordion`       | 折叠区状态、键盘导航、ARIA            | 无，Accordion 只提供 headless 逻辑                 |
-| `useMenu`            | 菜单打开/关闭、键盘导航、子菜单、选择 | `Menu`                                             |
-| `useSelect`          | 选项过滤、值管理、菜单控制            | `Select`, `Combobox`                               |
-| `usePressShapeMorph` | 按压变形属性、禁用拦截和释放状态管理  | `Button`, `IconButton`, `Chip`, `Card`, `ListItem` |
-| `usePressedState`    | 低层按下状态管理                      | `usePressShapeMorph`                               |
+| Composable            | 用途                                      | 对应组件                                           |
+| --------------------- | ----------------------------------------- | -------------------------------------------------- |
+| `useTabs`             | 标签页切换、键盘导航、ARIA                | `Tabs`, `Tab`, `TabList`, `TabPanel`               |
+| `useAccordion`        | 折叠区状态、键盘导航、ARIA                | 无，Accordion 只提供 headless 逻辑                 |
+| `useMenu`             | 菜单打开/关闭、键盘导航、子菜单、选择     | `Menu`                                             |
+| `useSelect`           | 选项过滤、值管理、菜单控制                | `Select`, `Combobox`                               |
+| `usePressShapeMorph`  | 按压变形属性、禁用拦截和释放状态管理      | `Button`, `IconButton`, `Chip`, `Card`, `ListItem` |
+| `usePressedState`     | 低层按下状态管理                          | `usePressShapeMorph`                               |
+| `useDelegatedTooltip` | 高基数非交互 Tooltip 的事件代理和 slot 池 | 键盘、候选键等动态列表                             |
 
 ## 使用方式
 
@@ -85,6 +86,44 @@ const { pressShapeMorphAttrs } = usePressShapeMorph();
   <button v-bind="pressShapeMorphAttrs">Action</button>
 </template>
 ```
+
+### 高基数 Tooltip 的事件代理
+
+当一个列表包含大量动态、非交互 Tooltip 时，不要为每个条目同时创建 Tooltip DOM 和完整的 `v-tooltip`
+监听器。`useDelegatedTooltip` 将 hover、focus 和 Escape 事件绑定到容器，并通过有限的 slot 池复用 Tooltip
+表面。slot 的内容仍由 Vue 渲染，因此可以保留多行文本、`kbd` 等富标记；交互式富浮层仍应使用独立的
+`v-tooltip` 实例。
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { Tooltip, useDelegatedTooltip } from '@chillet/m3-vue';
+
+const container = ref<HTMLElement>();
+const { tooltipSlots, refreshTooltip } = useDelegatedTooltip(
+  container,
+  'keyboard-tooltip',
+  (anchor) => anchor.dataset.tooltip ?? null,
+  (target) => (target instanceof Element ? target.closest<HTMLElement>('[data-tooltip]') : null),
+  3,
+);
+</script>
+
+<template>
+  <div ref="container">
+    <button v-for="item in items" :key="item.id" :data-tooltip="item.tooltip">
+      {{ item.label }}
+    </button>
+
+    <Tooltip v-for="slot in tooltipSlots" :id="slot.id" :key="slot.id" popover="hint">
+      <span v-for="line in slot.tooltip?.lines ?? []" :key="line">{{ line }}</span>
+    </Tooltip>
+  </div>
+</template>
+```
+
+`tooltipId` 应在同一个 document 内保持唯一。当列表数据改变时，调用 `refreshTooltip()` 让当前 slot 重新解析
+内容；组件卸载时 composable 会释放 anchor、slot 控制器和容器监听器。
 
 ## API 模式
 
