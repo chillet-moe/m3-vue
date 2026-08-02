@@ -1,10 +1,13 @@
 import type { Directive } from 'vue';
-import { hideMenuElement, resolveMenuTarget, shouldCloseOnOutsideClick, showMenuElement } from './helpers';
+import { hideMenuElement, needsCustomOutsideClick, resolveMenuTarget, showMenuElement } from './helpers';
 import type { MenuTargetBinding } from './helpers';
+import { registerOutsidePointerDown } from '@/internal/outsidePointerDown';
 
 type CleanupRecord = {
   onContextMenu: (event: MouseEvent) => void;
-  onDocPointerDown?: (event: PointerEvent) => void;
+  cleanupOutsidePointerDown?: () => void;
+  menu: HTMLElement;
+  onToggle?: () => void;
 };
 
 const cleanupMap = new WeakMap<HTMLElement, CleanupRecord>();
@@ -32,27 +35,39 @@ const vContextMenu: Directive<HTMLElement, MenuTargetBinding> = {
 
     host.addEventListener('contextmenu', onContextMenu);
 
-    let onDocPointerDown: ((event: PointerEvent) => void) | undefined;
+    let cleanupOutsidePointerDown: (() => void) | undefined;
+    let onToggle: (() => void) | undefined;
 
-    if (shouldCloseOnOutsideClick(binding)) {
-      onDocPointerDown = (event: PointerEvent) => {
-        const target = event.target as Node | null;
-
-        if (!target) {
+    if (needsCustomOutsideClick(binding, menu)) {
+      const syncOutsidePointerDown = () => {
+        if (menu.matches(':popover-open')) {
+          cleanupOutsidePointerDown ??= registerOutsidePointerDown(host.ownerDocument, {
+            contains: (target) => host.contains(target) || menu.contains(target),
+            onOutside: () => hideMenuElement(menu),
+          });
           return;
         }
 
-        if (host.contains(target) || menu.contains(target)) {
-          return;
-        }
-
-        hideMenuElement(menu);
+        cleanupOutsidePointerDown?.();
+        cleanupOutsidePointerDown = undefined;
       };
 
-      document.addEventListener('pointerdown', onDocPointerDown, true);
+      onToggle = syncOutsidePointerDown;
+      menu.addEventListener('toggle', onToggle);
+      syncOutsidePointerDown();
     }
 
-    cleanupMap.set(host, { onContextMenu, onDocPointerDown });
+    cleanupMap.set(host, {
+      menu,
+      onContextMenu,
+      cleanupOutsidePointerDown: onToggle
+        ? () => {
+            cleanupOutsidePointerDown?.();
+            cleanupOutsidePointerDown = undefined;
+          }
+        : undefined,
+      onToggle,
+    });
   },
   unmounted(host) {
     const record = cleanupMap.get(host);
@@ -63,9 +78,8 @@ const vContextMenu: Directive<HTMLElement, MenuTargetBinding> = {
 
     host.removeEventListener('contextmenu', record.onContextMenu);
 
-    if (record.onDocPointerDown) {
-      document.removeEventListener('pointerdown', record.onDocPointerDown, true);
-    }
+    record.cleanupOutsidePointerDown?.();
+    if (record.onToggle) record.menu.removeEventListener('toggle', record.onToggle);
 
     cleanupMap.delete(host);
   },

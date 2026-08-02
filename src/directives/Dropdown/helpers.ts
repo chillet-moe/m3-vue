@@ -39,6 +39,13 @@ export function shouldCloseOnOutsideClick(binding: DirectiveBinding<DropdownTarg
     : true;
 }
 
+export function needsCustomOutsideClick(binding: DirectiveBinding<DropdownTargetBinding>, dropdown: HTMLElement) {
+  if (!shouldCloseOnOutsideClick(binding)) return false;
+
+  const popoverType = dropdown.getAttribute('popover');
+  return popoverType !== 'auto' && popoverType !== 'hint';
+}
+
 export function resolveDropdownAnchor(binding: DirectiveBinding<DropdownTargetBinding>, trigger: HTMLElement) {
   const value = binding.value;
 

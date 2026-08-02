@@ -1,5 +1,6 @@
 export {
   hideDropdownElement as hideMenuElement,
+  needsCustomOutsideClick,
   resolveDropdownTarget as resolveMenuTarget,
   shouldCloseOnOutsideClick,
   showDropdownElement as showMenuElement,

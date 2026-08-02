@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref, withDirectives } from 'vue';
 import Select, { type SelectModelValue, type SelectOption } from '@/components/Select/Select.vue';
-import { vDropdown } from '@/directives/Menu';
+import { vContextMenu, vDropdown } from '@/directives/Menu';
 import Menu, { type MenuContentItem, type MenuModelValue } from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
 import MenuGap from './MenuGap.vue';
@@ -1261,6 +1261,37 @@ describe('Menu', () => {
 
       app.unmount();
     }
+  });
+
+  it('uses native light dismiss for an auto context menu without a document listener', async () => {
+    installPopoverPolyfill();
+    const addEventListener = vi.spyOn(document, 'addEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h('div', [
+        withDirectives(h('div', { id: 'context-host' }, 'Context target'), [[vContextMenu, '#context-menu']]),
+        h(Menu, { id: 'context-menu' }),
+      ]),
+    );
+
+    app.mount(container);
+    await nextTick();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(0);
+
+    container
+      .querySelector('#context-host')
+      ?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: 24, clientY: 32 }));
+    await nextTick();
+
+    const menu = container.querySelector<HTMLElement>('#context-menu');
+    expect(isPopoverOpen(menu)).toBe(true);
+    expect(menu?.style.left).toBe('24px');
+    expect(menu?.style.top).toBe('32px');
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(0);
+
+    app.unmount();
   });
 
   it('restores focus to the dropdown trigger when the menu closes from keyboard or keyboard selection, but not mouse selection', async () => {

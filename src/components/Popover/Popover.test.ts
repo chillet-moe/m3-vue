@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { computed, createApp, h, nextTick, ref, withDirectives } from 'vue';
 import { vDropdown } from '@/directives/Menu';
 import Popover from './Popover.vue';
@@ -158,6 +158,75 @@ describe('Popover', () => {
     const popover = document.body.querySelector<HTMLElement>('.m3-popover');
     expect(isPopoverOpen(popover)).toBe(true);
     expect(popover?.dataset.popoverSourceId).toBe('trigger');
+
+    app.unmount();
+  });
+
+  it('uses native light dismiss for auto popovers without a document listener', async () => {
+    installPopoverPolyfill();
+    const addEventListener = vi.spyOn(document, 'addEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const popover = ref<{ popoverEl?: HTMLDivElement } | null>(null);
+        const dropdownBinding = computed(() => popover.value?.popoverEl ?? null);
+        return () =>
+          h('div', [
+            withDirectives(h('button', { id: 'auto-trigger' }, 'Open'), [[vDropdown, dropdownBinding.value]]),
+            h(Popover, { ref: popover }, () => 'Auto popover'),
+          ]);
+      },
+    });
+
+    app.mount(container);
+    await flushPopover();
+    await flushPopover();
+
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(0);
+    container.querySelector<HTMLButtonElement>('#auto-trigger')?.click();
+    await flushPopover();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(0);
+
+    app.unmount();
+  });
+
+  it('shares a document listener only while manual dropdowns are open', async () => {
+    installPopoverPolyfill();
+    const addEventListener = vi.spyOn(document, 'addEventListener');
+    const removeEventListener = vi.spyOn(document, 'removeEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp({
+      setup() {
+        const first = ref<{ popoverEl?: HTMLDivElement } | null>(null);
+        const second = ref<{ popoverEl?: HTMLDivElement } | null>(null);
+        return () =>
+          h('div', [
+            withDirectives(h('button', { id: 'first-trigger' }, 'First'), [[vDropdown, first.value?.popoverEl]]),
+            withDirectives(h('button', { id: 'second-trigger' }, 'Second'), [[vDropdown, second.value?.popoverEl]]),
+            h(Popover, { ref: first, popover: 'manual' }, () => 'First popover'),
+            h(Popover, { ref: second, popover: 'manual' }, () => 'Second popover'),
+          ]);
+      },
+    });
+
+    app.mount(container);
+    await flushPopover();
+    await flushPopover();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(0);
+
+    container.querySelector<HTMLButtonElement>('#first-trigger')?.click();
+    container.querySelector<HTMLButtonElement>('#second-trigger')?.click();
+    await flushPopover();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(1);
+
+    document.body.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
+    await flushPopover();
+    expect(Array.from(document.body.querySelectorAll<HTMLElement>('.m3-popover')).some(isPopoverOpen)).toBe(false);
+    expect(removeEventListener.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(1);
 
     app.unmount();
   });

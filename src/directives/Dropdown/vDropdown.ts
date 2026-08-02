@@ -1,11 +1,12 @@
 import type { Directive, DirectiveBinding } from 'vue';
 import './vDropdown.css';
 import { acquireAnchorName } from '@/internal/anchorName';
+import { registerOutsidePointerDown } from '@/internal/outsidePointerDown';
 import {
   hideDropdownElement,
   resolveDropdownAnchor,
   resolveDropdownTarget,
-  shouldCloseOnOutsideClick,
+  needsCustomOutsideClick,
   showDropdownElement,
   toggleDropdownElement,
 } from './helpers';
@@ -17,7 +18,8 @@ type CleanupRecord = {
   onDropdownClick: (event: MouseEvent) => void;
   onDropdownKeydown: (event: KeyboardEvent) => void;
   onKeydown: (event: KeyboardEvent) => void;
-  onDocPointerDown?: (event: PointerEvent) => void;
+  cleanupOutsidePointerDown?: () => void;
+  onToggle?: () => void;
   previousDropdownPositionAnchor: string;
   releaseAnchorName: () => void;
   source: HTMLElement;
@@ -38,9 +40,8 @@ function teardownDropdown(trigger: HTMLElement) {
   record.dropdown.removeEventListener('click', record.onDropdownClick);
   record.dropdown.removeEventListener('keydown', record.onDropdownKeydown);
 
-  if (record.onDocPointerDown) {
-    document.removeEventListener('pointerdown', record.onDocPointerDown, true);
-  }
+  record.cleanupOutsidePointerDown?.();
+  if (record.onToggle) record.dropdown.removeEventListener('toggle', record.onToggle);
 
   record.releaseAnchorName();
 
@@ -68,7 +69,7 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
     existingRecord &&
     existingRecord.dropdown === dropdown &&
     existingRecord.source === anchor &&
-    shouldCloseOnOutsideClick(binding) === (existingRecord.onDocPointerDown !== undefined)
+    needsCustomOutsideClick(binding, dropdown) === (existingRecord.onToggle !== undefined)
   ) {
     return;
   }
@@ -137,24 +138,26 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
   dropdown.addEventListener('click', onDropdownClick);
   dropdown.addEventListener('keydown', onDropdownKeydown);
 
-  let onDocPointerDown: ((event: PointerEvent) => void) | undefined;
+  let cleanupOutsidePointerDown: (() => void) | undefined;
+  let onToggle: (() => void) | undefined;
 
-  if (shouldCloseOnOutsideClick(binding)) {
-    onDocPointerDown = (event: PointerEvent) => {
-      const target = event.target as Node | null;
-
-      if (!target) {
+  if (needsCustomOutsideClick(binding, dropdown)) {
+    const syncOutsidePointerDown = () => {
+      if (dropdown.matches(':popover-open')) {
+        cleanupOutsidePointerDown ??= registerOutsidePointerDown(trigger.ownerDocument, {
+          contains: (target) => trigger.contains(target) || dropdown.contains(target),
+          onOutside: () => hideDropdownElement(dropdown),
+        });
         return;
       }
 
-      if (trigger.contains(target) || dropdown.contains(target)) {
-        return;
-      }
-
-      hideDropdownElement(dropdown);
+      cleanupOutsidePointerDown?.();
+      cleanupOutsidePointerDown = undefined;
     };
 
-    document.addEventListener('pointerdown', onDocPointerDown, true);
+    onToggle = syncOutsidePointerDown;
+    dropdown.addEventListener('toggle', onToggle);
+    syncOutsidePointerDown();
   }
 
   cleanupMap.set(trigger, {
@@ -163,7 +166,13 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
     onKeydown,
     onDropdownClick,
     onDropdownKeydown,
-    onDocPointerDown,
+    cleanupOutsidePointerDown: onToggle
+      ? () => {
+          cleanupOutsidePointerDown?.();
+          cleanupOutsidePointerDown = undefined;
+        }
+      : undefined,
+    onToggle,
     previousDropdownPositionAnchor,
     releaseAnchorName,
     source: anchor,
