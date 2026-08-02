@@ -60,6 +60,7 @@ const menuRef = useTemplateRef<HTMLDivElement>('menu');
 const modelValue = ref<MenuModelValue>();
 const restoreFocusAfterClose = ref(false);
 const effectiveAlignment = ref<FloatingActionButtonMenuProps['alignment']>(props.alignment);
+let hasOpenListeners = false;
 
 const disabled = computed(() => props.disabled);
 const { pressShapeMorphAttrs: triggerPressShapeMorphAttrs } = usePressShapeMorph({ disabled });
@@ -279,10 +280,27 @@ function handleDocumentPointerDown(event: PointerEvent) {
   hide();
 }
 
+function syncOpenListeners(nextOpen: boolean) {
+  if (typeof window === 'undefined' || nextOpen === hasOpenListeners) return;
+
+  if (nextOpen) {
+    window.addEventListener('resize', updatePopoverPosition);
+    window.addEventListener('scroll', updatePopoverPosition, true);
+    document.addEventListener('pointerdown', handleDocumentPointerDown, true);
+  } else {
+    window.removeEventListener('resize', updatePopoverPosition);
+    window.removeEventListener('scroll', updatePopoverPosition, true);
+    document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
+  }
+
+  hasOpenListeners = nextOpen;
+}
+
 watch(
   [menuRef, open],
   ([menu, nextOpen]) => {
     if (!menu) return;
+    syncOpenListeners(nextOpen);
 
     if (nextOpen) {
       showPopover();
@@ -294,18 +312,8 @@ watch(
   { immediate: true, flush: 'post' },
 );
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('resize', updatePopoverPosition);
-  window.addEventListener('scroll', updatePopoverPosition, true);
-  document.addEventListener('pointerdown', handleDocumentPointerDown, true);
-}
-
 onUnmounted(() => {
-  if (typeof window === 'undefined') return;
-
-  window.removeEventListener('resize', updatePopoverPosition);
-  window.removeEventListener('scroll', updatePopoverPosition, true);
-  document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
+  syncOpenListeners(false);
 });
 
 defineExpose({

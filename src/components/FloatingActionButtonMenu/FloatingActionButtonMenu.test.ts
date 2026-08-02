@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import FloatingActionButtonMenu from './FloatingActionButtonMenu.vue';
 import FloatingActionButtonMenuItem from './FloatingActionButtonMenuItem.vue';
@@ -165,6 +165,38 @@ describe('FloatingActionButtonMenu', () => {
 
     expect(root?.dataset.open).toBe('false');
     expect(isPopoverOpen(menu)).toBe(false);
+
+    app.unmount();
+  });
+
+  it('only installs dismissal and viewport listeners while open', async () => {
+    installPopoverPolyfill();
+    const windowAdd = vi.spyOn(window, 'addEventListener');
+    const windowRemove = vi.spyOn(window, 'removeEventListener');
+    const documentAdd = vi.spyOn(document, 'addEventListener');
+    const documentRemove = vi.spyOn(document, 'removeEventListener');
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() => h(FloatingActionButtonMenu));
+    app.mount(container);
+    await nextTick();
+    const trigger = container.querySelector<HTMLButtonElement>('.m3-fab-menu-trigger')!;
+    const initialPointerDownListeners = documentAdd.mock.calls.filter(([type]) => type === 'pointerdown').length;
+
+    expect(windowAdd.mock.calls.filter(([type]) => type === 'resize' || type === 'scroll')).toHaveLength(0);
+
+    trigger.click();
+    await flushPopover();
+    expect(windowAdd.mock.calls.filter(([type]) => type === 'resize' || type === 'scroll')).toHaveLength(2);
+    expect(documentAdd.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(
+      initialPointerDownListeners + 1,
+    );
+
+    trigger.click();
+    await flushPopover();
+    expect(windowRemove.mock.calls.filter(([type]) => type === 'resize' || type === 'scroll')).toHaveLength(2);
+    expect(documentRemove.mock.calls.filter(([type]) => type === 'pointerdown')).toHaveLength(1);
 
     app.unmount();
   });
