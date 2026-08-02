@@ -2,11 +2,28 @@ import type { TooltipDirective } from './types';
 import '../../components/Tooltip/Tooltip.css';
 import './vTooltip.css';
 import { setupTooltip } from './setup';
+import { normalizeBinding as normalizeTooltipBinding } from './helpers';
+import { registerSharedPlainTooltip } from '@/internal/sharedPlainTooltip';
+import type { SharedPlainTooltipState } from '@/internal/sharedPlainTooltip';
 
 const STATE = Symbol('vtt_state');
 type TooltipStateEntry = {
   owner: unknown;
-  state: ReturnType<typeof setupTooltip>;
+  shared: boolean;
+  state: ReturnType<typeof setupTooltip> | SharedPlainTooltipState;
+};
+
+const usesSharedPlainTooltip = (value: Exclude<Parameters<typeof setupTooltip>[1], undefined>) => {
+  const options = normalizeTooltipBinding(value);
+  return !options.target && !options.interactive && options.variant === 'plain';
+};
+
+const createState = (el: HTMLElement, value: Exclude<Parameters<typeof setupTooltip>[1], undefined>) => {
+  const shared = usesSharedPlainTooltip(value);
+  return {
+    shared,
+    state: shared ? registerSharedPlainTooltip(el, value) : setupTooltip(el, value),
+  };
 };
 
 function getEntry(el: HTMLElement) {
@@ -36,10 +53,7 @@ export { normalizeBinding } from './helpers';
 export default {
   mounted(el, binding) {
     if (binding.value === undefined) return;
-    setEntry(el, {
-      owner: binding.instance,
-      state: setupTooltip(el, binding.value),
-    });
+    setEntry(el, { owner: binding.instance, ...createState(el, binding.value) });
   },
   updated(el, binding) {
     const entry = getEntry(el);
@@ -52,10 +66,7 @@ export default {
     }
 
     if (!entry) {
-      setEntry(el, {
-        owner: binding.instance,
-        state: setupTooltip(el, binding.value),
-      });
+      setEntry(el, { owner: binding.instance, ...createState(el, binding.value) });
       return;
     }
 
@@ -64,6 +75,12 @@ export default {
     }
 
     if (binding.value === binding.oldValue) {
+      return;
+    }
+
+    if (entry.shared !== usesSharedPlainTooltip(binding.value)) {
+      entry.state.cleanup();
+      setEntry(el, { owner: binding.instance, ...createState(el, binding.value) });
       return;
     }
 

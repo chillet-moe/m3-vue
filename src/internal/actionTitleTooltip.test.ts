@@ -105,7 +105,7 @@ describe('shared action title tooltip runtime', () => {
     cleanup();
   });
 
-  it('updates only the active tooltip and releases it when a recycled trigger unregisters', async () => {
+  it('updates only the active tooltip and releases it when a recycled trigger unregisters', () => {
     const trigger = createTrigger('Before');
     const cleanup = registerActionTitleTooltip(trigger);
 
@@ -114,7 +114,7 @@ describe('shared action title tooltip runtime', () => {
     const tip = document.body.querySelector<HTMLElement>('.m3-tooltip');
 
     trigger.setAttribute(actionTitleTooltipAttribute, 'After');
-    await Promise.resolve();
+    cleanup.update('After');
     expect(tip?.textContent).toBe('After');
 
     trigger.remove();

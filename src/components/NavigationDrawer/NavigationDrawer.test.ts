@@ -173,19 +173,22 @@ describe('NavigationDrawer', () => {
     const home = container.querySelector<HTMLElement>('[data-item-value="home"]');
     const settings = container.querySelector<HTMLElement>('[data-item-value="settings"]');
     const sectionTrigger = container.querySelector<HTMLButtonElement>('[data-part="trigger"]');
-    const tooltips = Array.from(document.body.querySelectorAll<HTMLElement>('.m3-tooltip'));
-    const projectsTooltip = tooltips.find((tooltip) => tooltip.textContent === 'Projects');
-
     expect(root?.dataset.iconOnly).toBe('true');
     expect(home?.getAttribute('aria-label')).toBe('Home');
     expect(settings?.getAttribute('aria-label')).toBe('Settings');
     expect(sectionTrigger?.getAttribute('aria-label')).toBe('Projects');
-    expect(tooltips.map((tooltip) => tooltip.textContent)).toEqual(
-      expect.arrayContaining(['Home', 'Projects', 'Settings']),
-    );
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
+
+    sectionTrigger?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    const projectsTooltip = document.body.querySelector<HTMLElement>('.m3-tooltip');
+    expect(projectsTooltip?.textContent).toBe('Projects');
+    expect(sectionTrigger?.getAttribute('aria-describedby')).toBe(projectsTooltip?.id);
+
+    home?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(document.body.querySelectorAll('.m3-tooltip')).toHaveLength(1);
+    expect(projectsTooltip?.textContent).toBe('Home');
     expect(sectionTrigger?.getAttribute('aria-controls')).toMatch(/^navigation-drawer-section-content-/);
     expect(sectionTrigger?.getAttribute('aria-expanded')).toBe('true');
-    expect(sectionTrigger?.getAttribute('aria-describedby')).toBe(projectsTooltip?.id);
     expect(defaultSlotIconOnlyValues).toContain(true);
 
     settings?.dispatchEvent(new MouseEvent('click', { bubbles: true }));

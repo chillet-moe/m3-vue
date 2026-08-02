@@ -8,7 +8,7 @@ import { actionTitleTooltipAttribute, registerActionTitleTooltip } from '@/inter
 export function useActionTitleTooltip(options: { ariaLabelFallback?: boolean } = {}) {
   const attrs = useAttrs();
   const rootRef = ref<HTMLElement | null>(null);
-  let unregister: (() => void) | undefined;
+  let registration: ReturnType<typeof registerActionTitleTooltip> | undefined;
 
   const resolveTitleTooltip = () => {
     const value = attrs.title;
@@ -42,14 +42,15 @@ export function useActionTitleTooltip(options: { ariaLabelFallback?: boolean } =
   const rootAttrs = shallowRef(resolveRootAttrs());
 
   onMounted(() => {
-    if (rootRef.value) unregister = registerActionTitleTooltip(rootRef.value);
+    if (rootRef.value) registration = registerActionTitleTooltip(rootRef.value);
   });
   onBeforeUpdate(() => {
     rootAttrs.value = resolveRootAttrs();
+    registration?.update(resolveTitleTooltip()?.content ?? '');
   });
   onBeforeUnmount(() => {
-    unregister?.();
-    unregister = undefined;
+    registration?.();
+    registration = undefined;
   });
 
   return {

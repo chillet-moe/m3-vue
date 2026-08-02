@@ -150,12 +150,30 @@ export function setupTooltip(
   let suppressClickUntil = 0;
   let isOpen = false;
   let internalClosePending = false;
+  let fallbackPositionAbortController: AbortController | null = null;
+
+  const removeFallbackPositionListeners = () => {
+    fallbackPositionAbortController?.abort();
+    fallbackPositionAbortController = null;
+  };
+
+  const addFallbackPositionListeners = () => {
+    if (canAnchor || fallbackPositionAbortController) return;
+
+    fallbackPositionAbortController = new AbortController();
+    window.addEventListener('scroll', onScrollOrResize, {
+      passive: true,
+      signal: fallbackPositionAbortController.signal,
+    });
+    window.addEventListener('resize', onScrollOrResize, { signal: fallbackPositionAbortController.signal });
+  };
 
   const syncClosedPopoverState = () => {
     if (isOpen) {
       isOpen = false;
     }
 
+    removeFallbackPositionListeners();
     setExpanded(false);
     scheduleDeferredOffset();
   };
@@ -229,6 +247,7 @@ export function setupTooltip(
 
     isOpen = true;
     setExpanded(true);
+    addFallbackPositionListeners();
 
     if (canPopover) {
       tip.style.visibility = 'hidden';
@@ -256,6 +275,7 @@ export function setupTooltip(
 
     isOpen = false;
     setExpanded(false);
+    removeFallbackPositionListeners();
 
     if (canPopover) {
       internalClosePending = true;
@@ -424,9 +444,6 @@ export function setupTooltip(
     on(tip, 'toggle', onPopoverToggle);
   }
 
-  on(window, 'scroll', onScrollOrResize, { passive: true });
-  on(window, 'resize', onScrollOrResize);
-
   setExpanded(false);
   if (!canPopover) tip.hidden = true;
   scheduleDeferredOffset();
@@ -434,6 +451,7 @@ export function setupTooltip(
   const cleanup = () => {
     clearTimers();
     cancelDeferredOffset();
+    removeFallbackPositionListeners();
     ac.abort();
 
     trigger.classList.remove('vtt-trigger');

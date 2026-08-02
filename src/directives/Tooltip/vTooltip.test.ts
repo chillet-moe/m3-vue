@@ -186,7 +186,7 @@ describe('vTooltip directive', () => {
     expect(el.hasAttribute('aria-controls')).toBe(false);
   });
 
-  it('can describe an existing trigger without replacing its controlled region', () => {
+  it('lazily describes an existing trigger without replacing its controlled region', () => {
     const el = createTrigger();
     el.setAttribute('aria-controls', 'section-content');
     el.setAttribute('aria-expanded', 'true');
@@ -195,6 +195,9 @@ describe('vTooltip directive', () => {
       value: { content: 'Projects', triggerAria: 'describedby', interactive: false },
     } as never);
 
+    expect(document.body.querySelector('.vtt-popover')).toBeNull();
+
+    el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     const tip = document.body.querySelector('.vtt-popover');
 
     expect(tip).not.toBeNull();
@@ -208,6 +211,73 @@ describe('vTooltip directive', () => {
     expect(el.getAttribute('aria-controls')).toBe('section-content');
     expect(el.getAttribute('aria-expanded')).toBe('true');
     expect(el.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('shares one lazy tooltip across many non-interactive triggers', () => {
+    const triggers = Array.from({ length: 100 }, (_, index) => {
+      const trigger = createTrigger();
+      vTooltip.mounted?.(trigger, {
+        value: { content: `Tooltip ${index}`, interactive: false, triggerAria: 'describedby' },
+      } as never);
+      return trigger;
+    });
+
+    expect(document.body.querySelector('.vtt-popover')).toBeNull();
+    expect(triggers.every((trigger) => trigger.style.getPropertyValue('anchor-name') === '')).toBe(true);
+
+    triggers[0]!.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    const tip = document.body.querySelector<HTMLElement>('.vtt-popover');
+    expect(tip?.textContent).toBe('Tooltip 0');
+
+    triggers[99]!.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(document.body.querySelectorAll('.vtt-popover')).toHaveLength(1);
+    expect(tip?.textContent).toBe('Tooltip 99');
+    expect(triggers[0]!.style.getPropertyValue('anchor-name')).toBe('');
+
+    triggers.forEach((trigger) => vTooltip.unmounted?.(trigger));
+    expect(document.body.querySelector('.vtt-popover')).toBeNull();
+  });
+
+  it('keeps interactive rich tooltip instances independent', () => {
+    const first = createTrigger();
+    const second = createTrigger();
+
+    vTooltip.mounted?.(first, { value: { content: 'First', variant: 'rich', interactive: true } } as never);
+    vTooltip.mounted?.(second, { value: { content: 'Second', variant: 'rich', interactive: true } } as never);
+
+    const tips = document.body.querySelectorAll('.vtt-popover');
+    expect(tips).toHaveLength(2);
+    expect(Array.from(tips).every((tip) => tip.getAttribute('role') === 'dialog')).toBe(true);
+
+    vTooltip.unmounted?.(first);
+    vTooltip.unmounted?.(second);
+  });
+
+  it('rebuilds when an updated binding crosses the shared tooltip boundary', () => {
+    const el = createTrigger();
+
+    vTooltip.mounted?.(el, { value: { content: 'Plain', interactive: false } } as never);
+    expect(document.body.querySelector('.vtt-popover')).toBeNull();
+
+    vTooltip.updated?.(el, {
+      value: { content: 'Rich', interactive: true, variant: 'rich' },
+      oldValue: { content: 'Plain', interactive: false },
+    } as never);
+
+    const tip = document.body.querySelector('.vtt-popover');
+    expect(tip?.textContent).toBe('Rich');
+    expect(tip?.getAttribute('role')).toBe('dialog');
+
+    vTooltip.updated?.(el, {
+      value: { content: 'Plain again', interactive: false },
+      oldValue: { content: 'Rich', interactive: true, variant: 'rich' },
+    } as never);
+
+    expect(document.body.querySelector('.vtt-popover')).toBeNull();
+    el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(document.body.querySelector('.vtt-popover')?.textContent).toBe('Plain again');
+
+    vTooltip.unmounted?.(el);
   });
 
   it('does not let another component owner clear an existing tooltip instance', () => {
@@ -312,6 +382,23 @@ describe('vTooltip directive', () => {
 
     state.cleanup();
     getComputedStyleSpy.mockRestore();
+  });
+
+  it('registers fallback viewport listeners only while open', () => {
+    const el = createTrigger();
+    const addEventListener = vi.spyOn(window, 'addEventListener');
+    const state = setupTooltip(el, { content: 'Tooltip content' }, { manual: true });
+
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'scroll' || type === 'resize')).toHaveLength(0);
+
+    state.show();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'scroll' || type === 'resize')).toHaveLength(2);
+
+    state.hide();
+    state.show();
+    expect(addEventListener.mock.calls.filter(([type]) => type === 'scroll' || type === 'resize')).toHaveLength(4);
+
+    state.cleanup();
   });
 
   it('skips semantically identical updates', () => {
