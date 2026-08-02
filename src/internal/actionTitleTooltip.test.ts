@@ -105,6 +105,18 @@ describe('shared action title tooltip runtime', () => {
     cleanup();
   });
 
+  it('does not schedule hover work for an empty title registration', () => {
+    const trigger = createTrigger('');
+    const cleanup = registerActionTitleTooltip(trigger);
+    const setTimeoutSpy = vi.spyOn(window, 'setTimeout');
+
+    trigger.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
+
+    expect(setTimeoutSpy).not.toHaveBeenCalled();
+    cleanup();
+    setTimeoutSpy.mockRestore();
+  });
+
   it('updates only the active tooltip and releases it when a recycled trigger unregisters', () => {
     const trigger = createTrigger('Before');
     const cleanup = registerActionTitleTooltip(trigger);

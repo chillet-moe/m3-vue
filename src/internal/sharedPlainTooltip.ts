@@ -162,7 +162,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
 
   const findTrigger = (event: Event) => {
     for (const item of event.composedPath()) {
-      if (item instanceof HTMLElement && registrations.has(item)) return item;
+      if (item instanceof HTMLElement && registrations.get(item)?.opts.content) return item;
     }
     return undefined;
   };
