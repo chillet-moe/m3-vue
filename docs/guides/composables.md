@@ -92,7 +92,8 @@ const { pressShapeMorphAttrs } = usePressShapeMorph();
 当一个列表包含大量动态、非交互 Tooltip 时，不要为每个条目同时创建 Tooltip DOM 和完整的 `v-tooltip`
 监听器。`useDelegatedTooltip` 将 hover、focus 和 Escape 事件绑定到容器，并通过有限的 slot 池复用 Tooltip
 表面。slot 的内容仍由 Vue 渲染，因此可以保留多行文本、`kbd` 等富标记；交互式富浮层仍应使用独立的
-`v-tooltip` 实例。
+`v-tooltip` 实例。首次 hover 会立即显示；只有从一个已显示的 anchor 切换到另一个 anchor 时才使用短暂
+debounce，避免快速扫过列表时 Tooltip 闪烁，键盘 focus 切换不延迟。
 
 ```vue
 <script setup lang="ts">

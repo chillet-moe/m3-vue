@@ -69,6 +69,55 @@ afterEach(() => {
 });
 
 describe('useDelegatedTooltip', () => {
+  it('shows immediately on the first pointer hover', async () => {
+    const host = mountDelegatedTooltip();
+    await nextTick();
+    const first = host.querySelector<HTMLElement>('#first')!;
+
+    first.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
+    await flushDelegatedUpdate();
+
+    expect(state!.tooltipSlots[0]?.state).toBe('open');
+    expect(host.querySelector(`#${state!.tooltipSlots[0]?.id}`)?.textContent).toBe('First');
+  });
+
+  it('debounces only a pointer switch while keeping the current tooltip open', async () => {
+    const host = mountDelegatedTooltip();
+    await nextTick();
+    const first = host.querySelector<HTMLElement>('#first')!;
+    const second = host.querySelector<HTMLElement>('#second')!;
+
+    first.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    await flushDelegatedUpdate();
+    second.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
+
+    expect(state!.tooltipSlots[0]?.state).toBe('open');
+    expect(state!.tooltipSlots[1]?.state).toBe('idle');
+
+    vi.advanceTimersByTime(20);
+    await flushDelegatedUpdate();
+
+    expect(state!.tooltipSlots[0]?.state).toBe('closing');
+    expect(state!.tooltipSlots[1]?.state).toBe('open');
+  });
+
+  it('cancels a pending pointer switch when the pointer returns to the current anchor', async () => {
+    const host = mountDelegatedTooltip();
+    await nextTick();
+    const first = host.querySelector<HTMLElement>('#first')!;
+    const second = host.querySelector<HTMLElement>('#second')!;
+
+    first.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    await flushDelegatedUpdate();
+    second.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
+    first.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
+    await flushDelegatedUpdate();
+    vi.advanceTimersByTime(20);
+
+    expect(state!.tooltipSlots[0]?.state).toBe('open');
+    expect(state!.tooltipSlots[1]?.state).toBe('idle');
+  });
+
   it('keeps a bounded slot pool while switching active anchors', async () => {
     const host = mountDelegatedTooltip();
     await nextTick();

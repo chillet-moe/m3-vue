@@ -81,7 +81,9 @@ does not need those listeners.
 For high-cardinality dynamic content that needs Vue markup but does not accept focus or pointer interaction inside the
 surface, use `useDelegatedTooltip`. It owns a bounded slot pool and delegates pointer/focus handling from the list
 container. Do not use it for rich surfaces containing buttons, inputs, or other focusable content: those surfaces keep
-independent `v-tooltip` instances so trigger and surface lifetimes remain coupled.
+independent `v-tooltip` instances so trigger and surface lifetimes remain coupled. The first pointer hover opens
+immediately; a short switch debounce applies only while another anchor is already active, and keyboard focus switches
+immediately.
 
 When CSS anchor positioning is unavailable, open Tooltip instances register with a document-scoped viewport runtime.
 The runtime coalesces scroll and resize events into one animation frame and removes its listeners after the last open

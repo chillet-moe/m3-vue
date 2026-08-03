@@ -19,7 +19,7 @@ type GetAnchorElement = (target: EventTarget | null) => HTMLElement | null;
 type TooltipController = ReturnType<typeof setupTooltip>;
 
 const TOOLTIP_ANIMATION_MS = 120;
-const TOOLTIP_POINTER_HOVER_DELAY_MS = 20;
+const TOOLTIP_POINTER_SWITCH_DELAY_MS = 20;
 
 /**
  * Delegates non-interactive tooltip behavior from a high-cardinality container.
@@ -273,13 +273,14 @@ export function useDelegatedTooltip<T>(
       return;
     }
 
-    if (pendingHoverAnchor === anchor) {
+    if (!activeSlot || activeSlot.state === 'closing') {
+      clearPendingHover();
+      syncTooltipForAnchor(anchor);
       return;
     }
 
-    if (activeSlot && activeSlot.anchor !== anchor) {
-      startHideSlot(activeSlot);
-      activeSlot = null;
+    if (pendingHoverAnchor === anchor) {
+      return;
     }
 
     clearPendingHover();
@@ -295,7 +296,7 @@ export function useDelegatedTooltip<T>(
       }
 
       syncTooltipForAnchor(nextAnchor);
-    }, TOOLTIP_POINTER_HOVER_DELAY_MS);
+    }, TOOLTIP_POINTER_SWITCH_DELAY_MS);
   };
 
   const refreshTooltip = () => {
