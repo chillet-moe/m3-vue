@@ -39,6 +39,32 @@ ListItem is a Button extension with richer content layout, suitable for interact
 
 <StyleTokenTable component="ListItem" />
 
+## List grouping
+
+List grouping is a CSS behavior, not a component. Add the public `data-scope="list" data-part="container"` marker to
+any element or custom component root that directly contains `ListItem` components:
+
+```vue
+<section class="settings-list" data-scope="list" data-part="container">
+  <ListItem title="Account" />
+  <ListItem title="Notifications" />
+  <ListItem title="Privacy" />
+</section>
+```
+
+The marker keeps middle items compact and restores the larger logical block-start corners of the first item and
+block-end corners of the last item. It does not add a wrapper, layout, spacing, ARIA role, or menu semantics. Set
+`display`, `gap`, width, and any list semantics on the container that you own. Nested grouping markers create separate
+groups, and non-item direct children do not change which `ListItem` is first or last.
+
+When the marker is placed on a Vue component, its root must receive fallthrough attributes. A single-root component
+does this by default; components using `inheritAttrs: false` should forward `$attrs` to the grouping root.
+
+The three `--md-list-group-*` tokens below are set on the grouping container. `shape="square"` items are not changed by
+the grouping rule, so an individual item can opt out while preserving its own shape behavior.
+
+<StyleTokenTable component="ListItemGrouping" />
+
 ## Examples
 
 ### Default

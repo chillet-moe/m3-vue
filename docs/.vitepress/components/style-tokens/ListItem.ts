@@ -122,3 +122,27 @@ export const listItemStyleTokens = [
     category: 'Layout',
   },
 ] satisfies StyleTokenMeta[];
+
+export const listItemGroupingStyleTokens = [
+  {
+    name: '--md-list-group-item-first-child-shape',
+    description: 'Controls the block-start corner radius of the first direct ListItem in a grouping container.',
+    fallback: 'var(--md-shape-action)',
+    category: 'Shape',
+    targets: [{ scope: 'list', part: 'container' }],
+  },
+  {
+    name: '--md-list-group-item-last-child-shape',
+    description: 'Controls the block-end corner radius of the last direct ListItem in a grouping container.',
+    fallback: 'var(--md-shape-action)',
+    category: 'Shape',
+    targets: [{ scope: 'list', part: 'container' }],
+  },
+  {
+    name: '--md-list-group-item-shape',
+    description: 'Controls the base corner radius of direct ListItem children in a grouping container.',
+    fallback: 'var(--md-shape-compact)',
+    category: 'Shape',
+    targets: [{ scope: 'list', part: 'container' }],
+  },
+] satisfies StyleTokenMeta[];

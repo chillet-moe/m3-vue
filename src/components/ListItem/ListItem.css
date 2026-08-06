@@ -24,6 +24,10 @@
     --md-item-motion: initial;
     --md-item-padding-block: initial;
     --md-item-padding-inline: initial;
+
+    --md-list-group-item-first-child-shape: initial;
+    --md-list-group-item-last-child-shape: initial;
+    --md-list-group-item-shape: initial;
   }
 
   .m3-item {
@@ -51,6 +55,12 @@
     --_item-motion: var(--md-item-motion, var(--md-easing-spatial));
     --_item-indicator-shape: var(--md-item-indicator-shape, var(--_button-container-shape, var(--md-shape-indicator)));
     --_item-indicator-collapsed-visual-width: var(--md-item-indicator-collapsed-visual-width, --dp(12));
+  }
+
+  [data-scope='list'][data-part='container'] {
+    --_list-group-item-shape: var(--md-list-group-item-shape, var(--md-shape-compact));
+    --_list-group-item-first-child-shape: var(--md-list-group-item-first-child-shape, var(--md-shape-action));
+    --_list-group-item-last-child-shape: var(--md-list-group-item-last-child-shape, var(--md-shape-action));
   }
 }
 
@@ -298,5 +308,33 @@
     .m3-item::before {
       transition-duration: 0ms;
     }
+  }
+
+  /*
+   * List grouping is a public CSS contract. The marker may be placed on any
+   * user-owned container; only direct, rounded, idle ListItem roots participate.
+   */
+  [data-scope='list'][data-part='container']
+    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false'] {
+    border-start-start-radius: var(--_list-group-item-shape);
+    border-start-end-radius: var(--_list-group-item-shape);
+    border-end-end-radius: var(--_list-group-item-shape);
+    border-end-start-radius: var(--_list-group-item-shape);
+  }
+
+  [data-scope='list'][data-part='container']
+    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false']:nth-child(
+      1 of [data-scope='item'][data-part='root']
+    ) {
+    border-start-start-radius: var(--_list-group-item-first-child-shape);
+    border-start-end-radius: var(--_list-group-item-first-child-shape);
+  }
+
+  [data-scope='list'][data-part='container']
+    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false']:nth-last-child(
+      1 of [data-scope='item'][data-part='root']
+    ) {
+    border-end-end-radius: var(--_list-group-item-last-child-shape);
+    border-end-start-radius: var(--_list-group-item-last-child-shape);
   }
 }

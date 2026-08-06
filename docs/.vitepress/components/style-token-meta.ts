@@ -16,7 +16,7 @@ import { floatingActionButtonMenuStyleTokens } from './style-tokens/FloatingActi
 import { iconButtonStyleTokens } from './style-tokens/IconButton';
 import { inputOtpStyleTokens } from './style-tokens/InputOtp';
 import { linearProgressIndicatorStyleTokens } from './style-tokens/LinearProgressIndicator';
-import { listItemStyleTokens } from './style-tokens/ListItem';
+import { listItemGroupingStyleTokens, listItemStyleTokens } from './style-tokens/ListItem';
 import { loadingIndicatorStyleTokens } from './style-tokens/LoadingIndicator';
 import { menuStyleTokens } from './style-tokens/Menu';
 import { navigationDrawerStyleTokens } from './style-tokens/NavigationDrawer';
@@ -56,6 +56,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   IconButton: iconButtonStyleTokens,
   InputOtp: inputOtpStyleTokens,
   LinearProgressIndicator: linearProgressIndicatorStyleTokens,
+  ListItemGrouping: listItemGroupingStyleTokens,
   ListItem: listItemStyleTokens,
   LoadingIndicator: loadingIndicatorStyleTokens,
   Menu: menuStyleTokens,
