@@ -52,8 +52,9 @@ any element or custom component root that directly contains `ListItem` component
 </section>
 ```
 
-The marker keeps middle items compact and restores the larger logical block-start corners of the first item and
-block-end corners of the last item. It does not add a wrapper, layout, spacing, ARIA role, or menu semantics. Set
+With the default tokens, rounded middle items use an `8px` radius and the first/last rounded items use `24px` outer
+corners. Square middle items use `4px`; square first/last items use `4px` on their inner corners and keep their own
+square shape on the outer corners. The marker does not add a wrapper, layout, spacing, ARIA role, or menu semantics. Set
 `display`, `gap`, width, and any list semantics on the container that you own. Nested grouping markers create separate
 groups, and non-item direct children do not change which `ListItem` is first or last.
 
@@ -61,9 +62,9 @@ When the marker is placed on a Vue component, its root must receive fallthrough 
 does this by default; components using `inheritAttrs: false` should forward `$attrs` to the grouping root.
 
 The three `--md-list-group-*` tokens below are set on the grouping container. They apply to both the item surface and
-its active indicator, so a selected or pressed middle item keeps the compact group shape. `shape="square"` items are
-not changed by the grouping rule, including their active and pressed states, so an individual item can opt out while
-preserving its own shape behavior.
+its active indicator, so a selected or pressed middle item keeps its group shape. Square first/last items retain their
+own shape, while square middle items use the `4px` group shape in every state. Square items do not count as rounded
+group participants when determining which rounded item is first or last.
 
 <StyleTokenTable component="ListItemGrouping" />
 

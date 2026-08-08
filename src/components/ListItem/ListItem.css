@@ -58,9 +58,10 @@
   }
 
   [data-scope='list'][data-part='container'] {
-    --_list-group-item-shape: var(--md-list-group-item-shape, var(--md-shape-compact));
-    --_list-group-item-first-child-shape: var(--md-list-group-item-first-child-shape, var(--md-shape-action));
-    --_list-group-item-last-child-shape: var(--md-list-group-item-last-child-shape, var(--md-shape-action));
+    --_list-group-item-rounded-shape: var(--md-list-group-item-shape, var(--md-sys-shape-corner-small));
+    --_list-group-item-square-shape: var(--md-list-group-item-shape, var(--md-shape-compact));
+    --_list-group-item-first-child-shape: var(--md-list-group-item-first-child-shape, --dp(24));
+    --_list-group-item-last-child-shape: var(--md-list-group-item-last-child-shape, --dp(24));
   }
 }
 
@@ -312,36 +313,71 @@
 
   /*
    * List grouping is a public CSS contract. The marker may be placed on any
-   * user-owned container; only direct, rounded ListItem roots participate.
+   * user-owned container; only direct ListItem roots participate.
    */
   [data-scope='list'][data-part='container'] > [data-scope='item'][data-part='root'][data-shape='rounded'] {
-    border-start-start-radius: var(--_list-group-item-shape);
-    border-start-end-radius: var(--_list-group-item-shape);
-    border-end-end-radius: var(--_list-group-item-shape);
-    border-end-start-radius: var(--_list-group-item-shape);
+    border-start-start-radius: var(--_list-group-item-rounded-shape);
+    border-start-end-radius: var(--_list-group-item-rounded-shape);
+    border-end-end-radius: var(--_list-group-item-rounded-shape);
+    border-end-start-radius: var(--_list-group-item-rounded-shape);
   }
 
   [data-scope='list'][data-part='container'] > [data-scope='item'][data-part='root'][data-shape='rounded'] {
-    --md-item-indicator-shape: var(--_list-group-item-shape);
+    --md-item-indicator-shape: var(--_list-group-item-rounded-shape);
+  }
+
+  [data-scope='list'][data-part='container']
+    > [data-scope='item'][data-part='root'][data-shape='square']:not(
+      :nth-child(1 of [data-scope='item'][data-part='root'])
+    ):not(:nth-last-child(1 of [data-scope='item'][data-part='root'])) {
+    border-start-start-radius: var(--_list-group-item-square-shape);
+    border-start-end-radius: var(--_list-group-item-square-shape);
+    border-end-end-radius: var(--_list-group-item-square-shape);
+    border-end-start-radius: var(--_list-group-item-square-shape);
+    --md-item-indicator-shape: var(--_list-group-item-square-shape);
+  }
+
+  [data-scope='list'][data-part='container']
+    > [data-scope='item'][data-part='root'][data-shape='square']:nth-child(
+      1 of [data-scope='item'][data-part='root']
+    ):not(:nth-last-child(1 of [data-scope='item'][data-part='root'])) {
+    border-start-start-radius: var(--_button-container-shape);
+    border-start-end-radius: var(--_button-container-shape);
+    border-end-end-radius: var(--_list-group-item-square-shape);
+    border-end-start-radius: var(--_list-group-item-square-shape);
+    --md-item-indicator-shape: var(--_button-container-shape) var(--_button-container-shape)
+      var(--_list-group-item-square-shape) var(--_list-group-item-square-shape);
+  }
+
+  [data-scope='list'][data-part='container']
+    > [data-scope='item'][data-part='root'][data-shape='square']:nth-last-child(
+      1 of [data-scope='item'][data-part='root']
+    ):not(:nth-child(1 of [data-scope='item'][data-part='root'])) {
+    border-start-start-radius: var(--_list-group-item-square-shape);
+    border-start-end-radius: var(--_list-group-item-square-shape);
+    border-end-end-radius: var(--_button-container-shape);
+    border-end-start-radius: var(--_button-container-shape);
+    --md-item-indicator-shape: var(--_list-group-item-square-shape) var(--_list-group-item-square-shape)
+      var(--_button-container-shape) var(--_button-container-shape);
   }
 
   [data-scope='list'][data-part='container']
     > [data-scope='item'][data-part='root'][data-shape='rounded']:nth-child(
-      1 of [data-scope='item'][data-part='root']
+      1 of [data-scope='item'][data-part='root'][data-shape='rounded']
     ) {
     border-start-start-radius: var(--_list-group-item-first-child-shape);
     border-start-end-radius: var(--_list-group-item-first-child-shape);
     --md-item-indicator-shape: var(--_list-group-item-first-child-shape) var(--_list-group-item-first-child-shape)
-      var(--_list-group-item-shape) var(--_list-group-item-shape);
+      var(--_list-group-item-rounded-shape) var(--_list-group-item-rounded-shape);
   }
 
   [data-scope='list'][data-part='container']
     > [data-scope='item'][data-part='root'][data-shape='rounded']:nth-last-child(
-      1 of [data-scope='item'][data-part='root']
+      1 of [data-scope='item'][data-part='root'][data-shape='rounded']
     ) {
     border-end-end-radius: var(--_list-group-item-last-child-shape);
     border-end-start-radius: var(--_list-group-item-last-child-shape);
-    --md-item-indicator-shape: var(--_list-group-item-shape) var(--_list-group-item-shape)
+    --md-item-indicator-shape: var(--_list-group-item-rounded-shape) var(--_list-group-item-rounded-shape)
       var(--_list-group-item-last-child-shape) var(--_list-group-item-last-child-shape);
   }
 }

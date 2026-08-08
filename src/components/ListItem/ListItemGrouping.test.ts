@@ -86,14 +86,25 @@ describe('ListItem grouping contract', () => {
 
   it('keeps grouping styles on public markers and leaves layout to the owner', () => {
     expect(listItemStyles).toContain('--md-list-group-item-shape: initial');
+    expect(listItemStyles).toContain(
+      '--_list-group-item-rounded-shape: var(--md-list-group-item-shape, var(--md-sys-shape-corner-small));',
+    );
+    expect(listItemStyles).toContain(
+      '--_list-group-item-square-shape: var(--md-list-group-item-shape, var(--md-shape-compact));',
+    );
+    expect(listItemStyles).toContain("[data-shape='square']:not(");
+    expect(listItemStyles).toContain("[data-shape='square']:nth-child(");
+    expect(listItemStyles).toContain("[data-shape='square']:nth-last-child(");
+    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_button-container-shape)');
     expect(listItemStyles).toContain("[data-scope='list'][data-part='container']");
     expect(listItemStyles).toContain("> [data-scope='item'][data-part='root'][data-shape='rounded'] {");
     expect(listItemStyles).not.toContain("[data-shape='rounded'][data-pressed='false']");
-    expect(listItemStyles).toContain('border-start-start-radius: var(--_list-group-item-shape)');
-    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-shape)');
+    expect(listItemStyles).toContain("1 of [data-scope='item'][data-part='root'][data-shape='rounded']");
+    expect(listItemStyles).toContain('border-start-start-radius: var(--_list-group-item-rounded-shape)');
+    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-rounded-shape)');
     expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-first-child-shape)');
     expect(listItemStyles).toContain(
-      '--md-item-indicator-shape: var(--_list-group-item-shape) var(--_list-group-item-shape)',
+      '--md-item-indicator-shape: var(--_list-group-item-rounded-shape) var(--_list-group-item-rounded-shape)',
     );
     expect(listItemStyles).not.toContain('m3-list-container');
   });
