@@ -89,6 +89,11 @@ describe('ListItem grouping contract', () => {
     expect(listItemStyles).toContain("[data-scope='list'][data-part='container']");
     expect(listItemStyles).toContain("[data-shape='rounded'][data-pressed='false']");
     expect(listItemStyles).toContain('border-start-start-radius: var(--_list-group-item-shape)');
+    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-shape)');
+    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-first-child-shape)');
+    expect(listItemStyles).toContain(
+      '--md-item-indicator-shape: var(--_list-group-item-shape) var(--_list-group-item-shape)',
+    );
     expect(listItemStyles).not.toContain('m3-list-container');
   });
 });

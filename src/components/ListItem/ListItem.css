@@ -323,11 +323,18 @@
   }
 
   [data-scope='list'][data-part='container']
+    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false'] {
+    --md-item-indicator-shape: var(--_list-group-item-shape);
+  }
+
+  [data-scope='list'][data-part='container']
     > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false']:nth-child(
       1 of [data-scope='item'][data-part='root']
     ) {
     border-start-start-radius: var(--_list-group-item-first-child-shape);
     border-start-end-radius: var(--_list-group-item-first-child-shape);
+    --md-item-indicator-shape: var(--_list-group-item-first-child-shape) var(--_list-group-item-first-child-shape)
+      var(--_list-group-item-shape) var(--_list-group-item-shape);
   }
 
   [data-scope='list'][data-part='container']
@@ -336,5 +343,7 @@
     ) {
     border-end-end-radius: var(--_list-group-item-last-child-shape);
     border-end-start-radius: var(--_list-group-item-last-child-shape);
+    --md-item-indicator-shape: var(--_list-group-item-shape) var(--_list-group-item-shape)
+      var(--_list-group-item-last-child-shape) var(--_list-group-item-last-child-shape);
   }
 }

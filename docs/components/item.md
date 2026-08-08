@@ -60,8 +60,9 @@ groups, and non-item direct children do not change which `ListItem` is first or 
 When the marker is placed on a Vue component, its root must receive fallthrough attributes. A single-root component
 does this by default; components using `inheritAttrs: false` should forward `$attrs` to the grouping root.
 
-The three `--md-list-group-*` tokens below are set on the grouping container. `shape="square"` items are not changed by
-the grouping rule, so an individual item can opt out while preserving its own shape behavior.
+The three `--md-list-group-*` tokens below are set on the grouping container. They apply to both the item surface and
+its active indicator, so a selected middle item keeps the compact group shape. `shape="square"` items are not changed
+by the grouping rule, so an individual item can opt out while preserving its own shape behavior.
 
 <StyleTokenTable component="ListItemGrouping" />
 
