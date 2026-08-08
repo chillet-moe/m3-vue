@@ -331,7 +331,7 @@
   .m3-navigation-drawer-section-content-inner {
     display: flex;
     flex-direction: column;
-    gap: --dp(4);
+    gap: var(--_navigation-drawer-content-gap, --dp(2));
     min-block-size: 0;
     padding-inline-start: var(--_navigation-drawer-section-content-indent);
   }

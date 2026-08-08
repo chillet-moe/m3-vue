@@ -24,7 +24,7 @@
     --_navigation-drawer-on-container-color: var(--md-color-on-container, var(--md-sys-color-on-surface));
     --_navigation-drawer-padding-block: var(--md-navigation-drawer-padding-block, --dp(12));
     --_navigation-drawer-padding-inline: var(--md-navigation-drawer-padding-inline, --dp(12));
-    --_navigation-drawer-content-gap: var(--md-navigation-drawer-content-gap, --dp(4));
+    --_navigation-drawer-content-gap: var(--md-navigation-drawer-content-gap, --dp(2));
     --_navigation-drawer-section-content-indent: var(--md-navigation-drawer-section-content-indent, 0);
   }
 }
