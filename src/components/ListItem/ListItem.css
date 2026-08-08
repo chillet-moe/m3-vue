@@ -312,23 +312,21 @@
 
   /*
    * List grouping is a public CSS contract. The marker may be placed on any
-   * user-owned container; only direct, rounded, idle ListItem roots participate.
+   * user-owned container; only direct, rounded ListItem roots participate.
    */
-  [data-scope='list'][data-part='container']
-    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false'] {
+  [data-scope='list'][data-part='container'] > [data-scope='item'][data-part='root'][data-shape='rounded'] {
     border-start-start-radius: var(--_list-group-item-shape);
     border-start-end-radius: var(--_list-group-item-shape);
     border-end-end-radius: var(--_list-group-item-shape);
     border-end-start-radius: var(--_list-group-item-shape);
   }
 
-  [data-scope='list'][data-part='container']
-    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false'] {
+  [data-scope='list'][data-part='container'] > [data-scope='item'][data-part='root'][data-shape='rounded'] {
     --md-item-indicator-shape: var(--_list-group-item-shape);
   }
 
   [data-scope='list'][data-part='container']
-    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false']:nth-child(
+    > [data-scope='item'][data-part='root'][data-shape='rounded']:nth-child(
       1 of [data-scope='item'][data-part='root']
     ) {
     border-start-start-radius: var(--_list-group-item-first-child-shape);
@@ -338,7 +336,7 @@
   }
 
   [data-scope='list'][data-part='container']
-    > [data-scope='item'][data-part='root'][data-shape='rounded'][data-pressed='false']:nth-last-child(
+    > [data-scope='item'][data-part='root'][data-shape='rounded']:nth-last-child(
       1 of [data-scope='item'][data-part='root']
     ) {
     border-end-end-radius: var(--_list-group-item-last-child-shape);

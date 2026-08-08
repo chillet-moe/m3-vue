@@ -87,7 +87,8 @@ describe('ListItem grouping contract', () => {
   it('keeps grouping styles on public markers and leaves layout to the owner', () => {
     expect(listItemStyles).toContain('--md-list-group-item-shape: initial');
     expect(listItemStyles).toContain("[data-scope='list'][data-part='container']");
-    expect(listItemStyles).toContain("[data-shape='rounded'][data-pressed='false']");
+    expect(listItemStyles).toContain("> [data-scope='item'][data-part='root'][data-shape='rounded'] {");
+    expect(listItemStyles).not.toContain("[data-shape='rounded'][data-pressed='false']");
     expect(listItemStyles).toContain('border-start-start-radius: var(--_list-group-item-shape)');
     expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-shape)');
     expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-first-child-shape)');
@@ -95,5 +96,26 @@ describe('ListItem grouping contract', () => {
       '--md-item-indicator-shape: var(--_list-group-item-shape) var(--_list-group-item-shape)',
     );
     expect(listItemStyles).not.toContain('m3-list-container');
+  });
+
+  it('keeps square items out of the rounded grouping contract', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h('div', { 'data-scope': 'list', 'data-part': 'container' }, [
+        h(ListItem, { title: 'Square item', shape: 'square', active: true }),
+      ]),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const root = container.querySelector<HTMLElement>('[data-scope="item"][data-part="root"]');
+
+    expect(root?.dataset.shape).toBe('square');
+    expect(root?.dataset.active).toBe('true');
+
+    app.unmount();
   });
 });
