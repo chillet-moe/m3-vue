@@ -316,6 +316,10 @@
     min-inline-size: 0;
   }
 
+  .m3-navigation-drawer-section[data-expanded='true'] {
+    row-gap: var(--_navigation-drawer-content-gap, --dp(2));
+  }
+
   .m3-navigation-drawer-section-content {
     display: grid;
     grid-template-rows: 0fr;
@@ -331,7 +335,7 @@
   .m3-navigation-drawer-section-content-inner {
     display: flex;
     flex-direction: column;
-    gap: var(--_navigation-drawer-content-gap, --dp(2));
+    gap: --dp(4);
     min-block-size: 0;
     padding-inline-start: var(--_navigation-drawer-section-content-indent);
   }
