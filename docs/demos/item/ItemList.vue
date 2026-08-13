@@ -10,6 +10,7 @@ import { ListItem } from '@/components/ListItem';
         <ListItem class="item-demo-list-item" title="Item 1" shape="rounded" />
         <ListItem class="item-demo-list-item" title="Item 2" shape="rounded" />
         <ListItem class="item-demo-list-item" title="Item 3" shape="rounded" />
+        <div class="item-demo-custom-item" data-list-group-item data-shape="rounded">Custom status row</div>
         <ListItem class="item-demo-list-item" title="Item 4" shape="rounded" />
         <ListItem class="item-demo-list-item" title="Item 5" shape="rounded" leading-icon="settings" active />
         <ListItem class="item-demo-list-item" title="Item 6" shape="rounded" leading-icon="star" />
@@ -60,5 +61,10 @@ import { ListItem } from '@/components/ListItem';
 
 .item-demo-list-item {
   --md-button-container-color: var(--md-sys-color-surface-container);
+}
+
+.item-demo-custom-item {
+  padding: --dp(16);
+  background: var(--md-sys-color-surface-container);
 }
 </style>

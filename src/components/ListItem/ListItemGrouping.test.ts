@@ -14,6 +14,14 @@ const UserOwnedList = defineComponent({
   },
 });
 
+const UserOwnedRow = defineComponent({
+  name: 'UserOwnedRow',
+  inheritAttrs: false,
+  setup(_, { attrs, slots }) {
+    return () => h('article', attrs, slots.default?.());
+  },
+});
+
 afterEach(() => {
   document.body.innerHTML = '';
 });
@@ -37,6 +45,11 @@ describe('ListItem grouping contract', () => {
             h('h2', { id: 'heading' }, 'Settings'),
             h(ListItem, { title: 'Account' }),
             h('hr', { id: 'divider' }),
+            h(
+              UserOwnedRow,
+              { id: 'status', 'data-list-group-item': '', 'data-shape': 'rounded' },
+              { default: () => 'System status' },
+            ),
             h(ListItem, { title: 'Privacy' }),
           ],
         },
@@ -48,19 +61,22 @@ describe('ListItem grouping contract', () => {
 
     const root = container.querySelector<HTMLElement>('[data-scope="list"][data-part="container"]');
     const directItems = root?.querySelectorAll(':scope > [data-scope="item"][data-part="root"]');
+    const directParticipants = root?.querySelectorAll(':scope > [data-list-group-item]');
 
     expect(root?.tagName).toBe('SECTION');
     expect(root?.classList.contains('settings-list')).toBe(true);
     expect(root?.getAttribute('aria-label')).toBe('Settings');
     expect(root?.classList.contains('m3-list-container')).toBe(false);
     expect(directItems).toHaveLength(2);
+    expect(directParticipants).toHaveLength(3);
+    expect(root?.querySelector('#status')?.getAttribute('data-shape')).toBe('rounded');
     expect(root?.children[0]?.id).toBe('heading');
     expect(root?.children[2]?.id).toBe('divider');
 
     app.unmount();
   });
 
-  it('keeps nested grouping boundaries and ignores non-item children for first and last matching', async () => {
+  it('keeps nested grouping boundaries and ignores non-participant children for first and last matching', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -93,13 +109,16 @@ describe('ListItem grouping contract', () => {
       '--_list-group-item-square-shape: var(--md-list-group-item-shape, var(--md-shape-compact));',
     );
     expect(listItemStyles).toContain("[data-shape='square']:not(");
-    expect(listItemStyles).toContain("[data-shape='square']:nth-child(");
-    expect(listItemStyles).toContain("[data-shape='square']:nth-last-child(");
+    expect(listItemStyles).toContain("[data-shape='square']:nth-child(1 of [data-list-group-item])");
+    expect(listItemStyles).toContain("[data-shape='square']:nth-last-child(1 of [data-list-group-item])");
     expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_item-container-shape)');
     expect(listItemStyles).toContain("[data-scope='list'][data-part='container']");
-    expect(listItemStyles).toContain("> [data-scope='item'][data-part='root'][data-shape='rounded'] {");
+    expect(listItemStyles).toContain("> [data-list-group-item][data-shape='rounded'] {");
+    expect(listItemStyles).toContain(
+      "> [data-list-group-item][data-scope='item'][data-part='root'][data-shape='rounded']",
+    );
     expect(listItemStyles).not.toContain("[data-shape='rounded'][data-pressed='false']");
-    expect(listItemStyles).toContain("1 of [data-scope='item'][data-part='root'][data-shape='rounded']");
+    expect(listItemStyles).toContain("1 of [data-list-group-item][data-shape='rounded']");
     expect(listItemStyles).toContain('border-start-start-radius: var(--_list-group-item-rounded-shape)');
     expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-rounded-shape)');
     expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-first-child-shape)');

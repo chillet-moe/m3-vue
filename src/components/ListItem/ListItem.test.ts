@@ -31,6 +31,7 @@ describe('ListItem', () => {
     const trailing = container.querySelector<HTMLElement>('[data-scope="item"][data-part="trailing"]');
 
     expect(root?.tagName).toBe('BUTTON');
+    expect(root?.hasAttribute('data-list-group-item')).toBe(true);
     expect(root?.dataset.size).toBe('small');
     expect(title?.textContent).toContain('Profile');
     expect(description?.textContent).toContain('Manage your account settings.');

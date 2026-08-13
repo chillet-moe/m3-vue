@@ -96,6 +96,7 @@ const slotProps = computed(() => ({
     ]"
     data-scope="item"
     data-part="root"
+    data-list-group-item
     data-variant="text"
     data-size="small"
     :data-shape="shape"
