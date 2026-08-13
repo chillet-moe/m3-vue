@@ -124,6 +124,8 @@
     inline-size: var(--_breadcrumb-separator-icon-size);
     block-size: var(--_breadcrumb-separator-icon-size);
     font-size: var(--_breadcrumb-separator-icon-size);
+
+    --md-icon-size: var(--_breadcrumb-separator-icon-size);
   }
 
   .m3-breadcrumb-ellipsis {
@@ -135,5 +137,7 @@
     inline-size: var(--_breadcrumb-separator-icon-size);
     block-size: var(--_breadcrumb-separator-icon-size);
     font-size: var(--_breadcrumb-separator-icon-size);
+
+    --md-icon-size: var(--_breadcrumb-separator-icon-size);
   }
 }

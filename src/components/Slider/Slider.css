@@ -354,6 +354,8 @@
     writing-mode: horizontal-tb;
     font-size: var(--icon-size);
     line-height: 1;
+
+    --md-icon-size: var(--icon-size);
   }
 
   .m3-slider-inset-icon-start {
@@ -378,10 +380,6 @@
 
   .m3-slider-inset-icon-on-inactive {
     color: var(--_slider-inactive-icon-color);
-  }
-
-  .m3-slider-inset-icon .m3-icon {
-    font-size: inherit;
   }
 
   .m3-slider-value-indicator {

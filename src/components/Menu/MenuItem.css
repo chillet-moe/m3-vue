@@ -169,6 +169,9 @@
     min-inline-size: var(--_menus-menu-item-leading-icon-size);
     min-block-size: var(--_menus-menu-item-leading-icon-size);
     font-size: var(--_menus-menu-item-leading-icon-size);
+
+    --md-icon-size: var(--_menus-menu-item-leading-icon-size);
+
     transition:
       color 120ms var(--md-timing-function-fast),
       transform 220ms var(--md-timing-function-fast-spatial),

@@ -13,6 +13,7 @@ import { dialogStyleTokens } from './style-tokens/Dialog';
 import { dividerStyleTokens } from './style-tokens/Divider';
 import { floatingActionButtonStyleTokens } from './style-tokens/FloatingActionButton';
 import { floatingActionButtonMenuStyleTokens } from './style-tokens/FloatingActionButtonMenu';
+import { iconStyleTokens } from './style-tokens/Icon';
 import { iconButtonStyleTokens } from './style-tokens/IconButton';
 import { inputOtpStyleTokens } from './style-tokens/InputOtp';
 import { linearProgressIndicatorStyleTokens } from './style-tokens/LinearProgressIndicator';
@@ -53,6 +54,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   Divider: dividerStyleTokens,
   FloatingActionButton: floatingActionButtonStyleTokens,
   FloatingActionButtonMenu: floatingActionButtonMenuStyleTokens,
+  Icon: iconStyleTokens,
   IconButton: iconButtonStyleTokens,
   InputOtp: inputOtpStyleTokens,
   LinearProgressIndicator: linearProgressIndicatorStyleTokens,

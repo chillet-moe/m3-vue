@@ -13,7 +13,9 @@
 
 1. `--md-sys-*`：全局 Material system token，用于主题级配置。不建议在单个组件实例上局部覆盖。
 2. `--md-shape-*`：库级语义 shape token，用少量变量把 system shape scale 映射到 action、field、card、popover、overlay 等组件角色。
-3. `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color`：上下文 token，用于父组件向子组件传递容器色、内容色和 state layer 颜色。
+3. `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color`、`--md-icon-size`：上下文 token，
+   用于父组件向子组件传递容器色、内容色、state layer 颜色和图标尺寸。组件应在自己拥有的最小 icon 容器上设置
+   `--md-icon-size`，避免尺寸影响无关的后代 Icon。
 4. `--md-<component>-*`：组件 public token，是推荐的组件级定制入口。
 5. `--_*`：组件内部 private token，只用于实现细节，不作为外部 API。
 

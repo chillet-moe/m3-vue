@@ -473,6 +473,8 @@
     justify-content: center;
     color: var(--_date-picker-docked-menu-list-item-selected-leading-icon-color);
     font-size: 1.5rem;
+
+    --md-icon-size: 1.5rem;
   }
 
   .m3-date-picker-actions {

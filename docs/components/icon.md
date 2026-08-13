@@ -17,6 +17,8 @@ const props = ref({
 # Icon
 
 The icon component renders Material Symbols names directly, making it easy to reuse the same icon tokens across the library and docs.
+Standalone icons are 24px by default, independent of the surrounding text size. Use the `inline` variant when an icon should
+follow the surrounding text size and weight.
 
 <DemoContainer :viewport="false">
   <div style="display: grid; justify-items: center; gap: 0.75rem;">
@@ -28,6 +30,8 @@ The icon component renders Material Symbols names directly, making it easy to re
 <AnatomyTable scope="icon" />
 
 <ApiTable component="Icon" v-model="props" />
+
+<StyleTokenTable component="Icon" />
 
 ## Examples
 

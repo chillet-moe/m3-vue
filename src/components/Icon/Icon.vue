@@ -7,13 +7,13 @@ type IconProps = {
   /** The name of the Material Symbols Outlined icon to display. */
   name: string;
 
-  /** The size of the Icon. Accepts any valid CSS font-size value, such as "24px", "1.5em". */
+  /** An explicit Icon size that overrides the variant default and --md-icon-size context. Accepts any valid CSS font-size value, such as "24px", "1.5em". */
   size?: string;
 
   /** The font-weight of the Icon */
   weight?: IconWeight;
 
-  /** Variant of the Icon. "standalone" (default) means the Icon will use the default weight of 400 if weight is not specified. "inline" means the Icon will inherit the font-weight from its context if weight is not specified. */
+  /** Variant of the Icon. "standalone" (default) uses the default size and weight. "inline" follows the surrounding text size and weight unless explicitly overridden. */
   variant?: 'standalone' | 'inline';
 };
 
@@ -42,7 +42,7 @@ const iconStyle = computed<CSSProperties>(() => {
 </script>
 
 <template>
-  <span class="m3-icon" data-scope="icon" data-part="root" :style="iconStyle">{{ name }}</span>
+  <span class="m3-icon" data-scope="icon" data-part="root" :data-variant="variant" :style="iconStyle">{{ name }}</span>
 </template>
 
 <style src="./Icon.css"></style>

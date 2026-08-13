@@ -232,6 +232,8 @@
     block-size: var(--_navigation-rail-item-icon-size);
     color: var(--_navigation-rail-item-current-icon-color);
     transition: color var(--md-easing-fast);
+
+    --md-icon-size: var(--_navigation-rail-item-icon-size);
   }
 
   .m3-navigation-rail-item-icon-glyph {

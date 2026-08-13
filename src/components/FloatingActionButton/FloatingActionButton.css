@@ -209,6 +209,8 @@
     block-size: var(--_fab-icon-size);
     font-size: var(--_fab-icon-size);
     color: var(--_fab-icon-color);
+
+    --md-icon-size: var(--_fab-icon-size);
   }
 
   .m3-fab-label {

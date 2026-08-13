@@ -67,6 +67,8 @@
     inline-size: var(--_pagination-nav-icon-size);
     block-size: var(--_pagination-nav-icon-size);
     font-size: var(--_pagination-nav-icon-size);
+
+    --md-icon-size: var(--_pagination-nav-icon-size);
   }
 
   .m3-pagination-nav-text {

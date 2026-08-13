@@ -684,11 +684,15 @@
   .m3-text-field-leading-slot {
     color: var(--_leading-icon-color);
     font-size: var(--_outlined-text-field-leading-icon-size);
+
+    --md-icon-size: var(--_outlined-text-field-leading-icon-size);
   }
 
   .m3-text-field-trailing-slot {
     color: var(--_trailing-icon-color);
     font-size: var(--_outlined-text-field-trailing-icon-size);
+
+    --md-icon-size: var(--_outlined-text-field-trailing-icon-size);
   }
 
   .m3-text-field[data-has-date-picker='true'] .m3-text-field-trailing-slot,

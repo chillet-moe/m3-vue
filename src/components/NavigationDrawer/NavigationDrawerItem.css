@@ -146,6 +146,8 @@
     inline-size: var(--_navigation-drawer-item-icon-size);
     block-size: var(--_navigation-drawer-item-icon-size);
     color: var(--_navigation-drawer-item-current-icon-color);
+
+    --md-icon-size: var(--_navigation-drawer-item-icon-size);
   }
 
   .m3-navigation-drawer-item-leading,
@@ -264,6 +266,9 @@
     font-size: var(--_navigation-drawer-item-icon-size);
     inline-size: var(--_navigation-drawer-item-icon-size);
     block-size: var(--_navigation-drawer-item-icon-size);
+
+    --md-icon-size: var(--_navigation-drawer-item-icon-size);
+
     transition:
       color var(--md-easing-fast),
       rotate var(--_navigation-drawer-item-motion),

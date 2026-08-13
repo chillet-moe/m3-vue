@@ -1153,5 +1153,7 @@
     width: var(--_button-icon-size);
     height: var(--_button-icon-size);
     font-size: var(--_button-icon-size);
+
+    --md-icon-size: var(--_button-icon-size);
   }
 }

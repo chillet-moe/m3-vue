@@ -1989,6 +1989,8 @@
     inline-size: var(--_chip-icon-size);
     block-size: var(--_chip-icon-size);
     font-size: var(--_chip-icon-size);
+
+    --md-icon-size: var(--_chip-icon-size);
   }
 
   .m3-chip-leading {

@@ -181,6 +181,8 @@
     block-size: var(--_item-icon-size);
     color: var(--_item-current-icon-color);
 
+    --md-icon-size: var(--_item-icon-size);
+
     z-index: 1;
   }
 

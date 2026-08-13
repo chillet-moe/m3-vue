@@ -1645,5 +1645,7 @@
     width: var(--_icon-button-icon-size);
     height: var(--_icon-button-icon-size);
     font-size: var(--_icon-button-icon-size);
+
+    --md-icon-size: var(--_icon-button-icon-size);
   }
 }

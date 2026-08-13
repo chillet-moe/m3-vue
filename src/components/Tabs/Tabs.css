@@ -652,6 +652,8 @@
     color: currentColor;
     font-size: var(--_tabs-icon-size);
     line-height: 1;
+
+    --md-icon-size: var(--_tabs-icon-size);
   }
 
   .m3-tab[data-active] {
