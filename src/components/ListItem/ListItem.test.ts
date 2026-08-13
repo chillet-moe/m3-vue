@@ -69,6 +69,37 @@ describe('ListItem', () => {
     app.unmount();
   });
 
+  it('renders a non-interactive item without action semantics', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(ListItem, {
+        interactive: false,
+        href: '/settings',
+        active: true,
+        title: 'Account status',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const root = container.querySelector<HTMLElement>('[data-scope="item"][data-part="root"]');
+
+    expect(root?.tagName).toBe('DIV');
+    expect(root?.dataset.interactive).toBe('false');
+    expect(root?.classList.contains('m3-button')).toBe(false);
+    expect(root?.classList.contains('m3-state-layer')).toBe(false);
+    expect(root?.getAttribute('data-pressed')).toBeNull();
+    expect(root?.getAttribute('href')).toBeNull();
+    expect(root?.getAttribute('type')).toBeNull();
+    expect(root?.getAttribute('tabindex')).toBeNull();
+    expect(root?.getAttribute('aria-current')).toBeNull();
+
+    app.unmount();
+  });
+
   it('supports active state with leading and trailing slots', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

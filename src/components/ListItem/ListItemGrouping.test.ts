@@ -95,7 +95,7 @@ describe('ListItem grouping contract', () => {
     expect(listItemStyles).toContain("[data-shape='square']:not(");
     expect(listItemStyles).toContain("[data-shape='square']:nth-child(");
     expect(listItemStyles).toContain("[data-shape='square']:nth-last-child(");
-    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_button-container-shape)');
+    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_item-container-shape)');
     expect(listItemStyles).toContain("[data-scope='list'][data-part='container']");
     expect(listItemStyles).toContain("> [data-scope='item'][data-part='root'][data-shape='rounded'] {");
     expect(listItemStyles).not.toContain("[data-shape='rounded'][data-pressed='false']");

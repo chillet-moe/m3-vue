@@ -16,6 +16,7 @@ import ItemRouterLink from '../demos/item/ItemRouterLink.vue';
 import ItemRouterLinkSrc from '../demos/item/ItemRouterLink.vue?raw';
 
 const props = ref({
+  interactive: true,
   shape: 'rounded',
   disabled: false,
   active: false,
@@ -29,7 +30,10 @@ const props = ref({
 
 # ListItem
 
-ListItem is a Button extension with richer content layout, suitable for interactive list entries and action rows.
+ListItem provides a rich list-entry layout. It is interactive by default and renders as a button, or as an anchor when
+`href` is set. Set `interactive="false"` for a passive information row or a row whose nested control owns the
+interaction; passive items render as `div` elements without button, link, focus, state-layer, or press behavior. Any
+`href` is ignored while the item is passive.
 
 <DemoContainer><ListItem v-bind="props" /></DemoContainer>
 

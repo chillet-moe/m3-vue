@@ -9,6 +9,9 @@ import type { ButtonProps } from '@/components/Button';
 type ListItemButtonProps = Omit<ButtonProps, 'toggleable' | 'variant' | 'size' | 'pressShapeMorph'>;
 
 export type ListItemProps = ListItemButtonProps & {
+  /** Whether the whole item is an interactive action or link. */
+  interactive?: boolean;
+
   /** Highlight the item as active/selected. */
   active?: boolean;
 
@@ -20,6 +23,7 @@ export type ListItemProps = ListItemButtonProps & {
 };
 
 const props = withDefaults(defineProps<ListItemProps>(), {
+  interactive: true,
   active: false,
   href: undefined,
   size: undefined,
@@ -32,16 +36,17 @@ const props = withDefaults(defineProps<ListItemProps>(), {
 });
 
 const context = inject(buttonContextKey, undefined);
+const interactive = computed(() => props.interactive);
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
 const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
-  defaultTag: 'button',
-  href: computed(() => props.href),
+  defaultTag: computed(() => (interactive.value ? 'button' : 'div')),
+  href: computed(() => (interactive.value ? props.href : undefined)),
   disabled,
 });
 
-const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
+const { pressShapeMorphAttrs } = usePressShapeMorph({ enabled: interactive, disabled });
 
 defineSlots<{
   /** Optional content above the main row. */
@@ -81,21 +86,29 @@ const slotProps = computed(() => ({
 <template>
   <component
     :is="tag"
-    class="m3-state-layer m3-button m3-item m3-morph-host"
+    :class="[
+      'm3-item',
+      'm3-morph-host',
+      {
+        'm3-state-layer': interactive,
+        'm3-button': interactive,
+      },
+    ]"
     data-scope="item"
     data-part="root"
     data-variant="text"
     data-size="small"
     :data-shape="shape"
+    :data-interactive="interactive ? 'true' : 'false'"
     :data-active="isSelected ? 'true' : undefined"
     :data-selected="isSelected ? 'true' : undefined"
     :href="href"
     :disabled="nativeDisabled"
     :aria-disabled="ariaDisabled"
-    :aria-current="isSelected ? 'page' : undefined"
+    :aria-current="interactive && isSelected ? 'page' : undefined"
     :tabindex="tabIndex"
     :type="type"
-    v-bind="pressShapeMorphAttrs"
+    v-bind="interactive ? pressShapeMorphAttrs : undefined"
   >
     <Icon
       v-if="props.leadingIcon"
