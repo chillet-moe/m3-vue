@@ -17,7 +17,8 @@ import { iconStyleTokens } from './style-tokens/Icon';
 import { iconButtonStyleTokens } from './style-tokens/IconButton';
 import { inputOtpStyleTokens } from './style-tokens/InputOtp';
 import { linearProgressIndicatorStyleTokens } from './style-tokens/LinearProgressIndicator';
-import { listItemGroupingStyleTokens, listItemStyleTokens } from './style-tokens/ListItem';
+import { listGroupingStyleTokens } from './style-tokens/ListGrouping';
+import { listItemStyleTokens } from './style-tokens/ListItem';
 import { loadingIndicatorStyleTokens } from './style-tokens/LoadingIndicator';
 import { menuStyleTokens } from './style-tokens/Menu';
 import { navigationDrawerStyleTokens } from './style-tokens/NavigationDrawer';
@@ -58,7 +59,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   IconButton: iconButtonStyleTokens,
   InputOtp: inputOtpStyleTokens,
   LinearProgressIndicator: linearProgressIndicatorStyleTokens,
-  ListItemGrouping: listItemGroupingStyleTokens,
+  ListGrouping: listGroupingStyleTokens,
   ListItem: listItemStyleTokens,
   LoadingIndicator: loadingIndicatorStyleTokens,
   Menu: menuStyleTokens,

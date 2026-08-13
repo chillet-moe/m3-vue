@@ -172,6 +172,7 @@ export default defineConfig({
           text: 'Utilities',
           items: [
             { text: 'Elevation', link: '/utilities/elevation' },
+            { text: 'List Grouping', link: '/utilities/list-grouping' },
             { text: 'Material Shape Paths', link: '/utilities/material-shape-paths' },
             { text: 'State Layer', link: '/utilities/state-layer' },
           ],
