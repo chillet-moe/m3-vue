@@ -3,6 +3,7 @@ import { computed, provide, toRef } from 'vue';
 import { navigationDrawerContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerIconSpace = 'none' | 'root' | 'all';
+export type NavigationDrawerShape = 'rounded' | 'square';
 
 export type NavigationDrawerProps = {
   /** Accessible label for the navigation landmark. */
@@ -16,6 +17,9 @@ export type NavigationDrawerProps = {
 
   /** Show only leading icons while keeping labels available to assistive technologies. */
   iconOnly?: boolean;
+
+  /** Default shape for items and section triggers inside the drawer. */
+  shape?: NavigationDrawerShape;
 };
 
 const props = withDefaults(defineProps<NavigationDrawerProps>(), {
@@ -23,6 +27,7 @@ const props = withDefaults(defineProps<NavigationDrawerProps>(), {
   disabled: false,
   iconSpace: 'none',
   iconOnly: false,
+  shape: 'rounded',
 });
 
 const modelValue = defineModel<string>();
@@ -56,6 +61,7 @@ provide(navigationDrawerContextKey, {
   value: selectedValue,
   disabled: toRef(() => props.disabled),
   iconOnly: toRef(() => props.iconOnly),
+  shape: toRef(() => props.shape),
   activate,
 });
 </script>

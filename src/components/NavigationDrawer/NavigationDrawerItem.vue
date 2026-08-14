@@ -6,6 +6,8 @@ import type { VTooltipBinding } from '@/directives/Tooltip/types';
 import { computed, inject, useSlots } from 'vue';
 import { navigationDrawerContextKey } from './NavigationDrawerContext';
 
+export type NavigationDrawerItemShape = 'rounded' | 'square';
+
 export type NavigationDrawerItemProps = {
   /** Destination value used by NavigationDrawer v-model. */
   value?: string;
@@ -18,6 +20,9 @@ export type NavigationDrawerItemProps = {
 
   /** Optional href. When provided, the item renders as an anchor. */
   href?: string;
+
+  /** The shape of the item. */
+  shape?: NavigationDrawerItemShape;
 
   /** Disable interaction. */
   disabled?: boolean;
@@ -34,6 +39,7 @@ const props = withDefaults(defineProps<NavigationDrawerItemProps>(), {
   icon: undefined,
   label: undefined,
   href: undefined,
+  shape: undefined,
   disabled: false,
   selected: undefined,
   ariaLabel: undefined,
@@ -54,6 +60,7 @@ const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
+const resolvedShape = computed(() => props.shape ?? drawer?.shape.value ?? 'rounded');
 const {
   mergedDisabled,
   isSelected,
@@ -127,6 +134,7 @@ const tooltip = computed<VTooltipBinding>(() => {
     data-scope="navigation-drawer-item"
     data-part="root"
     :data-item-value="props.value"
+    :data-shape="resolvedShape"
     :data-selected="isSelected ? 'true' : undefined"
     :data-disabled="mergedDisabled ? 'true' : undefined"
     @click="handleClick"

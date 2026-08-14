@@ -18,6 +18,7 @@ const props = ref({
   disabled: false,
   iconSpace: 'root',
   iconOnly: false,
+  shape: 'rounded',
 });
 
 const value = ref('home');
@@ -28,6 +29,7 @@ const value = ref('home');
 NavigationDrawer provides vertical navigation destinations with selectable items and expandable sections.
 Use `iconSpace="root"` when top-level icon and text-only items should share the same label column.
 Use `iconOnly` for compact drawers that show leading icons, keep labels available to assistive technologies, and expose labels as tooltips.
+Use `shape` to set the default shape for items and section triggers; an individual `NavigationDrawerItem` can override it.
 
 <DemoContainer><NavigationDrawer v-model="value" v-bind="props" style="block-size: 30rem"><NavigationDrawerItem value="home" icon="home" label="Home" /><NavigationDrawerItem value="inbox" icon="inbox" label="Inbox" /><NavigationDrawerSection icon="folder" label="Projects"><NavigationDrawerItem value="active" icon="task_alt" label="Active" /><NavigationDrawerItem value="archived" icon="archive" label="Archived" /></NavigationDrawerSection><NavigationDrawerSection icon="groups" label="Teams"><NavigationDrawerItem value="design" icon="palette" label="Design" /><NavigationDrawerItem value="engineering" icon="engineering" label="Engineering" /></NavigationDrawerSection><NavigationDrawerSection icon="list" label="Plain"><NavigationDrawerItem value="drafts" icon="draft" label="Drafts" /><NavigationDrawerItem value="sent" icon="send" label="Sent" /></NavigationDrawerSection><NavigationDrawerItem value="settings" icon="settings" label="Settings" /></NavigationDrawer></DemoContainer>
 

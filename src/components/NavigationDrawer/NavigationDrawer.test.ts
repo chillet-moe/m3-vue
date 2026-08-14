@@ -124,6 +124,40 @@ describe('NavigationDrawer', () => {
     app.unmount();
   });
 
+  it('provides a shape default to items and section triggers while allowing item overrides', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        NavigationDrawer,
+        { shape: 'square' },
+        {
+          default: () => [
+            h(NavigationDrawerItem, { value: 'default', label: 'Default' }),
+            h(NavigationDrawerItem, { value: 'rounded', label: 'Rounded', shape: 'rounded' }),
+            h(
+              NavigationDrawerSection,
+              { label: 'Projects', expanded: true },
+              {
+                default: () => [h(NavigationDrawerItem, { value: 'nested', label: 'Nested' })],
+              },
+            ),
+          ],
+        },
+      ),
+    );
+    app.mount(container);
+    await nextTick();
+
+    expect(container.querySelector('[data-item-value="default"]')?.getAttribute('data-shape')).toBe('square');
+    expect(container.querySelector('[data-item-value="rounded"]')?.getAttribute('data-shape')).toBe('rounded');
+    expect(container.querySelector('[data-item-value="nested"]')?.getAttribute('data-shape')).toBe('square');
+    expect(container.querySelector('[data-part="trigger"]')?.getAttribute('data-shape')).toBe('square');
+
+    app.unmount();
+  });
+
   it('supports icon-only state with accessible destination labels', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -287,6 +321,25 @@ describe('NavigationDrawer', () => {
 });
 
 describe('NavigationDrawerItem', () => {
+  it('supports rounded and square shapes', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() => [
+      h(NavigationDrawerItem, { label: 'Rounded' }),
+      h(NavigationDrawerItem, { label: 'Square', shape: 'square' }),
+    ]);
+    app.mount(container);
+    await nextTick();
+
+    const items = container.querySelectorAll<HTMLElement>('[data-scope="navigation-drawer-item"][data-part="root"]');
+
+    expect(items[0]?.dataset.shape).toBe('rounded');
+    expect(items[1]?.dataset.shape).toBe('square');
+
+    app.unmount();
+  });
+
   it('renders disabled href items as non-interactive anchor state', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

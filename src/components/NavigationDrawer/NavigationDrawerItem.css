@@ -85,6 +85,22 @@
 }
 
 @layer components {
+  .m3-navigation-drawer-item[data-shape='rounded'],
+  .m3-navigation-drawer-section-trigger[data-shape='rounded'] {
+    --_navigation-drawer-item-indicator-shape: var(
+      --md-navigation-drawer-item-indicator-shape,
+      var(--md-shape-indicator)
+    );
+  }
+
+  .m3-navigation-drawer-item[data-shape='square'],
+  .m3-navigation-drawer-section-trigger[data-shape='square'] {
+    --_navigation-drawer-item-indicator-shape: var(
+      --md-navigation-drawer-item-indicator-shape,
+      var(--md-shape-action-square-small)
+    );
+  }
+
   .m3-navigation-drawer-item,
   .m3-navigation-drawer-section-trigger {
     --_navigation-drawer-item-current-label-color: var(--_navigation-drawer-item-inactive-label-color);

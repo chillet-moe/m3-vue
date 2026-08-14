@@ -44,6 +44,7 @@ defineSlots<{
 const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 const contentId = `navigation-drawer-section-content-${useId()}`;
+const shape = computed(() => drawer?.shape.value ?? 'rounded');
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
 const mergedDisabled = computed(() => props.disabled || drawer?.disabled.value || false);
@@ -89,6 +90,7 @@ provide(navigationDrawerContextKey, {
   value: computed(() => drawer?.value.value),
   disabled: mergedDisabled,
   iconOnly: isIconOnly,
+  shape,
   activate: (value) => drawer?.activate(value),
 });
 
@@ -118,6 +120,7 @@ const toggle = () => {
       :aria-expanded="expanded ? 'true' : 'false'"
       :aria-controls="contentId"
       :aria-label="resolvedAriaLabel"
+      :data-shape="shape"
       v-tooltip="tooltip"
       @click="toggle"
     >
