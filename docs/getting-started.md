@@ -38,6 +38,20 @@ app.mount('#app');
 After registration, `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` are available globally.
 The plugin also accepts reactive locale configuration; see [Localization](/guides/localization).
 
+You can set one global default shape for action components through the same plugin. The value can be a `ref` when the
+application needs to switch between `rounded` and `square` at runtime; explicit component props and nested contexts
+still take precedence.
+
+```ts
+import { ref } from 'vue';
+
+const shape = ref<'rounded' | 'square'>('square');
+app.use(M3VuePlugin, { shape });
+
+// Later, all ButtonContext and IconButtonContext consumers update together.
+shape.value = 'rounded';
+```
+
 ## Mount The Overlay Host
 
 Render one `OverlayHost` near the root of the application when using the programmatic `showDialog()` or

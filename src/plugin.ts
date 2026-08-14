@@ -7,6 +7,7 @@ import vTooltip from './directives/Tooltip/vTooltip';
 import { initStateLayer } from '@/components/StateLayer/state-layer.ts';
 import { installM3Locale } from '@/locales/context';
 import type { M3LocaleOptions } from '@/locales/types';
+import { installM3Shape, type M3ShapeOptions } from './styles/context';
 
 export const m3VueDirectives = {
   tooltip: vTooltip,
@@ -17,13 +18,16 @@ export const m3VueDirectives = {
 
 export const m3VueDirectiveNames = Object.freeze(Object.keys(m3VueDirectives) as Array<keyof typeof m3VueDirectives>);
 
+export type M3VuePluginOptions = M3LocaleOptions & M3ShapeOptions;
+
 export const M3VuePlugin = {
-  install(app: App, options: M3LocaleOptions = {}) {
+  install(app: App, options: M3VuePluginOptions = {}) {
     for (const name of m3VueDirectiveNames) {
       app.directive(name, m3VueDirectives[name] as Directive);
     }
 
     installM3Locale(app, options);
+    installM3Shape(app, options);
     initStateLayer();
   },
 } satisfies Plugin;

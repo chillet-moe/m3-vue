@@ -10,6 +10,7 @@ export * from './locales';
 // Shapes
 export * from './shapes/animatable';
 export * from './shapes/animatableSmall';
+export * from './styles/context';
 
 // Composables
 export { usePressedState } from './composables/pressedState.ts';
