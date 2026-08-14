@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, provide, toRef } from 'vue';
-import { navigationDrawerContextKey } from './NavigationDrawerContext';
+import { computed, inject, provide, toRef, unref } from 'vue';
+import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerIconSpace = 'none' | 'root' | 'all';
 export type NavigationDrawerShape = 'rounded' | 'square';
@@ -27,11 +27,13 @@ const props = withDefaults(defineProps<NavigationDrawerProps>(), {
   disabled: false,
   iconSpace: 'none',
   iconOnly: false,
-  shape: 'rounded',
+  shape: undefined,
 });
 
 const modelValue = defineModel<string>();
 const selectedValue = computed(() => modelValue.value);
+const globalShape = inject(navigationDrawerShapeContextKey, undefined);
+const shape = computed(() => props.shape ?? unref(globalShape?.shape) ?? 'rounded');
 const slotProps = computed(() => ({
   value: selectedValue.value,
   disabled: props.disabled,
@@ -61,7 +63,7 @@ provide(navigationDrawerContextKey, {
   value: selectedValue,
   disabled: toRef(() => props.disabled),
   iconOnly: toRef(() => props.iconOnly),
-  shape: toRef(() => props.shape),
+  shape,
   activate,
 });
 </script>

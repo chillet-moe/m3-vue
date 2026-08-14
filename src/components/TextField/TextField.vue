@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
+import { computed, inject, onBeforeUnmount, ref, unref, useAttrs, useId, useSlots, watch } from 'vue';
 import {
   DatePicker,
   type DatePickerModelValue,
@@ -15,7 +15,7 @@ import {
   type TimePickerModelValue,
   type TimePickerVariant,
 } from '@/components/TimePicker';
-import { useFieldLabelClearanceStyle } from '@/components/TextField/FieldContext';
+import { fieldContextKey, useFieldLabelClearanceStyle } from '@/components/TextField/FieldContext';
 import { acquireAnchorName } from '@/internal/anchorName';
 import { useM3Locale } from '@/locales/context';
 
@@ -118,7 +118,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   as: 'input',
   size: 'medium',
   type: 'text',
-  shape: 'square',
+  shape: undefined,
   labelClearance: undefined,
   rows: 3,
   description: undefined,
@@ -138,7 +138,9 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   timePickerInputMode: undefined,
 });
 
+const fieldContext = inject(fieldContextKey, undefined);
 const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
+const shape = computed(() => props.shape ?? unref(fieldContext?.shape) ?? 'square');
 
 const emit = defineEmits<{
   input: [event: Event];
@@ -410,7 +412,7 @@ defineExpose({
     data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
-    :data-shape="props.shape"
+    :data-shape="shape"
     :data-size="effectiveSize"
     :data-multiline="props.as === 'textarea' ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"

@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<PaginationNextProps>(), {
   ariaLabel: 'Go to next page',
   variant: undefined,
   size: 'small',
-  shape: 'rounded',
+  shape: undefined,
   href: undefined,
   disabled: false,
 });

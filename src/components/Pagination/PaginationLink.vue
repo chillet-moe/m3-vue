@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<PaginationLinkProps>(), {
   isActive: false,
   variant: undefined,
   size: 'small',
-  shape: 'rounded',
+  shape: undefined,
   href: undefined,
   disabled: false,
 });

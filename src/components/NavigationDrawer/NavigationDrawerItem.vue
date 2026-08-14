@@ -3,8 +3,8 @@ import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
-import { computed, inject, useSlots } from 'vue';
-import { navigationDrawerContextKey } from './NavigationDrawerContext';
+import { computed, inject, unref, useSlots } from 'vue';
+import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerItemShape = 'rounded' | 'square';
 
@@ -58,9 +58,10 @@ defineSlots<{
 
 const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
+const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
-const resolvedShape = computed(() => props.shape ?? drawer?.shape.value ?? 'rounded');
+const resolvedShape = computed(() => props.shape ?? drawer?.shape.value ?? unref(globalShape?.shape) ?? 'rounded');
 const {
   mergedDisabled,
   isSelected,

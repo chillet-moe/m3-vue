@@ -2,8 +2,8 @@
 import { Icon } from '@/components/Icon';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
-import { computed, inject, provide, useId, useSlots } from 'vue';
-import { navigationDrawerContextKey } from './NavigationDrawerContext';
+import { computed, inject, provide, unref, useId, useSlots } from 'vue';
+import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerSectionProps = {
   /** Default icon name (Material Symbols Outlined). */
@@ -43,8 +43,9 @@ defineSlots<{
 
 const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
+const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 const contentId = `navigation-drawer-section-content-${useId()}`;
-const shape = computed(() => drawer?.shape.value ?? 'rounded');
+const shape = computed(() => drawer?.shape.value ?? unref(globalShape?.shape) ?? 'rounded');
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
 const mergedDisabled = computed(() => props.disabled || drawer?.disabled.value || false);

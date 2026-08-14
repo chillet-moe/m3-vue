@@ -1,4 +1,4 @@
-import type { InjectionKey, Ref } from 'vue';
+import type { InjectionKey, MaybeRef, Ref } from 'vue';
 import type { NavigationItemContext } from '@/composables/useNavigationItem';
 
 export type NavigationDrawerShape = 'rounded' | 'square';
@@ -9,3 +9,10 @@ export type NavigationDrawerContext = NavigationItemContext & {
 };
 
 export const navigationDrawerContextKey: InjectionKey<NavigationDrawerContext> = Symbol('NavigationDrawerContext');
+
+export type NavigationDrawerShapeContext = {
+  shape?: MaybeRef<NavigationDrawerShape>;
+};
+
+export const navigationDrawerShapeContextKey: InjectionKey<NavigationDrawerShapeContext> =
+  Symbol('NavigationDrawerShapeContext');
