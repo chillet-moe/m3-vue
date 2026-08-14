@@ -5,6 +5,12 @@ title: List Grouping
 <script setup lang="ts">
 import ListGroupingDefault from '../demos/list-grouping/ListGroupingDefault.vue';
 import ListGroupingDefaultSrc from '../demos/list-grouping/ListGroupingDefault.vue?raw';
+import ListGroupingParticipants from '../demos/list-grouping/ListGroupingParticipants.vue';
+import ListGroupingParticipantsSrc from '../demos/list-grouping/ListGroupingParticipants.vue?raw';
+import ListGroupingBoundaries from '../demos/list-grouping/ListGroupingBoundaries.vue';
+import ListGroupingBoundariesSrc from '../demos/list-grouping/ListGroupingBoundaries.vue?raw';
+import ListGroupingShapes from '../demos/list-grouping/ListGroupingShapes.vue';
+import ListGroupingShapesSrc from '../demos/list-grouping/ListGroupingShapes.vue?raw';
 </script>
 
 # List Grouping
@@ -26,8 +32,6 @@ declare a `data-shape` of `rounded` or `square`:
 `ListItem` automatically carries the participant marker and its `shape` prop supplies `data-shape`. Other elements and
 components must provide both attributes explicitly.
 
-<DemoContainer :src="ListGroupingDefaultSrc"><ListGroupingDefault /></DemoContainer>
-
 ## Behavior
 
 With the default tokens, rounded middle participants use an `8px` radius and the first and last rounded participants
@@ -43,6 +47,33 @@ single-root component does this by default; components using `inheritAttrs: fals
 intended root.
 
 `ListItem` additionally adapts its active indicator to the resolved group shape.
+
+## Examples
+
+### Rounded and square
+
+The same container contract supports rounded and square participants, including mixed custom roots.
+
+<DemoContainer :src="ListGroupingDefaultSrc"><ListGroupingDefault /></DemoContainer>
+
+### Passive and custom participants
+
+Interactive behavior is independent from grouping. Passive `ListItem` roots and user-owned elements participate using
+the same shape contract.
+
+<DemoContainer :src="ListGroupingParticipantsSrc"><ListGroupingParticipants /></DemoContainer>
+
+### Non-participants and nested groups
+
+Unmarked direct children are ignored, while a nested container calculates its own first and last participants.
+
+<DemoContainer :src="ListGroupingBoundariesSrc"><ListGroupingBoundaries /></DemoContainer>
+
+### Custom shapes
+
+Set the grouping tokens on each container to tune its middle and outer corners without targeting participant internals.
+
+<DemoContainer :src="ListGroupingShapesSrc"><ListGroupingShapes /></DemoContainer>
 
 ## Styling
 
