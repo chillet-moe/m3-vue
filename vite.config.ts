@@ -40,11 +40,9 @@ export default defineConfig({
     vueWithScopeBoundary(),
     webTypesFromVueComponentMeta({
       tsconfigPath: 'tsconfig.types.json',
-      components: ['src/components/**/*.vue'],
+      entryPoints: 'src/index.ts',
       outFile: 'web-types.json',
-      tagNameStyle: 'as-is',
       checkerOptions: {
-        forceUseTs: true,
         printer: {
           newLine: 1,
         },
