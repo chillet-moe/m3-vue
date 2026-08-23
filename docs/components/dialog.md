@@ -66,6 +66,12 @@ For stylesheet-level customization, set `--md-dialog-container-width` on the `Di
 }
 ```
 
+## Scrollable content
+
+The content part preserves common descendant visual overflow at its block edges while remaining independently
+scrollable. See [Scrollable Content Visual Overflow](/guides/scrollable-content-visual-overflow) for the shared Dialog
+and sheet contract and its customization token.
+
 ## Examples
 
 ### Default

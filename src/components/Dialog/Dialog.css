@@ -14,6 +14,7 @@
     --md-dialog-container-elevation: initial;
     --md-dialog-container-shape: initial;
     --md-dialog-container-width: initial;
+    --md-dialog-content-visual-overflow-inset: initial;
     --md-dialog-headline-color: initial;
     --md-dialog-headline-font: initial;
     --md-dialog-headline-line-height: initial;
@@ -37,6 +38,7 @@
     --_dialog-container-elevation: var(--md-dialog-container-elevation, var(--md-sys-elevation-level3));
     --_dialog-container-shape: var(--md-dialog-container-shape, var(--md-shape-overlay));
     --_dialog-container-width: var(--md-dialog-container-width, 35rem);
+    --_dialog-content-visual-overflow-inset: var(--md-dialog-content-visual-overflow-inset, 0.5rem);
     --_dialog-action-label-text-font: var(--md-dialog-action-label-text-font, var(--md-sys-typescale-label-large-font));
     --_dialog-action-label-text-line-height: var(
       --md-dialog-action-label-text-line-height,
@@ -200,8 +202,11 @@
 
   .m3-dialog-content {
     min-block-size: 0;
+    margin-block: calc(-1 * var(--_dialog-content-visual-overflow-inset));
+    padding-block: var(--_dialog-content-visual-overflow-inset);
     padding-inline: var(--_dialog-container-padding-inline);
     overflow: auto;
+    scroll-padding-block: var(--_dialog-content-visual-overflow-inset);
     opacity: 0;
 
     color: var(--_dialog-supporting-text-color);

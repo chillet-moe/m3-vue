@@ -24,6 +24,7 @@
     --md-sheet-side-docked-standard-container-color: initial;
     --md-sheet-side-docked-standard-container-elevation: initial;
     --md-side-sheet-closed-translate: initial;
+    --md-side-sheet-content-visual-overflow-inset: initial;
     --md-side-sheet-detached-gap: initial;
     --md-side-sheet-width: initial;
   }
@@ -94,6 +95,7 @@
     --_side-sheet-detached-gap: var(--md-side-sheet-detached-gap, 1rem);
     --_side-sheet-width: var(--md-side-sheet-width, var(--_sheet-side-docked-container-width));
     --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, 100%);
+    --_side-sheet-content-visual-overflow-inset: var(--md-side-sheet-content-visual-overflow-inset, 0.5rem);
     --_side-sheet-container-padding-block: 1.5rem;
     --_side-sheet-container-padding-inline: 1.5rem;
   }
@@ -241,8 +243,11 @@
     box-sizing: border-box;
     flex: 1 1 auto;
     min-block-size: 0;
+    margin-block: calc(-1 * var(--_side-sheet-content-visual-overflow-inset));
+    padding-block: var(--_side-sheet-content-visual-overflow-inset);
     padding-inline: var(--_side-sheet-container-padding-inline);
     overflow: auto;
+    scroll-padding-block: var(--_side-sheet-content-visual-overflow-inset);
     color: var(--md-sys-color-on-surface-variant);
   }
 

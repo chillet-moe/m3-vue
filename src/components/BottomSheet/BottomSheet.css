@@ -5,6 +5,7 @@
     /* Low-specificity public token placeholders; private tokens own defaults. */
     --md-bottom-sheet-background-extension: initial;
     --md-bottom-sheet-drag-offset: initial;
+    --md-bottom-sheet-content-visual-overflow-inset: initial;
     --md-bottom-sheet-max-height: initial;
     --md-bottom-sheet-translate-offset: initial;
     --md-sheet-bottom-docked-container-color: initial;
@@ -55,6 +56,7 @@
     );
     --_bottom-sheet-max-height: var(--md-bottom-sheet-max-height, calc(100vb - 3rem));
     --_bottom-sheet-drag-offset: var(--md-bottom-sheet-drag-offset, 0px);
+    --_bottom-sheet-content-visual-overflow-inset: var(--md-bottom-sheet-content-visual-overflow-inset, 0.5rem);
     --_bottom-sheet-translate-offset: var(--md-bottom-sheet-translate-offset, 0px);
     --_bottom-sheet-background-extension: var(--md-bottom-sheet-background-extension, 0px);
     --_bottom-sheet-container-padding-block-start: 1rem;
@@ -175,8 +177,11 @@
 
     box-sizing: border-box;
     min-block-size: 0;
+    margin-block: calc(-1 * var(--_bottom-sheet-content-visual-overflow-inset));
+    padding-block: var(--_bottom-sheet-content-visual-overflow-inset);
     padding-inline: var(--_bottom-sheet-container-padding-inline);
     overflow: auto;
+    scroll-padding-block: var(--_bottom-sheet-content-visual-overflow-inset);
     color: var(--md-sys-color-on-surface-variant);
   }
 
