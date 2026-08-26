@@ -549,6 +549,9 @@
   .m3-text-field-outline legend {
     box-sizing: border-box;
     visibility: hidden;
+    /* A near-zero inline size must not wrap the hidden label into scrollable block overflow. */
+    overflow: clip;
+    white-space: nowrap;
     max-inline-size: 0.01px;
     block-size: 0;
     padding: 0;

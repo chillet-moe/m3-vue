@@ -65,6 +65,7 @@
     "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
     "prepublishOnly": "pnpm run build && pnpm run build:types",
     "test": "vp test run",
+    "test:browser": "tsx tests/browser/text-field-outline/run.ts",
     "typecheck": "vue-tsc -b",
     "fmt": "vp fmt",
     "fmt:check": "vp fmt --check",

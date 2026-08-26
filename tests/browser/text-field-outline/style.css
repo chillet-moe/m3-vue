@@ -1,0 +1,9 @@
+html,
+body {
+  margin: 0;
+}
+
+.text-field-outline-fixture {
+  display: grid;
+  gap: 1rem;
+}

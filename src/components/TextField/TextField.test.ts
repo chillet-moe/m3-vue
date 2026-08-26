@@ -417,6 +417,19 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('clips the collapsed outline legend to a single line while retaining the animated notch', () => {
+    const legendRule = textFieldStyles.match(/\.m3-text-field-outline legend\s*\{([^}]*)\}/)?.[1];
+    const expandedLegendRule = textFieldStyles.match(
+      /\.m3-text-field:focus-within \.m3-text-field-outline legend,[\s\S]*?\.m3-text-field\[data-always-float-label='true'\] \.m3-text-field-outline legend\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(legendRule).toContain('overflow: clip');
+    expect(legendRule).toContain('white-space: nowrap');
+    expect(legendRule).toContain('max-inline-size: 0.01px');
+    expect(expandedLegendRule).toContain('max-inline-size: 100%');
+    expect(expandedLegendRule).toContain('padding-inline: 0.25rem');
+  });
+
   it('uses medium size by default and exposes each single-line size across field states', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
