@@ -430,13 +430,17 @@ describe('TextField', () => {
     expect(expandedLegendRule).toContain('padding-inline: 0.25rem');
   });
 
-  it('draws layout-stable inset edges while retaining the native floating-label notch', () => {
+  it('draws one continuous segmented outline around the native floating-label notch', () => {
     const outlineRule = textFieldStyles.match(/\.m3-text-field-outline\s*\{([^}]*)\}/)?.[1];
+    const segmentRule = textFieldStyles.match(
+      /\.m3-text-field-outline::before,\s*\.m3-text-field-outline::after\s*\{([^}]*)\}/,
+    )?.[1];
     expect(outlineRule).toContain('border: 0');
-    expect(outlineRule).toContain('border-block-start: var(--_outline-width) solid var(--_outline-color)');
-    expect(outlineRule).toContain('inset var(--_outline-width) 0 0 var(--_outline-color)');
-    expect(outlineRule).toContain('inset calc(-1 * var(--_outline-width)) 0 0 var(--_outline-color)');
-    expect(outlineRule).toContain('inset 0 calc(-1 * var(--_outline-width)) 0 var(--_outline-color)');
+    expect(outlineRule).toContain('linear-gradient(var(--_outline-color), var(--_outline-color)) left');
+    expect(outlineRule).toContain('linear-gradient(var(--_outline-color), var(--_outline-color)) right');
+    expect(outlineRule).toContain('linear-gradient(var(--_outline-color), var(--_outline-color)) bottom');
+    expect(segmentRule).toContain('block-size: var(--_outline-width)');
+    expect(segmentRule).toContain('background: var(--_outline-color)');
     expect(textFieldStyles).not.toContain('--md-outlined-text-field-container-color');
     expect(textFieldStyles).toContain('@media (forced-colors: active)');
     expect(textFieldStyles).toContain('border: var(--_outline-width) solid CanvasText');
