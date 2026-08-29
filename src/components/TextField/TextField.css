@@ -135,15 +135,15 @@
     );
     --_outlined-text-field-container-shape-square: var(
       --md-outlined-text-field-container-shape-square,
-      var(--md-button-medium-container-shape-square, var(--md-shape-field-square))
+      var(--md-button-medium-container-shape-square, var(--md-shape-action-square-medium))
     );
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,
-      var(--md-button-medium-outlined-outline-width, --dp(1.5))
+      var(--md-button-medium-outlined-outline-width, var(--md-control-outline-width-medium))
     );
     --_outlined-text-field-outline-color: var(
       --md-outlined-text-field-outline-color,
-      var(--md-button-outlined-outline-color, var(--md-sys-color-outline-variant))
+      var(--md-button-outlined-outline-color, var(--md-control-outline-color))
     );
     --_outlined-text-field-label-text-color: var(
       --md-outlined-text-field-label-text-color,
@@ -451,6 +451,14 @@
   }
 
   .m3-text-field[data-size='extra-small'] {
+    --_outlined-text-field-container-shape-square: var(
+      --md-outlined-text-field-container-shape-square,
+      var(--md-button-xsmall-container-shape-square, var(--md-shape-action-square-small))
+    );
+    --_outlined-text-field-outline-width: var(
+      --md-outlined-text-field-outline-width,
+      var(--md-button-xsmall-outlined-outline-width, var(--md-control-outline-width-extra-small))
+    );
     --_container-height: var(
       --md-outlined-text-field-container-height,
       var(--_outlined-text-field-extra-small-container-height)
@@ -471,6 +479,14 @@
   }
 
   .m3-text-field[data-size='small'] {
+    --_outlined-text-field-container-shape-square: var(
+      --md-outlined-text-field-container-shape-square,
+      var(--md-button-small-container-shape-square, var(--md-shape-action-square-small))
+    );
+    --_outlined-text-field-outline-width: var(
+      --md-outlined-text-field-outline-width,
+      var(--md-button-small-outlined-outline-width, var(--md-control-outline-width-small))
+    );
     --_container-height: var(
       --md-outlined-text-field-container-height,
       var(--_outlined-text-field-small-container-height)
@@ -489,6 +505,14 @@
   }
 
   .m3-text-field[data-size='medium'] {
+    --_outlined-text-field-container-shape-square: var(
+      --md-outlined-text-field-container-shape-square,
+      var(--md-button-medium-container-shape-square, var(--md-shape-action-square-medium))
+    );
+    --_outlined-text-field-outline-width: var(
+      --md-outlined-text-field-outline-width,
+      var(--md-button-medium-outlined-outline-width, var(--md-control-outline-width-medium))
+    );
     --_container-height: var(
       --md-outlined-text-field-container-height,
       var(--_outlined-text-field-medium-container-height)

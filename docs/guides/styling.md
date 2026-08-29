@@ -12,7 +12,7 @@
 组件使用五层 CSS token：
 
 1. `--md-sys-*`：全局 Material system token，用于主题级配置。不建议在单个组件实例上局部覆盖。
-2. `--md-shape-*`：库级语义 shape token，用少量变量把 system shape scale 映射到 action、field、card、popover、overlay 等组件角色。
+2. `--md-shape-*` 和 `--md-control-*`：库级语义 token，用少量变量把 system token 映射到组件共享的 shape 与 control outline 角色。
 3. `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color`、`--md-icon-size`：上下文 token，
    用于父组件向子组件传递容器色、内容色、state layer 颜色和图标尺寸。组件应在自己拥有的最小 icon 容器上设置
    `--md-icon-size`，避免尺寸影响无关的后代 Icon。
@@ -66,6 +66,17 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
 ```css
 :root {
   --md-outlined-text-field-container-shape: var(--md-sys-shape-corner-small);
+}
+```
+
+同尺寸的 outlined Button 与 TextField 共享静止状态的 control outline token。需要统一调整控件边界时，优先覆盖：
+
+```css
+:root {
+  --md-control-outline-color: var(--md-sys-color-outline-variant);
+  --md-control-outline-width-extra-small: 0.0625rem;
+  --md-control-outline-width-small: 0.078125rem;
+  --md-control-outline-width-medium: 0.09375rem;
 }
 ```
 

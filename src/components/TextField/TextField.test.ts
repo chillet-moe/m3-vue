@@ -457,6 +457,22 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('maps square shape and resting outline defaults to the same-sized outlined Button tokens', () => {
+    const extraSmallRule = textFieldStyles.match(
+      /\.m3-text-field\[data-size='extra-small'\]\s*\{([\s\S]*?)\n  \}/,
+    )?.[1];
+    const smallRule = textFieldStyles.match(/\.m3-text-field\[data-size='small'\]\s*\{([\s\S]*?)\n  \}/)?.[1];
+    const mediumRule = textFieldStyles.match(/\.m3-text-field\[data-size='medium'\]\s*\{([\s\S]*?)\n  \}/)?.[1];
+
+    expect(extraSmallRule).toContain('--md-button-xsmall-container-shape-square');
+    expect(extraSmallRule).toContain('--md-control-outline-width-extra-small');
+    expect(smallRule).toContain('--md-button-small-container-shape-square');
+    expect(smallRule).toContain('--md-control-outline-width-small');
+    expect(mediumRule).toContain('--md-button-medium-container-shape-square');
+    expect(mediumRule).toContain('--md-control-outline-width-medium');
+    expect(textFieldStyles).toContain('var(--md-button-outlined-outline-color, var(--md-control-outline-color))');
+  });
+
   it('keeps leading and trailing slot wrappers compact at every single-line size', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

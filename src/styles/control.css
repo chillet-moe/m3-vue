@@ -1,0 +1,9 @@
+@layer tokens {
+  :where(:root) {
+    /* Shared resting outline defaults for size-aligned controls. */
+    --md-control-outline-color: var(--md-sys-color-outline-variant);
+    --md-control-outline-width-extra-small: 0.0625rem;
+    --md-control-outline-width-small: --dp(1.25);
+    --md-control-outline-width-medium: --dp(1.5);
+  }
+}
