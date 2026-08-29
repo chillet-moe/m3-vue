@@ -556,47 +556,18 @@
 
   .m3-text-field-outline {
     position: absolute;
-    display: flex;
-    align-items: flex-start;
     inset: 0;
     margin: 0;
     padding-inline: 0.5rem;
     padding-block: 0;
-    border: 0;
+    border: var(--_outline-width) solid var(--_outline-color);
     box-sizing: border-box;
     border-radius: inherit;
-    background:
-      linear-gradient(var(--_outline-color), var(--_outline-color)) left / var(--_outline-width) 100% no-repeat,
-      linear-gradient(var(--_outline-color), var(--_outline-color)) right / var(--_outline-width) 100% no-repeat,
-      linear-gradient(var(--_outline-color), var(--_outline-color)) bottom / 100% var(--_outline-width) no-repeat;
-    overflow: hidden;
     pointer-events: none;
     min-inline-size: 0;
-    z-index: 0;
     transition:
-      background-color var(--md-duration-fast) var(--md-timing-function-fast),
-      background-size var(--md-duration-fast) var(--md-timing-function-fast);
-  }
-
-  .m3-text-field-outline::before,
-  .m3-text-field-outline::after {
-    content: '';
-    flex: 0 0 auto;
-    block-size: var(--_outline-width);
-    background: var(--_outline-color);
-    transition:
-      block-size var(--md-duration-fast) var(--md-timing-function-fast),
-      background-color var(--md-duration-fast) var(--md-timing-function-fast);
-  }
-
-  .m3-text-field-outline::before {
-    inline-size: 0.75rem;
-    margin-inline-start: -0.5rem;
-  }
-
-  .m3-text-field-outline::after {
-    flex-grow: 1;
-    margin-inline-end: -0.5rem;
+      border-color var(--md-duration-fast) var(--md-timing-function-fast),
+      border-width var(--md-duration-fast) var(--md-timing-function-fast);
   }
 
   .m3-text-field-outline legend {
@@ -608,7 +579,7 @@
     max-inline-size: 0.01px;
     block-size: 0;
     padding: 0;
-    margin-inline-start: 0;
+    margin-inline-start: 0.25rem;
     font-family: var(--_outlined-text-field-label-text-font), sans-serif;
     font-size: var(--_outlined-text-field-label-text-populated-size);
     line-height: var(--_outlined-text-field-label-text-populated-line-height);
@@ -626,7 +597,6 @@
     translate: 0 -50%;
     padding-inline: 0;
     background: transparent;
-    z-index: 2;
 
     color: var(--_label-color);
     font-family: var(--_outlined-text-field-label-text-font), sans-serif;
@@ -676,11 +646,9 @@
   }
 
   .m3-text-field-content {
-    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    z-index: 1;
     inline-size: 100%;
   }
 
@@ -892,13 +860,7 @@
 
   @media (forced-colors: active) {
     .m3-text-field-outline {
-      background: none;
       border: var(--_outline-width) solid CanvasText;
-    }
-
-    .m3-text-field-outline::before,
-    .m3-text-field-outline::after {
-      background: none;
     }
   }
 }

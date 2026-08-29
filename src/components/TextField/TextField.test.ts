@@ -430,17 +430,12 @@ describe('TextField', () => {
     expect(expandedLegendRule).toContain('padding-inline: 0.25rem');
   });
 
-  it('draws one continuous segmented outline around the native floating-label notch', () => {
+  it('uses the native fieldset border for continuous rounded corners and the floating-label notch', () => {
     const outlineRule = textFieldStyles.match(/\.m3-text-field-outline\s*\{([^}]*)\}/)?.[1];
-    const segmentRule = textFieldStyles.match(
-      /\.m3-text-field-outline::before,\s*\.m3-text-field-outline::after\s*\{([^}]*)\}/,
-    )?.[1];
-    expect(outlineRule).toContain('border: 0');
-    expect(outlineRule).toContain('linear-gradient(var(--_outline-color), var(--_outline-color)) left');
-    expect(outlineRule).toContain('linear-gradient(var(--_outline-color), var(--_outline-color)) right');
-    expect(outlineRule).toContain('linear-gradient(var(--_outline-color), var(--_outline-color)) bottom');
-    expect(segmentRule).toContain('block-size: var(--_outline-width)');
-    expect(segmentRule).toContain('background: var(--_outline-color)');
+    expect(outlineRule).toContain('border: var(--_outline-width) solid var(--_outline-color)');
+    expect(outlineRule).toContain('border-radius: inherit');
+    expect(outlineRule).not.toContain('box-shadow');
+    expect(textFieldStyles).not.toContain('.m3-text-field-outline::before');
     expect(textFieldStyles).not.toContain('--md-outlined-text-field-container-color');
     expect(textFieldStyles).toContain('@media (forced-colors: active)');
     expect(textFieldStyles).toContain('border: var(--_outline-width) solid CanvasText');
