@@ -515,16 +515,18 @@
 
 @layer components {
   .m3-button {
-    border: none;
+    border: var(--button-outline-width, var(--_button-reserved-outline-width)) solid transparent;
     user-select: none;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    overflow: hidden;
 
     transition:
       border-radius var(--md-easing-fast-spatial),
+      border-color var(--md-easing-fast),
       box-shadow var(--md-easing-fast),
       background-color var(--md-easing-fast),
       color var(--md-easing-fast);
@@ -534,14 +536,18 @@
 
     background-color: var(--md-color-container);
     color: var(--md-color-on-container);
-    box-shadow:
-      var(--_button-container-elevation),
-      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
+    box-shadow: var(--_button-container-elevation);
 
     border-start-start-radius: var(--_button-container-shape);
     border-start-end-radius: var(--_button-container-shape);
     border-end-end-radius: var(--_button-container-shape);
     border-end-start-radius: var(--_button-container-shape);
+
+    /* Let the padding-box clip derive the exact inner curve of the native border. */
+    &::after,
+    > .ripple {
+      border-radius: 0;
+    }
   }
 
   .m3-button:not(:disabled):not(:has(input:disabled)) {
@@ -550,17 +556,13 @@
 
   .m3-button:hover {
     --md-color-on-container: var(--_button-hovered-label-text-color);
-    box-shadow:
-      var(--_button-hovered-container-elevation, var(--_button-container-elevation)),
-      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
+    box-shadow: var(--_button-hovered-container-elevation, var(--_button-container-elevation));
   }
 
   .m3-button:focus-visible,
   .m3-button:has(input:focus-visible) {
     --md-color-on-container: var(--_button-focused-label-text-color);
-    box-shadow:
-      var(--_button-focused-container-elevation),
-      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
+    box-shadow: var(--_button-focused-container-elevation);
 
     outline-offset: var(--_button-focus-indicator-outline-offset);
     outline: var(--_button-focus-indicator-color) solid var(--_button-focus-indicator-thickness);
@@ -568,18 +570,14 @@
 
   .m3-button[data-pressed='true'] {
     --md-color-on-container: var(--_button-pressed-label-text-color);
-    box-shadow:
-      var(--_button-pressed-container-elevation),
-      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
+    box-shadow: var(--_button-pressed-container-elevation);
   }
 
   .m3-button:disabled,
   label.m3-button:has(input:disabled) {
     background-color: rgb(from var(--_button-disabled-container-color) r g b / 0.1);
     color: rgb(from var(--_button-disabled-label-text-color) r g b / 0.38);
-    box-shadow:
-      var(--_button-disabled-container-elevation),
-      inset 0 0 0 var(--button-outline-width, 0) var(--button-outline-color, #000000);
+    box-shadow: var(--_button-disabled-container-elevation);
   }
 
   /* elevated */
@@ -763,7 +761,7 @@
   .m3-button[data-variant='outlined'] {
     --_button-container-color: var(--md-button-container-color, transparent);
     --_button-label-text-color: var(--md-button-label-text-color, var(--_button-outlined-label-text-color));
-    --button-outline-color: var(--_button-outlined-outline-color);
+    border-color: var(--_button-outlined-outline-color);
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
       var(--_button-outlined-hovered-label-text-color)
@@ -841,7 +839,9 @@
     @apply label-large;
 
     height: --dp(32);
-    padding-inline: --dp(12);
+    padding-inline: calc(--dp(12) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+
+    --_button-reserved-outline-width: var(--_button-xsmall-outlined-outline-width);
 
     --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
     --_button-container-shape-square: var(
@@ -865,7 +865,9 @@
     @apply label-large;
 
     height: --dp(40);
-    padding-inline: --dp(16);
+    padding-inline: calc(--dp(16) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+
+    --_button-reserved-outline-width: var(--_button-small-outlined-outline-width);
 
     --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
     --_button-container-shape-square: var(
@@ -889,7 +891,9 @@
     @apply title-medium;
 
     height: --dp(56);
-    padding-inline: --dp(24);
+    padding-inline: calc(--dp(24) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+
+    --_button-reserved-outline-width: var(--_button-medium-outlined-outline-width);
 
     --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
     --_button-container-shape-square: var(
@@ -913,7 +917,9 @@
     @apply headline-small;
 
     height: --dp(96);
-    padding-inline: --dp(48);
+    padding-inline: calc(--dp(48) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+
+    --_button-reserved-outline-width: var(--_button-large-outlined-outline-width);
 
     --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
     --_button-container-shape-square: var(
@@ -937,7 +943,9 @@
     @apply headline-large;
 
     height: --dp(136);
-    padding-inline: --dp(64);
+    padding-inline: calc(--dp(64) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+
+    --_button-reserved-outline-width: var(--_button-xlarge-outlined-outline-width);
 
     --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
     --_button-container-shape-square: var(
@@ -955,28 +963,6 @@
 
     --_button-icon-size: var(--md-button-icon-size, var(--_button-xlarge-icon-size));
     --_button-icon-label-space: var(--md-button-icon-label-space, var(--_button-xlarge-icon-label-space));
-  }
-
-  .m3-button[data-variant='outlined'] {
-    &[data-size='extra-small'] {
-      --button-outline-width: var(--_button-xsmall-outlined-outline-width);
-    }
-
-    &[data-size='small'] {
-      --button-outline-width: var(--_button-small-outlined-outline-width);
-    }
-
-    &[data-size='medium'] {
-      --button-outline-width: var(--_button-medium-outlined-outline-width);
-    }
-
-    &[data-size='large'] {
-      --button-outline-width: var(--_button-large-outlined-outline-width);
-    }
-
-    &[data-size='extra-large'] {
-      --button-outline-width: var(--_button-xlarge-outlined-outline-width);
-    }
   }
 
   /* Shape Variants */
