@@ -430,17 +430,14 @@ describe('TextField', () => {
     expect(expandedLegendRule).toContain('padding-inline: 0.25rem');
   });
 
-  it('draws a layout-stable inset outline and masks it behind the floating label', () => {
+  it('draws layout-stable inset edges while retaining the native floating-label notch', () => {
     const outlineRule = textFieldStyles.match(/\.m3-text-field-outline\s*\{([^}]*)\}/)?.[1];
-    const labelRule = textFieldStyles.match(/\.m3-text-field-label\s*\{([^}]*)\}/)?.[1];
-    const floatingLabelRule = textFieldStyles.match(
-      /\.m3-text-field:focus-within \.m3-text-field-label,[\s\S]*?\.m3-text-field\[data-always-float-label='true'\] \.m3-text-field-label\s*\{([^}]*)\}/,
-    )?.[1];
-
     expect(outlineRule).toContain('border: 0');
-    expect(outlineRule).toContain('box-shadow: inset 0 0 0 var(--_outline-width) var(--_outline-color)');
-    expect(labelRule).toContain('z-index: 2');
-    expect(floatingLabelRule).toContain('background: var(--_outlined-text-field-container-color)');
+    expect(outlineRule).toContain('border-block-start: var(--_outline-width) solid var(--_outline-color)');
+    expect(outlineRule).toContain('inset var(--_outline-width) 0 0 var(--_outline-color)');
+    expect(outlineRule).toContain('inset calc(-1 * var(--_outline-width)) 0 0 var(--_outline-color)');
+    expect(outlineRule).toContain('inset 0 calc(-1 * var(--_outline-width)) 0 var(--_outline-color)');
+    expect(textFieldStyles).not.toContain('--md-outlined-text-field-container-color');
     expect(textFieldStyles).toContain('@media (forced-colors: active)');
     expect(textFieldStyles).toContain('border: var(--_outline-width) solid CanvasText');
   });

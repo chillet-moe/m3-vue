@@ -12,6 +12,8 @@ import TextFieldConfigurations from '../demos/text-field/TextFieldConfigurations
 import TextFieldConfigurationsSrc from '../demos/text-field/TextFieldConfigurations.vue?raw';
 import TextFieldPassword from '../demos/text-field/TextFieldPassword.vue';
 import TextFieldPasswordSrc from '../demos/text-field/TextFieldPassword.vue?raw';
+import TextFieldButtonOutlineComparison from '../demos/text-field/TextFieldButtonOutlineComparison.vue';
+import TextFieldButtonOutlineComparisonSrc from '../demos/text-field/TextFieldButtonOutlineComparison.vue?raw';
 import FieldSizes from '../demos/shared/FieldSizes.vue';
 import FieldSizesSrc from '../demos/shared/FieldSizes.vue?raw';
 
@@ -66,12 +68,17 @@ Prefix and suffix content uses the input typography and preserves the selected s
 
 Place an `IconButton` directly in the `leading` or `trailing` slot for interactive adornments. TextField automatically sizes and aligns its touch target without changing the field height; plain icons and text remain unchanged.
 
-The outlined container and floating-label notch use `--md-outlined-text-field-container-color`. Its default follows the
-nearest `--md-color-container` context and otherwise uses `--md-sys-color-surface`; override it when a field sits on a
-different opaque surface so the label continues to mask the inset outline cleanly.
-
 <DemoContainer :src="FieldSizesSrc">
   <FieldSizes />
+</DemoContainer>
+
+### Outlined control comparison
+
+TextField and outlined Button use the same resting outline color, size-matched outline width, square shape, and
+container height. TextField keeps its native floating-label notch and field-specific focus, error, and disabled states.
+
+<DemoContainer :src="TextFieldButtonOutlineComparisonSrc">
+  <TextFieldButtonOutlineComparison />
 </DemoContainer>
 
 ### Default
