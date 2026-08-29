@@ -66,6 +66,10 @@ Prefix and suffix content uses the input typography and preserves the selected s
 
 Place an `IconButton` directly in the `leading` or `trailing` slot for interactive adornments. TextField automatically sizes and aligns its touch target without changing the field height; plain icons and text remain unchanged.
 
+The outlined container and floating-label notch use `--md-outlined-text-field-container-color`. Its default follows the
+nearest `--md-color-container` context and otherwise uses `--md-sys-color-surface`; override it when a field sits on a
+different opaque surface so the label continues to mask the inset outline cleanly.
+
 <DemoContainer :src="FieldSizesSrc">
   <FieldSizes />
 </DemoContainer>

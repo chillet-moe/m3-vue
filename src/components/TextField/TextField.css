@@ -2,6 +2,7 @@
   :where(:root) {
     /* Low-specificity public token placeholders; private tokens own defaults. */
     --md-outlined-text-field-caret-color: initial;
+    --md-outlined-text-field-container-color: initial;
     --md-outlined-text-field-container-height: initial;
     --md-outlined-text-field-container-horizontal-padding: initial;
     --md-outlined-text-field-container-shape: initial;
@@ -95,6 +96,10 @@
   }
 
   :where(.m3-text-field) {
+    --_outlined-text-field-container-color: var(
+      --md-outlined-text-field-container-color,
+      var(--md-color-container, var(--md-sys-color-surface))
+    );
     --_outlined-text-field-extra-small-container-height: var(
       --md-outlined-text-field-extra-small-container-height,
       2rem
@@ -551,7 +556,7 @@
     padding-inline: var(--_container-horizontal-padding);
 
     border-radius: var(--_outlined-text-field-container-shape);
-    background: transparent;
+    background: var(--_outlined-text-field-container-color);
   }
 
   .m3-text-field-outline {
@@ -560,14 +565,14 @@
     margin: 0;
     padding-inline: 0.5rem;
     padding-block: 0;
-    border: var(--_outline-width) solid var(--_outline-color);
+    border: 0;
     box-sizing: border-box;
     border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--_outline-width) var(--_outline-color);
     pointer-events: none;
     min-inline-size: 0;
-    transition:
-      border-color var(--md-duration-fast) var(--md-timing-function-fast),
-      border-width var(--md-duration-fast) var(--md-timing-function-fast);
+    z-index: 0;
+    transition: box-shadow var(--md-duration-fast) var(--md-timing-function-fast);
   }
 
   .m3-text-field-outline legend {
@@ -597,6 +602,7 @@
     translate: 0 -50%;
     padding-inline: 0;
     background: transparent;
+    z-index: 2;
 
     color: var(--_label-color);
     font-family: var(--_outlined-text-field-label-text-font), sans-serif;
@@ -621,7 +627,7 @@
     inset-block-start: 0;
     translate: 0 calc(-0.5 * var(--_outlined-text-field-label-text-populated-line-height));
     padding-inline: 0.25rem;
-    background: transparent;
+    background: var(--_outlined-text-field-container-color);
 
     font-size: var(--_outlined-text-field-label-text-populated-size);
     line-height: var(--_outlined-text-field-label-text-populated-line-height);
@@ -646,9 +652,11 @@
   }
 
   .m3-text-field-content {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    z-index: 1;
     inline-size: 100%;
   }
 
@@ -856,5 +864,16 @@
 
   .m3-text-field:has(.m3-text-field-textarea) .m3-text-field-content {
     align-items: flex-start;
+  }
+
+  @media (forced-colors: active) {
+    .m3-text-field-outline {
+      border: var(--_outline-width) solid CanvasText;
+      box-shadow: none;
+    }
+
+    .m3-text-field-label {
+      background: Canvas;
+    }
   }
 }

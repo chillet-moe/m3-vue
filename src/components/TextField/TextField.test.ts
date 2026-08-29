@@ -430,6 +430,21 @@ describe('TextField', () => {
     expect(expandedLegendRule).toContain('padding-inline: 0.25rem');
   });
 
+  it('draws a layout-stable inset outline and masks it behind the floating label', () => {
+    const outlineRule = textFieldStyles.match(/\.m3-text-field-outline\s*\{([^}]*)\}/)?.[1];
+    const labelRule = textFieldStyles.match(/\.m3-text-field-label\s*\{([^}]*)\}/)?.[1];
+    const floatingLabelRule = textFieldStyles.match(
+      /\.m3-text-field:focus-within \.m3-text-field-label,[\s\S]*?\.m3-text-field\[data-always-float-label='true'\] \.m3-text-field-label\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(outlineRule).toContain('border: 0');
+    expect(outlineRule).toContain('box-shadow: inset 0 0 0 var(--_outline-width) var(--_outline-color)');
+    expect(labelRule).toContain('z-index: 2');
+    expect(floatingLabelRule).toContain('background: var(--_outlined-text-field-container-color)');
+    expect(textFieldStyles).toContain('@media (forced-colors: active)');
+    expect(textFieldStyles).toContain('border: var(--_outline-width) solid CanvasText');
+  });
+
   it('uses medium size by default and exposes each single-line size across field states', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

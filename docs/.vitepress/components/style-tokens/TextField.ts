@@ -8,6 +8,12 @@ export const textFieldStyleTokens = [
     category: 'Color',
   },
   {
+    name: '--md-outlined-text-field-container-color',
+    description: 'Controls text field container and floating-label notch color.',
+    fallback: 'var(--md-color-container, var(--md-sys-color-surface))',
+    category: 'Color',
+  },
+  {
     name: '--md-outlined-text-field-container-shape',
     description: 'Controls text field container shape.',
     fallback: 'var(--md-shape-field-square)',
