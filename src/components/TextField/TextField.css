@@ -439,6 +439,8 @@
       --md-outlined-text-field-container-vertical-padding,
       var(--_outlined-text-field-medium-container-vertical-padding)
     );
+    /* Keep the legend text origin aligned with the floating label after both add 0.25rem inline padding. */
+    --_outline-horizontal-padding: max(0px, calc(var(--_container-horizontal-padding) - 0.25rem));
     --_slot-action-height: 3rem;
     --_slot-action-space: 0.75rem;
     --_slot-action-margin: -0.75rem;
@@ -558,7 +560,7 @@
     position: absolute;
     inset: 0;
     margin: 0;
-    padding-inline: 0.5rem;
+    padding-inline: var(--_outline-horizontal-padding);
     padding-block: 0;
     border: var(--_outline-width) solid var(--_outline-color);
     box-sizing: border-box;

@@ -484,6 +484,16 @@ describe('TextField', () => {
     expect(textFieldStyles).toContain('var(--md-button-outlined-outline-color, var(--md-control-outline-color))');
   });
 
+  it('aligns the floating label and legend notch from each size container padding', () => {
+    const rootRule = textFieldStyles.match(/\.m3-text-field\s*\{([\s\S]*?)\n  \}/)?.[1];
+    const outlineRule = textFieldStyles.match(/\.m3-text-field-outline\s*\{([^}]*)\}/)?.[1];
+
+    expect(rootRule).toContain(
+      '--_outline-horizontal-padding: max(0px, calc(var(--_container-horizontal-padding) - 0.25rem))',
+    );
+    expect(outlineRule).toContain('padding-inline: var(--_outline-horizontal-padding)');
+  });
+
   it('keeps leading and trailing slot wrappers compact at every single-line size', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
