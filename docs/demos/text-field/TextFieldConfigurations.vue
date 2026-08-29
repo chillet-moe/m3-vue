@@ -12,7 +12,7 @@ const multiline = ref('This is a long input in a multi-line text field that wrap
 
 <template>
   <div style="display: grid; gap: 1rem; max-inline-size: 24rem">
-    <TextField label="Label" v-model="empty" description="Supporting text" />
+    <TextField label="Label" v-model="empty" supporting-text="Supporting text" />
     <TextField label="Label" v-model="input" error="Error text" />
     <TextField label="Label" v-model="empty" placeholder="Search keyword">
       <template #leading>

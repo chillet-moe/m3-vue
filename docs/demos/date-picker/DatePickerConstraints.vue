@@ -13,7 +13,7 @@ const modelValue = ref('2026-05-12');
       label="Reservation"
       min="2026-05-01"
       max="2026-05-31"
-      description="Available during May 2026"
+      supporting-text="Available during May 2026"
     />
   </div>
 </template>

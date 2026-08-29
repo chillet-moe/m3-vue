@@ -24,7 +24,7 @@ const props = ref({
   labelClearance: undefined,
   disabled: false,
   required: false,
-  description: 'Supporting text',
+  supportingText: 'Supporting text',
   placeholder: '',
   alwaysFloatLabel: false,
   error: '',

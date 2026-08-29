@@ -360,7 +360,7 @@ describe('TextField', () => {
       h(TextField, {
         label: 'Amount',
         error: 'Amount is required',
-        description: 'Helper text',
+        supportingText: 'Helper text',
         modelValue: '',
       }),
     );
@@ -373,7 +373,7 @@ describe('TextField', () => {
     app.unmount();
   });
 
-  it('renders description when error is an empty string', async () => {
+  it('renders supporting text when error is an empty string', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -381,7 +381,7 @@ describe('TextField', () => {
       h(TextField, {
         label: 'Amount',
         error: '',
-        description: 'Helper text',
+        supportingText: 'Helper text',
         modelValue: '',
       }),
     );

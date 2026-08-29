@@ -7,6 +7,6 @@ const modelValue = ref('');
 
 <template>
   <div style="max-inline-size: 22rem">
-    <TextField v-model="modelValue" label="Label" description="Supporting text" />
+    <TextField v-model="modelValue" label="Label" supporting-text="Supporting text" />
   </div>
 </template>

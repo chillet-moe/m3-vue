@@ -45,7 +45,7 @@ export type SelectProps = {
   options: SelectOption[];
 
   /** Supporting text shown below the field when not in error state. */
-  description?: string;
+  supportingText?: string;
 
   /** Error text shown below the field. When provided, field is invalid. */
   error?: string;
@@ -116,7 +116,7 @@ const generatedId = useId();
 const props = withDefaults(defineProps<SelectProps>(), {
   label: undefined,
   id: undefined,
-  description: undefined,
+  supportingText: undefined,
   error: undefined,
   disabled: false,
   required: false,
@@ -299,7 +299,7 @@ defineExpose({
         v-model="textFieldValue"
         class="m3-select-field"
         :label="props.label"
-        :description="props.description"
+        :supporting-text="props.supportingText"
         :error="props.error"
         :disabled="props.disabled"
         :visually-focused="open"

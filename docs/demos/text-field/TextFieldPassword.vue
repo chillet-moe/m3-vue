@@ -14,7 +14,7 @@ const showPassword = ref(false);
       v-model="password"
       :type="showPassword ? 'text' : 'password'"
       autocomplete="current-password"
-      description="Toggle the checkbox below to reveal the current value."
+      supporting-text="Toggle the checkbox below to reveal the current value."
     />
 
     <CheckBox v-model:checked="showPassword">Show password</CheckBox>

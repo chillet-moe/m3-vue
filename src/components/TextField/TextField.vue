@@ -41,7 +41,7 @@ type TextFieldSharedProps = {
   rows?: number;
 
   /** Supporting text shown below the field when not in error state. */
-  description?: string;
+  supportingText?: string;
 
   /** Error text shown below the field. When provided, field is invalid. */
   error?: string;
@@ -121,7 +121,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   shape: undefined,
   labelClearance: undefined,
   rows: 3,
-  description: undefined,
+  supportingText: undefined,
   error: undefined,
   disabled: false,
   required: false,
@@ -177,7 +177,7 @@ const effectiveSize = computed<TextFieldSize>(() => {
 });
 
 const supportingMessage = computed(() => {
-  return props.error || props.description;
+  return props.error || props.supportingText;
 });
 
 const hasSupporting = computed(() => {

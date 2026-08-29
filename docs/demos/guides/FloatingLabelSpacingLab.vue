@@ -51,7 +51,7 @@ const usageAnalytics = ref(false);
         v-model="labelClearanceInput"
         label="Label clearance"
         size="small"
-        description="CSS length added at the field's block-start edge."
+        supporting-text="CSS length added at the field's block-start edge."
       />
     </div>
 
@@ -98,7 +98,7 @@ const usageAnalytics = ref(false);
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="TextField · Email"
             type="email"
-            description="Used for account notifications"
+            supporting-text="Used for account notifications"
             :label-clearance="labelClearance"
           />
         </div>
