@@ -515,7 +515,7 @@
 
 @layer components {
   .m3-button {
-    border: var(--button-outline-width, var(--_button-reserved-outline-width)) solid transparent;
+    border: var(--_button-outline-inset, 0) solid transparent;
     user-select: none;
 
     display: inline-flex;
@@ -761,6 +761,8 @@
   .m3-button[data-variant='outlined'] {
     --_button-container-color: var(--md-button-container-color, transparent);
     --_button-label-text-color: var(--md-button-label-text-color, var(--_button-outlined-label-text-color));
+    --_button-outline-inset: var(--button-outline-width, var(--_button-reserved-outline-width));
+
     border-color: var(--_button-outlined-outline-color);
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
@@ -839,7 +841,7 @@
     @apply label-large;
 
     height: --dp(32);
-    padding-inline: calc(--dp(12) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+    padding-inline: calc(--dp(12) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-xsmall-outlined-outline-width);
 
@@ -865,7 +867,7 @@
     @apply label-large;
 
     height: --dp(40);
-    padding-inline: calc(--dp(16) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+    padding-inline: calc(--dp(16) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-small-outlined-outline-width);
 
@@ -891,7 +893,7 @@
     @apply title-medium;
 
     height: --dp(56);
-    padding-inline: calc(--dp(24) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+    padding-inline: calc(--dp(24) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-medium-outlined-outline-width);
 
@@ -917,7 +919,7 @@
     @apply headline-small;
 
     height: --dp(96);
-    padding-inline: calc(--dp(48) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+    padding-inline: calc(--dp(48) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-large-outlined-outline-width);
 
@@ -943,7 +945,7 @@
     @apply headline-large;
 
     height: --dp(136);
-    padding-inline: calc(--dp(64) - var(--button-outline-width, var(--_button-reserved-outline-width)));
+    padding-inline: calc(--dp(64) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-xlarge-outlined-outline-width);
 
