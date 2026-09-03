@@ -1,8 +1,15 @@
-import { h, shallowRef } from 'vue';
+import { h, inject, shallowRef } from 'vue';
 import Snackbar from './Snackbar.vue';
-import type { SnackbarProps } from './Snackbar.vue';
+import {
+  getSnackbarDefaults,
+  snackbarDefaultsContextKey,
+  type ShowSnackbarDefaults,
+  type SnackbarPosition,
+} from './config';
 import { showPopoverStackItem } from '@/internal/popoverStack/popoverStack';
 import './SnackbarStack.css';
+
+export type { ShowSnackbarDefaults, SnackbarPosition } from './config';
 
 export type SnackbarAction = {
   /** Label shown in the action area. */
@@ -24,43 +31,38 @@ export type SnackbarAction = {
   onClick?: () => void | boolean | Promise<void | boolean>;
 };
 
-export type SnackbarPosition = 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end';
-
-export type ShowSnackbarOptions = Pick<SnackbarProps, 'actionOnNewLine' | 'dismissible' | 'dismissButtonLabel'> & {
+export type ShowSnackbarOptions = ShowSnackbarDefaults & {
   /** Supporting text displayed inside the snackbar. */
   message?: string;
 
   /** Optional action button. */
   action?: SnackbarAction;
-
-  /** Milliseconds before the snackbar closes automatically. Use `null` to disable auto close. */
-  duration?: number | null;
-
-  /** Value returned when the snackbar closes automatically. */
-  timeoutValue?: string;
-
-  /** Value returned when the dismiss button closes the snackbar. */
-  dismissValue?: string;
-
-  /** Where the snackbar stack is placed in the viewport. */
-  position?: SnackbarPosition;
 };
 
-const DEFAULT_DURATION = 4_000;
-const DEFAULT_TIMEOUT_VALUE = 'timeout';
-const DEFAULT_DISMISS_VALUE = 'dismiss';
 const DEFAULT_ACTION_VALUE = 'action';
-const DEFAULT_POSITION: SnackbarPosition = 'bottom';
+const BUILT_IN_DEFAULTS = {
+  dismissible: true,
+  duration: 4_000,
+  timeoutValue: 'timeout',
+  dismissValue: 'dismiss',
+  position: 'bottom',
+} as const satisfies ShowSnackbarDefaults;
 
-export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string> {
+export type UseSnackbarReturn = (options?: ShowSnackbarOptions) => Promise<string>;
+
+function showSnackbarWithDefaults(
+  options: ShowSnackbarOptions,
+  contextualDefaults: ShowSnackbarDefaults | undefined,
+): Promise<string> {
   if (typeof document === 'undefined') {
     return Promise.reject(new Error('showSnackbar requires a browser environment.'));
   }
 
   return new Promise<string>((resolve, reject) => {
-    const action = options.action;
-    const position = options.position ?? DEFAULT_POSITION;
-    const remainingDuration = shallowRef(options.duration ?? DEFAULT_DURATION);
+    const resolvedOptions = { ...BUILT_IN_DEFAULTS, ...contextualDefaults, ...options };
+    const action = resolvedOptions.action;
+    const position = resolvedOptions.position;
+    const remainingDuration = shallowRef(resolvedOptions.duration ?? BUILT_IN_DEFAULTS.duration);
 
     let settled = false;
     let timerId = 0;
@@ -112,14 +114,14 @@ export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string>
             actionLabel: action?.label,
             actionDisabled: action?.disabled,
             actionAutofocus: action?.autofocus,
-            actionOnNewLine: options.actionOnNewLine,
-            dismissible: options.dismissible,
-            dismissButtonLabel: options.dismissButtonLabel,
+            actionOnNewLine: resolvedOptions.actionOnNewLine,
+            dismissible: resolvedOptions.dismissible,
+            dismissButtonLabel: resolvedOptions.dismissButtonLabel,
             onAction: () => {
               void handleActionClick();
             },
             onDismiss: () => {
-              closeWithValue(options.dismissValue ?? DEFAULT_DISMISS_VALUE);
+              closeWithValue(resolvedOptions.dismissValue);
             },
             onPointerenter: () => {
               clearTimer();
@@ -142,7 +144,7 @@ export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string>
             },
           },
           {
-            default: () => options.message ?? '',
+            default: () => resolvedOptions.message ?? '',
           },
         ),
     });
@@ -154,12 +156,12 @@ export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string>
     };
 
     const startTimer = () => {
-      if (options.duration === null || timerId) {
+      if (resolvedOptions.duration === null || timerId) {
         return;
       }
 
       if (remainingDuration.value <= 0) {
-        closeWithValue(options.timeoutValue ?? DEFAULT_TIMEOUT_VALUE);
+        closeWithValue(resolvedOptions.timeoutValue);
         return;
       }
 
@@ -167,7 +169,7 @@ export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string>
       timerId = window.setTimeout(() => {
         timerId = 0;
         remainingDuration.value = 0;
-        closeWithValue(options.timeoutValue ?? DEFAULT_TIMEOUT_VALUE);
+        closeWithValue(resolvedOptions.timeoutValue);
       }, remainingDuration.value);
     };
 
@@ -189,4 +191,14 @@ export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string>
 
     startTimer();
   });
+}
+
+export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string> {
+  return showSnackbarWithDefaults(options, getSnackbarDefaults());
+}
+
+/** Returns a showSnackbar function bound to the nearest provided defaults. */
+export function useSnackbar(): UseSnackbarReturn {
+  const defaults = inject(snackbarDefaultsContextKey, undefined);
+  return (options = {}) => showSnackbarWithDefaults(options, defaults?.value);
 }

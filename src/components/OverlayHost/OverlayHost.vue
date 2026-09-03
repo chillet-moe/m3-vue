@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { defineComponent, onBeforeUnmount, shallowRef, type PropType } from 'vue';
+import { defineComponent, inject, onBeforeUnmount, shallowRef, type PropType } from 'vue';
+import { registerSnackbarDefaults, snackbarDefaultsContextKey } from '@/components/Snackbar/config';
 import { registerOverlayHost, type OverlayEntry } from '@/internal/overlayHost/overlayHost';
 
 const entries = shallowRef<OverlayEntry[]>([]);
-const unregister = typeof document === 'undefined' ? undefined : registerOverlayHost(entries);
+const snackbarDefaults = inject(snackbarDefaultsContextKey, undefined);
+const unregisterOverlayHost = typeof document === 'undefined' ? undefined : registerOverlayHost(entries);
+const unregisterSnackbarDefaults =
+  typeof document === 'undefined' ? undefined : registerSnackbarDefaults(() => snackbarDefaults?.value);
 
 const OverlayEntryRenderer = defineComponent({
   name: 'OverlayEntryRenderer',
@@ -19,7 +23,8 @@ const OverlayEntryRenderer = defineComponent({
 });
 
 onBeforeUnmount(() => {
-  unregister?.();
+  unregisterSnackbarDefaults?.();
+  unregisterOverlayHost?.();
 });
 </script>
 

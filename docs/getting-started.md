@@ -38,6 +38,18 @@ app.mount('#app');
 After registration, `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` are available globally.
 The plugin also accepts reactive locale configuration; see [Localization](/guides/localization).
 
+Application-level defaults for programmatic snackbars can be configured through `snackbarDefaults`. Refs and getters
+are supported, and options passed directly to `showSnackbar()` take precedence.
+
+```ts
+app.use(M3VuePlugin, {
+  snackbarDefaults: {
+    dismissible: false,
+    duration: 6_000,
+  },
+});
+```
+
 You can set one global default shape for shape-aware components through the same plugin. This covers buttons, list
 items, text fields, pagination links, and navigation drawer items. The value can be a `ref` when the application needs
 to switch between `rounded` and `square` at runtime; explicit component props and nested contexts still take

@@ -1,18 +1,24 @@
 // @vitest-environment jsdom
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
-import { createApp, h, nextTick, type App } from 'vue';
+import { createApp, defineComponent, h, nextTick, ref, type App } from 'vue';
 import { buttonContextKey } from '@/components/Button';
 import { iconButtonContextKey } from '@/components/IconButton';
 import { OverlayHost } from '@/components/OverlayHost';
-import { showSnackbar } from './showSnackbar';
+import { M3VuePlugin } from '@/plugin';
+import { provideSnackbarDefaults, type ShowSnackbarDefaults } from './config';
+import { showSnackbar, useSnackbar, type UseSnackbarReturn } from './showSnackbar';
 
 let app: App<Element> | null = null;
 
-function mountOverlayHost(actionShape?: 'rounded' | 'square') {
+function mountOverlayHost(actionShape?: 'rounded' | 'square', snackbarDefaults?: ShowSnackbarDefaults) {
   const container = document.createElement('div');
   document.body.appendChild(container);
 
   app = createApp(() => h(OverlayHost));
+
+  if (snackbarDefaults) {
+    app.use(M3VuePlugin, { snackbarDefaults });
+  }
 
   if (actionShape) {
     app.provide(buttonContextKey, { shape: actionShape });
@@ -94,6 +100,129 @@ describe('showSnackbar', () => {
 
     document.querySelector<HTMLButtonElement>('.m3-icon-button')?.click();
     await expect(result).resolves.toBe('dismiss');
+  });
+
+  it('shows a dismiss button by default', async () => {
+    const result = showSnackbar({
+      message: 'Draft archived.',
+      duration: null,
+    });
+
+    await nextTick();
+
+    const dismissButton = document.querySelector<HTMLButtonElement>('[aria-label="Dismiss notification"]');
+    expect(dismissButton).not.toBeNull();
+
+    dismissButton?.click();
+    await expect(result).resolves.toBe('dismiss');
+  });
+
+  it('allows the default dismiss button to be disabled', async () => {
+    const result = showSnackbar({
+      message: 'Draft archived.',
+      action: { label: 'Undo' },
+      dismissible: false,
+      duration: null,
+    });
+
+    await nextTick();
+
+    expect(document.querySelector('[aria-label="Dismiss notification"]')).toBeNull();
+
+    document.querySelector<HTMLButtonElement>('.m3-snackbar-action-button')?.click();
+    await expect(result).resolves.toBe('action');
+  });
+
+  it('uses OverlayHost defaults while allowing individual calls to override them', async () => {
+    app?.unmount();
+    mountOverlayHost(undefined, {
+      dismissible: false,
+      dismissValue: 'closed-by-default',
+      position: 'top-end',
+    });
+
+    const defaultResult = showSnackbar({
+      message: 'Draft archived.',
+      action: { label: 'Undo' },
+      duration: null,
+    });
+
+    await nextTick();
+
+    expect(document.querySelector('[popover="manual"][data-position="top-end"]')).not.toBeNull();
+    expect(document.querySelector('[aria-label="Dismiss notification"]')).toBeNull();
+
+    document.querySelector<HTMLButtonElement>('.m3-snackbar-action-button')?.click();
+    await expect(defaultResult).resolves.toBe('action');
+
+    const overriddenResult = showSnackbar({
+      message: 'Draft archived.',
+      dismissible: true,
+      duration: null,
+    });
+
+    await nextTick();
+
+    const dismissButton = document.querySelector<HTMLButtonElement>('[aria-label="Dismiss notification"]');
+    expect(dismissButton).not.toBeNull();
+
+    dismissButton?.click();
+    await expect(overriddenResult).resolves.toBe('closed-by-default');
+  });
+
+  it('inherits reactive defaults from the nearest component provider through useSnackbar', async () => {
+    app?.unmount();
+
+    const localDefaults = ref<ShowSnackbarDefaults>({
+      dismissible: false,
+      dismissValue: 'local-dismiss',
+    });
+    let showLocalSnackbar: UseSnackbarReturn | undefined;
+
+    const Child = defineComponent({
+      setup() {
+        showLocalSnackbar = useSnackbar();
+        return () => null;
+      },
+    });
+    const Provider = defineComponent({
+      setup() {
+        provideSnackbarDefaults(localDefaults);
+        return () => h(Child);
+      },
+    });
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    app = createApp(() => h('div', [h(OverlayHost), h(Provider)]));
+    app.use(M3VuePlugin, {
+      snackbarDefaults: {
+        dismissible: true,
+        position: 'top-end',
+      },
+    });
+    app.mount(container);
+
+    const firstResult = showLocalSnackbar?.({
+      message: 'First message',
+      action: { label: 'Close' },
+      duration: null,
+    });
+    await nextTick();
+
+    expect(document.querySelector('[popover="manual"][data-position="top-end"]')).not.toBeNull();
+    expect(document.querySelector('[aria-label="Dismiss notification"]')).toBeNull();
+
+    document.querySelector<HTMLButtonElement>('.m3-snackbar-action-button')?.click();
+    await expect(firstResult).resolves.toBe('action');
+
+    localDefaults.value = { dismissible: true, dismissValue: 'updated-local-dismiss' };
+
+    const secondResult = showLocalSnackbar?.({ message: 'Second message', duration: null });
+    await nextTick();
+
+    document.querySelector<HTMLButtonElement>('[aria-label="Dismiss notification"]')?.click();
+    await expect(secondResult).resolves.toBe('updated-local-dismiss');
   });
 
   it('rejects a pending snackbar when OverlayHost is unmounted', async () => {

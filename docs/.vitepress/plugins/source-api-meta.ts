@@ -97,6 +97,22 @@ const API_ENTRIES: ApiEntry[] = [
           names: ['actionOnNewLine', 'dismissible', 'dismissButtonLabel'],
         },
       },
+      {
+        name: 'ShowSnackbarDefaults',
+        fieldOrder: [
+          'duration',
+          'timeoutValue',
+          'dismissValue',
+          'position',
+          'actionOnNewLine',
+          'dismissible',
+          'dismissButtonLabel',
+        ],
+        componentProps: {
+          file: 'src/components/Snackbar/Snackbar.vue',
+          names: ['actionOnNewLine', 'dismissible', 'dismissButtonLabel'],
+        },
+      },
       { name: 'SnackbarAction' },
     ],
   },

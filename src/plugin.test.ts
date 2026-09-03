@@ -13,6 +13,7 @@ import PaginationPrevious from '@/components/Pagination/PaginationPrevious.vue';
 import TextField from '@/components/TextField/TextField.vue';
 import { buttonContextKey } from '@/components/Button/ButtonContext';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext';
+import { snackbarDefaultsContextKey } from '@/components/Snackbar/config';
 import { navigationDrawerShapeContextKey } from '@/components/NavigationDrawer/NavigationDrawerContext';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
 import { M3VuePlugin, m3VueDirectiveNames, m3VueDirectives } from './plugin';
@@ -119,5 +120,25 @@ describe('M3VuePlugin', () => {
     expect(iconButtonContext).toBe(buttonContext);
     expect(fieldContext).toBe(buttonContext);
     expect(navigationDrawerShapeContext).toBe(buttonContext);
+  });
+
+  it('provides reactive showSnackbar defaults', () => {
+    const directive = vi.fn();
+    const provide = vi.fn();
+    const snackbarDefaults = ref({ dismissible: false });
+
+    M3VuePlugin.install(
+      {
+        directive,
+        provide,
+      } as unknown as App,
+      { snackbarDefaults },
+    );
+
+    const providedDefaults = provide.mock.calls.find(([key]) => key === snackbarDefaultsContextKey)?.[1];
+    expect(providedDefaults.value).toEqual({ dismissible: false });
+
+    snackbarDefaults.value = { dismissible: true };
+    expect(providedDefaults.value).toEqual({ dismissible: true });
   });
 });

@@ -12,7 +12,6 @@ const result = ref('');
 async function openSnackbar() {
   result.value = await showSnackbar({
     message: 'Draft archived',
-    dismissible: true,
     action: {
       label: 'Undo',
       value: 'undo',
@@ -50,6 +49,61 @@ await showSnackbar({
 });
 ```
 
+## Configure Defaults
+
+Set application-level defaults when installing `M3VuePlugin`. These defaults apply to future `showSnackbar()` calls.
+Refs and getters are supported, and options passed to an individual call always take precedence.
+
+```ts
+import { M3VuePlugin } from '@chillet/m3-vue';
+
+app.use(M3VuePlugin, {
+  snackbarDefaults: {
+    dismissible: false,
+    duration: 6_000,
+    position: 'bottom-end',
+  },
+});
+```
+
+### Component Subtree Defaults
+
+Call `provideSnackbarDefaults()` in an ancestor and capture the nearest defaults with `useSnackbar()` in descendant
+components. The returned function can be used later in event handlers. The globally imported `showSnackbar()` keeps
+using application-level defaults because it has no component injection context.
+
+```vue
+<!-- NotificationArea.vue -->
+<script setup lang="ts">
+import { provideSnackbarDefaults } from '@chillet/m3-vue';
+
+provideSnackbarDefaults({
+  dismissible: false,
+  position: 'top-end',
+});
+</script>
+
+<template>
+  <slot />
+</template>
+```
+
+```vue
+<!-- DescendantComponent.vue -->
+<script setup lang="ts">
+import { useSnackbar } from '@chillet/m3-vue';
+
+const showSnackbar = useSnackbar();
+
+function notify() {
+  void showSnackbar({ message: 'Saved' });
+}
+</script>
+```
+
+The precedence order is built-in defaults, application plugin defaults, the nearest subtree defaults, and finally
+the options passed to the individual call.
+
 ## Return Value
 
 The promise resolves when the snackbar closes.
@@ -69,12 +123,17 @@ The tables below are generated from source types and stay in sync with API chang
 
 <SourceApiTable api="showSnackbar" type="ShowSnackbarOptions" :show-signature="false" />
 
+### ShowSnackbarDefaults
+
+<SourceApiTable api="showSnackbar" type="ShowSnackbarDefaults" :show-signature="false" />
+
 ### SnackbarAction
 
 <SourceApiTable api="showSnackbar" type="SnackbarAction" :show-signature="false" />
 
 ## Behavior Notes
 
+- Programmatic snackbars include a dismiss button by default. Set `dismissible: false` to hide it.
 - Multiple snackbars can be shown at the same time.
 - Stacks are separated by `position`, so top and bottom placements do not interfere with each other.
 - Snackbar actions inherit application-level provides and CSS custom properties from `OverlayHost`.
