@@ -439,8 +439,12 @@
       --md-outlined-text-field-container-vertical-padding,
       var(--_outlined-text-field-medium-container-vertical-padding)
     );
-    /* Keep the legend text origin aligned with the floating label after both add 0.25rem inline padding. */
-    --_outline-horizontal-padding: max(0px, calc(var(--_container-horizontal-padding) - 0.25rem));
+    --_floating-label-inline-start: var(--_container-horizontal-padding);
+    /* A fieldset lays out its legend inside the border; subtract that inset to align it with the floating label. */
+    --_outline-horizontal-padding: max(
+      0px,
+      calc(var(--_floating-label-inline-start) - 0.25rem - var(--_outline-width))
+    );
     --_slot-action-height: 3rem;
     --_slot-action-space: 0.75rem;
     --_slot-action-margin: -0.75rem;
@@ -473,6 +477,8 @@
       --md-outlined-text-field-container-vertical-padding,
       var(--_outlined-text-field-extra-small-container-vertical-padding)
     );
+    /* Keep the notch clear of the 0.75rem square corner while preserving the compact input padding. */
+    --_floating-label-inline-start: max(var(--_container-horizontal-padding), 0.75rem);
     --_slot-action-height: 2rem;
     --_slot-action-space: 0.25rem;
     --_slot-action-margin: -0.25rem;
@@ -620,8 +626,9 @@
   .m3-text-field[data-populated='true'] .m3-text-field-label,
   .m3-text-field[data-has-placeholder='true'] .m3-text-field-label,
   .m3-text-field[data-always-float-label='true'] .m3-text-field-label {
+    inset-inline-start: var(--_floating-label-inline-start);
     inset-block-start: 0;
-    translate: 0 calc(-0.5 * var(--_outlined-text-field-label-text-populated-line-height));
+    translate: 0 calc(-0.5 * var(--_outlined-text-field-label-text-populated-line-height) + 0.5 * var(--_outline-width));
     padding-inline: 0.25rem;
     background: transparent;
 

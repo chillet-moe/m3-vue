@@ -488,9 +488,7 @@ describe('TextField', () => {
     const rootRule = textFieldStyles.match(/\.m3-text-field\s*\{([\s\S]*?)\n  \}/)?.[1];
     const outlineRule = textFieldStyles.match(/\.m3-text-field-outline\s*\{([^}]*)\}/)?.[1];
 
-    expect(rootRule).toContain(
-      '--_outline-horizontal-padding: max(0px, calc(var(--_container-horizontal-padding) - 0.25rem))',
-    );
+    expect(rootRule).toContain('calc(var(--_floating-label-inline-start) - 0.25rem - var(--_outline-width))');
     expect(outlineRule).toContain('padding-inline: var(--_outline-horizontal-padding)');
   });
 

@@ -33,35 +33,50 @@ window.__textFieldOutlineFixture = {
 createApp({
   setup() {
     return () =>
-      h(
-        Dialog,
-        {
-          open: open.value,
-          width: '22rem',
-          'onUpdate:open': (nextOpen: boolean) => {
-            open.value = nextOpen;
+      h('div', [
+        h(
+          Dialog,
+          {
+            open: open.value,
+            width: '22rem',
+            'onUpdate:open': (nextOpen: boolean) => {
+              open.value = nextOpen;
+            },
           },
-        },
-        {
-          default: () =>
-            h('form', { class: 'text-field-outline-fixture' }, [
-              h(TextField, {
-                alwaysFloatLabel: state.alwaysFloatLabel,
-                label: 'First field with a long label',
-                modelValue: state.value,
-                placeholder: state.placeholder || undefined,
-                visuallyFocused: state.visuallyFocused,
-                'onUpdate:modelValue': (value: string) => {
-                  state.value = value;
-                },
-              }),
-              h(TextField, {
-                label: 'Second field with another long label',
-                modelValue: '',
-              }),
-            ]),
-        },
-      );
+          {
+            default: () =>
+              h('form', { class: 'text-field-outline-fixture' }, [
+                h(TextField, {
+                  alwaysFloatLabel: state.alwaysFloatLabel,
+                  label: 'First field with a long label',
+                  modelValue: state.value,
+                  placeholder: state.placeholder || undefined,
+                  visuallyFocused: state.visuallyFocused,
+                  'onUpdate:modelValue': (value: string) => {
+                    state.value = value;
+                  },
+                }),
+                h(TextField, {
+                  label: 'Second field with another long label',
+                  modelValue: '',
+                }),
+              ]),
+          },
+        ),
+        h(
+          'div',
+          { class: 'text-field-outline-alignment-fixture' },
+          (['extra-small', 'small', 'medium'] as const).map((size) =>
+            h(TextField, {
+              key: size,
+              label: size,
+              modelValue: 'Value',
+              shape: 'square',
+              size,
+            }),
+          ),
+        ),
+      ]);
   },
 }).mount('#app');
 

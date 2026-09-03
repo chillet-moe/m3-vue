@@ -37,7 +37,9 @@ const snapshotLayout = (page: Page) =>
         clientHeight: content.clientHeight,
         scrollHeight: content.scrollHeight,
       },
-      legends: Array.from(document.querySelectorAll<HTMLElement>('.m3-text-field-outline legend')).map((legend) => {
+      legends: Array.from(
+        document.querySelectorAll<HTMLElement>('.text-field-outline-fixture .m3-text-field-outline legend'),
+      ).map((legend) => {
         const style = getComputedStyle(legend);
         return {
           clientHeight: legend.clientHeight,
@@ -81,7 +83,52 @@ try {
 
   await page.goto(new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
   await page.waitForSelector('.m3-dialog[open] .m3-dialog-content');
+  await page.locator(".text-field-outline-alignment-fixture .m3-text-field[data-size='extra-small'] input").focus();
   await waitForNotchTransition(page);
+
+  const alignment = await page.locator('.text-field-outline-alignment-fixture .m3-text-field').evaluateAll((fields) =>
+    fields.map((field) => {
+      const label = field.querySelector<HTMLElement>('.m3-text-field-label');
+      const outline = field.querySelector<HTMLElement>('.m3-text-field-outline');
+      const legend = outline?.querySelector<HTMLElement>('legend');
+      if (!label || !outline || !legend) {
+        throw new Error('Missing TextField alignment fixture parts');
+      }
+
+      const labelRect = label.getBoundingClientRect();
+      const outlineRect = outline.getBoundingClientRect();
+      const legendRect = legend.getBoundingClientRect();
+
+      return {
+        labelCenterY: labelRect.top + labelRect.height / 2,
+        labelX: labelRect.left,
+        legendX: legendRect.left,
+        outlineRadius: Number.parseFloat(getComputedStyle(outline).borderTopLeftRadius),
+        outlineBorderWidth: Number.parseFloat(getComputedStyle(outline).borderTopWidth),
+        outlineX: outlineRect.left,
+        outlineY: outlineRect.top,
+        size: (field as HTMLElement).dataset.size,
+      };
+    }),
+  );
+
+  assert.equal(alignment.length, 3);
+  for (const measurement of alignment) {
+    assert(
+      Math.abs(measurement.labelX - measurement.legendX) <= 0.5,
+      `${measurement.size}: label should align with notch`,
+    );
+    assert(
+      Math.abs(measurement.labelCenterY - (measurement.outlineY + measurement.outlineBorderWidth / 2)) <= 0.5,
+      `${measurement.size}: label should center on the outline`,
+    );
+    if (measurement.size === 'extra-small') {
+      assert(
+        measurement.labelX - measurement.outlineX >= measurement.outlineRadius,
+        'extra-small: focused notch should not interrupt the start corner',
+      );
+    }
+  }
 
   const collapsed = await snapshotLayout(page);
   assertNoFalseVerticalOverflow(collapsed, 'empty');
