@@ -49,7 +49,9 @@ Side sheets present modal supporting content from the side of the viewport using
 
 ## Layout
 
-The sheet surface owns the background, shape, elevation, and motion. Default spacing is applied to the `headline`, `content`, and `actions` parts instead of the surface, so custom full-bleed content can opt out by overriding the relevant part padding.
+The dialog root owns viewport placement and motion. The sheet surface owns the background, shape, and elevation.
+Default spacing is applied to the `headline`, `content`, and `actions` parts instead of the surface, so custom
+full-bleed content can opt out by overriding the relevant part padding.
 
 Scrollable content also preserves common descendant visual overflow at its block edges. See
 [Scrollable Content Visual Overflow](/guides/scrollable-content-visual-overflow) for the shared surface contract and
