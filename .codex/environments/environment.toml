@@ -8,4 +8,4 @@ script = "vp i"
 [[actions]]
 name = "dev"
 icon = "run"
-command = "vp run docs:dev"
+command = "vp run docs:dev --host --port 5300"
