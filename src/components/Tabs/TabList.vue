@@ -18,8 +18,6 @@ const tabs = inject(tabsContextKey);
 const listElement = ref<HTMLElement | null>(null);
 const indicatorStyle = ref<CSSProperties>({ '--_tabs-indicator-opacity': '0' });
 
-const indicatorMinimumSize = 24;
-
 let resizeObserver: ResizeObserver | undefined;
 let mutationObserver: MutationObserver | undefined;
 let observedTabs = new Set<HTMLElement>();
@@ -62,7 +60,7 @@ const updateIndicator = () => {
   }
 
   const content = activeTab.querySelector<HTMLElement>('.m3-tab-content') ?? activeTab;
-  const width = Math.min(activeTab.offsetWidth, Math.max(content.offsetWidth, indicatorMinimumSize));
+  const width = Math.min(activeTab.offsetWidth, content.offsetWidth);
   const start = activeTab.offsetLeft + content.offsetLeft + (content.offsetWidth - width) / 2;
 
   indicatorStyle.value = {

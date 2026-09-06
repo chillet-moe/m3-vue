@@ -6,7 +6,7 @@ const value = ref('tab1');
 </script>
 
 <template>
-  <Tabs v-model="value" variant="line">
+  <Tabs v-model="value" variant="line" divider divider-full-width>
     <TabList>
       <Tab value="tab1">Tab 1</Tab>
       <Tab value="tab2">Tab 2</Tab>

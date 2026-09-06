@@ -394,6 +394,65 @@
     --_tabs-navigation-size-tab-padding-inline: var(--md-tabs-navigation-extra-large-tab-padding-inline, 1.75rem);
   }
 
+  .m3-tabs[data-variant='line'] {
+    --_tabs-size-container-height: var(--md-tabs-medium-container-height, 2.75rem);
+    --_tabs-size-with-icon-and-label-container-height: var(
+      --md-tabs-medium-with-icon-and-label-container-height,
+      3.5rem
+    );
+    --_tabs-container-color: var(--md-tabs-container-color, transparent);
+    --_tabs-active-label-color: var(--md-tabs-active-label-color, var(--md-sys-color-on-surface));
+    --_tabs-active-hover-label-color: var(--md-tabs-active-hover-label-color, var(--md-sys-color-on-surface));
+    --_tabs-active-focus-label-color: var(--md-tabs-active-focus-label-color, var(--md-sys-color-on-surface));
+    --_tabs-active-pressed-label-color: var(--md-tabs-active-pressed-label-color, var(--md-sys-color-on-surface));
+    --_tabs-active-indicator-height: var(--md-tabs-active-indicator-height, 0.125rem);
+    --_tabs-active-indicator-minimum-size: var(--md-tabs-active-indicator-minimum-size, 0rem);
+    --_tabs-active-indicator-shape: var(--md-tabs-active-indicator-shape, 0rem);
+  }
+
+  .m3-tabs[data-variant='line'][data-size='medium'] {
+    --_tabs-size-label-text-font: var(--md-tabs-medium-label-text-font, var(--md-sys-typescale-label-large-font));
+    --_tabs-size-label-text-size: var(--md-tabs-medium-label-text-size, var(--md-sys-typescale-label-large-size));
+    --_tabs-size-label-text-line-height: var(
+      --md-tabs-medium-label-text-line-height,
+      var(--md-sys-typescale-label-large-line-height)
+    );
+    --_tabs-size-label-text-weight: var(--md-tabs-medium-label-text-weight, var(--md-sys-typescale-label-large-weight));
+    --_tabs-size-label-text-tracking: var(
+      --md-tabs-medium-label-text-tracking,
+      var(--md-sys-typescale-label-large-tracking)
+    );
+  }
+
+  .m3-tabs[data-variant='line'][data-size='extra-small'] {
+    --_tabs-size-container-height: var(--md-tabs-extra-small-container-height, 2rem);
+    --_tabs-size-with-icon-and-label-container-height: var(
+      --md-tabs-extra-small-with-icon-and-label-container-height,
+      2.75rem
+    );
+  }
+
+  .m3-tabs[data-variant='line'][data-size='small'] {
+    --_tabs-size-container-height: var(--md-tabs-small-container-height, 2.5rem);
+    --_tabs-size-with-icon-and-label-container-height: var(
+      --md-tabs-small-with-icon-and-label-container-height,
+      3.25rem
+    );
+  }
+
+  .m3-tabs[data-variant='line'][data-size='large'] {
+    --_tabs-size-container-height: var(--md-tabs-large-container-height, 3rem);
+    --_tabs-size-with-icon-and-label-container-height: var(--md-tabs-large-with-icon-and-label-container-height, 4rem);
+  }
+
+  .m3-tabs[data-variant='line'][data-size='extra-large'] {
+    --_tabs-size-container-height: var(--md-tabs-extra-large-container-height, 3.5rem);
+    --_tabs-size-with-icon-and-label-container-height: var(
+      --md-tabs-extra-large-with-icon-and-label-container-height,
+      4.5rem
+    );
+  }
+
   .m3-tabs[data-variant='navigation'] {
     --_tabs-container-color: var(--md-tabs-container-color, var(--_tabs-navigation-container-color));
     --_tabs-container-height: var(--md-tabs-container-height, var(--_tabs-navigation-container-height));
@@ -544,7 +603,7 @@
     overflow-y: auto;
   }
 
-  .m3-tab-list::after {
+  .m3-tabs[data-variant='line'][data-divider] .m3-tab-list::after {
     content: '';
     position: absolute;
     inset-block-end: 0;
@@ -555,7 +614,7 @@
     z-index: 0;
   }
 
-  .m3-tabs[data-orientation='vertical'] .m3-tab-list::after {
+  .m3-tabs[data-variant='line'][data-divider][data-orientation='vertical'] .m3-tab-list::after {
     inset-block: 0;
     inset-inline-end: 0;
     inset-inline-start: auto;
@@ -744,6 +803,15 @@
 
   .m3-tabs[data-variant='navigation'] .m3-tab-list::after {
     display: none;
+  }
+
+  .m3-tabs[data-variant='line'][data-divider-full-width] .m3-tab-list {
+    inline-size: 100%;
+  }
+
+  .m3-tabs[data-variant='line'][data-divider-full-width][data-orientation='vertical'] .m3-tab-list {
+    inline-size: auto;
+    block-size: 100%;
   }
 
   .m3-tabs[data-variant='navigation'] .m3-tab {

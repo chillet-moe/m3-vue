@@ -11,6 +11,12 @@ export type TabsProps = {
   /** Visual variant of the tabs. @default 'navigation' */
   variant?: TabsVariant;
 
+  /** Whether the line variant shows a divider below the tab list. @default false */
+  divider?: boolean;
+
+  /** Whether the line variant divider spans the full width of the Tabs root. @default false */
+  dividerFullWidth?: boolean;
+
   /** Size of the tab triggers. @default 'medium' */
   size?: TabsSize;
 
@@ -29,6 +35,8 @@ export type TabsProps = {
 
 const props = withDefaults(defineProps<TabsProps>(), {
   variant: 'navigation',
+  divider: false,
+  dividerFullWidth: false,
   size: 'medium',
   mode: 'auto',
   orientation: 'horizontal',
@@ -68,6 +76,8 @@ provide(tabsContextKey, {
     data-scope="tabs"
     data-part="root"
     :data-variant="props.variant"
+    :data-divider="props.variant === 'line' && props.divider ? true : undefined"
+    :data-divider-full-width="props.variant === 'line' && props.divider && props.dividerFullWidth ? true : undefined"
     :data-size="props.size"
     :data-mode="props.mode"
     :data-orientation="tabs.orientation.value"

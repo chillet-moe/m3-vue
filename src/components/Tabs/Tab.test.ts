@@ -67,6 +67,37 @@ function mountTabs(
 }
 
 describe('Tab', () => {
+  it('exposes line divider options on the Tabs root', async () => {
+    const mounted = mountTabs({}, 'overview', {
+      variant: 'line',
+      divider: true,
+      dividerFullWidth: true,
+    });
+    await nextTick();
+
+    const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
+
+    expect(root?.dataset.divider).toBe('true');
+    expect(root?.dataset.dividerFullWidth).toBe('true');
+
+    mounted.app.unmount();
+  });
+
+  it('omits line divider attributes by default', async () => {
+    const mounted = mountTabs({}, 'overview', {
+      variant: 'line',
+      dividerFullWidth: true,
+    });
+    await nextTick();
+
+    const root = mounted.container.querySelector<HTMLElement>('[data-scope="tabs"][data-part="root"]');
+
+    expect(root?.hasAttribute('data-divider')).toBe(false);
+    expect(root?.hasAttribute('data-divider-full-width')).toBe(false);
+
+    mounted.app.unmount();
+  });
+
   it('renders as an anchor when href is provided', async () => {
     const mounted = mountTabs({ href: '/settings/details' });
     await nextTick();

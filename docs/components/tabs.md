@@ -21,6 +21,8 @@ import TabsHeadlessSrc from '../demos/tabs/TabsHeadless.vue?raw';
 
 const props = ref({
   variant: 'navigation',
+  divider: false,
+  dividerFullWidth: false,
   size: 'medium',
   mode: 'auto',
 });
@@ -32,7 +34,7 @@ const value = ref('overview');
 
 Tabs organize content into separate views where only one view is visible at a time. Each tab acts as a trigger for its associated panel.
 
-The default `navigation` variant is a desktop-oriented navigation treatment with a contained shell and selected container. Use `line` when you want a closer Material 3 tab bar with a bottom indicator.
+The default `navigation` variant is a desktop-oriented navigation treatment with a contained shell and selected container. Use the transparent `line` variant for a lighter, compact tab bar with a text-width underline. Add `divider` to show a bottom divider, and combine it with `divider-full-width` to extend the divider across the Tabs root.
 
 Tabs use content width by default. Use `mode="fixed"` only when tabs should divide and fill the available width, or `mode="scrollable"` when each tab should keep a minimum touch target and overflow horizontally.
 
