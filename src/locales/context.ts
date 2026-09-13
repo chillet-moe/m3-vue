@@ -3,7 +3,7 @@ import { en } from './en';
 import type { M3LocaleDefinition, M3LocaleOptions, M3LocaleSource, M3MessageOverrides, M3Messages } from './types';
 
 export type M3LocaleContext = {
-  locale: ComputedRef<string>;
+  locale: ComputedRef<string | undefined>;
   messages: ComputedRef<M3Messages>;
 };
 
@@ -33,7 +33,7 @@ export function createM3LocaleContext(options: M3LocaleOptions = {}, inherited?:
 
   const locale = computed(() => {
     const source = localeSource.value;
-    return (isLocaleDefinition(source) ? source.locale : source) ?? inherited?.locale.value ?? en.locale;
+    return (isLocaleDefinition(source) ? source.locale : source) ?? inherited?.locale.value;
   });
 
   const messages = computed(() => {

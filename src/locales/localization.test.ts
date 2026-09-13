@@ -7,7 +7,7 @@ import Select from '@/components/Select/Select.vue';
 import TextField from '@/components/TextField/TextField.vue';
 import TimePicker from '@/components/TimePicker/TimePicker.vue';
 import { M3VuePlugin } from '@/plugin';
-import { provideM3Locale, useM3Locale } from './context';
+import { createM3LocaleContext, provideM3Locale, useM3Locale } from './context';
 import { en } from './en';
 import type { M3LocaleDefinition } from './types';
 import { zhHans } from './zh-Hans';
@@ -23,6 +23,13 @@ afterEach(() => {
 });
 
 describe('localization', () => {
+  it('leaves the formatting locale undefined by default for native locale negotiation', () => {
+    const context = createM3LocaleContext();
+
+    expect(context.locale.value).toBeUndefined();
+    expect(context.messages.value).toBe(en.messages);
+  });
+
   it('reactively switches a provided locale definition', async () => {
     const locale = shallowRef<M3LocaleDefinition>(en);
     const Consumer = defineComponent({

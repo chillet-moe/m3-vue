@@ -63,6 +63,7 @@ export type M3LocaleSource = string | M3LocaleDefinition;
 export type M3LocaleOptions = {
   /**
    * A BCP 47 locale or a locale definition. Refs and getters can be used to switch languages at runtime.
+   * When omitted, locale-sensitive operations use the runtime's default locale.
    * A string changes locale-sensitive formatting only; messages continue to use the inherited or English defaults.
    */
   locale?: MaybeRefOrGetter<M3LocaleSource | undefined>;

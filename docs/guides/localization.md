@@ -6,6 +6,8 @@ title: Localization
 
 m3-vue uses locale definitions for its built-in visible and accessibility text. English is the default. Simplified
 and Traditional Chinese are separate entry points so applications only bundle the languages they import.
+When no locale is configured, locale-sensitive formatting such as month and weekday names uses the browser's
+default locale, while built-in messages continue to use English.
 
 ## Configure The Application
 
