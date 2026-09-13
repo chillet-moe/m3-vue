@@ -133,12 +133,20 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', dateStyle: 'medium' });
   });
 
+  const numberFormatter = computed(() => {
+    return new Intl.NumberFormat(locale.value, { useGrouping: false });
+  });
+
   const displayedMonthDate = computed(() => {
     return createLocalDate(displayedYear.value, displayedMonth.value, 1);
   });
 
   const monthButtonLabel = computed(() => {
     return shortMonthFormatter.value.format(displayedMonthDate.value);
+  });
+
+  const displayedYearLabel = computed(() => {
+    return numberFormatter.value.format(displayedYear.value);
   });
 
   const calendarLabel = computed(() => {
@@ -205,7 +213,7 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
         month: date.getMonth(),
         day: date.getDate(),
         date: isoDate,
-        label: String(date.getDate()),
+        label: numberFormatter.value.format(date.getDate()),
         outsideMonth: date.getMonth() !== visibleMonth,
         today: isoDate === today,
         selected,
@@ -250,6 +258,7 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
 
       return {
         year,
+        label: numberFormatter.value.format(year),
         selected: year === displayedYear.value,
         disabled: isYearDisabled(year),
       };
@@ -580,6 +589,7 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     fullDateFormatter,
     mediumDateFormatter,
     monthButtonLabel,
+    displayedYearLabel,
     calendarLabel,
     weekdayLabels,
     calendarDays,

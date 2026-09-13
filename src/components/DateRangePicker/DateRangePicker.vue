@@ -347,7 +347,7 @@ defineExpose({
           :aria-expanded="picker.calendarView.value === 'years' ? 'true' : 'false'"
           @click="picker.toggleYearView"
         >
-          {{ picker.displayedYear.value }}
+          {{ picker.displayedYearLabel.value }}
         </Button>
 
         <IconButton
@@ -498,7 +498,7 @@ defineExpose({
             <Icon v-if="yearOption.selected" name="check" />
           </span>
           <span class="m3-date-picker-list-label" data-scope="date-range-picker" data-part="list-label">
-            {{ yearOption.year }}
+            {{ yearOption.label }}
           </span>
         </button>
       </div>

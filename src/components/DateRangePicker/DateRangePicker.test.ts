@@ -135,6 +135,8 @@ describe('DateRangePicker', () => {
     const title = document.body.querySelector<HTMLElement>('[data-part="calendar-title"]');
     expect(title?.textContent).toContain('۲۰۲۶');
     expect(title?.textContent).not.toContain('۱۴۰۵');
+    expect(document.body.querySelector<HTMLElement>('[data-part="year-switch"]')?.textContent).toContain('۲۰۲۶');
+    expect(getDay('2026-08-12')?.textContent?.trim()).toBe('۱۲');
 
     app.unmount();
   });

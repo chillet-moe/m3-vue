@@ -222,6 +222,8 @@ describe('DatePicker', () => {
     const calendar = document.body.querySelector<HTMLElement>('[data-part="grid"]');
     expect(calendar?.getAttribute('aria-label')).toContain('۲۰۲۶');
     expect(calendar?.getAttribute('aria-label')).not.toContain('۱۴۰۵');
+    expect(document.body.querySelector<HTMLElement>('[data-part="year-switch"]')?.textContent).toContain('۲۰۲۶');
+    expect(getDay(container, '2026-08-17')?.textContent?.trim()).toBe('۱۷');
 
     app.unmount();
   });

@@ -31,6 +31,7 @@ export type DatePickerMonthOption = DatePickerListOption & {
 
 export type DatePickerYearOption = DatePickerListOption & {
   year: number;
+  label: string;
 };
 
 export type UseDatePickerOptions = {
@@ -97,12 +98,20 @@ export function useDatePicker(options: UseDatePickerOptions) {
     return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', dateStyle: 'full' });
   });
 
+  const numberFormatter = computed(() => {
+    return new Intl.NumberFormat(locale.value, { useGrouping: false });
+  });
+
   const displayedMonthDate = computed(() => {
     return createLocalDate(displayedYear.value, displayedMonth.value, 1);
   });
 
   const monthButtonLabel = computed(() => {
     return shortMonthFormatter.value.format(displayedMonthDate.value);
+  });
+
+  const displayedYearLabel = computed(() => {
+    return numberFormatter.value.format(displayedYear.value);
   });
 
   const calendarLabel = computed(() => {
@@ -137,7 +146,7 @@ export function useDatePicker(options: UseDatePickerOptions) {
         month: date.getMonth(),
         day: date.getDate(),
         date: isoDate,
-        label: String(date.getDate()),
+        label: numberFormatter.value.format(date.getDate()),
         outsideMonth: date.getMonth() !== displayedMonth.value,
         today: isoDate === today,
         selected: isoDate === selected,
@@ -177,6 +186,7 @@ export function useDatePicker(options: UseDatePickerOptions) {
 
       return {
         year,
+        label: numberFormatter.value.format(year),
         selected: year === displayedYear.value,
         disabled: isYearDisabled(year),
       };
@@ -436,6 +446,7 @@ export function useDatePicker(options: UseDatePickerOptions) {
     selectedDate,
     fullDateFormatter,
     monthButtonLabel,
+    displayedYearLabel,
     calendarLabel,
     weekdayLabels,
     calendarDays,
