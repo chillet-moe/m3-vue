@@ -201,4 +201,28 @@ describe('DatePicker', () => {
 
     app.unmount();
   });
+
+  it('keeps localized labels aligned with the Gregorian model calendar', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(DatePicker, {
+        open: true,
+        modelValue: '2026-08-17',
+        today: '2026-08-17',
+        locale: 'fa-IR',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const calendar = document.body.querySelector<HTMLElement>('[data-part="grid"]');
+    expect(calendar?.getAttribute('aria-label')).toContain('۲۰۲۶');
+    expect(calendar?.getAttribute('aria-label')).not.toContain('۱۴۰۵');
+
+    app.unmount();
+  });
 });

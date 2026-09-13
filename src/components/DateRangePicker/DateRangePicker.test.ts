@@ -111,6 +111,34 @@ describe('DateRangePicker', () => {
     app.unmount();
   });
 
+  it('keeps localized calendar pages aligned with the Gregorian model calendar', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(DateRangePicker, {
+        open: true,
+        calendars: 1,
+        modelValue: {
+          start: '2026-08-10',
+          end: '2026-08-14',
+        },
+        today: '2026-08-12',
+        locale: 'fa-IR',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const title = document.body.querySelector<HTMLElement>('[data-part="calendar-title"]');
+    expect(title?.textContent).toContain('۲۰۲۶');
+    expect(title?.textContent).not.toContain('۱۴۰۵');
+
+    app.unmount();
+  });
+
   it('can render a single calendar pane', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

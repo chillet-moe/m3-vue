@@ -109,27 +109,27 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
   });
 
   const shortMonthFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { month: 'short' });
+    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', month: 'short' });
   });
 
   const longMonthFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { month: 'long' });
+    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', month: 'long' });
   });
 
   const monthYearFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { month: 'long', year: 'numeric' });
+    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', month: 'long', year: 'numeric' });
   });
 
   const weekdayFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { weekday: 'narrow' });
+    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', weekday: 'narrow' });
   });
 
   const fullDateFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { dateStyle: 'full' });
+    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', dateStyle: 'full' });
   });
 
   const mediumDateFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { dateStyle: 'medium' });
+    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', dateStyle: 'medium' });
   });
 
   const displayedMonthDate = computed(() => {
