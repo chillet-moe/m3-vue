@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<DatePickerProps>(), {
   min: undefined,
   max: undefined,
   locale: undefined,
-  firstDayOfWeek: 0,
+  firstDayOfWeek: undefined,
   confirmText: undefined,
   cancelText: undefined,
   today: undefined,

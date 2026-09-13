@@ -10,6 +10,7 @@ import {
   createLocalDate,
   dateFromIso,
   getLocalIsoDate,
+  getLocaleFirstDayOfWeek,
   normalizeIsoDate,
   parseIsoDate,
 } from '@/components/DatePicker/useDatePicker';
@@ -58,7 +59,7 @@ export type UseDateRangePickerOptions = {
   max?: MaybeRefOrGetter<string | undefined>;
   today?: MaybeRefOrGetter<string | undefined>;
   locale?: MaybeRefOrGetter<string | undefined>;
-  firstDayOfWeek?: MaybeRefOrGetter<0 | 1 | 2 | 3 | 4 | 5 | 6>;
+  firstDayOfWeek?: MaybeRefOrGetter<0 | 1 | 2 | 3 | 4 | 5 | 6 | undefined>;
   messages?: MaybeRefOrGetter<
     Pick<M3Messages['dateRangePicker'], 'startAndEndDate' | 'selectedStartDate' | 'selectedEndDate'>
   >;
@@ -100,12 +101,12 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return draftRange.value?.end;
   });
 
-  const firstDayOfWeek = computed(() => {
-    return toValue(options.firstDayOfWeek) ?? 0;
-  });
-
   const locale = computed(() => {
     return toValue(options.locale);
+  });
+
+  const firstDayOfWeek = computed(() => {
+    return toValue(options.firstDayOfWeek) ?? getLocaleFirstDayOfWeek(locale.value);
   });
 
   const shortMonthFormatter = computed(() => {

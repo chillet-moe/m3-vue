@@ -139,6 +139,35 @@ describe('DateRangePicker', () => {
     app.unmount();
   });
 
+  it('uses the locale week start by default', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(DateRangePicker, {
+        open: true,
+        calendars: 1,
+        modelValue: {
+          start: '2026-08-10',
+          end: '2026-08-14',
+        },
+        today: '2026-08-12',
+        locale: 'en-GB',
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const weekdays = Array.from(document.body.querySelectorAll<HTMLElement>('[data-part="weekday"]')).map((day) =>
+      day.textContent?.trim(),
+    );
+    expect(weekdays).toEqual(['M', 'T', 'W', 'T', 'F', 'S', 'S']);
+
+    app.unmount();
+  });
+
   it('can render a single calendar pane', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

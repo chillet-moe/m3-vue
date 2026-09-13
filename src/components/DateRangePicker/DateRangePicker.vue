@@ -72,7 +72,7 @@ const props = withDefaults(defineProps<DateRangePickerProps>(), {
   min: undefined,
   max: undefined,
   locale: undefined,
-  firstDayOfWeek: 0,
+  firstDayOfWeek: undefined,
   confirmText: undefined,
   cancelText: undefined,
   startText: undefined,

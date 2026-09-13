@@ -39,7 +39,7 @@ export type UseDatePickerOptions = {
   max?: MaybeRefOrGetter<string | undefined>;
   today?: MaybeRefOrGetter<string | undefined>;
   locale?: MaybeRefOrGetter<string | undefined>;
-  firstDayOfWeek?: MaybeRefOrGetter<0 | 1 | 2 | 3 | 4 | 5 | 6>;
+  firstDayOfWeek?: MaybeRefOrGetter<0 | 1 | 2 | 3 | 4 | 5 | 6 | undefined>;
   onChange?: (value: DatePickerModelValue) => void;
   onConfirm?: (value: DatePickerModelValue) => void;
   onCancel?: () => void;
@@ -69,12 +69,12 @@ export function useDatePicker(options: UseDatePickerOptions) {
     return normalizeIsoDate(draftValue.value);
   });
 
-  const firstDayOfWeek = computed(() => {
-    return toValue(options.firstDayOfWeek) ?? 0;
-  });
-
   const locale = computed(() => {
     return toValue(options.locale);
+  });
+
+  const firstDayOfWeek = computed(() => {
+    return toValue(options.firstDayOfWeek) ?? getLocaleFirstDayOfWeek(locale.value);
   });
 
   const shortMonthFormatter = computed(() => {
@@ -523,6 +523,24 @@ export function addMonths(year: number, month: number, delta: number) {
 
 export function compareIsoDates(first: string, second: string) {
   return first.localeCompare(second);
+}
+
+export function getLocaleFirstDayOfWeek(locale?: string): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
+  const resolvedLocale = new Intl.DateTimeFormat(locale).resolvedOptions().locale;
+  const localeInfo = new Intl.Locale(resolvedLocale) as Intl.Locale & {
+    weekInfo?: { firstDay: number };
+    getWeekInfo?: () => { firstDay: number };
+  };
+  const weekInfo = localeInfo.getWeekInfo?.() ?? localeInfo.weekInfo;
+  const firstDay = weekInfo?.firstDay;
+
+  if (firstDay === 7) {
+    return 0;
+  }
+
+  return firstDay === 1 || firstDay === 2 || firstDay === 3 || firstDay === 4 || firstDay === 5 || firstDay === 6
+    ? firstDay
+    : 0;
 }
 
 function padDatePart(value: number) {

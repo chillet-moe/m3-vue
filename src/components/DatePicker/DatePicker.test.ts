@@ -225,4 +225,39 @@ describe('DatePicker', () => {
 
     app.unmount();
   });
+
+  it('uses the locale week start unless explicitly overridden', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const locale = ref('en-GB');
+    const firstDayOfWeek = ref<0 | undefined>();
+    const app = createApp(() =>
+      h(DatePicker, {
+        open: true,
+        modelValue: '2026-08-17',
+        today: '2026-08-17',
+        locale: locale.value,
+        firstDayOfWeek: firstDayOfWeek.value,
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const getWeekdays = () =>
+      Array.from(document.body.querySelectorAll<HTMLElement>('[data-part="weekday"]')).map((day) =>
+        day.textContent?.trim(),
+      );
+
+    expect(getWeekdays()).toEqual(['M', 'T', 'W', 'T', 'F', 'S', 'S']);
+
+    firstDayOfWeek.value = 0;
+    await nextTick();
+
+    expect(getWeekdays()).toEqual(['S', 'M', 'T', 'W', 'T', 'F', 'S']);
+
+    app.unmount();
+  });
 });
