@@ -18,7 +18,7 @@ import TimePickerKeyboardSrc from '../demos/time-picker/TimePickerKeyboard.vue?r
 
 const props = ref({
   variant: 'auto',
-  format: '12h',
+  format: undefined,
   inputMode: undefined,
   titleText: 'Select time',
 });
@@ -33,6 +33,7 @@ const textFieldValue = ref('09:30');
 # TimePicker
 
 TimePicker is a standalone time selection surface. TextField uses it automatically for `type="time"`.
+When `format` is omitted, it uses the configured or browser locale's preferred hour cycle.
 
 <DemoContainer>
   <div style="display: grid; gap: 1rem; max-inline-size: 22rem;">

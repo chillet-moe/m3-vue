@@ -29,10 +29,14 @@ export type TimeParts = {
 
 export type UseTimePickerOptions = {
   modelValue: Ref<TimePickerModelValue>;
-  format?: MaybeRefOrGetter<TimePickerFormat>;
+  format?: MaybeRefOrGetter<TimePickerFormat | undefined>;
+  locale?: MaybeRefOrGetter<string | undefined>;
   inputMode?: MaybeRefOrGetter<TimePickerInputMode | undefined>;
   messages?: MaybeRefOrGetter<
-    Pick<M3Messages['timePicker'], 'enterHour' | 'enterMinute' | 'hourRange12' | 'hourRange24' | 'minuteRange'>
+    Pick<
+      M3Messages['timePicker'],
+      'am' | 'pm' | 'enterHour' | 'enterMinute' | 'hourRange12' | 'hourRange24' | 'minuteRange'
+    >
   >;
   onChange?: (value: TimePickerModelValue) => void;
   onConfirm?: (value: TimePickerModelValue) => void;
@@ -51,7 +55,39 @@ export function useTimePicker(options: UseTimePickerOptions) {
   const inputMinuteTouched = ref(false);
   const inputSubmitted = ref(false);
 
-  const format = computed(() => toValue(options.format) ?? '12h');
+  const locale = computed(() => toValue(options.locale));
+
+  const format = computed(() => {
+    const configuredFormat = toValue(options.format);
+
+    if (configuredFormat) {
+      return configuredFormat;
+    }
+
+    const { hour12 } = new Intl.DateTimeFormat(locale.value, { hour: 'numeric' }).resolvedOptions();
+    return hour12 ? '12h' : '24h';
+  });
+
+  const dayPeriodFormatter = computed(() => {
+    return new Intl.DateTimeFormat(locale.value, { hour: 'numeric', hour12: true });
+  });
+
+  function formatDayPeriod(hour: number, fallback: string) {
+    return (
+      dayPeriodFormatter.value.formatToParts(new Date(2024, 0, 1, hour)).find((part) => part.type === 'dayPeriod')
+        ?.value ?? fallback
+    );
+  }
+
+  const amLabel = computed(() => {
+    const messages = toValue(options.messages) ?? en.messages.timePicker;
+    return formatDayPeriod(9, messages.am);
+  });
+
+  const pmLabel = computed(() => {
+    const messages = toValue(options.messages) ?? en.messages.timePicker;
+    return formatDayPeriod(21, messages.pm);
+  });
 
   const inputMode = computed<TimePickerInputMode>(() => {
     return toValue(options.inputMode) ?? (format.value === '24h' ? 'keyboard' : 'clock');
@@ -321,6 +357,8 @@ export function useTimePicker(options: UseTimePickerOptions) {
     inputHourText,
     inputMinuteText,
     format,
+    amLabel,
+    pmLabel,
     inputMode,
     period,
     displayHour,

@@ -34,7 +34,10 @@ export type TimePickerProps = {
   /** Visible title. */
   titleText?: string;
 
-  /** Clock format. */
+  /** BCP 47 locale used for the default clock format and day-period labels. */
+  locale?: string;
+
+  /** Clock format. Defaults to the locale's preferred hour cycle. */
   format?: TimePickerFormat;
 
   /** Initial input mode. If omitted, 12h starts in clock mode and 24h starts in keyboard mode. */
@@ -54,7 +57,8 @@ const props = withDefaults(defineProps<TimePickerProps>(), {
   anchorElement: undefined,
   ariaLabel: undefined,
   titleText: undefined,
-  format: '12h',
+  locale: undefined,
+  format: undefined,
   inputMode: undefined,
   confirmText: undefined,
   cancelText: undefined,
@@ -86,6 +90,7 @@ const movedInPointerStream = ref(false);
 const suppressNextClockClick = ref(false);
 const localeContext = useM3Locale();
 
+const locale = computed(() => props.locale ?? localeContext.locale.value);
 const messages = computed(() => localeContext.messages.value);
 const titleText = computed(() => props.titleText ?? messages.value.timePicker.selectTime);
 const confirmText = computed(() => props.confirmText ?? messages.value.common.confirm);
@@ -108,6 +113,7 @@ const currentInputMode = computed(() => localInputMode.value ?? props.inputMode)
 const picker = useTimePicker({
   modelValue,
   format: () => props.format,
+  locale,
   inputMode: currentInputMode,
   messages: () => messages.value.timePicker,
   onChange: (value) => emit('change', value),
@@ -457,7 +463,7 @@ defineExpose({
               :aria-pressed="picker.period.value === 'AM' ? 'true' : 'false'"
               @click="picker.setPeriod('AM')"
             >
-              {{ messages.timePicker.am }}
+              {{ picker.amLabel.value }}
             </button>
             <button
               type="button"
@@ -468,7 +474,7 @@ defineExpose({
               :aria-pressed="picker.period.value === 'PM' ? 'true' : 'false'"
               @click="picker.setPeriod('PM')"
             >
-              {{ messages.timePicker.pm }}
+              {{ picker.pmLabel.value }}
             </button>
           </div>
         </div>
@@ -606,7 +612,7 @@ defineExpose({
             :aria-pressed="picker.period.value === 'AM' ? 'true' : 'false'"
             @click="picker.setPeriod('AM')"
           >
-            {{ messages.timePicker.am }}
+            {{ picker.amLabel.value }}
           </button>
           <button
             type="button"
@@ -617,7 +623,7 @@ defineExpose({
             :aria-pressed="picker.period.value === 'PM' ? 'true' : 'false'"
             @click="picker.setPeriod('PM')"
           >
-            {{ messages.timePicker.pm }}
+            {{ picker.pmLabel.value }}
           </button>
         </div>
       </div>

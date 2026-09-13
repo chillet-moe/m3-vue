@@ -121,6 +121,40 @@ afterEach(() => {
 });
 
 describe('TimePicker', () => {
+  it('uses the locale hour cycle and day-period labels by default', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const locale = ref('en-GB');
+    const format = ref<'12h' | undefined>();
+    const app = createApp(() =>
+      h(TimePicker, {
+        open: true,
+        modelValue: '09:30',
+        locale: locale.value,
+        format: format.value,
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    expect(document.body.querySelector('[data-part="period-selector"]')).toBeNull();
+    expect(document.body.querySelector('[data-part="hour-input"]')).not.toBeNull();
+
+    locale.value = 'zh-CN';
+    format.value = '12h';
+    await nextTick();
+
+    const periods = Array.from(document.body.querySelectorAll<HTMLElement>('[data-part="period-option"]')).map(
+      (option) => option.textContent?.trim(),
+    );
+    expect(periods).toEqual(['上午', '下午']);
+
+    app.unmount();
+  });
+
   it('renders a standalone popover with the selected time', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
