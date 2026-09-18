@@ -73,6 +73,9 @@ const emit = defineEmits<{
 
   /** Fired when the user confirms the draft selection. */
   confirm: [value: TimePickerModelValue];
+
+  /** Fired after the TimePicker-owned visual exit finishes. */
+  closed: [];
 }>();
 
 const modelValue = defineModel<TimePickerModelValue>();
@@ -167,6 +170,8 @@ const popover = usePickerPopover({
     picker.resetDraftFromModel();
   },
   onAfterOpen: focusFirstControl,
+  exitElements: () => [surfaceRef.value],
+  onAfterClose: () => emit('closed'),
 });
 
 function handleCancel() {

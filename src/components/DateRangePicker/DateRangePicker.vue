@@ -89,6 +89,9 @@ const emit = defineEmits<{
 
   /** Fired when the user confirms the draft selection. */
   confirm: [value: DateRangePickerModelValue];
+
+  /** Fired after the DateRangePicker-owned visual exit finishes. */
+  closed: [];
 }>();
 
 const modelValue = defineModel<DateRangePickerModelValue>();
@@ -206,8 +209,10 @@ const popover = usePickerPopover({
     picker.resetDraftFromModel();
   },
   onAfterOpen: focusActiveDate,
-  onBeforeClose: () => {
+  exitElements: () => [surfaceRef.value],
+  onAfterClose: () => {
     picker.calendarView.value = 'days';
+    emit('closed');
   },
 });
 

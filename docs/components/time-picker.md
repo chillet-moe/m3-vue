@@ -51,6 +51,9 @@ When `format` is omitted, it uses the configured or browser locale's preferred h
 
 <StyleTokenTable component="TimePicker" />
 
+`update:open(false)` is emitted when the native popover closes. Use `closed` for cleanup that must wait until the
+TimePicker-owned visual exit finishes.
+
 ## Examples
 
 ### Default

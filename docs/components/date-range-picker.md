@@ -56,6 +56,9 @@ DateRangePicker is a standalone surface for choosing a start and end date. By de
 
 <StyleTokenTable component="DateRangePicker" />
 
+`update:open(false)` is emitted when the native popover closes. `closed` follows after the DateRangePicker-owned exit
+motion finishes. The current calendar view is preserved during the exit and reset afterward.
+
 ## Examples
 
 ### Default

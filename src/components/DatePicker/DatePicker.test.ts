@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, beforeAll, describe, expect, it } from 'vite-plus/test';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import DatePicker, { type DatePickerModelValue } from './DatePicker.vue';
 
@@ -199,6 +199,57 @@ describe('DatePicker', () => {
 
     expect(getDay(container, '2026-05-17')).not.toBeNull();
 
+    app.unmount();
+  });
+
+  it('keeps the current calendar view until the visual exit finishes', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const open = ref(true);
+    const onClosed = vi.fn();
+    let finishExit!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      finishExit = resolve;
+    });
+    const app = createApp(() =>
+      h(DatePicker, {
+        open: open.value,
+        modelValue: '2026-08-17',
+        today: '2026-08-17',
+        'onUpdate:open': (nextOpen: boolean) => {
+          open.value = nextOpen;
+        },
+        onClosed,
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    document.body.querySelector<HTMLButtonElement>('[data-part="month-switch"]')?.click();
+    await nextTick();
+    expect(document.body.querySelector('.m3-date-picker-list')).not.toBeNull();
+
+    const surface = document.body.querySelector<HTMLElement>('.m3-date-picker-surface')!;
+    Object.defineProperty(surface, 'getAnimations', {
+      configurable: true,
+      value: () => [{ finished } as unknown as Animation],
+    });
+
+    open.value = false;
+    await nextTick();
+
+    expect(document.body.querySelector('.m3-date-picker-list')).not.toBeNull();
+    expect(onClosed).not.toHaveBeenCalled();
+
+    finishExit();
+    await finished;
+    await Promise.resolve();
+    await nextTick();
+
+    expect(onClosed).toHaveBeenCalledOnce();
+    expect(document.body.querySelector('[data-part="grid"]')).not.toBeNull();
     app.unmount();
   });
 

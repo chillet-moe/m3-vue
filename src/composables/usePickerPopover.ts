@@ -1,4 +1,5 @@
 import { type Ref, watch } from 'vue';
+import { useExitMotionCompletion } from './useExitMotionCompletion';
 
 export type UsePickerPopoverOptions<T extends HTMLElement = HTMLElement> = {
   /** Reactive open state for the picker. */
@@ -18,6 +19,12 @@ export type UsePickerPopoverOptions<T extends HTMLElement = HTMLElement> = {
 
   /** Runs before the native popover is hidden or synchronized closed. */
   onBeforeClose?: () => void;
+
+  /** Runs after the picker-owned visual exit finishes. */
+  onAfterClose?: () => void | Promise<void>;
+
+  /** Picker-owned elements whose exit motion must finish with the popover root. */
+  exitElements?: () => readonly (HTMLElement | null | undefined)[];
 };
 
 export type UsePickerPopoverReturn = {
@@ -41,7 +48,18 @@ export function usePickerPopover<T extends HTMLElement = HTMLElement>({
   onBeforeOpen,
   onAfterOpen,
   onBeforeClose,
+  onAfterClose,
+  exitElements,
 }: UsePickerPopoverOptions<T>): UsePickerPopoverReturn {
+  const exitCompletion = useExitMotionCompletion<void, T>({
+    rootRef: popoverRef,
+    open,
+    ownedElements: exitElements,
+    onComplete: () => {
+      void onAfterClose?.();
+    },
+  });
+
   function show() {
     open.value = true;
   }
@@ -61,9 +79,18 @@ export function usePickerPopover<T extends HTMLElement = HTMLElement>({
 
   function handlePopoverToggle(event: Event) {
     const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
+    const target = event.currentTarget as T | null;
+
+    if (nextState === 'open') {
+      exitCompletion.cancel();
+      return;
+    }
 
     if (nextState === 'closed' && open.value) {
       open.value = false;
+    }
+    if (nextState === 'closed' && target) {
+      exitCompletion.begin(undefined, target);
     }
   }
 
@@ -73,6 +100,7 @@ export function usePickerPopover<T extends HTMLElement = HTMLElement>({
       const popover = popoverRef.value;
 
       if (nextOpen) {
+        exitCompletion.cancel();
         onBeforeOpen?.();
 
         if (popover && !popover.matches(':popover-open')) {
@@ -93,6 +121,7 @@ export function usePickerPopover<T extends HTMLElement = HTMLElement>({
 
       if (popover?.matches(':popover-open')) {
         popover.hidePopover();
+        exitCompletion.begin(undefined, popover);
       }
     },
     {

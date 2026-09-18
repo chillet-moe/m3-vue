@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, beforeAll, describe, expect, it } from 'vite-plus/test';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, ref } from 'vue';
 import TimePicker, { type TimePickerModelValue } from './TimePicker.vue';
 
@@ -121,6 +121,34 @@ afterEach(() => {
 });
 
 describe('TimePicker', () => {
+  it('emits closed after its popover exit completes', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const open = ref(true);
+    const onClosed = vi.fn();
+    const app = createApp(() =>
+      h(TimePicker, {
+        open: open.value,
+        'onUpdate:open': (nextOpen: boolean) => {
+          open.value = nextOpen;
+        },
+        onClosed,
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    document.body.querySelector<HTMLElement>('.m3-time-picker')?.hidePopover();
+    await nextTick();
+    await Promise.resolve();
+
+    expect(open.value).toBe(false);
+    expect(onClosed).toHaveBeenCalledOnce();
+    app.unmount();
+  });
+
   it('uses the locale hour cycle and day-period labels by default', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

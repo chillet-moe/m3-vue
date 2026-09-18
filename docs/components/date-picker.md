@@ -50,6 +50,9 @@ DatePicker is a standalone date surface. TextField uses it automatically for `ty
 
 <StyleTokenTable component="DatePicker" />
 
+`update:open(false)` is emitted when the native popover closes. `closed` follows after the DatePicker-owned exit motion
+finishes. The current calendar view is preserved during the exit and reset afterward.
+
 ## Examples
 
 ### Default
