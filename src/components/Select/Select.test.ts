@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
 import { createApp, h, nextTick, provide, ref } from 'vue';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
 import Select, { type SelectModelValue, type SelectOption } from './Select.vue';
@@ -639,6 +639,7 @@ describe('Select', () => {
 
     const container = document.createElement('div');
     document.body.appendChild(container);
+    const onClosed = vi.fn();
 
     const app = createApp(() =>
       h(Select, {
@@ -646,6 +647,7 @@ describe('Select', () => {
         options: stateOptions,
         filterable: true,
         filterPlaceholder: 'Filter states',
+        onClosed,
       }),
     );
 
@@ -676,6 +678,33 @@ describe('Select', () => {
     );
 
     expect(visibleLabels).toEqual(['Colorado', 'Connecticut']);
+
+    let finishExit!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      finishExit = resolve;
+    });
+    const surface = container.querySelector<HTMLElement>('.m3-menu-surface')!;
+    Object.defineProperty(surface, 'getAnimations', {
+      configurable: true,
+      value: () => [{ finished } as unknown as Animation],
+    });
+
+    filterInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await nextTick();
+    await nextTick();
+
+    expect(onClosed).not.toHaveBeenCalled();
+    expect(
+      getCurrentMenuItems(container).map((item) => item.querySelector('.m3-menu-item-label')?.textContent?.trim()),
+    ).toEqual(['Colorado', 'Connecticut']);
+
+    finishExit();
+    await finished;
+    await Promise.resolve();
+    await nextTick();
+
+    expect(onClosed).toHaveBeenCalledOnce();
+    expect(getCurrentMenuItems(container)).toHaveLength(stateOptions.length);
 
     app.unmount();
   });

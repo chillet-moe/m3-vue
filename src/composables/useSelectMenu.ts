@@ -1,4 +1,4 @@
-import { watch, type Ref } from 'vue';
+import type { Ref } from 'vue';
 import { hideDropdownElement, showDropdownElement } from '@/directives/Dropdown/helpers';
 import type { SelectMenuRef, SelectTextFieldRef } from './selectTypes';
 
@@ -23,6 +23,7 @@ export type UseSelectMenuReturn = {
   handleFieldClick: () => void;
   handleFieldInput: () => void;
   handleFilterKeydown: (event: KeyboardEvent) => void;
+  handleMenuClosed: () => void;
 };
 
 export function useSelectMenu({
@@ -136,20 +137,9 @@ export function useSelectMenu({
     }
   }
 
-  watch(
-    open,
-    (nextOpen) => {
-      if (nextOpen) {
-        if (filterable()) {
-          textFieldRef.value?.focus();
-        }
-        return;
-      }
-
-      onClosed();
-    },
-    { immediate: true },
-  );
+  function handleMenuClosed() {
+    onClosed();
+  }
 
   return {
     focus,
@@ -162,5 +152,6 @@ export function useSelectMenu({
     handleFieldClick,
     handleFieldInput,
     handleFilterKeydown,
+    handleMenuClosed,
   };
 }

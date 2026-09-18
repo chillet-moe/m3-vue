@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
-import { createApp, h, nextTick } from 'vue';
+import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import { createApp, h, nextTick, ref } from 'vue';
 import Combobox from './Combobox.vue';
 import type { SelectOption } from '@/components/Select/Select.vue';
 
@@ -139,6 +139,37 @@ describe('Combobox', () => {
 
     expect(visibleLabels).toEqual(['Colorado', 'Connecticut']);
 
+    app.unmount();
+  });
+
+  it('forwards the closed event from Select', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const open = ref(true);
+    const onClosed = vi.fn();
+    const app = createApp(() =>
+      h(Combobox, {
+        label: 'State',
+        options: stateOptions,
+        open: open.value,
+        'onUpdate:open': (nextOpen: boolean) => {
+          open.value = nextOpen;
+        },
+        onClosed,
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    container.querySelector<HTMLElement>('[role="menu"]')?.hidePopover();
+    await nextTick();
+    await Promise.resolve();
+
+    expect(open.value).toBe(false);
+    expect(onClosed).toHaveBeenCalledOnce();
     app.unmount();
   });
 });

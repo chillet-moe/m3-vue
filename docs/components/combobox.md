@@ -41,6 +41,9 @@ intended density and add clearance only when its floating label needs it. See th
 
 <ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />
 
+`Combobox` forwards Select's `closed` event after its dropdown menu finishes exiting. Use it instead of
+`update:open(false)` when releasing data used by option slots.
+
 ::: info
 Combobox 是 Select 的封装，共享 `select` scope。详见 [Select Anatomy](./select)。
 :::

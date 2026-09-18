@@ -52,6 +52,12 @@ default from `fieldContextKey`; it adds to any parent gap. See the
 
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
+## Close lifecycle
+
+`update:open(false)` updates the control state as soon as the native menu closes. `closed` follows after the menu's
+visual exit completes. Filter state is retained through the exit and reset at `closed`, so the closing menu does not
+change its option list or dimensions mid-animation.
+
 ## Examples
 
 ### Sizes and toolbar alignment

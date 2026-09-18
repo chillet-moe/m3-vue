@@ -59,6 +59,9 @@ export type UseSelectOptions = {
   /** Called when value changes. */
   onChange?: (value: UseSelectModelValue) => void;
 
+  /** Called after the dropdown menu's visual exit finishes. */
+  onClosed?: () => void;
+
   /** Ref to the menu exposed API. */
   menuRef: SelectMenuRef;
 
@@ -132,4 +135,7 @@ export type UseSelectReturn = {
 
   /** Handle keydown on the filter field. */
   handleFilterKeydown: (event: KeyboardEvent) => void;
+
+  /** Handle completion of the dropdown menu's visual exit. */
+  handleMenuClosed: () => void;
 };

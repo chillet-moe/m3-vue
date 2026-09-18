@@ -87,6 +87,9 @@ If you are using Vue Router, keep `MenuItem` as the rendered anchor and let `Rou
 
 <StyleTokenTable component="Menu" />
 
+`update:open(false)` reflects the native popover closing immediately. Use `closed` for cleanup that must wait until the
+Menu-owned opacity and scale exit finishes. Animations inside slotted menu content are not included.
+
 ### MenuContainer
 
 <ApiTable component="MenuContainer" />

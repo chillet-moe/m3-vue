@@ -26,6 +26,9 @@ const modelValue = defineModel<MenuModelValue>();
 const emit = defineEmits<{
   /** Fired when a menu item is activated. */
   select: [event: MouseEvent, itemElement: HTMLElement];
+
+  /** Fired after the Menu-owned visual exit finishes. */
+  closed: [];
 }>();
 
 defineSlots<{
@@ -34,6 +37,7 @@ defineSlots<{
 }>();
 
 const menuRef = useTemplateRef<HTMLDivElement>('menu');
+const surfaceRef = useTemplateRef<HTMLDivElement>('surface');
 const ambientParentMenu = inject(menuContextKey, null);
 const parentSubmenu = inject(menuSubmenuContextKey, null);
 // Only MenuSubMenu opts a child Menu into the parent menu chain.
@@ -55,6 +59,8 @@ const menuActions = useMenu({
   modelValue,
   multiple: () => multiple,
   onSelect: notifySelect,
+  exitElements: () => [surfaceRef.value],
+  onClosed: () => emit('closed'),
   parentCloseAll: parentMenu?.closeAll,
   parentSubmenu,
 });
@@ -101,7 +107,7 @@ defineExpose({
     @click="menuActions.onMenuClick"
     @focusin="menuActions.onMenuFocusIn"
   >
-    <div class="m3-menu-surface" data-scope="menu" data-part="surface">
+    <div ref="surface" class="m3-menu-surface" data-scope="menu" data-part="surface">
       <MenuContentRenderer v-if="items?.length" :items="items" />
       <slot />
     </div>

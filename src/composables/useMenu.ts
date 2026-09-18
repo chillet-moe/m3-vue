@@ -1,5 +1,6 @@
 import { type Ref, nextTick, onUnmounted, watch } from 'vue';
 import type { MenuItemValue, MenuModelValue } from '@/components/Menu/MenuTypes';
+import { useExitMotionCompletion } from './useExitMotionCompletion';
 
 export type UseMenuOptions = {
   /** Unique ID for the menu instance. */
@@ -19,6 +20,12 @@ export type UseMenuOptions = {
 
   /** Notify parent of item selection. */
   onSelect?: (event: MouseEvent, itemElement: HTMLElement) => void;
+
+  /** Component-owned elements whose exit motion must finish with the menu root. */
+  exitElements?: () => readonly (HTMLElement | null | undefined)[];
+
+  /** Runs after the menu's visual exit finishes. */
+  onClosed?: () => void;
 
   /** Parent menu context (for nested menus). */
   parentCloseAll?: () => void;
@@ -78,6 +85,12 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   const { menuId, menuRef, open, modelValue, multiple, onSelect, parentCloseAll, parentSubmenu } = options;
 
   const submenuClosers = new Set<() => void>();
+  const exitCompletion = useExitMotionCompletion<void>({
+    rootRef: menuRef,
+    open,
+    ownedElements: options.exitElements,
+    onComplete: options.onClosed,
+  });
 
   function registerSubmenu(close: () => void) {
     submenuClosers.add(close);
@@ -150,9 +163,9 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
 
   function hideMenu() {
     const menu = menuRef.value;
-    if (!menu) return;
-    if (!isMenuOpen(menu)) return;
+    if (!menu || !isMenuOpen(menu)) return;
     menu.hidePopover();
+    exitCompletion.begin(undefined, menu);
   }
 
   function getMenuItemElements() {
@@ -174,6 +187,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   }
 
   async function show(focusFirst = false, source?: HTMLElement) {
+    exitCompletion.cancel();
     open.value = true;
     showMenu(source);
 
@@ -307,6 +321,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
     }
 
     if (isOpen) {
+      exitCompletion.cancel();
       if (!open.value) {
         open.value = true;
       }
@@ -317,6 +332,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
     if (open.value) {
       open.value = false;
     }
+    exitCompletion.begin(undefined, menu);
   }
 
   type ExternalMenuShowDetail = {
@@ -355,6 +371,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
     ([menu, nextOpen]) => {
       if (!menu) return;
       if (nextOpen) {
+        exitCompletion.cancel();
         showMenu();
         return;
       }

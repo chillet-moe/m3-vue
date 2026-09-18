@@ -206,6 +206,54 @@ describe('Menu', () => {
     app.unmount();
   });
 
+  it('emits closed after the menu surface exit finishes', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const open = ref(true);
+    const onClosed = vi.fn();
+    let finishExit!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      finishExit = resolve;
+    });
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        {
+          open: open.value,
+          'onUpdate:open': (nextOpen: boolean) => {
+            open.value = nextOpen;
+          },
+          onClosed,
+        },
+        { default: () => h(MenuItem, null, { default: () => 'Edit' }) },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const surface = container.querySelector<HTMLElement>('[data-part="surface"]')!;
+    Object.defineProperty(surface, 'getAnimations', {
+      configurable: true,
+      value: () => [{ finished } as unknown as Animation],
+    });
+
+    open.value = false;
+    await nextTick();
+
+    expect(onClosed).not.toHaveBeenCalled();
+
+    finishExit();
+    await finished;
+    await Promise.resolve();
+
+    expect(onClosed).toHaveBeenCalledOnce();
+    app.unmount();
+  });
+
   it('emits select from slotted MenuItem, closes by default, and ignores disabled item', async () => {
     installPopoverPolyfill();
 

@@ -25,6 +25,8 @@ const emit = defineEmits<{
   change: [value: SelectModelValue];
   focus: [event: FocusEvent];
   blur: [event: FocusEvent];
+  /** Fired after the dropdown menu's visual exit finishes. */
+  closed: [];
 }>();
 
 defineSlots<{
@@ -81,6 +83,7 @@ defineExpose({
     @change="emit('change', $event)"
     @focus="emit('focus', $event)"
     @blur="emit('blur', $event)"
+    @closed="emit('closed')"
   >
     <template v-if="$slots.leading" #leading>
       <slot name="leading" />

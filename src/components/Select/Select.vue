@@ -146,6 +146,8 @@ const emit = defineEmits<{
   change: [value: SelectModelValue];
   focus: [event: FocusEvent];
   blur: [event: FocusEvent];
+  /** Fired after the dropdown menu's visual exit finishes. */
+  closed: [];
 }>();
 
 defineSlots<{
@@ -192,6 +194,7 @@ const select = useSelect({
   modelValue,
   open,
   onChange: (value) => emit('change', value),
+  onClosed: () => emit('closed'),
   menuRef: menuRef as any,
   triggerRef,
   textFieldRef: textFieldRef as any,
@@ -370,6 +373,7 @@ defineExpose({
       :color="props.menuColor"
       :style="{ 'position-anchor': anchorName }"
       @select="select.handleMenuSelect"
+      @closed="select.handleMenuClosed"
     >
       <MenuContainer>
         <TransitionGroup

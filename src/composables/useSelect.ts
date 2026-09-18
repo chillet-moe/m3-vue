@@ -28,6 +28,7 @@ export function useSelect(opts: UseSelectOptions): UseSelectReturn {
     modelValue,
     open,
     onChange,
+    onClosed,
     menuRef,
     triggerRef,
     textFieldRef,
@@ -123,6 +124,7 @@ export function useSelect(opts: UseSelectOptions): UseSelectReturn {
     textFieldRef,
     onClosed: () => {
       filterQuery.value = '';
+      onClosed?.();
     },
   });
 
@@ -148,5 +150,6 @@ export function useSelect(opts: UseSelectOptions): UseSelectReturn {
     handleFieldClick: menu.handleFieldClick,
     handleFieldInput: menu.handleFieldInput,
     handleFilterKeydown: menu.handleFilterKeydown,
+    handleMenuClosed: menu.handleMenuClosed,
   };
 }
