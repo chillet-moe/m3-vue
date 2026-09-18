@@ -21,8 +21,11 @@ const emit = defineEmits<{
   /** Fired when the user requests closing the dialog, such as pressing Escape. */
   cancel: [event: Event];
 
-  /** Fired after the dialog closes. Receives the native dialog return value. */
+  /** Fired when the native dialog closes. Receives its return value. */
   close: [returnValue: string];
+
+  /** Fired after the dialog's visual exit finishes. Receives the native dialog return value. */
+  closed: [returnValue: string];
 }>();
 
 defineSlots<{
@@ -41,6 +44,11 @@ defineSlots<{
 
 const slots = useSlots();
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog');
+const surfaceRef = useTemplateRef<HTMLElement>('surface');
+const iconRef = useTemplateRef<HTMLElement>('icon');
+const headlineRef = useTemplateRef<HTMLElement>('headline');
+const contentRef = useTemplateRef<HTMLElement>('content');
+const actionsRef = useTemplateRef<HTMLElement>('actions');
 
 const headlineId = `dialog-headline-${useId()}`;
 const contentId = `dialog-content-${useId()}`;
@@ -64,8 +72,10 @@ const { showModal, close, onCancel, onClose, onBackdropClick } = useNativeDialog
   dialogRef,
   open,
   closeOnBackdrop: () => props.closeOnBackdrop,
+  exitElements: () => [surfaceRef.value, iconRef.value, headlineRef.value, contentRef.value, actionsRef.value],
   onCancel: (event) => emit('cancel', event),
   onClose: (returnValue) => emit('close', returnValue),
+  onClosed: (returnValue) => emit('closed', returnValue),
 });
 
 defineExpose({
@@ -91,20 +101,34 @@ defineExpose({
     @close="onClose"
     @click="onBackdropClick"
   >
-    <div class="m3-dialog-surface" data-scope="dialog" data-part="surface">
-      <div v-if="hasIcon" :class="'m3-dialog-icon'" data-scope="dialog" data-part="icon">
+    <div ref="surface" class="m3-dialog-surface" data-scope="dialog" data-part="surface">
+      <div v-if="hasIcon" ref="icon" :class="'m3-dialog-icon'" data-scope="dialog" data-part="icon">
         <slot name="icon" />
       </div>
 
-      <h2 v-if="hasHeadline" :id="headlineId" :class="'m3-dialog-headline'" data-scope="dialog" data-part="headline">
+      <h2
+        v-if="hasHeadline"
+        :id="headlineId"
+        ref="headline"
+        :class="'m3-dialog-headline'"
+        data-scope="dialog"
+        data-part="headline"
+      >
         <slot name="headline" />
       </h2>
 
-      <div v-if="hasContent" :id="contentId" :class="'m3-dialog-content'" data-scope="dialog" data-part="content">
+      <div
+        v-if="hasContent"
+        :id="contentId"
+        ref="content"
+        :class="'m3-dialog-content'"
+        data-scope="dialog"
+        data-part="content"
+      >
         <slot />
       </div>
 
-      <div v-if="hasActions" :class="'m3-dialog-actions'" data-scope="dialog" data-part="actions">
+      <div v-if="hasActions" ref="actions" :class="'m3-dialog-actions'" data-scope="dialog" data-part="actions">
         <slot name="actions" />
       </div>
     </div>

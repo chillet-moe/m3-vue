@@ -42,9 +42,7 @@ export type ShowDialogOptions = DialogProps & {
   role?: 'dialog' | 'alertdialog';
 };
 
-type DialogExposed = {
-  dialogRef: HTMLDialogElement | null;
-};
+type DialogExposed = { dialogRef: HTMLDialogElement | null };
 
 const DEFAULT_ACTIONS: DialogAction[] = [
   {
@@ -52,45 +50,6 @@ const DEFAULT_ACTIONS: DialogAction[] = [
     value: 'confirm',
   },
 ];
-
-function parseTimeValue(value: string): number {
-  const trimmed = value.trim();
-
-  if (!trimmed) {
-    return 0;
-  }
-
-  if (trimmed.endsWith('ms')) {
-    return Number.parseFloat(trimmed);
-  }
-
-  if (trimmed.endsWith('s')) {
-    return Number.parseFloat(trimmed) * 1000;
-  }
-
-  return 0;
-}
-
-function getMaxTimingValue(values: string): number {
-  return values
-    .split(',')
-    .map(parseTimeValue)
-    .reduce((max, current) => Math.max(max, current), 0);
-}
-
-function getExitDuration(element: HTMLElement | null): number {
-  if (!element) {
-    return 0;
-  }
-
-  const style = window.getComputedStyle(element);
-  const transitionDuration = getMaxTimingValue(style.transitionDuration);
-  const transitionDelay = getMaxTimingValue(style.transitionDelay);
-  const animationDuration = getMaxTimingValue(style.animationDuration);
-  const animationDelay = getMaxTimingValue(style.animationDelay);
-
-  return Math.max(transitionDuration + transitionDelay, animationDuration + animationDelay);
-}
 
 export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
   if (typeof document === 'undefined') {
@@ -135,39 +94,6 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
       dialogComponent = null;
       overlayHandle?.remove();
       overlayHandle = null;
-    };
-
-    const cleanupAfterExit = () => {
-      const dialog = queryDialog();
-      const surface = dialog?.querySelector('.m3-dialog-surface') as HTMLElement | null;
-      const exitDuration = Math.max(getExitDuration(dialog), getExitDuration(surface));
-
-      if (!dialog || exitDuration === 0) {
-        queueMicrotask(cleanup);
-        return;
-      }
-
-      let finished = false;
-
-      const finish = () => {
-        if (finished) {
-          return;
-        }
-
-        finished = true;
-        dialog.removeEventListener('transitionend', onTransitionEnd);
-        window.clearTimeout(timeoutId);
-        cleanup();
-      };
-
-      const onTransitionEnd = (event: TransitionEvent) => {
-        if (event.target === surface && event.propertyName === 'opacity') {
-          finish();
-        }
-      };
-
-      const timeoutId = window.setTimeout(finish, exitDuration + 50);
-      dialog.addEventListener('transitionend', onTransitionEnd);
     };
 
     const closeWithValue = (value = '') => {
@@ -218,8 +144,8 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
             onClose: (returnValue: string) => {
               open.value = false;
               finalizeResolve(returnValue);
-              cleanupAfterExit();
             },
+            onClosed: cleanup,
           },
           {
             icon: options.icon ? () => h(Icon, { name: options.icon! }) : undefined,

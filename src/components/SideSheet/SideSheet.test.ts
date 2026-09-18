@@ -104,6 +104,7 @@ describe('SideSheet', () => {
 
     const open = ref(true);
     const onClose = vi.fn();
+    const onClosed = vi.fn();
     const app = createApp({
       setup() {
         return () =>
@@ -113,6 +114,7 @@ describe('SideSheet', () => {
               open.value = value;
             },
             onClose,
+            onClosed,
           });
       },
     });
@@ -127,6 +129,7 @@ describe('SideSheet', () => {
 
     expect(open.value).toBe(false);
     expect(onClose).toHaveBeenCalledWith('done');
+    expect(onClosed).toHaveBeenCalledWith('done');
     expect(document.body.style.overflow).toBe('');
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 

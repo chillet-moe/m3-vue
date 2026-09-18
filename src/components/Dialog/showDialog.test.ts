@@ -140,6 +140,36 @@ describe('showDialog', () => {
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
   });
 
+  it('resolves on close but keeps the overlay mounted until the exit finishes', async () => {
+    let finishExit!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      finishExit = resolve;
+    });
+    const result = showDialog();
+
+    await nextTick();
+
+    const dialog = document.querySelector('dialog') as HTMLDialogElement;
+    const surface = dialog.querySelector<HTMLElement>('[data-part="surface"]')!;
+
+    Object.defineProperty(surface, 'getAnimations', {
+      configurable: true,
+      value: () => [{ finished } as unknown as Animation],
+    });
+
+    document.querySelector<HTMLButtonElement>('button')?.click();
+
+    await expect(result).resolves.toBe('confirm');
+    expect(document.querySelector('dialog')).toBe(dialog);
+
+    finishExit();
+    await finished;
+    await Promise.resolve();
+    await nextTick();
+
+    expect(document.querySelector('dialog')).toBeNull();
+  });
+
   it('resolves with an empty string when dismissed by backdrop click', async () => {
     const result = showDialog({
       headline: 'Delete file?',

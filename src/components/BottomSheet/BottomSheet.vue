@@ -35,8 +35,11 @@ const emit = defineEmits<{
   /** Fired when the user requests closing the sheet, such as pressing Escape. */
   cancel: [event: Event];
 
-  /** Fired after the sheet closes. Receives the native dialog return value. */
+  /** Fired when the native dialog closes. Receives its return value. */
   close: [returnValue: string];
+
+  /** Fired after the sheet's visual exit finishes. Receives the native dialog return value. */
+  closed: [returnValue: string];
 }>();
 
 defineSlots<{
@@ -54,6 +57,9 @@ const slots = useSlots();
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog');
 const surfaceRef = useTemplateRef<HTMLElement>('surface');
 const contentRef = useTemplateRef<HTMLElement>('content');
+const dragHandleRef = useTemplateRef<HTMLElement>('drag-handle');
+const headlineRef = useTemplateRef<HTMLElement>('headline');
+const actionsRef = useTemplateRef<HTMLElement>('actions');
 
 const headlineId = `bottom-sheet-headline-${useId()}`;
 const contentId = `bottom-sheet-content-${useId()}`;
@@ -106,12 +112,14 @@ const { showModal, close, onCancel, onClose, onBackdropClick } = useNativeDialog
   dialogRef,
   open,
   closeOnBackdrop: () => props.closeOnBackdrop,
+  exitElements: () => [surfaceRef.value, dragHandleRef.value, headlineRef.value, contentRef.value, actionsRef.value],
   onBeforeOpen: resetDrag,
   onCancel: (event) => emit('cancel', event),
   onClose: (returnValue) => {
     resetDrag();
     emit('close', returnValue);
   },
+  onClosed: (returnValue) => emit('closed', returnValue),
 });
 
 const getEventTime = () => (typeof performance === 'undefined' ? Date.now() : performance.now());
@@ -341,6 +349,7 @@ onMounted(() => {
     >
       <div
         v-if="props.showDragHandle"
+        ref="drag-handle"
         class="m3-bottom-sheet-drag-handle"
         data-scope="bottom-sheet"
         data-part="drag-handle"
@@ -350,6 +359,7 @@ onMounted(() => {
       <h2
         v-if="hasHeadline"
         :id="headlineId"
+        ref="headline"
         class="m3-bottom-sheet-headline"
         data-scope="bottom-sheet"
         data-part="headline"
@@ -368,7 +378,13 @@ onMounted(() => {
         <slot />
       </div>
 
-      <div v-if="hasActions" class="m3-bottom-sheet-actions" data-scope="bottom-sheet" data-part="actions">
+      <div
+        v-if="hasActions"
+        ref="actions"
+        class="m3-bottom-sheet-actions"
+        data-scope="bottom-sheet"
+        data-part="actions"
+      >
         <slot name="actions" />
       </div>
     </div>

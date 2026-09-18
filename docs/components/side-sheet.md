@@ -47,6 +47,24 @@ Side sheets present modal supporting content from the side of the viewport using
 
 <StyleTokenTable component="SideSheet" />
 
+## Close lifecycle
+
+`update:open(false)` and `close` run when the native dialog closes. Use `closed` for cleanup that must wait until the
+sheet is no longer visible. It is emitted after the SideSheet-owned exit motion, including its backdrop, finishes and
+receives the same native dialog return value as `close`. It does not wait for animations inside slot content. With no
+motion or reduced motion, it follows asynchronously without a business timeout.
+
+```vue
+<SideSheet v-model:open="open" @closed="selectedItem = null">
+  {{ selectedItem?.name }}
+  <template #actions>
+    <Button variant="text" @click="open = false">Close</Button>
+  </template>
+</SideSheet>
+```
+
+Keep content or payload state intact in `close` and while setting `open` to `false`; clear it from `closed`.
+
 ## Layout
 
 The dialog root owns viewport placement and motion. The sheet surface owns the background, shape, and elevation.

@@ -104,6 +104,7 @@ describe('Dialog', () => {
 
     const open = ref(true);
     const onClose = vi.fn();
+    const onClosed = vi.fn();
     const app = createApp({
       setup() {
         return () =>
@@ -115,6 +116,7 @@ describe('Dialog', () => {
                 open.value = value;
               },
               onClose,
+              onClosed,
             },
             {
               headline: () => 'Delete file?',
@@ -136,6 +138,7 @@ describe('Dialog', () => {
 
     expect(open.value).toBe(false);
     expect(onClose).toHaveBeenCalledWith('confirmed');
+    expect(onClosed).toHaveBeenCalledWith('confirmed');
     expect(document.body.style.overflow).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
 

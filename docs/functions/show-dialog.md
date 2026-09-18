@@ -57,6 +57,7 @@ The tables below are generated from source types and stay in sync with API chang
 - Calling `showDialog()` without a mounted `OverlayHost` rejects the promise.
 - The dialog inherits application-level provides and CSS custom properties from the host.
 - If an action callback throws or rejects, the promise rejects with that error.
-- Cleanup waits for the dialog exit animation before removing it from the host.
+- The promise resolves when the native dialog closes. Cleanup still waits for all Dialog-owned exit motion, including
+  the backdrop, before removing the dialog from the host, so cleanup does not delay the existing result timing.
 
 For manually rendered dialogs and slot-based composition, see [Dialog](/components/dialog).

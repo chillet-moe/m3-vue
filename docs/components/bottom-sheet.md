@@ -44,6 +44,24 @@ Bottom sheets present modal content from the bottom edge of the viewport using t
 
 <StyleTokenTable component="BottomSheet" />
 
+## Close lifecycle
+
+`update:open(false)` and `close` run when the native dialog closes. Use `closed` for cleanup that must wait until the
+sheet is no longer visible. It is emitted after the BottomSheet-owned exit motion, including its backdrop, finishes and
+receives the same native dialog return value as `close`. It does not wait for animations inside slot content. With no
+motion or reduced motion, it follows asynchronously without a business timeout.
+
+```vue
+<BottomSheet v-model:open="open" @closed="selectedItem = null">
+  {{ selectedItem?.name }}
+  <template #actions>
+    <Button variant="text" @click="open = false">Close</Button>
+  </template>
+</BottomSheet>
+```
+
+Keep content or payload state intact in `close` and while setting `open` to `false`; clear it from `closed`.
+
 ## Layout
 
 The sheet surface owns the background, shape, elevation, and motion. Default spacing is applied to the `headline`, `content`, and `actions` parts instead of the surface, so custom full-bleed content can opt out by overriding the relevant part padding.

@@ -1,0 +1,25 @@
+.m3-dialog,
+.m3-dialog-surface,
+.m3-dialog-headline,
+.m3-dialog-content {
+  transition-duration: 80ms !important;
+}
+
+.m3-dialog::backdrop {
+  transition-duration: 450ms !important;
+}
+
+.m3-dialog-actions {
+  transition-duration: 80ms, 650ms !important;
+}
+
+.infinite-slot-animation {
+  display: inline-block;
+  animation: infinite-slot-spin 1s linear infinite;
+}
+
+@keyframes infinite-slot-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}

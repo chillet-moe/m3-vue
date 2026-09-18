@@ -46,6 +46,39 @@ hierarchy through clear labels, order, and position rather than filled, tonal, o
 
 <StyleTokenTable component="Dialog" />
 
+## Close lifecycle
+
+`update:open(false)` and `close` are emitted when the native dialog closes. Use them to update application state that
+controls whether the dialog is open. `closed` is emitted later, after the Dialog-owned visual exit—including its
+backdrop—has finished, with the same native dialog return value as `close`. It does not wait for animations inside slot
+content. With no motion or reduced motion, `closed` follows asynchronously without waiting for a timeout.
+
+Keep slot data available during the exit and release it from `closed`:
+
+```vue
+<script setup lang="ts">
+import { ref, shallowRef } from 'vue';
+
+const open = ref(false);
+const selectedItem = shallowRef<{ name: string } | null>(null);
+
+function requestClose() {
+  open.value = false;
+}
+
+function clearDialogContent() {
+  selectedItem.value = null;
+}
+</script>
+
+<template>
+  <Dialog v-model:open="open" @closed="clearDialogContent">
+    <template #headline>{{ selectedItem?.name }}</template>
+    <Button variant="text" @click="requestClose">Close</Button>
+  </Dialog>
+</template>
+```
+
 ## Width
 
 Use the `width` prop for the dialog surface width.
