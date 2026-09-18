@@ -1,11 +1,8 @@
 import { onUnmounted, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue';
 import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
+import { useExitMotionCompletion } from './useExitMotionCompletion';
 
 type DialogRef = Readonly<Ref<HTMLDialogElement | null | undefined>>;
-type AnimationQueryOptions = {
-  pseudoElement?: string;
-  subtree?: boolean;
-};
 
 export type UseNativeDialogOptions = {
   dialogRef: DialogRef;
@@ -21,70 +18,15 @@ export type UseNativeDialogOptions = {
 
 export function useNativeDialog(options: UseNativeDialogOptions) {
   let releaseScrollLock: (() => void) | undefined;
-  let exitSequence = 0;
-  let exitPending = false;
-  let unmounted = false;
 
   const shouldLockScroll = () => toValue(options.lockScroll) !== false;
   const shouldCloseOnBackdrop = () => toValue(options.closeOnBackdrop) !== false;
-
-  const cancelExitCompletion = () => {
-    exitSequence += 1;
-    exitPending = false;
-  };
-
-  const waitForExit = (dialog: HTMLDialogElement, returnValue: string) => {
-    if (exitPending) {
-      return;
-    }
-
-    exitPending = true;
-    const sequence = ++exitSequence;
-
-    queueMicrotask(() => {
-      const elements = [dialog, ...(options.exitElements?.() ?? [])];
-      const animations = new Set(elements.flatMap((element) => element?.getAnimations?.() ?? []));
-      const getDialogAnimations = dialog.getAnimations?.bind(dialog) as
-        | ((options?: AnimationQueryOptions) => Animation[])
-        | undefined;
-
-      if (getDialogAnimations) {
-        try {
-          for (const animation of getDialogAnimations({ pseudoElement: '::backdrop' })) {
-            animations.add(animation);
-          }
-        } catch {
-          // Some browsers do not support querying a pseudo-element directly.
-        }
-
-        try {
-          for (const animation of getDialogAnimations({ subtree: true })) {
-            if ((animation.effect as KeyframeEffect | null)?.pseudoElement === '::backdrop') {
-              animations.add(animation);
-            }
-          }
-        } catch {
-          // Direct pseudo-element queries above cover browsers without subtree queries.
-        }
-      }
-
-      const finish = () => {
-        if (unmounted || sequence !== exitSequence || options.open.value || options.dialogRef.value !== dialog) {
-          return;
-        }
-
-        exitPending = false;
-        options.onClosed?.(returnValue);
-      };
-
-      if (animations.size === 0) {
-        finish();
-        return;
-      }
-
-      void Promise.allSettled([...animations].map((animation) => animation.finished)).then(finish);
-    });
-  };
+  const exitCompletion = useExitMotionCompletion<string, HTMLDialogElement>({
+    rootRef: options.dialogRef,
+    open: options.open,
+    ownedElements: options.exitElements,
+    onComplete: options.onClosed,
+  });
 
   const showDialogElement = () => {
     const dialog = options.dialogRef.value;
@@ -136,7 +78,7 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
       }
 
       if (options.open.value) {
-        cancelExitCompletion();
+        exitCompletion.cancel();
         options.onBeforeOpen?.();
         syncScrollLock();
         showDialogElement();
@@ -167,7 +109,7 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
     }
 
     options.onClose?.(returnValue, event);
-    waitForExit(dialog, returnValue);
+    exitCompletion.begin(returnValue, dialog);
   };
 
   const onBackdropClick = (event: MouseEvent) => {
@@ -189,8 +131,6 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
   };
 
   onUnmounted(() => {
-    unmounted = true;
-    cancelExitCompletion();
     releaseScrollLockIfNeeded();
   });
 
