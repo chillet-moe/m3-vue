@@ -47,6 +47,9 @@ FAB menus open from a floating action button to show a small set of related acti
 
 <StyleTokenTable component="FloatingActionButtonMenu" />
 
+`update:open(false)` reflects the native popover state immediately. Use `closed` for cleanup that must wait until the
+FAB menu's visual exit finishes.
+
 ## Examples
 
 ### Default

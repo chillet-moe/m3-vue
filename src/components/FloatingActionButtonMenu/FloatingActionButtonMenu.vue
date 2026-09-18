@@ -45,6 +45,9 @@ const open = defineModel<boolean>('open', { default: false });
 const emit = defineEmits<{
   /** Fired when a menu item is activated. */
   select: [event: MouseEvent, itemElement: HTMLElement];
+
+  /** Fired after the FAB menu's visual exit finishes. */
+  closed: [];
 }>();
 
 defineSlots<{
@@ -57,6 +60,7 @@ const triggerId = `${menuId}-trigger`;
 const rootRef = useTemplateRef<HTMLDivElement>('root');
 const triggerRef = useTemplateRef<HTMLButtonElement>('trigger');
 const menuRef = useTemplateRef<HTMLDivElement>('menu');
+const surfaceRef = useTemplateRef<HTMLDivElement>('surface');
 const modelValue = ref<MenuModelValue>();
 const restoreFocusAfterClose = ref(false);
 const effectiveAlignment = ref<FloatingActionButtonMenuProps['alignment']>(props.alignment);
@@ -162,6 +166,8 @@ const menuActions = useMenu({
   modelValue,
   multiple: () => false,
   onSelect: (event, itemElement) => emit('select', event, itemElement),
+  exitElements: () => [surfaceRef.value],
+  onClosed: () => emit('closed'),
 });
 
 function showPopover() {
@@ -390,7 +396,7 @@ defineExpose({
       @keydown="handleMenuKeydown"
       @focusin="menuActions.onMenuFocusIn"
     >
-      <div class="m3-fab-menu-surface" data-scope="floating-action-button-menu" data-part="surface">
+      <div ref="surface" class="m3-fab-menu-surface" data-scope="floating-action-button-menu" data-part="surface">
         <div class="m3-fab-menu-items" data-scope="floating-action-button-menu" data-part="items">
           <slot />
         </div>

@@ -127,12 +127,14 @@ describe('FloatingActionButtonMenu', () => {
 
     const container = document.createElement('div');
     document.body.appendChild(container);
+    const onClosed = vi.fn();
 
     const app = createApp(() =>
       h(
         FloatingActionButtonMenu,
         {
           ariaLabel: 'Create',
+          onClosed,
         },
         {
           default: () => [h(FloatingActionButtonMenuItem, { icon: 'mail' }, { default: () => 'Message' })],
@@ -160,11 +162,27 @@ describe('FloatingActionButtonMenu', () => {
     expect(isPopoverOpen(menu)).toBe(true);
     expect(menu?.dataset.popoverSourceId).toBe(trigger?.id);
 
+    let finishExit!: () => void;
+    const exitFinished = new Promise<void>((resolve) => {
+      finishExit = resolve;
+    });
+    Object.defineProperty(menu as HTMLElement, 'getAnimations', {
+      configurable: true,
+      value: () => [{ finished: exitFinished }],
+    });
+
     trigger?.click();
     await flushPopover();
 
     expect(root?.dataset.open).toBe('false');
     expect(isPopoverOpen(menu)).toBe(false);
+    expect(onClosed).not.toHaveBeenCalled();
+
+    finishExit();
+    await exitFinished;
+    await Promise.resolve();
+
+    expect(onClosed).toHaveBeenCalledOnce();
 
     app.unmount();
   });
