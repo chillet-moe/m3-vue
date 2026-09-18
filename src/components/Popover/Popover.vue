@@ -60,8 +60,14 @@ const props = withDefaults(defineProps<PopoverProps>(), {
 
 const open = defineModel<boolean>('open', { default: false });
 
+const emit = defineEmits<{
+  /** Fired after the Popover-owned visual exit finishes. */
+  closed: [];
+}>();
+
 const generatedId = useId();
 const popoverRef = ref<HTMLDivElement>();
+const surfaceRef = ref<HTMLDivElement>();
 const cssId = computed(() => generatedId.replace(/[^a-zA-Z0-9_-]/g, '-'));
 const popoverId = computed(() => props.id ?? `m3-popover-${generatedId}`);
 const resolvedAnchorName = computed(
@@ -81,6 +87,8 @@ const popover = usePopover({
   open,
   popoverRef,
   anchorElement: () => props.anchorElement,
+  exitElements: () => [surfaceRef.value],
+  onAfterClose: () => emit('closed'),
 });
 
 watch(
@@ -132,7 +140,7 @@ defineExpose({
     :style="popoverStyle"
     @toggle="popover.handlePopoverToggle"
   >
-    <div class="m3-popover-surface" data-scope="popover" data-part="surface">
+    <div ref="surfaceRef" class="m3-popover-surface" data-scope="popover" data-part="surface">
       <slot :open="open" :show="popover.show" :hide="popover.hide" :toggle="popover.toggle" />
     </div>
   </div>

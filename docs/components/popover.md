@@ -48,6 +48,12 @@ Popover is optional. Use it when you need a small anchored panel with simple ope
 
 <StyleTokenTable component="Popover" />
 
+## Close lifecycle
+
+`update:open(false)` is emitted when the native popover closes. The later `closed` event waits for Popover-owned exit
+motion to finish, but does not wait for animations inside slot content. Keep slot payload available while closing and
+release it from `closed`.
+
 ## Examples
 
 ### Default

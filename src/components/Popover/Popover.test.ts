@@ -76,6 +76,18 @@ async function flushPopover() {
   await Promise.resolve();
 }
 
+function createControlledAnimation() {
+  let finish!: () => void;
+  const finished = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+
+  return {
+    animation: { finished } as unknown as Animation,
+    finish,
+  };
+}
+
 describe('Popover', () => {
   afterEach(() => {
     popoverOpenElements = new WeakSet();
@@ -88,6 +100,7 @@ describe('Popover', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
     const open = ref(true);
+    const onClosed = vi.fn();
 
     const app = createApp({
       setup() {
@@ -99,6 +112,7 @@ describe('Popover', () => {
               'onUpdate:open': (value: boolean) => {
                 open.value = value;
               },
+              onClosed,
             },
             () => 'Popover content',
           );
@@ -113,11 +127,25 @@ describe('Popover', () => {
     expect(popover?.parentElement).toBe(container);
     expect(isPopoverOpen(popover)).toBe(true);
 
+    const exit = createControlledAnimation();
+    const surface = popover?.querySelector<HTMLElement>('[data-part="surface"]');
+    Object.defineProperty(surface!, 'getAnimations', {
+      configurable: true,
+      value: () => [exit.animation],
+    });
+
     popover?.hidePopover();
     await flushPopover();
 
     expect(open.value).toBe(false);
     expect(isPopoverOpen(popover)).toBe(false);
+    expect(onClosed).not.toHaveBeenCalled();
+
+    exit.finish();
+    await exit.animation.finished;
+    await Promise.resolve();
+
+    expect(onClosed).toHaveBeenCalledOnce();
 
     app.unmount();
   });

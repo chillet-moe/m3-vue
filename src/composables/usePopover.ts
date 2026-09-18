@@ -1,4 +1,5 @@
 import { type Ref, onUnmounted, watch } from 'vue';
+import { useExitMotionCompletion } from './useExitMotionCompletion';
 
 export type UsePopoverShowOptions = {
   /** Element passed to showPopover as the source for focus and dismissal semantics. */
@@ -26,6 +27,9 @@ export type UsePopoverOptions<T extends HTMLElement = HTMLElement> = {
 
   /** Runs after the native popover has been hidden or synchronized closed. */
   onAfterClose?: () => void | Promise<void>;
+
+  /** Component-owned elements whose exit motion must finish with the popover root. */
+  exitElements?: () => readonly (HTMLElement | null | undefined)[];
 };
 
 export type UsePopoverReturn = {
@@ -81,8 +85,17 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
   onAfterOpen,
   onBeforeClose,
   onAfterClose,
+  exitElements,
 }: UsePopoverOptions<T>): UsePopoverReturn {
   let pendingSource: HTMLElement | undefined;
+  const exitCompletion = useExitMotionCompletion<void, T>({
+    rootRef: popoverRef,
+    open,
+    ownedElements: exitElements,
+    onComplete: () => {
+      void onAfterClose?.();
+    },
+  });
 
   function resolveSource() {
     const source = pendingSource ?? anchorElement?.();
@@ -115,6 +128,7 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
       nextState === 'open' ? true : nextState === 'closed' ? false : target ? isPopoverOpen(target) : open.value;
 
     if (nextOpen) {
+      exitCompletion.cancel();
       if (!open.value) {
         open.value = true;
       }
@@ -123,6 +137,9 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
 
     if (open.value) {
       open.value = false;
+    }
+    if (target) {
+      exitCompletion.begin(undefined, target as T);
     }
   }
 
@@ -146,6 +163,7 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
       }
 
       if (nextOpen) {
+        exitCompletion.cancel();
         onBeforeOpen?.();
         showPopoverElement(popover, resolveSource());
         await onAfterOpen?.();
@@ -154,8 +172,11 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
 
       onBeforeClose?.();
       pendingSource = undefined;
+      const wasOpen = isPopoverOpen(popover);
       hidePopoverElement(popover);
-      await onAfterClose?.();
+      if (wasOpen) {
+        exitCompletion.begin(undefined, popover);
+      }
     },
     {
       immediate: true,
