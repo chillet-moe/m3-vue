@@ -172,7 +172,7 @@
     line-height: 1;
     font-weight: var(--md-sys-typescale-display-large-weight);
     letter-spacing: 0;
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
   }
 
   .m3-time-picker-display-field[data-selected='true'] {
@@ -220,7 +220,7 @@
     line-height: var(--md-sys-typescale-title-medium-line-height);
     font-weight: var(--md-sys-typescale-title-medium-weight);
     letter-spacing: var(--md-sys-typescale-title-medium-tracking);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
   }
 
   .m3-time-picker-period-button + .m3-time-picker-period-button {
@@ -303,7 +303,7 @@
     line-height: var(--md-sys-typescale-body-large-line-height);
     font-weight: var(--md-sys-typescale-body-large-weight);
     letter-spacing: var(--md-sys-typescale-body-large-tracking);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     z-index: 1;
     transform: translate(-50%, -50%);
   }

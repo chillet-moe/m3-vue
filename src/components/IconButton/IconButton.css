@@ -1081,8 +1081,12 @@
     padding-inline-end: var(--_icon-button-trailing-space);
   }
 
-  .m3-icon-button:not(:disabled):not(:has(input:disabled)) {
-    cursor: pointer;
+  .m3-icon-button:not(:any-link):not(:disabled):not([aria-disabled='true']):not(:has(input:disabled)) {
+    cursor: var(--md-cursor-action);
+  }
+
+  .m3-icon-button:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-icon-button:hover {

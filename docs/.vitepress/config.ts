@@ -59,6 +59,7 @@ export default defineConfig({
           text: 'Guides',
           items: [
             { text: 'Styling', link: '/guides/styling' },
+            { text: 'Interaction Cursors', link: '/guides/interaction-cursors' },
             { text: 'Floating Label Spacing Lab', link: '/guides/floating-label-spacing-lab' },
             { text: 'Scrollable Content Visual Overflow', link: '/guides/scrollable-content-visual-overflow' },
             { text: 'Vue Scope Boundaries', link: '/guides/vue-scope-isolation' },

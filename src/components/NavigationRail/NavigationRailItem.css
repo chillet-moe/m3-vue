@@ -156,12 +156,16 @@
     row-gap: var(--_navigation-rail-item-current-icon-label-space);
     border-radius: var(--_navigation-rail-item-indicator-shape);
     color: var(--_navigation-rail-item-current-label-color);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     transition:
       color var(--md-easing-fast),
       min-block-size var(--_navigation-rail-item-layout-motion),
       padding var(--_navigation-rail-item-layout-motion),
       row-gap var(--_navigation-rail-item-layout-motion);
+  }
+
+  .m3-navigation-rail-item:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-navigation-rail-item-indicator {

@@ -15,7 +15,7 @@
         align-items: center;
         justify-content: center;
         gap: 12px;
-        cursor: pointer;
+        cursor: var(--md-cursor-action);
         user-select: none;
       "
     >
@@ -34,7 +34,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          cursor: pointer;
+          cursor: var(--md-cursor-action);
           user-select: none;
           font-size: 0.85em;
         "

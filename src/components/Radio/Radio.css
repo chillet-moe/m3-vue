@@ -65,7 +65,7 @@
     flex-shrink: 0;
     position: relative;
     inline-size: fit-content;
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     user-select: none;
   }
 

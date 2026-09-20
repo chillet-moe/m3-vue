@@ -262,6 +262,10 @@
     --md-sys-state-pressed-state-layer-opacity: 0.1;
     --md-sys-state-dragged-state-layer-opacity: 0.16;
 
+    /* Semantic cursors for interactive components. */
+    --md-cursor-action: pointer;
+    --md-cursor-link: pointer;
+
     --md-ref-typeface-brand: 'Google Sans Flex';
     --md-ref-typeface-plain: 'Google Sans Flex';
     --md-ref-typeface-weight-regular: 400;

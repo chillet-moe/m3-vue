@@ -34,13 +34,13 @@ function selectAction(name: string, event: MouseEvent) {
       popover="auto"
       style="inline-size: 14rem; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; position: fixed; inset: auto; inset-inline-start: anchor(start); inset-block-start: calc(anchor(bottom) + 0.25rem);"
     >
-      <button type="button" style="all: unset; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem;" @click="selectAction('Preview', $event)">
+      <button type="button" style="all: unset; cursor: var(--md-cursor-action); padding: 0.75rem; border-radius: 0.5rem;" @click="selectAction('Preview', $event)">
         Preview
       </button>
-      <button type="button" style="all: unset; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem;" @click="selectAction('Share', $event)">
+      <button type="button" style="all: unset; cursor: var(--md-cursor-action); padding: 0.75rem; border-radius: 0.5rem;" @click="selectAction('Share', $event)">
         Share
       </button>
-      <button type="button" style="all: unset; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem;" @click="selectAction('Delete', $event)">
+      <button type="button" style="all: unset; cursor: var(--md-cursor-action); padding: 0.75rem; border-radius: 0.5rem;" @click="selectAction('Delete', $event)">
         Delete
       </button>
     </Card>

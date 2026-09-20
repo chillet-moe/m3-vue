@@ -386,7 +386,7 @@
     line-height: var(--_date-picker-docked-date-label-text-line-height);
     font-weight: var(--_date-picker-docked-date-label-text-weight);
     letter-spacing: var(--_date-picker-docked-date-label-text-tracking);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
 
     --md-state-layer-color: var(--_date-picker-docked-date-unselected-hover-state-layer-color);
   }
@@ -457,7 +457,7 @@
     line-height: var(--_date-picker-docked-menu-list-item-label-text-line-height);
     font-weight: var(--_date-picker-docked-menu-list-item-label-text-weight);
     letter-spacing: var(--_date-picker-docked-menu-list-item-label-text-tracking);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     text-align: start;
 
     --md-state-layer-color: var(--_date-picker-docked-menu-list-item-hover-state-layer-color);

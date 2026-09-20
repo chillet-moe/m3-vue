@@ -12,7 +12,7 @@
 组件使用五层 CSS token：
 
 1. `--md-sys-*`：全局 Material system token，用于主题级配置。不建议在单个组件实例上局部覆盖。
-2. `--md-shape-*` 和 `--md-control-*`：库级语义 token，用少量变量把 system token 映射到组件共享的 shape 与 control outline 角色。
+2. `--md-shape-*`、`--md-control-*` 和 `--md-cursor-*`：库级语义 token，用少量变量把 system token 映射到组件共享的 shape、control outline 与交互 cursor 角色。
 3. `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color`、`--md-icon-size`：上下文 token，
    用于父组件向子组件传递容器色、内容色、state layer 颜色和图标尺寸。组件应在自己拥有的最小 icon 容器上设置
    `--md-icon-size`，避免尺寸影响无关的后代 Icon。
@@ -24,6 +24,9 @@
 组件 public token 只覆盖有明确语义的部件或稳定状态，例如 container、label、selected、unselected、error、disabled。`hover`、`focus`、`pressed` 这类瞬时交互状态优先通过 state layer 表达，不默认展开成完整的颜色 token 矩阵。
 
 新增定制优先使用组件自己的 `--md-<component>-*` token。旧的 `--md-comp-*` token 不作为公开 API。
+
+普通 action 与真实 URL link 使用独立的全局 cursor token。需要把控件切换为桌面应用式默认箭头时，参阅
+[Interaction Cursors](/guides/interaction-cursors)。
 
 每个组件页面的 **Styling** 表格由显式 metadata 生成，只列出推荐的 public token。metadata 按组件拆分在 `docs/.vitepress/components/style-tokens/<ComponentName>.ts`，统一入口 `style-token-meta.ts` 只负责注册组件名到对应 metadata。
 

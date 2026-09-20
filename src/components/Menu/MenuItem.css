@@ -33,7 +33,7 @@
     padding-inline: var(--_menus-menu-item-leading-space, 1rem) var(--_menus-menu-item-trailing-space, 1rem);
 
     border-radius: var(--_menus-menu-item-shape, var(--md-shape-popover-item));
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
 
     color: var(--_menu-item-current-label-color);
     --md-state-layer-color: var(--_menu-item-state-layer-color, var(--md-sys-color-on-surface));
@@ -50,6 +50,10 @@
     line-height: var(--_menus-menu-item-label-text-line-height);
     font-weight: var(--_menus-menu-item-label-text-weight);
     letter-spacing: var(--_menus-menu-item-label-text-tracking);
+  }
+
+  .m3-menu-item:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-menu-item::before {

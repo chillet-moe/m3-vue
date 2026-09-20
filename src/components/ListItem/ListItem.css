@@ -84,6 +84,10 @@
     background-color: transparent;
   }
 
+  .m3-item:any-link {
+    cursor: var(--md-cursor-link);
+  }
+
   .m3-item::before {
     content: '';
     position: absolute;

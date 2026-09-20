@@ -88,7 +88,7 @@
     border-radius: var(--_breadcrumb-link-shape);
     background: transparent;
     color: var(--_breadcrumb-link-color);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     font: inherit;
     margin: 0;
     padding-block: 0;
@@ -101,6 +101,10 @@
       outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
       outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
     }
+  }
+
+  .m3-breadcrumb-link:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-breadcrumb-link[data-disabled='true'] {

@@ -1794,7 +1794,7 @@
   }
 
   .m3-chip:not(:disabled):not([aria-disabled='true']) {
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
   }
 
   .m3-chip[data-elevated='true']:not([data-variant='input']) {

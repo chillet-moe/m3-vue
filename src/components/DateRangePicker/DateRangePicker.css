@@ -83,7 +83,7 @@
     border-radius: var(--md-shape-field);
     color: var(--_date-range-picker-summary-value-text-color);
     background: var(--md-sys-color-surface-container-highest);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     text-align: start;
 
     --md-state-layer-color: var(--md-sys-color-on-surface);

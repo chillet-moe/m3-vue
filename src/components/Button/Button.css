@@ -550,8 +550,12 @@
     }
   }
 
-  .m3-button:not(:disabled):not(:has(input:disabled)) {
-    cursor: pointer;
+  .m3-button:not(:any-link):not(:disabled):not([aria-disabled='true']):not(:has(input:disabled)) {
+    cursor: var(--md-cursor-action);
+  }
+
+  .m3-button:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-button:hover {

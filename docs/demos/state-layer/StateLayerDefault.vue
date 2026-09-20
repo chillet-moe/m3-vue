@@ -13,7 +13,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
+      cursor: var(--md-cursor-action);
       user-select: none;
     "
   >

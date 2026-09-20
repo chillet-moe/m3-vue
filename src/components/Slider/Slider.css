@@ -64,7 +64,7 @@
       inset-block: 0;
       inset-inline: var(--track-inset);
 
-      cursor: pointer;
+      cursor: var(--md-cursor-action);
       appearance: none;
       -webkit-appearance: none;
       background: transparent;
@@ -94,7 +94,7 @@
       border-radius: 50%;
       inline-size: var(--handle-height);
       block-size: var(--handle-height);
-      cursor: pointer;
+      cursor: var(--md-cursor-action);
     }
 
     input[type='range']::-moz-range-thumb {
@@ -106,7 +106,7 @@
       border-radius: 50%;
       inline-size: var(--handle-height);
       block-size: var(--handle-height);
-      cursor: pointer;
+      cursor: var(--md-cursor-action);
     }
 
     input[disabled] {

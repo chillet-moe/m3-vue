@@ -126,10 +126,14 @@
     padding-inline: var(--_navigation-drawer-item-padding-inline);
     border-radius: var(--_navigation-drawer-item-indicator-shape);
     color: var(--_navigation-drawer-item-current-label-color);
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     text-align: start;
     text-decoration: none;
     --md-state-layer-color: var(--_navigation-drawer-item-current-state-layer-color);
+  }
+
+  .m3-navigation-drawer-item:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-navigation-drawer-item::before {

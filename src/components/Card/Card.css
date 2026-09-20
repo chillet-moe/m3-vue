@@ -347,7 +347,7 @@
   }
 
   .m3-card[data-pressed] {
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
   }
 
   .m3-card[data-color='elevated'] {

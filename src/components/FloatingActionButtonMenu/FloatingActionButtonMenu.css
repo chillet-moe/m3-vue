@@ -185,7 +185,7 @@
     justify-content: center;
     flex: none;
     padding: 0;
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     user-select: none;
     overflow: hidden;
 
@@ -375,7 +375,7 @@
     padding-inline-end: var(--_fab-menu-item-trailing-space);
     border-radius: var(--_fab-menu-item-container-shape);
     text-decoration: none;
-    cursor: pointer;
+    cursor: var(--md-cursor-action);
     user-select: none;
     overflow: hidden;
     white-space: nowrap;
@@ -393,6 +393,10 @@
       box-shadow var(--md-easing-fast),
       background-color var(--md-easing-fast),
       color var(--md-easing-fast);
+  }
+
+  .m3-fab-menu-item:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-fab-menu-popover[data-effective-alignment='start'] .m3-fab-menu-item {

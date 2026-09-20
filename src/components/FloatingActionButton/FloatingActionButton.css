@@ -98,8 +98,12 @@
     border-radius: var(--_fab-container-shape);
   }
 
-  .m3-fab:not(:disabled):not([aria-disabled='true']) {
-    cursor: pointer;
+  .m3-fab:not(:any-link):not(:disabled):not([aria-disabled='true']) {
+    cursor: var(--md-cursor-action);
+  }
+
+  .m3-fab:any-link {
+    cursor: var(--md-cursor-link);
   }
 
   .m3-fab:hover {
