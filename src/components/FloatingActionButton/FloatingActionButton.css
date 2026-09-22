@@ -122,6 +122,7 @@
 
   .m3-fab:disabled,
   .m3-fab[aria-disabled='true'] {
+    cursor: default;
     --md-color-container: rgb(from var(--_fab-disabled-container-color) r g b / var(--_fab-disabled-container-opacity));
     --md-color-on-container: rgb(from var(--_fab-disabled-content-color) r g b / var(--_fab-disabled-content-opacity));
     --_fab-icon-color: var(--md-color-on-container);

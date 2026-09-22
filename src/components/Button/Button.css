@@ -578,7 +578,9 @@
   }
 
   .m3-button:disabled,
+  .m3-button[aria-disabled='true'],
   label.m3-button:has(input:disabled) {
+    cursor: default;
     background-color: rgb(from var(--_button-disabled-container-color) r g b / 0.1);
     color: rgb(from var(--_button-disabled-label-text-color) r g b / 0.38);
     box-shadow: var(--_button-disabled-container-elevation);

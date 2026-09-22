@@ -1111,7 +1111,9 @@
   }
 
   .m3-icon-button:disabled,
+  .m3-icon-button[aria-disabled='true'],
   label.m3-icon-button:has(input:disabled) {
+    cursor: default;
     background-color: rgb(
       from var(--_icon-button-disabled-container-color) r g b / var(--_icon-button-disabled-container-opacity)
     );

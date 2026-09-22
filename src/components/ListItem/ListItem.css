@@ -80,7 +80,9 @@
     --md-state-layer-color: var(--_item-current-state-layer-color);
   }
 
-  .m3-item:disabled {
+  .m3-item:disabled,
+  .m3-item[aria-disabled='true'] {
+    cursor: default;
     background-color: transparent;
   }
 
