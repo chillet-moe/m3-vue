@@ -22,10 +22,22 @@ function createPointerEvent(
     value: init.pointerType ?? 'mouse',
   });
 
+  Object.defineProperty(event, 'isPrimary', {
+    configurable: true,
+    value: true,
+  });
+
   if (typeof init.pointerId === 'number') {
     Object.defineProperty(event, 'pointerId', {
       configurable: true,
       value: init.pointerId,
+    });
+  }
+
+  if (typeof init.pointerId !== 'number') {
+    Object.defineProperty(event, 'pointerId', {
+      configurable: true,
+      value: 1,
     });
   }
 
@@ -1309,6 +1321,54 @@ describe('Menu', () => {
 
       app.unmount();
     }
+  });
+
+  it('opens a dropdown menu on mouse press and selects an item on drag release', async () => {
+    installPopoverPolyfill();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const onSelect = vi.fn();
+
+    const app = createApp(() =>
+      h('div', [
+        withDirectives(h('button', { type: 'button' }, 'Open menu'), [[vDropdown, '#drag-menu']]),
+        h(Menu, { id: 'drag-menu', onSelect }, () =>
+          h(MenuContainer, null, () => [
+            h(MenuItem, null, () => 'First'),
+            h(MenuItem, { disabled: true }, () => 'Disabled'),
+          ]),
+        ),
+      ]),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const trigger = container.querySelector<HTMLButtonElement>('button');
+    const menu = container.querySelector<HTMLElement>('#drag-menu');
+    const items = container.querySelectorAll<HTMLButtonElement>('[role="menuitem"]');
+
+    trigger?.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 10, clientY: 10 }));
+    trigger?.dispatchEvent(createPointerEvent('pointerup', { bubbles: true, clientX: 10, clientY: 10 }));
+    trigger?.click();
+    expect(isPopoverOpen(menu)).toBe(true);
+    expect(onSelect).not.toHaveBeenCalled();
+
+    menu?.hidePopover();
+    trigger?.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 10, clientY: 10 }));
+    document.dispatchEvent(createPointerEvent('pointermove', { bubbles: true, clientX: 20, clientY: 20 }));
+    expect(isPopoverOpen(menu)).toBe(true);
+    items[0]?.dispatchEvent(createPointerEvent('pointerup', { bubbles: true, clientX: 30, clientY: 30 }));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(isPopoverOpen(menu)).toBe(false);
+
+    trigger?.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 10, clientY: 10 }));
+    document.dispatchEvent(createPointerEvent('pointermove', { bubbles: true, clientX: 20, clientY: 20 }));
+    items[1]?.dispatchEvent(createPointerEvent('pointerup', { bubbles: true, clientX: 30, clientY: 30 }));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(isPopoverOpen(menu)).toBe(false);
+
+    app.unmount();
   });
 
   it('uses native light dismiss for an auto context menu without a document listener', async () => {

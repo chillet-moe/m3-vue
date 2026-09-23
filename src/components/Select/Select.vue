@@ -8,6 +8,7 @@ import { useFieldLabelClearanceStyle } from '@/components/TextField/FieldContext
 import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
 import { acquireAnchorName } from '@/internal/anchorName';
+import { startMenuPressDrag } from '@/internal/menuPressDrag';
 import { useM3Locale } from '@/locales/context';
 
 export type SelectOptionValue = string | number;
@@ -167,6 +168,8 @@ const menuRef = ref<SelectExposed>();
 const textFieldRef = ref<TextFieldExposed>();
 const anchorName = `--m3-select-anchor-${generatedId}`;
 let releaseAnchorName: (() => void) | undefined;
+let cleanupPressDrag: (() => void) | undefined;
+let reopenAfterHeldClick = false;
 
 const triggerId = computed(() => {
   return props.id ?? `m3-select-${generatedId}`;
@@ -250,6 +253,40 @@ function handleBlur(event: FocusEvent) {
   emit('blur', event);
 }
 
+function handleTriggerPointerDown(event: PointerEvent) {
+  if (props.disabled || props.filterable || (event.target as Element).closest('[data-part="clear-button"]')) {
+    return;
+  }
+
+  const menu = menuRef.value?.menuRef;
+  if (!menu) return;
+
+  const trigger = event.currentTarget;
+  if (!(trigger instanceof HTMLElement)) return;
+  cleanupPressDrag?.();
+  reopenAfterHeldClick = false;
+  cleanupPressDrag = startMenuPressDrag(event, {
+    trigger,
+    menu,
+    open: select.openMenu,
+    close: select.closeMenu,
+    onFinish: ({ heldTriggerPress }) => {
+      cleanupPressDrag = undefined;
+      reopenAfterHeldClick = heldTriggerPress;
+    },
+  });
+}
+
+function handleFieldClick() {
+  if (reopenAfterHeldClick) {
+    reopenAfterHeldClick = false;
+    select.openMenu();
+    return;
+  }
+
+  select.handleFieldClick();
+}
+
 watch(
   () => textFieldRef.value?.containerEl,
   (nextContainer, previousContainer) => {
@@ -268,6 +305,7 @@ watch(
 
 onBeforeUnmount(() => {
   releaseAnchorName?.();
+  cleanupPressDrag?.();
 });
 
 defineExpose({
@@ -295,7 +333,13 @@ defineExpose({
     :data-has-leading="hasLeading ? 'true' : 'false'"
     :style="labelClearanceStyle"
   >
-    <div class="m3-select-trigger" data-scope="select" data-part="trigger" @click="select.handleFieldClick">
+    <div
+      class="m3-select-trigger"
+      data-scope="select"
+      data-part="trigger"
+      @pointerdown="handleTriggerPointerDown"
+      @click="handleFieldClick"
+    >
       <TextField
         :id="triggerId"
         ref="textFieldRef"
@@ -319,7 +363,6 @@ defineExpose({
         :aria-required="props.required ? 'true' : undefined"
         :aria-label="props.label ? undefined : filterAriaLabel"
         v-bind="controlAttrs"
-        @click="select.handleFieldClick"
         @input="select.handleFieldInput"
         @focus="handleFocus"
         @blur="handleBlur"

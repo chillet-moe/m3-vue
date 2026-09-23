@@ -117,6 +117,17 @@ function getSelectInput(container: HTMLElement) {
   return container.querySelector<HTMLInputElement>('.m3-select-field .m3-text-field-input');
 }
 
+function createMousePointerEvent(type: string, clientX: number, clientY: number) {
+  const EventConstructor = window.PointerEvent ?? MouseEvent;
+  const event = new EventConstructor(type, { bubbles: true, clientX, clientY });
+  Object.defineProperties(event, {
+    pointerType: { value: 'mouse' },
+    pointerId: { value: 1 },
+    isPrimary: { value: true },
+  });
+  return event;
+}
+
 describe('Select', () => {
   afterEach(() => {
     document.body.innerHTML = '';
@@ -239,6 +250,47 @@ describe('Select', () => {
     expect(selectedValue).toBe('pour-over');
     expect(getSelectInput(container)?.value).toBe('Pour-over');
     expect(isPopoverOpen(menu)).toBe(false);
+
+    app.unmount();
+  });
+
+  it('selects an option when a mouse press on the field drags onto it', async () => {
+    installPopoverPolyfill();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const value = ref<SelectModelValue>();
+    const app = createApp(() =>
+      h(Select, {
+        label: 'Coffee',
+        options,
+        modelValue: value.value,
+        'onUpdate:modelValue': (nextValue) => {
+          value.value = nextValue as SelectModelValue;
+        },
+      }),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const items = getCurrentMenuItems(container);
+
+    trigger?.dispatchEvent(createMousePointerEvent('pointerdown', 10, 10));
+    document.dispatchEvent(createMousePointerEvent('pointermove', 20, 20));
+    expect(isPopoverOpen(menu)).toBe(true);
+    items[1]?.dispatchEvent(createMousePointerEvent('pointerup', 30, 30));
+    await nextTick();
+
+    expect(value.value).toBe('pour-over');
+    expect(isPopoverOpen(menu)).toBe(false);
+
+    trigger?.dispatchEvent(createMousePointerEvent('pointerdown', 10, 10));
+    document.dispatchEvent(createMousePointerEvent('pointermove', 20, 20));
+    document.body.dispatchEvent(createMousePointerEvent('pointerup', 30, 30));
+    expect(isPopoverOpen(menu)).toBe(false);
+    expect(value.value).toBe('pour-over');
 
     app.unmount();
   });

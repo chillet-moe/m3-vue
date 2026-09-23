@@ -2,6 +2,7 @@ import type { Directive, DirectiveBinding } from 'vue';
 import './vDropdown.css';
 import { acquireAnchorName } from '@/internal/anchorName';
 import { registerOutsidePointerDown } from '@/internal/outsidePointerDown';
+import { startMenuPressDrag } from '@/internal/menuPressDrag';
 import {
   hideDropdownElement,
   resolveDropdownAnchor,
@@ -15,6 +16,7 @@ import type { DropdownTargetBinding } from './helpers';
 type CleanupRecord = {
   dropdown: HTMLElement;
   onClick: (event: MouseEvent) => void;
+  onPointerDown: (event: PointerEvent) => void;
   onDropdownClick: (event: MouseEvent) => void;
   onDropdownKeydown: (event: KeyboardEvent) => void;
   onKeydown: (event: KeyboardEvent) => void;
@@ -22,6 +24,7 @@ type CleanupRecord = {
   onToggle?: () => void;
   previousDropdownPositionAnchor: string;
   releaseAnchorName: () => void;
+  cleanupPressDrag: () => void;
   source: HTMLElement;
 };
 
@@ -36,6 +39,7 @@ function teardownDropdown(trigger: HTMLElement) {
   }
 
   trigger.removeEventListener('click', record.onClick);
+  trigger.removeEventListener('pointerdown', record.onPointerDown);
   trigger.removeEventListener('keydown', record.onKeydown);
   record.dropdown.removeEventListener('click', record.onDropdownClick);
   record.dropdown.removeEventListener('keydown', record.onDropdownKeydown);
@@ -44,6 +48,7 @@ function teardownDropdown(trigger: HTMLElement) {
   if (record.onToggle) record.dropdown.removeEventListener('toggle', record.onToggle);
 
   record.releaseAnchorName();
+  record.cleanupPressDrag();
 
   if (record.previousDropdownPositionAnchor) {
     record.dropdown.style.setProperty('position-anchor', record.previousDropdownPositionAnchor);
@@ -82,6 +87,29 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
   dropdown.style.setProperty('position-anchor', anchorName);
 
   let ignoreSyntheticClickUntil = 0;
+  let suppressPointerClick = false;
+  let reopenAfterHeldClick = false;
+  let cleanupPressDrag: (() => void) | undefined;
+  let cleanupOpenMenuPress: (() => void) | undefined;
+
+  const resetPointerClickAfterRelease = (pointerId: number) => {
+    const onPointerEnd = (event: PointerEvent) => {
+      if (event.pointerId !== pointerId) return;
+      cleanupOpenMenuPress?.();
+      if (event.type === 'pointercancel' || !trigger.contains(event.target as Node)) {
+        suppressPointerClick = false;
+      }
+    };
+
+    const document = trigger.ownerDocument;
+    document.addEventListener('pointerup', onPointerEnd, true);
+    document.addEventListener('pointercancel', onPointerEnd, true);
+    cleanupOpenMenuPress = () => {
+      document.removeEventListener('pointerup', onPointerEnd, true);
+      document.removeEventListener('pointercancel', onPointerEnd, true);
+      cleanupOpenMenuPress = undefined;
+    };
+  };
 
   const restoreTriggerFocusIfDropdownClosed = () => {
     void Promise.resolve().then(() => {
@@ -94,6 +122,16 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
   };
 
   const onClick = (event: MouseEvent) => {
+    if (suppressPointerClick) {
+      suppressPointerClick = false;
+      event.preventDefault();
+      if (reopenAfterHeldClick && !dropdown.matches(':popover-open')) {
+        showDropdownElement(dropdown, { source: anchor });
+      }
+      reopenAfterHeldClick = false;
+      return;
+    }
+
     if (event.detail === 0 && performance.now() < ignoreSyntheticClickUntil) {
       ignoreSyntheticClickUntil = 0;
       return;
@@ -101,6 +139,42 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
 
     event.preventDefault();
     toggleDropdownElement(dropdown, { source: anchor });
+  };
+
+  const onPointerDown = (event: PointerEvent) => {
+    if (dropdown.getAttribute('role') !== 'menu') return;
+
+    if (event.pointerType === 'mouse' && event.button === 0 && dropdown.matches(':popover-open')) {
+      // An auto popover is light-dismissed on this pointerdown. Its following
+      // click must not immediately reopen it.
+      suppressPointerClick = true;
+      reopenAfterHeldClick = false;
+      cleanupOpenMenuPress?.();
+      resetPointerClickAfterRelease(event.pointerId);
+      return;
+    }
+
+    cleanupPressDrag?.();
+    suppressPointerClick = false;
+    reopenAfterHeldClick = false;
+    cleanupPressDrag = startMenuPressDrag(event, {
+      trigger,
+      menu: dropdown,
+      open: () => {
+        suppressPointerClick = true;
+        showDropdownElement(dropdown, { source: anchor });
+      },
+      close: () => hideDropdownElement(dropdown),
+      onFinish: ({ releasedOnTrigger, heldTriggerPress }) => {
+        cleanupPressDrag = undefined;
+        if (!releasedOnTrigger) {
+          suppressPointerClick = false;
+          return;
+        }
+
+        reopenAfterHeldClick = heldTriggerPress;
+      },
+    });
   };
 
   const onKeydown = (event: KeyboardEvent) => {
@@ -134,6 +208,7 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
   };
 
   trigger.addEventListener('click', onClick);
+  trigger.addEventListener('pointerdown', onPointerDown);
   trigger.addEventListener('keydown', onKeydown);
   dropdown.addEventListener('click', onDropdownClick);
   dropdown.addEventListener('keydown', onDropdownKeydown);
@@ -163,6 +238,7 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
   cleanupMap.set(trigger, {
     dropdown,
     onClick,
+    onPointerDown,
     onKeydown,
     onDropdownClick,
     onDropdownKeydown,
@@ -175,6 +251,10 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
     onToggle,
     previousDropdownPositionAnchor,
     releaseAnchorName,
+    cleanupPressDrag: () => {
+      cleanupPressDrag?.();
+      cleanupOpenMenuPress?.();
+    },
     source: anchor,
   });
 }
