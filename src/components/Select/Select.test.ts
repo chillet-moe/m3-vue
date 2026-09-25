@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, provide, ref } from 'vue';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
 import Select, { type SelectModelValue, type SelectOption } from './Select.vue';

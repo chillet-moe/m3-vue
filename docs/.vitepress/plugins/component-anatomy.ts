@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import fg from 'fast-glob';
 import { parse as parseSFC } from 'vue/compiler-sfc';
-import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr';
+import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr.ts';
 
 export interface ComponentAnatomyPluginOptions {
   components: string | string[];

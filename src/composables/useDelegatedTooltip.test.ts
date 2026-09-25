@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Tooltip from '@/components/Tooltip/Tooltip.vue';
 import { useDelegatedTooltip, type DelegatedTooltipSlot } from './useDelegatedTooltip';

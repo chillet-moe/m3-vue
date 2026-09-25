@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { readFileSync } from 'node:fs';
-import { afterEach, describe, expect, expectTypeOf, it } from 'vite-plus/test';
+import { afterEach, describe, expect, expectTypeOf, it } from 'vitest';
 import { createApp, h, nextTick, provide, ref } from 'vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
 import { fieldContextKey } from './FieldContext';

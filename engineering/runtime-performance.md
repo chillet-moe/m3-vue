@@ -220,7 +220,7 @@ authority for layout, style, paint, and frame-budget claims.
 Run focused behavioral and lifecycle tests while changing these paths:
 
 ```sh
-vp test run \
+pnpm exec vitest run \
   src/internal/actionTitleTooltip.test.ts \
   src/internal/sharedViewportChange.test.ts \
   src/internal/sharedAnimationFrame.test.ts \
@@ -237,10 +237,9 @@ vp test run \
 Then run the project gates:
 
 ```sh
-vp test run
-vp check
-vp run typecheck
-vp build --no-minify
+pnpm exec vitest run
+pnpm run check
+pnpm exec vite build --no-minify
 ```
 
 For animation changes, a warmed Chrome trace should show:

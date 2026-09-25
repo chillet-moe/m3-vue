@@ -1,10 +1,10 @@
 import { defineConfig } from 'vitepress';
 import { createScopeBoundaryVueOptions } from '@chillet/vue-scope-boundary/vite';
 import { fileURLToPath } from 'url';
-import { componentMetaPlugin } from './plugins/component-meta';
-import { componentAnatomyPlugin } from './plugins/component-anatomy';
-import { sourceApiMetaPlugin } from './plugins/source-api-meta';
-import { layerPreludePlugin } from './plugins/layer-prelude';
+import { componentMetaPlugin } from './plugins/component-meta.ts';
+import { componentAnatomyPlugin } from './plugins/component-anatomy.ts';
+import { sourceApiMetaPlugin } from './plugins/source-api-meta.ts';
+import { layerPreludePlugin } from './plugins/layer-prelude.ts';
 
 // Sync with theme.css
 const m3LayerOrder = ['reset', 'base', 'tokens', 'components'];

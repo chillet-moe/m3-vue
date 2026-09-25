@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { computed, createApp, h, nextTick, ref, withDirectives } from 'vue';
 import { vDropdown } from '@/directives/Menu';
 import Popover from './Popover.vue';

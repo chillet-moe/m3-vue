@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import CircularProgressIndicator from './CircularProgressIndicator.vue';
 

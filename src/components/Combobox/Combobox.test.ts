@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Combobox from './Combobox.vue';
 import type { SelectOption } from '@/components/Select/Select.vue';

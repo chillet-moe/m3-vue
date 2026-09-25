@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import vTooltip, { normalizeBinding } from './vTooltip';
 import { inferPlacementFromRects, placementToTranslate, positionFallback, resolveFallbackPlacement } from './helpers';
 import { setupTooltip } from './setup';

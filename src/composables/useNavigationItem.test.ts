@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it, vi } from 'vite-plus/test';
+import { describe, expect, it, vi } from 'vitest';
 import { computed, ref } from 'vue';
 import { useNavigationItem, type NavigationItemContext } from './useNavigationItem';
 

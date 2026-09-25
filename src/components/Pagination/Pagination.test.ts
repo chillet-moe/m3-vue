@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick } from 'vue';
 import Pagination from './Pagination.vue';
 import PaginationContent from './PaginationContent.vue';

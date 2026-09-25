@@ -7,7 +7,7 @@ trigger counts.
 Start the repository dev server:
 
 ```sh
-vp dev --port 4173
+pnpm exec vite --port 4173
 ```
 
 Open the fixture directly:
@@ -19,7 +19,7 @@ http://127.0.0.1:4173/benchmarks/delegated-tooltip/?count=1000&recycleRounds=3
 For a five-run browser sample:
 
 ```sh
-vp exec tsx benchmarks/delegated-tooltip/run.ts
+pnpm exec tsx benchmarks/delegated-tooltip/run.ts
 ```
 
 The delegated mode intentionally keeps three Tooltip elements for the slot pool. The per-instance mode creates one

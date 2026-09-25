@@ -1,4 +1,4 @@
-import type { Plugin } from 'vite-plus';
+import type { Plugin } from 'vite';
 
 const layerOrderPattern = /@layer\b[^{};]*,[^{};]*;\s*/g;
 const charsetPattern = /^(\s*@charset\s+[^;]+;\s*)/i;

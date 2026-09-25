@@ -7,7 +7,7 @@ registrations, tooltip/anchor DOM counts, and Chromium heap measurements when av
 Run it with the repository toolchain:
 
 ```sh
-vp dev --port 4173
+pnpm exec vite --port 4173
 ```
 
 Open `http://127.0.0.1:4173/benchmarks/action-title-tooltip/?count=2000&recycleRounds=5&memoryBatches=3`. All three
@@ -18,7 +18,7 @@ values, launch Chromium with `--js-flags=--expose-gc`; timing and DOM/listener c
 For a five-run median with explicit garbage collection, keep the dev server running and execute:
 
 ```sh
-vp exec tsx benchmarks/action-title-tooltip/run.ts
+pnpm exec tsx benchmarks/action-title-tooltip/run.ts
 ```
 
 The runner uses `/usr/bin/google-chrome-stable` by default. Set `CHROME_PATH` when Chrome is installed elsewhere;
@@ -29,6 +29,6 @@ pass a URL and iteration count as the first and second arguments to override the
 and records the heap after each of ten batches:
 
 ```sh
-vp exec tsx benchmarks/action-title-tooltip/run.ts \
+pnpm exec tsx benchmarks/action-title-tooltip/run.ts \
   'http://127.0.0.1:4173/benchmarks/action-title-tooltip/memory.html?count=2000&batches=10' 1
 ```

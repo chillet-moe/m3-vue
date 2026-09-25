@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it } from 'vitest';
 import { createScopeBoundaryVueOptions } from '@chillet/vue-scope-boundary/vite';
 import { createApp, createSSRApp, defineComponent, h, nextTick, ref } from 'vue';
 import { renderToString } from 'vue/server-renderer';

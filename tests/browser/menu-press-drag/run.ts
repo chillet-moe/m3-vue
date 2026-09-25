@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
-import { createServer, type ViteDevServer } from 'vite-plus';
+import { createServer, type ViteDevServer } from 'vite';
 
 const fixturePath = '/tests/browser/menu-press-drag/';
 const systemChromePath = process.env.CHROME_PATH ?? '/usr/bin/google-chrome-stable';

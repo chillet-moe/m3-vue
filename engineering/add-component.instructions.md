@@ -396,10 +396,10 @@ export const nameStyleTokens = [
 
 ```bash
 # 类型检查 + 构建库
-vp run prepublishOnly
+pnpm run build
 
 # 构建文档（验证 AnatomyTable、ApiTable 等是否正常）
-vp run docs:build
+pnpm run docs:build
 ```
 
 ---
@@ -416,5 +416,5 @@ vp run docs:build
 - [ ] `docs/.vitepress/config.ts` — 侧边栏添加条目
 - [ ] `docs/.vitepress/components/style-tokens/<ComponentName>.ts` — public styling token metadata（如适用）
 - [ ] `docs/.vitepress/components/style-token-meta.ts` — 注册 styling metadata（如适用）
-- [ ] `vp run prepublishOnly` 通过
-- [ ] `vp run docs:build` 通过
+- [ ] `pnpm run build` 通过
+- [ ] `pnpm run docs:build` 通过

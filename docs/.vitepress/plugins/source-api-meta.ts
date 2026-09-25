@@ -1,7 +1,7 @@
 import path from 'node:path';
 import ts from 'typescript';
 import { createChecker as createVueMetaChecker } from 'vue-component-meta';
-import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr';
+import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr.ts';
 
 export interface SourceApiFieldMeta {
   name: string;

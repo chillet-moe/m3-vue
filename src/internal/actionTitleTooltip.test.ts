@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { actionTitleTooltipAttribute, registerActionTitleTooltip } from './actionTitleTooltip';
 
 function createTrigger(content: string) {

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { createApp, defineComponent, h, nextTick, shallowRef } from 'vue';
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it } from 'vitest';
 import DatePicker from '@/components/DatePicker/DatePicker.vue';
 import DateRangePicker from '@/components/DateRangePicker/DateRangePicker.vue';
 import Select from '@/components/Select/Select.vue';

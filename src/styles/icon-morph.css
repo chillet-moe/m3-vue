@@ -56,8 +56,8 @@
 
 /* CJK 语言时，使用字重 */
 :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):not(
-  :is([aria-selected='true'], [data-selected='true'], [aria-current='page'])
-):hover,
+    :is([aria-selected='true'], [data-selected='true'], [aria-current='page'])
+  ):hover,
 .m3-morph-host:not(:is([aria-selected='true'], [data-selected='true'], [aria-current='page'])):hover
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)) {
   --m3-text-morph-weight-offset: 50;
@@ -117,15 +117,15 @@
 
 /* CJK 语言时，使用字重 */
 :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):is(
-  [aria-selected='true'],
-  [data-selected='true'],
-  [aria-current='page']
-):focus-visible,
+    [aria-selected='true'],
+    [data-selected='true'],
+    [aria-current='page']
+  ):focus-visible,
 :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)):is(
-  [aria-selected='true'],
-  [data-selected='true'],
-  [aria-current='page']
-):active,
+    [aria-selected='true'],
+    [data-selected='true'],
+    [aria-current='page']
+  ):active,
 .m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):focus-visible
   :is(.m3-text-morph:lang(zh), .m3-text-morph:lang(ja), .m3-text-morph:lang(ko)),
 .m3-morph-host:is([aria-selected='true'], [data-selected='true'], [aria-current='page']):active

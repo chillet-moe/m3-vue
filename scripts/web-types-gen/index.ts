@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createChecker, type MetaCheckerOptions, type PropertyMeta, type PropertyMetaSchema } from 'vue-component-meta';
 import ts from 'typescript';
-import type { Plugin } from 'vite-plus';
+import type { Plugin } from 'vite';
 
 type WebTypesTypedContribution = {
   name: string;

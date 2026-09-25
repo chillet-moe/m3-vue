@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
-import { createServer, type ViteDevServer } from 'vite-plus';
+import { createServer, type ViteDevServer } from 'vite';
 
 type LayoutSnapshot = {
   content: {

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import type { App } from 'vue';
 import { createApp, h, nextTick, ref } from 'vue';
-import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import Button from '@/components/Button/Button.vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
 import ListItem from '@/components/ListItem/ListItem.vue';

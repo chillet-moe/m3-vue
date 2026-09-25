@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vite-plus/test';
+import { describe, expect, it } from 'vitest';
 
 const componentsDirectory = 'src/components';
 const tokenStyles = readFileSync('src/styles/tokens.css', 'utf8');

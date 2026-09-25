@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { readFileSync } from 'node:fs';
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, defineComponent, h, nextTick } from 'vue';
 import ListItem from '../components/ListItem/ListItem.vue';
 

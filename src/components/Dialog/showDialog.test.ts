@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, type App } from 'vue';
 import { buttonContextKey } from '@/components/Button';
 import { OverlayHost } from '@/components/OverlayHost';

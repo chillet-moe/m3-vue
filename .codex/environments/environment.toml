@@ -3,9 +3,9 @@ version = 1
 name = "m3-vue"
 
 [setup]
-script = "vp i"
+script = "pnpm install"
 
 [[actions]]
 name = "dev"
 icon = "run"
-command = "vp run docs:dev --host --port 5300"
+command = "pnpm run docs:dev --host --port 5300"

@@ -1,16 +1,22 @@
 packages:
   - packages/*
+# Imported peers are declared explicitly; optional tooling peers should not enter the lockfile.
+autoInstallPeers: false
 allowBuilds:
   esbuild: false
   sharp: false
   workerd: false
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@0.2.4
-  vite-plus: 0.2.4
-  vitest: 4.1.10
-  '@vitest/coverage-v8': 4.1.10
+  vite: 8.3.1
+  vitest: 5.0.2
+  '@vitest/coverage-v8': 5.0.2
 minimumReleaseAgeExclude:
   - '@chillet/postcss-custom-mixins@0.3.0'
+  - '@vitest/coverage-v8@5.0.2'
+  - '@vitest/mocker@5.0.2'
+  - '@vitest/spy@5.0.2'
+  - vite@8.3.1
+  - vitest@5.0.2
 overrides:
   vite: 'catalog:'
   vitest: 'catalog:'

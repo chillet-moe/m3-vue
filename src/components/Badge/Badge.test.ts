@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it } from 'vite-plus/test';
+import { describe, expect, it } from 'vitest';
 import { createApp, h, nextTick } from 'vue';
 import Badge from './Badge.vue';
 

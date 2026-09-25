@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vite-plus/test';
+import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import CheckBox from './CheckBox.vue';
 

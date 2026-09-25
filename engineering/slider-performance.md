@@ -67,10 +67,9 @@ When recording a Chrome trace after the value indicator is already open and the 
 For behavior or performance-sensitive Slider changes, run the focused tests first and then broaden as needed:
 
 ```sh
-vp test run src/components/Slider/Slider.test.ts src/directives/Tooltip/vTooltip.test.ts
-vp lint
-vp check
-vp build --no-minify
+pnpm exec vitest run src/components/Slider/Slider.test.ts src/directives/Tooltip/vTooltip.test.ts
+pnpm run check
+pnpm exec vite build --no-minify
 ```
 
 For this specific issue, a small Chromium trace was also used to verify that a warmed manual popover value indicator produced `Layout 0.000ms` and `layout count 0` across 45 animated `--percent` frames.

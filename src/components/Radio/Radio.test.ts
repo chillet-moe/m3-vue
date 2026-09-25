@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, expectTypeOf, it } from 'vite-plus/test';
+import { afterEach, describe, expect, expectTypeOf, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Radio from './Radio.vue';
 

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vite-plus/test';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, ref, withDirectives } from 'vue';
 import Select, { type SelectModelValue, type SelectOption } from '@/components/Select/Select.vue';
 import { vContextMenu, vDropdown } from '@/directives/Menu';

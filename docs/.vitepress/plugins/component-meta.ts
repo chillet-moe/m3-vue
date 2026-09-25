@@ -3,7 +3,7 @@ import path from 'node:path';
 import fg from 'fast-glob';
 import ts from 'typescript';
 import { createChecker, type MetaCheckerOptions } from 'vue-component-meta';
-import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr';
+import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr.ts';
 
 export interface ComponentMetaPluginOptions {
   tsconfigPath: string;
