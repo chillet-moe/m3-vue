@@ -2,15 +2,22 @@
 import { withBase } from 'vitepress';
 
 import { Button, Card } from '@/index';
+import { useLocaleNavigation } from '../composables/nav';
+
+const { isChinese, homeLink } = useLocaleNavigation();
 </script>
 
 <template>
   <div class="docs-not-found">
     <Card color="filled" class="docs-not-found-card">
       <span class="docs-not-found-icon material-symbols-outlined" aria-hidden="true">search_off</span>
-      <h1 class="docs-not-found-title">Page Not Found</h1>
-      <p class="docs-not-found-text">The page you're looking for doesn't exist or has been moved.</p>
-      <Button variant="filled" size="medium" :href="withBase('/')" leading-icon="home"> Back to Home </Button>
+      <h1 class="docs-not-found-title">{{ isChinese ? '页面未找到' : 'Page Not Found' }}</h1>
+      <p class="docs-not-found-text">
+        {{ isChinese ? '该页面不存在或已被移动。' : "The page you're looking for doesn't exist or has been moved." }}
+      </p>
+      <Button variant="filled" size="medium" :href="withBase(homeLink)" leading-icon="home">{{
+        isChinese ? '返回首页' : 'Back to Home'
+      }}</Button>
     </Card>
   </div>
 </template>

@@ -3,6 +3,7 @@ import { computed, onMounted, ref, useId } from 'vue';
 import allMeta from 'virtual:component-meta';
 import { useLocalStorage } from '@vueuse/core';
 import { Icon } from '@/components/Icon';
+import { useData } from 'vitepress';
 
 import ControlItem from './ControlItem.vue';
 import { getControlType } from './control-meta';
@@ -19,6 +20,8 @@ const props = withDefaults(
     exclude: () => [],
   },
 );
+const { lang } = useData();
+const isZhHans = computed(() => lang.value === 'zh-Hans');
 
 const emit = defineEmits<{
   'update:modelValue': [value: Record<string, unknown>];
@@ -63,20 +66,20 @@ const sections = computed<ApiTableSection[]>(() => {
   return [
     {
       key: 'props',
-      title: 'Props',
-      empty: 'No props documented.',
+      title: isZhHans.value ? '属性' : 'Props',
+      empty: isZhHans.value ? '暂无属性文档。' : 'No props documented.',
       rows: meta.value.props,
     },
     {
       key: 'events',
-      title: 'Events',
-      empty: 'No events documented.',
+      title: isZhHans.value ? '事件' : 'Events',
+      empty: isZhHans.value ? '暂无事件文档。' : 'No events documented.',
       rows: meta.value.events,
     },
     {
       key: 'slots',
-      title: 'Slots',
-      empty: 'No slots documented.',
+      title: isZhHans.value ? '插槽' : 'Slots',
+      empty: isZhHans.value ? '暂无插槽文档。' : 'No slots documented.',
       rows: meta.value.slots,
     },
   ];
@@ -123,7 +126,9 @@ function getSectionContentId(key: string) {
 
 <template>
   <div class="vp-raw api-table">
-    <p v-if="!meta" class="api-table-empty">No API metadata found for {{ component }}.</p>
+    <p v-if="!meta" class="api-table-empty">
+      {{ isZhHans ? `未找到 ${component} 的 API 元数据。` : `No API metadata found for ${component}.` }}
+    </p>
 
     <template v-else>
       <template v-for="section in inlineSections" :key="section.key">
@@ -139,7 +144,13 @@ function getSectionContentId(key: string) {
                 :aria-expanded="!isSectionCollapsed(section.key)"
                 :aria-controls="getSectionContentId(section.key)"
                 :aria-label="
-                  isSectionCollapsed(section.key) ? `Expand ${section.title} table` : `Collapse ${section.title} table`
+                  isZhHans
+                    ? isSectionCollapsed(section.key)
+                      ? `展开${section.title}表格`
+                      : `收起${section.title}表格`
+                    : isSectionCollapsed(section.key)
+                      ? `Expand ${section.title} table`
+                      : `Collapse ${section.title} table`
                 "
                 @click="toggleSection(section.key)"
               >
@@ -157,10 +168,10 @@ function getSectionContentId(key: string) {
                 <table class="api-table-grid">
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Description</th>
-                      <th>Default</th>
-                      <th v-if="controlsEnabled">Control</th>
+                      <th>{{ isZhHans ? '名称' : 'Name' }}</th>
+                      <th>{{ isZhHans ? '说明' : 'Description' }}</th>
+                      <th>{{ isZhHans ? '默认值' : 'Default' }}</th>
+                      <th v-if="controlsEnabled">{{ isZhHans ? '控件' : 'Control' }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -169,7 +180,7 @@ function getSectionContentId(key: string) {
                         <div class="api-table-name-cell">
                           <code>{{ prop.name }}</code>
                           <span class="api-table-badge" :data-required="prop.required ? 'true' : 'false'">
-                            {{ prop.required ? 'Required' : 'Optional' }}
+                            {{ prop.required ? (isZhHans ? '必填' : 'Required') : isZhHans ? '可选' : 'Optional' }}
                           </span>
                         </div>
                       </td>
@@ -225,14 +236,14 @@ function getSectionContentId(key: string) {
               <table class="api-table-grid">
                 <thead>
                   <tr v-if="section.key === 'events'">
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
+                    <th>{{ isZhHans ? '名称' : 'Name' }}</th>
+                    <th>{{ isZhHans ? '类型' : 'Type' }}</th>
+                    <th>{{ isZhHans ? '说明' : 'Description' }}</th>
                   </tr>
                   <tr v-else>
-                    <th>Name</th>
-                    <th>Parameters</th>
-                    <th>Description</th>
+                    <th>{{ isZhHans ? '名称' : 'Name' }}</th>
+                    <th>{{ isZhHans ? '参数' : 'Parameters' }}</th>
+                    <th>{{ isZhHans ? '说明' : 'Description' }}</th>
                   </tr>
                 </thead>
                 <tbody>

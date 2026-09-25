@@ -3,12 +3,14 @@ import { withBase } from 'vitepress';
 
 import { Button } from '@/index';
 import { useSidebar } from '../composables/sidebar';
+import { useLocaleNavigation } from '../composables/nav';
 
 const { prevItem, nextItem } = useSidebar();
+const { isChinese } = useLocaleNavigation();
 </script>
 
 <template>
-  <nav v-if="prevItem || nextItem" class="docs-pager" aria-label="Page navigation">
+  <nav v-if="prevItem || nextItem" class="docs-pager" :aria-label="isChinese ? '页面导航' : 'Page navigation'">
     <Button v-if="prevItem" variant="outlined" size="medium" :href="withBase(prevItem.link)" leading-icon="arrow_back">
       {{ prevItem.text }}
     </Button>

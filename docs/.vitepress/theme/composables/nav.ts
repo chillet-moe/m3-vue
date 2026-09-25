@@ -1,8 +1,27 @@
 import type { DefaultTheme } from 'vitepress';
-import { useData, withBase } from 'vitepress';
+import { useData, useRoute, withBase } from 'vitepress';
 import { computed } from 'vue';
 
-import type { HeroAction, ThemeNavItem, ThemeSocialLink } from '../utils';
+import { normalizePath, type HeroAction, type ThemeNavItem, type ThemeSocialLink } from '../utils';
+
+export function useLocaleNavigation() {
+  const { lang } = useData();
+  const route = useRoute();
+  const isChinese = computed(() => lang.value === 'zh-Hans');
+  const homeLink = computed(() => (isChinese.value ? '/zh-Hans/' : '/'));
+  const languageLink = computed(() => {
+    const currentPath = normalizePath(route.path);
+    const englishPath = isChinese.value ? currentPath.replace(/^\/zh-Hans(?=\/|$)/, '') || '/' : currentPath;
+
+    return isChinese.value ? englishPath : `/zh-Hans${englishPath === '/' ? '/' : englishPath}`;
+  });
+
+  function localizePath(path: string) {
+    return isChinese.value ? `/zh-Hans${path === '/' ? '/' : path}` : path;
+  }
+
+  return { isChinese, homeLink, languageLink, localizePath };
+}
 
 export function useNav() {
   const { theme } = useData();

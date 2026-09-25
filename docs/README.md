@@ -9,6 +9,7 @@ This package publishes a curated subset of the `docs/` directory for local inspe
 - `docs/directives/*.md` documents directives.
 - `docs/functions/*.md` documents programmatic APIs.
 - `docs/guides/*.md` and `docs/utilities/*.md` cover customization and shared primitives.
+- `docs/zh-Hans/` contains Simplified Chinese counterparts to the English pages.
 - `docs/demos/**/*.vue` contains the example source used by many component pages.
 
 ## Notes

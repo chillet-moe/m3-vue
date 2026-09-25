@@ -3,6 +3,7 @@ import { computed, useId } from 'vue';
 import allMeta from 'virtual:source-api-meta';
 import { useLocalStorage } from '@vueuse/core';
 import { Icon } from '@/components/Icon';
+import { useData } from 'vitepress';
 
 type SourceApiFieldMeta = {
   name: string;
@@ -35,6 +36,8 @@ const props = withDefaults(
     showSignature: true,
   },
 );
+const { lang } = useData();
+const isZhHans = computed(() => lang.value === 'zh-Hans');
 
 const meta = computed<SourceApiMeta | null>(() => {
   return (allMeta as Record<string, SourceApiMeta | undefined>)[props.api] ?? null;
@@ -65,12 +68,14 @@ function getSectionContentId(name: string) {
 
 <template>
   <div class="vp-raw source-api-table">
-    <p v-if="!meta" class="source-api-empty">No API metadata found for {{ api }}.</p>
+    <p v-if="!meta" class="source-api-empty">
+      {{ isZhHans ? `未找到 ${api} 的 API 元数据。` : `No API metadata found for ${api}.` }}
+    </p>
     <template v-else>
       <div v-if="showSignature" class="source-api-signature">
         <code>{{ meta.signature }}</code>
         <p class="source-api-source">
-          Source: <code>{{ meta.source }}</code>
+          {{ isZhHans ? '来源：' : 'Source: ' }}<code>{{ meta.source }}</code>
         </p>
       </div>
 
@@ -81,7 +86,15 @@ function getSectionContentId(name: string) {
             type="button"
             :aria-expanded="!collapsed"
             :aria-controls="getSectionContentId(section.name)"
-            :aria-label="collapsed ? `Expand ${section.name} table` : `Collapse ${section.name} table`"
+            :aria-label="
+              isZhHans
+                ? collapsed
+                  ? `展开 ${section.name} 表格`
+                  : `收起 ${section.name} 表格`
+                : collapsed
+                  ? `Expand ${section.name} table`
+                  : `Collapse ${section.name} table`
+            "
             @click="toggleCollapsed"
           >
             <Icon class="source-api-toggle-icon" name="expand_more" aria-hidden="true" />
@@ -93,11 +106,11 @@ function getSectionContentId(name: string) {
             <table class="source-api-grid">
               <thead>
                 <tr>
-                  <th>Field</th>
-                  <th>Type</th>
-                  <th>Required</th>
-                  <th>Description</th>
-                  <th>Default</th>
+                  <th>{{ isZhHans ? '字段' : 'Field' }}</th>
+                  <th>{{ isZhHans ? '类型' : 'Type' }}</th>
+                  <th>{{ isZhHans ? '必填' : 'Required' }}</th>
+                  <th>{{ isZhHans ? '说明' : 'Description' }}</th>
+                  <th>{{ isZhHans ? '默认值' : 'Default' }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,7 +121,7 @@ function getSectionContentId(name: string) {
                   <td>
                     <code>{{ field.type }}</code>
                   </td>
-                  <td>{{ field.required ? 'Yes' : 'No' }}</td>
+                  <td>{{ field.required ? (isZhHans ? '是' : 'Yes') : isZhHans ? '否' : 'No' }}</td>
                   <td>{{ field.description || '-' }}</td>
                   <td>
                     <code v-if="field.defaultValue">{{ field.defaultValue }}</code>
@@ -121,7 +134,9 @@ function getSectionContentId(name: string) {
         </section>
       </template>
 
-      <p v-else class="source-api-empty">No type metadata found for {{ type ?? api }}.</p>
+      <p v-else class="source-api-empty">
+        {{ isZhHans ? `未找到 ${type ?? api} 的类型元数据。` : `No type metadata found for ${type ?? api}.` }}
+      </p>
     </template>
   </div>
 </template>

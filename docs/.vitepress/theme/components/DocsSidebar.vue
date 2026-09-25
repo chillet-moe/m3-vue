@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress';
 
-import { useSiteInfo } from '../composables/nav';
+import { useLocaleNavigation, useSiteInfo } from '../composables/nav';
 import { useSidebar, useSidebarControl } from '../composables/sidebar';
 import DocsSidebarItems from './DocsSidebarItems.vue';
 
 const { isOpen, close } = useSidebarControl();
 const { sidebarItems } = useSidebar();
 const { siteLogo, siteTitle } = useSiteInfo();
+const { isChinese, homeLink } = useLocaleNavigation();
 
 function resolveLink(path: string) {
   return withBase(path);
@@ -18,13 +19,13 @@ function resolveLink(path: string) {
   <aside class="docs-sidebar" :data-open="isOpen ? 'true' : 'false'">
     <div class="docs-sidebar-surface">
       <div class="docs-sidebar-brand">
-        <a class="docs-brand" :href="resolveLink('/')" @click="close()">
+        <a class="docs-brand" :href="resolveLink(homeLink)" @click="close()">
           <img v-if="siteLogo" class="docs-brand-logo" :src="siteLogo" alt="" />
           <span class="docs-brand-text">{{ siteTitle }}</span>
         </a>
       </div>
 
-      <nav class="docs-sidebar-nav" aria-label="Sidebar">
+      <nav class="docs-sidebar-nav" :aria-label="isChinese ? '侧边栏' : 'Sidebar'">
         <section v-for="item in sidebarItems" :key="item.text || item.link || 'group'" class="docs-sidebar-group">
           <template v-if="item.items?.length">
             <h2 v-if="item.text" class="docs-sidebar-title">{{ item.text }}</h2>

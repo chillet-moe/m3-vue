@@ -1,52 +1,64 @@
 <script setup lang="ts">
 import { useData, withBase } from 'vitepress';
 import { VPNavBarSearch } from 'vitepress/theme';
+import { computed } from 'vue';
 
 import { Button, Icon, IconButton } from '@/index';
 import ShapeTokenControls from '../../components/ShapeTokenControls.vue';
-import { useHero, useNav, useSiteInfo } from '../composables/nav';
+import { useHero, useLocaleNavigation, useNav, useSiteInfo } from '../composables/nav';
 import { mapHeroActionVariant, resolveSocialLabel } from '../utils';
 
 const { isDark } = useData();
 const { navItems, socialLinks } = useNav();
 const { siteLogo, siteTitle } = useSiteInfo();
 const { hero } = useHero();
+const { isChinese, homeLink, languageLink, localizePath } = useLocaleNavigation();
 
-const guideLinks = [
+const guideLinks = computed(() => [
   {
     icon: 'rocket_launch',
-    title: 'Getting started',
-    description: 'Install the package and register the Vue plugin.',
-    link: '/getting-started',
+    title: isChinese.value ? '快速开始' : 'Getting started',
+    description: isChinese.value ? '安装组件库并注册 Vue 插件。' : 'Install the package and register the Vue plugin.',
+    link: localizePath('/getting-started'),
   },
   {
     icon: 'widgets',
-    title: 'Components',
-    description: 'Browse component APIs, examples, and styling tokens.',
-    link: '/components/button',
+    title: isChinese.value ? '组件' : 'Components',
+    description: isChinese.value
+      ? '查看组件 API、示例和样式令牌。'
+      : 'Browse component APIs, examples, and styling tokens.',
+    link: localizePath('/components/button'),
   },
   {
     icon: 'palette',
-    title: 'Styling',
-    description: 'Customize color, shape, typography, and elevation.',
-    link: '/guides/styling',
+    title: isChinese.value ? '样式定制' : 'Styling',
+    description: isChinese.value
+      ? '定制颜色、形状、排版和海拔高度。'
+      : 'Customize color, shape, typography, and elevation.',
+    link: localizePath('/guides/styling'),
   },
   {
     icon: 'menu_book',
-    title: 'Guides',
-    description: 'Read about composables, patterns, and integration details.',
-    link: '/guides/composables',
+    title: isChinese.value ? '指南' : 'Guides',
+    description: isChinese.value
+      ? '了解组合式函数、使用模式和集成方式。'
+      : 'Read about composables, patterns, and integration details.',
+    link: localizePath('/guides/composables'),
   },
-] as const;
+]);
 
-const componentLinks = [
-  { icon: 'smart_button', label: 'Actions', link: '/components/button' },
-  { icon: 'edit_note', label: 'Inputs', link: '/components/text-field' },
-  { icon: 'toggle_on', label: 'Selection', link: '/components/switch' },
-  { icon: 'view_sidebar', label: 'Navigation', link: '/components/navigation-drawer' },
-  { icon: 'dialogs', label: 'Containment', link: '/components/dialog' },
-  { icon: 'notifications', label: 'Feedback', link: '/components/snackbar' },
-] as const;
+const componentLinks = computed(() => [
+  { icon: 'smart_button', label: isChinese.value ? '操作' : 'Actions', link: localizePath('/components/button') },
+  { icon: 'edit_note', label: isChinese.value ? '输入' : 'Inputs', link: localizePath('/components/text-field') },
+  { icon: 'toggle_on', label: isChinese.value ? '选择' : 'Selection', link: localizePath('/components/switch') },
+  {
+    icon: 'view_sidebar',
+    label: isChinese.value ? '导航' : 'Navigation',
+    link: localizePath('/components/navigation-drawer'),
+  },
+  { icon: 'dialogs', label: isChinese.value ? '容器' : 'Containment', link: localizePath('/components/dialog') },
+  { icon: 'notifications', label: isChinese.value ? '反馈' : 'Feedback', link: localizePath('/components/snackbar') },
+]);
 
 function resolveLink(path: string) {
   return withBase(path);
@@ -61,7 +73,7 @@ function toggleAppearance() {
   <div class="home-layout vp-raw">
     <header class="home-header">
       <div class="home-header-inner">
-        <Button class="home-brand" variant="text" size="medium" :href="resolveLink('/')">
+        <Button class="home-brand" variant="text" size="medium" :href="resolveLink(homeLink)">
           <span class="home-brand-mark">
             <span
               v-if="siteLogo"
@@ -73,7 +85,7 @@ function toggleAppearance() {
           <span class="m3-typo-title-medium">{{ siteTitle }}</span>
         </Button>
 
-        <nav v-if="navItems.length" class="home-nav" aria-label="Primary">
+        <nav v-if="navItems.length" class="home-nav" :aria-label="isChinese ? '主导航' : 'Primary'">
           <Button v-for="item in navItems" :key="item.link" variant="text" size="medium" :href="resolveLink(item.link)">
             {{ item.text }}
           </Button>
@@ -81,6 +93,10 @@ function toggleAppearance() {
 
         <div class="home-actions">
           <VPNavBarSearch class="home-search" />
+
+          <Button variant="text" size="small" :href="resolveLink(languageLink)" :lang="isChinese ? 'en' : 'zh-Hans'">
+            {{ isChinese ? 'English' : '简体中文' }}
+          </Button>
 
           <Button
             v-for="link in socialLinks"
@@ -101,7 +117,15 @@ function toggleAppearance() {
             size="small"
             width="default"
             :icon="isDark ? 'light_mode' : 'dark_mode'"
-            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            :aria-label="
+              isDark
+                ? isChinese
+                  ? '切换到浅色模式'
+                  : 'Switch to light mode'
+                : isChinese
+                  ? '切换到深色模式'
+                  : 'Switch to dark mode'
+            "
             @click="toggleAppearance"
           />
         </div>
@@ -111,7 +135,7 @@ function toggleAppearance() {
     <main class="home-main">
       <section v-if="hero" class="home-hero" aria-labelledby="home-hero-title">
         <div class="home-hero-copy">
-          <p class="home-kicker m3-typo-label-medium">Documentation</p>
+          <p class="home-kicker m3-typo-label-medium">{{ isChinese ? '文档' : 'Documentation' }}</p>
           <h1 id="home-hero-title" class="m3-typo-display-large">{{ hero.text }}</h1>
           <p class="home-hero-tagline m3-typo-body-large">{{ hero.tagline }}</p>
 
@@ -128,14 +152,14 @@ function toggleAppearance() {
           </div>
         </div>
 
-        <div class="home-install" aria-label="Package installation">
+        <div class="home-install" :aria-label="isChinese ? '安装组件库' : 'Package installation'">
           <div class="home-install-header">
-            <span class="m3-typo-label-medium">Install</span>
+            <span class="m3-typo-label-medium">{{ isChinese ? '安装' : 'Install' }}</span>
             <span class="m3-typo-body-small">pnpm</span>
           </div>
           <pre><code>pnpm add @chillet/m3-vue</code></pre>
-          <a class="home-install-link m3-typo-label-large" :href="resolveLink('/getting-started')">
-            Setup instructions
+          <a class="home-install-link m3-typo-label-large" :href="resolveLink(localizePath('/getting-started'))">
+            {{ isChinese ? '安装说明' : 'Setup instructions' }}
             <Icon name="arrow_forward" />
           </a>
         </div>
@@ -143,8 +167,14 @@ function toggleAppearance() {
 
       <section class="home-section" aria-labelledby="home-docs-title">
         <div class="home-section-heading">
-          <h2 id="home-docs-title" class="m3-typo-headline-large">Documentation</h2>
-          <p class="m3-typo-body-medium">Start with installation, or go directly to the reference you need.</p>
+          <h2 id="home-docs-title" class="m3-typo-headline-large">{{ isChinese ? '文档' : 'Documentation' }}</h2>
+          <p class="m3-typo-body-medium">
+            {{
+              isChinese
+                ? '从安装开始，或直接查阅所需内容。'
+                : 'Start with installation, or go directly to the reference you need.'
+            }}
+          </p>
         </div>
 
         <div class="home-guide-grid">
@@ -161,8 +191,8 @@ function toggleAppearance() {
 
       <section class="home-section" aria-labelledby="home-components-title">
         <div class="home-section-heading">
-          <h2 id="home-components-title" class="m3-typo-headline-large">Components</h2>
-          <p class="m3-typo-body-medium">Browse by component category.</p>
+          <h2 id="home-components-title" class="m3-typo-headline-large">{{ isChinese ? '组件' : 'Components' }}</h2>
+          <p class="m3-typo-body-medium">{{ isChinese ? '按组件类别浏览。' : 'Browse by component category.' }}</p>
         </div>
 
         <div class="home-component-grid">
@@ -183,7 +213,7 @@ function toggleAppearance() {
       </div>
 
       <footer class="home-footer">
-        <span class="m3-typo-body-small">{{ siteTitle }} documentation</span>
+        <span class="m3-typo-body-small">{{ siteTitle }} {{ isChinese ? '文档' : 'documentation' }}</span>
         <a
           v-if="socialLinks[0]"
           class="m3-typo-label-medium"

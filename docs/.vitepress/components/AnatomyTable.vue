@@ -7,6 +7,7 @@ import { Icon } from '@/components/Icon';
 import { useLocalStorage } from '@vueuse/core';
 import { showSnackbar } from '@/components/Snackbar';
 import type { AnatomyPart } from '../plugins/component-anatomy.ts';
+import { useData } from 'vitepress';
 
 const props = defineProps<{
   scope: string;
@@ -15,6 +16,8 @@ const props = defineProps<{
 const anatomy = computed(() => {
   return allAnatomy[props.scope] ?? null;
 });
+const { lang } = useData();
+const isZhHans = computed(() => lang.value === 'zh-Hans');
 
 const highlightEnabled = useLocalStorage('anatomy-highlight-enabled', false);
 const highlightedPart = ref<string | null>(null);
@@ -67,11 +70,11 @@ async function onCopyPartSelector(text: string) {
   try {
     await navigator.clipboard.writeText(text);
     void showSnackbar({
-      message: `${text} copied to clipboard`,
+      message: isZhHans.value ? `已将 ${text} 复制到剪贴板` : `${text} copied to clipboard`,
     });
   } catch (err) {
     void showSnackbar({
-      message: `Failed to copy ${text} to clipboard`,
+      message: isZhHans.value ? `无法将 ${text} 复制到剪贴板` : `Failed to copy ${text} to clipboard`,
     });
   }
 }
@@ -95,7 +98,7 @@ const headingId = computed(() => {
     <div class="anatomy-panel">
       <div class="anatomy-header">
         <h2 :id="headingId" class="anatomy-heading">
-          <span class="anatomy-header-title">Anatomy</span>
+          <span class="anatomy-header-title">{{ isZhHans ? '结构' : 'Anatomy' }}</span>
         </h2>
 
         <button
@@ -103,20 +106,34 @@ const headingId = computed(() => {
           type="button"
           :aria-expanded="!collapsed"
           :aria-controls="`anatomy-parts-${partSelectorId}`"
-          :aria-label="collapsed ? 'Expand anatomy table' : 'Collapse anatomy table'"
+          :aria-label="
+            isZhHans
+              ? collapsed
+                ? '展开结构表格'
+                : '收起结构表格'
+              : collapsed
+                ? 'Expand anatomy table'
+                : 'Collapse anatomy table'
+          "
           @click="toggleCollapsed"
         >
           <Icon class="anatomy-toggle-icon" name="expand_more" aria-hidden="true" />
           <span class="anatomy-part-count">{{ anatomyData.length }}</span>
         </button>
 
-        <CheckBox v-model:checked="highlightEnabled" :label="'Highlight'" class="anatomy-highlight-checkbox">
-          <span class="anatomy-highlight-label">Highlight</span>
+        <CheckBox
+          v-model:checked="highlightEnabled"
+          :label="isZhHans ? '高亮显示' : 'Highlight'"
+          class="anatomy-highlight-checkbox"
+        >
+          <span class="anatomy-highlight-label">{{ isZhHans ? '高亮显示' : 'Highlight' }}</span>
         </CheckBox>
       </div>
 
       <div v-show="!collapsed" :id="`anatomy-parts-${partSelectorId}`">
-        <p v-if="anatomyData.length === 0" class="anatomy-empty">No anatomy parts documented.</p>
+        <p v-if="anatomyData.length === 0" class="anatomy-empty">
+          {{ isZhHans ? '暂无结构部件文档。' : 'No anatomy parts documented.' }}
+        </p>
 
         <div v-else class="anatomy-scroll">
           <table class="anatomy-grid">
@@ -127,9 +144,9 @@ const headingId = computed(() => {
             </colgroup>
             <thead>
               <tr>
-                <th>Element</th>
-                <th>Part</th>
-                <th>Selector</th>
+                <th>{{ isZhHans ? '元素' : 'Element' }}</th>
+                <th>{{ isZhHans ? '部件' : 'Part' }}</th>
+                <th>{{ isZhHans ? '选择器' : 'Selector' }}</th>
               </tr>
             </thead>
             <tbody>
@@ -146,7 +163,9 @@ const headingId = computed(() => {
                 <td>
                   <div class="anatomy-part-cell">
                     <span class="anatomy-part-name">{{ part.part }}</span>
-                    <span v-if="part.conditional" class="anatomy-part-conditional">conditional</span>
+                    <span v-if="part.conditional" class="anatomy-part-conditional">{{
+                      isZhHans ? '条件显示' : 'conditional'
+                    }}</span>
                   </div>
                 </td>
                 <td>
@@ -157,7 +176,8 @@ const headingId = computed(() => {
                     >{{ part.selector }}</code
                   >
                   <Tooltip :id="`${part.part}-${partSelectorId}`"
-                    ><kbd><Icon name="left_click"></Icon>LMB</kbd>Copy</Tooltip
+                    ><kbd><Icon name="left_click"></Icon>{{ isZhHans ? '鼠标左键' : 'LMB' }}</kbd
+                    >{{ isZhHans ? '单击复制' : 'Copy' }}</Tooltip
                   >
                 </td>
               </tr>

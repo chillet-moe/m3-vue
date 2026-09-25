@@ -6,10 +6,13 @@ import { CheckBox } from '@/components/CheckBox';
 import { styleTokenMeta } from './style-token-meta';
 import type { ComponentAnatomy } from '../plugins/component-anatomy.ts';
 import type { StyleTokenMeta, StyleTokenTarget } from './style-tokens/types';
+import { useData } from 'vitepress';
 
 const props = defineProps<{
   component: string;
 }>();
+const { lang } = useData();
+const isZhHans = computed(() => lang.value === 'zh-Hans');
 
 const tokens = computed(() => {
   return styleTokenMeta[props.component] ?? [];
@@ -306,17 +309,21 @@ onMounted(() => {
       <div class="style-token-table-panel">
         <div class="style-token-table-header">
           <h2 :id="headingId" class="style-token-table-heading">
-            <span class="style-token-table-title">Styling</span>
+            <span class="style-token-table-title">{{ isZhHans ? '样式' : 'Styling' }}</span>
             <span class="style-token-table-count ignore-header">{{ tokens.length }}</span>
           </h2>
 
-          <CheckBox v-model:checked="previewEnabled" :label="'Preview'" class="style-token-table-preview-checkbox">
-            <span class="style-token-table-preview-label">Preview</span>
+          <CheckBox
+            v-model:checked="previewEnabled"
+            :label="isZhHans ? '预览' : 'Preview'"
+            class="style-token-table-preview-checkbox"
+          >
+            <span class="style-token-table-preview-label">{{ isZhHans ? '预览' : 'Preview' }}</span>
           </CheckBox>
         </div>
 
         <p v-if="tokens.length === 0" class="style-token-table-empty">
-          No styling tokens documented for {{ component }}.
+          {{ isZhHans ? `暂无 ${component} 的样式 token 文档。` : `No styling tokens documented for ${component}.` }}
         </p>
 
         <div v-else class="style-token-table-scroll">
@@ -328,7 +335,7 @@ onMounted(() => {
             <thead>
               <tr>
                 <th>Token</th>
-                <th>Description</th>
+                <th>{{ isZhHans ? '说明' : 'Description' }}</th>
               </tr>
             </thead>
             <tbody>
@@ -346,7 +353,7 @@ onMounted(() => {
                       <span v-if="token.category" class="style-token-table-badge">{{ token.category }}</span>
                     </div>
                     <div class="style-token-table-token-row">
-                      <span class="style-token-table-label">Fallback</span>
+                      <span class="style-token-table-label">{{ isZhHans ? '回退值' : 'Fallback' }}</span>
                       <code>{{ token.fallback }}</code>
                     </div>
                   </div>

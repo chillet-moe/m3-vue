@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { Button, Card } from '@/index';
 import { useOutline } from '../composables/outline';
+import { useLocaleNavigation } from '../composables/nav';
 
 const { items, label, activeHeadingId } = useOutline();
+const { isChinese } = useLocaleNavigation();
 
 function isActiveOutlineLink(link: string) {
   return link === `#${activeHeadingId.value}`;
@@ -14,7 +16,7 @@ function isActiveOutlineLink(link: string) {
     <div class="docs-outline-card">
       <h2 class="docs-outline-title">{{ label }}</h2>
 
-      <nav class="docs-outline-links" aria-label="On this page">
+      <nav class="docs-outline-links" :aria-label="isChinese ? '本页目录' : 'On this page'">
         <Button
           v-for="item in items"
           :key="item.link"

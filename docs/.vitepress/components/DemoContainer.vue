@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue';
 import { codeToHtml } from 'shiki';
+import { useData } from 'vitepress';
 import { useStickyPreviewPreference } from '../theme/composables/preferences';
 
 type ViewportPreset = {
@@ -22,6 +23,8 @@ const props = withDefaults(
     viewport: true,
   },
 );
+const { lang } = useData();
+const isZhHans = computed(() => lang.value === 'zh-Hans');
 
 const sourceOpen = ref(false);
 const highlightedSource = ref('');
@@ -141,7 +144,7 @@ watch(stickyEnabled, async () => {
         :aria-expanded="sourceOpen ? 'true' : 'false'"
         @click="sourceOpen = !sourceOpen"
       >
-        {{ sourceOpen ? 'Hide source' : 'Show source' }}
+        {{ isZhHans ? (sourceOpen ? '隐藏源码' : '显示源码') : sourceOpen ? 'Hide source' : 'Show source' }}
       </button>
     </div>
 

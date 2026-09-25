@@ -5,13 +5,14 @@ import { computed } from 'vue';
 
 import { Button, IconButton } from '@/index';
 import ShapeTokenControls from '../../components/ShapeTokenControls.vue';
-import { useNav } from '../composables/nav';
+import { useLocaleNavigation, useNav } from '../composables/nav';
 import { useStickyPreviewPreference } from '../composables/preferences';
 import { useSidebar, useSidebarControl } from '../composables/sidebar';
 import { normalizePath, resolveSocialLabel } from '../utils';
 
 const { page, frontmatter, site, isDark } = useData();
 const { navItems, socialLinks } = useNav();
+const { isChinese, languageLink } = useLocaleNavigation();
 const { currentPath } = useSidebar();
 const { toggle: toggleSidebar } = useSidebarControl();
 const stickyPreviewEnabled = useStickyPreviewPreference();
@@ -47,13 +48,13 @@ function toggleStickyPreview() {
           size="small"
           width="default"
           icon="menu"
-          aria-label="Toggle sidebar"
+          :aria-label="isChinese ? '切换侧边栏' : 'Toggle sidebar'"
           @click="toggleSidebar()"
         />
         <VPNavBarSearch class="docs-search" />
       </div>
 
-      <nav v-if="navItems.length" class="docs-nav" aria-label="Primary">
+      <nav v-if="navItems.length" class="docs-nav" :aria-label="isChinese ? '主导航' : 'Primary'">
         <Button
           v-for="item in navItems"
           :key="item.link"
@@ -68,6 +69,10 @@ function toggleStickyPreview() {
       </nav>
 
       <div class="docs-topbar-actions">
+        <Button variant="text" size="small" :href="resolveLink(languageLink)" :lang="isChinese ? 'en' : 'zh-Hans'">
+          {{ isChinese ? 'English' : '简体中文' }}
+        </Button>
+
         <Button
           v-for="link in socialLinks"
           :key="link.link"
@@ -85,7 +90,15 @@ function toggleStickyPreview() {
           size="small"
           width="default"
           icon="push_pin"
-          :aria-label="stickyPreviewEnabled ? 'Disable sticky preview' : 'Enable sticky preview'"
+          :aria-label="
+            stickyPreviewEnabled
+              ? isChinese
+                ? '关闭预览置顶'
+                : 'Disable sticky preview'
+              : isChinese
+                ? '开启预览置顶'
+                : 'Enable sticky preview'
+          "
           :data-active="stickyPreviewEnabled ? 'true' : 'false'"
           @click="toggleStickyPreview"
         />
@@ -97,7 +110,15 @@ function toggleStickyPreview() {
           size="small"
           width="default"
           :icon="isDark ? 'light_mode' : 'dark_mode'"
-          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+          :aria-label="
+            isDark
+              ? isChinese
+                ? '切换到浅色模式'
+                : 'Switch to light mode'
+              : isChinese
+                ? '切换到深色模式'
+                : 'Switch to dark mode'
+          "
           @click="toggleAppearance"
         />
       </div>

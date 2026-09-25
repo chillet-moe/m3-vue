@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, useId, useTemplate
 
 import { Button, IconButton, Slider } from '@/index';
 import { vDropdown } from '@/directives/Menu';
+import { useData } from 'vitepress';
 
 type ShapeRoleKey =
   | 'action'
@@ -38,6 +39,8 @@ type ShapePreset = {
 };
 
 const storageKey = 'm3-vue-docs-shape-tokens';
+const { lang } = useData();
+const isZhHans = computed(() => lang.value === 'zh-Hans');
 
 const shapeRoles: ShapeRole[] = [
   {
@@ -180,6 +183,49 @@ const presets: ShapePreset[] = [
     },
   },
 ];
+
+function getRoleLabel(role: ShapeRole) {
+  if (!isZhHans.value) return role.label;
+
+  const labels: Record<ShapeRoleKey, string> = {
+    action: '操作',
+    field: '输入框',
+    fieldSquare: '方形输入框',
+    chip: 'Chip',
+    card: '卡片',
+    popover: '弹出层',
+    compact: '紧凑',
+    overlay: '模态层',
+    indicator: '指示器',
+    fab: 'FAB',
+  };
+
+  return labels[role.key];
+}
+
+function getRoleAffects(role: ShapeRole) {
+  if (!isZhHans.value) return role.affects;
+
+  const descriptions: Record<ShapeRoleKey, string> = {
+    action: 'Button、IconButton、ButtonGroup、Select、DatePicker 操作和 FAB 菜单操作',
+    field: 'TextField 圆角容器',
+    fieldSquare: 'TextField 方形容器和 InputOtp 输入框',
+    chip: 'Chip、Menu 未激活容器、Tabs 已激活色调容器和 TimePicker 输入框',
+    card: 'Card、富文本 Tooltip、Tabs 色调容器和焦点指示器',
+    popover: 'Menu 表面、已激活菜单容器和独立 SideSheet 表面',
+    compact: 'Snackbar 和普通 Tooltip 表面',
+    overlay: 'Dialog、DatePicker 和 TimePicker 表面',
+    indicator: 'LinearProgressIndicator、LoadingIndicator、NavigationRail 和 ListItem 的激活指示器',
+    fab: 'FloatingActionButton 和 FloatingActionButtonMenu 触发器',
+  };
+
+  return descriptions[role.key];
+}
+
+function getPresetLabel(preset: ShapePreset) {
+  if (!isZhHans.value) return preset.label;
+  return preset.label === 'Soft' ? '柔和' : preset.label === 'Sharp' ? '锐利' : 'Material';
+}
 
 const roleValues = reactive<Record<ShapeRoleKey, ShapeRoleValue>>(createRoleValues(presets[0].values));
 const isMounted = ref(false);
@@ -384,7 +430,7 @@ onBeforeUnmount(() => {
       size="small"
       width="default"
       icon="rounded_corner"
-      aria-label="Shape tokens"
+      :aria-label="isZhHans ? '形状 Token' : 'Shape tokens'"
       aria-haspopup="dialog"
       :aria-controls="panelId"
       :aria-expanded="isOpen ? 'true' : 'false'"
@@ -397,15 +443,17 @@ onBeforeUnmount(() => {
       popover="auto"
       class="shape-token-controls-panel m3-dropdown"
       role="dialog"
-      aria-label="Shape tokens"
+      :aria-label="isZhHans ? '形状 Token' : 'Shape tokens'"
       @toggle="onPanelToggle"
     >
       <div class="shape-token-controls-header">
-        <h2>Shape</h2>
-        <Button variant="text" size="small" leading-icon="restart_alt" @click="resetShapeTokens">Reset</Button>
+        <h2>{{ isZhHans ? '形状' : 'Shape' }}</h2>
+        <Button variant="text" size="small" leading-icon="restart_alt" @click="resetShapeTokens">{{
+          isZhHans ? '重置' : 'Reset'
+        }}</Button>
       </div>
 
-      <div class="shape-token-controls-presets" aria-label="Shape presets">
+      <div class="shape-token-controls-presets" :aria-label="isZhHans ? '形状预设' : 'Shape presets'">
         <Button
           v-for="preset in presets"
           :key="preset.label"
@@ -415,7 +463,7 @@ onBeforeUnmount(() => {
           :data-active="activePreset === preset.label ? 'true' : undefined"
           @click="applyPreset(preset)"
         >
-          {{ preset.label }}
+          {{ getPresetLabel(preset) }}
         </Button>
       </div>
 
@@ -423,13 +471,13 @@ onBeforeUnmount(() => {
         <label v-for="role in shapeRoles" :key="role.key" class="shape-token-controls-row">
           <span class="shape-token-controls-row-header">
             <span>
-              <span class="shape-token-controls-label">{{ role.label }}</span>
+              <span class="shape-token-controls-label">{{ getRoleLabel(role) }}</span>
               <code>{{ role.token }}</code>
             </span>
             <span class="shape-token-controls-value">{{ formatRoleValue(role) }}</span>
           </span>
 
-          <span class="shape-token-controls-affects">{{ role.affects }}</span>
+          <span class="shape-token-controls-affects">{{ getRoleAffects(role) }}</span>
 
           <span class="shape-token-controls-slider-row">
             <Slider
@@ -440,7 +488,7 @@ onBeforeUnmount(() => {
               :wheel-step="role.step"
               size="small"
               :value-indicator="false"
-              :aria-label="`${role.label} radius`"
+              :aria-label="isZhHans ? `${getRoleLabel(role)}圆角半径` : `${role.label} radius`"
               @update:value="updateRoleValue(role, $event)"
               @input="onSliderInput(role, $event)"
             />
@@ -454,7 +502,7 @@ onBeforeUnmount(() => {
               :data-active="roleValues[role.key].full ? 'true' : undefined"
               @click.prevent="toggleFull(role)"
             >
-              Full
+              {{ isZhHans ? '全圆角' : 'Full' }}
             </Button>
           </span>
         </label>
@@ -464,11 +512,13 @@ onBeforeUnmount(() => {
         <div class="shape-token-controls-code-header">
           <span>CSS</span>
           <Button variant="text" size="small" :leading-icon="copied ? 'check' : 'content_copy'" @click="copyCssSnippet">
-            {{ copied ? 'Copied' : 'Copy' }}
+            {{ isZhHans ? (copied ? '已复制' : '复制') : copied ? 'Copied' : 'Copy' }}
           </Button>
         </div>
         <pre><code>{{ cssSnippet }}</code></pre>
-        <span class="shape-token-controls-copy-status" aria-live="polite">{{ copied ? 'CSS copied' : '' }}</span>
+        <span class="shape-token-controls-copy-status" aria-live="polite">{{
+          copied ? (isZhHans ? 'CSS 已复制' : 'CSS copied') : ''
+        }}</span>
       </div>
     </div>
   </div>

@@ -65,6 +65,10 @@ import DocsPager from './DocsPager.vue';
   content: 'API Reference';
 }
 
+.docs-api-appendix:not(:empty):lang(zh-Hans)::before {
+  content: 'API 参考';
+}
+
 @media (max-width: 80rem) {
   .docs-content-shell {
     grid-template-columns: minmax(0, 1fr);
