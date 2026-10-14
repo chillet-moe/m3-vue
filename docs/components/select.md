@@ -97,3 +97,12 @@ Select uses the same `extra-small` (32px), `small` (40px), and `medium` (56px) t
 ### useSelect
 
 <SourceApiTable api="useSelect" />
+
+## Default Size
+
+Single-line fields resolve size from an explicit `size` prop, then the nearest `fieldContextKey.size`, then `medium`.
+Use `app.use(M3VuePlugin, { fieldSize: 'small' })` for an application default, or provide `fieldContextKey` for a
+subtree default. Context sizes accept refs. See [Default Field Size](/getting-started#default-field-size) for typed
+application and subtree examples.
+
+Combobox inherits the same size default through Select.

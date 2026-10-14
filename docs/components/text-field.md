@@ -98,3 +98,12 @@ container height. TextField keeps its native floating-label notch and field-spec
 <DemoContainer :src="TextFieldPasswordSrc">
   <TextFieldPassword />
 </DemoContainer>
+
+## Default Size
+
+Single-line fields resolve size from an explicit `size` prop, then the nearest `fieldContextKey.size`, then `medium`.
+Use `app.use(M3VuePlugin, { fieldSize: 'small' })` for an application default, or provide `fieldContextKey` for a
+subtree default. Context sizes accept refs. See [Default Field Size](/getting-started#default-field-size) for typed
+application and subtree examples.
+
+Textarea fields always use `medium`, including when the context specifies a smaller size.

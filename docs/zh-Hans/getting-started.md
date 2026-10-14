@@ -54,6 +54,51 @@ app.use(M3VuePlugin, { shape });
 shape.value = 'rounded';
 ```
 
+## 默认字段大小
+
+将 `fieldSize` 设为 `'extra-small'`、`'small'` 或 `'medium'`，即可设置单行 `TextField` 和 `Select` 控件的默认大小。
+它可以接收普通值或 ref，也可以与 `shape` 一起配置：
+
+```ts
+app.use(M3VuePlugin, { shape: 'square', fieldSize: 'small' });
+```
+
+也可以在应用启动时直接提供类型完整的 `fieldContextKey`。如果同时使用这两种 API，请先安装插件；之后对同一 key 调用
+`app.provide` 会替换整个上下文。
+
+```ts
+import { fieldContextKey } from '@chillet/m3-vue';
+
+app.provide(fieldContextKey, { size: 'small', shape: 'square', labelClearance: '0.5rem' });
+```
+
+若要让某个子树使用 medium 大小的控件，可从其祖先组件提供更近的上下文。展开继承的上下文以保留其他默认值（包括响应式
+ref）；Vue 不会自动合并上下文属性。
+
+```vue
+<script setup lang="ts">
+import { inject, provide, ref } from 'vue';
+import { fieldContextKey, Select, TextField } from '@chillet/m3-vue';
+
+const inherited = inject(fieldContextKey, {});
+provide(fieldContextKey, { ...inherited, size: 'medium' });
+const customer = ref('');
+const reference = ref('');
+const notes = ref('');
+</script>
+
+<template>
+  <TextField v-model="customer" label="Customer" />
+  <Select label="Status" :options="[{ label: 'Open', value: 'open' }]" />
+  <TextField v-model="reference" label="Reference" size="small" />
+  <TextField v-model="notes" label="Notes" as="textarea" />
+</template>
+```
+
+显式设置的 `size` 属性优先于最近的上下文。两者都未设置时，大小为 `medium`。Textarea 控件始终使用 `medium`，与注入或
+显式设置的大小无关。Combobox 通过 Select 继承相同的大小默认值。provider 作用于其后代，不作用于自身 setup 中的其他注入。`FieldContext`、`TextFieldSize`、
+`M3FieldOptions` 和 `M3VuePluginOptions` 均已导出，可用于类型配置。
+
 ## 挂载 OverlayHost
 
 使用程序化 `showDialog()` 或 `showSnackbar()` 函数时，请在应用根部附近渲染一个 `OverlayHost`。该宿主会使这些浮层保留在应用的 Vue 上下文中，同时原生 dialog 和 popover 元素仍使用浏览器顶层。

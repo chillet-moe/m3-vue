@@ -15,7 +15,7 @@ import {
   type TimePickerModelValue,
   type TimePickerVariant,
 } from '@/components/TimePicker';
-import { fieldContextKey, useFieldLabelClearanceStyle } from '@/components/TextField/FieldContext';
+import { fieldContextKey, useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
 import { acquireAnchorName } from '@/internal/anchorName';
 import { useM3Locale } from '@/locales/context';
 
@@ -116,7 +116,7 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   label: undefined,
   id: undefined,
   as: 'input',
-  size: 'medium',
+  size: undefined,
   type: 'text',
   shape: undefined,
   labelClearance: undefined,
@@ -172,8 +172,9 @@ const hasValue = computed(() => {
   return modelValue.value.length > 0;
 });
 
+const inheritedSize = useFieldSize(() => props.size);
 const effectiveSize = computed<TextFieldSize>(() => {
-  return props.as === 'textarea' ? 'medium' : props.size;
+  return props.as === 'textarea' ? 'medium' : inheritedSize.value;
 });
 
 const supportingMessage = computed(() => {

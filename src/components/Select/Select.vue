@@ -4,7 +4,7 @@ import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
 import MenuItem from '@/components/Menu/MenuItem.vue';
-import { useFieldLabelClearanceStyle } from '@/components/TextField/FieldContext';
+import { useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
 import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
 import { acquireAnchorName } from '@/internal/anchorName';
@@ -123,7 +123,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   required: false,
   name: undefined,
   placeholder: undefined,
-  size: 'medium',
+  size: undefined,
   labelClearance: undefined,
   multiple: false,
   clearable: false,
@@ -135,6 +135,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   filterNoResultsText: undefined,
 });
 
+const effectiveSize = useFieldSize(() => props.size);
 const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
 
 const localeContext = useM3Locale();
@@ -326,7 +327,7 @@ defineExpose({
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="select.hasValue.value ? 'true' : 'false'"
-    :data-size="props.size"
+    :data-size="effectiveSize"
     :data-open="open ? 'true' : 'false'"
     :data-filterable="props.filterable ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
@@ -353,7 +354,7 @@ defineExpose({
         :required="props.required"
         :readonly="!props.filterable"
         :placeholder="textFieldPlaceholder"
-        :size="props.size"
+        :size="effectiveSize"
         label-clearance="0rem"
         :role="props.filterable ? undefined : 'button'"
         :aria-controls="menuId"

@@ -65,6 +65,53 @@ app.use(M3VuePlugin, { shape });
 shape.value = 'rounded';
 ```
 
+## Default Field Size
+
+Set `fieldSize` to `'extra-small'`, `'small'`, or `'medium'` for single-line `TextField` and `Select` controls.
+Combobox inherits the same size default through Select.
+It accepts a value or a ref and can be configured alongside `shape`:
+
+```ts
+app.use(M3VuePlugin, { shape: 'square', fieldSize: 'small' });
+```
+
+You can also provide the typed `fieldContextKey` directly at application startup. If using both APIs, install the
+plugin first; a later `app.provide` for the same key replaces the whole context.
+
+```ts
+import { fieldContextKey } from '@chillet/m3-vue';
+
+app.provide(fieldContextKey, { size: 'small', shape: 'square', labelClearance: '0.5rem' });
+```
+
+For a subtree with medium controls, provide a closer context from its ancestor component. Spread the inherited
+context to retain its other defaults, including reactive refs; Vue does not merge context properties automatically.
+
+```vue
+<script setup lang="ts">
+import { inject, provide, ref } from 'vue';
+import { fieldContextKey, Select, TextField } from '@chillet/m3-vue';
+
+const customer = ref('');
+const reference = ref('');
+const notes = ref('');
+const inherited = inject(fieldContextKey, {});
+provide(fieldContextKey, { ...inherited, size: 'medium' });
+</script>
+
+<template>
+  <TextField v-model="customer" label="Customer" />
+  <Select label="Status" :options="[{ label: 'Open', value: 'open' }]" />
+  <TextField v-model="reference" label="Reference" size="small" />
+  <TextField v-model="notes" label="Notes" as="textarea" />
+</template>
+```
+
+Explicit `size` props take precedence over the nearest context. Without either, the size is `medium`.
+Textarea controls always use `medium`, regardless of injected or explicit sizes. A provider applies to descendants,
+not to other injections within its own setup. `FieldContext`, `TextFieldSize`, `M3FieldOptions`, and
+`M3VuePluginOptions` are exported for typed configuration.
+
 ## Mount The Overlay Host
 
 Render one `OverlayHost` near the root of the application when using the programmatic `showDialog()` or

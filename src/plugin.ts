@@ -8,7 +8,7 @@ import { initStateLayer } from '@/components/StateLayer/state-layer.ts';
 import { installM3Snackbar, type M3SnackbarOptions } from '@/components/Snackbar/config';
 import { installM3Locale } from '@/locales/context';
 import type { M3LocaleOptions } from '@/locales/types';
-import { installM3Shape, type M3ShapeOptions } from './styles/context';
+import { installM3StyleDefaults, type M3FieldOptions, type M3ShapeOptions } from './styles/context';
 
 export const m3VueDirectives = {
   tooltip: vTooltip,
@@ -19,7 +19,7 @@ export const m3VueDirectives = {
 
 export const m3VueDirectiveNames = Object.freeze(Object.keys(m3VueDirectives) as Array<keyof typeof m3VueDirectives>);
 
-export type M3VuePluginOptions = M3LocaleOptions & M3ShapeOptions & M3SnackbarOptions;
+export type M3VuePluginOptions = M3LocaleOptions & M3ShapeOptions & M3FieldOptions & M3SnackbarOptions;
 
 export const M3VuePlugin = {
   install(app: App, options: M3VuePluginOptions = {}) {
@@ -28,7 +28,7 @@ export const M3VuePlugin = {
     }
 
     installM3Locale(app, options);
-    installM3Shape(app, options);
+    installM3StyleDefaults(app, options);
     installM3Snackbar(app, options);
     initStateLayer();
   },

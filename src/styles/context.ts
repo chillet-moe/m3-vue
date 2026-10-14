@@ -1,6 +1,7 @@
 import type { App, MaybeRef } from 'vue';
 import { buttonContextKey } from '@/components/Button/ButtonContext';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext';
+import type { FieldContext } from '@/components/TextField/FieldContext';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
 import { navigationDrawerShapeContextKey } from '@/components/NavigationDrawer/NavigationDrawerContext';
 
@@ -11,15 +12,26 @@ export type M3ShapeOptions = {
   shape?: MaybeRef<M3Shape>;
 };
 
-/** Installs one application-level shape default across all shape-aware component contexts. */
-export function installM3Shape(app: App, options: M3ShapeOptions = {}): void {
+export type M3FieldOptions = {
+  /** Default size for single-line TextField and Select controls. Accepts a reactive ref. */
+  fieldSize?: FieldContext['size'];
+};
+
+/** Installs appearance defaults, providing each context once so shape and size coexist. */
+export function installM3StyleDefaults(app: App, options: M3ShapeOptions & M3FieldOptions = {}): void {
+  const context: FieldContext = {};
+  if (options.shape !== undefined) context.shape = options.shape;
+  if (options.fieldSize !== undefined) context.size = options.fieldSize;
+  if (options.shape !== undefined || options.fieldSize !== undefined) {
+    app.provide(fieldContextKey, context);
+  }
+
   if (options.shape === undefined) {
     return;
   }
 
-  const context = { shape: options.shape };
-  app.provide(buttonContextKey, context);
-  app.provide(iconButtonContextKey, context);
-  app.provide(fieldContextKey, context);
-  app.provide(navigationDrawerShapeContextKey, context);
+  const shapeContext = { shape: options.shape };
+  app.provide(buttonContextKey, shapeContext);
+  app.provide(iconButtonContextKey, shapeContext);
+  app.provide(navigationDrawerShapeContextKey, shapeContext);
 }

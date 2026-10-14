@@ -92,3 +92,11 @@ TextField 和描边 Button 使用相同的静止描边颜色、匹配尺寸的�
 <DemoContainer :src="TextFieldPasswordSrc">
   <TextFieldPassword />
 </DemoContainer>
+
+## 默认大小
+
+单行字段按以下优先级确定大小：显式的 `size` 属性、最近的 `fieldContextKey.size`，最后是 `medium`。
+应用级默认值可通过 `app.use(M3VuePlugin, { fieldSize: 'small' })` 设置，子树默认值可通过提供 `fieldContextKey` 设置。
+上下文大小可以使用 refs。类型完整的应用和子树示例请参阅[默认字段大小](/zh-Hans/getting-started#默认字段大小)。
+
+Textarea 字段始终使用 `medium`，即使上下文指定了更小的大小也是如此。

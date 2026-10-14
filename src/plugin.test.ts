@@ -118,8 +118,17 @@ describe('M3VuePlugin', () => {
 
     expect(buttonContext).toEqual({ shape });
     expect(iconButtonContext).toBe(buttonContext);
-    expect(fieldContext).toBe(buttonContext);
+    expect(fieldContext).toEqual({ shape });
     expect(navigationDrawerShapeContext).toBe(buttonContext);
+  });
+
+  it('installs field size without requiring or changing other component defaults', () => {
+    const provide = vi.fn();
+    M3VuePlugin.install({ directive: vi.fn(), provide } as unknown as App, { fieldSize: 'small' });
+    expect(provide.mock.calls.filter(([key]) => key === fieldContextKey)).toEqual([
+      [fieldContextKey, { size: 'small' }],
+    ]);
+    expect(provide.mock.calls.some(([key]) => key === buttonContextKey || key === iconButtonContextKey)).toBe(false);
   });
 
   it('provides reactive showSnackbar defaults', () => {

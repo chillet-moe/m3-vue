@@ -8,9 +8,12 @@ import {
   type MaybeRef,
   type MaybeRefOrGetter,
 } from 'vue';
+import type { TextFieldSize } from './TextField.vue';
 import type { M3Shape } from '@/styles/context';
 
 export interface FieldContext {
+  /** Default size for single-line TextField and Select controls. */
+  size?: MaybeRef<TextFieldSize | undefined>;
   /** Default block-start clearance reserved for floating labels in this component subtree. */
   labelClearance?: MaybeRef<string | undefined>;
   /** Default shape for text fields in this component subtree. */
@@ -30,4 +33,9 @@ export function useFieldLabelClearanceStyle(labelClearance: MaybeRefOrGetter<str
           marginBlockStart: effectiveLabelClearance.value,
         },
   );
+}
+
+export function useFieldSize(size: MaybeRefOrGetter<TextFieldSize | undefined>) {
+  const fieldContext = inject(fieldContextKey, undefined);
+  return computed<TextFieldSize>(() => toValue(size) ?? unref(fieldContext?.size) ?? 'medium');
 }

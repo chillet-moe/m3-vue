@@ -92,3 +92,10 @@ Select 与 TextField 使用相同的触发器尺寸：`extra-small`（32px）、
 ### useSelect
 
 <SourceApiTable api="useSelect" />
+
+## 默认大小
+
+单行字段按以下优先级确定大小：显式的 `size` 属性、最近的 `fieldContextKey.size`，最后是 `medium`。
+应用级默认值可通过 `app.use(M3VuePlugin, { fieldSize: 'small' })` 设置，子树默认值可通过提供 `fieldContextKey` 设置。
+上下文大小可以使用 refs。类型完整的应用和子树示例请参阅[默认字段大小](/zh-Hans/getting-started#默认字段大小)。
+Combobox 通过 Select 继承相同的大小默认值。

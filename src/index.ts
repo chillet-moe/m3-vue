@@ -89,3 +89,6 @@ export { M3VueResolver } from './resolver';
 
 // Plugin
 export { M3VuePlugin } from './plugin';
+
+export type { M3VuePluginOptions } from './plugin';
+export type { M3FieldOptions, M3Shape, M3ShapeOptions } from './styles/context';
