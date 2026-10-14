@@ -108,6 +108,8 @@ Slider 会原样保留外部传入的 `value`，包括步进刻度之间的值�
 
 ### 尺寸
 
+`size` 属性优先于 `sliderContextKey` 中的 `size`，内置回退值为 `medium`。可在 `M3VuePlugin` 中设置 `sliderSize` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
 <DemoContainer :src="SliderSizesSrc" :viewport="false">
   <SliderSizes />
 </DemoContainer>
@@ -129,9 +131,3 @@ Slider 会原样保留外部传入的 `value`，包括步进刻度之间的值�
 <DemoContainer :src="SliderDisabledSrc" :viewport="false">
   <SliderDisabled />
 </DemoContainer>
-
-## 共享默认值
-
-通过 `M3VuePlugin` 设置 `sliderSize`，或提供 `sliderContextKey.size`。显式设置的 `size` 属性优先；回退值仍为 `medium`。
-
-应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。

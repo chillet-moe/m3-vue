@@ -33,7 +33,6 @@ const textFieldValue = ref('09:30');
 # TimePicker
 
 TimePicker is a standalone time selection surface. TextField uses it automatically for `type="time"`.
-When `format` is omitted, it uses the configured or browser locale's preferred hour cycle.
 
 <DemoContainer>
   <div style="display: grid; gap: 1rem; max-inline-size: 22rem;">
@@ -54,6 +53,17 @@ When `format` is omitted, it uses the configured or browser locale's preferred h
 `update:open(false)` is emitted when the native popover closes. Use `closed` for cleanup that must wait until the
 TimePicker-owned visual exit finishes.
 
+## Format and Input Mode
+
+`format` selects `12h` or `24h`; `inputMode` selects `clock` or `keyboard`. Explicit props override the corresponding
+values in `timePickerContextKey`. Without a format preference, standalone TimePicker follows the configured or
+browser locale, while TextField's embedded time picker uses `24h`. Without an input-mode preference, 12-hour pickers
+start with the clock and 24-hour pickers start with keyboard input. Users can switch modes within an open picker.
+
+Set `timePickerDefaults.format` and `timePickerDefaults.inputMode` through `M3VuePlugin`, or provide the context for
+a subtree. Both standalone and TextField time pickers inherit these preferences. See
+[component defaults](/getting-started#component-defaults).
+
 ## Examples
 
 ### Default
@@ -73,9 +83,3 @@ TimePicker-owned visual exit finishes.
 <DemoContainer :src="TimePickerKeyboardSrc">
   <TimePickerKeyboard />
 </DemoContainer>
-
-## Shared Defaults
-
-Set `timePickerDefaults.format` and `timePickerDefaults.inputMode` through `M3VuePlugin`, or provide `timePickerContextKey`. Explicit props win. TextField time pickers inherit these preferences; without a format preference, TextField retains its 24-hour fallback while standalone TimePicker follows the locale.
-
-See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

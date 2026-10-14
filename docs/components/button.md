@@ -79,6 +79,9 @@ when they need more emphasis than an outline.
 
 ### Sizes
 
+The `size` prop overrides `buttonContextKey`'s `size`, with `small` as the fallback. Set `buttonSize` in
+`M3VuePlugin` for an application default, or provide the context for a subtree. See [component defaults](/getting-started#component-defaults).
+
 <DemoContainer :src="ButtonSizesSrc">
   <ButtonSizes />
 </DemoContainer>
@@ -132,9 +135,3 @@ Use `RouterLink custom` and pass its `href` and `navigate` values into `Button`.
 <DemoContainer :src="ButtonRouterLinkSrc">
   <ButtonRouterLink />
 </DemoContainer>
-
-## Shared Defaults
-
-Set `buttonSize` through `M3VuePlugin`, or provide `buttonContextKey.size`. Explicit `size` props win. Shape defaults can be configured alongside size.
-
-See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

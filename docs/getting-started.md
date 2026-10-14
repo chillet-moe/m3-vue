@@ -36,56 +36,65 @@ app.mount('#app');
 ```
 
 After registration, `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` are available globally.
-The plugin also accepts reactive locale configuration; see [Localization](/guides/localization).
+Use the plugin's `locale` and `messages` options to configure [localization](/guides/localization).
 
-Application-level defaults for programmatic snackbars can be configured through `snackbarDefaults`. Refs and getters
-are supported, and options passed directly to `showSnackbar()` take precedence.
+## Use Components
 
-```ts
-app.use(M3VuePlugin, {
-  snackbarDefaults: {
-    dismissible: false,
-    duration: 6_000,
-  },
-});
+```vue
+<script setup lang="ts">
+import { Button } from '@chillet/m3-vue';
+</script>
+
+<template>
+  <Button leading-icon="favorite">Button</Button>
+</template>
 ```
 
-You can set one global default shape for shape-aware components through the same plugin. This covers buttons, list
-items, text fields, pagination links, and navigation drawer items. The value can be a `ref` when the application needs
-to switch between `rounded` and `square` at runtime; explicit component props and nested contexts still take
-precedence.
+## Component Defaults
+
+Use `M3VuePlugin` for application-wide appearance and interaction preferences, a context provider for a component
+subtree, and props for individual controls. Explicit props take precedence over the nearest context; without either,
+each component uses its built-in default.
+
+### Application Configuration
 
 ```ts
 import { ref } from 'vue';
+import { M3VuePlugin, type M3VuePluginOptions, type TimePickerFormat } from '@chillet/m3-vue';
 
-const shape = ref<'rounded' | 'square'>('square');
-app.use(M3VuePlugin, { shape });
+const format = ref<TimePickerFormat>('24h');
+const options = {
+  shape: 'square',
+  fieldSize: 'small',
+  buttonSize: 'small',
+  timePickerDefaults: { format, inputMode: 'keyboard' },
+} satisfies M3VuePluginOptions;
 
-// Later, all shape-aware components update together.
-shape.value = 'rounded';
+app.use(M3VuePlugin, options);
 ```
 
-## Default Field Size
+Sizes, shape, menu color, week start, time format, and input mode accept values or refs. Updating a ref updates the
+controls that inherit it.
 
-Set `fieldSize` to `'extra-small'`, `'small'`, or `'medium'` for single-line `TextField` and `Select` controls.
-Combobox inherits the same size default through Select.
-It accepts a value or a ref and can be configured alongside `shape`:
+| Plugin option                       | Applies to                                   | Context key and property                  |
+| ----------------------------------- | -------------------------------------------- | ----------------------------------------- |
+| `fieldSize`                         | Single-line TextField, Select, Combobox      | `fieldContextKey` → `size`                |
+| `buttonSize`                        | Button                                       | `buttonContextKey` → `size`               |
+| `iconButtonSize`                    | IconButton                                   | `iconButtonContextKey` → `size`           |
+| `sliderSize`                        | Slider                                       | `sliderContextKey` → `size`               |
+| `menuColor`                         | Menu, Select and Combobox menus              | `menuDefaultsContextKey` → `color`        |
+| `datePickerDefaults.firstDayOfWeek` | DatePicker, including TextField date pickers | `datePickerContextKey` → `firstDayOfWeek` |
+| `timePickerDefaults.format`         | TimePicker, including TextField time pickers | `timePickerContextKey` → `format`         |
+| `timePickerDefaults.inputMode`      | TimePicker, including TextField time pickers | `timePickerContextKey` → `inputMode`      |
 
-```ts
-app.use(M3VuePlugin, { shape: 'square', fieldSize: 'small' });
-```
+`shape` sets `rounded` or `square` across buttons, list items, text fields, pagination links, and navigation drawer
+items. It can be combined with size defaults. Textarea fields always use `medium`, regardless of `fieldSize`.
 
-You can also provide the typed `fieldContextKey` directly at application startup. If using both APIs, install the
-plugin first; a later `app.provide` for the same key replaces the whole context.
+### Subtree Configuration
 
-```ts
-import { fieldContextKey } from '@chillet/m3-vue';
-
-app.provide(fieldContextKey, { size: 'small', shape: 'square', labelClearance: '0.5rem' });
-```
-
-For a subtree with medium controls, provide a closer context from its ancestor component. Spread the inherited
-context to retain its other defaults, including reactive refs; Vue does not merge context properties automatically.
+Provide a context from an ancestor component to configure its descendants. This example gives the subtree medium
+fields while keeping the inherited shape and floating-label clearance. The Reference field explicitly uses small;
+the Notes textarea uses medium.
 
 ```vue
 <script setup lang="ts">
@@ -107,62 +116,30 @@ provide(fieldContextKey, { ...inherited, size: 'medium' });
 </template>
 ```
 
-Explicit `size` props take precedence over the nearest context. Without either, the size is `medium`.
-Textarea controls always use `medium`, regardless of injected or explicit sizes. A provider applies to descendants,
-not to other injections within its own setup. `FieldContext`, `TextFieldSize`, `M3FieldOptions`, and
-`M3VuePluginOptions` are exported for typed configuration.
+Vue replaces the whole context rather than merging individual properties. Spread the inherited context to retain
+its other values and refs. A component's provider applies to descendants, not to injections in its own setup.
 
-## Other Component Defaults
-
-Configure shared appearance and interaction preferences through the plugin. Each size, color, weekday, format,
-or input mode below accepts either a value or a Vue ref. Explicit component props take
-precedence over the nearest context; omitted preferences keep the component's existing behavior.
+All keys in the table are typed and exported, along with their context types. They also work with `app.provide()`:
 
 ```ts
-import { ref } from 'vue';
-import { M3VuePlugin, type TimePickerFormat } from '@chillet/m3-vue';
+import { fieldContextKey } from '@chillet/m3-vue';
 
-const format = ref<TimePickerFormat>('24h');
+app.provide(fieldContextKey, { size: 'small', shape: 'square', labelClearance: '0.5rem' });
+```
+
+When combining `app.provide()` with plugin configuration for the same key, install the plugin first so the explicit
+application provider takes precedence.
+
+### Snackbar Configuration
+
+`snackbarDefaults` configures programmatic snackbars. It accepts an object, ref, or getter; options passed to
+`showSnackbar()` take precedence. See [Snackbar](/components/snackbar) for the overlay API.
+
+```ts
 app.use(M3VuePlugin, {
-  buttonSize: 'small',
-  iconButtonSize: 'small',
-  sliderSize: 'small',
-  menuColor: 'vibrant',
-  datePickerDefaults: { firstDayOfWeek: 1 },
-  timePickerDefaults: { format, inputMode: 'keyboard' },
+  snackbarDefaults: { dismissible: false, duration: 6_000 },
 });
 ```
-
-| Plugin option        | Context key              | Context properties    |
-| -------------------- | ------------------------ | --------------------- |
-| `buttonSize`         | `buttonContextKey`       | `size`                |
-| `iconButtonSize`     | `iconButtonContextKey`   | `size`                |
-| `sliderSize`         | `sliderContextKey`       | `size`                |
-| `menuColor`          | `menuDefaultsContextKey` | `color`               |
-| `datePickerDefaults` | `datePickerContextKey`   | `firstDayOfWeek`      |
-| `timePickerDefaults` | `timePickerContextKey`   | `format`, `inputMode` |
-
-These typed keys also work with `app.provide()` and component-level `provide()`. Install the plugin before any
-application-level overrides for the same key. A closer provider replaces the whole context; spread the inherited
-context when retaining its other preferences:
-
-```ts
-import { inject, provide, ref } from 'vue';
-import { timePickerContextKey, type TimePickerInputMode } from '@chillet/m3-vue';
-
-const inputMode = ref<TimePickerInputMode>('clock');
-provide(timePickerContextKey, { ...inject(timePickerContextKey, {}), inputMode });
-```
-
-Menu defaults also apply to Select and Combobox menus; explicit `menuColor` wins. Submenus retain their parent menu's
-resolved color unless explicitly overridden. TextField's date/time pickers inherit picker preferences too. Without
-a format preference, standalone TimePicker follows the locale and TextField keeps its 24-hour fallback. Without an
-input-mode preference, 12-hour pickers start with the clock and 24-hour pickers start with keyboard input. Switching
-modes inside an open picker remains a local interaction. DatePicker keeps its locale-based week start when unset.
-
-Keep values, open state, validation, disabled/required state, and selectable ranges local to their business owner.
-Choose button emphasis for each action instead of setting an application-wide variant. `M3ComponentDefaultsOptions`
-and the context types are exported for typed configuration.
 
 ## Mount The Overlay Host
 
@@ -187,18 +164,6 @@ modify the consuming application's root component.
 
 Mount exactly one host. The programmatic overlay functions reject if it is missing, and pending calls reject if it
 is unmounted.
-
-## Use Components
-
-```vue
-<script setup lang="ts">
-import { Button } from '@chillet/m3-vue';
-</script>
-
-<template>
-  <Button leading-icon="favorite">Button</Button>
-</template>
-```
 
 ## Auto Import
 

@@ -62,7 +62,12 @@ default from `fieldContextKey`; it is additive with any parent gap. See the
 
 ### Sizes and toolbar alignment
 
-Single-line fields support `extra-small` (32px), `small` (40px), and `medium` (56px), matching Button size names. Leading and trailing icon slots preserve those container heights. The default is `medium`, preserving the original 56px field. Multiline fields only support `medium`; their content and `rows` continue to determine the final height.
+Single-line fields support `extra-small` (32px), `small` (40px), and `medium` (56px), matching Button size names.
+The `size` prop overrides `fieldContextKey`'s `size`, with `medium` as the fallback. Set `fieldSize` in `M3VuePlugin`
+for an application default, or provide the context for a subtree. See [component defaults](/getting-started#component-defaults).
+
+Leading and trailing icon slots preserve the selected container height. Multiline fields always use `medium`;
+content and `rows` determine their final height.
 
 Prefix and suffix content uses the input typography and preserves the selected single-line height.
 
@@ -98,12 +103,3 @@ container height. TextField keeps its native floating-label notch and field-spec
 <DemoContainer :src="TextFieldPasswordSrc">
   <TextFieldPassword />
 </DemoContainer>
-
-## Default Size
-
-Single-line fields resolve size from an explicit `size` prop, then the nearest `fieldContextKey.size`, then `medium`.
-Use `app.use(M3VuePlugin, { fieldSize: 'small' })` for an application default, or provide `fieldContextKey` for a
-subtree default. Context sizes accept refs. See [Default Field Size](/getting-started#default-field-size) for typed
-application and subtree examples.
-
-Textarea fields always use `medium`, including when the context specifies a smaller size.

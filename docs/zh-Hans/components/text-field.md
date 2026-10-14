@@ -57,7 +57,7 @@ TextField 涵盖 Material 3 的基础输入场景，包括辅助文本、验证�
 
 ### 尺寸与工具栏对齐
 
-单行字段支持 `extra-small`（32px）、`small`（40px）和 `medium`（56px），与 Button 的尺寸名称一致。前置和后置图标插槽会保持相应的容器高度。默认值为 `medium`，沿用原有的 56px 字段高度。多行字段仅支持 `medium`；最终高度仍由内容和 `rows` 决定。
+单行字段支持 `extra-small`（32px）、`small`（40px）和 `medium`（56px），与 Button 的尺寸名称一致。`size` 属性优先于 `fieldContextKey` 中的 `size`，内置回退值为 `medium`。可在 `M3VuePlugin` 中设置 `fieldSize` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。前置和后置图标插槽会保持相应的容器高度。多行字段始终使用 `medium`；最终高度仍由内容和 `rows` 决定。
 
 前缀和后缀内容使用输入文本的排版，并保持所选单行字段的高度。
 
@@ -92,11 +92,3 @@ TextField 和描边 Button 使用相同的静止描边颜色、匹配尺寸的�
 <DemoContainer :src="TextFieldPasswordSrc">
   <TextFieldPassword />
 </DemoContainer>
-
-## 默认大小
-
-单行字段按以下优先级确定大小：显式的 `size` 属性、最近的 `fieldContextKey.size`，最后是 `medium`。
-应用级默认值可通过 `app.use(M3VuePlugin, { fieldSize: 'small' })` 设置，子树默认值可通过提供 `fieldContextKey` 设置。
-上下文大小可以使用 refs。类型完整的应用和子树示例请参阅[默认字段大小](/zh-Hans/getting-started#默认字段大小)。
-
-Textarea 字段始终使用 `medium`，即使上下文指定了更小的大小也是如此。

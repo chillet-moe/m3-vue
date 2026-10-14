@@ -21,6 +21,15 @@ import MenuLinksSrc from '../demos/menu/MenuLinks.vue?raw';
 
 Menu supports dropdown, context, submenu, and object-driven item rendering while keeping keyboard and selection behavior inside the component set.
 
+## Color
+
+`color` selects the `standard` or `vibrant` palette. An explicit prop overrides `menuDefaultsContextKey`'s `color`,
+with `standard` as the fallback. Set `menuColor` through `M3VuePlugin` for an application default, or provide the
+context for a subtree. See [component defaults](/getting-started#component-defaults).
+
+Submenus inherit their parent menu's resolved color unless explicitly overridden. Select and Combobox menus use the
+same shared preference, with their `menuColor` prop taking precedence.
+
 ## Examples
 
 ### Dropdown
@@ -117,9 +126,3 @@ Menu-owned opacity and scale exit finishes. Animations inside slotted menu conte
 <AnatomyTable scope="menu" />
 
 <AnatomyTable scope="menu-item" />
-
-## Shared Defaults
-
-Set `menuColor` through `M3VuePlugin`, or provide `menuDefaultsContextKey.color`. Explicit `color` props win. Submenus inherit their parent menu color; Select and Combobox menus also use this default unless `menuColor` is set locally.
-
-See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

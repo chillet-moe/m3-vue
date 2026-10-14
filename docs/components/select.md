@@ -52,6 +52,11 @@ default from `fieldContextKey`; it adds to any parent gap. See the
 
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
+## Menu Appearance
+
+`menuColor` overrides the shared Menu color preference, with `standard` as the fallback. Configure the plugin's
+`menuColor` or provide `menuDefaultsContextKey` to share a palette across menus. See [Menu](./menu#color).
+
 ## Close lifecycle
 
 `update:open(false)` updates the control state as soon as the native menu closes. `closed` follows after the menu's
@@ -62,7 +67,9 @@ change its option list or dimensions mid-animation.
 
 ### Sizes and toolbar alignment
 
-Select uses the same `extra-small` (32px), `small` (40px), and `medium` (56px) trigger sizes as TextField. The default remains `medium`.
+Select and Combobox use the same `extra-small` (32px), `small` (40px), and `medium` (56px) trigger sizes as TextField.
+The `size` prop overrides `fieldContextKey`'s `size`, with `medium` as the fallback. Configure `fieldSize` through
+`M3VuePlugin` or provide the context for a subtree. See [component defaults](/getting-started#component-defaults).
 
 <DemoContainer :src="FieldSizesSrc">
   <FieldSizes />
@@ -97,12 +104,3 @@ Select uses the same `extra-small` (32px), `small` (40px), and `medium` (56px) t
 ### useSelect
 
 <SourceApiTable api="useSelect" />
-
-## Default Size
-
-Single-line fields resolve size from an explicit `size` prop, then the nearest `fieldContextKey.size`, then `medium`.
-Use `app.use(M3VuePlugin, { fieldSize: 'small' })` for an application default, or provide `fieldContextKey` for a
-subtree default. Context sizes accept refs. See [Default Field Size](/getting-started#default-field-size) for typed
-application and subtree examples.
-
-Combobox inherits the same size default through Select.

@@ -49,6 +49,10 @@ Select 提供锚定菜单以供选择一个或多个选项，并支持可选图�
 
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
+## 菜单外观
+
+`menuColor` 会覆盖共享的 Menu 颜色偏好，内置回退值为 `standard`。可通过插件的 `menuColor` 配置，或提供 `menuDefaultsContextKey`，让菜单共享调色板。详见[Menu 颜色](./menu#颜色)。
+
 ## 关闭生命周期
 
 原生菜单关闭时会立即触发 `update:open(false)` 更新控件状态。菜单的视觉退出完成后才会触发 `closed`。退出期间会保留筛选状态，并在 `closed` 时重置，因此菜单关闭动画过程中选项列表和尺寸不会发生变化。
@@ -57,7 +61,7 @@ Select 提供锚定菜单以供选择一个或多个选项，并支持可选图�
 
 ### 尺寸与工具栏对齐
 
-Select 与 TextField 使用相同的触发器尺寸：`extra-small`（32px）、`small`（40px）和 `medium`（56px）。默认值仍为 `medium`。
+Select 和 Combobox 与 TextField 使用相同的触发器尺寸：`extra-small`（32px）、`small`（40px）和 `medium`（56px）。`size` 属性优先于 `fieldContextKey` 中的 `size`，内置回退值为 `medium`。可通过 `M3VuePlugin` 配置 `fieldSize`，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
 
 <DemoContainer :src="FieldSizesSrc">
   <FieldSizes />
@@ -92,10 +96,3 @@ Select 与 TextField 使用相同的触发器尺寸：`extra-small`（32px）、
 ### useSelect
 
 <SourceApiTable api="useSelect" />
-
-## 默认大小
-
-单行字段按以下优先级确定大小：显式的 `size` 属性、最近的 `fieldContextKey.size`，最后是 `medium`。
-应用级默认值可通过 `app.use(M3VuePlugin, { fieldSize: 'small' })` 设置，子树默认值可通过提供 `fieldContextKey` 设置。
-上下文大小可以使用 refs。类型完整的应用和子树示例请参阅[默认字段大小](/zh-Hans/getting-started#默认字段大小)。
-Combobox 通过 Select 继承相同的大小默认值。

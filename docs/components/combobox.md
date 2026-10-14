@@ -29,7 +29,8 @@ const modelValue = ref<SelectModelValue>(undefined);
 
 Combobox combines free-form text entry with option picking, making it useful for searchable single- and multi-select flows.
 
-Combobox shares Select's `labelClearance` prop and `fieldContextKey` default. Preserve the surrounding layout's
+Combobox shares Select's size and menu-color preferences; see [Select](./select#sizes-and-toolbar-alignment) for sizes
+and [Menu Appearance](./select#menu-appearance) for colors. Its `labelClearance` prop inherits from `fieldContextKey`. Preserve the surrounding layout's
 intended density and add clearance only when its floating label needs it. See the
 [floating label spacing guide](../guides/floating-label-spacing-lab).
 
@@ -45,7 +46,7 @@ intended density and add clearance only when its floating label needs it. See th
 `update:open(false)` when releasing data used by option slots.
 
 ::: info
-Combobox 是 Select 的封装，共享 `select` scope。详见 [Select Anatomy](./select)。
+Combobox wraps Select and shares its `select` scope. See [Select Anatomy](./select).
 :::
 
 ## Examples

@@ -29,7 +29,7 @@ const modelValue = ref<SelectModelValue>(undefined);
 
 Combobox 将自由文本输入与选项选择结合起来，适用于可搜索的单选和多选流程。
 
-Combobox 与 Select 共用 `labelClearance` 属性及 `fieldContextKey` 默认值。请保持周围布局预期的紧凑程度，仅在浮动标签需要额外空间时增加间距。详见[浮动标签间距指南](/zh-Hans/guides/floating-label-spacing-lab)。
+Combobox 与 Select 共用尺寸和菜单颜色偏好。尺寸说明见 [Select 尺寸与工具栏对齐](./select#尺寸与工具栏对齐)，颜色说明见 [Select 菜单外观](./select#菜单外观)。其 `labelClearance` 属性继承自 `fieldContextKey`。请保持周围布局预期的紧凑程度，仅在浮动标签需要额外空间时增加间距。详见[浮动标签间距指南](/zh-Hans/guides/floating-label-spacing-lab)。
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
@@ -42,7 +42,7 @@ Combobox 与 Select 共用 `labelClearance` 属性及 `fieldContextKey` 默认�
 下拉菜单完成退出后，`Combobox` 会转发 Select 的 `closed` 事件。若要释放选项插槽使用的数据，请使用此事件，而不是 `update:open(false)`。
 
 ::: info
-Combobox 是 Select 的封装，共享 `select` scope。详见 [Select Anatomy](./select)。
+Combobox 封装了 Select，并共享其 `select` scope。详见 [Select Anatomy](./select)。
 :::
 
 ## 示例
@@ -53,7 +53,7 @@ Combobox 是 Select 的封装，共享 `select` scope。详见 [Select Anatomy](
   <ComboboxDefault />
 </DemoContainer>
 
-### 多项展开 Selection
+### 多选
 
 <DemoContainer :src="ComboboxMultiSelectSrc">
   <ComboboxMultiSelect />

@@ -52,6 +52,12 @@ TimePicker 是独立的时间选择界面。TextField 在 `type="time"` 时会�
 
 原生弹出层关闭时会触发 `update:open(false)`。如果清理操作需要等到 TimePicker 自身的视觉退出完成后再执行，请使用 `closed`。
 
+## 格式和输入模式
+
+`format` 选择 `12h` 或 `24h`；`inputMode` 选择 `clock` 或 `keyboard`。显式属性优先于 `timePickerContextKey` 中对应的值。未设置格式偏好时，独立 TimePicker 遵循配置的区域设置或浏览器区域设置，TextField 内嵌的时间选择器使用 `24h`。未设置输入模式偏好时，12 小时制选择器默认使用时钟，24 小时制选择器默认使用键盘输入。用户可在选择器打开时切换模式。
+
+可通过 `M3VuePlugin` 设置 `timePickerDefaults.format` 和 `timePickerDefaults.inputMode`，或通过上下文配置子树。独立和 TextField 内嵌的时间选择器都会继承这些偏好。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
 ## 示例
 
 ### 默认
@@ -71,9 +77,3 @@ TimePicker 是独立的时间选择界面。TextField 在 `type="time"` 时会�
 <DemoContainer :src="TimePickerKeyboardSrc">
   <TimePickerKeyboard />
 </DemoContainer>
-
-## 共享默认值
-
-通过 `M3VuePlugin` 设置 `timePickerDefaults.format` 和 `timePickerDefaults.inputMode`，或提供 `timePickerContextKey`。显式属性优先。TextField 中的时间选择器也会继承这些偏好；未设置格式偏好时，TextField 保留 24 小时制回退值，而独立的 TimePicker 遵循区域设置。
-
-应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。

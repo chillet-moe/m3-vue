@@ -52,6 +52,12 @@ DatePicker 是独立的日期选择界面。TextField 在 `type="date"` 和 `typ
 
 原生弹出层关闭时会触发 `update:open(false)`。DatePicker 自身的退出动画结束后会触发 `closed`。退出期间会保留当前日历视图，动画结束后再重置。
 
+## 星期起始日
+
+`firstDayOfWeek` 使用 `0` 表示星期日，`6` 表示星期六。显式属性优先于 `datePickerContextKey` 中的 `firstDayOfWeek`；否则根据配置的区域设置或浏览器区域设置确定星期起始日。
+
+可通过 `M3VuePlugin` 设置 `datePickerDefaults.firstDayOfWeek`，或通过上下文配置子树。TextField 内嵌的日期选择器会继承相同偏好。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
 ## 示例
 
 ### 默认
@@ -71,9 +77,3 @@ DatePicker 是独立的日期选择界面。TextField 在 `type="date"` 和 `typ
 <DemoContainer :src="DatePickerConstraintsSrc">
   <DatePickerConstraints />
 </DemoContainer>
-
-## 共享默认值
-
-通过 `M3VuePlugin` 设置 `datePickerDefaults.firstDayOfWeek`，或提供 `datePickerContextKey.firstDayOfWeek`。显式设置的属性优先；未设置时，星期起始日由区域设置决定。TextField 中的日期选择器也会继承此偏好。
-
-应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。

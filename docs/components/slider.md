@@ -108,6 +108,9 @@ Values produced by Slider interaction are quantized consistently:
 
 ### Sizes
 
+The `size` prop overrides `sliderContextKey`'s `size`, with `medium` as the fallback. Set `sliderSize` in
+`M3VuePlugin` for an application default, or provide the context for a subtree. See [component defaults](/getting-started#component-defaults).
+
 <DemoContainer :src="SliderSizesSrc" :viewport="false">
   <SliderSizes />
 </DemoContainer>
@@ -129,9 +132,3 @@ Values produced by Slider interaction are quantized consistently:
 <DemoContainer :src="SliderDisabledSrc" :viewport="false">
   <SliderDisabled />
 </DemoContainer>
-
-## Shared Defaults
-
-Set `sliderSize` through `M3VuePlugin`, or provide `sliderContextKey.size`. Explicit `size` props win; the fallback remains `medium`.
-
-See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

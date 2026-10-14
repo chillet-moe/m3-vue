@@ -74,6 +74,9 @@ for a high-emphasis icon action; use `outlined` or `tonal` for intermediate emph
 
 ### Sizes
 
+The `size` prop overrides `iconButtonContextKey`'s `size`, with `small` as the fallback. Set `iconButtonSize` in
+`M3VuePlugin` for an application default, or provide the context for a subtree. See [component defaults](/getting-started#component-defaults).
+
 <DemoContainer :src="IconButtonSizesSrc" :viewport="false">
   <IconButtonSizes />
 </DemoContainer>
@@ -117,9 +120,3 @@ Use the same `RouterLink custom` pattern as `Button`, then forward `href` and `n
 <DemoContainer :src="IconButtonRouterLinkSrc" :viewport="false">
   <IconButtonRouterLink />
 </DemoContainer>
-
-## Shared Defaults
-
-Set `iconButtonSize` through `M3VuePlugin`, or provide `iconButtonContextKey.size`. Explicit `size` props win. Shape defaults can be configured alongside size.
-
-See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

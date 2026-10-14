@@ -53,6 +53,14 @@ DatePicker is a standalone date surface. TextField uses it automatically for `ty
 `update:open(false)` is emitted when the native popover closes. `closed` follows after the DatePicker-owned exit motion
 finishes. The current calendar view is preserved during the exit and reset afterward.
 
+## Week Start
+
+`firstDayOfWeek` uses `0` for Sunday through `6` for Saturday. An explicit prop overrides `datePickerContextKey`'s
+`firstDayOfWeek`; otherwise the configured or browser locale determines the first day.
+
+Set `datePickerDefaults.firstDayOfWeek` through `M3VuePlugin`, or provide the context for a subtree. TextField's
+embedded date pickers inherit the same preference. See [component defaults](/getting-started#component-defaults).
+
 ## Examples
 
 ### Default
@@ -72,9 +80,3 @@ finishes. The current calendar view is preserved during the exit and reset after
 <DemoContainer :src="DatePickerConstraintsSrc">
   <DatePickerConstraints />
 </DemoContainer>
-
-## Shared Defaults
-
-Set `datePickerDefaults.firstDayOfWeek` through `M3VuePlugin`, or provide `datePickerContextKey.firstDayOfWeek`. The explicit prop wins; when unset, the week starts according to the locale. TextField date pickers inherit the same preference.
-
-See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

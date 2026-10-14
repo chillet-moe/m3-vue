@@ -21,6 +21,12 @@ import MenuLinksSrc from '../../demos/menu/MenuLinks.vue?raw';
 
 Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单项渲染，并由组件组统一处理键盘与选择行为。
 
+## 颜色
+
+`color` 选择 `standard` 或 `vibrant` 调色板。显式属性优先于 `menuDefaultsContextKey` 中的 `color`，内置回退值为 `standard`。可在 `M3VuePlugin` 中设置 `menuColor` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
+子菜单会继承父菜单解析后的颜色，除非显式覆盖。Select 和 Combobox 菜单也使用相同的共享偏好，其 `menuColor` 属性优先。
+
 ## 示例
 
 ### 下拉菜单
@@ -116,9 +122,3 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 <AnatomyTable scope="menu" />
 
 <AnatomyTable scope="menu-item" />
-
-## 共享默认值
-
-通过 `M3VuePlugin` 设置 `menuColor`，或提供 `menuDefaultsContextKey.color`。显式设置的 `color` 属性优先。子菜单会继承父菜单的颜色；除非在本地设置 `menuColor`，Select 和 Combobox 菜单也会使用此默认值。
-
-应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。

@@ -73,6 +73,8 @@ const props = ref({
 
 ### 尺寸
 
+`size` 属性优先于 `iconButtonContextKey` 中的 `size`，内置回退值为 `small`。可在 `M3VuePlugin` 中设置 `iconButtonSize` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
 <DemoContainer :src="IconButtonSizesSrc" :viewport="false">
   <IconButtonSizes />
 </DemoContainer>
@@ -116,9 +118,3 @@ const props = ref({
 <DemoContainer :src="IconButtonRouterLinkSrc" :viewport="false">
   <IconButtonRouterLink />
 </DemoContainer>
-
-## 共享默认值
-
-通过 `M3VuePlugin` 设置 `iconButtonSize`，或提供 `iconButtonContextKey.size`。显式设置的 `size` 属性优先。形状默认值可与大小一并配置。
-
-应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。
