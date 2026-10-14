@@ -132,3 +132,9 @@ Use `RouterLink custom` and pass its `href` and `navigate` values into `Button`.
 <DemoContainer :src="ButtonRouterLinkSrc">
   <ButtonRouterLink />
 </DemoContainer>
+
+## Shared Defaults
+
+Set `buttonSize` through `M3VuePlugin`, or provide `buttonContextKey.size`. Explicit `size` props win. Shape defaults can be configured alongside size.
+
+See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

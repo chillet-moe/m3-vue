@@ -99,6 +99,48 @@ const notes = ref('');
 显式设置的大小无关。Combobox 通过 Select 继承相同的大小默认值。provider 作用于其后代，不作用于自身 setup 中的其他注入。`FieldContext`、`TextFieldSize`、
 `M3FieldOptions` 和 `M3VuePluginOptions` 均已导出，可用于类型配置。
 
+## 其他组件默认值
+
+通过插件配置共享的外观和交互偏好。下方的大小、颜色、星期、格式或输入模式均可接收普通值或 Vue ref。显式组件属性优先于最近的上下文；未设置的偏好会保留组件原有行为。
+
+```ts
+import { ref } from 'vue';
+import { M3VuePlugin, type TimePickerFormat } from '@chillet/m3-vue';
+
+const format = ref<TimePickerFormat>('24h');
+app.use(M3VuePlugin, {
+  buttonSize: 'small',
+  iconButtonSize: 'small',
+  sliderSize: 'small',
+  menuColor: 'vibrant',
+  datePickerDefaults: { firstDayOfWeek: 1 },
+  timePickerDefaults: { format, inputMode: 'keyboard' },
+});
+```
+
+| 插件选项             | 上下文 key               | 上下文属性            |
+| -------------------- | ------------------------ | --------------------- |
+| `buttonSize`         | `buttonContextKey`       | `size`                |
+| `iconButtonSize`     | `iconButtonContextKey`   | `size`                |
+| `sliderSize`         | `sliderContextKey`       | `size`                |
+| `menuColor`          | `menuDefaultsContextKey` | `color`               |
+| `datePickerDefaults` | `datePickerContextKey`   | `firstDayOfWeek`      |
+| `timePickerDefaults` | `timePickerContextKey`   | `format`、`inputMode` |
+
+这些类型化 key 也可用于 `app.provide()` 和组件级 `provide()`。对于同一个 key，请先安装插件，再设置应用级覆盖。更近的 provider 会替换整个上下文；若要保留其他偏好，请展开继承的上下文：
+
+```ts
+import { inject, provide, ref } from 'vue';
+import { timePickerContextKey, type TimePickerInputMode } from '@chillet/m3-vue';
+
+const inputMode = ref<TimePickerInputMode>('clock');
+provide(timePickerContextKey, { ...inject(timePickerContextKey, {}), inputMode });
+```
+
+菜单默认值也适用于 Select 和 Combobox 菜单；显式设置的 `menuColor` 优先。子菜单会沿用父菜单解析后的颜色，除非显式覆盖。TextField 中的日期和时间选择器也会继承对应偏好。未设置格式偏好时，独立的 TimePicker 遵循区域设置，而 TextField 保留 24 小时制回退值。未设置输入模式偏好时，12 小时制选择器默认使用时钟，24 小时制选择器默认使用键盘输入。在打开的选择器中切换模式仍是局部交互。DatePicker 未设置时仍按区域设置确定每周起始日。
+
+值、打开状态、校验、禁用/必填状态以及可选范围应由各自的业务所有者管理。请根据每个操作选择按钮强调样式，不要设置应用级 variant。`M3ComponentDefaultsOptions` 和上下文类型均已导出，可用于类型配置。
+
 ## 挂载 OverlayHost
 
 使用程序化 `showDialog()` 或 `showSnackbar()` 函数时，请在应用根部附近渲染一个 `OverlayHost`。该宿主会使这些浮层保留在应用的 Vue 上下文中，同时原生 dialog 和 popover 元素仍使用浏览器顶层。

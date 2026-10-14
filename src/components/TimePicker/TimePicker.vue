@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId, watch } from 'vue';
+import { computed, inject, nextTick, ref, unref, useId, watch } from 'vue';
+import { timePickerContextKey } from './TimePickerContext';
 import Button from '@/components/Button/Button.vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
 import {
@@ -92,6 +93,7 @@ const pointerStart = ref<{ x: number; y: number }>();
 const movedInPointerStream = ref(false);
 const suppressNextClockClick = ref(false);
 const localeContext = useM3Locale();
+const defaults = inject(timePickerContextKey, undefined);
 
 const locale = computed(() => props.locale ?? localeContext.locale.value);
 const messages = computed(() => localeContext.messages.value);
@@ -111,11 +113,11 @@ const popoverStyle = computed(() => {
   return props.anchorName ? { 'position-anchor': props.anchorName } : undefined;
 });
 
-const currentInputMode = computed(() => localInputMode.value ?? props.inputMode);
+const currentInputMode = computed(() => localInputMode.value ?? props.inputMode ?? unref(defaults?.inputMode));
 
 const picker = useTimePicker({
   modelValue,
-  format: () => props.format,
+  format: () => props.format ?? unref(defaults?.format),
   locale,
   inputMode: currentInputMode,
   messages: () => messages.value.timePicker,

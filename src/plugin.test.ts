@@ -117,9 +117,9 @@ describe('M3VuePlugin', () => {
     )?.[1];
 
     expect(buttonContext).toEqual({ shape });
-    expect(iconButtonContext).toBe(buttonContext);
+    expect(iconButtonContext).toEqual(buttonContext);
     expect(fieldContext).toEqual({ shape });
-    expect(navigationDrawerShapeContext).toBe(buttonContext);
+    expect(navigationDrawerShapeContext).toEqual({ shape });
   });
 
   it('installs field size without requiring or changing other component defaults', () => {

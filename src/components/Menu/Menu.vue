@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { inject, provide, useId, useTemplateRef } from 'vue';
+import { computed, inject, provide, unref, useId, useTemplateRef } from 'vue';
+import { menuDefaultsContextKey } from './MenuDefaultsContext';
 import { useMenu } from '@/composables/useMenu';
 import MenuContentRenderer from './MenuContentRenderer.vue';
 import { menuContextKey, menuItemOwnerContextKey, menuSelectionContextKey, menuSubmenuContextKey } from './MenuContext';
@@ -18,7 +19,10 @@ export type MenuProps = {
   multiple?: boolean;
 };
 
-const { color = 'standard', items = undefined, multiple = false } = defineProps<MenuProps>();
+const { color: colorProp, items = undefined, multiple = false } = defineProps<MenuProps>();
+
+const defaults = inject(menuDefaultsContextKey, undefined);
+const color = computed(() => colorProp ?? unref(defaults?.color) ?? 'standard');
 
 const open = defineModel<boolean>('open', { default: false });
 const modelValue = defineModel<MenuModelValue>();
@@ -70,7 +74,7 @@ provide(menuItemOwnerContextKey, {
 });
 
 provide(menuContextKey, {
-  getColor: () => color,
+  getColor: () => color.value,
   notifySelect,
   closeAll: menuActions.closeMenuChain,
   registerSubmenu: menuActions.registerSubmenu,

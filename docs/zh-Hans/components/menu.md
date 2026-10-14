@@ -116,3 +116,9 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 <AnatomyTable scope="menu" />
 
 <AnatomyTable scope="menu-item" />
+
+## 共享默认值
+
+通过 `M3VuePlugin` 设置 `menuColor`，或提供 `menuDefaultsContextKey.color`。显式设置的 `color` 属性优先。子菜单会继承父菜单的颜色；除非在本地设置 `menuColor`，Select 和 Combobox 菜单也会使用此默认值。
+
+应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。

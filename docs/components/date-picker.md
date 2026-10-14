@@ -72,3 +72,9 @@ finishes. The current calendar view is preserved during the exit and reset after
 <DemoContainer :src="DatePickerConstraintsSrc">
   <DatePickerConstraints />
 </DemoContainer>
+
+## Shared Defaults
+
+Set `datePickerDefaults.firstDayOfWeek` through `M3VuePlugin`, or provide `datePickerContextKey.firstDayOfWeek`. The explicit prop wins; when unset, the week starts according to the locale. TextField date pickers inherit the same preference.
+
+See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

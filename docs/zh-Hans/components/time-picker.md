@@ -71,3 +71,9 @@ TimePicker 是独立的时间选择界面。TextField 在 `type="time"` 时会�
 <DemoContainer :src="TimePickerKeyboardSrc">
   <TimePickerKeyboard />
 </DemoContainer>
+
+## 共享默认值
+
+通过 `M3VuePlugin` 设置 `timePickerDefaults.format` 和 `timePickerDefaults.inputMode`，或提供 `timePickerContextKey`。显式属性优先。TextField 中的时间选择器也会继承这些偏好；未设置格式偏好时，TextField 保留 24 小时制回退值，而独立的 TimePicker 遵循区域设置。
+
+应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。

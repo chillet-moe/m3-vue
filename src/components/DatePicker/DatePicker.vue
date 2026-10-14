@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId, watch } from 'vue';
+import { computed, inject, nextTick, ref, unref, useId, watch } from 'vue';
+import { datePickerContextKey } from './DatePickerContext';
 import Button from '@/components/Button/Button.vue';
 import Icon from '@/components/Icon/Icon.vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
@@ -87,6 +88,7 @@ const generatedId = useId();
 const popoverRef = ref<HTMLDivElement>();
 const surfaceRef = ref<HTMLElement>();
 const localeContext = useM3Locale();
+const defaults = inject(datePickerContextKey, undefined);
 
 const locale = computed(() => props.locale ?? localeContext.locale.value);
 const messages = computed(() => localeContext.messages.value);
@@ -108,7 +110,7 @@ const picker = useDatePicker({
   max: () => props.max,
   today: () => props.today,
   locale,
-  firstDayOfWeek: () => props.firstDayOfWeek,
+  firstDayOfWeek: () => props.firstDayOfWeek ?? unref(defaults?.firstDayOfWeek),
   onChange: (value) => emit('change', value),
   onCancel: () => emit('cancel'),
   onConfirm: (value) => emit('confirm', value),

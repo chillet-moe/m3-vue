@@ -129,3 +129,9 @@ Values produced by Slider interaction are quantized consistently:
 <DemoContainer :src="SliderDisabledSrc" :viewport="false">
   <SliderDisabled />
 </DemoContainer>
+
+## Shared Defaults
+
+Set `sliderSize` through `M3VuePlugin`, or provide `sliderContextKey.size`. Explicit `size` props win; the fallback remains `medium`.
+
+See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

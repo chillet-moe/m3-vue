@@ -117,3 +117,9 @@ Use the same `RouterLink custom` pattern as `Button`, then forward `href` and `n
 <DemoContainer :src="IconButtonRouterLinkSrc" :viewport="false">
   <IconButtonRouterLink />
 </DemoContainer>
+
+## Shared Defaults
+
+Set `iconButtonSize` through `M3VuePlugin`, or provide `iconButtonContextKey.size`. Explicit `size` props win. Shape defaults can be configured alongside size.
+
+See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

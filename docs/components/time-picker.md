@@ -73,3 +73,9 @@ TimePicker-owned visual exit finishes.
 <DemoContainer :src="TimePickerKeyboardSrc">
   <TimePickerKeyboard />
 </DemoContainer>
+
+## Shared Defaults
+
+Set `timePickerDefaults.format` and `timePickerDefaults.inputMode` through `M3VuePlugin`, or provide `timePickerContextKey`. Explicit props win. TextField time pickers inherit these preferences; without a format preference, TextField retains its 24-hour fallback while standalone TimePicker follows the locale.
+
+See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

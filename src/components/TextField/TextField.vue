@@ -6,6 +6,7 @@ import {
   type DatePickerVariant,
   normalizeIsoDate,
 } from '@/components/DatePicker';
+import { timePickerContextKey } from '@/components/TimePicker/TimePickerContext';
 import IconButton from '@/components/IconButton/IconButton.vue';
 import {
   normalizeTimeValue,
@@ -134,11 +135,14 @@ const props = withDefaults(defineProps<TextFieldProps>(), {
   visuallyFocused: false,
   datePickerVariant: 'auto',
   timePickerVariant: 'auto',
-  timePickerFormat: '24h',
+  timePickerFormat: undefined,
   timePickerInputMode: undefined,
 });
 
 const fieldContext = inject(fieldContextKey, undefined);
+const timePickerContext = inject(timePickerContextKey, undefined);
+// Keep the input's historical 24-hour fallback while honoring shared picker preferences.
+const timePickerFormat = computed(() => props.timePickerFormat ?? unref(timePickerContext?.format) ?? '24h');
 const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
 const shape = computed(() => props.shape ?? unref(fieldContext?.shape) ?? 'square');
 
@@ -564,7 +568,7 @@ defineExpose({
       v-model="timePickerValue"
       v-model:open="timePickerOpen"
       :variant="props.timePickerVariant"
-      :format="props.timePickerFormat"
+      :format="timePickerFormat"
       :input-mode="props.timePickerInputMode"
       :anchor-name="timePickerAnchorName"
       :anchor-element="containerRef"

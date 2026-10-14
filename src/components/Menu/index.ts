@@ -12,3 +12,5 @@ export { default as MenuGap } from './MenuGap.vue';
 export { default as MenuItem } from './MenuItem.vue';
 export { default as MenuLabel } from './MenuLabel.vue';
 export { default as MenuSubMenu } from './MenuSubMenu.vue';
+export type { MenuDefaultsContext } from './MenuDefaultsContext';
+export { menuDefaultsContextKey } from './MenuDefaultsContext';

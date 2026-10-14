@@ -71,3 +71,9 @@ DatePicker 是独立的日期选择界面。TextField 在 `type="date"` 和 `typ
 <DemoContainer :src="DatePickerConstraintsSrc">
   <DatePickerConstraints />
 </DemoContainer>
+
+## 共享默认值
+
+通过 `M3VuePlugin` 设置 `datePickerDefaults.firstDayOfWeek`，或提供 `datePickerContextKey.firstDayOfWeek`。显式设置的属性优先；未设置时，星期起始日由区域设置决定。TextField 中的日期选择器也会继承此偏好。
+
+应用级和子树级配置示例请参阅[其他组件默认值](/zh-Hans/getting-started#其他组件默认值)。

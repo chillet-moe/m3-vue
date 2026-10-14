@@ -117,3 +117,9 @@ Menu-owned opacity and scale exit finishes. Animations inside slotted menu conte
 <AnatomyTable scope="menu" />
 
 <AnatomyTable scope="menu-item" />
+
+## Shared Defaults
+
+Set `menuColor` through `M3VuePlugin`, or provide `menuDefaultsContextKey.color`. Explicit `color` props win. Submenus inherit their parent menu color; Select and Combobox menus also use this default unless `menuColor` is set locally.
+
+See [Other Component Defaults](/getting-started#other-component-defaults) for application and subtree examples.

@@ -1,4 +1,7 @@
 import type { App, MaybeRef } from 'vue';
+import type { M3ComponentDefaultsOptions } from '@/defaults';
+import { sliderContextKey } from '@/components/Slider/SliderContext';
+import { menuDefaultsContextKey } from '@/components/Menu/MenuDefaultsContext';
 import { buttonContextKey } from '@/components/Button/ButtonContext';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext';
 import type { FieldContext } from '@/components/TextField/FieldContext';
@@ -18,7 +21,10 @@ export type M3FieldOptions = {
 };
 
 /** Installs appearance defaults, providing each context once so shape and size coexist. */
-export function installM3StyleDefaults(app: App, options: M3ShapeOptions & M3FieldOptions = {}): void {
+export function installM3StyleDefaults(
+  app: App,
+  options: M3ShapeOptions & M3FieldOptions & M3ComponentDefaultsOptions = {},
+): void {
   const context: FieldContext = {};
   if (options.shape !== undefined) context.shape = options.shape;
   if (options.fieldSize !== undefined) context.size = options.fieldSize;
@@ -26,12 +32,13 @@ export function installM3StyleDefaults(app: App, options: M3ShapeOptions & M3Fie
     app.provide(fieldContextKey, context);
   }
 
-  if (options.shape === undefined) {
-    return;
+  if (options.shape !== undefined || options.buttonSize !== undefined) {
+    app.provide(buttonContextKey, { shape: options.shape, size: options.buttonSize });
   }
-
-  const shapeContext = { shape: options.shape };
-  app.provide(buttonContextKey, shapeContext);
-  app.provide(iconButtonContextKey, shapeContext);
-  app.provide(navigationDrawerShapeContextKey, shapeContext);
+  if (options.shape !== undefined || options.iconButtonSize !== undefined) {
+    app.provide(iconButtonContextKey, { shape: options.shape, size: options.iconButtonSize });
+  }
+  if (options.shape !== undefined) app.provide(navigationDrawerShapeContextKey, { shape: options.shape });
+  if (options.sliderSize !== undefined) app.provide(sliderContextKey, { size: options.sliderSize });
+  if (options.menuColor !== undefined) app.provide(menuDefaultsContextKey, { color: options.menuColor });
 }

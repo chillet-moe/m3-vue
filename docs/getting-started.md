@@ -112,6 +112,58 @@ Textarea controls always use `medium`, regardless of injected or explicit sizes.
 not to other injections within its own setup. `FieldContext`, `TextFieldSize`, `M3FieldOptions`, and
 `M3VuePluginOptions` are exported for typed configuration.
 
+## Other Component Defaults
+
+Configure shared appearance and interaction preferences through the plugin. Each size, color, weekday, format,
+or input mode below accepts either a value or a Vue ref. Explicit component props take
+precedence over the nearest context; omitted preferences keep the component's existing behavior.
+
+```ts
+import { ref } from 'vue';
+import { M3VuePlugin, type TimePickerFormat } from '@chillet/m3-vue';
+
+const format = ref<TimePickerFormat>('24h');
+app.use(M3VuePlugin, {
+  buttonSize: 'small',
+  iconButtonSize: 'small',
+  sliderSize: 'small',
+  menuColor: 'vibrant',
+  datePickerDefaults: { firstDayOfWeek: 1 },
+  timePickerDefaults: { format, inputMode: 'keyboard' },
+});
+```
+
+| Plugin option        | Context key              | Context properties    |
+| -------------------- | ------------------------ | --------------------- |
+| `buttonSize`         | `buttonContextKey`       | `size`                |
+| `iconButtonSize`     | `iconButtonContextKey`   | `size`                |
+| `sliderSize`         | `sliderContextKey`       | `size`                |
+| `menuColor`          | `menuDefaultsContextKey` | `color`               |
+| `datePickerDefaults` | `datePickerContextKey`   | `firstDayOfWeek`      |
+| `timePickerDefaults` | `timePickerContextKey`   | `format`, `inputMode` |
+
+These typed keys also work with `app.provide()` and component-level `provide()`. Install the plugin before any
+application-level overrides for the same key. A closer provider replaces the whole context; spread the inherited
+context when retaining its other preferences:
+
+```ts
+import { inject, provide, ref } from 'vue';
+import { timePickerContextKey, type TimePickerInputMode } from '@chillet/m3-vue';
+
+const inputMode = ref<TimePickerInputMode>('clock');
+provide(timePickerContextKey, { ...inject(timePickerContextKey, {}), inputMode });
+```
+
+Menu defaults also apply to Select and Combobox menus; explicit `menuColor` wins. Submenus retain their parent menu's
+resolved color unless explicitly overridden. TextField's date/time pickers inherit picker preferences too. Without
+a format preference, standalone TimePicker follows the locale and TextField keeps its 24-hour fallback. Without an
+input-mode preference, 12-hour pickers start with the clock and 24-hour pickers start with keyboard input. Switching
+modes inside an open picker remains a local interaction. DatePicker keeps its locale-based week start when unset.
+
+Keep values, open state, validation, disabled/required state, and selectable ranges local to their business owner.
+Choose button emphasis for each action instead of setting an application-wide variant. `M3ComponentDefaultsOptions`
+and the context types are exported for typed configuration.
+
 ## Mount The Overlay Host
 
 Render one `OverlayHost` near the root of the application when using the programmatic `showDialog()` or

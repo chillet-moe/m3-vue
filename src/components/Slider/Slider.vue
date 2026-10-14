@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, useTemplateRef, watch } from 'vue';
+import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, unref, useId, useTemplateRef, watch } from 'vue';
+import { sliderContextKey } from './SliderContext';
 import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
 import { Icon } from '@/components/Icon';
 
@@ -50,7 +51,7 @@ export type SliderProps = {
 const {
   vertical = false,
   direction = 'ltr',
-  size = 'medium',
+  size: sizeProp,
   min,
   max,
   step,
@@ -65,6 +66,9 @@ const {
   formatter,
   stopIndicators,
 } = defineProps<SliderProps>();
+
+const defaults = inject(sliderContextKey, undefined);
+const size = computed(() => sizeProp ?? unref(defaults?.size) ?? 'medium');
 
 const valueIndicatorPlacement = computed(() => {
   return valueIndicatorPlacementProp ?? (vertical ? 'end' : 'top');
@@ -99,12 +103,14 @@ const valueText = computed(() => {
   return formatter ? formatter.valueToText(valueCurrent.value) : valueCurrent.value;
 });
 
-const supportsInsetIcon = computed(() => size === 'medium' || size === 'large' || size === 'extra-large');
+const supportsInsetIcon = computed(
+  () => size.value === 'medium' || size.value === 'large' || size.value === 'extra-large',
+);
 const hasStartInsetIcon = computed(() => supportsInsetIcon.value && Boolean(startIcon));
 const hasEndInsetIcon = computed(() => supportsInsetIcon.value && Boolean(endIcon));
 const hasInsetIcon = computed(() => hasStartInsetIcon.value || hasEndInsetIcon.value);
 const insetIconPopThreshold = computed(() => {
-  switch (size) {
+  switch (size.value) {
     default:
     case 'large':
     case 'medium':
@@ -680,7 +686,7 @@ watch(
 );
 
 watch(
-  [() => vertical, () => direction, () => size],
+  [() => vertical, () => direction, () => size.value],
   async () => {
     await nextTick();
     syncSliderMeasurements();

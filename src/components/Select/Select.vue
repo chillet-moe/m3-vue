@@ -128,7 +128,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   multiple: false,
   clearable: false,
   clearLabel: undefined,
-  menuColor: 'standard',
+  menuColor: undefined,
   displaySeparator: ', ',
   filterable: false,
   filterPlaceholder: undefined,

@@ -1,4 +1,5 @@
 import type { App, Directive, Plugin } from 'vue';
+import { installM3InteractionDefaults, type M3ComponentDefaultsOptions } from './defaults';
 import type { DropdownTargetBinding } from '@/directives/Dropdown';
 import { vContextMenu, vDropdown, vDropdownMenu } from './directives/Menu';
 import type { MenuTargetBinding } from './directives/Menu/helpers';
@@ -19,7 +20,11 @@ export const m3VueDirectives = {
 
 export const m3VueDirectiveNames = Object.freeze(Object.keys(m3VueDirectives) as Array<keyof typeof m3VueDirectives>);
 
-export type M3VuePluginOptions = M3LocaleOptions & M3ShapeOptions & M3FieldOptions & M3SnackbarOptions;
+export type M3VuePluginOptions = M3LocaleOptions &
+  M3ShapeOptions &
+  M3FieldOptions &
+  M3SnackbarOptions &
+  M3ComponentDefaultsOptions;
 
 export const M3VuePlugin = {
   install(app: App, options: M3VuePluginOptions = {}) {
@@ -29,6 +34,7 @@ export const M3VuePlugin = {
 
     installM3Locale(app, options);
     installM3StyleDefaults(app, options);
+    installM3InteractionDefaults(app, options);
     installM3Snackbar(app, options);
     initStateLayer();
   },
