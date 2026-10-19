@@ -116,17 +116,20 @@
     z-index: 1;
     box-sizing: border-box;
 
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-content: start;
-    row-gap: 1rem;
+    /* Only content shrinks; headers and actions remain outside the scrollport. */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
     inline-size: 100%;
     max-inline-size: 40rem;
     max-block-size: min(calc(var(--_bottom-sheet-max-height) + var(--_bottom-sheet-background-extension)), 100vb);
     overflow: hidden;
 
-    padding: 0 0 var(--_bottom-sheet-background-extension);
+    /* Surface owns edge spacing; content owns the cancelling overflow inset. */
+    padding-block: var(--_bottom-sheet-container-padding-block-start)
+      calc(var(--_bottom-sheet-container-padding-block-end) + var(--_bottom-sheet-background-extension));
+    padding-inline: 0;
     border-radius: var(--_sheet-bottom-docked-container-shape);
 
     background-color: var(--_sheet-bottom-docked-container-color);
@@ -155,7 +158,8 @@
   }
 
   .m3-bottom-sheet-drag-handle {
-    justify-self: center;
+    flex-shrink: 0;
+    align-self: center;
     inline-size: var(--_sheet-bottom-docked-drag-handle-width);
     block-size: var(--_sheet-bottom-docked-drag-handle-height);
     border-radius: calc(infinity * 1px);
@@ -164,6 +168,7 @@
   }
 
   .m3-bottom-sheet-headline {
+    flex-shrink: 0;
     @apply title-large;
 
     box-sizing: border-box;
@@ -173,6 +178,7 @@
   }
 
   .m3-bottom-sheet-content {
+    flex: 0 1 auto;
     @apply body-medium;
 
     box-sizing: border-box;
@@ -186,28 +192,13 @@
   }
 
   .m3-bottom-sheet-actions {
+    flex-shrink: 0;
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     justify-content: end;
     gap: 0.5rem;
     padding-inline: var(--_bottom-sheet-container-padding-inline);
-  }
-
-  .m3-bottom-sheet-surface > :first-child:not(.m3-bottom-sheet-drag-handle) {
-    padding-block-start: var(--_bottom-sheet-container-padding-block-start);
-  }
-
-  .m3-bottom-sheet-surface > :last-child:not(.m3-bottom-sheet-drag-handle) {
-    padding-block-end: var(--_bottom-sheet-container-padding-block-end);
-  }
-
-  .m3-bottom-sheet-drag-handle:first-child {
-    margin-block-start: var(--_bottom-sheet-container-padding-block-start);
-  }
-
-  .m3-bottom-sheet-drag-handle:last-child {
-    margin-block-end: var(--_bottom-sheet-container-padding-block-end);
   }
 
   @starting-style {

@@ -194,7 +194,9 @@
     max-block-size: none;
     overflow: hidden;
 
-    padding: 0;
+    /* Surface owns edge spacing; content owns the cancelling overflow inset. */
+    padding-block: var(--_side-sheet-container-padding-block);
+    padding-inline: 0;
     background-color: var(--_sheet-side-docked-modal-container-color);
     box-shadow: var(--_sheet-side-docked-modal-container-elevation);
   }
@@ -251,14 +253,6 @@
     justify-content: end;
     gap: 0.5rem;
     padding-inline: var(--_side-sheet-container-padding-inline);
-  }
-
-  .m3-side-sheet-surface > :first-child {
-    padding-block-start: var(--_side-sheet-container-padding-block);
-  }
-
-  .m3-side-sheet-surface > :last-child {
-    padding-block-end: var(--_side-sheet-container-padding-block);
   }
 
   @starting-style {
