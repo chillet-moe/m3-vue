@@ -10,6 +10,7 @@ import { menuDefaultsContextKey } from '@/components/Menu/MenuDefaultsContext';
 import type { MenuColor } from '@/components/Menu/Menu.vue';
 import Popover from '@/components/Popover/Popover.vue';
 import SelectItem from './SelectItem.vue';
+import { provideSelectDefaults } from './SelectContext';
 import type { SelectListSlot } from '@/composables/useSelect';
 export type { SelectListSlot } from '@/composables/useSelect';
 import { useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
@@ -82,6 +83,9 @@ export type SelectProps = {
   /** CSS length reserved at block-start for the floating label. Overrides FieldContext. */
   labelClearance?: string;
 
+  /** Shows a checkmark in selected options. Overrides SelectContext; defaults to true. */
+  showSelectedIcon?: boolean;
+
   /** Enables multi-select behavior. */
   multiple?: boolean;
 
@@ -131,6 +135,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   placeholder: undefined,
   size: undefined,
   labelClearance: undefined,
+  showSelectedIcon: undefined,
   multiple: false,
   clearable: false,
   clearLabel: undefined,
@@ -140,6 +145,8 @@ const props = withDefaults(defineProps<SelectProps>(), {
   filterPlaceholder: undefined,
   filterNoResultsText: undefined,
 });
+
+provideSelectDefaults({ showSelectedIcon: computed(() => props.showSelectedIcon) });
 
 const menuDefaults = inject(menuDefaultsContextKey, undefined);
 const menuColor = computed(() => props.menuColor ?? unref(menuDefaults?.color) ?? 'standard');

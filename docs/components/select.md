@@ -63,6 +63,36 @@ change its option list or dimensions mid-animation.
 
 ## Examples
 
+### Selection icons
+
+`showSelectedIcon` controls the selection mark independently of selection state. It defaults to `true`; setting it to
+`false` preserves each item's original `leadingIcon` or `leading` slot. An explicit `SelectItem` prop takes precedence
+over the enclosing Select, then inherited Select defaults, then the built-in default. Select provides its setting to
+items rendered in its `list` slot, including custom and virtual lists.
+
+```vue
+<Select :options="options" :show-selected-icon="false" />
+```
+
+Configure an application default with `selectDefaults`; call `provideSelectDefaults` in setup for a subtree:
+
+```ts
+app.use(M3VuePlugin, { selectDefaults: { showSelectedIcon: false } });
+```
+
+```vue
+<script setup lang="ts">
+import { provideSelectDefaults } from '@chillet/m3-vue';
+
+provideSelectDefaults({ showSelectedIcon: false });
+</script>
+```
+
+`selectContextKey` and `SelectContext` are also exported. `SelectContext.showSelectedIcon` accepts a
+`MaybeRef<boolean | undefined>`. Use `provideSelectDefaults` to merge this field with inherited values; direct
+`provide(selectContextKey, { showSelectedIcon: false })` replaces the entire context object. Hiding the mark does not
+change selection semantics.
+
 ### Sizes and toolbar alignment
 
 Select and Combobox use the same `extra-small` (32px), `small` (40px), and `medium` (56px) trigger sizes as TextField.

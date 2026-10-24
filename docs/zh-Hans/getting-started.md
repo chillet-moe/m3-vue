@@ -60,6 +60,7 @@ const options = {
   buttonDefaults: { size: 'small', pressShapeMorph: true },
   sliderDefaults: { size: 'large', appearance: 'standard', wheel: false, valueIndicator: true },
   listItemDefaults: { appearance: 'standard' },
+  selectDefaults: { showSelectedIcon: false },
   timePickerDefaults: { format, inputMode: 'keyboard' },
 } satisfies M3VuePluginOptions;
 
@@ -79,14 +80,19 @@ app.use(M3VuePlugin, options);
 | `sliderDefaults.wheel`              | Slider                                | `sliderContextKey.wheel`              |
 | `sliderDefaults.valueIndicator`     | Slider                                | `sliderContextKey.valueIndicator`     |
 | `listItemDefaults.appearance`       | ListItem                              | `listItemContextKey.appearance`       |
+| `selectDefaults.showSelectedIcon`   | Select、SelectItem                    | `selectContextKey.showSelectedIcon`   |
 | `menuColor`                         | Menu、Select 和 Combobox 菜单         | `menuDefaultsContextKey.color`        |
 | `datePickerDefaults.firstDayOfWeek` | DatePicker，包括 TextField 日期选择器 | `datePickerContextKey.firstDayOfWeek` |
 | `timePickerDefaults.format`         | TimePicker，包括 TextField 时间选择器 | `timePickerContextKey.format`         |
 | `timePickerDefaults.inputMode`      | TimePicker，包括 TextField 时间选择器 | `timePickerContextKey.inputMode`      |
 
+Select 和 SelectItem 的 `showSelectedIcon` 内置默认值为 `true`。应用可通过 `selectDefaults.showSelectedIcon` 设置默认值；该字段也可接收 ref。
+
+库导出 `selectContextKey`、`SelectContext` 和 `provideSelectDefaults`。`SelectContext.showSelectedIcon` 的类型为 `MaybeRef<boolean | undefined>`；helper 会逐字段合并继承值，未设置或为 `undefined` 时继续继承。
+
 `shape` 可在支持的按钮、列表项、文本字段、分页链接和导航抽屉项中统一设置 `rounded` 或 `square`，并可与尺寸默认值组合使用。Textarea 始终使用 `medium`，不受 `fieldSize` 影响。
 
-`M3VuePluginOptions` 新增 `buttonDefaults?: Pick<ButtonContext, 'size' | 'pressShapeMorph'>`、`sliderDefaults?: SliderContext`（含 `size`、`appearance`、`wheel` 和 `valueIndicator`），以及 `listItemDefaults?: ListItemContext`（含 `appearance`）。其他顶层选项保持不变。库内默认值为 Button `pressShapeMorph: true`、Slider `appearance: 'standard'`、`wheel: false`、`valueIndicator: true`，以及 ListItem `appearance: 'standard'`。
+`M3VuePluginOptions` 新增 `buttonDefaults?: Pick<ButtonContext, 'size' | 'pressShapeMorph'>`、`sliderDefaults?: SliderContext`（含 `size`、`appearance`、`wheel` 和 `valueIndicator`）、`listItemDefaults?: ListItemContext`（含 `appearance`），以及 `selectDefaults?: SelectContext`（含 `showSelectedIcon`）。其他顶层选项保持不变。库内默认值为 Button `pressShapeMorph: true`、Slider `appearance: 'standard'`、`wheel: false`、`valueIndicator: true`、ListItem `appearance: 'standard'`，以及 Select 和 SelectItem `showSelectedIcon: true`。
 
 ### 子树默认值
 
@@ -95,15 +101,23 @@ app.use(M3VuePlugin, options);
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { provideButtonDefaults, provideSliderDefaults, provideListItemDefaults } from '@chillet/m3-vue';
+import {
+  provideButtonDefaults,
+  provideSliderDefaults,
+  provideListItemDefaults,
+  provideSelectDefaults,
+} from '@chillet/m3-vue';
 
 provideButtonDefaults({ size: 'small', pressShapeMorph: false });
 provideSliderDefaults({ size: 'large', wheel: ref(true), valueIndicator: false });
 provideListItemDefaults({ appearance: 'expressive' });
+provideSelectDefaults({ showSelectedIcon: false });
 </script>
 ```
 
 优先级为：实例属性 > 最近的 helper 子树字段 > 应用级字段 > 库默认值。直接调用 `provide(contextKey, value)` 仍会整体替换该 key 的上下文对象，不会按字段合并；字段级继承请使用上述 helper。
+
+`Select` 会将 `showSelectedIcon` 设置提供给其 `list` 插槽中的 `SelectItem`，包括自定义或虚拟列表。详细优先级和行为见 [Select](./components/select#选中图标)。
 
 ButtonGroup 未显式设置 `pressShapeMorph` 时，会继承其父级 Button context 的该字段。`SelectItem` 显式使用 `standard` 外观，因此不会被 `listItemDefaults` 改变。
 

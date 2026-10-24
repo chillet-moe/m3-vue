@@ -33,6 +33,38 @@ describe('SelectItem', () => {
     app.unmount();
     container.remove();
   });
+  it.each(['icon', 'slot', 'empty'] as const)(
+    'preserves %s leading content when the checkmark is disabled',
+    async (leading) => {
+      const showSelectedIcon = ref(false);
+      const container = document.createElement('div');
+      const app = createApp(() =>
+        h(
+          SelectItem,
+          {
+            selected: true,
+            showSelectedIcon: showSelectedIcon.value,
+            leadingIcon: leading === 'icon' ? 'folder' : undefined,
+          },
+          {
+            default: () => 'Files',
+            ...(leading === 'slot' ? { leading: () => h('span', 'Custom leading') } : {}),
+          },
+        ),
+      );
+      app.mount(container);
+      const option = container.querySelector('[role="option"]')!;
+      const content = leading === 'icon' ? 'folder' : leading === 'slot' ? 'Custom leading' : '';
+      expect(option.getAttribute('aria-selected')).toBe('true');
+      expect(option.querySelector('[data-part="check"]')).toBeNull();
+      expect(option.querySelector('.m3-item-leading-slot')?.textContent ?? '').toBe(content);
+      showSelectedIcon.value = true;
+      await nextTick();
+      expect(option.querySelector('[data-part="check"]')?.textContent).toBe('check');
+      expect(option.getAttribute('aria-selected')).toBe('true');
+      app.unmount();
+    },
+  );
   it('renders disabled semantics and supporting/trailing content', () => {
     const container = document.createElement('div');
     const app = createApp(() =>

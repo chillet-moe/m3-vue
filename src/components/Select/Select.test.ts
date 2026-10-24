@@ -1,6 +1,9 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, provide, ref } from 'vue';
+import { M3VuePlugin } from '@/plugin';
+import { selectContextKey, provideSelectDefaults } from './SelectContext';
+import SelectItem from './SelectItem.vue';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
 import Select, { type SelectModelValue, type SelectOption } from './Select.vue';
 
@@ -807,4 +810,93 @@ it('exposes only one combobox and keeps ARIA on the native input', async () => {
   expect(host.querySelector('[role="combobox"]')?.tagName).toBe('INPUT');
   expect(host.querySelector<HTMLElement>('.consumer-field')?.style.width).toBe('300px');
   app.unmount();
+});
+
+describe('selected icon defaults', () => {
+  it.each(['plugin', 'provide'] as const)(
+    'resolves reactive %s defaults, subtree preferences, and explicit props for ordinary and custom lists',
+    async (mode) => {
+      installPopoverPolyfill();
+      const preference = ref<boolean | undefined>(false);
+      const explicit = ref<boolean | undefined>(true);
+      const renderSelect = (id: string, custom: boolean, override?: boolean) =>
+        h(
+          Select,
+          {
+            id,
+            options,
+            modelValue: 'espresso',
+            showSelectedIcon: override,
+          },
+          custom
+            ? {
+                list: () =>
+                  h('div', [
+                    h(SelectItem, { selected: true, leadingIcon: 'local_cafe' }, () => 'Espresso'),
+                    h(
+                      SelectItem,
+                      { selected: true, showSelectedIcon: false, 'data-test': 'item-override' },
+                      () => 'Override',
+                    ),
+                  ]),
+              }
+            : undefined,
+        );
+      const Subtree = {
+        setup() {
+          provideSelectDefaults({ showSelectedIcon: false });
+          return () => h('section', { id: 'subtree' }, [renderSelect('subtree-select', false)]);
+        },
+      };
+      const app = createApp(() =>
+        h('main', [
+          ...[false, true].flatMap((custom) => [
+            h('section', { id: `inherited-${custom}` }, [renderSelect(`select-${custom}`, custom)]),
+            h('section', { id: `explicit-${custom}` }, [renderSelect(`override-${custom}`, custom, explicit.value)]),
+          ]),
+          h(Subtree),
+        ]),
+      );
+      if (mode === 'plugin') app.use(M3VuePlugin, { selectDefaults: { showSelectedIcon: preference } });
+      else app.provide(selectContextKey, { showSelectedIcon: preference });
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      app.mount(container);
+      await nextTick();
+      const assertMark = (id: string, expected: boolean) => {
+        const option = container.querySelector(`#${id} [role="option"]`)!;
+        expect(option.getAttribute('aria-selected')).toBe('true');
+        expect(Boolean(option.querySelector('[data-part="check"]'))).toBe(expected);
+        expect(option.querySelector('.m3-item-leading-slot')?.textContent?.trim()).toBe(
+          expected ? 'check' : 'local_cafe',
+        );
+      };
+      try {
+        for (const custom of [false, true]) {
+          assertMark(`inherited-${custom}`, false);
+          assertMark(`explicit-${custom}`, true);
+        }
+        preference.value = true;
+        explicit.value = false;
+        await nextTick();
+        for (const custom of [false, true]) {
+          assertMark(`inherited-${custom}`, true);
+          assertMark(`explicit-${custom}`, false);
+        }
+        preference.value = undefined;
+        explicit.value = undefined;
+        await nextTick();
+        for (const custom of [false, true]) {
+          assertMark(`inherited-${custom}`, true);
+          assertMark(`explicit-${custom}`, true);
+        }
+        assertMark('subtree', false);
+        for (const option of container.querySelectorAll('[data-test="item-override"]')) {
+          expect(option.querySelector('[data-part="check"]')).toBeNull();
+        }
+      } finally {
+        app.unmount();
+      }
+    },
+  );
 });

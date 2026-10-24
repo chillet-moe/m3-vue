@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed, inject, unref } from 'vue';
+import { selectContextKey } from './SelectContext';
 import ListItem from '@/components/ListItem/ListItem.vue';
 import Icon from '@/components/Icon/Icon.vue';
 
@@ -7,12 +9,21 @@ export type SelectItemProps = {
   active?: boolean;
   /** Whether this option's value is selected. */
   selected?: boolean;
+  /** Shows the selected checkmark instead of leading content. Defaults to SelectContext, then true. */
+  showSelectedIcon?: boolean;
   disabled?: boolean;
   supportingText?: string;
   leadingIcon?: string;
   trailingText?: string;
 };
-const props = withDefaults(defineProps<SelectItemProps>(), { active: false, selected: false, disabled: false });
+const props = withDefaults(defineProps<SelectItemProps>(), {
+  active: false,
+  selected: false,
+  disabled: false,
+  showSelectedIcon: undefined,
+});
+const context = inject(selectContextKey, undefined);
+const showSelectedIcon = computed(() => props.showSelectedIcon ?? unref(context?.showSelectedIcon) ?? true);
 defineSlots<{
   default(): any;
   leading(): any;
@@ -37,7 +48,13 @@ defineSlots<{
     :description="props.supportingText"
   >
     <template #leading>
-      <Icon v-if="props.selected" aria-hidden="true" name="check" data-scope="select-item" data-part="check" />
+      <Icon
+        v-if="props.selected && showSelectedIcon"
+        aria-hidden="true"
+        name="check"
+        data-scope="select-item"
+        data-part="check"
+      />
       <slot v-else name="leading"><Icon v-if="props.leadingIcon" aria-hidden="true" :name="props.leadingIcon" /></slot>
     </template>
     <slot />

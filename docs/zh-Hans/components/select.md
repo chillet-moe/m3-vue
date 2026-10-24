@@ -57,6 +57,18 @@ Popover 关闭时会立即触发 `update:open(false)` 更新控件状态。弹�
 
 ## 示例
 
+### 选中图标
+
+`Select` 和 `SelectItem` 的 `showSelectedIcon` 默认值为 `true`。设为 `false` 时，选中项不显示勾选图标，并保留其原有的 `leadingIcon` 或 `leading` 插槽内容；选中状态和选择行为不变。
+
+```vue
+<Select v-model="modelValue" :options="coffeeOptions" :show-selected-icon="false" />
+```
+
+`Select` 会将该设置提供给其 `list` 插槽中的 `SelectItem`，因此自定义列表和虚拟列表也会继承设置。优先级为：`SelectItem` 显式属性 > 外层 `Select` 属性 > 继承的 `selectContextKey` 或插件默认值 > 内置值 `true`。需要为子树配置时，在组件 `setup` 中调用 `provideSelectDefaults({ showSelectedIcon: false })`；应用级配置见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
+库还导出 `selectContextKey` 和 `SelectContext`。`SelectContext.showSelectedIcon` 的类型为 `MaybeRef<boolean | undefined>`。`provideSelectDefaults` 会与继承字段合并；直接调用 `provide(selectContextKey, value)` 则会替换整个上下文对象。
+
 ### 尺寸与工具栏对齐
 
 Select 和 Combobox 与 TextField 使用相同的触发器尺寸：`extra-small`（32px）、`small`（40px）和 `medium`（56px）。`size` 属性优先于 `fieldContextKey` 中的 `size`，内置回退值为 `medium`。可通过 `M3VuePlugin` 配置 `fieldSize`，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。

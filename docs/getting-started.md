@@ -56,7 +56,8 @@ Set application-wide preferences with `M3VuePlugin`, subtree preferences with a 
 values with component props. Precedence is instance prop > helper subtree field > application field > library default.
 The built-in defaults are Button `size="small"` and `pressShapeMorph=true`, Slider `size="medium"`,
 `appearance="standard"`, `wheel=false`, and `valueIndicator=true`, and ListItem `appearance="standard"`.
-`ButtonGroup` inherits its parent's `pressShapeMorph` when the prop is omitted.
+Select and SelectItem show the selection mark by default. `ButtonGroup` inherits its parent's `pressShapeMorph`
+when the prop is omitted.
 
 ### Application configuration
 
@@ -69,6 +70,7 @@ const options = {
   buttonDefaults: { size: 'small', pressShapeMorph: true },
   sliderDefaults: { size: 'large', appearance: 'standard', wheel: false, valueIndicator: true },
   listItemDefaults: { appearance: 'standard' },
+  selectDefaults: { showSelectedIcon: false },
   timePickerDefaults: { format: '24h', inputMode: 'keyboard' },
 } satisfies M3VuePluginOptions;
 
@@ -77,7 +79,8 @@ app.use(M3VuePlugin, options);
 
 `M3VuePluginOptions` adds `buttonDefaults?: Pick<ButtonContext, 'size' | 'pressShapeMorph'>`,
 `sliderDefaults?: SliderContext` (with `size`, `appearance`, `wheel`, and `valueIndicator`), and
-`listItemDefaults?: ListItemContext` (with `appearance`). Existing options such as `shape`, `fieldSize`,
+`listItemDefaults?: ListItemContext` (with `appearance`), and `selectDefaults?: SelectContext` (with
+`showSelectedIcon`). Existing options such as `shape`, `fieldSize`,
 `iconButtonSize`, `menuColor`, and picker defaults remain available.
 
 | Plugin option                                                     | Applies to                                   | Context field                           |
@@ -88,6 +91,7 @@ app.use(M3VuePlugin, options);
 | `iconButtonSize`                                                  | IconButton                                   | `iconButtonContextKey.size`             |
 | `sliderDefaults.size`, `.appearance`, `.wheel`, `.valueIndicator` | Slider                                       | Corresponding `sliderContextKey` fields |
 | `listItemDefaults.appearance`                                     | ListItem                                     | `listItemContextKey.appearance`         |
+| `selectDefaults.showSelectedIcon`                                 | Select and SelectItem                        | `selectContextKey.showSelectedIcon`     |
 | `menuColor`                                                       | Menu, Select and Combobox menus              | `menuDefaultsContextKey.color`          |
 | `datePickerDefaults`                                              | DatePicker, including TextField date pickers | `datePickerContextKey` fields           |
 | `timePickerDefaults`                                              | TimePicker, including TextField time pickers | `timePickerContextKey` fields           |
@@ -104,12 +108,18 @@ values such as `false` override the inherited value.
 ```vue
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { provideButtonDefaults, provideSliderDefaults, provideListItemDefaults } from '@chillet/m3-vue';
+import {
+  provideButtonDefaults,
+  provideSliderDefaults,
+  provideListItemDefaults,
+  provideSelectDefaults,
+} from '@chillet/m3-vue';
 
 const compact = ref(true);
 provideButtonDefaults({ size: computed(() => (compact.value ? 'small' : undefined)) });
 provideSliderDefaults({ wheel: false, valueIndicator: computed(() => !compact.value) });
 provideListItemDefaults({ appearance: 'expressive' });
+provideSelectDefaults({ showSelectedIcon: false });
 </script>
 ```
 
