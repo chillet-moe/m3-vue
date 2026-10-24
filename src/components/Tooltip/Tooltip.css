@@ -30,7 +30,7 @@
     --md-rich-tooltip-action-pressed-state-layer-opacity: initial;
     --md-rich-tooltip-container-color: initial;
     --md-rich-tooltip-container-elevation: initial;
-    --md-rich-tooltip-container-shadow-color: initial;
+    --md-rich-tooltip-container-border-color: initial;
     --md-rich-tooltip-container-shape: initial;
     --md-rich-tooltip-subhead-color: initial;
     --md-rich-tooltip-subhead-font: initial;
@@ -80,9 +80,12 @@
       var(--md-sys-color-inverse-on-surface)
     );
 
-    --_rich-tooltip-container-color: var(--md-rich-tooltip-container-color, var(--md-sys-color-surface-container));
-    --_rich-tooltip-container-elevation: var(--md-rich-tooltip-container-elevation, var(--md-sys-elevation-level2));
-    --_rich-tooltip-container-shadow-color: var(--md-rich-tooltip-container-shadow-color, var(--md-sys-color-shadow));
+    --_rich-tooltip-container-color: var(--md-rich-tooltip-container-color, var(--md-overlay-container-color));
+    --_rich-tooltip-container-elevation: var(--md-rich-tooltip-container-elevation, var(--md-overlay-elevation));
+    --_rich-tooltip-container-border-color: var(
+      --md-rich-tooltip-container-border-color,
+      var(--md-overlay-border-color)
+    );
     --_rich-tooltip-container-shape: var(--md-rich-tooltip-container-shape, var(--md-shape-card));
     --_rich-tooltip-action-label-text-font: var(
       --md-rich-tooltip-action-label-text-font,
@@ -193,6 +196,21 @@
 }
 
 @layer components {
+  .m3-tooltip,
+  .m3-tooltip[data-vtt-fallback='1'] {
+    margin: 0;
+    inset: auto;
+    border: none;
+
+    padding-inline: 0.5rem;
+    padding-block: 0.25rem;
+
+    display: inline-flex;
+    align-items: center;
+
+    max-inline-size: min(28rem, calc(100vw - 16px));
+  }
+
   .m3-tooltip[data-variant='plain'] {
     background-color: var(--_plain-tooltip-container-color);
     color: var(--_plain-tooltip-supporting-text-color);
@@ -213,6 +231,7 @@
 
   .m3-tooltip[data-variant='rich'] {
     background-color: var(--_rich-tooltip-container-color);
+    border: var(--md-overlay-border-width) solid var(--_rich-tooltip-container-border-color);
     box-shadow: var(--_rich-tooltip-container-elevation);
     color: var(--_rich-tooltip-supporting-text-color);
     border-radius: var(--_rich-tooltip-container-shape);
@@ -228,21 +247,6 @@
     line-height: var(--_rich-tooltip-supporting-text-line-height);
     font-weight: var(--_rich-tooltip-supporting-text-weight);
     letter-spacing: var(--_rich-tooltip-supporting-text-tracking);
-  }
-
-  .m3-tooltip,
-  .m3-tooltip[data-vtt-fallback='1'] {
-    margin: 0;
-    inset: auto;
-    border: none;
-
-    padding-inline: 0.5rem;
-    padding-block: 0.25rem;
-
-    display: inline-flex;
-    align-items: center;
-
-    max-inline-size: min(28rem, calc(100vw - 16px));
   }
 
   /* 有 Anchor Positioning 就走 CSS 锚定 */

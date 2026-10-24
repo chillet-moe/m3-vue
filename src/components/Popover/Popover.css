@@ -4,6 +4,7 @@
   :where(:root) {
     /* Low-specificity public token placeholders; private tokens own defaults. */
     --md-popover-container-color: initial;
+    --md-popover-container-border-color: initial;
     --md-popover-container-elevation: initial;
     --md-popover-container-shape: initial;
     --md-popover-max-height: initial;
@@ -14,8 +15,9 @@
   }
 
   .m3-popover {
-    --_popover-container-color: var(--md-popover-container-color, var(--md-sys-color-surface-container));
-    --_popover-container-elevation: var(--md-popover-container-elevation, var(--md-sys-elevation-level2));
+    --_popover-container-border-color: var(--md-popover-container-border-color, var(--md-overlay-border-color));
+    --_popover-container-color: var(--md-popover-container-color, var(--md-overlay-container-color));
+    --_popover-container-elevation: var(--md-popover-container-elevation, var(--md-overlay-elevation));
     --_popover-container-shape: var(--md-popover-container-shape, var(--md-shape-popover));
     --_popover-max-height: var(--md-popover-max-height, 32rem);
     --_popover-max-width: var(--md-popover-max-width, 28rem);
@@ -140,6 +142,7 @@
     max-block-size: inherit;
     overflow: auto;
     overscroll-behavior: contain;
+    border: var(--md-overlay-border-width) solid var(--_popover-container-border-color);
     border-radius: var(--_popover-container-shape);
     padding: var(--_popover-padding);
     background: var(--md-color-container);

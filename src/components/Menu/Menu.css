@@ -4,7 +4,7 @@
   :where(:root) {
     /* Low-specificity public token placeholders; private tokens own defaults. */
     --md-menu-container-elevation: initial;
-    --md-menu-container-shadow-color: initial;
+    --md-menu-container-border-color: initial;
     --md-menus-active-container-shape: initial;
     --md-menus-container-shape: initial;
     --md-menus-gap: initial;
@@ -90,6 +90,7 @@
   }
 
   .m3-menu {
+    --_menu-container-border-color: var(--md-menu-container-border-color, var(--md-overlay-border-color));
     --_menus-container-shape: var(--md-menus-container-shape, var(--md-shape-popover));
     --_menus-active-container-shape: var(--md-menus-active-container-shape, var(--md-shape-popover));
     --_menus-inactive-container-shape: var(--md-menus-inactive-container-shape, var(--md-shape-chip));
@@ -101,8 +102,7 @@
       --md-menus-menu-item-last-child-shape,
       calc(var(--_menus-container-shape) - --dp(3))
     );
-    --_menu-container-elevation: var(--md-menu-container-elevation, var(--md-sys-elevation-level2));
-    --_menu-container-shadow-color: var(--md-menu-container-shadow-color, var(--md-sys-color-shadow));
+    --_menu-container-elevation: var(--md-menu-container-elevation, var(--md-overlay-elevation));
 
     --_menus-menu-item-label-text-font: var(
       --md-menus-menu-item-label-text-font,
@@ -178,10 +178,7 @@
     --_menus-group-padding: var(--md-menus-group-padding, --dp(4));
     --_menus-popover-padding: var(--md-menus-popover-padding, 0.25rem);
 
-    --_menus-standard-container-color: var(
-      --md-menus-standard-container-color,
-      var(--md-sys-color-surface-container-low)
-    );
+    --_menus-standard-container-color: var(--md-menus-standard-container-color, var(--md-overlay-menu-color));
     --_menus-standard-section-label-text-color: var(
       --md-menus-standard-section-label-text-color,
       var(--md-sys-color-on-surface-variant)
@@ -576,6 +573,7 @@
     display: flex;
     flex-direction: column;
 
+    border: var(--md-overlay-border-width) solid var(--_menu-container-border-color);
     border-radius: var(--_menus-inactive-container-shape);
     background: var(--_menu-container-color);
     box-shadow: var(--_menu-container-elevation);

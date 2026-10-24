@@ -72,6 +72,7 @@ try {
                     return {
                       modal: root.matches(':modal'),
                       surface: surfaceRect,
+                      border: parseFloat(getComputedStyle(surface).borderTopWidth),
                       start,
                       end,
                       clip,
@@ -96,12 +97,12 @@ try {
                 const label = JSON.stringify({ ...options, width, inset });
                 assert(result.modal, label);
                 assert.equal(
-                  result.top,
+                  result.top - result.border,
                   kind === 'bottom-sheet' ? 16 : kind.includes('ialog') && width < 640 ? 20 : 24,
                   `top spacing: ${label}`,
                 );
                 assert.equal(
-                  result.bottom,
+                  result.bottom - result.border,
                   kind.includes('ialog') && width < 640 ? 20 : 24,
                   `bottom spacing: ${label}`,
                 );

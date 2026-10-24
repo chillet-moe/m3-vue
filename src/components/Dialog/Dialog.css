@@ -11,6 +11,7 @@
     --md-dialog-action-label-text-type: initial;
     --md-dialog-action-label-text-weight: initial;
     --md-dialog-container-color: initial;
+    --md-dialog-container-border-color: initial;
     --md-dialog-container-elevation: initial;
     --md-dialog-container-shape: initial;
     --md-dialog-container-width: initial;
@@ -34,8 +35,9 @@
   }
 
   .m3-dialog {
-    --_dialog-container-color: var(--md-dialog-container-color, var(--md-sys-color-surface-container-high));
-    --_dialog-container-elevation: var(--md-dialog-container-elevation, var(--md-sys-elevation-level3));
+    --_dialog-container-border-color: var(--md-dialog-container-border-color, var(--md-overlay-border-color));
+    --_dialog-container-color: var(--md-dialog-container-color, var(--md-overlay-modal-color));
+    --_dialog-container-elevation: var(--md-dialog-container-elevation, var(--md-overlay-modal-elevation));
     --_dialog-container-shape: var(--md-dialog-container-shape, var(--md-shape-overlay));
     --_dialog-container-width: var(--md-dialog-container-width, 35rem);
     --_dialog-content-visual-overflow-inset: var(--md-dialog-content-visual-overflow-inset, 0.5rem);
@@ -149,6 +151,7 @@
     /* Surface owns edge spacing; content owns the cancelling overflow inset. */
     padding-block: var(--_dialog-container-padding-block);
     padding-inline: 0;
+    border: var(--md-overlay-border-width) solid var(--_dialog-container-border-color);
     border-radius: var(--_dialog-container-shape);
 
     background-color: var(--_dialog-container-color);

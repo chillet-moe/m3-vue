@@ -1,0 +1,26 @@
+@layer tokens {
+  :root {
+    /* Theme colors remain lazy light-dark() values, including in locally themed subtrees. */
+    --md-overlay-menu-color: light-dark(
+      var(--md-sys-color-surface-container-low),
+      var(--md-sys-color-surface-container-high)
+    );
+    --md-overlay-container-color: light-dark(
+      var(--md-sys-color-surface-container),
+      var(--md-sys-color-surface-container-high)
+    );
+    --md-overlay-modal-color: light-dark(
+      var(--md-sys-color-surface-container-high),
+      var(--md-sys-color-surface-container-highest)
+    );
+    --md-overlay-on-container-color: var(--md-sys-color-on-surface);
+    --md-overlay-border-color: light-dark(rgb(0 0 0 / 8%), rgb(255 255 255 / 12%));
+    --md-overlay-border-width: 1px;
+    --md-overlay-shadow-key-color: light-dark(rgb(0 0 0 / 12%), rgb(0 0 0 / 38%));
+    --md-overlay-shadow-ambient-color: light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 32%));
+    --md-overlay-elevation:
+      0 2px 6px var(--md-overlay-shadow-key-color), 0 8px 24px var(--md-overlay-shadow-ambient-color);
+    --md-overlay-modal-elevation:
+      0 4px 8px var(--md-overlay-shadow-key-color), 0 12px 32px var(--md-overlay-shadow-ambient-color);
+  }
+}
