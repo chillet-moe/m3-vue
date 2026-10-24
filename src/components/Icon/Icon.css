@@ -28,6 +28,9 @@
 
   .m3-icon[data-variant='inline'] {
     font-size: var(--md-icon-size, 1em);
+    /* Align to the surrounding text's x-height instead of the icon font's baseline.
+       Flex/grid containers retain ownership of their item alignment. */
+    vertical-align: middle;
   }
 
   .m3-icon svg {
