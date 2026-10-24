@@ -93,6 +93,10 @@ than using the shared simple-title runtime.
 
 See [v-tooltip](/directives/tooltip) for the full directive API.
 
+## Floating surface
+
+See [floating surface tokens](../utilities/elevation.md#floating-surfaces) for shared theme colors, borders, shadows, and an interactive example with nested menus and dialogs.
+
 ## Reference
 
 <AnatomyTable scope="tooltip" />

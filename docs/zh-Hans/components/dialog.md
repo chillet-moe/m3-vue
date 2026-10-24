@@ -107,6 +107,10 @@ function clearDialogContent() {
   <DialogWithIcon />
 </DemoContainer>
 
+## 浮动表面
+
+共享主题颜色、边框、阴影，以及包含嵌套菜单和对话框的交互式示例，请参阅[浮动表面 token](../utilities/elevation.md#floating-surfaces)。
+
 ## 参考
 
 <AnatomyTable scope="dialog" />

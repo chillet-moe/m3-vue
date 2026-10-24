@@ -62,6 +62,10 @@ release it from `closed`.
   <PopoverControlled />
 </DemoContainer>
 
+## Floating surface
+
+See [floating surface tokens](../utilities/elevation.md#floating-surfaces) for shared theme colors, borders, shadows, and an interactive example with nested menus and dialogs.
+
 ## Reference
 
 <AnatomyTable scope="popover" />

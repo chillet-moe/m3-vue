@@ -75,6 +75,10 @@ Selected values do not depend on mounted rows or current results. Labels come fr
 
 Combobox forwards Select's `list` and `empty` slots. Use `SelectItem` for row presentation and the same `optionProps` and `setScrollToIndex` contract. See [Select's virtual list example](./select#external-virtual-lists) for 10,000 options with single and multiple selection.
 
+## Floating surface
+
+See [floating surface tokens](../utilities/elevation.md#floating-surfaces) for shared theme colors, borders, shadows, and an interactive example with nested menus and dialogs.
+
 ## Reference
 
 <ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />

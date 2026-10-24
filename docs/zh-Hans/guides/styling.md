@@ -181,3 +181,7 @@ selector：
 ## 查看组件的 Anatomy
 
 每个组件文档页面都包含 **Anatomy** 部分，展示该组件的所有 `data-scope` 和 `data-part`，并支持交互式高亮。
+
+## 浮动表面
+
+使用共享的[浮动表面 token](../utilities/elevation.md#floating-surfaces)，统一为菜单、下拉菜单、Popover、丰富 Tooltip 和 Dialog 设置主题，包括使用方自有的原生对话框。只有个别组件需要例外样式时，才使用组件 token。

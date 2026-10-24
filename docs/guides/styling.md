@@ -167,3 +167,7 @@ Do not add an internal root tag or private class to these rules. `button.checkou
 ## Inspect component anatomy
 
 Each component documentation page includes an **Anatomy** section that lists its `data-scope` and `data-part` attributes and supports interactive highlighting.
+
+## Floating surfaces
+
+Use the shared [floating surface tokens](../utilities/elevation.md#floating-surfaces) to theme menus, dropdowns, popovers, rich tooltips, and dialogs together, including consumer-owned native dialogs. Use component tokens only for individual exceptions.

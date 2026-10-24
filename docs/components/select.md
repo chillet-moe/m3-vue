@@ -172,6 +172,10 @@ Select/Combobox now use combobox/listbox/option semantics, with focus retained o
 
 Public `useSelect` accepts `id`, `focus`, and `blur` callbacks instead of Menu, trigger and TextField refs. Bind the shared `open` ref to Popover and call `handleMenuClosed` from `closed`. Use `list`/`optionProps` for ordinary or virtual rendering; `handleMenuSelect` is removed.
 
+## Floating surface
+
+See [floating surface tokens](../utilities/elevation.md#floating-surfaces) for shared theme colors, borders, shadows, and an interactive example with nested menus and dialogs.
+
 ## Reference
 
 <AnatomyTable scope="select" />

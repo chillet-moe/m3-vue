@@ -79,6 +79,10 @@ Combobox 封装了 Select，并共享其 `select` scope。详见 [Select Anatomy
 
 Combobox 会转发 Select 的 `list` 和 `empty` 插槽。选项行使用 SelectItem 呈现，并遵循相同的 `optionProps` 与 `setScrollToIndex` 约定。支持 10,000 个选项及单选、多选的示例请参阅 [Select 虚拟列表](./select#外部虚拟列表)。
 
+## 浮动表面
+
+共享主题颜色、边框、阴影，以及包含嵌套菜单和对话框的交互式示例，请参阅[浮动表面 token](../utilities/elevation.md#floating-surfaces)。
+
 ## 参考
 
 <ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />

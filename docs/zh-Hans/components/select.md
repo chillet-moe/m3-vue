@@ -146,6 +146,10 @@ Select/Combobox 现在使用 combobox/listbox/option 语义，焦点保留在输
 
 公开的 `useSelect` 接收 `id`、`focus` 和 `blur` 回调，而不是 Menu、触发器和 TextField 引用。将共享的 `open` ref 绑定到 Popover，并在 `closed` 时调用 `handleMenuClosed`。普通或虚拟列表都使用 `list`/`optionProps`；`handleMenuSelect` 已移除。
 
+## 浮动表面
+
+共享主题颜色、边框、阴影，以及包含嵌套菜单和对话框的交互式示例，请参阅[浮动表面 token](../utilities/elevation.md#floating-surfaces)。
+
 ## 参考
 
 <AnatomyTable scope="select" />

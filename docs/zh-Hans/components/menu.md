@@ -79,6 +79,10 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 </RouterLink>
 ```
 
+## 浮动表面
+
+共享主题颜色、边框、阴影，以及包含嵌套菜单和对话框的交互式示例，请参阅[浮动表面 token](../utilities/elevation.md#floating-surfaces)。
+
 ## 参考
 
 <ApiTable component="Menu" />
