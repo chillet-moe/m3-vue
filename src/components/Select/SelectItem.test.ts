@@ -58,10 +58,15 @@ describe('SelectItem', () => {
       expect(option.getAttribute('aria-selected')).toBe('true');
       expect(option.querySelector('[data-part="check"]')).toBeNull();
       expect(option.querySelector('.m3-item-leading-slot')?.textContent ?? '').toBe(content);
+      if (leading === 'empty') expect(option.querySelector('[data-part="leading"]')).toBeNull();
       showSelectedIcon.value = true;
       await nextTick();
       expect(option.querySelector('[data-part="check"]')?.textContent).toBe('check');
       expect(option.getAttribute('aria-selected')).toBe('true');
+      showSelectedIcon.value = false;
+      await nextTick();
+      expect(option.querySelector('[data-part="check"]')).toBeNull();
+      if (leading === 'empty') expect(option.querySelector('[data-part="leading"]')).toBeNull();
       app.unmount();
     },
   );

@@ -85,7 +85,6 @@ const hasHeader = computed(() => Boolean(slots.header));
 const hasFooter = computed(() => Boolean(slots.footer));
 const hasTitle = computed(() => Boolean(props.title || slots.default));
 const hasDescription = computed(() => Boolean(props.description || slots.description));
-const hasLeading = computed(() => !props.leadingIcon && Boolean(slots.leading));
 const hasTrailing = computed(() => !props.trailingIcon && Boolean(slots.trailing));
 const isSelected = computed(() => props.active);
 const slotProps = computed(() => ({
@@ -132,7 +131,7 @@ const slotProps = computed(() => ({
       data-part="leading"
       :disabled="disabled"
     />
-    <span v-else-if="hasLeading" class="m3-item-leading-slot" data-scope="item" data-part="leading">
+    <span v-else-if="$slots.leading" class="m3-item-leading-slot" data-scope="item" data-part="leading">
       <slot name="leading" v-bind="slotProps" />
     </span>
 

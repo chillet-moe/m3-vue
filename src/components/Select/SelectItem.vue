@@ -47,7 +47,7 @@ defineSlots<{
     :data-selected="props.selected ? 'true' : 'false'"
     :description="props.supportingText"
   >
-    <template #leading>
+    <template v-if="(props.selected && showSelectedIcon) || $slots.leading || props.leadingIcon" #leading>
       <Icon
         v-if="props.selected && showSelectedIcon"
         aria-hidden="true"
