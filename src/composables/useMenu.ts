@@ -1,5 +1,6 @@
 import { type Ref, nextTick, onUnmounted, watch } from 'vue';
 import type { MenuItemValue, MenuModelValue } from '@/components/Menu/MenuTypes';
+import { usePopoverSource } from './usePopoverSource';
 import { useExitMotionCompletion } from './useExitMotionCompletion';
 
 export type UseMenuOptions = {
@@ -38,7 +39,7 @@ export type UseMenuOptions = {
 };
 
 export type UseMenuReturn = {
-  /** Show the menu. */
+  /** Show or reanchor the menu; focusFirst explicitly focuses the first enabled item. */
   show: (focusFirst?: boolean, source?: HTMLElement) => Promise<void>;
 
   /** Hide the menu. */
@@ -84,12 +85,17 @@ export type UseMenuReturn = {
 export function useMenu(options: UseMenuOptions): UseMenuReturn {
   const { menuId, menuRef, open, modelValue, multiple, onSelect, parentCloseAll, parentSubmenu } = options;
 
+  const popoverSource = usePopoverSource();
+  let focusRequest = 0;
   const submenuClosers = new Set<() => void>();
   const exitCompletion = useExitMotionCompletion<void>({
     rootRef: menuRef,
     open,
     ownedElements: options.exitElements,
-    onComplete: options.onClosed,
+    onComplete: () => {
+      popoverSource.release();
+      options.onClosed?.();
+    },
   });
 
   function registerSubmenu(close: () => void) {
@@ -147,18 +153,8 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   function showMenu(source?: HTMLElement) {
     const menu = menuRef.value;
     if (!menu) return;
-    if (isMenuOpen(menu)) return;
-
-    if (source) {
-      try {
-        menu.showPopover({ source } as any);
-      } catch {
-        menu.showPopover();
-      }
-      return;
-    }
-
-    menu.showPopover();
+    if (popoverSource.isChanging(menu, source)) closeSubmenus();
+    popoverSource.show(menu, source);
   }
 
   function hideMenu() {
@@ -187,17 +183,19 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   }
 
   async function show(focusFirst = false, source?: HTMLElement) {
+    const request = ++focusRequest;
     exitCompletion.cancel();
     open.value = true;
     showMenu(source);
 
     if (focusFirst) {
       await nextTick();
-      focusItem(0);
+      if (request === focusRequest && open.value && menuRef.value && isMenuOpen(menuRef.value)) focusItem(0);
     }
   }
 
   function hide() {
+    focusRequest++;
     closeSubmenus();
     open.value = false;
     hideMenu();
@@ -309,16 +307,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
     const menu = event.currentTarget as HTMLElement | null;
     if (!menu) return;
 
-    const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
-    let isOpen: boolean;
-
-    if (nextState === 'open') {
-      isOpen = true;
-    } else if (nextState === 'closed') {
-      isOpen = false;
-    } else {
-      isOpen = isMenuOpen(menu);
-    }
+    const isOpen = isMenuOpen(menu);
 
     if (isOpen) {
       exitCompletion.cancel();
@@ -345,12 +334,13 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
     const focusTarget = detail?.focus;
     const source = detail?.source;
 
-    open.value = true;
-    showMenu(source);
+    void show(false, source);
+    const request = focusRequest;
 
     if (!focusTarget) return;
 
     void nextTick(() => {
+      if (request !== focusRequest || !open.value || !menuRef.value || !isMenuOpen(menuRef.value)) return;
       if (focusTarget === 'last') {
         const menuItems = getMenuItemElements();
         if (!menuItems.length) return;

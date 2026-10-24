@@ -46,6 +46,10 @@ Popover 是可选组件。需要具有简单开关行为、轻触关闭和基础
 
 原生弹出层关闭时会触发 `update:open(false)`。之后的 `closed` 事件会等待 Popover 自身的退出动画结束，但不会等待插槽内容内部的动画。关闭期间请保留插槽内容，并在 `closed` 中释放。
 
+## Show API
+
+Popover 已打开时调用 `Popover.show({ source })` 会更新 source，不会关闭并重新打开 Popover，也不会触发开关生命周期。传入相同的 `source` 或省略 `source` 会保留当前 source。CSS 定位优先使用 `anchorName` 和 `anchorElement`；Popover 打开期间 `anchorElement` 变化也可更新位置。
+
 ## 示例
 
 ### 默认

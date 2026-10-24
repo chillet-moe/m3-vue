@@ -97,6 +97,12 @@ See [floating surface tokens](../utilities/elevation.md#floating-surfaces) for s
 `update:open(false)` reflects the native popover closing immediately. Use `closed` for cleanup that must wait until the
 Menu-owned opacity and scale exit finishes. Animations inside slotted menu content are not included.
 
+`Menu.show(focusFirst = false, source?)` can also be called while the Menu is open. A new `source` updates its CSS
+anchor while keeping the Menu open; this does not emit `update:open(false)` or `closed`, and closes any submenus. The
+same or omitted `source` keeps the current anchor. Each call with `focusFirst: true` explicitly requests focus on the
+first item; `false` preserves focus. After the Menu closes, a later call without `source` does not reuse the previous
+explicit source.
+
 ### MenuContainer
 
 <ApiTable component="MenuContainer" />

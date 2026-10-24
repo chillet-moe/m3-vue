@@ -69,11 +69,9 @@ function isDropdownOpen(dropdown: HTMLElement) {
 }
 
 export function showDropdownElement(dropdown: HTMLElement, options: DropdownShowOptions = {}) {
-  if (isDropdownOpen(dropdown)) {
-    return;
-  }
-
   dropdown.dispatchEvent(new CustomEvent('m3-dropdown:show', { detail: options }));
+
+  if (isDropdownOpen(dropdown)) return;
 
   if (options.source) {
     try {

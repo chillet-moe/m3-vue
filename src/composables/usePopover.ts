@@ -1,8 +1,9 @@
-import { type Ref, onUnmounted, watch } from 'vue';
+import { type Ref, nextTick, onUnmounted, watch } from 'vue';
+import { usePopoverSource } from './usePopoverSource';
 import { useExitMotionCompletion } from './useExitMotionCompletion';
 
 export type UsePopoverShowOptions = {
-  /** Element passed to showPopover as the source for focus and dismissal semantics. */
+  /** Position and focus-return source. Omit while open to keep the current source. */
   source?: HTMLElement;
 };
 
@@ -54,21 +55,6 @@ function isPopoverOpen(element: HTMLElement) {
   return element.matches(':popover-open');
 }
 
-function showPopoverElement(element: HTMLElement, source?: HTMLElement) {
-  if (isPopoverOpen(element)) {
-    return;
-  }
-
-  if (source) {
-    try {
-      element.showPopover({ source });
-      return;
-    } catch {}
-  }
-
-  element.showPopover();
-}
-
 function hidePopoverElement(element: HTMLElement) {
   if (!isPopoverOpen(element)) {
     return;
@@ -87,25 +73,41 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
   onAfterClose,
   exitElements,
 }: UsePopoverOptions<T>): UsePopoverReturn {
+  const popoverSource = usePopoverSource();
   let pendingSource: HTMLElement | undefined;
   const exitCompletion = useExitMotionCompletion<void, T>({
     rootRef: popoverRef,
     open,
     ownedElements: exitElements,
     onComplete: () => {
+      popoverSource.release();
       void onAfterClose?.();
     },
   });
 
-  function resolveSource() {
-    const source = pendingSource ?? anchorElement?.();
+  function syncOpen() {
+    const popover = popoverRef.value;
+    if (!popover || !open.value) return;
+    exitCompletion.cancel();
+    const wasOpen = isPopoverOpen(popover);
+    const source = pendingSource ?? (wasOpen ? undefined : anchorElement?.());
     pendingSource = undefined;
-    return source;
+    if (!wasOpen) onBeforeOpen?.();
+    popoverSource.show(popover, source);
+    if (!wasOpen) void onAfterOpen?.();
   }
 
   function show(options: UsePopoverShowOptions = {}) {
-    pendingSource = options.source;
+    pendingSource = options.source ?? (open.value ? pendingSource : undefined);
+    exitCompletion.cancel();
     open.value = true;
+    if (popoverRef.value && isPopoverOpen(popoverRef.value)) {
+      syncOpen();
+    } else {
+      // Also covers a native dismissal whose queued toggle has not arrived yet:
+      // setting an already-true model alone would not schedule the watcher.
+      void nextTick(syncOpen);
+    }
   }
 
   function hide() {
@@ -122,10 +124,8 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
   }
 
   function handlePopoverToggle(event: Event) {
-    const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
     const target = event.currentTarget as HTMLElement | null;
-    const nextOpen =
-      nextState === 'open' ? true : nextState === 'closed' ? false : target ? isPopoverOpen(target) : open.value;
+    const nextOpen = target ? isPopoverOpen(target) : open.value;
 
     if (nextOpen) {
       exitCompletion.cancel();
@@ -145,8 +145,7 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
 
   function handleExternalDropdownShow(event: Event) {
     const detail = 'detail' in event ? (event.detail as ExternalDropdownShowDetail | undefined) : undefined;
-    pendingSource = detail?.source;
-    open.value = true;
+    show(detail);
   }
 
   function handleExternalDropdownHide() {
@@ -155,7 +154,7 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
 
   watch(
     [open, popoverRef],
-    async ([nextOpen]) => {
+    ([nextOpen]) => {
       const popover = popoverRef.value;
 
       if (!popover) {
@@ -163,10 +162,7 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
       }
 
       if (nextOpen) {
-        exitCompletion.cancel();
-        onBeforeOpen?.();
-        showPopoverElement(popover, resolveSource());
-        await onAfterOpen?.();
+        syncOpen();
         return;
       }
 
@@ -182,6 +178,14 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
       immediate: true,
       flush: 'post',
     },
+  );
+
+  watch(
+    () => anchorElement?.(),
+    (source) => {
+      if (open.value && popoverRef.value && source) popoverSource.show(popoverRef.value, source);
+    },
+    { flush: 'post' },
   );
 
   watch(

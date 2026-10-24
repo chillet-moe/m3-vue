@@ -93,6 +93,8 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 
 原生弹出层关闭时会立即触发 `update:open(false)`。如果清理操作需要等到 Menu 自身的透明度和缩放退出动画结束后再执行，请使用 `closed`。插槽菜单内容内部的动画不计入等待范围。
 
+`Menu.show(focusFirst = false, source?)` 也可在 Menu 已打开时调用。传入新的 `source` 会更新 CSS 锚点并保持 Menu 打开；不会触发 `update:open(false)` 或 `closed`，并会关闭所有子菜单。传入相同的 `source` 或省略 `source` 会保留当前锚点。每次以 `focusFirst: true` 调用都会明确请求聚焦首个菜单项；`false` 则保留当前焦点。Menu 关闭后，若再次调用时未传入 `source`，不会复用先前显式指定的 source。
+
 ### MenuContainer
 
 <ApiTable component="MenuContainer" />

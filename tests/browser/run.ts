@@ -9,3 +9,5 @@ await import('./multi-window/run');
 await import('./desktop-workspace/run');
 
 await import('./overlay-appearance/run');
+
+await import('./menu-reanchor/run');

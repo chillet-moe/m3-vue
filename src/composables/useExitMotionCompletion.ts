@@ -71,7 +71,8 @@ export function useExitMotionCompletion<T, TElement extends HTMLElement = HTMLEl
           return;
         }
 
-        exitPending = false;
+        // The native toggle event can arrive after a zero-duration exit.
+        // Keep this close cycle completed until cancel() starts a new one.
         options.onComplete?.(payload);
       };
 

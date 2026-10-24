@@ -48,6 +48,12 @@ Popover is optional. Use it when you need a small anchored panel with simple ope
 motion to finish, but does not wait for animations inside slot content. Keep slot payload available while closing and
 release it from `closed`.
 
+## Show API
+
+Calling `Popover.show({ source })` while open updates the source without closing and reopening the Popover or triggering
+its open or close lifecycle. Repeating the same `source`, or omitting it, keeps the current source. `anchorName` and
+`anchorElement` take precedence for CSS positioning; changes to `anchorElement` can update the position while open.
+
 ## Examples
 
 ### Default
