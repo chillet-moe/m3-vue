@@ -33,16 +33,6 @@ Breadcrumbs show the current page location within a navigational hierarchy.
   <Breadcrumb v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="breadcrumb" />
-
-## API
-
-### Breadcrumb
-
-<ApiTable component="Breadcrumb" v-model="props" />
-
-<StyleTokenTable component="Breadcrumb" />
-
 ## Examples
 
 ### Default
@@ -62,3 +52,13 @@ Breadcrumbs show the current page location within a navigational hierarchy.
 Use `@item-click` to bridge item clicks into your router.
 
 <DemoContainer :src="BreadcrumbRouterLinkSrc"><BreadcrumbRouterLink /></DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="breadcrumb" />
+
+### Breadcrumb
+
+<ApiTable component="Breadcrumb" v-model="props" />
+
+<StyleTokenTable component="Breadcrumb" />

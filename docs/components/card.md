@@ -32,12 +32,6 @@ Cards provide a flexible surface for grouped content, with elevated, filled, out
   </Card>
 </DemoContainer>
 
-<AnatomyTable scope="card" />
-
-<ApiTable component="Card" v-model="props" />
-
-<StyleTokenTable component="Card" />
-
 ## Examples
 
 ### Default
@@ -57,3 +51,11 @@ Cards provide a flexible surface for grouped content, with elevated, filled, out
 <DemoContainer :src="CardClickableSrc" :viewport="false">
   <CardClickable />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="card" />
+
+<ApiTable component="Card" v-model="props" />
+
+<StyleTokenTable component="Card" />

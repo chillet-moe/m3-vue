@@ -17,12 +17,6 @@ Accordion is provided as the `useAccordion` composable. It manages open state, A
 
 This is intentionally headless because accordion UI varies heavily by product surface: list rows, cards, settings panels, sidebars, and dense tables all need different structure.
 
-## Composable
-
-### useAccordion
-
-<SourceApiTable api="useAccordion" />
-
 ## Examples
 
 ### Default
@@ -42,3 +36,9 @@ This is intentionally headless because accordion UI varies heavily by product su
 <DemoContainer :src="AccordionStandaloneSrc">
   <AccordionStandalone />
 </DemoContainer>
+
+## Composable
+
+### useAccordion
+
+<SourceApiTable api="useAccordion" />

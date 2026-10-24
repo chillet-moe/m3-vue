@@ -13,10 +13,13 @@ pnpm run fmt:check
 pnpm run lint
 pnpm run check
 pnpm run docs:dev
+pnpm run docs:check
 pnpm run docs:build
 pnpm run test:browser
 ```
 
-`pnpm run check` combines formatting, lint, and type checking. Use `pnpm exec vitest run <file>` for focused tests. Run `pnpm run check` before publishing or submitting changes.
+`pnpm run check` combines formatting, lint, type checking, and documentation translation-pair/local-link checks. Use `pnpm exec vitest run <file>` for focused tests. Run `pnpm run check` before publishing or submitting changes.
 
 The repository has no ordinary Vite application entry. Use `pnpm run docs:dev` for the documentation site. The browser fixtures and benchmarks have their own run instructions.
+
+Documentation structure and page authoring conventions are described in [Documentation](documentation.md).

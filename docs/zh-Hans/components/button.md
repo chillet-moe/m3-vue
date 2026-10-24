@@ -44,7 +44,7 @@ const props = ref({
 
 按钮用于触发主要、次要或低强调操作，并采用 Material 3 视觉样式。
 
-操作组件会将 `title` 转换为组件库的工具提示。有关共同行为，请参阅[操作工具提示](/zh-Hans/guides/action-tooltips)。
+操作组件会将 `title` 转换为组件库的工具提示。有关共同行为，请参阅[操作工具提示](/zh-Hans/components/tooltip#action-tooltips)。
 
 当操作层级不明确时，`text` 是稳妥的默认样式。只有在某个表面或操作组中唯一的主要流程完成操作才使用 `filled`。重要的次要操作使用 `outlined`；需要比描边样式更醒目时使用 `tonal`。
 
@@ -54,12 +54,6 @@ const props = ref({
     Button
   </Button>
 </DemoContainer>
-
-<AnatomyTable scope="button" />
-
-<ApiTable component="Button" v-model="props" />
-
-<StyleTokenTable component="Button" />
 
 ## 示例
 
@@ -132,3 +126,11 @@ const props = ref({
 <DemoContainer :src="ButtonRouterLinkSrc">
   <ButtonRouterLink />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="button" />
+
+<ApiTable component="Button" v-model="props" />
+
+<StyleTokenTable component="Button" />

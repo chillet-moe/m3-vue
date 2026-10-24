@@ -82,6 +82,8 @@ const { showDialog, showSnackbar } = useOverlays();
 
 如果多个应用或可独立处置的面板使用同一个模块，请勿保留模块级共享控制器。应使用拥有该 UI 的实例创建控制器。
 
+## 参考
+
 <AnatomyTable scope="overlay-host" />
 
 <ApiTable component="OverlayHost" />

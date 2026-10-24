@@ -50,12 +50,6 @@ DateRangePicker 是用于选择开始和结束日期的独立界面。默认情�
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="date-range-picker" />
-
-<ApiTable component="DateRangePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
-
-<StyleTokenTable component="DateRangePicker" />
-
 原生弹出层关闭时会触发 `update:open(false)`。DateRangePicker 自身的退出动画结束后会触发 `closed`。退出期间会保留当前日历视图，动画结束后再重置。
 
 ## 示例
@@ -77,3 +71,11 @@ DateRangePicker 是用于选择开始和结束日期的独立界面。默认情�
 <DemoContainer :src="DateRangePickerConstraintsSrc">
   <DateRangePickerConstraints />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="date-range-picker" />
+
+<ApiTable component="DateRangePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
+
+<StyleTokenTable component="DateRangePicker" />

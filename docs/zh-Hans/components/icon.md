@@ -25,12 +25,6 @@ Icon 组件可直接渲染 Material Symbols 名称，便于在整个组件库和
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="icon" />
-
-<ApiTable component="Icon" v-model="props" />
-
-<StyleTokenTable component="Icon" />
-
 ## 示例
 
 ### 默认
@@ -38,3 +32,11 @@ Icon 组件可直接渲染 Material Symbols 名称，便于在整个组件库和
 <DemoContainer :src="IconDefaultSrc" :viewport="false">
   <IconDefault />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="icon" />
+
+<ApiTable component="Icon" v-model="props" />
+
+<StyleTokenTable component="Icon" />

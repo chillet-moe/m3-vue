@@ -11,15 +11,18 @@
 
 ## 当前分类
 
-| 分类          | 标准                         | 组件                                                                           |
-| ------------- | ---------------------------- | ------------------------------------------------------------------------------ |
-| `Actions`     | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`                                          |
-| `Feedback`    | 传达状态、提示、反馈或进度   | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`                |
-| `Containment` | 承载、分隔、组织或覆盖内容   | `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet` |
-| `Display`     | 展示基础视觉内容             | `Icon`                                                                         |
-| `Inputs`      | 输入文本、结构化值或选项查询 | `Combobox`, `InputOtp`, `Select`, `TextField`                                  |
-| `Navigation`  | 在页面、视图或内容范围间移动 | `Menu`, `NavigationRail`, `Pagination`, `Tabs`                                 |
-| `Selection`   | 选择、切换或调整一个已有值   | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`                   |
+此表与文档侧边栏中的组件分类对应。`ProgressIndicator` 是一组组件，子项列在名称后。
+
+| 分类             | 标准                         | 组件                                                                                                                                          |
+| ---------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Infrastructure` | 为组件提供共享基础设施       | `OverlayHost`                                                                                                                                 |
+| `Actions`        | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`, `FloatingActionButton`, `FloatingActionButtonMenu`                                                     |
+| `Feedback`       | 传达状态、提示、反馈或进度   | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`（`CircularProgressIndicator`, `LinearProgressIndicator`, `LoadingIndicator`） |
+| `Containment`    | 承载、分隔、组织或覆盖内容   | `Accordion`, `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet`                                                   |
+| `Display`        | 展示基础视觉内容             | `Icon`                                                                                                                                        |
+| `Inputs`         | 输入文本、结构化值或选项查询 | `Combobox`, `DatePicker`, `DateRangePicker`, `InputOtp`, `Select`, `TextField`, `TimePicker`                                                  |
+| `Navigation`     | 在页面、视图或内容范围间移动 | `Breadcrumb`, `Menu`, `NavigationDrawer`, `NavigationRail`, `Pagination`, `Tabs`                                                              |
+| `Selection`      | 选择、切换或调整一个已有值   | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`                                                                                  |
 
 ## ProgressIndicator
 

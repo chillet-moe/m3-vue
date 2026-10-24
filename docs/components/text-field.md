@@ -44,19 +44,13 @@ application's responsibility.
 Field spacing belongs to the surrounding layout; preserve its intended density instead of normalizing every field
 group to one gap. `labelClearance` accepts a CSS length for local block-start clearance and can inherit a subtree
 default from `fieldContextKey`; it is additive with any parent gap. See the
-[floating label spacing guide](../guides/floating-label-spacing-lab).
+[floating label spacing guide](../guides/field-layout).
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <TextField v-bind="props" v-model="modelValue" />
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="text-field" />
-
-<ApiTable component="TextField" v-model="props" :exclude="['as', 'rows']" />
-
-<StyleTokenTable component="TextField" />
 
 ## Examples
 
@@ -103,3 +97,11 @@ container height. TextField keeps its native floating-label notch and field-spec
 <DemoContainer :src="TextFieldPasswordSrc">
   <TextFieldPassword />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="text-field" />
+
+<ApiTable component="TextField" v-model="props" :exclude="['as', 'rows']" />
+
+<StyleTokenTable component="TextField" />

@@ -44,12 +44,6 @@ DatePicker is a standalone date surface. TextField uses it automatically for `ty
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="date-picker" />
-
-<ApiTable component="DatePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
-
-<StyleTokenTable component="DatePicker" />
-
 `update:open(false)` is emitted when the native popover closes. `closed` follows after the DatePicker-owned exit motion
 finishes. The current calendar view is preserved during the exit and reset afterward.
 
@@ -80,3 +74,11 @@ embedded date pickers inherit the same preference. See [component defaults](/get
 <DemoContainer :src="DatePickerConstraintsSrc">
   <DatePickerConstraints />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="date-picker" />
+
+<ApiTable component="DatePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
+
+<StyleTokenTable component="DatePicker" />

@@ -38,12 +38,6 @@ Snackbar 用于呈现短暂状态更新，可选操作按钮和关闭按钮均�
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="snackbar" />
-
-<ApiTable component="Snackbar" v-model="props" />
-
-<StyleTokenTable component="Snackbar" />
-
 ## 示例
 
 ### 默认
@@ -63,3 +57,11 @@ Snackbar 用于呈现短暂状态更新，可选操作按钮和关闭按钮均�
 <DemoContainer :src="SnackbarCombinationsSrc" :viewport="false">
   <SnackbarCombinations />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="snackbar" />
+
+<ApiTable component="Snackbar" v-model="props" />
+
+<StyleTokenTable component="Snackbar" />

@@ -50,12 +50,6 @@ DateRangePicker is a standalone surface for choosing a start and end date. By de
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="date-range-picker" />
-
-<ApiTable component="DateRangePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
-
-<StyleTokenTable component="DateRangePicker" />
-
 `update:open(false)` is emitted when the native popover closes. `closed` follows after the DateRangePicker-owned exit
 motion finishes. The current calendar view is preserved during the exit and reset afterward.
 
@@ -78,3 +72,11 @@ motion finishes. The current calendar view is preserved during the exit and rese
 <DemoContainer :src="DateRangePickerConstraintsSrc">
   <DateRangePickerConstraints />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="date-range-picker" />
+
+<ApiTable component="DateRangePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
+
+<StyleTokenTable component="DateRangePicker" />

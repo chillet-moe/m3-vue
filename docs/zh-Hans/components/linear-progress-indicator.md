@@ -37,12 +37,6 @@ LinearProgressIndicator 在水平轨道上显示确定或不确定进度。
   <LinearProgressIndicator v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="linear-progress-indicator" />
-
-<ApiTable component="LinearProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
-
-<StyleTokenTable component="LinearProgressIndicator" />
-
 ## 示例
 
 ### 默认
@@ -62,3 +56,11 @@ LinearProgressIndicator 在水平轨道上显示确定或不确定进度。
 <DemoContainer :src="LinearProgressIndicatorIndeterminateSrc" :viewport="false">
   <LinearProgressIndicatorIndeterminate />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="linear-progress-indicator" />
+
+<ApiTable component="LinearProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
+
+<StyleTokenTable component="LinearProgressIndicator" />

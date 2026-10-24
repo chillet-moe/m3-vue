@@ -35,12 +35,6 @@ LoadingIndicator 使用形状变化的活动指示器显示短暂等待中的不
   <LoadingIndicator v-bind="props" aria-label="正在加载" />
 </DemoContainer>
 
-<AnatomyTable scope="loading-indicator" />
-
-<ApiTable component="LoadingIndicator" v-model="props" :exclude="['ariaLabel']" />
-
-<StyleTokenTable component="LoadingIndicator" />
-
 ## 示例
 
 ### 默认
@@ -60,3 +54,11 @@ LoadingIndicator 使用形状变化的活动指示器显示短暂等待中的不
 <DemoContainer :src="LoadingIndicatorSizesSrc">
   <LoadingIndicatorSizes />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="loading-indicator" />
+
+<ApiTable component="LoadingIndicator" v-model="props" :exclude="['ariaLabel']" />
+
+<StyleTokenTable component="LoadingIndicator" />

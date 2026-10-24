@@ -50,12 +50,6 @@ Button groups keep a related set of options visually connected while preserving 
   </ButtonGroup>
 </DemoContainer>
 
-<AnatomyTable scope="button-group" />
-
-<ApiTable component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
-
-<StyleTokenTable component="ButtonGroup" />
-
 ## Examples
 
 ### Default
@@ -94,7 +88,13 @@ Button groups keep a related set of options visually connected while preserving 
   <ButtonGroupMultiple />
 </DemoContainer>
 
-## API
+## Reference
+
+<AnatomyTable scope="button-group" />
+
+<ApiTable component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
+
+<StyleTokenTable component="ButtonGroup" />
 
 ### ButtonGroupItem
 

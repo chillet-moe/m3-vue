@@ -79,19 +79,13 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 </RouterLink>
 ```
 
-## Composable
-
-### useMenu
-
-<SourceApiTable api="useMenu" />
-
-## API
-
-### Menu
+## 参考
 
 <ApiTable component="Menu" />
 
 <StyleTokenTable component="Menu" />
+
+### Menu
 
 原生弹出层关闭时会立即触发 `update:open(false)`。如果清理操作需要等到 Menu 自身的透明度和缩放退出动画结束后再执行，请使用 `closed`。插槽菜单内容内部的动画不计入等待范围。
 
@@ -122,3 +116,9 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 <AnatomyTable scope="menu" />
 
 <AnatomyTable scope="menu-item" />
+
+## Composable
+
+### useMenu
+
+<SourceApiTable api="useMenu" />

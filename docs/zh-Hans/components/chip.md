@@ -40,12 +40,6 @@ Chip 支持辅助、建议、筛选和输入等场景，并统一提供选择、
   <Chip v-bind="props" v-model="selected">Chip</Chip>
 </DemoContainer>
 
-<AnatomyTable scope="chip" />
-
-<ApiTable component="Chip" v-model="props" :exclude="['value', 'name', 'ariaLabel']" />
-
-<StyleTokenTable component="Chip" />
-
 ## 示例
 
 ### 默认
@@ -83,3 +77,11 @@ Chip 支持辅助、建议、筛选和输入等场景，并统一提供选择、
 <DemoContainer :src="ChipDisabledSrc" :viewport="false">
   <ChipDisabled />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="chip" />
+
+<ApiTable component="Chip" v-model="props" :exclude="['value', 'name', 'ariaLabel']" />
+
+<StyleTokenTable component="Chip" />

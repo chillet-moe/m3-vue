@@ -46,7 +46,6 @@ onMounted(() => {
 type ApiTableSection = {
   key: 'props' | 'events' | 'slots';
   title: string;
-  empty: string;
   rows: unknown[];
 };
 
@@ -63,26 +62,24 @@ const sections = computed<ApiTableSection[]>(() => {
     return [];
   }
 
-  return [
+  const result: ApiTableSection[] = [
     {
       key: 'props',
       title: isZhHans.value ? '属性' : 'Props',
-      empty: isZhHans.value ? '暂无属性文档。' : 'No props documented.',
       rows: meta.value.props,
     },
     {
       key: 'events',
       title: isZhHans.value ? '事件' : 'Events',
-      empty: isZhHans.value ? '暂无事件文档。' : 'No events documented.',
       rows: meta.value.events,
     },
     {
       key: 'slots',
       title: isZhHans.value ? '插槽' : 'Slots',
-      empty: isZhHans.value ? '暂无插槽文档。' : 'No slots documented.',
       rows: meta.value.slots,
     },
   ];
+  return result.filter((section) => section.rows.length > 0);
 });
 
 const inlineSections = computed(() => {
@@ -160,11 +157,7 @@ function getSectionContentId(key: string) {
             </div>
 
             <div v-show="!isSectionCollapsed(section.key)" :id="getSectionContentId(section.key)">
-              <p v-if="section.rows.length === 0" class="api-table-empty">
-                {{ section.empty }}
-              </p>
-
-              <div v-else class="api-table-scroll">
+              <div class="api-table-scroll">
                 <table class="api-table-grid">
                   <thead>
                     <tr>
@@ -227,12 +220,7 @@ function getSectionContentId(key: string) {
               <span class="api-table-static-title">{{ section.title }}</span>
               <span class="api-table-count ignore-header">{{ section.rows.length }}</span>
             </h2>
-
-            <p v-if="section.rows.length === 0" class="api-table-empty">
-              {{ section.empty }}
-            </p>
-
-            <div v-else class="api-table-scroll">
+            <div class="api-table-scroll">
               <table class="api-table-grid">
                 <thead>
                   <tr v-if="section.key === 'events'">

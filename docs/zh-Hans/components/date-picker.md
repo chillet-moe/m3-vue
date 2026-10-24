@@ -44,12 +44,6 @@ DatePicker 是独立的日期选择界面。TextField 在 `type="date"` 和 `typ
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="date-picker" />
-
-<ApiTable component="DatePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
-
-<StyleTokenTable component="DatePicker" />
-
 原生弹出层关闭时会触发 `update:open(false)`。DatePicker 自身的退出动画结束后会触发 `closed`。退出期间会保留当前日历视图，动画结束后再重置。
 
 ## 星期起始日
@@ -77,3 +71,11 @@ DatePicker 是独立的日期选择界面。TextField 在 `type="date"` 和 `typ
 <DemoContainer :src="DatePickerConstraintsSrc">
   <DatePickerConstraints />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="date-picker" />
+
+<ApiTable component="DatePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement', 'locale', 'today']" />
+
+<StyleTokenTable component="DatePicker" />

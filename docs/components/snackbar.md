@@ -38,12 +38,6 @@ Snackbar presents transient status updates with optional action and dismiss affo
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="snackbar" />
-
-<ApiTable component="Snackbar" v-model="props" />
-
-<StyleTokenTable component="Snackbar" />
-
 ## Examples
 
 ### Default
@@ -63,3 +57,11 @@ Snackbar presents transient status updates with optional action and dismiss affo
 <DemoContainer :src="SnackbarCombinationsSrc" :viewport="false">
   <SnackbarCombinations />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="snackbar" />
+
+<ApiTable component="Snackbar" v-model="props" />
+
+<StyleTokenTable component="Snackbar" />

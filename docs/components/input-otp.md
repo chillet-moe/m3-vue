@@ -37,12 +37,6 @@ Input OTP fields collect short one-time codes with single-character cells, keybo
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="input-otp" />
-
-<ApiTable component="InputOtp" v-model="props" :exclude="['id', 'name', 'autocomplete', 'inputMode']" />
-
-<StyleTokenTable component="InputOtp" />
-
 ## Examples
 
 ### Default
@@ -56,3 +50,11 @@ Input OTP fields collect short one-time codes with single-character cells, keybo
 <DemoContainer :src="InputOtpStatesSrc">
   <InputOtpStates />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="input-otp" />
+
+<ApiTable component="InputOtp" v-model="props" :exclude="['id', 'name', 'autocomplete', 'inputMode']" />
+
+<StyleTokenTable component="InputOtp" />

@@ -27,12 +27,6 @@ follow the surrounding text size and weight.
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="icon" />
-
-<ApiTable component="Icon" v-model="props" />
-
-<StyleTokenTable component="Icon" />
-
 ## Examples
 
 ### Default
@@ -40,3 +34,11 @@ follow the surrounding text size and weight.
 <DemoContainer :src="IconDefaultSrc" :viewport="false">
   <IconDefault />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="icon" />
+
+<ApiTable component="Icon" v-model="props" />
+
+<StyleTokenTable component="Icon" />

@@ -33,16 +33,6 @@ const props = ref({
   <Breadcrumb v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="breadcrumb" />
-
-## API
-
-### Breadcrumb
-
-<ApiTable component="Breadcrumb" v-model="props" />
-
-<StyleTokenTable component="Breadcrumb" />
-
 ## 示例
 
 ### 默认
@@ -62,3 +52,13 @@ const props = ref({
 使用 `@item-click` 将条目点击事件接入路由器。
 
 <DemoContainer :src="BreadcrumbRouterLinkSrc"><BreadcrumbRouterLink /></DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="breadcrumb" />
+
+### Breadcrumb
+
+<ApiTable component="Breadcrumb" v-model="props" />
+
+<StyleTokenTable component="Breadcrumb" />

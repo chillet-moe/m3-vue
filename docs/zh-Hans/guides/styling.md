@@ -14,7 +14,7 @@
 
 Slider 和 ListItem 默认使用 `appearance="standard"`。Expressive 保留原有外观。这不是全库通用的变体；应使用各组件文档中的 API，而不是给所有控件传入 `appearance`。ListItem 的 standard 外观会让活动指示器保持整行宽度，不展开高亮，也不执行按压形状变换。普通列表和虚拟列表中的 SelectItem 都采用这种克制的呈现方式；键盘活动状态与选中状态彼此独立。
 
-使用 `size` 选择组件支持的尺寸，并通过公开 Token 做更细致的调整。视觉尺寸较小不代表命中区域也要变小：Slider 将滑块和轨道尺寸与目标区域尺寸分开控制。Slider 可搭配 TextField 实现精确输入，详见 [Slider](../components/slider#精确数字输入)。TextField、Select 和 Combobox 支持相同的 32px、40px 和 56px 字段高度。为浮动标签预留空间，详见[字段间距](./floating-label-spacing-lab)。
+使用 `size` 选择组件支持的尺寸，并通过公开 Token 做更细致的调整。视觉尺寸较小不代表命中区域也要变小：Slider 将滑块和轨道尺寸与目标区域尺寸分开控制。Slider 可搭配 TextField 实现精确输入，详见 [Slider](../components/slider#精确数字输入)。TextField、Select 和 Combobox 支持相同的 32px、40px 和 56px 字段高度。为浮动标签预留空间，详见[字段间距](./field-layout)。
 
 根据操作的重要性选择按钮强调层级。`filled` 可用于唯一的主要操作，但不是所有主要操作都必须使用。常规操作使用 text/outlined 按钮或 standard IconButton；Dialog 操作使用 text。确保两种主题下的焦点都清晰可见。优先使用语义 Token 表达颜色；进一步缩小间距前，先检查长标签和窄容器下的显示效果。
 

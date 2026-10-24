@@ -35,12 +35,6 @@ Dividers separate related content into clear groups.
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="divider" />
-
-<ApiTable component="Divider" v-model="props" />
-
-<StyleTokenTable component="Divider" />
-
 ## Examples
 
 ### Default
@@ -66,3 +60,11 @@ Dividers separate related content into clear groups.
 <DemoContainer :src="DividerCustomSpacingSrc" :viewport="false">
   <DividerCustomSpacing />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="divider" />
+
+<ApiTable component="Divider" v-model="props" />
+
+<StyleTokenTable component="Divider" />

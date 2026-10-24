@@ -37,12 +37,6 @@ OTP 输入框用于收集简短的一次性验证码，提供单字符输入格�
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="input-otp" />
-
-<ApiTable component="InputOtp" v-model="props" :exclude="['id', 'name', 'autocomplete', 'inputMode']" />
-
-<StyleTokenTable component="InputOtp" />
-
 ## 示例
 
 ### 默认
@@ -56,3 +50,11 @@ OTP 输入框用于收集简短的一次性验证码，提供单字符输入格�
 <DemoContainer :src="InputOtpStatesSrc">
   <InputOtpStates />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="input-otp" />
+
+<ApiTable component="InputOtp" v-model="props" :exclude="['id', 'name', 'autocomplete', 'inputMode']" />
+
+<StyleTokenTable component="InputOtp" />

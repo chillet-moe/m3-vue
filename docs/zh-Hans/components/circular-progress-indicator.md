@@ -35,12 +35,6 @@ CircularProgressIndicator 沿圆形轨道显示确定或不确定进度。
   <CircularProgressIndicator v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="circular-progress-indicator" />
-
-<ApiTable component="CircularProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
-
-<StyleTokenTable component="CircularProgressIndicator" />
-
 ## 示例
 
 ### 默认
@@ -60,3 +54,11 @@ CircularProgressIndicator 沿圆形轨道显示确定或不确定进度。
 <DemoContainer :src="CircularProgressIndicatorIndeterminateSrc">
   <CircularProgressIndicatorIndeterminate />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="circular-progress-indicator" />
+
+<ApiTable component="CircularProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
+
+<StyleTokenTable component="CircularProgressIndicator" />

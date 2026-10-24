@@ -1,5 +1,5 @@
 ---
-title: Floating Label Spacing Lab
+title: Field Layout
 ---
 
 <script setup lang="ts">
@@ -7,33 +7,11 @@ import FloatingLabelSpacingLab from '../demos/guides/FloatingLabelSpacingLab.vue
 import FloatingLabelSpacingLabSrc from '../demos/guides/FloatingLabelSpacingLab.vue?raw';
 </script>
 
-# Floating Label Spacing Lab
+# Field Layout
 
-Outlined `TextField`, `Select`, and `Combobox` labels can float across the top edge of the field. The label is painted
-partly outside the nominal component box, so a mechanically correct layout gap may still look too tight.
-
-This page makes that visual overflow easy to compare. Adjust the vertical gap from `0px` to `40px`; the dashed outline
-shows each item's nominal box. The floating label may extend beyond that outline. You can also apply the component
-`labelClearance` to see how a concrete CSS length combines with the parent gap in both a field-only stack and a mixed
-settings panel.
-
-::: tip Layout ownership
-The demo starts with an `8px` parent `row-gap` and `0.5rem` of label clearance because that combination provides a
-harmonious regular-density reference here. Treat it as a visual starting point, not a migration rule: choose the gap
-from the surrounding content and add clearance only where floating labels need it.
-:::
-
-<DemoContainer :src="FloatingLabelSpacingLabSrc" :viewport="false">
-  <FloatingLabelSpacingLab />
-</DemoContainer>
-
-## What to compare
-
-- Whether adjacent floating labels and field outlines have enough visual separation.
-- Whether one spacing value works for populated fields and empty fields with placeholders.
-- Whether the preferred spacing still feels appropriate next to headings, body text, selection controls, dividers,
-  and actions.
-- How a concrete `labelClearance` length adds to the selected parent gap.
+Choose field dimensions and spacing to fit the surrounding layout density. Let the parent layout's `gap` set spacing
+between fields and other controls. Add `labelClearance` only when you observe a floating label visually crowding the
+content above an outlined `TextField`, `Select`, or `Combobox`.
 
 ## Label clearance
 
@@ -70,3 +48,15 @@ provide(fieldContextKey, { labelClearance });
 
 Do not provide a clearance merely because a subtree contains fields. Preserve its existing density, and provide a
 value only when the shared visual treatment calls for it.
+
+## Compare in the demo
+
+- Whether adjacent floating labels and field outlines have enough visual separation.
+- Whether one spacing value works for populated fields and empty fields with placeholders.
+- Whether the preferred spacing still feels appropriate next to headings, body text, selection controls, dividers,
+  and actions.
+- How a concrete `labelClearance` length adds to the selected parent gap.
+
+<DemoContainer :src="FloatingLabelSpacingLabSrc" :viewport="false">
+  <FloatingLabelSpacingLab />
+</DemoContainer>

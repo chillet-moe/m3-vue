@@ -30,12 +30,6 @@ Badges show compact status markers or small counts. Use the small variant for a 
   <Badge v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="badge" />
-
-<ApiTable component="Badge" v-model="props" />
-
-<StyleTokenTable component="Badge" />
-
 ## Examples
 
 ### Default
@@ -55,3 +49,11 @@ Badges show compact status markers or small counts. Use the small variant for a 
 <DemoContainer :src="BadgeOverflowSrc" :viewport="false">
   <BadgeOverflow />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="badge" />
+
+<ApiTable component="Badge" v-model="props" />
+
+<StyleTokenTable component="Badge" />

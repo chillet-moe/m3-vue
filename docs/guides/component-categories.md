@@ -1,26 +1,27 @@
 # Component Categories
 
-组件侧边栏按组件的主要使用目的分类，而不是按实现方式、DOM 结构或视觉形态分类。
+The component sidebar groups components by their primary purpose in the interface, rather than by implementation, DOM structure, or visual form.
 
-## 分类原则
+## Classification principles
 
-- 优先看组件在用户界面中承担的主要职责。
-- 如果一个组件同时符合多个分类，放到用户最可能寻找它的分类下。
-- 组件家族可以作为子分类出现。例如 `ProgressIndicator` 下面包含圆形和线形两种进度指示器。
-- 分类只是文档导航结构，不代表包导出、API 稳定性或代码目录边界。
+- Classify each component by its main responsibility in the user interface.
+- When a component could fit more than one category, place it where users are most likely to look for it.
+- Use component families as subcategories where helpful. For example, `ProgressIndicator` groups circular and linear progress indicators.
+- Categories organize documentation navigation; they do not define package exports, API stability, or source directory boundaries.
 
-## 当前分类
+## Current categories
 
-| 分类          | 标准                         | 组件                                                                           |
-| ------------- | ---------------------------- | ------------------------------------------------------------------------------ |
-| `Actions`     | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`                                          |
-| `Feedback`    | 传达状态、提示、反馈或进度   | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`                |
-| `Containment` | 承载、分隔、组织或覆盖内容   | `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet` |
-| `Display`     | 展示基础视觉内容             | `Icon`                                                                         |
-| `Inputs`      | 输入文本、结构化值或选项查询 | `Combobox`, `InputOtp`, `Select`, `TextField`                                  |
-| `Navigation`  | 在页面、视图或内容范围间移动 | `Menu`, `NavigationRail`, `Pagination`, `Tabs`                                 |
-| `Selection`   | 选择、切换或调整一个已有值   | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`                   |
+| Category         | Purpose                                                 | Components                                                                                   |
+| ---------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `Infrastructure` | Provide shared infrastructure for component overlays    | `OverlayHost`                                                                                |
+| `Actions`        | Trigger commands or operations                          | `Button`, `IconButton`, `ButtonGroup`, `FloatingActionButton`, `FloatingActionButtonMenu`    |
+| `Feedback`       | Communicate status, guidance, feedback, or progress     | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`                              |
+| `Containment`    | Hold, divide, organize, or overlay content              | `Accordion`, `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet`  |
+| `Display`        | Present basic visual content                            | `Icon`                                                                                       |
+| `Inputs`         | Accept text, structured values, or queries over options | `Combobox`, `DatePicker`, `DateRangePicker`, `InputOtp`, `Select`, `TextField`, `TimePicker` |
+| `Navigation`     | Move between pages, views, or content sections          | `Breadcrumb`, `Menu`, `NavigationDrawer`, `NavigationRail`, `Pagination`, `Tabs`             |
+| `Selection`      | Choose, toggle, or adjust an existing value             | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`                                 |
 
-## ProgressIndicator
+## Progress indicators
 
-`ProgressIndicator` 属于 `Feedback`，因为它的核心职责是告诉用户任务正在进行、当前进度是多少，或当前状态尚未完成。它不接收用户输入，也不负责导航或承载内容。
+`ProgressIndicator` is nested under `Feedback`, with `CircularProgressIndicator`, `LinearProgressIndicator`, and `LoadingIndicator` beneath it. These components tell users that a task is in progress, show its progress, or indicate that it is not yet complete. They do not accept user input, navigate, or contain other content.

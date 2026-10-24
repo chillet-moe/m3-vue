@@ -32,17 +32,11 @@ const props = ref({
 
 Floating action buttons represent the primary action on a screen. This component implements the M3 Expressive FAB sizes and color styles; label content turns it into an extended FAB.
 
-Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior and accessible-name fallback.
+Action components convert `title` into the library tooltip. See [Action Tooltips](/components/tooltip#action-tooltips) for the shared behavior and accessible-name fallback.
 
 <DemoContainer>
   <FloatingActionButton v-bind="props" aria-label="Edit" />
 </DemoContainer>
-
-<AnatomyTable scope="floating-action-button" />
-
-<ApiTable component="FloatingActionButton" v-model="props" />
-
-<StyleTokenTable component="FloatingActionButton" />
 
 ## Examples
 
@@ -83,3 +77,11 @@ Action components convert `title` into the library tooltip. See [Action Tooltips
 <DemoContainer :src="FloatingActionButtonTooltipSrc">
   <FloatingActionButtonTooltip />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="floating-action-button" />
+
+<ApiTable component="FloatingActionButton" v-model="props" />
+
+<StyleTokenTable component="FloatingActionButton" />

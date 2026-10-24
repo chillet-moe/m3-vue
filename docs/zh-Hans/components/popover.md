@@ -42,12 +42,6 @@ Popover 是可选组件。需要具有简单开关行为、轻触关闭和基础
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="popover" />
-
-<ApiTable component="Popover" v-model="props" />
-
-<StyleTokenTable component="Popover" />
-
 ## 关闭生命周期
 
 原生弹出层关闭时会触发 `update:open(false)`。之后的 `closed` 事件会等待 Popover 自身的退出动画结束，但不会等待插槽内容内部的动画。关闭期间请保留插槽内容，并在 `closed` 中释放。
@@ -65,3 +59,11 @@ Popover 是可选组件。需要具有简单开关行为、轻触关闭和基础
 <DemoContainer :src="PopoverControlledSrc" :viewport="false">
   <PopoverControlled />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="popover" />
+
+<ApiTable component="Popover" v-model="props" />
+
+<StyleTokenTable component="Popover" />

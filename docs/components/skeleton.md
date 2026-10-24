@@ -34,12 +34,6 @@ Skeleton renders a decorative loading placeholder. It intentionally does not pre
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="skeleton" />
-
-<ApiTable component="Skeleton" v-model="props" />
-
-<StyleTokenTable component="Skeleton" />
-
 ## Examples
 
 ### Default
@@ -92,3 +86,11 @@ Skeleton renders a decorative loading placeholder. It intentionally does not pre
   inline-size: 68%;
 }
 </style>
+
+## Reference
+
+<AnatomyTable scope="skeleton" />
+
+<ApiTable component="Skeleton" v-model="props" />
+
+<StyleTokenTable component="Skeleton" />

@@ -42,17 +42,13 @@ Select provides an anchored popover for choosing one or many options, using comb
 Field spacing belongs to the surrounding layout; preserve its intended density instead of normalizing every field
 group to one gap. `labelClearance` accepts a CSS length for local block-start clearance and can inherit a subtree
 default from `fieldContextKey`; it adds to any parent gap. See the
-[floating label spacing guide](../guides/floating-label-spacing-lab).
+[floating label spacing guide](../guides/field-layout).
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <Select v-bind="props" v-model="modelValue" :options="coffeeOptions" />
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="select" />
-
-<ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
 ## Menu Appearance
 
@@ -101,12 +97,6 @@ The `size` prop overrides `fieldContextKey`'s `size`, with `medium` as the fallb
   <SelectConfigurations />
 </DemoContainer>
 
-## Composable
-
-### useSelect
-
-<SourceApiTable api="useSelect" />
-
 ## External virtual lists
 
 Install `@tanstack/vue-virtual` in the consuming application. The library has no runtime dependency on it. This example uses the real [TanStack Vue Virtual adapter](https://tanstack.com/virtual/latest/docs/framework/vue/vue-virtual), including row measurement and scroll-to-index.
@@ -151,3 +141,15 @@ For consumer-owned search, loading and error states, see [Combobox](./combobox#a
 Select/Combobox now use combobox/listbox/option semantics, with focus retained on the input. Replace tests and styles that depend on Menu's private DOM. `optionLeading` and `optionTrailing` remain available.
 
 Public `useSelect` accepts `id`, `focus`, and `blur` callbacks instead of Menu, trigger and TextField refs. Bind the shared `open` ref to Popover and call `handleMenuClosed` from `closed`. Use `list`/`optionProps` for ordinary or virtual rendering; `handleMenuSelect` is removed.
+
+## Reference
+
+<AnatomyTable scope="select" />
+
+<ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
+
+## Composable
+
+### useSelect
+
+<SourceApiTable api="useSelect" />

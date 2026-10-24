@@ -24,7 +24,7 @@ import CheckBoxGroupSrc from '../demos/checkbox/CheckBoxGroup.vue?raw';
 # CheckBox
 
 Checkboxes let people confirm independent selections while preserving clear unchecked, checked, and disabled states.
-Use `presentation` when the checkbox is only a visual indicator inside another accessible control, such as a clickable [ListItem](/guides/selection-controls-in-list-items).
+Use `presentation` when the checkbox is only a visual indicator inside another accessible control, such as a clickable [ListItem](/components/item#selection-controls).
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">
@@ -32,12 +32,6 @@ Use `presentation` when the checkbox is only a visual indicator inside another a
     <div>Checked: {{ checked ? 'true' : 'false' }}</div>
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="checkbox" />
-
-<ApiTable component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
-
-<StyleTokenTable component="CheckBox" />
 
 ## Examples
 
@@ -60,3 +54,11 @@ Use `presentation` when the checkbox is only a visual indicator inside another a
 User activation follows native checkbox behavior: toggles `checked`, emits `update:checked`, then clears `indeterminate` with `update:indeterminate(false)`. Disabled checkboxes do not update. Presentation mode renders no input and emits no interactions; the parent owns all semantics. The component never derives group selection.
 
 <DemoContainer :src="CheckBoxGroupSrc"><CheckBoxGroup /></DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="checkbox" />
+
+<ApiTable component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
+
+<StyleTokenTable component="CheckBox" />

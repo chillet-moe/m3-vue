@@ -30,12 +30,6 @@ const props = ref({
   <Badge v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="badge" />
-
-<ApiTable component="Badge" v-model="props" />
-
-<StyleTokenTable component="Badge" />
-
 ## 示例
 
 ### 默认
@@ -55,3 +49,11 @@ const props = ref({
 <DemoContainer :src="BadgeOverflowSrc" :viewport="false">
   <BadgeOverflow />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="badge" />
+
+<ApiTable component="Badge" v-model="props" />
+
+<StyleTokenTable component="Badge" />

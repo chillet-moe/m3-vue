@@ -32,17 +32,11 @@ const props = ref({
 
 悬浮操作按钮代表屏幕上的主要操作。此组件实现 M3 Expressive FAB 的尺寸和颜色样式；加入标签内容后即成为扩展型 FAB。
 
-操作组件会将 `title` 转换为组件库的工具提示。有关共同行为和可访问名称回退方式，请参阅[操作工具提示](/zh-Hans/guides/action-tooltips)。
+操作组件会将 `title` 转换为组件库的工具提示。有关共同行为和可访问名称回退方式，请参阅[操作工具提示](/zh-Hans/components/tooltip#action-tooltips)。
 
 <DemoContainer>
   <FloatingActionButton v-bind="props" aria-label="Edit" />
 </DemoContainer>
-
-<AnatomyTable scope="floating-action-button" />
-
-<ApiTable component="FloatingActionButton" v-model="props" />
-
-<StyleTokenTable component="FloatingActionButton" />
 
 ## 示例
 
@@ -83,3 +77,11 @@ const props = ref({
 <DemoContainer :src="FloatingActionButtonTooltipSrc">
   <FloatingActionButtonTooltip />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="floating-action-button" />
+
+<ApiTable component="FloatingActionButton" v-model="props" />
+
+<StyleTokenTable component="FloatingActionButton" />

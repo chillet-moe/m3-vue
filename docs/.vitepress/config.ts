@@ -16,13 +16,13 @@ const sidebarLabels: Record<string, string> = {
   'Multiple windows': '多窗口',
   Styling: '样式定制',
   'Interaction Cursors': '交互光标',
-  'Floating Label Spacing Lab': '浮动标签间距实验',
+  'Field Layout': '字段布局',
+  'Appearance and Layout': '外观与布局',
+  'Advanced Integration': '进阶集成',
   'Scrollable Content Visual Overflow': '滚动内容的视觉溢出',
   'Vue Scope Boundaries': 'Vue 作用域边界',
   Composables: '组合式函数',
   'Component Categories': '组件分类',
-  'Action Tooltips': '操作提示',
-  'Selection Controls in List Items': '列表项中的选择控件',
   Localization: '本地化',
   Components: '组件',
   Infrastructure: '基础设施',
@@ -54,22 +54,27 @@ function translateSidebar(items: DefaultTheme.SidebarItem[]): DefaultTheme.Sideb
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'Getting Started',
-    items: [{ text: 'Installation', link: '/getting-started' }],
+    items: [
+      { text: 'Installation', link: '/getting-started' },
+      { text: 'Component Categories', link: '/guides/component-categories' },
+    ],
   },
   {
-    text: 'Guides',
+    text: 'Appearance and Layout',
     items: [
       { text: 'Styling', link: '/guides/styling' },
+      { text: 'Field Layout', link: '/guides/field-layout' },
+      { text: 'Interaction Cursors', link: '/guides/interaction-cursors' },
+      { text: 'Scrollable Content Visual Overflow', link: '/guides/scrollable-content-visual-overflow' },
+    ],
+  },
+  {
+    text: 'Advanced Integration',
+    items: [
       { text: 'Localization', link: '/guides/localization' },
       { text: 'Multiple windows', link: '/guides/multiple-windows' },
-      { text: 'Interaction Cursors', link: '/guides/interaction-cursors' },
-      { text: 'Floating Label Spacing Lab', link: '/guides/floating-label-spacing-lab' },
-      { text: 'Scrollable Content Visual Overflow', link: '/guides/scrollable-content-visual-overflow' },
       { text: 'Vue Scope Boundaries', link: '/guides/vue-scope-isolation' },
       { text: 'Composables', link: '/guides/composables' },
-      { text: 'Component Categories', link: '/guides/component-categories' },
-      { text: 'Action Tooltips', link: '/guides/action-tooltips' },
-      { text: 'Selection Controls in List Items', link: '/guides/selection-controls-in-list-items' },
     ],
   },
   {

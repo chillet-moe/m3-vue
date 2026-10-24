@@ -41,12 +41,6 @@ Side sheets present modal supporting content from the side of the viewport using
   </SideSheet>
 </DemoContainer>
 
-<AnatomyTable scope="side-sheet" />
-
-<ApiTable component="SideSheet" v-model="props" />
-
-<StyleTokenTable component="SideSheet" />
-
 ## Close lifecycle
 
 `update:open(false)` and `close` run when the native dialog closes. Use `closed` for cleanup that must wait until the
@@ -94,3 +88,11 @@ its customization token.
 <DemoContainer :src="SideSheetDetachedSrc" :viewport="false">
   <SideSheetDetached />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="side-sheet" />
+
+<ApiTable component="SideSheet" v-model="props" />
+
+<StyleTokenTable component="SideSheet" />

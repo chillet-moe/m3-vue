@@ -50,12 +50,6 @@ watch(
   </ButtonGroup>
 </DemoContainer>
 
-<AnatomyTable scope="button-group" />
-
-<ApiTable component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
-
-<StyleTokenTable component="ButtonGroup" />
-
 ## 示例
 
 ### 默认
@@ -94,7 +88,13 @@ watch(
   <ButtonGroupMultiple />
 </DemoContainer>
 
-## API
+## 参考
+
+<AnatomyTable scope="button-group" />
+
+<ApiTable component="ButtonGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
+
+<StyleTokenTable component="ButtonGroup" />
 
 ### ButtonGroupItem
 

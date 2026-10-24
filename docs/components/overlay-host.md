@@ -82,6 +82,8 @@ Existing `showDialog(options)` and `showSnackbar(options)` call bodies can stay 
 
 Do not keep a module-wide controller when multiple applications or independently disposable panels use that module. Create the controller with the owning UI instance.
 
+## Reference
+
 <AnatomyTable scope="overlay-host" />
 
 <ApiTable component="OverlayHost" />

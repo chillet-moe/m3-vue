@@ -82,12 +82,6 @@ Values produced by Slider interaction are quantized consistently:
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="slider" />
-
-<ApiTable component="Slider" v-model="props" />
-
-<StyleTokenTable component="Slider" />
-
 ## Examples
 
 ### Default
@@ -150,3 +144,11 @@ Standard sizing tokens are `--md-slider-track-thickness`, `--md-slider-thumb-siz
 ### Migrating the default
 
 Set `appearance="expressive"` per instance, provide `sliderContextKey` with `{ appearance: 'expressive' }`, or use `sliderAppearance: 'expressive'` in M3 defaults to retain the previous appearance. For choosing appearance and density together, see [Styling](../guides/styling).
+
+## Reference
+
+<AnatomyTable scope="slider" />
+
+<ApiTable component="Slider" v-model="props" />
+
+<StyleTokenTable component="Slider" />

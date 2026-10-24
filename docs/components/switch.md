@@ -26,7 +26,7 @@ const checked = ref(false);
 # Switch
 
 Switches communicate an immediate on or off state and support optional checked and unchecked icon affordances.
-Use `presentation` when the switch is only a visual indicator inside another accessible control, such as a clickable [ListItem](/guides/selection-controls-in-list-items).
+Use `presentation` when the switch is only a visual indicator inside another accessible control, such as a clickable [ListItem](/components/item#selection-controls).
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">
@@ -34,12 +34,6 @@ Use `presentation` when the switch is only a visual indicator inside another acc
     <div>Checked: {{ checked ? 'true' : 'false' }}</div>
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="switch" />
-
-<ApiTable component="Switch" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
-
-<StyleTokenTable component="Switch" />
 
 ## Examples
 
@@ -60,3 +54,11 @@ Use `presentation` when the switch is only a visual indicator inside another acc
 <DemoContainer :src="SwitchStatesSrc" :viewport="false">
   <SwitchStates />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="switch" />
+
+<ApiTable component="Switch" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
+
+<StyleTokenTable component="Switch" />

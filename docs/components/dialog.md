@@ -40,12 +40,6 @@ hierarchy through clear labels, order, and position rather than filled, tonal, o
   </Dialog>
 </DemoContainer>
 
-<AnatomyTable scope="dialog" />
-
-<ApiTable component="Dialog" v-model="props" />
-
-<StyleTokenTable component="Dialog" />
-
 ## Close lifecycle
 
 `update:open(false)` and `close` are emitted when the native dialog closes. Use them to update application state that
@@ -118,3 +112,11 @@ and sheet contract and its customization token.
 <DemoContainer :src="DialogWithIconSrc" :viewport="false">
   <DialogWithIcon />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="dialog" />
+
+<ApiTable component="Dialog" v-model="props" />
+
+<StyleTokenTable component="Dialog" />

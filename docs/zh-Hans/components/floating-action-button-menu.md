@@ -41,12 +41,6 @@ FAB 菜单从悬浮操作按钮展开，用于显示一组相关操作。此组�
   </FloatingActionButtonMenu>
 </DemoContainer>
 
-<AnatomyTable scope="floating-action-button-menu" />
-
-<ApiTable component="FloatingActionButtonMenu" v-model="props" />
-
-<StyleTokenTable component="FloatingActionButtonMenu" />
-
 `update:open(false)` 会立即反映原生弹出层状态。若清理操作必须等到 FAB 菜单的视觉退出效果结束后再执行，请使用 `closed`。
 
 ## 示例
@@ -80,3 +74,11 @@ FAB 菜单从悬浮操作按钮展开，用于显示一组相关操作。此组�
 <DemoContainer :src="FloatingActionButtonMenuControlledSrc">
   <FloatingActionButtonMenuControlled />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="floating-action-button-menu" />
+
+<ApiTable component="FloatingActionButtonMenu" v-model="props" />
+
+<StyleTokenTable component="FloatingActionButtonMenu" />

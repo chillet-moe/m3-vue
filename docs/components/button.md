@@ -44,7 +44,7 @@ const props = ref({
 
 Buttons let people trigger primary, secondary, or low-emphasis actions with Material 3 visual treatments.
 
-Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior.
+Action components convert `title` into the library tooltip. See [Action Tooltips](/components/tooltip#action-tooltips) for the shared behavior.
 
 `text` is the safe default when an action's hierarchy is not known. Use `filled` only for the single primary,
 flow-completing action in a surface or action group. Use `outlined` for important secondary actions and `tonal`
@@ -56,12 +56,6 @@ when they need more emphasis than an outline.
     Button
   </Button>
 </DemoContainer>
-
-<AnatomyTable scope="button" />
-
-<ApiTable component="Button" v-model="props" />
-
-<StyleTokenTable component="Button" />
 
 ## Examples
 
@@ -135,3 +129,11 @@ Use `RouterLink custom` and pass its `href` and `navigate` values into `Button`.
 <DemoContainer :src="ButtonRouterLinkSrc">
   <ButtonRouterLink />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="button" />
+
+<ApiTable component="Button" v-model="props" />
+
+<StyleTokenTable component="Button" />

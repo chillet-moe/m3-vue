@@ -55,12 +55,6 @@ Tabs 基于 `useTabs` composable 构建：键盘导航、ARIA 属性和值管理
   </Tabs>
 </DemoContainer>
 
-<AnatomyTable scope="tabs" />
-
-<ApiTable component="Tabs" v-model="props" />
-
-<StyleTokenTable component="Tabs" />
-
 ## 示例
 
 ### 默认
@@ -105,17 +99,13 @@ Tabs 基于 `useTabs` composable 构建：键盘导航、ARIA 属性和值管理
   <TabsHeadless />
 </DemoContainer>
 
-## Composable
+## 参考
 
-### useTabs
+<AnatomyTable scope="tabs" />
 
-<SourceApiTable api="useTabs" />
+<ApiTable component="Tabs" v-model="props" />
 
-## API
-
-### Tabs
-
-<ApiTable component="Tabs" />
+<StyleTokenTable component="Tabs" />
 
 ### Tab
 
@@ -128,3 +118,9 @@ Tabs 基于 `useTabs` composable 构建：键盘导航、ARIA 属性和值管理
 ### TabPanel
 
 <ApiTable component="TabPanel" />
+
+## Composable
+
+### useTabs
+
+<SourceApiTable api="useTabs" />

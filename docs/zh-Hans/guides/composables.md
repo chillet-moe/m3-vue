@@ -1,26 +1,28 @@
 # Composables
 
-M3 Vue 将复杂组件的**交互逻辑**与**视觉呈现**分离。每个复杂组件都由一个对应的 composable 驱动——composable 管理状态、键盘导航和 ARIA 属性，组件则负责 Material Design 3 的样式和模板。
+M3 Vue 优先提供可直接使用的组件。Composable 用于封装需要复用的交互逻辑、状态或生命周期行为；需要自定义模板或在组件外复用这些逻辑时，也可以直接使用公开的 composable。组件并不都依赖独立的 composable，Vue 组件本身也可以单独测试。
 
 ## 为什么分离？
 
-| 问题                                   | 分离后                                                    |
-| -------------------------------------- | --------------------------------------------------------- |
-| 逻辑内联在 `.vue` 文件中，无法单独测试 | Composable 可以在纯 JS 环境中测试                         |
-| 想要自定义模板但又需要标准交互行为     | 使用 composable 直接绑定到自定义元素                      |
-| 多个组件需要相同的交互模式             | 共享 composable（如 Select 和 Combobox 复用 `useSelect`） |
+| 使用场景                     | 可采用的方式                                                                         |
+| ---------------------------- | ------------------------------------------------------------------------------------ |
+| 直接使用库提供的外观和交互   | 使用现成组件                                                                         |
+| 需要自定义模板或复用交互逻辑 | 使用适合该场景的公开 composable                                                      |
+| 多个组件共享同一套交互行为   | 在共同实现边界复用逻辑，例如 Combobox 包装 Select，因而复用其完整的 `useSelect` 逻辑 |
 
 ## 可用的 Composables
 
-| Composable            | 用途                                      | 对应组件                                           |
-| --------------------- | ----------------------------------------- | -------------------------------------------------- |
-| `useTabs`             | 标签页切换、键盘导航、ARIA                | `Tabs`, `Tab`, `TabList`, `TabPanel`               |
-| `useAccordion`        | 折叠区状态、键盘导航、ARIA                | 无，Accordion 只提供 headless 逻辑                 |
-| `useMenu`             | 菜单打开/关闭、键盘导航、子菜单、选择     | `Menu`                                             |
-| `useSelect`           | 选项过滤、值管理、菜单控制                | `Select`, `Combobox`                               |
-| `usePressShapeMorph`  | 按压变形属性、禁用拦截和释放状态管理      | `Button`, `IconButton`, `Chip`, `Card`, `ListItem` |
-| `usePressedState`     | 低层按下状态管理                          | `usePressShapeMorph`                               |
-| `useDelegatedTooltip` | 高基数非交互 Tooltip 的事件代理和 slot 池 | 键盘、候选键等动态列表                             |
+| Composable            | 用途                                                       | 对应组件                                                                                                                               |
+| --------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `useTabs`             | 标签页状态、切换、键盘导航和 ARIA 属性                     | `Tabs`                                                                                                                                 |
+| `useAccordion`        | 折叠项状态、开合行为和 ARIA 属性                           | 无对应的 Accordion 组件；提供 headless 逻辑                                                                                            |
+| `useMenu`             | 菜单打开/关闭、键盘导航、子菜单和选择                      | `Menu`, `FloatingActionButtonMenu`                                                                                                     |
+| `useSelect`           | 选项过滤与导航、选择状态、菜单控制、选项属性及虚拟列表滚动 | `Select`；`Combobox` 包装 `Select`                                                                                                     |
+| `usePopover`          | 同步原生 Popover 的打开/关闭状态、关闭事件和退出动画       | `Popover`                                                                                                                              |
+| `useAnimatedNumber`   | 数值变化动画                                               | `Slider`；也用于进度状态逻辑                                                                                                           |
+| `usePressShapeMorph`  | 按压状态、形状变形属性及禁用状态处理                       | `Button`, `IconButton`, `Chip`, `Card`, `ListItem`, `FloatingActionButton`, `FloatingActionButtonMenu`, `FloatingActionButtonMenuItem` |
+| `usePressedState`     | 低层按下状态管理                                           | `usePressShapeMorph`                                                                                                                   |
+| `useDelegatedTooltip` | 为大量动态 Tooltip 提供事件代理和可复用的 Tooltip slot     | 面向自定义列表；没有绑定到特定组件                                                                                                     |
 
 ## 使用方式
 
@@ -126,26 +128,13 @@ const { tooltipSlots, refreshTooltip } = useDelegatedTooltip(
 `tooltipId` 应在同一个 document 内保持唯一。当列表数据改变时，调用 `refreshTooltip()` 让当前 slot 重新解析
 内容；组件卸载时 composable 会释放 anchor、slot 控制器和容器监听器。
 
-## API 模式
+## API
 
-每个 composable 遵循相同的模式：
-
-```ts
-const result = useXxx(options);
-
-// 状态（响应式）
-result.value; // ComputedRef<T>
-
-// 属性对象（用于 v-bind）
-result.triggerAttrs; // ComputedRef<Record<string, unknown>>
-
-// 方法
-result.setValue(v); // 更新状态
-```
+每个 composable 都有针对其职责设计的参数和返回值。请查阅对应的类型定义和组件示例，不要假设它们共用一套状态、属性或方法接口。
 
 ### Options 接收响应式值
 
-Options 中的大多数属性同时接受静态值和响应式值（`MaybeRefOrGetter<T>`）：
+是否接受静态值、响应式引用或 getter 由各 composable 的类型定义决定。以 `useTabs` 的 `orientation` 为例：
 
 ```ts
 // 静态
@@ -159,7 +148,7 @@ const tabs = useTabs({ orientation });
 const tabs = useTabs({ orientation: () => props.orientation });
 ```
 
-### 受控 vs 非受控
+### 受控与非受控
 
 传入 `value` 使组件变为受控模式，配合 `onValueChange` 处理变化：
 

@@ -38,12 +38,6 @@ const open = ref(false);
   </BottomSheet>
 </DemoContainer>
 
-<AnatomyTable scope="bottom-sheet" />
-
-<ApiTable component="BottomSheet" v-model="props" />
-
-<StyleTokenTable component="BottomSheet" />
-
 ## 关闭 lifecycle
 
 原生对话框关闭时会触发 `update:open(false)` 和 `close`。若清理操作必须等到底部弹出层完全不可见后再执行，请使用 `closed`。BottomSheet 自身的退出动画（包括背景遮罩）结束后会触发该事件，其返回值与 `close` 收到的原生对话框返回值相同。它不会等待插槽内容中的动画。若没有动画或启用了减少动态效果，事件会异步触发，不依赖业务超时。
@@ -78,3 +72,11 @@ const open = ref(false);
 <DemoContainer :src="BottomSheetNoHandleSrc" :viewport="false">
   <BottomSheetNoHandle />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="bottom-sheet" />
+
+<ApiTable component="BottomSheet" v-model="props" />
+
+<StyleTokenTable component="BottomSheet" />

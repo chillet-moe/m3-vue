@@ -44,12 +44,6 @@ TimePicker 是独立的时间选择界面。TextField 在 `type="time"` 时会�
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="time-picker" />
-
-<ApiTable component="TimePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement']" />
-
-<StyleTokenTable component="TimePicker" />
-
 原生弹出层关闭时会触发 `update:open(false)`。如果清理操作需要等到 TimePicker 自身的视觉退出完成后再执行，请使用 `closed`。
 
 ## 格式和输入模式
@@ -77,3 +71,11 @@ TimePicker 是独立的时间选择界面。TextField 在 `type="time"` 时会�
 <DemoContainer :src="TimePickerKeyboardSrc">
   <TimePickerKeyboard />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="time-picker" />
+
+<ApiTable component="TimePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement']" />
+
+<StyleTokenTable component="TimePicker" />

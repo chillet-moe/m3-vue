@@ -55,12 +55,6 @@ Tabs is built on the `useTabs` composable — the interaction logic (keyboard na
   </Tabs>
 </DemoContainer>
 
-<AnatomyTable scope="tabs" />
-
-<ApiTable component="Tabs" v-model="props" />
-
-<StyleTokenTable component="Tabs" />
-
 ## Examples
 
 ### Default
@@ -105,17 +99,13 @@ Use the `useTabs` composable directly to build custom tab UIs without any predef
   <TabsHeadless />
 </DemoContainer>
 
-## Composable
+## Reference
 
-### useTabs
+<AnatomyTable scope="tabs" />
 
-<SourceApiTable api="useTabs" />
+<ApiTable component="Tabs" v-model="props" />
 
-## API
-
-### Tabs
-
-<ApiTable component="Tabs" />
+<StyleTokenTable component="Tabs" />
 
 ### Tab
 
@@ -128,3 +118,9 @@ Use the `useTabs` composable directly to build custom tab UIs without any predef
 ### TabPanel
 
 <ApiTable component="TabPanel" />
+
+## Composable
+
+### useTabs
+
+<SourceApiTable api="useTabs" />

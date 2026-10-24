@@ -75,7 +75,8 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "remove-unused-vars": "tsx scripts/remove-unused-vars/index.ts",
-    "check": "pnpm run fmt:check && pnpm run lint && pnpm run typecheck"
+    "check": "pnpm run fmt:check && pnpm run lint && pnpm run typecheck && pnpm run docs:check",
+    "docs:check": "node scripts/check-docs.mjs"
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",

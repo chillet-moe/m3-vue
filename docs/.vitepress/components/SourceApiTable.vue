@@ -72,12 +72,13 @@ function getSectionContentId(name: string) {
       {{ isZhHans ? `未找到 ${api} 的 API 元数据。` : `No API metadata found for ${api}.` }}
     </p>
     <template v-else>
-      <div v-if="showSignature" class="source-api-signature">
+      <details v-if="showSignature" class="source-api-signature">
+        <summary>{{ isZhHans ? '完整类型签名' : 'Full type signature' }}</summary>
         <code>{{ meta.signature }}</code>
         <p class="source-api-source">
           {{ isZhHans ? '来源：' : 'Source: ' }}<code>{{ meta.source }}</code>
         </p>
-      </div>
+      </details>
 
       <template v-if="sections.length > 0">
         <section v-for="section in sections" :key="section.name" class="source-api-section">
@@ -149,12 +150,18 @@ function getSectionContentId(name: string) {
 }
 
 .source-api-signature {
-  display: grid;
-  gap: 0.5rem;
   padding: 0.875rem 1rem;
   border: 1px solid var(--vp-c-divider);
   border-radius: 1rem;
   background: var(--vp-c-bg-soft);
+}
+
+.source-api-signature summary {
+  cursor: pointer;
+}
+
+.source-api-signature[open] summary {
+  margin-block-end: 0.5rem;
 }
 
 .source-api-signature code {

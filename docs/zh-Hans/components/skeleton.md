@@ -34,12 +34,6 @@ Skeleton 用于显示装饰性的加载占位内容。它不会限定形状；�
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="skeleton" />
-
-<ApiTable component="Skeleton" v-model="props" />
-
-<StyleTokenTable component="Skeleton" />
-
 ## 示例
 
 ### 默认
@@ -92,3 +86,11 @@ Skeleton 用于显示装饰性的加载占位内容。它不会限定形状；�
   inline-size: 68%;
 }
 </style>
+
+## 参考
+
+<AnatomyTable scope="skeleton" />
+
+<ApiTable component="Skeleton" v-model="props" />
+
+<StyleTokenTable component="Skeleton" />

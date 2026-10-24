@@ -40,10 +40,6 @@ ChipGroup 用于协调单选或多选，同时让 Chip 本身保持可复用。
   </ChipGroup>
 </DemoContainer>
 
-<AnatomyTable scope="chip-group" />
-
-<ApiTable component="ChipGroup" v-model="props" :exclude="['name', 'ariaLabel']" />
-
 ## 示例
 
 ### 默认
@@ -57,3 +53,9 @@ ChipGroup 用于协调单选或多选，同时让 Chip 本身保持可复用。
 <DemoContainer :src="ChipGroupMultipleSrc" :viewport="false">
   <ChipGroupMultiple />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="chip-group" />
+
+<ApiTable component="ChipGroup" v-model="props" :exclude="['name', 'ariaLabel']" />

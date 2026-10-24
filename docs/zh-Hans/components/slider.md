@@ -82,12 +82,6 @@ Slider 会原样保留外部传入的 `value`，包括步进刻度之间的值�
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="slider" />
-
-<ApiTable component="Slider" v-model="props" />
-
-<StyleTokenTable component="Slider" />
-
 ## 示例
 
 ### 默认
@@ -149,3 +143,11 @@ Standard 尺寸 Token 为 `--md-slider-track-thickness`、`--md-slider-thumb-siz
 ### 迁移默认外观
 
 如需保留之前的外观，可在实例上设置 `appearance="expressive"`、通过 `sliderContextKey` 提供 `{ appearance: 'expressive' }`，或在 M3 默认值中设置 `sliderAppearance: 'expressive'`。外观与密度的搭配建议请参阅 [样式指南](../guides/styling#选择外观与密度)。
+
+## 参考
+
+<AnatomyTable scope="slider" />
+
+<ApiTable component="Slider" v-model="props" />
+
+<StyleTokenTable component="Slider" />

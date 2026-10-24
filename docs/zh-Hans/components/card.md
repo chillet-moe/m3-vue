@@ -32,12 +32,6 @@ const props = ref({
   </Card>
 </DemoContainer>
 
-<AnatomyTable scope="card" />
-
-<ApiTable component="Card" v-model="props" />
-
-<StyleTokenTable component="Card" />
-
 ## 示例
 
 ### 默认
@@ -57,3 +51,11 @@ const props = ref({
 <DemoContainer :src="CardClickableSrc" :viewport="false">
   <CardClickable />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="card" />
+
+<ApiTable component="Card" v-model="props" />
+
+<StyleTokenTable component="Card" />

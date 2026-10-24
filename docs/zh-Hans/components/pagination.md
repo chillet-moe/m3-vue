@@ -34,9 +34,29 @@ Pagination 提供可组合的分页导航模式，包含上一页/下一页辅�
 
 <DemoContainer><Pagination v-bind="props"><PaginationContent><PaginationItem><PaginationPrevious href="#" /></PaginationItem><PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem><PaginationItem><PaginationLink href="#" :is-active="true">2</PaginationLink></PaginationItem><PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem><PaginationItem><PaginationEllipsis /></PaginationItem><PaginationItem><PaginationNext href="#" /></PaginationItem></PaginationContent></Pagination></DemoContainer>
 
-<AnatomyTable scope="pagination" />
+## 示例
 
-## API
+### 默认
+
+<DemoContainer :src="PaginationDefaultSrc"><PaginationDefault /></DemoContainer>
+
+### 简单模式
+
+<DemoContainer :src="PaginationSimpleSrc"><PaginationSimple /></DemoContainer>
+
+### 仅图标
+
+<DemoContainer :src="PaginationIconsOnlySrc"><PaginationIconsOnly /></DemoContainer>
+
+### Vue Router
+
+`PaginationLink`、`PaginationPrevious` 和 `PaginationNext` 使用相同模式：通过 `RouterLink custom` 获取 `href` 和 `navigate`，再将它们传给分页控件。
+
+<DemoContainer :src="PaginationRouterLinkSrc"><PaginationRouterLink /></DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="pagination" />
 
 ### Pagination
 
@@ -67,23 +87,3 @@ Pagination 提供可组合的分页导航模式，包含上一页/下一页辅�
 ### PaginationEllipsis
 
 <ApiTable component="PaginationEllipsis" />
-
-## 示例
-
-### 默认
-
-<DemoContainer :src="PaginationDefaultSrc"><PaginationDefault /></DemoContainer>
-
-### 简单模式
-
-<DemoContainer :src="PaginationSimpleSrc"><PaginationSimple /></DemoContainer>
-
-### 仅图标
-
-<DemoContainer :src="PaginationIconsOnlySrc"><PaginationIconsOnly /></DemoContainer>
-
-### Vue Router
-
-`PaginationLink`、`PaginationPrevious` 和 `PaginationNext` 使用相同模式：通过 `RouterLink custom` 获取 `href` 和 `navigate`，再将它们传给分页控件。
-
-<DemoContainer :src="PaginationRouterLinkSrc"><PaginationRouterLink /></DemoContainer>

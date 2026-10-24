@@ -28,14 +28,6 @@ NavigationRail provides vertical primary destinations through `NavigationRailIte
 
 <DemoContainer><NavigationRail v-model="value" v-bind="props" style="block-size: 28rem"><NavigationRailItem value="home" icon="home" label="Home" /><NavigationRailItem value="bookmarks" icon="bookmark" label="Saved" /><NavigationRailItem value="folder" icon="folder" label="Files" /><NavigationRailItem value="settings" icon="settings" label="Settings" /></NavigationRail></DemoContainer>
 
-<AnatomyTable scope="navigation-rail" />
-
-<AnatomyTable scope="navigation-rail-item" />
-
-<ApiTable component="NavigationRail" v-model="props" />
-
-<StyleTokenTable component="NavigationRail" />
-
 ## Examples
 
 ### Default
@@ -50,11 +42,15 @@ NavigationRail provides vertical primary destinations through `NavigationRailIte
 
 <DemoContainer :src="NavigationRailStatesSrc"><NavigationRailStates /></DemoContainer>
 
-## API
+## Reference
 
-### NavigationRail
+<AnatomyTable scope="navigation-rail" />
 
-<ApiTable component="NavigationRail" />
+<AnatomyTable scope="navigation-rail-item" />
+
+<ApiTable component="NavigationRail" v-model="props" />
+
+<StyleTokenTable component="NavigationRail" />
 
 ### NavigationRailItem
 

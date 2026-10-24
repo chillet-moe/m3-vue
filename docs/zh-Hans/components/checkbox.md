@@ -23,7 +23,7 @@ import CheckBoxGroupSrc from '../../demos/checkbox/CheckBoxGroup.vue?raw';
 
 # 复选框
 
-复选框用于确认彼此独立的选项，并清晰呈现未选中、已选中和禁用状态。当复选框仅作为另一个可访问控件（例如可点击的 [ListItem](/zh-Hans/guides/selection-controls-in-list-items)）中的视觉指示器时，请使用 `presentation`。
+复选框用于确认彼此独立的选项，并清晰呈现未选中、已选中和禁用状态。当复选框仅作为另一个可访问控件（例如可点击的 [ListItem](/zh-Hans/components/item#selection-controls)）中的视觉指示器时，请使用 `presentation`。
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 0.75rem;">
@@ -31,12 +31,6 @@ import CheckBoxGroupSrc from '../../demos/checkbox/CheckBoxGroup.vue?raw';
     <div>已选中：{{ checked ? 'true' : 'false' }}</div>
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="checkbox" />
-
-<ApiTable component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
-
-<StyleTokenTable component="CheckBox" />
 
 ## 示例
 
@@ -59,3 +53,11 @@ import CheckBoxGroupSrc from '../../demos/checkbox/CheckBoxGroup.vue?raw';
 用户操作遵循原生复选框行为：切换 `checked`、触发 `update:checked`，再通过 `update:indeterminate(false)` 清除 `indeterminate`。禁用复选框不会更新。Presentation 模式不渲染 input，也不会触发交互事件；语义由父级管理。组件不会推导分组选择状态。
 
 <DemoContainer :src="CheckBoxGroupSrc"><CheckBoxGroup /></DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="checkbox" />
+
+<ApiTable component="CheckBox" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
+
+<StyleTokenTable component="CheckBox" />

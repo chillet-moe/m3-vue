@@ -34,9 +34,29 @@ Pagination provides a composable page-navigation pattern with previous/next help
 
 <DemoContainer><Pagination v-bind="props"><PaginationContent><PaginationItem><PaginationPrevious href="#" /></PaginationItem><PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem><PaginationItem><PaginationLink href="#" :is-active="true">2</PaginationLink></PaginationItem><PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem><PaginationItem><PaginationEllipsis /></PaginationItem><PaginationItem><PaginationNext href="#" /></PaginationItem></PaginationContent></Pagination></DemoContainer>
 
-<AnatomyTable scope="pagination" />
+## Examples
 
-## API
+### Default
+
+<DemoContainer :src="PaginationDefaultSrc"><PaginationDefault /></DemoContainer>
+
+### Simple
+
+<DemoContainer :src="PaginationSimpleSrc"><PaginationSimple /></DemoContainer>
+
+### Icons Only
+
+<DemoContainer :src="PaginationIconsOnlySrc"><PaginationIconsOnly /></DemoContainer>
+
+### Vue Router
+
+`PaginationLink`, `PaginationPrevious`, and `PaginationNext` follow the same pattern: use `RouterLink custom`, then forward `href` and `navigate` into the pagination control.
+
+<DemoContainer :src="PaginationRouterLinkSrc"><PaginationRouterLink /></DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="pagination" />
 
 ### Pagination
 
@@ -67,23 +87,3 @@ Pagination provides a composable page-navigation pattern with previous/next help
 ### PaginationEllipsis
 
 <ApiTable component="PaginationEllipsis" />
-
-## Examples
-
-### Default
-
-<DemoContainer :src="PaginationDefaultSrc"><PaginationDefault /></DemoContainer>
-
-### Simple
-
-<DemoContainer :src="PaginationSimpleSrc"><PaginationSimple /></DemoContainer>
-
-### Icons Only
-
-<DemoContainer :src="PaginationIconsOnlySrc"><PaginationIconsOnly /></DemoContainer>
-
-### Vue Router
-
-`PaginationLink`, `PaginationPrevious`, and `PaginationNext` follow the same pattern: use `RouterLink custom`, then forward `href` and `navigate` into the pagination control.
-
-<DemoContainer :src="PaginationRouterLinkSrc"><PaginationRouterLink /></DemoContainer>

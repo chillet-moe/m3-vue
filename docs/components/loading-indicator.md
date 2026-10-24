@@ -35,12 +35,6 @@ The active indicator morphs between Material shape paths. See [Material Shape Pa
   <LoadingIndicator v-bind="props" aria-label="Loading" />
 </DemoContainer>
 
-<AnatomyTable scope="loading-indicator" />
-
-<ApiTable component="LoadingIndicator" v-model="props" :exclude="['ariaLabel']" />
-
-<StyleTokenTable component="LoadingIndicator" />
-
 ## Examples
 
 ### Default
@@ -60,3 +54,11 @@ The active indicator morphs between Material shape paths. See [Material Shape Pa
 <DemoContainer :src="LoadingIndicatorSizesSrc">
   <LoadingIndicatorSizes />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="loading-indicator" />
+
+<ApiTable component="LoadingIndicator" v-model="props" :exclude="['ariaLabel']" />
+
+<StyleTokenTable component="LoadingIndicator" />

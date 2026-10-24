@@ -37,12 +37,6 @@ LinearProgressIndicator displays determinate or indeterminate progress on a hori
   <LinearProgressIndicator v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="linear-progress-indicator" />
-
-<ApiTable component="LinearProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
-
-<StyleTokenTable component="LinearProgressIndicator" />
-
 ## Examples
 
 ### Default
@@ -62,3 +56,11 @@ LinearProgressIndicator displays determinate or indeterminate progress on a hori
 <DemoContainer :src="LinearProgressIndicatorIndeterminateSrc" :viewport="false">
   <LinearProgressIndicatorIndeterminate />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="linear-progress-indicator" />
+
+<ApiTable component="LinearProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
+
+<StyleTokenTable component="LinearProgressIndicator" />

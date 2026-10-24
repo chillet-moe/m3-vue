@@ -41,12 +41,6 @@ FAB menus open from a floating action button to show a small set of related acti
   </FloatingActionButtonMenu>
 </DemoContainer>
 
-<AnatomyTable scope="floating-action-button-menu" />
-
-<ApiTable component="FloatingActionButtonMenu" v-model="props" />
-
-<StyleTokenTable component="FloatingActionButtonMenu" />
-
 `update:open(false)` reflects the native popover state immediately. Use `closed` for cleanup that must wait until the
 FAB menu's visual exit finishes.
 
@@ -81,3 +75,11 @@ FAB menu's visual exit finishes.
 <DemoContainer :src="FloatingActionButtonMenuControlledSrc">
   <FloatingActionButtonMenuControlled />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="floating-action-button-menu" />
+
+<ApiTable component="FloatingActionButtonMenu" v-model="props" />
+
+<StyleTokenTable component="FloatingActionButtonMenu" />

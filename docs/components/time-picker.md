@@ -44,12 +44,6 @@ TimePicker is a standalone time selection surface. TextField uses it automatical
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="time-picker" />
-
-<ApiTable component="TimePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement']" />
-
-<StyleTokenTable component="TimePicker" />
-
 `update:open(false)` is emitted when the native popover closes. Use `closed` for cleanup that must wait until the
 TimePicker-owned visual exit finishes.
 
@@ -83,3 +77,11 @@ a subtree. Both standalone and TextField time pickers inherit these preferences.
 <DemoContainer :src="TimePickerKeyboardSrc">
   <TimePickerKeyboard />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="time-picker" />
+
+<ApiTable component="TimePicker" v-model="props" :exclude="['id', 'anchorName', 'anchorElement']" />
+
+<StyleTokenTable component="TimePicker" />

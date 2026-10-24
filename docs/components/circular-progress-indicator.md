@@ -35,12 +35,6 @@ CircularProgressIndicator displays determinate or indeterminate progress around 
   <CircularProgressIndicator v-bind="props" />
 </DemoContainer>
 
-<AnatomyTable scope="circular-progress-indicator" />
-
-<ApiTable component="CircularProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
-
-<StyleTokenTable component="CircularProgressIndicator" />
-
 ## Examples
 
 ### Default
@@ -60,3 +54,11 @@ CircularProgressIndicator displays determinate or indeterminate progress around 
 <DemoContainer :src="CircularProgressIndicatorIndeterminateSrc">
   <CircularProgressIndicatorIndeterminate />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="circular-progress-indicator" />
+
+<ApiTable component="CircularProgressIndicator" v-model="props" :exclude="['ariaLabel', 'ariaValueText']" />
+
+<StyleTokenTable component="CircularProgressIndicator" />

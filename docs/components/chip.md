@@ -40,12 +40,6 @@ Chips cover assist, suggestion, filter, and input patterns with shared selection
   <Chip v-bind="props" v-model="selected">Chip</Chip>
 </DemoContainer>
 
-<AnatomyTable scope="chip" />
-
-<ApiTable component="Chip" v-model="props" :exclude="['value', 'name', 'ariaLabel']" />
-
-<StyleTokenTable component="Chip" />
-
 ## Examples
 
 ### Default
@@ -83,3 +77,11 @@ Chips cover assist, suggestion, filter, and input patterns with shared selection
 <DemoContainer :src="ChipDisabledSrc" :viewport="false">
   <ChipDisabled />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="chip" />
+
+<ApiTable component="Chip" v-model="props" :exclude="['value', 'name', 'ariaLabel']" />
+
+<StyleTokenTable component="Chip" />

@@ -39,12 +39,6 @@ Dialog 中的所有操作都使用文本按钮，包括主要、确认、最终�
   </Dialog>
 </DemoContainer>
 
-<AnatomyTable scope="dialog" />
-
-<ApiTable component="Dialog" v-model="props" />
-
-<StyleTokenTable component="Dialog" />
-
 ## 关闭 lifecycle
 
 原生对话框关闭时会触发 `update:open(false)` 和 `close`。请用它们更新控制对话框开关状态的应用状态。Dialog 自身的视觉退出效果（包括背景遮罩）完成后会触发 `closed`，其返回值与 `close` 收到的原生对话框返回值相同。该事件不会等待插槽内容中的动画。若没有动画或启用了减少动态效果，`closed` 会异步触发，不依赖超时。
@@ -112,3 +106,11 @@ function clearDialogContent() {
 <DemoContainer :src="DialogWithIconSrc" :viewport="false">
   <DialogWithIcon />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="dialog" />
+
+<ApiTable component="Dialog" v-model="props" />
+
+<StyleTokenTable component="Dialog" />

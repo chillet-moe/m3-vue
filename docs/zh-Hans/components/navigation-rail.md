@@ -28,14 +28,6 @@ NavigationRail 通过 `NavigationRailItem` 提供纵向主要导航目标，并�
 
 <DemoContainer><NavigationRail v-model="value" v-bind="props" style="block-size: 28rem"><NavigationRailItem value="home" icon="home" label="主页" /><NavigationRailItem value="bookmarks" icon="bookmark" label="已保存" /><NavigationRailItem value="folder" icon="folder" label="文件" /><NavigationRailItem value="settings" icon="settings" label="设置" /></NavigationRail></DemoContainer>
 
-<AnatomyTable scope="navigation-rail" />
-
-<AnatomyTable scope="navigation-rail-item" />
-
-<ApiTable component="NavigationRail" v-model="props" />
-
-<StyleTokenTable component="NavigationRail" />
-
 ## 示例
 
 ### 默认
@@ -50,11 +42,15 @@ NavigationRail 通过 `NavigationRailItem` 提供纵向主要导航目标，并�
 
 <DemoContainer :src="NavigationRailStatesSrc"><NavigationRailStates /></DemoContainer>
 
-## API
+## 参考
 
-### NavigationRail
+<AnatomyTable scope="navigation-rail" />
 
-<ApiTable component="NavigationRail" />
+<AnatomyTable scope="navigation-rail-item" />
+
+<ApiTable component="NavigationRail" v-model="props" />
+
+<StyleTokenTable component="NavigationRail" />
 
 ### NavigationRailItem
 

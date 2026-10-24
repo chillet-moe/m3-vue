@@ -34,15 +34,13 @@ Combobox combines free-form text entry with option picking, making it useful for
 Combobox shares Select's size and menu-color preferences; see [Select](./select#sizes-and-toolbar-alignment) for sizes
 and [Menu Appearance](./select#menu-appearance) for colors. Its `labelClearance` prop inherits from `fieldContextKey`. Preserve the surrounding layout's
 intended density and add clearance only when its floating label needs it. See the
-[floating label spacing guide](../guides/floating-label-spacing-lab).
+[floating label spacing guide](../guides/field-layout).
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <Combobox v-bind="props" v-model="modelValue" :options="stateOptions" />
   </div>
 </DemoContainer>
-
-<ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />
 
 `Combobox` forwards Select's `closed` event after its dropdown menu finishes exiting. Use it instead of
 `update:open(false)` when releasing data used by option slots.
@@ -65,14 +63,6 @@ Combobox wraps Select and shares its `select` scope. See [Select Anatomy](./sele
   <ComboboxMultiSelect />
 </DemoContainer>
 
-## Composable
-
-`Combobox` shares the same composable as `Select`.
-
-### useSelect
-
-<SourceApiTable api="useSelect" />
-
 ## Asynchronous results
 
 `v-model:query` exposes the query. `filter-mode="local"` is the default; `filter-mode="external"` treats `options` as the complete current result set and does no additional filtering. The consumer owns requests, cancellation, stale-response handling, loading, and errors. Replace the list slot with status content while loading or after failure. The `empty` slot customizes the ordinary list's empty result. The example clears obsolete results during a simulated request and ignores obsolete responses.
@@ -84,3 +74,15 @@ Selected values do not depend on mounted rows or current results. Labels come fr
 ## Virtual lists
 
 Combobox forwards Select's `list` and `empty` slots. Use `SelectItem` for row presentation and the same `optionProps` and `setScrollToIndex` contract. See [Select's virtual list example](./select#external-virtual-lists) for 10,000 options with single and multiple selection.
+
+## Reference
+
+<ApiTable component="Combobox" v-model="props" :exclude="['options', 'multiple']" />
+
+## Composable
+
+`Combobox` shares the same composable as `Select`.
+
+### useSelect
+
+<SourceApiTable api="useSelect" />

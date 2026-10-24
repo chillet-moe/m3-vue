@@ -41,7 +41,7 @@ const props = ref({
 
 图标按钮提供紧凑、以图标为主的操作，并沿用组件库的 Material 3 形状、强调层级和尺寸变体。
 
-操作组件会将 `title` 转换为组件库的工具提示。有关共同行为和可访问名称回退方式，请参阅[操作工具提示](/zh-Hans/guides/action-tooltips)。
+操作组件会将 `title` 转换为组件库的工具提示。有关共同行为和可访问名称回退方式，请参阅[操作工具提示](/zh-Hans/components/tooltip#action-tooltips)。
 
 工具栏、列表行和卡片中的辅助操作默认使用 `standard`。`filled` 留给高强调的图标操作；中等强调程度可使用 `outlined` 或 `tonal`。
 
@@ -50,12 +50,6 @@ const props = ref({
     <input v-if="props.toggleable" type="checkbox" />
   </IconButton>
 </DemoContainer>
-
-<AnatomyTable scope="icon-button" />
-
-<ApiTable component="IconButton" v-model="props" />
-
-<StyleTokenTable component="IconButton" />
 
 ## 示例
 
@@ -118,3 +112,11 @@ const props = ref({
 <DemoContainer :src="IconButtonRouterLinkSrc" :viewport="false">
   <IconButtonRouterLink />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="icon-button" />
+
+<ApiTable component="IconButton" v-model="props" />
+
+<StyleTokenTable component="IconButton" />

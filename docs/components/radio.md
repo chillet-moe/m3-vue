@@ -22,7 +22,7 @@ const checked = ref(false);
 # Radio
 
 Radio buttons present mutually exclusive choices with Material 3 state styling and accessible native form semantics.
-Use `presentation` when the radio is only a visual indicator inside another accessible control, such as a clickable [ListItem](/guides/selection-controls-in-list-items).
+Use `presentation` when the radio is only a visual indicator inside another accessible control, such as a clickable [ListItem](/components/item#selection-controls).
 
 `v-model:checked` controls the radio's boolean checked state. The optional `value` remains the native form-submission
 value and does not change the checked model's type. For a radio group, derive each radio's `checked` state from one shared
@@ -34,12 +34,6 @@ selected value.
     <div>Checked: {{ checked ? 'true' : 'false' }}</div>
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="radio" />
-
-<ApiTable component="Radio" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
-
-<StyleTokenTable component="Radio" />
 
 ## Examples
 
@@ -54,3 +48,11 @@ selected value.
 <DemoContainer :src="RadioStatesSrc" :viewport="false">
   <RadioStates />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="radio" />
+
+<ApiTable component="Radio" v-model="props" :exclude="['name', 'value', 'ariaLabel']" />
+
+<StyleTokenTable component="Radio" />

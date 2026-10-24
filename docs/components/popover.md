@@ -42,12 +42,6 @@ Popover is optional. Use it when you need a small anchored panel with simple ope
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="popover" />
-
-<ApiTable component="Popover" v-model="props" />
-
-<StyleTokenTable component="Popover" />
-
 ## Close lifecycle
 
 `update:open(false)` is emitted when the native popover closes. The later `closed` event waits for Popover-owned exit
@@ -67,3 +61,11 @@ release it from `closed`.
 <DemoContainer :src="PopoverControlledSrc" :viewport="false">
   <PopoverControlled />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="popover" />
+
+<ApiTable component="Popover" v-model="props" />
+
+<StyleTokenTable component="Popover" />

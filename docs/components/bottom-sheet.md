@@ -38,12 +38,6 @@ Bottom sheets present modal content from the bottom edge of the viewport using t
   </BottomSheet>
 </DemoContainer>
 
-<AnatomyTable scope="bottom-sheet" />
-
-<ApiTable component="BottomSheet" v-model="props" />
-
-<StyleTokenTable component="BottomSheet" />
-
 ## Close lifecycle
 
 `update:open(false)` and `close` run when the native dialog closes. Use `closed` for cleanup that must wait until the
@@ -83,3 +77,11 @@ its customization token.
 <DemoContainer :src="BottomSheetNoHandleSrc" :viewport="false">
   <BottomSheetNoHandle />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="bottom-sheet" />
+
+<ApiTable component="BottomSheet" v-model="props" />
+
+<StyleTokenTable component="BottomSheet" />

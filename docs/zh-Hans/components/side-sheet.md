@@ -41,12 +41,6 @@ const open = ref(false);
   </SideSheet>
 </DemoContainer>
 
-<AnatomyTable scope="side-sheet" />
-
-<ApiTable component="SideSheet" v-model="props" />
-
-<StyleTokenTable component="SideSheet" />
-
 ## 关闭生命周期
 
 原生对话框关闭时会触发 `update:open(false)` 和 `close`。如果清理操作需要等到面板完全不可见后再执行，请使用 `closed`。SideSheet 自身的退出动画（包括背景遮罩）结束后会触发该事件，其参数与 `close` 收到的原生对话框返回值相同。它不会等待插槽内容内部的动画。没有动画或启用减少动态效果时，该事件也会异步触发，不受业务超时影响。
@@ -87,3 +81,11 @@ const open = ref(false);
 <DemoContainer :src="SideSheetDetachedSrc" :viewport="false">
   <SideSheetDetached />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="side-sheet" />
+
+<ApiTable component="SideSheet" v-model="props" />
+
+<StyleTokenTable component="SideSheet" />

@@ -35,12 +35,6 @@ const props = ref({
   </div>
 </DemoContainer>
 
-<AnatomyTable scope="divider" />
-
-<ApiTable component="Divider" v-model="props" />
-
-<StyleTokenTable component="Divider" />
-
 ## 示例
 
 ### 默认
@@ -66,3 +60,11 @@ const props = ref({
 <DemoContainer :src="DividerCustomSpacingSrc" :viewport="false">
   <DividerCustomSpacing />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="divider" />
+
+<ApiTable component="Divider" v-model="props" />
+
+<StyleTokenTable component="Divider" />

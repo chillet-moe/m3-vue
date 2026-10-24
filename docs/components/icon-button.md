@@ -41,7 +41,7 @@ const props = ref({
 
 Icon buttons expose compact, icon-first actions with the same Material 3 shape, emphasis, and size variants as the library component.
 
-Action components convert `title` into the library tooltip. See [Action Tooltips](/guides/action-tooltips) for the shared behavior and accessible-name fallback.
+Action components convert `title` into the library tooltip. See [Action Tooltips](/components/tooltip#action-tooltips) for the shared behavior and accessible-name fallback.
 
 `standard` is the default for supplementary actions, including toolbar, list-row, and card actions. Reserve `filled`
 for a high-emphasis icon action; use `outlined` or `tonal` for intermediate emphasis.
@@ -51,12 +51,6 @@ for a high-emphasis icon action; use `outlined` or `tonal` for intermediate emph
     <input v-if="props.toggleable" type="checkbox" />
   </IconButton>
 </DemoContainer>
-
-<AnatomyTable scope="icon-button" />
-
-<ApiTable component="IconButton" v-model="props" />
-
-<StyleTokenTable component="IconButton" />
 
 ## Examples
 
@@ -120,3 +114,11 @@ Use the same `RouterLink custom` pattern as `Button`, then forward `href` and `n
 <DemoContainer :src="IconButtonRouterLinkSrc" :viewport="false">
   <IconButtonRouterLink />
 </DemoContainer>
+
+## Reference
+
+<AnatomyTable scope="icon-button" />
+
+<ApiTable component="IconButton" v-model="props" />
+
+<StyleTokenTable component="IconButton" />

@@ -39,19 +39,13 @@ TextField 涵盖 Material 3 的基础输入场景，包括辅助文本、验证�
 
 `TextField` 始终使用字符串模型，包括 `type="number"` 时也是如此。数字输入仍保留原生数字键盘、验证行为和文本形式的 `input.value`；将模型解析为数值由应用负责。
 
-字段间距由外围布局负责；请保留其预期密度，不要将所有字段组统一为相同间距。`labelClearance` 接受 CSS 长度，用于设置局部块起始方向的间距，也可从 `fieldContextKey` 继承子树默认值；该间距会叠加到父级间距上。请参阅[浮动标签间距指南](../../guides/floating-label-spacing-lab)。
+字段间距由外围布局负责；请保留其预期密度，不要将所有字段组统一为相同间距。`labelClearance` 接受 CSS 长度，用于设置局部块起始方向的间距，也可从 `fieldContextKey` 继承子树默认值；该间距会叠加到父级间距上。请参阅[浮动标签间距指南](/zh-Hans/guides/field-layout)。
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <TextField v-bind="props" v-model="modelValue" />
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="text-field" />
-
-<ApiTable component="TextField" v-model="props" :exclude="['as', 'rows']" />
-
-<StyleTokenTable component="TextField" />
 
 ## 示例
 
@@ -92,3 +86,11 @@ TextField 和描边 Button 使用相同的静止描边颜色、匹配尺寸的�
 <DemoContainer :src="TextFieldPasswordSrc">
   <TextFieldPassword />
 </DemoContainer>
+
+## 参考
+
+<AnatomyTable scope="text-field" />
+
+<ApiTable component="TextField" v-model="props" :exclude="['as', 'rows']" />
+
+<StyleTokenTable component="TextField" />

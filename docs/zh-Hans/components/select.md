@@ -39,17 +39,13 @@ import SelectVirtualSrc from '../../demos/select/SelectVirtual.vue?raw';
 
 Select 提供锚定弹出层以供选择一个或多个选项，并使用 combobox/listbox/option 语义；同时支持可选图标、筛选和验证文本。
 
-字段间距由外围布局负责；请保留其预期密度，不要将所有字段组统一为相同间距。`labelClearance` 接受 CSS 长度，用于设置局部块起始方向的间距，也可从 `fieldContextKey` 继承子树默认值；该间距会叠加到父级间距上。请参阅[浮动标签间距指南](../../guides/floating-label-spacing-lab)。
+字段间距由外围布局负责；请保留其预期密度，不要将所有字段组统一为相同间距。`labelClearance` 接受 CSS 长度，用于设置局部块起始方向的间距，也可从 `fieldContextKey` 继承子树默认值；该间距会叠加到父级间距上。请参阅[浮动标签间距指南](/zh-Hans/guides/field-layout)。
 
 <DemoContainer>
   <div style="max-inline-size: 22rem;">
     <Select v-bind="props" v-model="modelValue" :options="coffeeOptions" />
   </div>
 </DemoContainer>
-
-<AnatomyTable scope="select" />
-
-<ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
 
 ## 菜单外观
 
@@ -92,12 +88,6 @@ Select 和 Combobox 与 TextField 使用相同的触发器尺寸：`extra-small`
 <DemoContainer :src="SelectConfigurationsSrc">
   <SelectConfigurations />
 </DemoContainer>
-
-## Composable
-
-### useSelect
-
-<SourceApiTable api="useSelect" />
 
 ## 外部虚拟列表
 
@@ -143,3 +133,15 @@ SelectItem 负责选项呈现，不负责选择状态或键盘导航。可在 Se
 Select/Combobox 现在使用 combobox/listbox/option 语义，焦点保留在输入框上。请更新依赖 Menu 私有 DOM 的测试和样式。`optionLeading` 与 `optionTrailing` 仍可用。
 
 公开的 `useSelect` 接收 `id`、`focus` 和 `blur` 回调，而不是 Menu、触发器和 TextField 引用。将共享的 `open` ref 绑定到 Popover，并在 `closed` 时调用 `handleMenuClosed`。普通或虚拟列表都使用 `list`/`optionProps`；`handleMenuSelect` 已移除。
+
+## 参考
+
+<AnatomyTable scope="select" />
+
+<ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
+
+## Composable
+
+### useSelect
+
+<SourceApiTable api="useSelect" />

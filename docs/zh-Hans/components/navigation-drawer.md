@@ -33,16 +33,6 @@ NavigationDrawer 提供纵向导航目标，其中的条目可供选择，分区
 
 <DemoContainer><NavigationDrawer v-model="value" v-bind="props" style="block-size: 30rem"><NavigationDrawerItem value="home" icon="home" label="主页" /><NavigationDrawerItem value="inbox" icon="inbox" label="收件箱" /><NavigationDrawerSection icon="folder" label="项目"><NavigationDrawerItem value="active" icon="task_alt" label="进行中" /><NavigationDrawerItem value="archived" icon="archive" label="已归档" /></NavigationDrawerSection><NavigationDrawerSection icon="groups" label="团队"><NavigationDrawerItem value="design" icon="palette" label="设计" /><NavigationDrawerItem value="engineering" icon="engineering" label="工程" /></NavigationDrawerSection><NavigationDrawerSection icon="list" label="纯文本"><NavigationDrawerItem value="drafts" icon="draft" label="草稿" /><NavigationDrawerItem value="sent" icon="send" label="已发送" /></NavigationDrawerSection><NavigationDrawerItem value="settings" icon="settings" label="设置" /></NavigationDrawer></DemoContainer>
 
-<AnatomyTable scope="navigation-drawer" />
-
-<AnatomyTable scope="navigation-drawer-item" />
-
-<AnatomyTable scope="navigation-drawer-section" />
-
-<ApiTable component="NavigationDrawer" v-model="props" />
-
-<StyleTokenTable component="NavigationDrawer" />
-
 ## 示例
 
 ### 默认
@@ -57,11 +47,17 @@ NavigationDrawer 提供纵向导航目标，其中的条目可供选择，分区
 
 <DemoContainer :src="NavigationDrawerIconOnlySrc"><NavigationDrawerIconOnly /></DemoContainer>
 
-## API
+## 参考
 
-### NavigationDrawer
+<AnatomyTable scope="navigation-drawer" />
 
-<ApiTable component="NavigationDrawer" />
+<AnatomyTable scope="navigation-drawer-item" />
+
+<AnatomyTable scope="navigation-drawer-section" />
+
+<ApiTable component="NavigationDrawer" v-model="props" />
+
+<StyleTokenTable component="NavigationDrawer" />
 
 ### NavigationDrawerItem
 
