@@ -33,7 +33,10 @@ export type SliderProps = {
   /** The step value of the slider. */
   step: number;
 
-  /** The amount the value changes when using the mouse wheel. */
+  /** Enable mouse-wheel value changes. Disabled by default to preserve page scrolling. */
+  wheel?: boolean;
+
+  /** The amount the value changes when wheel interaction is enabled. */
   wheelStep?: number;
 
   /** The lower limit for the slider value. */
@@ -75,6 +78,7 @@ const {
   disabled = false,
   lowerLimit,
   upperLimit,
+  wheel = false,
   wheelStep,
   startIcon,
   endIcon,
@@ -218,10 +222,11 @@ const onChange = () => {
 };
 
 const onWheel = (event: WheelEvent) => {
-  if (disabled) {
+  if (!wheel || disabled || event.deltaY === 0) {
     return;
   }
 
+  event.preventDefault();
   const dir = event.deltaY < 0 ? 1 : -1;
   const valueStep = event.altKey ? step : (wheelStep ?? step);
   const nextValue = getAdjacentStepValue(valueCurrent.value, dir, valueStep);
@@ -805,7 +810,7 @@ onBeforeUnmount(() => {
       :aria-haspopup="valueIndicator ? 'true' : undefined"
       @input="onInput"
       @change="onChange"
-      @wheel.prevent="onWheel"
+      @wheel="onWheel"
       @pointerenter="onValueIndicatorPointerEnter"
       @pointerleave="onValueIndicatorPointerLeave"
       @pointerdown="onValueIndicatorPointerDown"

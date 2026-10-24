@@ -71,9 +71,17 @@ Slider 会原样保留外部传入的 `value`，包括步进刻度之间的值�
 通过 Slider 交互产生的值会按一致规则量化：
 
 - 指针拖动和键盘方向键使用 `step` 网格。
-- 提供 `wheelStep` 时，鼠标滚轮使用该网格；否则使用 `step` 网格。按住 Alt 时使用 `step` 网格。
+- 启用滚轮输入后，鼠标滚轮使用 `wheelStep` 网格（若未提供则使用 `step`）；按住 Alt 时始终使用 `step` 网格。
 - 网格从有效下限 `max(min, lowerLimit)` 开始。即使最后一个区间短于一个步长，也始终可以选择有效上限 `min(max, upperLimit)`。
 - Home 和 End 键分别选择准确的有效下限和上限。
+
+滚轮输入默认关闭。只有显式设置 `wheel` 才会启用：
+
+```vue
+<Slider v-model:value="value" :min="0" :max="100" :step="1" wheel :wheel-step="5" />
+```
+
+`wheelStep` 只控制已启用滚轮输入后的步长，不会自行启用滚轮。Slider 禁用或 `wheel` 为 `false` 时不会拦截滚轮事件，页面可正常滚动。
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 1rem;">
@@ -143,6 +151,8 @@ Standard 尺寸 Token 为 `--md-slider-track-thickness`、`--md-slider-thumb-siz
 ### 迁移默认外观
 
 如需保留之前的外观，可在实例上设置 `appearance="expressive"`、通过 `sliderContextKey` 提供 `{ appearance: 'expressive' }`，或在 M3 默认值中设置 `sliderAppearance: 'expressive'`。外观与密度的搭配建议请参阅 [样式指南](../guides/styling#选择外观与密度)。
+
+滚轮输入现在默认关闭。如果需要滚轮调整值，请显式添加 `wheel`，例如 `<Slider wheel />`。仅设置 `wheelStep` 不会启用滚轮；未启用滚轮或 Slider 已禁用时，页面滚动行为不变。
 
 ## 参考
 

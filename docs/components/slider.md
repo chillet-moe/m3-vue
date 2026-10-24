@@ -71,9 +71,17 @@ Slider preserves externally supplied `value` values as-is, including values betw
 Values produced by Slider interaction are quantized consistently:
 
 - Pointer dragging and keyboard arrows use the `step` grid.
-- The mouse wheel uses the `wheelStep` grid when provided, or the `step` grid otherwise. Holding Alt uses the `step` grid.
+- When enabled, the mouse wheel uses the `wheelStep` grid when provided, or the `step` grid otherwise. Holding Alt uses the `step` grid.
 - Grids start at the effective lower limit, `max(min, lowerLimit)`. The effective upper limit, `min(max, upperLimit)`, is always selectable even when the final interval is shorter than one step.
 - Home and End select the exact effective lower and upper limits.
+
+Mouse-wheel changes are opt-in: set `wheel` to enable them.
+
+```vue
+<Slider v-model:value="value" :min="0" :max="100" :step="1" wheel :wheel-step="5" />
+```
+
+`wheelStep` alone does not enable wheel interaction. By default, or when disabled, Slider does not change its value or prevent page scrolling in response to wheel events.
 
 <DemoContainer :viewport="false">
   <div style="display: grid; gap: 1rem;">
@@ -141,7 +149,9 @@ Standard sizing tokens are `--md-slider-track-thickness`, `--md-slider-thumb-siz
 
 <DemoContainer :src="SliderPreciseValueSrc" :viewport="false"><SliderPreciseValue /></DemoContainer>
 
-### Migrating the default
+### Migrating the defaults
+
+Add `wheel` to instances that should retain mouse-wheel value changes.
 
 Set `appearance="expressive"` per instance, provide `sliderContextKey` with `{ appearance: 'expressive' }`, or use `sliderAppearance: 'expressive'` in M3 defaults to retain the previous appearance. For choosing appearance and density together, see [Styling](../guides/styling).
 

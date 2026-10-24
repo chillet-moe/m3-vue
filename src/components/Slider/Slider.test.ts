@@ -232,6 +232,54 @@ describe('Slider', () => {
     app.unmount();
   });
 
+  it('only consumes wheel events when explicitly enabled and not disabled', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const wheel = ref<boolean | undefined>(undefined);
+    const disabled = ref(false);
+    const currentValue = ref(50);
+    const update = vi.fn((nextValue: number) => {
+      currentValue.value = nextValue;
+    });
+    const app = createApp(() =>
+      h(Slider, {
+        min: 0,
+        max: 100,
+        step: 1,
+        wheelStep: 10,
+        wheel: wheel.value,
+        disabled: disabled.value,
+        value: currentValue.value,
+        'onUpdate:value': update,
+      }),
+    );
+    app.mount(container);
+    await nextTick();
+    const input = container.querySelector('input')!;
+    const dispatchWheel = (deltaY = -1) => {
+      const event = new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY });
+      input.dispatchEvent(event);
+      return event.defaultPrevented;
+    };
+    expect(dispatchWheel()).toBe(false);
+    expect(update).not.toHaveBeenCalled();
+    wheel.value = true;
+    await nextTick();
+    expect(dispatchWheel()).toBe(true);
+    expect(currentValue.value).toBe(60);
+    await nextTick();
+    expect(dispatchWheel(0)).toBe(false);
+    disabled.value = true;
+    await nextTick();
+    expect(dispatchWheel()).toBe(false);
+    disabled.value = false;
+    wheel.value = false;
+    await nextTick();
+    expect(dispatchWheel()).toBe(false);
+    expect(update).toHaveBeenCalledTimes(1);
+    app.unmount();
+  });
+
   it('animates wheel-triggered value changes when pointer dragging has not started', async () => {
     const raf = mockAnimationFrame();
     const container = document.createElement('div');
@@ -242,6 +290,7 @@ describe('Slider', () => {
       setup() {
         return () =>
           h(Slider, {
+            wheel: true,
             min: 0,
             max: 10,
             step: 1,
@@ -292,6 +341,7 @@ describe('Slider', () => {
       setup() {
         return () =>
           h(Slider, {
+            wheel: true,
             min: 5,
             max: 1800,
             step: 50,
@@ -355,6 +405,7 @@ describe('Slider', () => {
       setup() {
         return () =>
           h(Slider, {
+            wheel: true,
             min: 5,
             max: 1800,
             step: 50,
@@ -408,6 +459,7 @@ describe('Slider', () => {
       setup() {
         return () =>
           h(Slider, {
+            wheel: true,
             min: 0,
             max: 100,
             step: 1,
@@ -454,6 +506,7 @@ describe('Slider', () => {
       setup() {
         return () =>
           h(Slider, {
+            wheel: true,
             min: 300,
             max: 1800,
             step: 50,
