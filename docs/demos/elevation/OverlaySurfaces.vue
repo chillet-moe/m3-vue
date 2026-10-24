@@ -51,7 +51,7 @@ const items: MenuContentItem[] = [
     </Dialog>
     <Button @click="native?.showModal()">Native dialog</Button>
     <dialog ref="native" class="native-overlay">
-      <h2>Workspace settings</h2>
+      <p class="native-overlay-title" role="heading" aria-level="2">Workspace settings</p>
       <p>A custom surface using the shared tokens.</p>
       <Button @click="native?.close()">Close</Button>
     </dialog>
@@ -77,6 +77,9 @@ const items: MenuContentItem[] = [
   border-radius: var(--md-shape-overlay);
   box-shadow: var(--md-overlay-modal-elevation);
   padding: 1.5rem;
+}
+.native-overlay-title {
+  font: var(--md-sys-typescale-title-large);
 }
 .native-overlay::backdrop {
   background: rgb(0 0 0 / 30%);
