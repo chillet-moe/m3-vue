@@ -6,3 +6,5 @@ await import('./dialog-spacing/run');
 await import('./multi-window/run');
 
 await import('./desktop-workspace/run');
+
+await import('./overlay-appearance/run');

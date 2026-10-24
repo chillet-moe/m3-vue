@@ -23,3 +23,9 @@ pnpm run test:browser
 The repository has no ordinary Vite application entry. Use `pnpm run docs:dev` for the documentation site. The browser fixtures and benchmarks have their own run instructions.
 
 Documentation structure and page authoring conventions are described in [Documentation](documentation.md).
+
+## Floating surface visual checks
+
+Run `pnpm exec tsx tests/browser/overlay-appearance/run.ts` to check real menus, nested menus, Select/Combobox dropdowns, Popover, Dialog, and a consumer-owned native dialog in light/dark schemes on two backgrounds. The test covers hover, selection, keyboard navigation, scrolling, viewport-edge placement, shared tokens, and component border overrides. Screenshots and side-by-side comparisons are written to `.tmp/overlay-appearance/`.
+
+For screenshots with Material Symbols, set `OVERLAY_ICON_FONT_PATH` to a local Material Symbols Outlined TTF file. Without it, geometry and interaction assertions still run, but icon ligatures may appear as text. `CHROME_PATH` selects a local Chrome binary.
