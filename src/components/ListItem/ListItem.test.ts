@@ -37,10 +37,10 @@ describe('ListItem', () => {
     expect(description?.textContent).toContain('Manage your account settings.');
     expect(leading).not.toBeNull();
     expect(trailing).not.toBeNull();
-    expect(leading?.classList.contains('m3-icon-morph')).toBe(true);
-    expect(trailing?.classList.contains('m3-icon-morph')).toBe(true);
-    expect(title?.classList.contains('m3-text-morph')).toBe(true);
-    expect(description?.classList.contains('m3-text-morph')).toBe(true);
+    expect(leading?.classList.contains('m3-icon-morph')).toBe(false);
+    expect(trailing?.classList.contains('m3-icon-morph')).toBe(false);
+    expect(title?.classList.contains('m3-text-morph')).toBe(false);
+    expect(description?.classList.contains('m3-text-morph')).toBe(false);
 
     app.unmount();
   });
@@ -135,4 +135,21 @@ describe('ListItem', () => {
 
     app.unmount();
   });
+});
+
+it('defaults to standard and opts into expressive morphs without changing semantics', async () => {
+  const container = document.createElement('div');
+  document.body.append(container);
+  const app = createApp(() =>
+    h('div', [h(ListItem, { title: 'Standard' }), h(ListItem, { title: 'Expressive', appearance: 'expressive' })]),
+  );
+  app.mount(container);
+  await nextTick();
+  const items = container.querySelectorAll<HTMLElement>('[data-scope="item"][data-part="root"]');
+  expect(items[0]?.dataset.appearance).toBe('standard');
+  expect(items[0]?.querySelector('.m3-text-morph')).toBeNull();
+  expect(items[1]?.dataset.appearance).toBe('expressive');
+  expect(items[1]?.querySelector('.m3-text-morph')).not.toBeNull();
+  expect([...items].map((item) => item.tagName)).toEqual(['BUTTON', 'BUTTON']);
+  app.unmount();
 });

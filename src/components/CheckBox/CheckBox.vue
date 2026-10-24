@@ -19,6 +19,14 @@ export type CheckBoxProps = {
 
 const { disabled = false, presentation = false, name, value, ariaLabel } = defineProps<CheckBoxProps>();
 
+const indeterminate = defineModel<boolean>('indeterminate', { default: false });
+
+function handleChange(event: Event) {
+  if (disabled || presentation) return;
+  checked.value = (event.target as HTMLInputElement).checked;
+  indeterminate.value = false;
+}
+
 const checked = defineModel<boolean>('checked', { required: true });
 
 defineSlots<{
@@ -33,7 +41,8 @@ defineSlots<{
     :class="'m3-checkbox'"
     data-scope="checkbox"
     data-part="root"
-    :data-checked="checked ? 'true' : 'false'"
+    :data-checked="checked || indeterminate ? 'true' : 'false'"
+    :data-indeterminate="indeterminate ? 'true' : 'false'"
     :data-disabled="disabled ? 'true' : 'false'"
     :data-presentation="presentation ? 'true' : 'false'"
     :aria-disabled="presentation ? undefined : disabled ? 'true' : 'false'"
@@ -42,7 +51,10 @@ defineSlots<{
   >
     <input
       v-if="!presentation"
-      v-model="checked"
+      :checked="checked"
+      :indeterminate.prop="indeterminate"
+      :aria-checked="indeterminate ? 'mixed' : checked"
+      @change="handleChange"
       :class="'m3-checkbox-input'"
       data-scope="checkbox"
       data-part="input"

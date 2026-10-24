@@ -29,6 +29,7 @@ describe('component defaults', () => {
     'resolves reactive %s preferences with subtree and prop overrides',
     async (mode) => {
       const size = ref<'small' | 'large'>('small');
+      const appearance = ref<'standard' | 'expressive'>('expressive');
       const color = ref<'standard' | 'vibrant'>('vibrant');
       const format = ref<'12h' | '24h'>('12h');
       const inputMode = ref<'clock' | 'keyboard'>('keyboard');
@@ -37,7 +38,14 @@ describe('component defaults', () => {
         h('section', { id }, [
           h(Button, { size: explicit ? 'medium' : undefined }, () => 'Action'),
           h(IconButton, { icon: 'settings', size: explicit ? 'medium' : undefined }),
-          h(Slider, { min: 0, max: 10, step: 1, value: 5, size: explicit ? 'medium' : undefined }),
+          h(Slider, {
+            min: 0,
+            max: 10,
+            step: 1,
+            value: 5,
+            size: explicit ? 'medium' : undefined,
+            appearance: explicit ? 'standard' : undefined,
+          }),
           h(Menu, { color: explicit ? 'standard' : undefined }),
           h(Select, { options: [], menuColor: explicit ? 'standard' : undefined }),
           h(DatePicker, { locale: 'en-US', today: '2026-10-15', firstDayOfWeek: explicit ? 0 : undefined }),
@@ -69,6 +77,7 @@ describe('component defaults', () => {
         buttonSize: size,
         iconButtonSize: size,
         sliderSize: size,
+        sliderAppearance: appearance,
         menuColor: color,
         datePickerDefaults: { firstDayOfWeek },
         timePickerDefaults: { format, inputMode },
@@ -77,7 +86,7 @@ describe('component defaults', () => {
       else {
         app.provide(buttonContextKey, { size });
         app.provide(iconButtonContextKey, { size });
-        app.provide(sliderContextKey, { size });
+        app.provide(sliderContextKey, { size, appearance });
         app.provide(menuDefaultsContextKey, { color });
         app.provide(datePickerContextKey, { firstDayOfWeek });
         app.provide(timePickerContextKey, { format, inputMode });
@@ -119,17 +128,22 @@ describe('component defaults', () => {
         expect(root.querySelector('[data-part="weekdays"]')?.firstElementChild?.textContent).toBe(expectedDay);
       };
       try {
+        expect(container.querySelector('#app .m3-slider-expressive')).not.toBeNull();
+        expect(container.querySelector('#explicit .m3-slider-standard')).not.toBeNull();
+        expect(container.querySelector('#subtree .m3-slider-standard')).not.toBeNull();
         assertControls('app', 'small', 'vibrant', '12h', 'keyboard', 'M');
         assertControls('subtree', 'medium', 'standard', '24h', 'clock', 'S');
         assertControls('explicit', 'medium', 'standard', '24h', 'clock', 'S');
         if (mode === 'plugin')
           expect(container.querySelector<HTMLElement>('#app [data-scope="button"]')?.dataset.shape).toBe('square');
         size.value = 'large';
+        appearance.value = 'standard';
         color.value = 'standard';
         format.value = '24h';
         inputMode.value = 'clock';
         firstDayOfWeek.value = 0;
         await nextTick();
+        expect(container.querySelector('#app .m3-slider-standard')).not.toBeNull();
         assertControls('app', 'large', 'standard', '24h', 'clock', 'S');
         assertControls('subtree', 'medium', 'standard', '24h', 'clock', 'S');
         assertControls('explicit', 'medium', 'standard', '24h', 'clock', 'S');

@@ -653,7 +653,7 @@ describe('Menu', () => {
     trigger?.click();
     await nextTick();
 
-    const selectItems = container.querySelectorAll<HTMLButtonElement>('.m3-select-option');
+    const selectItems = container.querySelectorAll<HTMLElement>('[role="option"]');
 
     expect(isPopoverOpen(selectMenu)).toBe(true);
 

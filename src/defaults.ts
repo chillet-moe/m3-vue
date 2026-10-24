@@ -9,6 +9,7 @@ import { timePickerContextKey, type TimePickerContext } from './components/TimeP
 export type M3ComponentDefaultsOptions = {
   buttonSize?: ButtonContext['size'];
   iconButtonSize?: IconButtonContext['size'];
+  sliderAppearance?: SliderContext['appearance'];
   sliderSize?: SliderContext['size'];
   menuColor?: MenuDefaultsContext['color'];
   datePickerDefaults?: DatePickerContext;

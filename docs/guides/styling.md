@@ -1,40 +1,54 @@
 # Styling
 
-组件样式优先通过 CSS 变量定制。
+## Choosing appearance and density
 
-当变量不能表达目标效果时，再覆盖具体的 `data-part`。M3 Vue 组件通过
-`data-scope` 和 `data-part` 暴露稳定的 CSS API。全局样式可以直接使用这些
-属性选择器；在 SFC 的 `<style scoped>` 中，只有确实需要跨越组件边界访问
-内部部件时才使用 `:deep()`。
+Start with the component's semantic role, then choose its visual appearance and size independently.
 
-## CSS token 分层
+| Need                                                | Component / choice                                                                  |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Choose a value                                      | Select or Combobox; use SelectItem for custom or virtual result rows.               |
+| Invoke a command or open a submenu                  | Menu with MenuItem.                                                                 |
+| Present general list content or navigation          | ListItem; choose button, link, or non-interactive presentation semantics.           |
+| Dense property panels and frequently traversed rows | Standard Slider and ListItem, with compact field sizes.                             |
+| Prominent controls or rich navigation surfaces      | Expressive Slider or ListItem when the larger geometry and motion suit the surface. |
 
-组件使用五层 CSS token：
+Slider and ListItem default to `appearance="standard"`. Expressive preserves their original appearance. This is not a library-wide variant: use each component's documented API rather than passing `appearance` to every control. For ListItem, standard keeps its active indicator at full width without expansion or press morph. SelectItem uses this restrained presentation for both ordinary and virtual lists; keyboard activity is distinct from selection.
 
-1. `--md-sys-*`：全局 Material system token，用于主题级配置。不建议在单个组件实例上局部覆盖。
-2. `--md-shape-*`、`--md-control-*` 和 `--md-cursor-*`：库级语义 token，用少量变量把 system token 映射到组件共享的 shape、control outline 与交互 cursor 角色。
-3. `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color`、`--md-icon-size`：上下文 token，
-   用于父组件向子组件传递容器色、内容色、state layer 颜色和图标尺寸。组件应在自己拥有的最小 icon 容器上设置
-   `--md-icon-size`，避免尺寸影响无关的后代 Icon。
-4. `--md-<component>-*`：组件 public token，是推荐的组件级定制入口。
-5. `--_*`：组件内部 private token，只用于实现细节，不作为外部 API。
+Use `size` to choose supported component dimensions, and public tokens for finer adjustments. Small visuals do not require small hit areas: Slider separates thumb and track dimensions from its target size. Pair a Slider with TextField for exact input; see [Slider](../components/slider#precise-numeric-input). TextField, Select and Combobox support the same 32px, 40px and 56px field heights. Allow space for floating labels; see [field spacing](./floating-label-spacing-lab).
 
-组件会用 `:where(:root)` 声明 public token 占位符，值为 `initial`。这只是给编辑器和 CSS API 一个明确声明，不是默认值；实际默认值集中在组件根元素的 private token fallback 上。这样 WebStorm 不需要解析深层 `var()` fallback，也不会因为组件 CSS 加载顺序覆盖用户自己的 `:root` 或局部定制。
+Choose button emphasis by action importance. Filled is available for the unique primary action, not required for every primary action. Routine actions use text/outlined buttons or standard icon buttons; Dialog actions use text. Keep focus visible in both themes. Prefer colors from semantic tokens, and verify long labels and narrow containers before reducing spacing further.
 
-组件 public token 只覆盖有明确语义的部件或稳定状态，例如 container、label、selected、unselected、error、disabled。`hover`、`focus`、`pressed` 这类瞬时交互状态优先通过 state layer 表达，不默认展开成完整的颜色 token 矩阵。
+The sections below explain how to customize these choices without depending on private component DOM.
 
-新增定制优先使用组件自己的 `--md-<component>-*` token。旧的 `--md-comp-*` token 不作为公开 API。
+Customize component styles with CSS variables first.
 
-普通 action 与真实 URL link 使用独立的全局 cursor token。需要把控件切换为桌面应用式默认箭头时，参阅
-[Interaction Cursors](/guides/interaction-cursors)。
+When a variable cannot express the desired result, override a specific `data-part`. M3 Vue components expose a stable CSS API through `data-scope` and `data-part`. Global styles can use these attribute selectors directly. In an SFC's `<style scoped>`, use `:deep()` only when you need to cross a component boundary to reach an internal part.
 
-每个组件页面的 **Styling** 表格由显式 metadata 生成，只列出推荐的 public token。metadata 按组件拆分在 `docs/.vitepress/components/style-tokens/<ComponentName>.ts`，统一入口 `style-token-meta.ts` 只负责注册组件名到对应 metadata。
+## CSS token layers
 
-## 主题级 shape token
+Components use five CSS token layers:
 
-如果只是想统一整套组件的圆角风格，优先覆盖少量 `--md-shape-*` 语义 token，而不是逐个组件改 `--md-<component>-*` 或 `data-part`。
+1. `--md-sys-*`: global Material system tokens for theme-level configuration. Avoid overriding these locally on an individual component instance.
+2. `--md-shape-*`, `--md-control-*`, and `--md-cursor-*`: library semantic tokens that map system tokens to shared shape, control-outline, and interaction-cursor roles with a small set of variables.
+3. `--md-color-container`, `--md-color-on-container`, `--md-state-layer-color`, and `--md-icon-size`: contextual tokens that let parent components pass container, content, state-layer colors, and icon size to children. Set `--md-icon-size` on the smallest icon container the component owns, so it does not affect unrelated descendant icons.
+4. `--md-<component>-*`: public component tokens and the recommended entry point for component-level customization.
+5. `--_*`: private component tokens used only for implementation details and not exposed as public API.
 
-文档右上角的 Shape 控制器会把这些变量写到文档根节点，因此调整会直接作用到整站组件。
+Components declare public-token placeholders with `:where(:root)` and a value of `initial`. This gives editors and the CSS API an explicit declaration; it is not the default value. Actual defaults live in private-token fallbacks on component roots. This keeps WebStorm from having to resolve deeply nested `var()` fallbacks and prevents component CSS load order from overriding user `:root` or local customizations.
+
+Public component tokens cover parts or stable states with clear meaning, such as container, label, selected, unselected, error, and disabled. Transient interaction states such as `hover`, `focus`, and `pressed` should use the state layer rather than expanding into a complete matrix of color tokens.
+
+Prefer each component's `--md-<component>-*` tokens for new customizations. Legacy `--md-comp-*` tokens are not public API.
+
+Ordinary actions and real URL links use separate global cursor tokens. To use the default arrow cursor for a desktop-app feel, see [Interaction Cursors](/guides/interaction-cursors).
+
+The **Styling** table on each component page is generated from explicit metadata and lists only recommended public tokens. Metadata is split by component under `docs/.vitepress/components/style-tokens/<ComponentName>.ts`; the shared `style-token-meta.ts` entry point only maps component names to metadata.
+
+## Theme-level shape tokens
+
+To apply a consistent corner style across the library, override a small set of semantic `--md-shape-*` tokens instead of changing each `--md-<component>-*` token or `data-part` individually.
+
+The Shape control at the top right of the documentation writes these variables to the document root, so changes apply to components across the site.
 
 ```css
 :root {
@@ -51,10 +65,9 @@
 }
 ```
 
-需要统一 action 的 square、pressed 或 selected 形变时，可以覆盖对应的 action 语义 token：
+To align the square, pressed, or selected morph of actions, override the corresponding action semantic tokens:
 
-`--md-shape-action` 建议使用有限圆角值，不要设为 `--md-sys-shape-corner-full`，否则 Button、IconButton 等组件在圆角动画中可能出现抖动。
-Square action 默认按比例派生自 `--md-shape-action`，只有需要让 square、pressed 或 selected 形变偏离 action 基准时，才需要覆盖下面这些 token。
+Use a bounded corner value for `--md-shape-action`; avoid setting it to `--md-sys-shape-corner-full`, which can make corner animations on Button, IconButton, and similar components jitter. Square actions derive proportionally from `--md-shape-action` by default. Override the tokens below only when square, pressed, or selected shapes need to differ from that baseline.
 
 ```css
 :root {
@@ -64,7 +77,7 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
 }
 ```
 
-当某个组件确实需要偏离全局语义时，再覆盖组件 public token：
+Override a component public token only when that component needs to differ from the global semantic:
 
 ```css
 :root {
@@ -72,7 +85,7 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
 }
 ```
 
-同尺寸的 outlined Button 与 TextField 共享静止状态的 control outline token。需要统一调整控件边界时，优先覆盖：
+Outlined Buttons and TextFields of the same size share the control-outline tokens in their resting state. To adjust control borders consistently, override:
 
 ```css
 :root {
@@ -95,7 +108,7 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
 }
 ```
 
-如果需要定制 disabled 等稳定状态，可以覆盖对应的组件 token：
+To customize stable states such as disabled, override the corresponding component tokens:
 
 ```css
 .custom-checkbox {
@@ -104,24 +117,18 @@ Square action 默认按比例派生自 `--md-shape-action`，只有需要让 squ
 }
 ```
 
-## data-scope 和 data-part
+## data-scope and data-part
 
-- **`data-scope`**：标识组件的类型，例如 `button`、`text-field`、`menu-item`。
-- **`data-part`**：标识组件内部的具体元素，例如 `root`、`label`、`leading`。
+- **`data-scope`** identifies a component type, such as `button`, `text-field`, or `menu-item`.
+- **`data-part`** identifies an element within a component, such as `root`, `label`, or `leading`.
 
-组件根元素使用 `data-part="root"`。给单个组件实例传入 class 是定制根元素
-的首选方式；这属于普通 Vue class fallthrough，不是 scope-boundary
-提供的授权机制。从父组件访问内部 `data-part` 则是显式的深层定制。
+Component roots use `data-part="root"`. Passing a class to an individual component instance is the preferred way to style its root. This uses ordinary Vue class fallthrough; it is not an authorization mechanism provided by scope-boundary. Accessing an internal `data-part` from a parent is an explicit deep customization.
 
-在启用了 `@chillet/vue-scope-boundary` 的 scoped SFC 中，正向 HTML type
-selector（如 `button`、`.toolbar > button`、`button.primary`）只匹配本 SFC
-写出的原生元素。纯 class、ID 和 attribute selector 仍遵循 Vue 原生规则，
-可以命中子组件根元素。因此短 class 名碰撞仍需通过组件前缀、BEM、CSS
-Modules 或其他命名约定避免。
+In a scoped SFC with `@chillet/vue-scope-boundary`, positive HTML type selectors such as `button`, `.toolbar > button`, and `button.primary` match only native elements written by that SFC. Plain class, ID, and attribute selectors retain Vue's native behavior and can match child component roots. Avoid short class-name collisions with component prefixes, BEM, CSS Modules, or another naming convention.
 
-## 用法
+## Usage
 
-在全局样式中，可以直接使用属性选择器：
+In global styles, use attribute selectors directly:
 
 ```css
 [data-scope='text-field'] [data-part='label'] {
@@ -129,22 +136,21 @@ Modules 或其他命名约定避免。
 }
 ```
 
-在 scoped SFC 中，使用 `:deep()` 明确表示有意跨越组件边界：
+In a scoped SFC, use `:deep()` to make an intentional component-boundary crossing explicit:
 
 ```css
-/* 自定义 TextField 的 label */
+/* Customize the TextField label */
 [data-scope='text-field'] :deep([data-part='label']) {
   font-weight: bold;
 }
 
-/* 自定义 Menu 中 MenuItem 的 label */
+/* Customize the MenuItem label inside Menu */
 [data-scope='menu-item'] :deep([data-part='label']) {
   color: red;
 }
 ```
 
-如果只需要定制组件根元素，给实例传入语义明确的 class，并使用纯 class
-selector：
+If you only need to style a component root, pass a descriptive class to the instance and use a plain class selector:
 
 ```vue
 <Button class="checkout-action">Checkout</Button>
@@ -156,10 +162,8 @@ selector：
 </style>
 ```
 
-不要给这类规则附加组件内部的根标签或 private class。`button.checkout-action`
-会被视为对私有根标签的依赖，只匹配本 SFC 自己写出的 `<button>`；
-`.m3-button.checkout-action` 则依赖组件内部实现。
+Do not add an internal root tag or private class to these rules. `button.checkout-action` is treated as a dependency on a private root tag and matches only `<button>` elements written by the SFC. `.m3-button.checkout-action` depends on the component's internal implementation.
 
-## 查看组件的 Anatomy
+## Inspect component anatomy
 
-每个组件文档页面都包含 **Anatomy** 部分，展示该组件的所有 `data-scope` 和 `data-part`，并支持交互式高亮。
+Each component documentation page includes an **Anatomy** section that lists its `data-scope` and `data-part` attributes and supports interactive highlighting.

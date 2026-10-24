@@ -8,6 +8,7 @@ const value = ref(48);
 
 <template>
   <Slider
+    appearance="expressive"
     v-model:value="value"
     :min="0"
     :max="100"

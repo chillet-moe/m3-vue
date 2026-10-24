@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { useElementEnvironment } from '@/internal/elementEnvironment';
-import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, unref, useId, useTemplateRef, watch } from 'vue';
+import {
+  computed,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  unref,
+  useAttrs,
+  useId,
+  useTemplateRef,
+  watch,
+} from 'vue';
 import { sliderContextKey } from './SliderContext';
 import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
 import { Icon } from '@/components/Icon';
@@ -30,6 +42,9 @@ export type SliderProps = {
   /** The upper limit for the slider value. */
   upperLimit?: number;
 
+  /** Visual appearance, independent of size. */
+  appearance?: 'standard' | 'expressive';
+
   /** The size of the slider. */
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
 
@@ -53,6 +68,7 @@ const {
   vertical = false,
   direction = 'ltr',
   size: sizeProp,
+  appearance: appearanceProp,
   min,
   max,
   step,
@@ -68,7 +84,9 @@ const {
   stopIndicators,
 } = defineProps<SliderProps>();
 
+const attrs = useAttrs();
 const defaults = inject(sliderContextKey, undefined);
+const appearance = computed(() => appearanceProp ?? unref(defaults?.appearance) ?? 'standard');
 const size = computed(() => sizeProp ?? unref(defaults?.size) ?? 'medium');
 
 const valueIndicatorPlacement = computed(() => {
@@ -105,7 +123,7 @@ const valueText = computed(() => {
 });
 
 const supportsInsetIcon = computed(
-  () => size.value === 'medium' || size.value === 'large' || size.value === 'extra-large',
+  () => appearance.value === 'expressive' && ['medium', 'large', 'extra-large'].includes(size.value),
 );
 const hasStartInsetIcon = computed(() => supportsInsetIcon.value && Boolean(startIcon));
 const hasEndInsetIcon = computed(() => supportsInsetIcon.value && Boolean(endIcon));
@@ -695,7 +713,7 @@ watch(
 );
 
 watch(
-  [() => vertical, () => direction, () => size.value],
+  [() => vertical, () => direction, () => size.value, () => appearance.value],
   async () => {
     await nextTick();
     syncSliderMeasurements();
@@ -763,6 +781,7 @@ onBeforeUnmount(() => {
     :class="[
       'm3-slider',
       `m3-slider-${size}`,
+      `m3-slider-${appearance}`,
       vertical ? 'm3-slider-vertical' : 'm3-slider-horizontal',
       direction === 'rtl' ? 'm3-slider-rtl' : 'm3-slider-lrt',
       isValueDragging && 'm3-slider-value-dragging',
@@ -771,6 +790,8 @@ onBeforeUnmount(() => {
     <input
       ref="input"
       type="range"
+      :aria-label="attrs['aria-label'] as string | undefined"
+      :aria-labelledby="attrs['aria-labelledby'] as string | undefined"
       :min="min"
       :max="max"
       step="any"

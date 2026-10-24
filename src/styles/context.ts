@@ -39,6 +39,8 @@ export function installM3StyleDefaults(
     app.provide(iconButtonContextKey, { shape: options.shape, size: options.iconButtonSize });
   }
   if (options.shape !== undefined) app.provide(navigationDrawerShapeContextKey, { shape: options.shape });
-  if (options.sliderSize !== undefined) app.provide(sliderContextKey, { size: options.sliderSize });
+  if (options.sliderSize !== undefined || options.sliderAppearance !== undefined) {
+    app.provide(sliderContextKey, { size: options.sliderSize, appearance: options.sliderAppearance });
+  }
   if (options.menuColor !== undefined) app.provide(menuDefaultsContextKey, { color: options.menuColor });
 }

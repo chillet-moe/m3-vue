@@ -194,3 +194,11 @@
     color: var(--_label-color);
   }
 }
+
+@layer components {
+  .m3-checkbox[data-indeterminate='true'] .m3-checkbox-control .m3-checkbox-icon {
+    block-size: 0;
+    border-inline-start: 0;
+    transform: translate(-50%, -50%);
+  }
+}

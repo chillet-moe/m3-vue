@@ -14,6 +14,7 @@ import ItemRouterLink from '../demos/item/ItemRouterLink.vue';
 import ItemRouterLinkSrc from '../demos/item/ItemRouterLink.vue?raw';
 
 const props = ref({
+  appearance: 'standard',
   interactive: true,
   shape: 'rounded',
   disabled: false,
@@ -24,6 +25,8 @@ const props = ref({
   title: 'Profile',
   description: 'Manage your account settings.',
 });
+import ItemAppearances from '../demos/item/ItemAppearances.vue';
+import ItemAppearancesSrc from '../demos/item/ItemAppearances.vue?raw';
 </script>
 
 # ListItem
@@ -59,3 +62,13 @@ other elements and components.
 When `ListItem` is acting as navigation, use `RouterLink custom` and feed its `href` and `navigate` into the component.
 
 <DemoContainer :src="ItemRouterLinkSrc"><ItemRouterLink /></DemoContainer>
+
+## Appearance
+
+`appearance="standard"` is the default: a fixed whole-row active indicator, compact corners, and no expanding highlight or press shape morph. `appearance="expressive"` retains the expanding indicator and press morph. Appearance does not change button/link/presentation semantics, slots, or layout tokens.
+
+<DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
+
+Set `appearance="expressive"` on existing items to retain the previous appearance. The `shape` prop controls the expressive shape; standard uses `--md-shape-compact`. `--md-item-indicator-shape` can customize the indicator in either appearance.
+
+Use [SelectItem](./select#selectitem) for selection options and [MenuItem](./menu) for menu commands. ListItem remains a general list entry. See [Styling](../guides/styling) for appearance and density choices.

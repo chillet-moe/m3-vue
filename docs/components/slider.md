@@ -54,6 +54,8 @@ watch(
   },
   { immediate: true },
 );
+import SliderPreciseValue from '../demos/slider/SliderPreciseValue.vue';
+import SliderPreciseValueSrc from '../demos/slider/SliderPreciseValue.vue?raw';
 </script>
 
 # Slider
@@ -132,3 +134,19 @@ The `size` prop overrides `sliderContextKey`'s `size`, with `medium` as the fall
 <DemoContainer :src="SliderDisabledSrc" :viewport="false">
   <SliderDisabled />
 </DemoContainer>
+
+## Slider appearance
+
+`appearance="standard"` is the default: a 4px neutral inactive track, a 16px circular thumb at medium size, and a separate 32px hit area. Extra-small and small use 14px thumbs; large and extra-large use 18px and 20px. `size` and `appearance` are independent. Focus uses a visible outline; hover and press add a small halo without changing geometry.
+
+`appearance="expressive"` preserves the original thick track and vertical handle. Inset icons are supported only for expressive medium, large, and extra-large; standard omits them. Both appearances support stop markers, all value-indicator placements, formatting, vertical orientation, RTL, disabled state, limits and step quantization. The standard indicator is compact and remains a top-layer popover. `:value-indicator="false"` hides only the visual hint.
+
+Standard sizing tokens are `--md-slider-track-thickness`, `--md-slider-thumb-size`, and `--md-slider-target-size`. Existing `--md-slider-active-track-color`, `--md-slider-inactive-track-color`, `--md-slider-handle-color`, and indicator color tokens apply to both appearances. Keep the hit area at least as large as the thumb. Programmatic values remain exact; Slider interactions snap to the step grid. The paired number field is consumer-owned.
+
+### Precise numeric input
+
+<DemoContainer :src="SliderPreciseValueSrc" :viewport="false"><SliderPreciseValue /></DemoContainer>
+
+### Migrating the default
+
+Set `appearance="expressive"` per instance, provide `sliderContextKey` with `{ appearance: 'expressive' }`, or use `sliderAppearance: 'expressive'` in M3 defaults to retain the previous appearance. For choosing appearance and density together, see [Styling](../guides/styling).

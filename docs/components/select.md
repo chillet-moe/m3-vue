@@ -31,11 +31,13 @@ const props = ref({
 });
 
 const modelValue = ref<SelectModelValue>(undefined);
+import SelectVirtual from '../demos/select/SelectVirtual.vue';
+import SelectVirtualSrc from '../demos/select/SelectVirtual.vue?raw';
 </script>
 
 # Select
 
-Select provides an anchored menu for choosing one or many options, with optional icons, filtering, and validation text.
+Select provides an anchored popover for choosing one or many options, using combobox/listbox/option semantics, with optional icons, filtering, and validation text.
 
 Field spacing belongs to the surrounding layout; preserve its intended density instead of normalizing every field
 group to one gap. `labelClearance` accepts a CSS length for local block-start clearance and can inherit a subtree
@@ -59,8 +61,8 @@ default from `fieldContextKey`; it adds to any parent gap. See the
 
 ## Close lifecycle
 
-`update:open(false)` updates the control state as soon as the native menu closes. `closed` follows after the menu's
-visual exit completes. Filter state is retained through the exit and reset at `closed`, so the closing menu does not
+`update:open(false)` updates the control state as soon as the popover closes. `closed` follows after the popover's
+visual exit completes. Filter state is retained through the exit and reset at `closed`, so the closing popover does not
 change its option list or dimensions mid-animation.
 
 ## Examples
@@ -104,3 +106,48 @@ The `size` prop overrides `fieldContextKey`'s `size`, with `medium` as the fallb
 ### useSelect
 
 <SourceApiTable api="useSelect" />
+
+## External virtual lists
+
+Install `@tanstack/vue-virtual` in the consuming application. The library has no runtime dependency on it. This example uses the real [TanStack Vue Virtual adapter](https://tanstack.com/virtual/latest/docs/framework/vue/vue-virtual), including row measurement and scroll-to-index.
+
+Select and Combobox expose a `list` slot with:
+
+| Member                       | Contract                                                                                                                                  |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `entries`                    | Complete filtered result set, each `{ option, index }`; `index` is the original options index.                                            |
+| `activeIndex`                | Index in `entries`, or -1. Independent of selection.                                                                                      |
+| `open`                       | Whether the popover is open. Enable measurement while open.                                                                               |
+| `optionProps(index)`         | Bind to the option root: stable id, function ref, role, ARIA state/position, pointer and selection handlers. Pass the index in `entries`. |
+| `isOptionSelected(option)`   | Selection state for rendering a checkmark.                                                                                                |
+| `setScrollToIndex(callback)` | Register the virtualizer's reveal callback; unregister with `undefined` on unmount.                                                       |
+
+Use unique stable string or number option values. Bind `optionProps(index)`, including its function ref, to `SelectItem`. Set its `active`, `selected`, and `disabled` props from the slot state. SelectItem provides option semantics, a static whole-row highlight, a selection mark, and tabindex -1. MenuItem remains the command-menu component; ListItem is for general list content.
+
+The input owns DOM focus. Up/Down navigate the complete logical result set and skip disabled options, without wrapping. Home/End move to the first/last enabled result while open. Enter selects (single selection closes; multiple selection remains open). Escape closes without changing selection. Tab closes and continues normal tab order. Rows have tabindex -1. The input's aria-activedescendant is omitted while the active row is unmounted and restored by its function ref after mounting. The component owns the manual Popover and its outside-pointer, focus-leave, Escape, and Tab dismissal, registering and cleaning up listeners on the owning Document.
+
+The virtualizer owns visible ranges, scrolling and measurement. Register `scrollToIndex` when opening and use `measureElement` with `data-index` for variable-height rows. Its ResizeObserver handles viewport and row changes. Keep content padding inside the scroll region; the example has one scroll viewport with the scrollbar at its outer edge.
+
+<DemoContainer :src="SelectVirtualSrc" :viewport="false"><SelectVirtual /></DemoContainer>
+
+<details><summary>VirtualOptions implementation</summary>
+
+<<< @/demos/select/VirtualOptions.vue
+
+</details>
+
+## SelectItem
+
+SelectItem owns option presentation, not selection or keyboard navigation. Use it in the `list` slot of Select or Combobox. Ordinary Select lists use the same component internally. It renders a non-button row; `active` and `selected` are independent. It composes the standard ListItem layout and accepts its public `--md-item-*` tokens for layout and colors.
+
+<AnatomyTable scope="select-item" />
+
+<ApiTable component="SelectItem" />
+
+For consumer-owned search, loading and error states, see [Combobox](./combobox#asynchronous-results).
+
+## Migration
+
+Select/Combobox now use combobox/listbox/option semantics, with focus retained on the input. Replace tests and styles that depend on Menu's private DOM. `optionLeading` and `optionTrailing` remain available.
+
+Public `useSelect` accepts `id`, `focus`, and `blur` callbacks instead of Menu, trigger and TextField refs. Bind the shared `open` ref to Popover and call `handleMenuClosed` from `closed`. Use `list`/`optionProps` for ordinary or virtual rendering; `handleMenuSelect` is removed.

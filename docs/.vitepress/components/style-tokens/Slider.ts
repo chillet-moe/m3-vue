@@ -2,6 +2,24 @@ import type { StyleTokenMeta } from './types';
 
 export const sliderStyleTokens = [
   {
+    name: '--md-slider-track-thickness',
+    description: 'Standard track thickness.',
+    fallback: '0.25rem',
+    category: 'Size',
+  },
+  {
+    name: '--md-slider-thumb-size',
+    description: 'Standard thumb diameter; size determines the fallback.',
+    fallback: '1rem',
+    category: 'Size',
+  },
+  {
+    name: '--md-slider-target-size',
+    description: 'Standard hit area, independent of thumb size.',
+    fallback: '2rem',
+    category: 'Size',
+  },
+  {
     name: '--md-slider-active-track-color',
     description: 'Controls active track color.',
     fallback: 'var(--md-sys-color-primary)',

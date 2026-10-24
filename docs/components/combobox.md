@@ -23,6 +23,8 @@ const props = ref({
 });
 
 const modelValue = ref<SelectModelValue>(undefined);
+import ComboboxAsync from '../demos/combobox/ComboboxAsync.vue';
+import ComboboxAsyncSrc from '../demos/combobox/ComboboxAsync.vue?raw';
 </script>
 
 # Combobox
@@ -70,3 +72,15 @@ Combobox wraps Select and shares its `select` scope. See [Select Anatomy](./sele
 ### useSelect
 
 <SourceApiTable api="useSelect" />
+
+## Asynchronous results
+
+`v-model:query` exposes the query. `filter-mode="local"` is the default; `filter-mode="external"` treats `options` as the complete current result set and does no additional filtering. The consumer owns requests, cancellation, stale-response handling, loading, and errors. Replace the list slot with status content while loading or after failure. The `empty` slot customizes the ordinary list's empty result. The example clears obsolete results during a simulated request and ignores obsolete responses.
+
+Selected values do not depend on mounted rows or current results. Labels come from matching `options`, then `resolveLabel(value)`, then `String(value)`. Keep a consumer-owned label catalog for asynchronous results. Hidden form values and the clear button continue to work when selected options are absent. Results replacement preserves the active value when it remains enabled; otherwise navigation returns to an enabled selected result or the first enabled result. Reopening follows the same rule. Closing clears the query after the visual exit completes (`closed`); clearing the selection also clears the query.
+
+<DemoContainer :src="ComboboxAsyncSrc" :viewport="false"><ComboboxAsync /></DemoContainer>
+
+## Virtual lists
+
+Combobox forwards Select's `list` and `empty` slots. Use `SelectItem` for row presentation and the same `optionProps` and `setScrollToIndex` contract. See [Select's virtual list example](./select#external-virtual-lists) for 10,000 options with single and multiple selection.

@@ -4,3 +4,5 @@ await import('./button-disabled-link/run');
 await import('./menu-press-drag/run');
 await import('./dialog-spacing/run');
 await import('./multi-window/run');
+
+await import('./desktop-workspace/run');

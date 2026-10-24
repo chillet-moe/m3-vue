@@ -309,6 +309,18 @@
     padding-inline: var(--_item-padding-inline);
   }
 
+  .m3-item[data-appearance='standard'] {
+    --_item-current-indicator-visual-width: 100%;
+    --_item-container-shape: var(--md-shape-compact);
+  }
+  .m3-item[data-appearance='standard']::before {
+    transition: none;
+  }
+  .m3-item[data-appearance='standard'] .m3-text-morph,
+  .m3-item[data-appearance='standard'] .m3-item-icon {
+    transition: none;
+  }
+
   /*.m3-button.m3-item[data-size='extra-small'] .m3-item-title,
   .m3-button.m3-item[data-size='small'] .m3-item-title {
     @apply body-medium;

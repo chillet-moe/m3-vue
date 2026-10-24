@@ -1,0 +1,19 @@
+@layer components {
+  .m3-select-item {
+    --md-item-min-height: 36px;
+    --md-item-padding-block: 0px;
+    --md-item-main-padding-block: 6px;
+    --md-item-main-padding-inline: 4px;
+    --md-item-gap: 8px;
+    --md-item-icon-size: 20px;
+    cursor: var(--md-cursor-action);
+  }
+  /* ListItem's public trailing part also supports text, not only an icon. */
+  .m3-select-item > [data-scope='item'][data-part='trailing'] {
+    inline-size: auto;
+    block-size: auto;
+  }
+  .m3-select-item[aria-disabled='true'] {
+    cursor: default;
+  }
+}

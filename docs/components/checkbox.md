@@ -17,6 +17,8 @@ const props = ref({
 });
 
 const checked = ref(false);
+import CheckBoxGroup from '../demos/checkbox/CheckBoxGroup.vue';
+import CheckBoxGroupSrc from '../demos/checkbox/CheckBoxGroup.vue?raw';
 </script>
 
 # CheckBox
@@ -50,3 +52,11 @@ Use `presentation` when the checkbox is only a visual indicator inside another a
 <DemoContainer :src="CheckBoxStatesSrc" :viewport="false">
   <CheckBoxStates />
 </DemoContainer>
+
+## Mixed state
+
+`checked` owns the submitted boolean value; `indeterminate` owns the mixed visual state and native `input.indeterminate` property. Use `v-model:indeterminate` for local state or pass a computed prop for consumer-owned group state. Mixed presentation takes precedence over the checkmark and exposes `aria-checked="mixed"` on the native input.
+
+User activation follows native checkbox behavior: toggles `checked`, emits `update:checked`, then clears `indeterminate` with `update:indeterminate(false)`. Disabled checkboxes do not update. Presentation mode renders no input and emits no interactions; the parent owns all semantics. The component never derives group selection.
+
+<DemoContainer :src="CheckBoxGroupSrc"><CheckBoxGroup /></DemoContainer>

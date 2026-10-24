@@ -86,6 +86,7 @@
     "@chillet/vue-scope-boundary": "^0.2.0",
     "@emnapi/core": "^1.11.3",
     "@nuxt/kit": "^4.4.2",
+    "@tanstack/vue-virtual": "^3.13.48",
     "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vitest/coverage-v8": "catalog:",

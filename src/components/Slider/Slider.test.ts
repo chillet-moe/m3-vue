@@ -1169,6 +1169,7 @@ describe('Slider', () => {
             max: 10,
             step: 1,
             size: 'small',
+            appearance: 'expressive',
             startIcon: 'radio_button_unchecked',
             endIcon: 'square',
             value: currentValue.value,
@@ -1200,6 +1201,7 @@ describe('Slider', () => {
             min: 0,
             max: 10,
             step: 1,
+            appearance: 'expressive',
             startIcon: 'radio_button_unchecked',
             value: currentValue.value,
             'onUpdate:value': (nextValue: number) => {
@@ -1240,6 +1242,7 @@ describe('Slider', () => {
             min: 0,
             max: 10,
             step: 1,
+            appearance: 'expressive',
             endIcon: 'square',
             value: currentValue.value,
             'onUpdate:value': (nextValue: number) => {

@@ -10,6 +10,9 @@ import type { ButtonProps } from '@/components/Button';
 type ListItemButtonProps = Omit<ButtonProps, 'toggleable' | 'variant' | 'size' | 'pressShapeMorph'>;
 
 export type ListItemProps = ListItemButtonProps & {
+  /** Standard fixed highlight or expressive expanding indicator and press morph. */
+  appearance?: 'standard' | 'expressive';
+
   /** Whether the whole item is an interactive action or link. */
   interactive?: boolean;
 
@@ -24,6 +27,7 @@ export type ListItemProps = ListItemButtonProps & {
 };
 
 const props = withDefaults(defineProps<ListItemProps>(), {
+  appearance: 'standard',
   interactive: true,
   active: false,
   href: undefined,
@@ -47,7 +51,10 @@ const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
   disabled,
 });
 
-const { pressShapeMorphAttrs } = usePressShapeMorph({ enabled: interactive, disabled });
+const { pressShapeMorphAttrs } = usePressShapeMorph({
+  enabled: computed(() => interactive.value && props.appearance === 'expressive'),
+  disabled,
+});
 
 defineSlots<{
   /** Optional content above the main row. */
@@ -90,7 +97,7 @@ const slotProps = computed(() => ({
     :is="tag"
     :class="[
       'm3-item',
-      'm3-morph-host',
+      props.appearance === 'expressive' && 'm3-morph-host',
       {
         'm3-state-layer': interactive,
         'm3-button': interactive,
@@ -98,6 +105,7 @@ const slotProps = computed(() => ({
     ]"
     data-scope="item"
     data-part="root"
+    :data-appearance="props.appearance"
     data-list-group-item
     data-variant="text"
     data-size="small"
@@ -116,7 +124,7 @@ const slotProps = computed(() => ({
     <Icon
       v-if="props.leadingIcon"
       :name="props.leadingIcon"
-      :class="['m3-item-leading', 'm3-item-icon', 'm3-icon-morph']"
+      :class="['m3-item-leading', 'm3-item-icon', props.appearance === 'expressive' && 'm3-icon-morph']"
       data-scope="item"
       data-part="leading"
       :disabled="disabled"
@@ -126,19 +134,39 @@ const slotProps = computed(() => ({
     </span>
 
     <span class="m3-item-main" data-scope="item" data-part="main">
-      <span v-if="hasHeader" class="m3-item-header m3-text-morph" data-scope="item" data-part="header">
+      <span
+        v-if="hasHeader"
+        :class="['m3-item-header', props.appearance === 'expressive' && 'm3-text-morph']"
+        data-scope="item"
+        data-part="header"
+      >
         <slot name="header" v-bind="slotProps" />
       </span>
 
-      <span v-if="hasTitle" class="m3-item-title m3-text-morph" data-scope="item" data-part="title">
+      <span
+        v-if="hasTitle"
+        :class="['m3-item-title', props.appearance === 'expressive' && 'm3-text-morph']"
+        data-scope="item"
+        data-part="title"
+      >
         <slot v-bind="slotProps">{{ props.title }}</slot>
       </span>
 
-      <span v-if="hasDescription" class="m3-item-description m3-text-morph" data-scope="item" data-part="description">
+      <span
+        v-if="hasDescription"
+        :class="['m3-item-description', props.appearance === 'expressive' && 'm3-text-morph']"
+        data-scope="item"
+        data-part="description"
+      >
         <slot name="description" v-bind="slotProps">{{ props.description }}</slot>
       </span>
 
-      <span v-if="hasFooter" class="m3-item-footer m3-text-morph" data-scope="item" data-part="footer">
+      <span
+        v-if="hasFooter"
+        :class="['m3-item-footer', props.appearance === 'expressive' && 'm3-text-morph']"
+        data-scope="item"
+        data-part="footer"
+      >
         <slot name="footer" v-bind="slotProps" />
       </span>
     </span>
@@ -146,7 +174,7 @@ const slotProps = computed(() => ({
     <Icon
       v-if="props.trailingIcon"
       :name="props.trailingIcon"
-      :class="['m3-item-trailing', 'm3-item-icon', 'm3-icon-morph']"
+      :class="['m3-item-trailing', 'm3-item-icon', props.appearance === 'expressive' && 'm3-icon-morph']"
       data-scope="item"
       data-part="trailing"
       :disabled="disabled"

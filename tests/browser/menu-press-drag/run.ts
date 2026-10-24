@@ -54,7 +54,7 @@ try {
   assert.equal(await page.locator('#menu-selection').textContent(), 'Second');
   assert.equal(await page.locator('#press-menu').evaluate((menu) => menu.matches(':popover-open')), false);
 
-  await pressDragTo(page, '.m3-select-trigger', '.m3-select-option:nth-child(2)');
+  await pressDragTo(page, '.m3-select-trigger', '.m3-select-item:nth-child(2)');
   assert.equal(await page.locator('#select-value').textContent(), 'pour-over');
   assert.equal(await page.locator('.m3-select-menu').evaluate((menu) => menu.matches(':popover-open')), false);
 

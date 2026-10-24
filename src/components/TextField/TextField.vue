@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { StyleValue } from 'vue';
+defineOptions({ inheritAttrs: false });
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
 import { computed, inject, onBeforeUnmount, ref, unref, useAttrs, useId, useSlots, watch } from 'vue';
@@ -414,7 +416,7 @@ defineExpose({
 <template>
   <div
     ref="rootRef"
-    :class="'m3-text-field'"
+    :class="['m3-text-field', attrs.class]"
     data-scope="text-field"
     data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"
@@ -429,7 +431,7 @@ defineExpose({
     :data-has-leading="hasLeading ? 'true' : 'false'"
     :data-has-date-picker="hasDatePicker ? 'true' : 'false'"
     :data-has-time-picker="hasTimePicker ? 'true' : 'false'"
-    :style="labelClearanceStyle"
+    :style="[labelClearanceStyle, attrs.style as StyleValue]"
   >
     <div ref="containerRef" :class="'m3-text-field-container'" data-scope="text-field" data-part="container">
       <label

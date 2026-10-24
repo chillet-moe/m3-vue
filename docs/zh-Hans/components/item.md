@@ -14,6 +14,7 @@ import ItemRouterLink from '../../demos/item/ItemRouterLink.vue';
 import ItemRouterLinkSrc from '../../demos/item/ItemRouterLink.vue?raw';
 
 const props = ref({
+  appearance: 'standard',
   interactive: true,
   shape: 'rounded',
   disabled: false,
@@ -24,6 +25,8 @@ const props = ref({
   title: '个人资料',
   description: '管理你的帐户设置。',
 });
+import ItemAppearances from '../../demos/item/ItemAppearances.vue';
+import ItemAppearancesSrc from '../../demos/item/ItemAppearances.vue?raw';
 </script>
 
 # ListItem
@@ -55,3 +58,13 @@ ListItem 提供丰富的列表项布局。默认情况下它可交互，并渲�
 当 `ListItem` 用作导航时，请使用 `RouterLink custom`，并将其 `href` 和 `navigate` 传给该组件。
 
 <DemoContainer :src="ItemRouterLinkSrc"><ItemRouterLink /></DemoContainer>
+
+## 外观
+
+`appearance="standard"` 是默认值：活动指示器固定为整行宽度、转角紧凑，并且不会展开高亮或执行按压形状变换。`appearance="expressive"` 保留展开式指示器和按压形状变换。外观不会改变按钮/链接/展示语义、插槽或布局 Token。
+
+<DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
+
+现有条目如需保留之前的外观，可设置 `appearance="expressive"`。`shape` 属性控制 expressive 外观的形状；standard 使用 `--md-shape-compact`。`--md-item-indicator-shape` 可定制两种外观中的指示器。
+
+选择选项请使用 [SelectItem](./select#selectitem)，菜单命令请使用 [MenuItem](./menu)。ListItem 仍用于一般列表项。外观与密度建议请参阅[样式指南](../guides/styling#选择外观与密度)。

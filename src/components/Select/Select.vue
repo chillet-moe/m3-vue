@@ -1,12 +1,17 @@
 <script setup lang="ts">
+import type { StyleValue } from 'vue';
+defineOptions({ inheritAttrs: false });
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import { isHTMLElement } from '@/internal/elementEnvironment';
+import { useElementEnvironment, isHTMLElement } from '@/internal/elementEnvironment';
 
-import { TransitionGroup, computed, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
+import { computed, inject, unref, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
 import Icon from '@/components/Icon/Icon.vue';
-import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
-import MenuContainer from '@/components/Menu/MenuContainer.vue';
-import MenuItem from '@/components/Menu/MenuItem.vue';
+import { menuDefaultsContextKey } from '@/components/Menu/MenuDefaultsContext';
+import type { MenuColor } from '@/components/Menu/Menu.vue';
+import Popover from '@/components/Popover/Popover.vue';
+import SelectItem from './SelectItem.vue';
+import type { SelectListSlot } from '@/composables/useSelect';
+export type { SelectListSlot } from '@/composables/useSelect';
 import { useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
 import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
@@ -39,6 +44,11 @@ export type SelectOption = {
 export type SelectModelValue = SelectOptionValue | SelectOptionValue[] | undefined;
 
 export type SelectProps = {
+  /** Local filtering or consumer-owned asynchronous results. */
+  filterMode?: 'local' | 'external';
+  /** Label for a selected value absent from options; otherwise String(value). */
+  resolveLabel?: (value: SelectOptionValue) => string | undefined;
+
   /** Visible label. If omitted, provide aria-label via attrs. */
   label?: string;
 
@@ -97,13 +107,6 @@ export type SelectProps = {
   filterNoResultsText?: string;
 };
 
-type SelectExposed = {
-  show: (focusFirst?: boolean, source?: HTMLElement) => Promise<void>;
-  hide: () => void;
-  toggle: () => void;
-  menuRef?: HTMLDivElement;
-};
-
 type TextFieldExposed = {
   rootEl?: HTMLDivElement;
   containerEl?: HTMLDivElement;
@@ -138,6 +141,8 @@ const props = withDefaults(defineProps<SelectProps>(), {
   filterNoResultsText: undefined,
 });
 
+const menuDefaults = inject(menuDefaultsContextKey, undefined);
+const menuColor = computed(() => props.menuColor ?? unref(menuDefaults?.color) ?? 'standard');
 const effectiveSize = useFieldSize(() => props.size);
 const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
 
@@ -156,6 +161,9 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
+  /** Replace the full list; bind optionProps to each rendered option. */
+  list(props: SelectListSlot): any;
+  empty(): any;
   leading(): any;
   prefix(): any;
   suffix(): any;
@@ -166,9 +174,10 @@ defineSlots<{
 
 const modelValue = defineModel<SelectModelValue>();
 const open = defineModel<boolean>('open', { default: false });
+const query = defineModel<string>('query', { default: '' });
 
 const triggerRef = ref<HTMLElement>();
-const menuRef = ref<SelectExposed>();
+const menuRef = ref<InstanceType<typeof Popover>>();
 const textFieldRef = ref<TextFieldExposed>();
 const anchorName = `--m3-select-anchor-${generatedId}`;
 let releaseAnchorName: (() => void) | undefined;
@@ -202,9 +211,12 @@ const select = useSelect({
   open,
   onChange: (value) => emit('change', value),
   onClosed: () => emit('closed'),
-  menuRef: menuRef as any,
-  triggerRef,
-  textFieldRef: textFieldRef as any,
+  id: () => menuId.value,
+  query,
+  filterMode: () => props.filterMode ?? 'local',
+  resolveLabel: (value) => props.resolveLabel?.(value),
+  focus: () => textFieldRef.value?.focus(),
+  blur: () => textFieldRef.value?.blur(),
 });
 
 const textFieldPlaceholder = computed(() => {
@@ -250,7 +262,7 @@ function handleFocus(event: FocusEvent) {
 function handleBlur(event: FocusEvent) {
   const nextFocused = event.relatedTarget as Node | null;
 
-  if (nextFocused && menuRef.value?.menuRef?.contains(nextFocused)) {
+  if (nextFocused && menuRef.value?.popoverEl?.contains(nextFocused)) {
     return;
   }
 
@@ -262,7 +274,7 @@ function handleTriggerPointerDown(event: PointerEvent) {
     return;
   }
 
-  const menu = menuRef.value?.menuRef;
+  const menu = menuRef.value?.popoverEl;
   if (!menu) return;
 
   const trigger = event.currentTarget;
@@ -288,7 +300,8 @@ function handleFieldClick() {
     return;
   }
 
-  select.handleFieldClick();
+  if (!props.filterable && open.value) select.closeMenu();
+  else select.handleFieldClick();
 }
 
 watch(
@@ -307,6 +320,22 @@ watch(
   },
 );
 
+// A selector retains input focus, so its manual popover has one explicit
+// dismissal owner. Bind to the trigger's Document, including window adoption.
+useElementEnvironment(triggerRef, (document) => {
+  const dismiss = (event: Event) => {
+    const target = event.target as Node | null;
+    if (target && !triggerRef.value?.contains(target) && !menuRef.value?.popoverEl?.contains(target))
+      select.closeMenu();
+  };
+  document.addEventListener('pointerdown', dismiss, true);
+  document.addEventListener('focusin', dismiss);
+  return () => {
+    document.removeEventListener('pointerdown', dismiss, true);
+    document.removeEventListener('focusin', dismiss);
+  };
+});
+
 onBeforeUnmount(() => {
   releaseAnchorName?.();
   cleanupPressDrag?.();
@@ -324,7 +353,7 @@ defineExpose({
 
 <template>
   <div
-    class="m3-text-field m3-select"
+    :class="['m3-text-field m3-select', attrs.class]"
     data-scope="select"
     data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"
@@ -335,7 +364,7 @@ defineExpose({
     :data-filterable="props.filterable ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
     :data-has-leading="hasLeading ? 'true' : 'false'"
-    :style="labelClearanceStyle"
+    :style="[labelClearanceStyle, attrs.style as StyleValue]"
   >
     <div
       class="m3-select-trigger"
@@ -359,10 +388,12 @@ defineExpose({
         :placeholder="textFieldPlaceholder"
         :size="effectiveSize"
         label-clearance="0rem"
-        :role="props.filterable ? undefined : 'button'"
+        role="combobox"
+        :aria-autocomplete="props.filterable ? 'list' : 'none'"
+        :aria-activedescendant="select.activeDescendant.value"
         :aria-controls="menuId"
         :aria-expanded="open ? 'true' : 'false'"
-        :aria-haspopup="'menu'"
+        aria-haspopup="listbox"
         :aria-invalid="invalid ? 'true' : undefined"
         :aria-required="props.required ? 'true' : undefined"
         :aria-label="props.label ? undefined : filterAriaLabel"
@@ -411,88 +442,50 @@ defineExpose({
       :value="submittedValue"
     />
 
-    <Menu
+    <Popover
       :id="menuId"
       ref="menuRef"
       v-model:open="open"
       class="m3-select-menu"
       data-scope="select"
       data-part="menu"
-      :color="props.menuColor"
-      :style="{ 'position-anchor': anchorName }"
-      @select="select.handleMenuSelect"
+      popover="manual"
+      role="listbox"
+      :data-color="menuColor"
+      :aria-label="props.label || filterAriaLabel"
+      :aria-multiselectable="props.multiple"
+      :anchor-name="anchorName"
+      :anchor-element="triggerRef"
+      match-anchor-width
       @closed="select.handleMenuClosed"
     >
-      <MenuContainer>
-        <TransitionGroup
-          tag="div"
-          name="m3-select-options"
-          class="m3-select-options"
-          data-scope="select"
-          data-part="options"
-        >
-          <MenuItem
-            v-for="{ option, index } in select.filteredOptionEntries.value"
-            :key="`${index}-${option.value}`"
-            class="m3-select-option"
-            data-scope="select"
-            data-part="option"
-            :data-option-index="index"
-            :data-has-option-leading="option.leadingIcon || slots.optionLeading ? 'true' : undefined"
+      <slot name="list" v-bind="select.list.value">
+        <div class="m3-select-options" data-scope="select" data-part="options">
+          <SelectItem
+            v-for="({ option }, index) in select.filteredOptionEntries.value"
+            :key="`${typeof option.value}-${option.value}`"
+            v-bind="select.optionProps(index)"
             :disabled="option.disabled"
-            :role="props.multiple ? 'menuitemcheckbox' : 'menuitemradio'"
-            :checked="select.isOptionSelected(option)"
+            :active="select.activeIndex.value === index"
             :selected="select.isOptionSelected(option)"
-            :close-on-select="!props.multiple"
+            :supporting-text="option.supportingText"
+            :leading-icon="option.leadingIcon"
+            :trailing-text="option.trailingText"
           >
-            <template #leading>
-              <span class="m3-select-option-leading-content" data-scope="select" data-part="option-leading-content">
-                <span class="m3-select-option-check" data-scope="select" data-part="option-check" aria-hidden="true">
-                  <Icon name="check" />
-                </span>
-
-                <span
-                  v-if="option.leadingIcon || slots.optionLeading"
-                  class="m3-select-option-icon"
-                  data-scope="select"
-                  data-part="option-icon"
-                  aria-hidden="true"
-                >
-                  <slot name="optionLeading" :option="option" :selected="false">
-                    <Icon v-if="option.leadingIcon" :name="option.leadingIcon" />
-                  </slot>
-                </span>
-              </span>
+            <template v-if="slots.optionLeading" #leading>
+              <slot name="optionLeading" :option="option" :selected="select.isOptionSelected(option)" />
             </template>
-
             {{ option.label }}
-
-            <template v-if="option.supportingText" #supporting>
-              {{ option.supportingText }}
-            </template>
-
             <template v-if="slots.optionTrailing" #trailing>
               <slot name="optionTrailing" :option="option" :selected="select.isOptionSelected(option)" />
             </template>
-
-            <template v-else-if="option.trailingText" #trailingText>
-              {{ option.trailingText }}
-            </template>
-          </MenuItem>
-
-          <div
-            v-if="props.filterable && !select.hasFilteredOptions.value"
-            key="no-results"
-            class="m3-select-empty"
-            data-scope="select"
-            data-part="empty"
-            aria-live="polite"
-          >
-            {{ filterNoResultsText }}
+          </SelectItem>
+          <div v-if="!select.hasFilteredOptions.value" class="m3-select-empty" data-part="empty" aria-live="polite">
+            <slot name="empty">{{ filterNoResultsText }}</slot>
           </div>
-        </TransitionGroup>
-      </MenuContainer>
-    </Menu>
+        </div>
+      </slot>
+    </Popover>
   </div>
 </template>
 

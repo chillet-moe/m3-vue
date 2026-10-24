@@ -81,6 +81,7 @@ controls that inherit it.
 | `fieldSize`                         | Single-line TextField, Select, Combobox      | `fieldContextKey` → `size`                |
 | `buttonSize`                        | Button                                       | `buttonContextKey` → `size`               |
 | `iconButtonSize`                    | IconButton                                   | `iconButtonContextKey` → `size`           |
+| `sliderAppearance`                  | Slider                                       | `sliderContextKey` → `appearance`         |
 | `sliderSize`                        | Slider                                       | `sliderContextKey` → `size`               |
 | `menuColor`                         | Menu, Select and Combobox menus              | `menuDefaultsContextKey` → `color`        |
 | `datePickerDefaults.firstDayOfWeek` | DatePicker, including TextField date pickers | `datePickerContextKey` → `firstDayOfWeek` |

@@ -54,6 +54,8 @@ watch(
   },
   { immediate: true },
 );
+import SliderPreciseValue from '../../demos/slider/SliderPreciseValue.vue';
+import SliderPreciseValueSrc from '../../demos/slider/SliderPreciseValue.vue?raw';
 </script>
 
 # Slider
@@ -131,3 +133,19 @@ Slider 会原样保留外部传入的 `value`，包括步进刻度之间的值�
 <DemoContainer :src="SliderDisabledSrc" :viewport="false">
   <SliderDisabled />
 </DemoContainer>
+
+## Slider 外观
+
+`appearance="standard"` 是默认值：中性非活动轨道厚 4px，中等尺寸下圆形滑块为 16px，并有独立的 32px 命中区域。Extra-small 和 small 使用 14px 滑块；large 和 extra-large 分别使用 18px 和 20px。`size` 与 `appearance` 相互独立。焦点状态会显示清晰轮廓；悬停和按压会添加轻微光晕，但不会改变几何尺寸。
+
+`appearance="expressive"` 保留原有的粗轨道和竖直手柄。内嵌图标仅支持 expressive 的 medium、large 和 extra-large 尺寸；standard 不显示图标。两种外观都支持停止标记、所有数值指示器位置、格式化、垂直方向、RTL、禁用状态、范围限制和步进量化。Standard 指示器更紧凑，并仍渲染在顶层弹出层中。`:value-indicator="false"` 仅隐藏视觉提示。
+
+Standard 尺寸 Token 为 `--md-slider-track-thickness`、`--md-slider-thumb-size` 和 `--md-slider-target-size`。已有的 `--md-slider-active-track-color`、`--md-slider-inactive-track-color`、`--md-slider-handle-color` 和指示器颜色 Token 对两种外观都有效。命中区域应至少与滑块一样大。程序设置的值保持精确；Slider 交互会按步进网格吸附。配对数字输入框由调用方管理。
+
+### 精确数字输入
+
+<DemoContainer :src="SliderPreciseValueSrc" :viewport="false"><SliderPreciseValue /></DemoContainer>
+
+### 迁移默认外观
+
+如需保留之前的外观，可在实例上设置 `appearance="expressive"`、通过 `sliderContextKey` 提供 `{ appearance: 'expressive' }`，或在 M3 默认值中设置 `sliderAppearance: 'expressive'`。外观与密度的搭配建议请参阅 [样式指南](../guides/styling#选择外观与密度)。

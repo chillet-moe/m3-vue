@@ -71,6 +71,7 @@ app.use(M3VuePlugin, options);
 | `fieldSize`                         | 单行 TextField、Select、Combobox      | `fieldContextKey` → `size`                |
 | `buttonSize`                        | Button                                | `buttonContextKey` → `size`               |
 | `iconButtonSize`                    | IconButton                            | `iconButtonContextKey` → `size`           |
+| `sliderAppearance`                  | Slider                                | `sliderContextKey` → `appearance`         |
 | `sliderSize`                        | Slider                                | `sliderContextKey` → `size`               |
 | `menuColor`                         | Menu、Select 和 Combobox 菜单         | `menuDefaultsContextKey` → `color`        |
 | `datePickerDefaults.firstDayOfWeek` | DatePicker，包括 TextField 日期选择器 | `datePickerContextKey` → `firstDayOfWeek` |

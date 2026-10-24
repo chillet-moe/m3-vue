@@ -103,14 +103,8 @@ function isPopoverOpen(element: HTMLElement | null) {
   return element ? popoverOpenElements.has(element) : false;
 }
 
-function getCurrentMenuItems(container: HTMLElement) {
-  return Array.from(
-    container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]'),
-  ).filter(
-    (item) =>
-      !item.classList.contains('m3-select-options-leave-active') &&
-      !item.classList.contains('m3-select-options-leave-to'),
-  );
+function getCurrentOptions(container: HTMLElement) {
+  return Array.from(container.querySelectorAll<HTMLElement>('[role="option"]'));
 }
 
 function getSelectInput(container: HTMLElement) {
@@ -237,10 +231,8 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
-    const menuItems = container.querySelectorAll<HTMLButtonElement>(
-      'button[role="menuitemradio"], button[role="menuitemcheckbox"]',
-    );
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('[role="option"]');
 
     expect(getSelectInput(container)?.value).toBe('');
 
@@ -274,11 +266,12 @@ describe('Select', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
-    const items = getCurrentMenuItems(container);
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
+    const items = getCurrentOptions(container);
 
     trigger?.dispatchEvent(createMousePointerEvent('pointerdown', 10, 10));
     document.dispatchEvent(createMousePointerEvent('pointermove', 20, 20));
+    await nextTick();
     expect(isPopoverOpen(menu)).toBe(true);
     items[1]?.dispatchEvent(createMousePointerEvent('pointerup', 30, 30));
     await nextTick();
@@ -289,6 +282,7 @@ describe('Select', () => {
     trigger?.dispatchEvent(createMousePointerEvent('pointerdown', 10, 10));
     document.dispatchEvent(createMousePointerEvent('pointermove', 20, 20));
     document.body.dispatchEvent(createMousePointerEvent('pointerup', 30, 30));
+    await nextTick();
     expect(isPopoverOpen(menu)).toBe(false);
     expect(value.value).toBe('pour-over');
 
@@ -325,8 +319,8 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
-    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitemcheckbox"]');
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('[role="option"]');
 
     expect(isPopoverOpen(menu)).toBe(true);
 
@@ -407,7 +401,7 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
     const clearButton = container.querySelector<HTMLButtonElement>('[data-part="clear-button"]');
 
     expect(clearButton?.getAttribute('aria-label')).toBe('Clear coffee');
@@ -489,7 +483,7 @@ describe('Select', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
     const textField = container.querySelector<HTMLElement>('.m3-select-field');
 
     trigger?.click();
@@ -597,7 +591,7 @@ describe('Select', () => {
     await nextTick();
 
     const selectedItemLeading = container.querySelector<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
+      '[role="option"][data-selected="true"] [data-scope="select-item"][data-part="check"]',
     );
 
     expect(selectedItemLeading?.textContent?.trim()).toBe('check');
@@ -627,7 +621,7 @@ describe('Select', () => {
     await nextTick();
 
     const selectedItemLeading = container.querySelector<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-leading',
+      '[role="option"][data-selected="true"] .m3-item-leading-slot',
     );
 
     expect(selectedItemLeading?.textContent?.trim()).toBe('check');
@@ -664,7 +658,7 @@ describe('Select', () => {
     trigger?.click();
     await nextTick();
 
-    let menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"]');
+    let menuItems = container.querySelectorAll<HTMLButtonElement>('[role="option"]');
     menuItems[2]?.click();
     await nextTick();
 
@@ -673,10 +667,10 @@ describe('Select', () => {
     await nextTick();
 
     const selectedLeadings = container.querySelectorAll<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
+      '[role="option"][data-selected="true"] [data-scope="select-item"][data-part="check"]',
     );
     const selectedLabels = container.querySelectorAll<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-label',
+      '[role="option"][data-selected="true"] .m3-item-title',
     );
 
     expect(selectedLeadings).toHaveLength(1);
@@ -725,8 +719,8 @@ describe('Select', () => {
     await nextTick();
     await nextTick();
 
-    const visibleLabels = getCurrentMenuItems(container).map((item) =>
-      item.querySelector('.m3-menu-item-label')?.textContent?.trim(),
+    const visibleLabels = getCurrentOptions(container).map((item) =>
+      item.querySelector('.m3-item-title')?.textContent?.trim(),
     );
 
     expect(visibleLabels).toEqual(['Colorado', 'Connecticut']);
@@ -735,7 +729,7 @@ describe('Select', () => {
     const finished = new Promise<void>((resolve) => {
       finishExit = resolve;
     });
-    const surface = container.querySelector<HTMLElement>('.m3-menu-surface')!;
+    const surface = container.querySelector<HTMLElement>('.m3-popover-surface')!;
     Object.defineProperty(surface, 'getAnimations', {
       configurable: true,
       value: () => [{ finished } as unknown as Animation],
@@ -747,7 +741,7 @@ describe('Select', () => {
 
     expect(onClosed).not.toHaveBeenCalled();
     expect(
-      getCurrentMenuItems(container).map((item) => item.querySelector('.m3-menu-item-label')?.textContent?.trim()),
+      getCurrentOptions(container).map((item) => item.querySelector('.m3-item-title')?.textContent?.trim()),
     ).toEqual(['Colorado', 'Connecticut']);
 
     finishExit();
@@ -756,7 +750,7 @@ describe('Select', () => {
     await nextTick();
 
     expect(onClosed).toHaveBeenCalledOnce();
-    expect(getCurrentMenuItems(container)).toHaveLength(stateOptions.length);
+    expect(getCurrentOptions(container)).toHaveLength(stateOptions.length);
 
     app.unmount();
   });
@@ -794,9 +788,23 @@ describe('Select', () => {
     await nextTick();
     await nextTick();
 
-    expect(getCurrentMenuItems(container)).toHaveLength(0);
+    expect(getCurrentOptions(container)).toHaveLength(0);
     expect(container.querySelector('.m3-select-empty')?.textContent?.trim()).toBe('No matching options');
 
     app.unmount();
   });
+});
+
+it('exposes only one combobox and keeps ARIA on the native input', async () => {
+  const host = document.createElement('div');
+  document.body.append(host);
+  const app = createApp(() =>
+    h(Select, { options, 'aria-label': 'Choose', class: 'consumer-field', style: 'width: 300px' }),
+  );
+  app.mount(host);
+  await nextTick();
+  expect(host.querySelectorAll('[role="combobox"]')).toHaveLength(1);
+  expect(host.querySelector('[role="combobox"]')?.tagName).toBe('INPUT');
+  expect(host.querySelector<HTMLElement>('.consumer-field')?.style.width).toBe('300px');
+  app.unmount();
 });

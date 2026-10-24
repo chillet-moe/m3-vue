@@ -64,6 +64,19 @@ try {
   await child.keyboard.press('Escape');
   assert.equal(await child.evaluate(() => document.activeElement?.classList.contains('menu-trigger')), true);
 
+  const layer = child.getByRole('combobox', { name: 'Window layers', exact: true });
+  await layer.click();
+  await layer.press('End');
+  await child.waitForFunction(() =>
+    document
+      .querySelector('input[role="combobox"]:focus')
+      ?.getAttribute('aria-activedescendant')
+      ?.endsWith('number-9999'),
+  );
+  assert((await child.getByRole('option').count()) < 40);
+  await layer.press('Enter');
+  assert.equal(await layer.inputValue(), 'Layer 9999');
+
   // Foreign-realm nodes and CustomEvent must work with the shared module instance.
   await child.evaluate(() => {
     const menu = document.querySelector('#window-menu')!;
@@ -116,6 +129,11 @@ try {
   await page.locator('.menu-trigger').click();
   await page.getByRole('menuitem', { name: 'First', exact: true }).click();
   assert.equal(await page.locator('.selected').textContent(), 'first');
+  const adoptedLayer = page.getByRole('combobox', { name: 'Window layers', exact: true });
+  await adoptedLayer.click();
+  await adoptedLayer.press('Home');
+  await adoptedLayer.press('Enter');
+  assert.equal(await adoptedLayer.inputValue(), 'Layer 1');
   await page.locator('.tooltip-trigger').hover();
   await page.getByRole('tooltip').waitFor({ state: 'visible' });
   assert.equal(await child.locator('.vtt-popover').count(), 0);

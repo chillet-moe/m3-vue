@@ -96,3 +96,68 @@ describe('CheckBox', () => {
     app.unmount();
   });
 });
+
+it('exposes native mixed state and clears it after native checked changes', async () => {
+  const container = document.createElement('div');
+  document.body.append(container);
+  const checked = ref(false);
+  const mixed = ref(true);
+  const events: string[] = [];
+  const app = createApp(() =>
+    h(CheckBox, {
+      checked: checked.value,
+      indeterminate: mixed.value,
+      'onUpdate:checked': (value) => {
+        checked.value = value;
+        events.push(`checked:${value}`);
+      },
+      'onUpdate:indeterminate': (value) => {
+        mixed.value = value;
+        events.push(`mixed:${value}`);
+      },
+    }),
+  );
+  app.mount(container);
+  await nextTick();
+  const input = container.querySelector('input')!;
+  expect(input.indeterminate).toBe(true);
+  expect(input.getAttribute('aria-checked')).toBe('mixed');
+  input.click();
+  await nextTick();
+  expect(input.checked).toBe(true);
+  expect(input.indeterminate).toBe(false);
+  expect(events).toEqual(['checked:true', 'mixed:false']);
+  mixed.value = true;
+  await nextTick();
+  input.click();
+  await nextTick();
+  expect(checked.value).toBe(false);
+  expect(mixed.value).toBe(false);
+  app.unmount();
+});
+
+it('preserves mixed presentation and disabled state without interactive updates', async () => {
+  const container = document.createElement('div');
+  document.body.append(container);
+  const updates: boolean[] = [];
+  const app = createApp(() =>
+    h('div', [
+      h(CheckBox, {
+        checked: false,
+        indeterminate: true,
+        disabled: true,
+        'onUpdate:indeterminate': (value) => updates.push(value),
+      }),
+      h(CheckBox, { checked: false, indeterminate: true, presentation: true }),
+    ]),
+  );
+  app.mount(container);
+  await nextTick();
+  expect(container.querySelectorAll('input')).toHaveLength(1);
+  container.querySelector('input')!.click();
+  await nextTick();
+  expect(container.querySelector('input')!.indeterminate).toBe(true);
+  expect(container.querySelector('[data-presentation="true"]')?.getAttribute('aria-hidden')).toBe('true');
+  expect(updates).toEqual([]);
+  app.unmount();
+});
