@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, inject, nextTick, ref, unref, useId, watch } from 'vue';
 import { datePickerContextKey } from './DatePickerContext';
 import Button from '@/components/Button/Button.vue';
@@ -221,6 +222,7 @@ defineExpose({
         />
 
         <Button
+          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -257,6 +259,7 @@ defineExpose({
         />
 
         <Button
+          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -307,6 +310,7 @@ defineExpose({
           :aria-label="picker.calendarLabel.value"
         >
           <button
+            v-state-layer
             v-for="day in picker.calendarDays.value"
             :key="day.date"
             type="button"
@@ -337,6 +341,7 @@ defineExpose({
         data-part="months"
       >
         <button
+          v-state-layer
           v-for="monthOption in picker.monthOptions.value"
           :key="monthOption.month"
           type="button"
@@ -359,6 +364,7 @@ defineExpose({
 
       <div v-else class="m3-date-picker-list" data-scope="date-picker" data-part="years">
         <button
+          v-state-layer
           v-for="yearOption in picker.yearOptions.value"
           :key="yearOption.year"
           type="button"

@@ -5,7 +5,8 @@ title: showSnackbar
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Button } from '@/components/Button';
-import { showSnackbar } from '@/components/Snackbar';
+import { useOverlays } from '@/overlays';
+const { showSnackbar } = useOverlays();
 
 const result = ref('');
 
@@ -33,12 +34,13 @@ async function openSnackbar() {
 
 ## 前置条件
 
-使用此函数前，请在应用根部附近渲染一个 `OverlayHost`。仅程序化浮层需要宿主；声明式 `Snackbar` 实例不需要。Vue 和 Nuxt 配置请参阅 [`OverlayHost`](/zh-Hans/components/overlay-host)。
+调用 `useOverlays()` 或 `createOverlayService(host)` 返回的函数前，请创建控制器并渲染 `<OverlayHost :host="overlays" />`。仅程序化浮层需要 host；声明式 `Snackbar` 实例不需要。Vue 和 Nuxt 配置请参阅 [`OverlayHost`](/zh-Hans/components/overlay-host)。
 
 ## 基本用法
 
 ```ts
-import { showSnackbar } from '@chillet/m3-vue';
+import { useOverlays } from '@chillet/m3-vue';
+const { showSnackbar } = useOverlays(); // 在 setup 期间捕获。
 
 await showSnackbar({
   message: '已保存',
@@ -63,7 +65,7 @@ app.use(M3VuePlugin, {
 
 ### 组件子树默认值
 
-在祖先组件中调用 `provideSnackbarDefaults()`，再在后代组件中通过 `useSnackbar()` 捕获最近的默认值。返回的函数可在事件处理器中稍后调用。全局导入的 `showSnackbar()` 没有组件注入上下文，因此仍使用应用级默认值。
+在祖先组件中调用 `provideSnackbarDefaults()`，再在后代组件中通过 `useSnackbar()` 捕获最近的默认值。返回的函数可在事件处理器中稍后调用。导入的 `showSnackbar(host, options)` 使用其显式 host 对应的默认值。调用 `useSnackbar()` 前，请通过 `provideOverlayHost()` 或 `OverlayHost` 默认插槽提供 host。
 
 ```vue
 <!-- NotificationArea.vue -->
@@ -104,7 +106,7 @@ Snackbar 关闭时 Promise 会返回结果。
 - 点击关闭按钮时返回 `dismissValue`，默认值为 `'dismiss'`。
 - 自动超时时返回 `timeoutValue`，默认值为 `'timeout'`。
 
-如果在浏览器环境之外调用、尚未挂载 `OverlayHost`，或 `action.onClick` 抛出错误或返回被拒绝的 Promise，则该 Promise 会被拒绝。
+如果在浏览器环境之外调用、目标 host 不存在或已处置，或 `action.onClick` 抛出错误或返回被拒绝的 Promise，则该 Promise 会被拒绝。
 
 ## 选项
 
@@ -126,7 +128,7 @@ Snackbar 关闭时 Promise 会返回结果。
 
 - 程序化 Snackbar 默认带有关闭按钮。设置 `dismissible: false` 可将其隐藏。
 - 可以同时显示多个 Snackbar。
-- 堆栈按 `position` 分开，因此顶部和底部位置互不干扰。
+- 堆栈按 host 和 `position` 分开，因此顶部和底部位置互不干扰。
 - Snackbar 操作从 `OverlayHost` 继承应用级 provide 和 CSS 自定义属性。
 - 悬停或聚焦 Snackbar 时会暂停自动关闭计时器。
 - 离开 Snackbar 后会继续剩余时间，而不是重新开始完整计时。

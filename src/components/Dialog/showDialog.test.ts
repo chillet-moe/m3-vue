@@ -1,17 +1,20 @@
 // @vitest-environment jsdom
+import { createOverlayHost } from '@/internal/overlayHost/overlayHost';
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, type App } from 'vue';
 import { buttonContextKey } from '@/components/Button';
 import { OverlayHost } from '@/components/OverlayHost';
-import { showDialog } from './showDialog';
+import { createOverlayService } from '@/overlays';
 
+const overlayHost = createOverlayHost();
+const { showDialog } = createOverlayService(overlayHost);
 let app: App<Element> | null = null;
 
 function mountOverlayHost(buttonShape?: 'rounded' | 'square') {
   const container = document.createElement('div');
   document.body.appendChild(container);
 
-  app = createApp(() => h(OverlayHost));
+  app = createApp(() => h(OverlayHost, { host: overlayHost }));
 
   if (buttonShape) {
     app.provide(buttonContextKey, { shape: buttonShape });
@@ -77,9 +80,7 @@ describe('showDialog', () => {
     app?.unmount();
     app = null;
 
-    await expect(showDialog()).rejects.toThrow(
-      'OverlayHost must be mounted before calling a programmatic overlay function.',
-    );
+    await expect(showDialog()).rejects.toThrow('OverlayHost must be mounted before showing an overlay.');
   });
 
   it('inherits Button context from the application hosting OverlayHost', async () => {
@@ -106,7 +107,7 @@ describe('showDialog', () => {
     app?.unmount();
     app = null;
 
-    await expect(result).rejects.toThrow('OverlayHost was unmounted before the overlay completed.');
+    await expect(result).rejects.toThrow('OverlayHost was disposed before the overlay completed.');
     expect(document.body.style.overflow).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
   });

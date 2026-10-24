@@ -1,7 +1,11 @@
 import { h, nextTick, ref } from 'vue';
 import { Button } from '@/components/Button';
 import { Icon } from '@/components/Icon';
-import { showOverlayEntry, type OverlayEntryHandle } from '@/internal/overlayHost/overlayHost';
+import {
+  showOverlayEntry,
+  type OverlayHostController,
+  type OverlayEntryHandle,
+} from '@/internal/overlayHost/overlayHost';
 import Dialog from './Dialog.vue';
 import type { DialogProps } from './Dialog.vue';
 
@@ -51,7 +55,7 @@ const DEFAULT_ACTIONS: DialogAction[] = [
   },
 ];
 
-export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
+export function showDialog(host: OverlayHostController, options: ShowDialogOptions = {}): Promise<string> {
   if (typeof document === 'undefined') {
     return Promise.reject(new Error('showDialog requires a browser environment.'));
   }
@@ -112,7 +116,7 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
       try {
         const callbackResult = await action.onClick?.();
 
-        if (callbackResult === false || action.closeOnClick === false) {
+        if (settled || cleanedUp || callbackResult === false || action.closeOnClick === false) {
           return;
         }
 
@@ -123,7 +127,7 @@ export function showDialog(options: ShowDialogOptions = {}): Promise<string> {
       }
     };
 
-    overlayHandle = showOverlayEntry({
+    overlayHandle = showOverlayEntry(host, {
       onHostUnmounted: (error) => {
         finalizeReject(error);
         cleanup();

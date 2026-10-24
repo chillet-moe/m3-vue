@@ -301,7 +301,7 @@ describe('Tab', () => {
     orientation.value = 'vertical';
     await nextTick();
     await nextTick();
-    mutationCallbacks[0]?.([{ type: 'characterData' } as MutationRecord], {} as MutationObserver);
+    mutationCallbacks.at(-1)?.([{ type: 'characterData' } as MutationRecord], {} as MutationObserver);
 
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
     expect(observe).toHaveBeenCalledTimes(4);
@@ -309,7 +309,7 @@ describe('Tab', () => {
 
     tabCount.value = 4;
     await nextTick();
-    mutationCallbacks[0]?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
+    mutationCallbacks.at(-1)?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
 
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
     expect(observe).toHaveBeenCalledTimes(5);
@@ -317,7 +317,7 @@ describe('Tab', () => {
 
     tabCount.value = 2;
     await nextTick();
-    mutationCallbacks[0]?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
+    mutationCallbacks.at(-1)?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
 
     expect(unobserve).toHaveBeenCalledTimes(2);
 

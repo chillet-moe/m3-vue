@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { isHTMLTag } from '@/internal/elementEnvironment';
+
+import { vStateLayer } from '@/components/StateLayer/state-layer';
+import { isHTMLElement } from '@/internal/elementEnvironment';
+
 import { computed, inject, useSlots } from 'vue';
 
 import { Icon } from '@/components/Icon';
@@ -78,7 +83,7 @@ function handleKeydown(event: KeyboardEvent) {
 
   const currentTarget = event.currentTarget;
 
-  if (!(currentTarget instanceof HTMLElement) || currentTarget instanceof HTMLButtonElement) {
+  if (!isHTMLElement(currentTarget) || isHTMLTag(currentTarget, 'button')) {
     return;
   }
 
@@ -89,6 +94,7 @@ function handleKeydown(event: KeyboardEvent) {
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     role="menuitem"
     :href="href"

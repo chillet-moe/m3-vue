@@ -1,6 +1,8 @@
+import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { onBeforeUnmount, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue';
 
 export type UseAnimatedNumberOptions = {
+  element?: Readonly<Ref<Element | null | undefined>>;
   enabled?: MaybeRefOrGetter<boolean>;
   clamp?: (value: number) => number;
   stiffness?: MaybeRefOrGetter<number>;
@@ -30,6 +32,7 @@ export function useAnimatedNumber(
   const isEnabled = () => options.enabled === undefined || Boolean(toValue(options.enabled));
 
   const displayedValue = ref(getTargetValue());
+  let view = options.element?.value?.ownerDocument.defaultView ?? (typeof window !== 'undefined' ? window : null);
   let animationFrame = 0;
   let animationTime: number | undefined;
   let velocity = 0;
@@ -40,8 +43,8 @@ export function useAnimatedNumber(
   const initialFrameSeconds = options.initialFrameSeconds ?? 1 / 60;
 
   const stopAnimation = () => {
-    if (animationFrame && typeof window !== 'undefined') {
-      window.cancelAnimationFrame(animationFrame);
+    if (animationFrame && view) {
+      view!.cancelAnimationFrame(animationFrame);
     }
     animationFrame = 0;
     animationTime = undefined;
@@ -93,11 +96,11 @@ export function useAnimatedNumber(
       return;
     }
 
-    animationFrame = window.requestAnimationFrame(animationStep);
+    animationFrame = view!.requestAnimationFrame(animationStep);
   };
 
   const startAnimation = () => {
-    if (typeof window === 'undefined' || !isEnabled()) {
+    if (!view || !isEnabled()) {
       syncToTarget();
       return;
     }
@@ -110,7 +113,7 @@ export function useAnimatedNumber(
 
     if (!animationFrame) {
       animationTime = undefined;
-      animationFrame = window.requestAnimationFrame(animationStep);
+      animationFrame = view!.requestAnimationFrame(animationStep);
     }
   };
 
@@ -126,6 +129,16 @@ export function useAnimatedNumber(
     },
     { flush: 'sync' },
   );
+
+  if (options.element)
+    useElementEnvironment(options.element, (document) => {
+      view = document.defaultView;
+      startAnimation();
+      return () => {
+        stopAnimation();
+        view = null;
+      };
+    });
 
   onBeforeUnmount(() => {
     stopAnimation();

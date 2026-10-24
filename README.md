@@ -57,15 +57,16 @@ app.mount('#app');
 After registration, you can use `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` directly in templates.
 
 Render one `OverlayHost` near the application root when using the programmatic `showDialog()` or `showSnackbar()`
-functions. It is not required for declaratively rendered `Dialog` or `Snackbar` components.
+functions. In descendant components, capture `const { showDialog, showSnackbar } = useOverlays()` during setup and keep using `showDialog(options)` / `showSnackbar(options)`. Outside components, use `createOverlayService(host)` to bind the functions once. It is not required for declaratively rendered `Dialog` or `Snackbar` components.
 
 ```vue
 <script setup lang="ts">
-import { OverlayHost } from '@chillet/m3-vue';
+import { OverlayHost, createOverlayHost, provideOverlayHost } from '@chillet/m3-vue';
+const overlays = provideOverlayHost(createOverlayHost());
 </script>
 
 <template>
-  <OverlayHost />
+  <OverlayHost :host="overlays" />
   <!-- Your application content -->
 </template>
 ```

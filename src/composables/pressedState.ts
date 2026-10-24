@@ -1,3 +1,4 @@
+import { bindElementEnvironment, isElement } from '@/internal/elementEnvironment';
 import { ref, onUnmounted } from 'vue';
 
 /**
@@ -14,10 +15,12 @@ export function usePressedState(minDuration = 200) {
   let isActive = false;
   let activePointerId: number | null = null;
   let hasWindowListeners = false;
+  let view: Window | null = null;
+  let releaseEnvironment: (() => void) | undefined;
 
   const clearTimer = () => {
     if (timeoutId) {
-      clearTimeout(timeoutId);
+      view?.clearTimeout(timeoutId);
       timeoutId = null;
     }
   };
@@ -27,13 +30,13 @@ export function usePressedState(minDuration = 200) {
   };
 
   const removeWindowListeners = () => {
-    if (!hasWindowListeners || typeof window === 'undefined') {
+    if (!hasWindowListeners || !view) {
       return;
     }
 
-    window.removeEventListener('pointerup', onWindowPointerUp);
-    window.removeEventListener('pointercancel', onWindowPointerCancel);
-    window.removeEventListener('blur', onWindowBlur);
+    view!.removeEventListener('pointerup', onWindowPointerUp);
+    view!.removeEventListener('pointercancel', onWindowPointerCancel);
+    view!.removeEventListener('blur', onWindowBlur);
     hasWindowListeners = false;
   };
 
@@ -62,13 +65,13 @@ export function usePressedState(minDuration = 200) {
   }
 
   const addWindowListeners = () => {
-    if (hasWindowListeners || typeof window === 'undefined') {
+    if (hasWindowListeners || !view) {
       return;
     }
 
-    window.addEventListener('pointerup', onWindowPointerUp);
-    window.addEventListener('pointercancel', onWindowPointerCancel);
-    window.addEventListener('blur', onWindowBlur);
+    view!.addEventListener('pointerup', onWindowPointerUp);
+    view!.addEventListener('pointercancel', onWindowPointerCancel);
+    view!.addEventListener('blur', onWindowBlur);
     hasWindowListeners = true;
   };
 
@@ -77,6 +80,20 @@ export function usePressedState(minDuration = 200) {
       return;
     }
 
+    releaseEnvironment?.();
+    view =
+      (event.currentTarget as Node | null)?.ownerDocument?.defaultView ??
+      (event.target as Node | null)?.ownerDocument?.defaultView ??
+      window;
+    const element = event.currentTarget ?? event.target;
+    if (isElement(element))
+      releaseEnvironment = bindElementEnvironment(element, () => () => {
+        clearTimer();
+        removeWindowListeners();
+        pressed.value = false;
+        isActive = false;
+        activePointerId = null;
+      });
     pressed.value = true;
     isActive = true;
     minTimeElapsed = false;
@@ -85,7 +102,7 @@ export function usePressedState(minDuration = 200) {
     clearTimer();
     addWindowListeners();
 
-    timeoutId = window.setTimeout(() => {
+    timeoutId = view!.setTimeout(() => {
       minTimeElapsed = true;
       if (!isActive) {
         pressed.value = false;
@@ -111,6 +128,7 @@ export function usePressedState(minDuration = 200) {
   onUnmounted(() => {
     clearTimer();
     removeWindowListeners();
+    releaseEnvironment?.();
   });
 
   return {

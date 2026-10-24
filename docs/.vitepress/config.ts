@@ -13,6 +13,7 @@ const sidebarLabels: Record<string, string> = {
   'Getting Started': '快速开始',
   Installation: '安装',
   Guides: '指南',
+  'Multiple windows': '多窗口',
   Styling: '样式定制',
   'Interaction Cursors': '交互光标',
   'Floating Label Spacing Lab': '浮动标签间距实验',
@@ -60,6 +61,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     items: [
       { text: 'Styling', link: '/guides/styling' },
       { text: 'Localization', link: '/guides/localization' },
+      { text: 'Multiple windows', link: '/guides/multiple-windows' },
       { text: 'Interaction Cursors', link: '/guides/interaction-cursors' },
       { text: 'Floating Label Spacing Lab', link: '/guides/floating-label-spacing-lab' },
       { text: 'Scrollable Content Visual Overflow', link: '/guides/scrollable-content-visual-overflow' },

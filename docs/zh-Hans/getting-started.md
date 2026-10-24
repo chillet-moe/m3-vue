@@ -125,15 +125,16 @@ app.use(M3VuePlugin, {
 
 ## 挂载 OverlayHost
 
-使用程序化 `showDialog()` 或 `showSnackbar()` 函数时，请在应用根部附近渲染一个 `OverlayHost`。该宿主会使这些浮层保留在应用的 Vue 上下文中，同时原生 dialog 和 popover 元素仍使用浏览器顶层。
+使用程序化 `showDialog()` 或 `showSnackbar()` 函数时，请在应用根部附近渲染一个 `OverlayHost`。在后代组件中，于 setup 期间调用 `const { showDialog, showSnackbar } = useOverlays()`，之后使用 `showDialog(options)` 或 `showSnackbar(options)`。在组件外部，使用 `createOverlayService(host)` 绑定函数。host 会使这些浮层保留在应用的 Vue 上下文中，同时原生 dialog 和 popover 元素仍使用浏览器顶层。
 
 ```vue
 <script setup lang="ts">
-import { OverlayHost } from '@chillet/m3-vue';
+import { OverlayHost, createOverlayHost, provideOverlayHost } from '@chillet/m3-vue';
+const overlays = provideOverlayHost(createOverlayHost());
 </script>
 
 <template>
-  <OverlayHost />
+  <OverlayHost :host="overlays" />
   <!-- 应用内容 -->
 </template>
 ```

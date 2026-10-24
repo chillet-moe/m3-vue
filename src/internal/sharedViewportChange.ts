@@ -37,12 +37,12 @@ function createRuntime(document: Document): ViewportRuntime | undefined {
       frame = null;
     }
 
-    view.removeEventListener('scroll', schedule);
+    view.removeEventListener('scroll', schedule, true);
     view.removeEventListener('resize', schedule);
     callbacks.clear();
   };
 
-  view.addEventListener('scroll', schedule, { passive: true });
+  view.addEventListener('scroll', schedule, { capture: true, passive: true });
   view.addEventListener('resize', schedule);
 
   return { callbacks, destroy };

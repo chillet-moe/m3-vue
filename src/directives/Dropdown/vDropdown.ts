@@ -1,3 +1,4 @@
+import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import type { Directive, DirectiveBinding } from 'vue';
 import './vDropdown.css';
 import { acquireAnchorName } from '@/internal/anchorName';
@@ -60,7 +61,7 @@ function teardownDropdown(trigger: HTMLElement) {
 }
 
 function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownTargetBinding>) {
-  const dropdown = resolveDropdownTarget(binding);
+  const dropdown = resolveDropdownTarget(binding, trigger.ownerDocument);
 
   if (!dropdown) {
     teardownDropdown(trigger);
@@ -259,15 +260,28 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
   });
 }
 
+const environments = new WeakMap<HTMLElement, () => void>();
+const bindings = new WeakMap<HTMLElement, DirectiveBinding<DropdownTargetBinding>>();
+
 const vDropdown: Directive<HTMLElement, DropdownTargetBinding> = {
   mounted(trigger, binding) {
-    setupDropdown(trigger, binding);
+    bindings.set(trigger, binding);
+    environments.set(
+      trigger,
+      bindElementEnvironment(trigger, () => {
+        setupDropdown(trigger, bindings.get(trigger)!);
+        return () => teardownDropdown(trigger);
+      }),
+    );
   },
   updated(trigger, binding) {
+    bindings.set(trigger, binding);
     setupDropdown(trigger, binding);
   },
   unmounted(trigger) {
-    teardownDropdown(trigger);
+    environments.get(trigger)?.();
+    environments.delete(trigger);
+    bindings.delete(trigger);
   },
 };
 

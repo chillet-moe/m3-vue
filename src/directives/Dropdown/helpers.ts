@@ -17,7 +17,10 @@ export type DropdownTargetBinding =
   | null
   | undefined;
 
-export function resolveDropdownTarget(binding: DirectiveBinding<DropdownTargetBinding>): HTMLElement | null {
+export function resolveDropdownTarget(
+  binding: DirectiveBinding<DropdownTargetBinding>,
+  document: Document = globalThis.document,
+): HTMLElement | null {
   const value = binding.value;
 
   if (!value) {

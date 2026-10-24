@@ -4,8 +4,7 @@ type PaddingProperty = 'paddingLeft' | 'paddingRight';
 const LOCK_ATTRIBUTE = 'data-m3-scroll-lock';
 const noop = () => {};
 
-let lockCount = 0;
-let restoreScrollLock: Restore | undefined;
+const locks = new WeakMap<Document, { count: number; restore: Restore }>();
 
 function assignStyle(
   element: HTMLElement | null | undefined,
@@ -126,36 +125,34 @@ function lockIOSScroll(
 
 export function lockPageScroll(documentToLock?: Document) {
   const document = documentToLock ?? (typeof globalThis.document === 'undefined' ? undefined : globalThis.document);
-  const window = document?.defaultView ?? (typeof globalThis.window === 'undefined' ? undefined : globalThis.window);
+  const window = document?.defaultView;
 
   if (!document || !window) {
     return noop;
   }
 
-  if (lockCount === 0) {
-    restoreScrollLock = createScrollLock(document, window);
-
-    if (!restoreScrollLock) {
-      return noop;
-    }
+  let lock = locks.get(document);
+  if (!lock) {
+    const restore = createScrollLock(document, window);
+    if (!restore) return noop;
+    const releaseAll = () => {
+      window.removeEventListener('pagehide', onPageHide);
+      restore();
+      locks.delete(document);
+    };
+    const onPageHide = (event: PageTransitionEvent) => {
+      if (!event.persisted) releaseAll();
+    };
+    lock = { count: 0, restore: releaseAll };
+    locks.set(document, lock);
+    window.addEventListener('pagehide', onPageHide);
   }
-
-  lockCount += 1;
+  lock.count += 1;
   let released = false;
-
   return () => {
-    if (released) {
-      return;
-    }
-
+    if (released || locks.get(document) !== lock) return;
     released = true;
-    lockCount = Math.max(0, lockCount - 1);
-
-    if (lockCount > 0) {
-      return;
-    }
-
-    restoreScrollLock?.();
-    restoreScrollLock = undefined;
+    if (--lock.count > 0) return;
+    lock.restore();
   };
 }

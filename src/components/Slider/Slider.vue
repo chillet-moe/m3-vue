@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, unref, useId, useTemplateRef, watch } from 'vue';
 import { sliderContextKey } from './SliderContext';
 import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
@@ -270,6 +271,7 @@ const isValueIndicatorPopoverOpen = (element: HTMLElement) => {
   }
 };
 
+let sliderWindow: Window | null = null;
 const syncValueIndicatorPosition = () => {
   const slider = sliderRef.value;
   const indicator = valueIndicatorRef.value;
@@ -277,6 +279,7 @@ const syncValueIndicatorPosition = () => {
     return;
   }
 
+  const sliderWindow = slider.ownerDocument.defaultView!;
   const rect = slider.getBoundingClientRect();
   indicator.style.setProperty('--value-indicator-slider-left', `${rect.left}px`);
   indicator.style.setProperty('--value-indicator-slider-right', `${rect.right}px`);
@@ -284,10 +287,13 @@ const syncValueIndicatorPosition = () => {
   indicator.style.setProperty('--value-indicator-slider-bottom', `${rect.bottom}px`);
   indicator.style.setProperty('--value-indicator-slider-center-x', `${rect.left + rect.width / 2}px`);
   indicator.style.setProperty('--value-indicator-slider-center-y', `${rect.top + rect.height / 2}px`);
-  indicator.style.setProperty('--value-indicator-viewport-right', `${Math.max(0, window.innerWidth - rect.right)}px`);
+  indicator.style.setProperty(
+    '--value-indicator-viewport-right',
+    `${Math.max(0, sliderWindow!.innerWidth - rect.right)}px`,
+  );
   indicator.style.setProperty(
     '--value-indicator-viewport-bottom',
-    `${Math.max(0, window.innerHeight - rect.bottom)}px`,
+    `${Math.max(0, sliderWindow!.innerHeight - rect.bottom)}px`,
   );
 };
 
@@ -367,6 +373,7 @@ const {
   stopAnimation: stopSyncValueDisplayed,
   syncToTarget: syncValueDisplayedToTarget,
 } = useAnimatedNumber(valuePercent, {
+  element: sliderRef,
   clamp: clampPercent,
   onUpdate: syncAnimatedValuePresentation,
 });
@@ -416,10 +423,10 @@ const syncValueIndicatorFocusedState = () => {
 
 const scheduleSyncValueIndicatorFocusedState = () => {
   if (syncValueIndicatorFocusFrame) {
-    window.cancelAnimationFrame(syncValueIndicatorFocusFrame);
+    sliderWindow!.cancelAnimationFrame(syncValueIndicatorFocusFrame);
   }
 
-  syncValueIndicatorFocusFrame = window.requestAnimationFrame(() => {
+  syncValueIndicatorFocusFrame = sliderWindow!.requestAnimationFrame(() => {
     syncValueIndicatorFocusFrame = 0;
     syncValueIndicatorFocusedState();
   });
@@ -477,23 +484,24 @@ const shouldListenToWindowPointerEnd = () => {
 };
 
 function syncWindowPointerListeners() {
+  if (!sliderWindow || sliderWindow.closed) return;
   const shouldListenPointerMove = shouldListenToWindowPointerMove();
   if (shouldListenPointerMove && !isWindowPointerMoveListenerActive) {
-    window.addEventListener('pointermove', onWindowPointerMove);
+    sliderWindow!.addEventListener('pointermove', onWindowPointerMove);
     isWindowPointerMoveListenerActive = true;
   } else if (!shouldListenPointerMove && isWindowPointerMoveListenerActive) {
-    window.removeEventListener('pointermove', onWindowPointerMove);
+    sliderWindow!.removeEventListener('pointermove', onWindowPointerMove);
     isWindowPointerMoveListenerActive = false;
   }
 
   const shouldListenPointerEnd = shouldListenToWindowPointerEnd();
   if (shouldListenPointerEnd && !isWindowPointerEndListenerActive) {
-    window.addEventListener('pointerup', stopValueIndicatorDragging);
-    window.addEventListener('pointercancel', stopValueIndicatorDragging);
+    sliderWindow!.addEventListener('pointerup', stopValueIndicatorDragging);
+    sliderWindow!.addEventListener('pointercancel', stopValueIndicatorDragging);
     isWindowPointerEndListenerActive = true;
   } else if (!shouldListenPointerEnd && isWindowPointerEndListenerActive) {
-    window.removeEventListener('pointerup', stopValueIndicatorDragging);
-    window.removeEventListener('pointercancel', stopValueIndicatorDragging);
+    sliderWindow!.removeEventListener('pointerup', stopValueIndicatorDragging);
+    sliderWindow!.removeEventListener('pointercancel', stopValueIndicatorDragging);
     isWindowPointerEndListenerActive = false;
   }
 }
@@ -597,13 +605,14 @@ const onWindowScrollOrResize = () => {
 };
 
 const syncWindowViewportListeners = () => {
+  if (!sliderWindow || sliderWindow.closed) return;
   if (isValueIndicatorVisible.value && !isWindowViewportListenerActive) {
-    window.addEventListener('scroll', onWindowScrollOrResize, { capture: true, passive: true });
-    window.addEventListener('resize', onWindowScrollOrResize);
+    sliderWindow!.addEventListener('scroll', onWindowScrollOrResize, { capture: true, passive: true });
+    sliderWindow!.addEventListener('resize', onWindowScrollOrResize);
     isWindowViewportListenerActive = true;
   } else if (!isValueIndicatorVisible.value && isWindowViewportListenerActive) {
-    window.removeEventListener('scroll', onWindowScrollOrResize, true);
-    window.removeEventListener('resize', onWindowScrollOrResize);
+    sliderWindow!.removeEventListener('scroll', onWindowScrollOrResize, true);
+    sliderWindow!.removeEventListener('resize', onWindowScrollOrResize);
     isWindowViewportListenerActive = false;
   }
 };
@@ -694,6 +703,31 @@ watch(
   { flush: 'post' },
 );
 
+useElementEnvironment(sliderRef, (document) => {
+  sliderWindow = document.defaultView;
+  syncSliderResizeObserver();
+  syncSliderMeasurements();
+  syncWindowViewportListeners();
+  return () => {
+    sliderResizeObserver?.disconnect();
+    sliderWindow?.cancelAnimationFrame(syncValueIndicatorFocusFrame);
+    sliderWindow?.removeEventListener('pointermove', onWindowPointerMove);
+    sliderWindow?.removeEventListener('pointerup', stopValueIndicatorDragging);
+    sliderWindow?.removeEventListener('pointercancel', stopValueIndicatorDragging);
+    sliderWindow?.removeEventListener('scroll', onWindowScrollOrResize, true);
+    sliderWindow?.removeEventListener('resize', onWindowScrollOrResize);
+    isWindowPointerMoveListenerActive = false;
+    isWindowPointerEndListenerActive = false;
+    isWindowViewportListenerActive = false;
+    activePointerId = null;
+    pointerDownPosition = null;
+    isValueIndicatorDragging.value = false;
+    isValueDragging.value = false;
+    syncValueIndicatorFocusFrame = 0;
+    sliderWindow = null;
+  };
+});
+
 onMounted(() => {
   refreshValueDisplayedStyleElements();
   syncSliderMeasurements();
@@ -702,20 +736,20 @@ onMounted(() => {
 onBeforeUnmount(() => {
   hideValueIndicatorPopover();
   if (syncValueIndicatorFocusFrame) {
-    window.cancelAnimationFrame(syncValueIndicatorFocusFrame);
+    sliderWindow!.cancelAnimationFrame(syncValueIndicatorFocusFrame);
   }
   stopSyncValueDisplayed();
   sliderResizeObserver?.disconnect();
   if (isWindowPointerMoveListenerActive) {
-    window.removeEventListener('pointermove', onWindowPointerMove);
+    sliderWindow!.removeEventListener('pointermove', onWindowPointerMove);
   }
   if (isWindowPointerEndListenerActive) {
-    window.removeEventListener('pointerup', stopValueIndicatorDragging);
-    window.removeEventListener('pointercancel', stopValueIndicatorDragging);
+    sliderWindow!.removeEventListener('pointerup', stopValueIndicatorDragging);
+    sliderWindow!.removeEventListener('pointercancel', stopValueIndicatorDragging);
   }
   if (isWindowViewportListenerActive) {
-    window.removeEventListener('scroll', onWindowScrollOrResize, true);
-    window.removeEventListener('resize', onWindowScrollOrResize);
+    sliderWindow!.removeEventListener('scroll', onWindowScrollOrResize, true);
+    sliderWindow!.removeEventListener('resize', onWindowScrollOrResize);
   }
 });
 </script>

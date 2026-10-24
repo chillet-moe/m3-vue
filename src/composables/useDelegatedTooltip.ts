@@ -1,3 +1,4 @@
+import { useElementEnvironment, isHTMLElement } from '@/internal/elementEnvironment';
 import { nextTick, onBeforeUnmount, reactive, watch, type Ref } from 'vue';
 import { setupTooltip } from '@/directives/Tooltip/setup';
 
@@ -57,7 +58,8 @@ export function useDelegatedTooltip<T>(
   let hoverTimeout = 0;
   let pendingHoverAnchor: HTMLElement | null = null;
 
-  const getView = () => container.value?.ownerDocument.defaultView;
+  let boundView = container.value?.ownerDocument.defaultView;
+  const getView = () => boundView;
 
   const clearHideTimeout = (slot: DelegatedTooltipSlot<T>) => {
     if (!slot.hideTimeout) {
@@ -94,7 +96,7 @@ export function useDelegatedTooltip<T>(
     }
 
     const element = ownerDocument.getElementById(slot.id);
-    return element instanceof HTMLElement ? element : null;
+    return isHTMLElement(element) ? element : null;
   };
 
   const cleanupSlot = (slot: DelegatedTooltipSlot<T>) => {
@@ -383,6 +385,17 @@ export function useDelegatedTooltip<T>(
     },
     { immediate: true },
   );
+
+  useElementEnvironment(container, (document) => {
+    boundView = document.defaultView;
+    return () => {
+      // Timers belong to the previous view even after ownerDocument changes.
+      clearPendingHover();
+      for (const slot of tooltipSlots) cleanupSlot(slot);
+      activeSlot = null;
+      boundView = null;
+    };
+  });
 
   onBeforeUnmount(() => {
     cleanupContainerListeners?.();

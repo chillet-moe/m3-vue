@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isHTMLTag } from '@/internal/elementEnvironment';
+
 import { computed, inject, onBeforeUnmount, ref, unref, useAttrs, useId, useSlots, watch } from 'vue';
 import {
   DatePicker,
@@ -394,7 +396,7 @@ const blur = () => {
 };
 
 const select = () => {
-  if (controlRef.value instanceof HTMLInputElement || controlRef.value instanceof HTMLTextAreaElement) {
+  if (isHTMLTag(controlRef.value, 'input') || isHTMLTag(controlRef.value, 'textarea')) {
     controlRef.value.select();
   }
 };

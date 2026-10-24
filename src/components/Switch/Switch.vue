@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed } from 'vue';
 
 export type SwitchProps = {
@@ -80,6 +81,7 @@ defineSlots<{
       aria-hidden="true"
     >
       <span
+        v-state-layer
         :class="[presentation ? undefined : 'm3-state-layer', 'm3-switch-handle']"
         data-scope="switch"
         data-part="handle"

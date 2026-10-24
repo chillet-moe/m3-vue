@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { isNode } from '@/internal/elementEnvironment';
+
 import { computed, inject, nextTick, onUnmounted, provide, ref, useTemplateRef, watch } from 'vue';
 import Menu, { type MenuColor } from './Menu.vue';
 import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
@@ -39,8 +42,7 @@ const submenuMenuRef = useTemplateRef<MenuExposed>('submenuMenu');
 const resolvedColor = computed(() => props.color ?? parentMenu?.getColor() ?? 'standard');
 const safeTriangle = ref<Triangle | null>(null);
 
-let shouldRestoreTriggerFocus = false;
-let ignoreNextFocusIn = false;
+let restoringTriggerFocus = false;
 let trackingSafeTriangle = false;
 let suppressFocusOpenUntil = 0;
 
@@ -85,6 +87,8 @@ function onTriggerPointerDown() {
   suppressFocusOpenUntil = performance.now() + 500;
 }
 
+let trackingDocument: Document | undefined;
+
 function clearSafeTriangle() {
   safeTriangle.value = null;
 
@@ -93,32 +97,25 @@ function clearSafeTriangle() {
   }
 
   trackingSafeTriangle = false;
-  document.removeEventListener('pointermove', onDocumentPointerMove, true);
+  trackingDocument?.removeEventListener('pointermove', onDocumentPointerMove, true);
 }
 
 function closeSubmenu(focusTriggerAfterClose = false) {
   clearSafeTriangle();
-  shouldRestoreTriggerFocus = focusTriggerAfterClose;
-
-  if (submenuMenuRef.value) {
-    submenuMenuRef.value.hide();
-
-    if (focusTriggerAfterClose) {
-      ignoreNextFocusIn = true;
-      void nextTick(() => {
-        focusTrigger();
-      });
-    }
-
-    return;
+  // Native hidePopover may synchronously restore focus to the trigger. That
+  // focus event must not reopen a submenu while the browser is still hiding it.
+  restoringTriggerFocus = true;
+  try {
+    submenuMenuRef.value?.hide();
+    open.value = false;
+  } finally {
+    restoringTriggerFocus = false;
   }
-
-  open.value = false;
-
   if (focusTriggerAfterClose) {
-    ignoreNextFocusIn = true;
     void nextTick(() => {
+      restoringTriggerFocus = true;
       focusTrigger();
+      restoringTriggerFocus = false;
     });
   }
 }
@@ -140,7 +137,7 @@ async function openSubmenu(focusFirst = false) {
 }
 
 function isWithinWrapper(target: EventTarget | null) {
-  return target instanceof Node && wrapperRef.value?.contains(target);
+  return isNode(target) && wrapperRef.value?.contains(target);
 }
 
 function createSafeTriangle(origin: Point) {
@@ -207,7 +204,8 @@ function activateSafeTriangle(origin: Point) {
   }
 
   trackingSafeTriangle = true;
-  document.addEventListener('pointermove', onDocumentPointerMove, true);
+  trackingDocument = wrapperRef.value?.ownerDocument;
+  trackingDocument?.addEventListener('pointermove', onDocumentPointerMove, true);
 
   return true;
 }
@@ -244,10 +242,7 @@ function onPointerLeave(event: PointerEvent) {
 }
 
 function onFocusIn() {
-  if (ignoreNextFocusIn) {
-    ignoreNextFocusIn = false;
-    return;
-  }
+  if (restoringTriggerFocus) return;
 
   if (performance.now() < suppressFocusOpenUntil) {
     return;
@@ -292,15 +287,6 @@ watch(
     }
 
     clearSafeTriangle();
-
-    if (!shouldRestoreTriggerFocus) {
-      return;
-    }
-
-    shouldRestoreTriggerFocus = false;
-    void nextTick(() => {
-      focusTrigger();
-    });
   },
   {
     flush: 'post',
@@ -336,6 +322,7 @@ onUnmounted(() => {
   clearSafeTriangle();
   unregisterSubmenu?.();
 });
+useElementEnvironment(wrapperRef, () => clearSafeTriangle);
 </script>
 
 <template>

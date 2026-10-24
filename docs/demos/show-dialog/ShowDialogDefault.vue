@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { useOverlays } from '@/overlays';
+const { showDialog } = useOverlays();
 import { ref } from 'vue';
 import { Button } from '@/components/Button';
-import { showDialog } from '@/components/Dialog';
 
 const result = ref('');
 

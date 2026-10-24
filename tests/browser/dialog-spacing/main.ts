@@ -1,3 +1,5 @@
+import { createOverlayHost } from '@/internal/overlayHost/overlayHost';
+const overlayHost = createOverlayHost();
 import { createApp, h, nextTick, type App } from 'vue';
 import { BottomSheet, Dialog, OverlayHost, SideSheet, showDialog } from '@/index';
 
@@ -35,7 +37,7 @@ window.__dialogSpacing = async (options: LayoutCase) => {
   app = createApp({
     render: () =>
       options.kind === 'showDialog'
-        ? h(OverlayHost)
+        ? h(OverlayHost, { host: overlayHost })
         : h(
             options.kind === 'dialog' ? Dialog : options.kind === 'bottom-sheet' ? BottomSheet : SideSheet,
             { open: true, showDragHandle: options.icon },
@@ -49,7 +51,7 @@ window.__dialogSpacing = async (options: LayoutCase) => {
   });
   app.mount('#app');
   if (options.kind === 'showDialog') {
-    pendingDialog = showDialog({
+    pendingDialog = showDialog(overlayHost, {
       headline: options.headline ? 'Headline' : undefined,
       icon: options.icon ? 'info' : undefined,
       content: options.long ? 'Body text. '.repeat(1500) : 'Body',

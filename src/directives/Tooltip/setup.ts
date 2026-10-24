@@ -31,6 +31,11 @@ export function setupTooltip(
     triggerAria?: TooltipTriggerAriaMode;
   } = {},
 ): State {
+  const document = trigger.ownerDocument;
+  const window = document.defaultView!;
+  let frame = 0;
+  let fadeTimer = 0;
+  let disposed = false;
   let opts = normalizeBinding(binding);
   let triggerAria = options.triggerAria ?? opts.triggerAria;
   let { tip, created, cleanupTriggerAttributes } = ensureTipElement(opts, trigger, triggerAria);
@@ -246,12 +251,15 @@ export function setupTooltip(
     setExpanded(true);
     addFallbackPositionListeners();
 
+    window.cancelAnimationFrame(frame);
     if (canPopover) {
       tip.style.visibility = 'hidden';
       try {
         (tip as HTMLElement & { showPopover: () => void }).showPopover();
       } catch {}
-      requestAnimationFrame(() => {
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        if (disposed) return;
         syncOpenPosition();
         tip.style.visibility = '';
       });
@@ -260,7 +268,9 @@ export function setupTooltip(
 
     tip.hidden = false;
     tip.dataset.vttOpen = '0';
-    requestAnimationFrame(() => {
+    frame = window.requestAnimationFrame(() => {
+      frame = 0;
+      if (disposed) return;
       tip.dataset.vttOpen = '1';
       syncOpenPosition();
     });
@@ -286,7 +296,8 @@ export function setupTooltip(
     }
 
     tip.dataset.vttOpen = '0';
-    window.setTimeout(() => {
+    fadeTimer = window.setTimeout(() => {
+      if (disposed) return;
       if (tip.dataset.vttOpen === '1') return;
       tip.hidden = true;
       scheduleDeferredOffset();
@@ -446,6 +457,9 @@ export function setupTooltip(
   scheduleDeferredOffset();
 
   const cleanup = () => {
+    disposed = true;
+    window.cancelAnimationFrame(frame);
+    window.clearTimeout(fadeTimer);
     clearTimers();
     cancelDeferredOffset();
     removeFallbackPositionListeners();

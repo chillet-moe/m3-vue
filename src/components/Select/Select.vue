@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
+import { isHTMLElement } from '@/internal/elementEnvironment';
+
 import { TransitionGroup, computed, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
 import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
@@ -263,7 +266,7 @@ function handleTriggerPointerDown(event: PointerEvent) {
   if (!menu) return;
 
   const trigger = event.currentTarget;
-  if (!(trigger instanceof HTMLElement)) return;
+  if (!isHTMLElement(trigger)) return;
   cleanupPressDrag?.();
   reopenAfterHeldClick = false;
   cleanupPressDrag = startMenuPressDrag(event, {
@@ -381,6 +384,7 @@ defineExpose({
         <template #trailing>
           <slot v-if="slots.trailing" name="trailing" />
           <button
+            v-state-layer
             v-if="props.clearable && select.hasValue.value && !props.disabled"
             class="m3-select-clear-button m3-state-layer"
             data-scope="select"

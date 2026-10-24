@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 import { useProgressIndicatorState } from '@/composables/useProgressIndicatorState';
 import { readCssLength } from '@/utils/cssLength';
 import { createLinearWavePath } from '../progressIndicatorPath';
@@ -63,8 +64,10 @@ const props = withDefaults(defineProps<LinearProgressIndicatorProps>(), {
 
 const isWavy = computed(() => props.shape === 'wavy');
 
+const rootRef = useTemplateRef<HTMLDivElement>('root');
 const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, ariaValueTextResolved } =
   useProgressIndicatorState({
+    element: rootRef,
     indeterminate: () => props.indeterminate,
     value: () => props.value,
     min: () => props.min,
@@ -74,7 +77,6 @@ const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, aria
 
 const isTrackGapVisible = computed(() => isDeterminate.value && progressState.value === 'partial');
 const isStopIndicatorVisible = computed(() => isDeterminate.value && props.stopIndicator);
-const rootRef = useTemplateRef<HTMLDivElement>('root');
 const layout = ref({
   width: 240,
   height: 4,
@@ -92,7 +94,7 @@ const syncLayout = () => {
     return;
   }
 
-  const styles = window.getComputedStyle(root);
+  const styles = root.ownerDocument.defaultView!.getComputedStyle(root);
   const thickness = readCssLength(styles, '--md-linear-progress-indicator-track-thickness', props.thickness, 4);
   const waveAmplitude = readCssLength(styles, '--md-linear-progress-indicator-wave-amplitude', props.waveAmplitude, 3);
   const wavelengthDeterminate = readCssLength(
@@ -201,12 +203,12 @@ watch(
   },
 );
 
-onMounted(() => {
-  startLayoutTracking();
-});
-
 onBeforeUnmount(() => {
   stopLayoutTracking();
+});
+useElementEnvironment(rootRef, () => {
+  startLayoutTracking();
+  return stopLayoutTracking;
 });
 </script>
 

@@ -1,3 +1,4 @@
+import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import type { TooltipDirective } from './types';
 import '../../components/Tooltip/Tooltip.css';
 import './vTooltip.css';
@@ -10,7 +11,7 @@ const STATE = Symbol('vtt_state');
 type TooltipStateEntry = {
   owner: unknown;
   shared: boolean;
-  state: ReturnType<typeof setupTooltip> | SharedPlainTooltipState;
+  state: SharedPlainTooltipState;
 };
 
 const usesSharedPlainTooltip = (value: Exclude<Parameters<typeof setupTooltip>[1], undefined>) => {
@@ -20,9 +21,22 @@ const usesSharedPlainTooltip = (value: Exclude<Parameters<typeof setupTooltip>[1
 
 const createState = (el: HTMLElement, value: Exclude<Parameters<typeof setupTooltip>[1], undefined>) => {
   const shared = usesSharedPlainTooltip(value);
+  if (shared) return { shared, state: registerSharedPlainTooltip(el, value) };
+  let current: ReturnType<typeof setupTooltip>;
+  let latest = value;
+  const cleanup = bindElementEnvironment(el, () => {
+    current = setupTooltip(el, latest);
+    return () => current.cleanup();
+  });
   return {
     shared,
-    state: shared ? registerSharedPlainTooltip(el, value) : setupTooltip(el, value),
+    state: {
+      cleanup,
+      update(next: typeof value) {
+        latest = next;
+        current.update(next);
+      },
+    },
   };
 };
 

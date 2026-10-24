@@ -1,3 +1,4 @@
+import { isElement } from '@/internal/elementEnvironment';
 type MenuPressDragOptions = {
   trigger: HTMLElement;
   menu: HTMLElement;
@@ -29,11 +30,11 @@ export function startMenuPressDrag(
 
   // A quick stationary press keeps the regular click-to-open behavior. Movement
   // opens the menu for dragging; holding opens it after the pointerdown event.
-  const openTimer = setTimeout(openMenu, 150);
+  const openTimer = document.defaultView!.setTimeout(openMenu, 150);
 
   const cleanup = (finishEvent?: PointerEvent) => {
     active = false;
-    clearTimeout(openTimer);
+    document.defaultView!.clearTimeout(openTimer);
     document.removeEventListener('pointermove', onPointerMove, true);
     document.removeEventListener('pointerup', onPointerUp, true);
     document.removeEventListener('pointercancel', onPointerCancel, true);
@@ -63,10 +64,9 @@ export function startMenuPressDrag(
     if (Math.hypot(releaseEvent.clientX - startX, releaseEvent.clientY - startY) < 4) return;
 
     const target = releaseEvent.target;
-    const item =
-      target instanceof Element
-        ? target.closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]')
-        : null;
+    const item = isElement(target)
+      ? target.closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]')
+      : null;
 
     if (item && menu.contains(item) && !item.matches('[disabled], [aria-disabled="true"]')) {
       item.click();

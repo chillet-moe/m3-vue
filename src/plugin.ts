@@ -5,7 +5,6 @@ import { vContextMenu, vDropdown, vDropdownMenu } from './directives/Menu';
 import type { MenuTargetBinding } from './directives/Menu/helpers';
 import type { TooltipDirective } from './directives/Tooltip/types';
 import vTooltip from './directives/Tooltip/vTooltip';
-import { initStateLayer } from '@/components/StateLayer/state-layer.ts';
 import { installM3Snackbar, type M3SnackbarOptions } from '@/components/Snackbar/config';
 import { installM3Locale } from '@/locales/context';
 import type { M3LocaleOptions } from '@/locales/types';
@@ -36,7 +35,6 @@ export const M3VuePlugin = {
     installM3StyleDefaults(app, options);
     installM3InteractionDefaults(app, options);
     installM3Snackbar(app, options);
-    initStateLayer();
   },
 } satisfies Plugin;
 

@@ -223,7 +223,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
       return;
     }
 
-    const currentIndex = menuItems.findIndex((item) => item === document.activeElement);
+    const currentIndex = menuItems.findIndex((item) => item === menuRef.value?.ownerDocument.activeElement);
 
     if (event.key === 'ArrowDown') {
       event.preventDefault();
@@ -341,7 +341,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   };
 
   function onExternalDropdownShowWithFocus(event: Event) {
-    const detail = event instanceof CustomEvent ? (event.detail as ExternalMenuShowDetail | undefined) : undefined;
+    const detail = 'detail' in event ? (event.detail as ExternalMenuShowDetail | undefined) : undefined;
     const focusTarget = detail?.focus;
     const source = detail?.source;
 

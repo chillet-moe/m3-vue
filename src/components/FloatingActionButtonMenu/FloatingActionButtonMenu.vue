@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { vStateLayer } from '@/components/StateLayer/state-layer';
+import { isNode } from '@/internal/elementEnvironment';
+
 import { computed, nextTick, onUnmounted, provide, ref, useId, useTemplateRef, watch } from 'vue';
 
 import { Icon } from '@/components/Icon';
@@ -78,7 +82,9 @@ function isPopoverOpen(menu: HTMLElement) {
 }
 
 function toPixelValue(value: string | undefined, relativeTo?: Element | null) {
-  if (!value) return 0;
+  if (!value || !relativeTo) return 0;
+  const document = relativeTo.ownerDocument;
+  const window = document.defaultView!;
 
   const parsedValue = Number.parseFloat(value);
   if (!Number.isFinite(parsedValue)) return 0;
@@ -97,7 +103,8 @@ function toPixelValue(value: string | undefined, relativeTo?: Element | null) {
 }
 
 function updatePopoverPosition() {
-  if (typeof window === 'undefined') return;
+  const window = rootRef.value?.ownerDocument.defaultView;
+  if (!window) return;
 
   const root = rootRef.value;
   const trigger = triggerRef.value;
@@ -275,7 +282,7 @@ function handleDocumentPointerDown(event: PointerEvent) {
 
   const target = event.target;
 
-  if (!(target instanceof Node)) {
+  if (!isNode(target)) {
     return;
   }
 
@@ -286,7 +293,12 @@ function handleDocumentPointerDown(event: PointerEvent) {
   hide();
 }
 
+let listenerDocument: Document | undefined;
 function syncOpenListeners(nextOpen: boolean) {
+  const document = nextOpen ? rootRef.value?.ownerDocument : listenerDocument;
+  const window = document?.defaultView;
+  if (!document || !window) return;
+  listenerDocument = document;
   if (typeof window === 'undefined' || nextOpen === hasOpenListeners) return;
 
   if (nextOpen) {
@@ -318,6 +330,12 @@ watch(
   { immediate: true, flush: 'post' },
 );
 
+useElementEnvironment(rootRef, () => {
+  syncOpenListeners(open.value);
+  if (open.value) updatePopoverPosition();
+  return () => syncOpenListeners(false);
+});
+
 onUnmounted(() => {
   syncOpenListeners(false);
 });
@@ -344,6 +362,7 @@ defineExpose({
     :data-open="open ? 'true' : 'false'"
   >
     <button
+      v-state-layer
       :id="triggerId"
       ref="trigger"
       type="button"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, nextTick, ref, useId, watch } from 'vue';
 import Button from '@/components/Button/Button.vue';
 import Icon from '@/components/Icon/Icon.vue';
@@ -265,6 +266,7 @@ defineExpose({
         </span>
         <div class="m3-date-range-picker-endpoints" data-scope="date-range-picker" data-part="endpoints">
           <button
+            v-state-layer
             type="button"
             class="m3-date-range-picker-endpoint m3-state-layer"
             data-scope="date-range-picker"
@@ -278,6 +280,7 @@ defineExpose({
             </span>
           </button>
           <button
+            v-state-layer
             type="button"
             class="m3-date-range-picker-endpoint m3-state-layer"
             data-scope="date-range-picker"
@@ -306,6 +309,7 @@ defineExpose({
         />
 
         <Button
+          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -342,6 +346,7 @@ defineExpose({
         />
 
         <Button
+          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -421,6 +426,7 @@ defineExpose({
               :data-disabled="day.disabled ? 'true' : undefined"
             >
               <button
+                v-state-layer
                 type="button"
                 role="gridcell"
                 class="m3-date-picker-day m3-state-layer"
@@ -456,6 +462,7 @@ defineExpose({
         data-part="months"
       >
         <button
+          v-state-layer
           v-for="monthOption in picker.monthOptions.value"
           :key="monthOption.month"
           type="button"
@@ -483,6 +490,7 @@ defineExpose({
 
       <div v-else class="m3-date-picker-list" data-scope="date-range-picker" data-part="years">
         <button
+          v-state-layer
           v-for="yearOption in picker.yearOptions.value"
           :key="yearOption.year"
           type="button"

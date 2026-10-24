@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 export type CheckBoxProps = {
   /** Whether the checkbox is disabled. */
   disabled?: boolean;
@@ -53,6 +54,7 @@ defineSlots<{
     />
 
     <span
+      v-state-layer
       :class="[presentation ? undefined : 'm3-state-layer', 'm3-checkbox-control']"
       data-scope="checkbox"
       data-part="control"

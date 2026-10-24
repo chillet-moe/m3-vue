@@ -90,7 +90,10 @@ export function supportsPopover(el: HTMLElement) {
   );
 }
 
-export function getTipFromTarget(target: string | HTMLElement | undefined): HTMLElement | null {
+export function getTipFromTarget(
+  target: string | HTMLElement | undefined,
+  document: Document = globalThis.document,
+): HTMLElement | null {
   if (!target) return null;
   if (typeof target === 'string') return document.querySelector(target) as HTMLElement | null;
   return target;
@@ -105,7 +108,7 @@ export function resolveFallbackPlacement(anchor: HTMLElement, placement: Placeme
     return placement;
   }
 
-  const { direction, writingMode } = window.getComputedStyle(anchor);
+  const { direction, writingMode } = anchor.ownerDocument.defaultView!.getComputedStyle(anchor);
   const isVertical = writingMode.startsWith('vertical') || writingMode.startsWith('sideways');
 
   if (!isVertical) {
@@ -189,8 +192,8 @@ export function positionFallback(
   const r = anchor.getBoundingClientRect();
   const tr = tip.getBoundingClientRect();
 
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
+  const vw = anchor.ownerDocument.defaultView!.innerWidth;
+  const vh = anchor.ownerDocument.defaultView!.innerHeight;
 
   const tryPlace = (p: PhysicalPlacement) => {
     let x = 0;
@@ -253,7 +256,8 @@ export function ensureTipElement(
   trigger: HTMLElement,
   triggerAria: TooltipTriggerAriaMode = 'controls',
 ) {
-  let tip = getTipFromTarget(opts.target);
+  const document = trigger.ownerDocument;
+  let tip = getTipFromTarget(opts.target, document);
   const created = !tip;
 
   if (!tip) {

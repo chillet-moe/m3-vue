@@ -1,11 +1,13 @@
+import { bindElementEnvironment } from '@/internal/elementEnvironment';
+import {
+  getOverlayHostElement,
+  getOverlayHostSnackbarDefaults,
+  useOverlayHost,
+  type OverlayHostController,
+} from '@/internal/overlayHost/overlayHost';
 import { h, inject, shallowRef } from 'vue';
 import Snackbar from './Snackbar.vue';
-import {
-  getSnackbarDefaults,
-  snackbarDefaultsContextKey,
-  type ShowSnackbarDefaults,
-  type SnackbarPosition,
-} from './config';
+import { snackbarDefaultsContextKey, type ShowSnackbarDefaults, type SnackbarPosition } from './config';
 import { showPopoverStackItem } from '@/internal/popoverStack/popoverStack';
 import './SnackbarStack.css';
 
@@ -51,6 +53,7 @@ const BUILT_IN_DEFAULTS = {
 export type UseSnackbarReturn = (options?: ShowSnackbarOptions) => Promise<string>;
 
 function showSnackbarWithDefaults(
+  host: OverlayHostController,
   options: ShowSnackbarOptions,
   contextualDefaults: ShowSnackbarDefaults | undefined,
 ): Promise<string> {
@@ -67,6 +70,8 @@ function showSnackbarWithDefaults(
     let settled = false;
     let timerId = 0;
     let startedAt = 0;
+    let view: Window;
+    let releaseEnvironment: (() => void) | undefined;
 
     const finalizeResolve = (value: string) => {
       if (settled) {
@@ -91,12 +96,12 @@ function showSnackbarWithDefaults(
         return;
       }
 
-      window.clearTimeout(timerId);
+      view.clearTimeout(timerId);
       timerId = 0;
-      remainingDuration.value = Math.max(0, remainingDuration.value - (performance.now() - startedAt));
+      remainingDuration.value = Math.max(0, remainingDuration.value - (view.performance.now() - startedAt));
     };
 
-    const handle = showPopoverStackItem({
+    const handle = showPopoverStackItem(host, {
       stackId: `snackbar:${position}`,
       popoverClass: 'm3-snackbar-stack-popover',
       stackClass: 'm3-snackbar-stack',
@@ -105,6 +110,7 @@ function showSnackbarWithDefaults(
       },
       onHostUnmounted: (error) => {
         clearTimer();
+        releaseEnvironment?.();
         finalizeReject(error);
       },
       render: () =>
@@ -152,11 +158,12 @@ function showSnackbarWithDefaults(
     const closeWithValue = (value: string) => {
       clearTimer();
       handle.close();
+      releaseEnvironment?.();
       finalizeResolve(value);
     };
 
     const startTimer = () => {
-      if (resolvedOptions.duration === null || timerId) {
+      if (settled || resolvedOptions.duration === null || timerId) {
         return;
       }
 
@@ -165,8 +172,8 @@ function showSnackbarWithDefaults(
         return;
       }
 
-      startedAt = performance.now();
-      timerId = window.setTimeout(() => {
+      startedAt = view.performance.now();
+      timerId = view.setTimeout(() => {
         timerId = 0;
         remainingDuration.value = 0;
         closeWithValue(resolvedOptions.timeoutValue);
@@ -177,7 +184,7 @@ function showSnackbarWithDefaults(
       try {
         const result = await action?.onClick?.();
 
-        if (result === false || action?.closeOnClick === false) {
+        if (settled || result === false || action?.closeOnClick === false) {
           return;
         }
 
@@ -185,20 +192,28 @@ function showSnackbarWithDefaults(
       } catch (error) {
         clearTimer();
         handle.close();
+        releaseEnvironment?.();
         finalizeReject(error);
       }
     };
 
-    startTimer();
+    releaseEnvironment = bindElementEnvironment(getOverlayHostElement(host)!, (document) => {
+      view = document.defaultView!;
+      startTimer();
+      return clearTimer;
+    });
+    if (settled) releaseEnvironment();
   });
 }
 
-export function showSnackbar(options: ShowSnackbarOptions = {}): Promise<string> {
-  return showSnackbarWithDefaults(options, getSnackbarDefaults());
+export function showSnackbar(host: OverlayHostController, options: ShowSnackbarOptions = {}): Promise<string> {
+  return showSnackbarWithDefaults(host, options, getOverlayHostSnackbarDefaults(host));
 }
 
 /** Returns a showSnackbar function bound to the nearest provided defaults. */
 export function useSnackbar(): UseSnackbarReturn {
+  const host = useOverlayHost();
   const defaults = inject(snackbarDefaultsContextKey, undefined);
-  return (options = {}) => showSnackbarWithDefaults(options, defaults?.value);
+  return (options = {}) =>
+    showSnackbarWithDefaults(host, options, defaults?.value ?? getOverlayHostSnackbarDefaults(host));
 }

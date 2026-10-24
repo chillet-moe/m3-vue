@@ -1,3 +1,4 @@
+import { isNode } from '@/internal/elementEnvironment';
 type OutsidePointerDownEntry = {
   contains: (target: Node) => boolean;
   onOutside: () => void;
@@ -14,7 +15,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
 
   const onPointerDown = (event: PointerEvent) => {
     const target = event.target;
-    if (!(target instanceof Node)) return;
+    if (!isNode(target)) return;
 
     for (const entry of entries) {
       if (!entry.contains(target)) entry.onOutside();

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
@@ -113,6 +114,7 @@ const toggle = () => {
     :data-disabled="mergedDisabled ? 'true' : undefined"
   >
     <button
+      v-state-layer
       class="m3-navigation-drawer-section-trigger m3-state-layer"
       data-scope="navigation-drawer-section"
       data-part="trigger"

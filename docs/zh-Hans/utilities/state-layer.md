@@ -36,15 +36,17 @@ State layer 工具为此组件库中的 Material 3 交互表面提供统一的�
 
 ## 初始化
 
-如果安装了 `M3VuePlugin`，组件库会自动调用 `initStateLayer()`。
+组件会在其所属的 Document 中自动注册 state layer，包括面板在窗口间移动后。对于使用 `m3-state-layer` 类的自定义标记，请显式获取并释放注册：
 
 ```ts
 import { initStateLayer } from '@chillet/m3-vue';
 
-initStateLayer();
+const release = initStateLayer(element.ownerDocument);
+// 自定义 UI 处置时：
+release();
 ```
 
-此函数具有幂等性，因此可以安全地重复调用。
+同一 Document 内的注册会共享监听器。每次调用都会返回一个幂等的释放函数；所有者处置时应释放其创建的每项注册。省略参数时会使用当前 Document。
 
 ## 样式钩子
 

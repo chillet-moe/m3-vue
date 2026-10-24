@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
+import { isHTMLElement } from '@/internal/elementEnvironment';
+
 import { computed, inject, nextTick, ref, unref, useId, watch } from 'vue';
 import { timePickerContextKey } from './TimePickerContext';
 import Button from '@/components/Button/Button.vue';
@@ -221,7 +224,7 @@ function handleMinuteInputKeydown(event: KeyboardEvent) {
 function getClockPointerState(event: PointerEvent) {
   const target = event.currentTarget;
 
-  if (!(target instanceof HTMLElement)) {
+  if (!isHTMLElement(target)) {
     return undefined;
   }
 
@@ -283,7 +286,7 @@ function handleClockPointerDown(event: PointerEvent) {
 
   const target = event.currentTarget;
 
-  if (!(target instanceof HTMLElement)) {
+  if (!isHTMLElement(target)) {
     return;
   }
 
@@ -319,7 +322,7 @@ function handleClockPointerUp(event: PointerEvent) {
 
   const target = event.currentTarget;
 
-  if (target instanceof HTMLElement && target.hasPointerCapture(event.pointerId)) {
+  if (isHTMLElement(target) && target.hasPointerCapture(event.pointerId)) {
     target.releasePointerCapture(event.pointerId);
   }
 
@@ -428,6 +431,7 @@ defineExpose({
           data-part="display"
         >
           <button
+            v-state-layer
             type="button"
             class="m3-time-picker-display-field m3-state-layer"
             data-scope="time-picker"
@@ -442,6 +446,7 @@ defineExpose({
           <span class="m3-time-picker-display-separator" data-scope="time-picker" data-part="display-separator">:</span>
 
           <button
+            v-state-layer
             type="button"
             class="m3-time-picker-display-field m3-state-layer"
             data-scope="time-picker"
@@ -462,6 +467,7 @@ defineExpose({
             :aria-label="messages.timePicker.selectPeriod"
           >
             <button
+              v-state-layer
               type="button"
               class="m3-time-picker-period-button m3-state-layer"
               data-scope="time-picker"
@@ -473,6 +479,7 @@ defineExpose({
               {{ picker.amLabel.value }}
             </button>
             <button
+              v-state-layer
               type="button"
               class="m3-time-picker-period-button m3-state-layer"
               data-scope="time-picker"
@@ -515,6 +522,7 @@ defineExpose({
           />
 
           <button
+            v-state-layer
             v-for="option in picker.clockOptions.value"
             :key="`${picker.activeSelection.value}-${option.value}`"
             type="button"
@@ -611,6 +619,7 @@ defineExpose({
           :aria-label="messages.timePicker.selectPeriod"
         >
           <button
+            v-state-layer
             type="button"
             class="m3-time-picker-period-button m3-state-layer"
             data-scope="time-picker"
@@ -622,6 +631,7 @@ defineExpose({
             {{ picker.amLabel.value }}
           </button>
           <button
+            v-state-layer
             type="button"
             class="m3-time-picker-period-button m3-state-layer"
             data-scope="time-picker"

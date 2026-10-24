@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
 import vTooltip from '@/directives/Tooltip/vTooltip';
@@ -122,6 +123,7 @@ const tooltip = computed<VTooltipBinding>(() => {
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     :href="href"
     :disabled="nativeDisabled"

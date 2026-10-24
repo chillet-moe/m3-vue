@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { getStaticLoadingIndicatorFrame } from './loadingIndicatorPath';
 import { registerLoadingIndicatorAnimation } from './loadingIndicatorAnimation';
@@ -44,14 +45,15 @@ const isShown = ref(props.visible);
 const activeIndicatorRef = useTemplateRef<SVGPathElement>('activeIndicator');
 const initialFrame = getStaticLoadingIndicatorFrame();
 
+let view: Window | null = null;
 let showTimer = 0;
 let hideTimer = 0;
 let shownAt = 0;
 let animationRegistration: ReturnType<typeof registerLoadingIndicatorAnimation> | undefined;
 
 const now = () => {
-  if (typeof window !== 'undefined' && window.performance) {
-    return window.performance.now();
+  if (view?.performance) {
+    return view!.performance.now();
   }
 
   return Date.now();
@@ -91,14 +93,14 @@ const rootStyle = computed(() => {
 
 const clearShowTimer = () => {
   if (showTimer) {
-    window.clearTimeout(showTimer);
+    view!.clearTimeout(showTimer);
     showTimer = 0;
   }
 };
 
 const clearHideTimer = () => {
   if (hideTimer) {
-    window.clearTimeout(hideTimer);
+    view!.clearTimeout(hideTimer);
     hideTimer = 0;
   }
 };
@@ -125,7 +127,7 @@ const hideNow = () => {
 };
 
 const syncVisibility = () => {
-  if (typeof window === 'undefined') {
+  if (!view) {
     return;
   }
 
@@ -138,7 +140,7 @@ const syncVisibility = () => {
     }
 
     if (normalizedShowDelay.value > 0) {
-      showTimer = window.setTimeout(showNow, normalizedShowDelay.value);
+      showTimer = view!.setTimeout(showNow, normalizedShowDelay.value);
     } else {
       showNow();
     }
@@ -152,7 +154,7 @@ const syncVisibility = () => {
   const visibleDuration = now() - shownAt;
   const hideDelay = Math.max(0, normalizedMinHideDelay.value - visibleDuration);
   if (hideDelay > 0) {
-    hideTimer = window.setTimeout(hideNow, hideDelay);
+    hideTimer = view!.setTimeout(hideNow, hideDelay);
   } else {
     hideNow();
   }
@@ -160,6 +162,16 @@ const syncVisibility = () => {
 
 watch(() => props.visible, syncVisibility);
 watch([normalizedShowDelay, normalizedMinHideDelay], syncVisibility);
+
+useElementEnvironment(activeIndicatorRef, (document) => {
+  view = document.defaultView;
+  shownAt = isShown.value ? now() : 0;
+  syncVisibility();
+  return () => {
+    clearShowTimer();
+    clearHideTimer();
+  };
+});
 
 onMounted(() => {
   shownAt = isShown.value ? now() : 0;

@@ -1,3 +1,5 @@
+import { bindElementEnvironment } from './elementEnvironment';
+import { isNode, isHTMLElement } from '@/internal/elementEnvironment';
 import { normalizeBinding } from '@/directives/Tooltip/helpers';
 import { setupTooltip } from '@/directives/Tooltip/setup';
 import type { NormalizedTooltipOptions, TooltipBindingValue } from '@/directives/Tooltip/types';
@@ -26,7 +28,8 @@ const normalizePlainBinding = (binding: TooltipBindingValue): NormalizedTooltipO
 
 function createRuntime(document: Document, onEmpty: () => void): Runtime {
   const view = document.defaultView;
-  const registrations = new Map<HTMLElement, Registration>();
+  const registrations = new Map<HTMLElement, Registration[]>();
+  const getRegistration = (trigger: HTMLElement) => registrations.get(trigger)?.findLast((entry) => entry.opts.content);
   const abortController = new (view?.AbortController ?? AbortController)();
   let sharedTip: HTMLElement | undefined;
   let activeTrigger: HTMLElement | undefined;
@@ -79,7 +82,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   };
 
   const activateTrigger = (trigger: HTMLElement) => {
-    const registration = registrations.get(trigger);
+    const registration = getRegistration(trigger);
     if (!registration?.opts.content) return undefined;
 
     if (activeTrigger === trigger && activeRegistration === registration && activeState) return activeState;
@@ -119,7 +122,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   };
 
   const scheduleOpen = (trigger: HTMLElement) => {
-    const registration = registrations.get(trigger);
+    const registration = getRegistration(trigger);
     if (!registration || !view) return;
 
     clearOpenTimer();
@@ -148,7 +151,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   };
 
   const scheduleClose = (trigger: HTMLElement) => {
-    const registration = registrations.get(trigger);
+    const registration = getRegistration(trigger);
     if (!registration || !view) return;
 
     clearOpenTimer();
@@ -162,7 +165,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
 
   const findTrigger = (event: Event) => {
     for (const item of event.composedPath()) {
-      if (item instanceof HTMLElement && registrations.get(item)?.opts.content) return item;
+      if (isHTMLElement(item) && getRegistration(item)?.opts.content) return item;
     }
     return undefined;
   };
@@ -170,14 +173,14 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   const onPointerOver = (event: PointerEvent) => {
     const trigger = findTrigger(event);
     if (!trigger) return;
-    if (event.relatedTarget instanceof Node && trigger.contains(event.relatedTarget)) return;
+    if (isNode(event.relatedTarget) && trigger.contains(event.relatedTarget)) return;
     scheduleOpen(trigger);
   };
 
   const onPointerOut = (event: PointerEvent) => {
     const trigger = findTrigger(event);
     if (!trigger) return;
-    if (event.relatedTarget instanceof Node && trigger.contains(event.relatedTarget)) return;
+    if (isNode(event.relatedTarget) && trigger.contains(event.relatedTarget)) return;
     scheduleClose(trigger);
   };
 
@@ -189,7 +192,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   const onFocusOut = (event: FocusEvent) => {
     const trigger = findTrigger(event);
     if (!trigger) return;
-    if (event.relatedTarget instanceof Node && trigger.contains(event.relatedTarget)) return;
+    if (isNode(event.relatedTarget) && trigger.contains(event.relatedTarget)) return;
     scheduleClose(trigger);
   };
 
@@ -205,7 +208,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
       longPressTimer = 0;
       suppressClickUntil = Date.now() + 500;
       show(trigger);
-    }, registrations.get(trigger)!.opts.longpressDelay);
+    }, getRegistration(trigger)!.opts.longpressDelay);
   };
 
   const onPointerMove = (event: PointerEvent) => {
@@ -261,16 +264,20 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   return {
     register(trigger, binding) {
       const registration = { opts: normalizePlainBinding(binding) };
-      registrations.set(trigger, registration);
+      const entries = registrations.get(trigger) ?? [];
+      entries.push(registration);
+      registrations.set(trigger, entries);
       let registered = true;
 
       return {
         cleanup() {
           if (!registered) return;
           registered = false;
-          registrations.delete(trigger);
+          const index = entries.indexOf(registration);
+          if (index >= 0) entries.splice(index, 1);
+          if (!entries.length) registrations.delete(trigger);
           if (pendingTrigger === trigger) clearOpenTimer();
-          if (activeTrigger === trigger) releaseActiveTrigger();
+          if (activeRegistration === registration) releaseActiveTrigger();
           if (registrations.size === 0) destroy();
         },
         update(nextBinding) {
@@ -278,7 +285,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
           const previousTriggerAria = registration.opts.triggerAria;
           registration.opts = normalizePlainBinding(nextBinding);
 
-          if (activeTrigger !== trigger) return;
+          if (activeTrigger !== trigger || activeRegistration !== registration) return;
           if (!registration.opts.content || registration.opts.triggerAria !== previousTriggerAria) {
             const shouldReopen = isOpen && Boolean(registration.opts.content);
             releaseActiveTrigger();
@@ -295,7 +302,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   };
 }
 
-export function registerSharedPlainTooltip(trigger: HTMLElement, binding: TooltipBindingValue) {
+function registerInDocument(trigger: HTMLElement, binding: TooltipBindingValue) {
   const document = trigger.ownerDocument;
   let runtime = runtimes.get(document);
 
@@ -305,4 +312,23 @@ export function registerSharedPlainTooltip(trigger: HTMLElement, binding: Toolti
   }
 
   return runtime.register(trigger, binding);
+}
+
+export function registerSharedPlainTooltip(
+  trigger: HTMLElement,
+  binding: TooltipBindingValue,
+): SharedPlainTooltipState {
+  let current: SharedPlainTooltipState;
+  let latest = binding;
+  const cleanup = bindElementEnvironment(trigger, () => {
+    current = registerInDocument(trigger, latest);
+    return () => current.cleanup();
+  });
+  return {
+    cleanup,
+    update(value) {
+      latest = value;
+      current.update(value);
+    },
+  };
 }

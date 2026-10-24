@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { useProgressIndicatorState } from '@/composables/useProgressIndicatorState';
 import { registerSharedAnimationFrame } from '@/internal/sharedAnimationFrame';
 import { parseCssLength, readCssLength, readCssToken } from '@/utils/cssLength';
@@ -63,8 +64,10 @@ const props = withDefaults(defineProps<CircularProgressIndicatorProps>(), {
 
 const isWavy = computed(() => props.shape === 'wavy');
 
+const rootRef = useTemplateRef<HTMLDivElement>('root');
 const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, ariaValueTextResolved } =
   useProgressIndicatorState({
+    element: rootRef,
     indeterminate: () => props.indeterminate,
     value: () => props.value,
     min: () => props.min,
@@ -72,7 +75,6 @@ const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, aria
     ariaValueText: () => props.ariaValueText,
   });
 
-const rootRef = useTemplateRef<HTMLDivElement>('root');
 const activePathRef = useTemplateRef<SVGPathElement>('activePath');
 const trackPathRef = useTemplateRef<SVGPathElement>('trackPath');
 const layout = ref({
@@ -93,7 +95,7 @@ const syncLayout = () => {
     return;
   }
 
-  const styles = window.getComputedStyle(root);
+  const styles = root.ownerDocument.defaultView!.getComputedStyle(root);
   const fallbackSize = isWavy.value ? 48 : 40;
   const cssSize =
     readCssToken(styles, '--md-circular-progress-indicator-size') ??
@@ -250,23 +252,20 @@ watch(
 
 watch(() => props.indeterminate, syncAnimation);
 
-onMounted(() => {
+useElementEnvironment(rootRef, (document, root) => {
   syncLayout();
-  if (rootRef.value) {
-    animationController = registerSharedAnimationFrame(rootRef.value.ownerDocument, syncIndeterminatePresentation);
-  }
+  animationController = registerSharedAnimationFrame(document, syncIndeterminatePresentation);
   syncAnimation();
-  if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
+  if (typeof ResizeObserver !== 'undefined') {
     resizeObserver = new ResizeObserver(syncLayout);
-    resizeObserver.observe(rootRef.value);
+    resizeObserver.observe(root);
   }
-});
-
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect();
-  resizeObserver = null;
-  animationController?.cleanup();
-  animationController = undefined;
+  return () => {
+    resizeObserver?.disconnect();
+    animationController?.cleanup();
+    animationController = undefined;
+    resizeObserver = null;
+  };
 });
 </script>
 

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { isHTMLTag } from '@/internal/elementEnvironment';
+
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 export type RadioProps = {
   /** Whether the radio is disabled. */
   disabled?: boolean;
@@ -23,7 +26,7 @@ const checked = defineModel<boolean>('checked', { required: true });
 function handleChange(event: Event) {
   const input = event.currentTarget;
 
-  if (input instanceof HTMLInputElement) {
+  if (isHTMLTag(input, 'input')) {
     checked.value = input.checked;
   }
 }
@@ -62,6 +65,7 @@ defineSlots<{
     />
 
     <span
+      v-state-layer
       :class="[presentation ? undefined : 'm3-state-layer', 'm3-radio-control']"
       data-scope="radio"
       data-part="control"

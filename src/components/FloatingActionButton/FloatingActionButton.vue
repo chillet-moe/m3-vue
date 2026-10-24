@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, mergeProps } from 'vue';
 
 import { useActionTitleTooltip } from '@/composables/useActionTitleTooltip';
@@ -60,6 +61,7 @@ const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttr
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     :class="['m3-state-layer', 'm3-fab']"
     data-scope="floating-action-button"

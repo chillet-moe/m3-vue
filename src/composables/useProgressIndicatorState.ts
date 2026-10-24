@@ -1,9 +1,10 @@
-import { computed } from 'vue';
+import { computed, type Ref } from 'vue';
 import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
 
 export type ProgressIndicatorState = 'empty' | 'partial' | 'complete';
 
 export type UseProgressIndicatorStateOptions = {
+  element?: Readonly<Ref<Element | null | undefined>>;
   /** Whether the progress value is unknown. */
   indeterminate: () => boolean;
 
@@ -23,6 +24,7 @@ export type UseProgressIndicatorStateOptions = {
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 export function useProgressIndicatorState({
+  element,
   indeterminate,
   value,
   min,
@@ -58,6 +60,7 @@ export function useProgressIndicatorState({
   });
 
   const { displayedValue: progressRatioDisplayed } = useAnimatedNumber(progressRatio, {
+    element,
     enabled: isDeterminate,
     clamp: (nextValue) => clamp(nextValue, 0, 1),
   });

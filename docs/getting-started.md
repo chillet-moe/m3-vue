@@ -144,16 +144,17 @@ app.use(M3VuePlugin, {
 ## Mount The Overlay Host
 
 Render one `OverlayHost` near the root of the application when using the programmatic `showDialog()` or
-`showSnackbar()` functions. The host keeps those overlays inside the application's Vue context while the native
+`showSnackbar()` functions. In descendant components, call `const { showDialog, showSnackbar } = useOverlays()` during setup, then use `showDialog(options)` or `showSnackbar(options)`. Outside components, bind once with `createOverlayService(host)`. The host keeps those overlays inside the application's Vue context while the native
 dialog and popover elements use the browser top layer.
 
 ```vue
 <script setup lang="ts">
-import { OverlayHost } from '@chillet/m3-vue';
+import { OverlayHost, createOverlayHost, provideOverlayHost } from '@chillet/m3-vue';
+const overlays = provideOverlayHost(createOverlayHost());
 </script>
 
 <template>
-  <OverlayHost />
+  <OverlayHost :host="overlays" />
   <!-- Your application content -->
 </template>
 ```

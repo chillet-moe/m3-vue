@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, useSlots } from 'vue';
 
 import { Icon } from '@/components/Icon';
@@ -120,6 +121,7 @@ defineSlots<{
           </span>
 
           <component
+            v-state-layer
             :is="getItemTag(item)"
             v-else
             :class="['m3-state-layer', item.current ? 'm3-breadcrumb-page' : 'm3-breadcrumb-link']"

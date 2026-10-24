@@ -1,3 +1,4 @@
+import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import type { Directive } from 'vue';
 import { hideMenuElement, needsCustomOutsideClick, resolveMenuTarget, showMenuElement } from './helpers';
 import type { MenuTargetBinding } from './helpers';
@@ -12,9 +13,9 @@ type CleanupRecord = {
 
 const cleanupMap = new WeakMap<HTMLElement, CleanupRecord>();
 
-const vContextMenu: Directive<HTMLElement, MenuTargetBinding> = {
+const base: Directive<HTMLElement, MenuTargetBinding> = {
   mounted(host, binding) {
-    const menu = resolveMenuTarget(binding);
+    const menu = resolveMenuTarget(binding, host.ownerDocument);
 
     if (!menu) {
       return;
@@ -85,4 +86,20 @@ const vContextMenu: Directive<HTMLElement, MenuTargetBinding> = {
   },
 };
 
+const environments = new WeakMap<HTMLElement, () => void>();
+const vContextMenu: Directive<HTMLElement, MenuTargetBinding> = {
+  mounted(host, binding, vnode, previous) {
+    environments.set(
+      host,
+      bindElementEnvironment(host, () => {
+        base.mounted!(host, binding, vnode, previous);
+        return () => base.unmounted!(host, binding, vnode, previous);
+      }),
+    );
+  },
+  unmounted(host) {
+    environments.get(host)?.();
+    environments.delete(host);
+  },
+};
 export default vContextMenu;

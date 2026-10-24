@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
+import { isHTMLElement } from '@/internal/elementEnvironment';
+
 import { useLinkTag } from '@/composables/useLinkTag';
 import { computed, inject } from 'vue';
 import { tabsContextKey } from './TabsContext';
@@ -85,7 +88,7 @@ const handleKeydown = (event: KeyboardEvent) => {
   event.preventDefault();
 
   const currentTarget = event.currentTarget;
-  if (currentTarget instanceof HTMLElement) {
+  if (isHTMLElement(currentTarget)) {
     currentTarget.click();
   }
 };
@@ -93,6 +96,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     class="m3-state-layer m3-tab"
     data-scope="tabs"

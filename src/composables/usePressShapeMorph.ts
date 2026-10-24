@@ -1,3 +1,4 @@
+import { bindElementEnvironment, isHTMLElement } from '@/internal/elementEnvironment';
 import { getPressShapeMorphRuntime } from '@/internal/pressShapeMorph';
 import { computed, ref, toValue } from 'vue';
 import type { MaybeRefOrGetter, VNode } from 'vue';
@@ -42,15 +43,17 @@ export function usePressShapeMorph(options: UsePressShapeMorphOptions = {}) {
 
   const handleVnodeMounted = (vnode: VNode) => {
     const element = vnode.el;
-    if (!(element instanceof HTMLElement)) return;
+    if (!isHTMLElement(element)) return;
 
     registeredElement = element;
-    unregister = getPressShapeMorphRuntime(element.ownerDocument).register(element, registration());
+    unregister = bindElementEnvironment(element, (document) =>
+      getPressShapeMorphRuntime(document).register(element, registration()),
+    );
   };
 
   const handleVnodeUpdated = (vnode: VNode) => {
     const element = vnode.el;
-    if (!(element instanceof HTMLElement) || registeredElement !== element) return;
+    if (!isHTMLElement(element) || registeredElement !== element) return;
 
     getPressShapeMorphRuntime(element.ownerDocument).update(element, registration());
   };

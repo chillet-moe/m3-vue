@@ -54,19 +54,3 @@ export function installM3Snackbar(app: App, options: M3SnackbarOptions = {}): vo
     computed(() => toValue(options.snackbarDefaults)),
   );
 }
-
-let activeDefaults: (() => ShowSnackbarDefaults | undefined) | undefined;
-
-export function registerSnackbarDefaults(getDefaults: () => ShowSnackbarDefaults | undefined): () => void {
-  activeDefaults = getDefaults;
-
-  return () => {
-    if (activeDefaults === getDefaults) {
-      activeDefaults = undefined;
-    }
-  };
-}
-
-export function getSnackbarDefaults(): ShowSnackbarDefaults | undefined {
-  return activeDefaults?.();
-}

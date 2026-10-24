@@ -1,3 +1,4 @@
+import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { onUnmounted, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue';
 import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
 import { useExitMotionCompletion } from './useExitMotionCompletion';
@@ -31,7 +32,7 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
   const showDialogElement = () => {
     const dialog = options.dialogRef.value;
 
-    if (!dialog || dialog.open) {
+    if (!dialog || dialog.open || !dialog.isConnected || dialog.ownerDocument.defaultView?.closed) {
       return;
     }
 
@@ -49,11 +50,11 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
   };
 
   const acquireScrollLock = () => {
-    if (!shouldLockScroll()) {
+    if (!shouldLockScroll() || options.dialogRef.value?.ownerDocument.defaultView?.closed) {
       return;
     }
 
-    releaseScrollLock ??= lockPageScroll();
+    if (options.dialogRef.value) releaseScrollLock ??= lockPageScroll(options.dialogRef.value.ownerDocument);
   };
 
   const releaseScrollLockIfNeeded = () => {
@@ -93,6 +94,18 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
       flush: 'post',
     },
   );
+
+  let boundDocument: Document | undefined;
+  useElementEnvironment(options.dialogRef, (document, dialog) => {
+    if (boundDocument && boundDocument !== document && options.open.value && dialog.isConnected) {
+      // Adoption removes native modal/top-layer membership, even if open remains set.
+      dialog.removeAttribute('open');
+      dialog.showModal();
+    }
+    boundDocument = document;
+    syncScrollLock();
+    return releaseScrollLockIfNeeded;
+  });
 
   const onCancel = (event: Event) => {
     options.onCancel?.(event);

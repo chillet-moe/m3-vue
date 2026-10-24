@@ -23,7 +23,10 @@ describe('shared viewport change runtime', () => {
 
     expect(addEventListener.mock.calls.filter(([type]) => type === 'scroll' || type === 'resize')).toHaveLength(2);
 
-    window.dispatchEvent(new Event('scroll'));
+    const scroller = document.createElement('div');
+    document.body.append(scroller);
+    scroller.dispatchEvent(new Event('scroll')); // Element scroll events do not bubble.
+    scroller.remove();
     window.dispatchEvent(new Event('resize'));
     expect(requestAnimationFrame).toHaveBeenCalledTimes(1);
     expect(firstCallback).not.toHaveBeenCalled();

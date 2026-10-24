@@ -93,3 +93,8 @@ export { M3VuePlugin } from './plugin';
 export type { M3VuePluginOptions } from './plugin';
 export type { M3FieldOptions, M3Shape, M3ShapeOptions } from './styles/context';
 export type { M3ComponentDefaultsOptions } from './defaults';
+
+export { createOverlayHost, provideOverlayHost, useOverlayHost } from './internal/overlayHost/overlayHost';
+export type { OverlayHostController } from './internal/overlayHost/overlayHost';
+export { createOverlayService, useOverlays } from './overlays';
+export type { OverlayService } from './overlays';

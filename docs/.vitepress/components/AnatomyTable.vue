@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { useOverlays } from '@/overlays';
+const { showSnackbar } = useOverlays();
 import { computed, ref, useId, watch } from 'vue';
 import allAnatomy from 'virtual:component-anatomy';
 import { CheckBox } from '@/components/CheckBox';
 import { Tooltip } from '@/components/Tooltip';
 import { Icon } from '@/components/Icon';
 import { useLocalStorage } from '@vueuse/core';
-import { showSnackbar } from '@/components/Snackbar';
 import type { AnatomyPart } from '../plugins/component-anatomy.ts';
 import { useData } from 'vitepress';
 

@@ -144,7 +144,7 @@ export function usePopover<T extends HTMLElement = HTMLElement>({
   }
 
   function handleExternalDropdownShow(event: Event) {
-    const detail = event instanceof CustomEvent ? (event.detail as ExternalDropdownShowDetail | undefined) : undefined;
+    const detail = 'detail' in event ? (event.detail as ExternalDropdownShowDetail | undefined) : undefined;
     pendingSource = detail?.source;
     open.value = true;
   }

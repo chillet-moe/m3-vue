@@ -1,3 +1,4 @@
+import { useElementEnvironment, bindElementEnvironment } from '@/internal/elementEnvironment';
 import {
   computed,
   defineComponent,
@@ -11,7 +12,11 @@ import {
   type ShallowRef,
   type VNodeChild,
 } from 'vue';
-import { showOverlayEntry, type OverlayEntryHandle } from '@/internal/overlayHost/overlayHost';
+import {
+  showOverlayEntry,
+  type OverlayHostController,
+  type OverlayEntryHandle,
+} from '@/internal/overlayHost/overlayHost';
 import './PopoverStackHost.css';
 
 type PopoverStackItemRecord = {
@@ -52,7 +57,15 @@ export type PopoverStackItemHandle = {
   close: () => void;
 };
 
-const stackControllers = new Map<string, PopoverStackController>();
+const stacks = new WeakMap<OverlayHostController, Map<string, PopoverStackController>>();
+function controllers(host: OverlayHostController) {
+  let value = stacks.get(host);
+  if (!value) {
+    value = new Map();
+    stacks.set(host, value);
+  }
+  return value;
+}
 let nextItemId = 0;
 
 function parseTimeValue(value: string): number {
@@ -85,7 +98,7 @@ function getExitDuration(element: HTMLElement | null): number {
     return 0;
   }
 
-  const style = window.getComputedStyle(element);
+  const style = element.ownerDocument.defaultView!.getComputedStyle(element);
   const transitionDuration = getMaxTimingValue(style.transitionDuration);
   const transitionDelay = getMaxTimingValue(style.transitionDelay);
   const animationDuration = getMaxTimingValue(style.animationDuration);
@@ -138,6 +151,10 @@ const PopoverStackHost = defineComponent({
   setup(props, { expose }) {
     const popoverRef = useTemplateRef<HTMLDivElement>('popover');
     const hasVisibleContent = computed(() => props.state.items.value.length > 0);
+
+    useElementEnvironment(popoverRef, () => {
+      if (hasVisibleContent.value) showPopoverElement(popoverRef.value!);
+    });
 
     expose({
       popoverRef,
@@ -202,7 +219,8 @@ const PopoverStackHost = defineComponent({
   },
 });
 
-function teardownPopoverStack(stackId: string) {
+function teardownPopoverStack(host: OverlayHostController, stackId: string) {
+  const stackControllers = controllers(host);
   const controller = stackControllers.get(stackId);
 
   if (!controller) {
@@ -213,7 +231,8 @@ function teardownPopoverStack(stackId: string) {
   stackControllers.delete(stackId);
 }
 
-function ensurePopoverStack(options: ShowPopoverStackItemOptions) {
+function ensurePopoverStack(owner: OverlayHostController, options: ShowPopoverStackItemOptions) {
+  const stackControllers = controllers(owner);
   const existing = stackControllers.get(options.stackId);
 
   if (existing) {
@@ -242,13 +261,13 @@ function ensurePopoverStack(options: ShowPopoverStackItemOptions) {
 
   let host: HTMLDivElement | null = null;
 
-  const overlayHandle = showOverlayEntry({
+  const overlayHandle = showOverlayEntry(owner, {
     onHostUnmounted: (error) => {
       stackControllers.delete(options.stackId);
 
-      for (const item of state.items.value) {
-        item.onHostUnmounted?.(error);
-      }
+      const pending = state.items.value;
+      state.items.value = [];
+      for (const item of pending) item.onHostUnmounted?.(error);
     },
     render: () =>
       h(PopoverStackHost, {
@@ -269,14 +288,19 @@ function ensurePopoverStack(options: ShowPopoverStackItemOptions) {
   return controller;
 }
 
-export function showPopoverStackItem(options: ShowPopoverStackItemOptions): PopoverStackItemHandle {
+export function showPopoverStackItem(
+  owner: OverlayHostController,
+  options: ShowPopoverStackItemOptions,
+): PopoverStackItemHandle {
   if (typeof document === 'undefined') {
     throw new Error('showPopoverStackItem requires a browser environment.');
   }
 
-  const controller = ensurePopoverStack(options);
+  const controller = ensurePopoverStack(owner, options);
   const itemId = ++nextItemId;
   let closed = false;
+  let disposed = false;
+  let releaseExit: (() => void) | undefined;
 
   controller.state.items.value = [
     ...controller.state.items.value,
@@ -284,11 +308,18 @@ export function showPopoverStackItem(options: ShowPopoverStackItemOptions): Popo
       id: itemId,
       closing: false,
       render: options.render,
-      onHostUnmounted: options.onHostUnmounted,
+      onHostUnmounted: (error) => {
+        disposed = true;
+        releaseExit?.();
+        options.onHostUnmounted?.(error);
+      },
     },
   ];
 
   const removeItem = () => {
+    if (disposed) return;
+    disposed = true;
+    releaseExit?.();
     controller.state.items.value = controller.state.items.value.filter((item) => item.id !== itemId);
 
     if (controller.state.items.value.length > 0) {
@@ -300,7 +331,7 @@ export function showPopoverStackItem(options: ShowPopoverStackItemOptions): Popo
         return;
       }
 
-      teardownPopoverStack(options.stackId);
+      if (controllers(owner).get(options.stackId) === controller) teardownPopoverStack(owner, options.stackId);
     });
   };
 
@@ -320,6 +351,7 @@ export function showPopoverStackItem(options: ShowPopoverStackItemOptions): Popo
     );
 
     void nextTick(() => {
+      if (disposed) return;
       const itemElement = controller.getHost()?.querySelector(`[data-stack-item-id="${itemId}"]`) as HTMLElement | null;
       const exitDuration = getExitDuration(itemElement);
 
@@ -328,7 +360,15 @@ export function showPopoverStackItem(options: ShowPopoverStackItemOptions): Popo
         return;
       }
 
-      window.setTimeout(removeItem, exitDuration + 50);
+      if (!itemElement) {
+        removeItem();
+        return;
+      }
+      releaseExit = bindElementEnvironment(itemElement, (document) => {
+        const view = document.defaultView!;
+        const timer = view.setTimeout(removeItem, exitDuration + 50);
+        return () => view.clearTimeout(timer);
+      });
     });
   };
 

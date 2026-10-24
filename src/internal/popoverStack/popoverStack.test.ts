@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
+import { createOverlayHost } from '@/internal/overlayHost/overlayHost';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick, type App } from 'vue';
 import { OverlayHost } from '@/components/OverlayHost';
 import { showPopoverStackItem } from './popoverStack';
 
+const overlayHost = createOverlayHost();
 let app: App<Element> | null = null;
 
 function installPopoverPolyfill() {
@@ -41,7 +43,7 @@ beforeEach(() => {
   const container = document.createElement('div');
   document.body.appendChild(container);
 
-  app = createApp(() => h(OverlayHost));
+  app = createApp(() => h(OverlayHost, { host: overlayHost }));
   app.mount(container);
 });
 
@@ -64,11 +66,11 @@ describe('showPopoverStackItem', () => {
       },
     });
 
-    const first = showPopoverStackItem({
+    const first = showPopoverStackItem(overlayHost, {
       stackId: 'test-stack',
       render: () => h('div', { 'data-testid': 'native-surface' }, 'Native item'),
     });
-    const second = showPopoverStackItem({
+    const second = showPopoverStackItem(overlayHost, {
       stackId: 'test-stack',
       render: () => h(CustomSurface),
     });

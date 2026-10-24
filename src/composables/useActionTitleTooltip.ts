@@ -41,12 +41,22 @@ export function useActionTitleTooltip(options: { ariaLabelFallback?: boolean } =
 
   const rootAttrs = shallowRef(resolveRootAttrs());
 
-  onMounted(() => {
-    if (rootRef.value) registration = registerActionTitleTooltip(rootRef.value);
-  });
+  const syncRegistration = () => {
+    const content = resolveTitleTooltip()?.content;
+    if (!content) {
+      registration?.();
+      registration = undefined;
+    } else if (registration) {
+      registration.update(content);
+    } else if (rootRef.value) {
+      registration = registerActionTitleTooltip(rootRef.value);
+      registration.update(content);
+    }
+  };
+  onMounted(syncRegistration);
   onBeforeUpdate(() => {
     rootAttrs.value = resolveRootAttrs();
-    registration?.update(resolveTitleTooltip()?.content ?? '');
+    syncRegistration();
   });
   onBeforeUnmount(() => {
     registration?.();

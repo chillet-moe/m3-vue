@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed } from 'vue';
 
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
@@ -164,6 +165,7 @@ defineSlots<{
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     :class="['m3-state-layer', 'm3-chip']"
     data-scope="chip"

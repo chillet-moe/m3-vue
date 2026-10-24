@@ -1,3 +1,4 @@
+import { isElement, isHTMLElement } from '@/internal/elementEnvironment';
 export type PressShapeMorphRegistration = {
   disabled: () => boolean;
   enabled: () => boolean;
@@ -24,10 +25,10 @@ const findRegisteredElement = (
   registrations: WeakMap<HTMLElement, PressShapeMorphRegistration>,
   target: EventTarget | null,
 ) => {
-  let element = target instanceof Element ? target : null;
+  let element = isElement(target) ? target : null;
 
   while (element) {
-    if (element instanceof HTMLElement && registrations.has(element)) return element;
+    if (isHTMLElement(element) && registrations.has(element)) return element;
     element = element.parentElement;
   }
 
@@ -44,6 +45,7 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
   const registrations = new WeakMap<HTMLElement, PressShapeMorphRegistration>();
   let registrationCount = 0;
   let activePress: ActivePress | null = null;
+  const releasingPresses = new Set<ActivePress>();
   let abortController: AbortController | null = null;
   let activeAbortController: AbortController | null = null;
   const view = document.defaultView;
@@ -75,8 +77,10 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
     }
 
     clearReleaseTimer(press);
+    releasingPresses.add(press);
     press.releaseTimer = (view ?? window).setTimeout(() => {
       press.releaseTimer = null;
+      releasingPresses.delete(press);
       setPressed(press, false);
     }, remaining);
   };
@@ -161,6 +165,12 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
         if (!registrations.delete(element)) return;
         registrationCount -= 1;
         if (activePress?.element === element) cancelActivePress();
+        for (const press of releasingPresses) {
+          if (press.element !== element) continue;
+          clearReleaseTimer(press);
+          setPressed(press, false);
+          releasingPresses.delete(press);
+        }
         removeListeners();
       };
     },

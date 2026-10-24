@@ -69,6 +69,27 @@ afterEach(() => {
 });
 
 describe('useDelegatedTooltip', () => {
+  it('cancels a pending hover in its original window when the container is adopted', async () => {
+    const host = mountDelegatedTooltip();
+    await nextTick();
+    host.querySelector('#first')!.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
+    await flushDelegatedUpdate();
+    const schedule = vi.spyOn(window, 'setTimeout');
+    host.querySelector('#second')!.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
+    const timer = schedule.mock.results.at(-1)!.value;
+    const frame = document.createElement('iframe');
+    document.body.append(frame);
+    const clearOriginal = vi.spyOn(window, 'clearTimeout');
+    const clearDestination = vi.spyOn(frame.contentWindow!, 'clearTimeout');
+    frame.contentDocument!.body.append(host);
+    await Promise.resolve();
+    expect(clearOriginal).toHaveBeenCalledWith(timer);
+    expect(clearDestination).not.toHaveBeenCalledWith(timer);
+    app!.unmount();
+    app = undefined;
+    frame.remove();
+  });
+
   it('shows immediately on the first pointer hover', async () => {
     const host = mountDelegatedTooltip();
     await nextTick();

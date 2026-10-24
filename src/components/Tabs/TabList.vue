@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { inject, nextTick, onBeforeUnmount, onMounted, ref, watch, type CSSProperties } from 'vue';
+import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { inject, nextTick, ref, watch, type CSSProperties } from 'vue';
 import { tabsContextKey } from './TabsContext';
 
 export type TabListProps = {
@@ -22,6 +23,7 @@ let resizeObserver: ResizeObserver | undefined;
 let mutationObserver: MutationObserver | undefined;
 let observedTabs = new Set<HTMLElement>();
 let animationFrame = 0;
+let view: Window | null = null;
 let usesWindowResizeFallback = false;
 
 const hideIndicator = () => {
@@ -71,14 +73,14 @@ const updateIndicator = () => {
 };
 
 const queueIndicatorUpdate = () => {
-  if (typeof window === 'undefined') {
+  if (!view) {
     return;
   }
 
   if (animationFrame) return;
 
-  if (typeof window.requestAnimationFrame === 'function') {
-    animationFrame = window.requestAnimationFrame(() => {
+  if (typeof view!.requestAnimationFrame === 'function') {
+    animationFrame = view!.requestAnimationFrame(() => {
       animationFrame = 0;
       updateIndicator();
     });
@@ -110,7 +112,7 @@ const startTabGeometryObservation = () => {
   if (!list) return;
 
   if (typeof ResizeObserver === 'undefined') {
-    window.addEventListener('resize', queueIndicatorUpdate);
+    view!.addEventListener('resize', queueIndicatorUpdate);
     usesWindowResizeFallback = true;
     return;
   }
@@ -120,8 +122,11 @@ const startTabGeometryObservation = () => {
   syncObservedTabGeometry();
 };
 
-onMounted(() => {
+useElementEnvironment(listElement, (document) => {
+  view = document.defaultView;
+  let disposed = false;
   void nextTick(() => {
+    if (disposed) return;
     const list = listElement.value;
 
     startTabGeometryObservation();
@@ -139,6 +144,16 @@ onMounted(() => {
       });
     }
   });
+  return () => {
+    disposed = true;
+    view?.cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
+    if (usesWindowResizeFallback) view?.removeEventListener('resize', queueIndicatorUpdate);
+    usesWindowResizeFallback = false;
+    resizeObserver?.disconnect();
+    mutationObserver?.disconnect();
+    observedTabs.clear();
+  };
 });
 
 watch(
@@ -150,20 +165,6 @@ watch(
   },
   { flush: 'post' },
 );
-
-onBeforeUnmount(() => {
-  if (typeof window !== 'undefined') {
-    if (usesWindowResizeFallback) window.removeEventListener('resize', queueIndicatorUpdate);
-
-    if (typeof window.cancelAnimationFrame === 'function' && animationFrame) {
-      window.cancelAnimationFrame(animationFrame);
-    }
-  }
-
-  resizeObserver?.disconnect();
-  mutationObserver?.disconnect();
-  observedTabs.clear();
-});
 </script>
 
 <template>

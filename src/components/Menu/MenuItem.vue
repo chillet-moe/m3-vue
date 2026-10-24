@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { isHTMLTag } from '@/internal/elementEnvironment';
+
+import { vStateLayer } from '@/components/StateLayer/state-layer';
+import { isHTMLElement } from '@/internal/elementEnvironment';
+
 import { useLinkTag } from '@/composables/useLinkTag';
 import { computed, inject, useId, useSlots } from 'vue';
 import { menuItemOwnerContextKey, menuSelectionContextKey } from './MenuContext';
@@ -158,7 +163,7 @@ function handleKeydown(event: KeyboardEvent) {
 
   const currentTarget = event.currentTarget;
 
-  if (!(currentTarget instanceof HTMLElement) || currentTarget instanceof HTMLButtonElement) {
+  if (!isHTMLElement(currentTarget) || isHTMLTag(currentTarget, 'button')) {
     return;
   }
 
@@ -193,6 +198,7 @@ function hasSuffix() {
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     :role="resolvedRole"
     :href="resolvedHref"

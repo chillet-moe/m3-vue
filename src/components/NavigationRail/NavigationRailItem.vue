@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
 import { computed, inject, useSlots } from 'vue';
@@ -113,6 +114,7 @@ const slotProps = computed(() => ({
   >
     <span class="m3-navigation-rail-item-indicator" data-scope="navigation-rail-item" data-part="indicator">
       <span
+        v-state-layer
         aria-hidden="true"
         class="m3-navigation-rail-item-state-layer m3-state-layer"
         data-state-layer-hover-from="target"

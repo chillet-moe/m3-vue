@@ -36,15 +36,17 @@ Apply the `state-layer` class to an interactive element and set a readable foreg
 
 ## Initialization
 
-If you install `M3VuePlugin`, the library calls `initStateLayer()` for you.
+Library components register their state layers automatically in the Document that contains them, including after a panel moves between windows. For custom markup using the `m3-state-layer` class, acquire and release a registration explicitly:
 
 ```ts
 import { initStateLayer } from '@chillet/m3-vue';
 
-initStateLayer();
+const release = initStateLayer(element.ownerDocument);
+// When the custom UI is disposed:
+release();
 ```
 
-The function is idempotent, so calling it more than once is safe.
+Registrations share listeners within each Document. Each call returns an idempotent release function; release every registration when its owner is disposed. Omitting the argument selects the current Document.
 
 ## Styling Hooks
 

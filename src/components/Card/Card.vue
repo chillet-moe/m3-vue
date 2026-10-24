@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, inject, unref } from 'vue';
 import { cardContextKey } from '@/components/Card/CardContext.ts';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
@@ -30,6 +31,7 @@ const slots = defineSlots<{
     <slot />
   </div>
   <button
+    v-state-layer
     v-else
     :class="['m3-card', 'm3-state-layer']"
     data-scope="card"

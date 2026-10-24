@@ -1,3 +1,4 @@
+import { isHTMLElement } from '@/internal/elementEnvironment';
 import { type ComputedRef, type Ref, computed, getCurrentInstance, isRef, ref, toValue, useId } from 'vue';
 import type { MaybeRefOrGetter } from 'vue';
 
@@ -57,11 +58,11 @@ function isTriggerDisabled(trigger: HTMLElement) {
 }
 
 function getEventTrigger(event: KeyboardEvent) {
-  if (event.currentTarget instanceof HTMLElement) {
+  if (isHTMLElement(event.currentTarget)) {
     return event.currentTarget;
   }
 
-  if (event.target instanceof HTMLElement) {
+  if (isHTMLElement(event.target)) {
     return event.target.closest<HTMLElement>('[role="tab"]');
   }
 

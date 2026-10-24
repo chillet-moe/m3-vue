@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
@@ -85,6 +86,7 @@ const slotProps = computed(() => ({
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     :class="[
       'm3-item',

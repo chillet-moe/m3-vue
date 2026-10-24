@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { useActionTitleTooltip } from '@/composables/useActionTitleTooltip';
@@ -91,6 +92,7 @@ const slots = defineSlots<{
 
 <template>
   <component
+    v-state-layer
     :is="tag"
     :class="['m3-state-layer', 'm3-button']"
     data-scope="button"

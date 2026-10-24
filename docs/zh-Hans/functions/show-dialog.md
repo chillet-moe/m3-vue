@@ -15,13 +15,14 @@ import ShowDialogDefaultSrc from '../../demos/show-dialog/ShowDialogDefault.vue?
 
 ## 前置条件
 
-使用此函数前，请在应用根部附近渲染一个 `OverlayHost`。仅程序化浮层需要宿主；声明式 `Dialog` 实例不需要。Vue 和 Nuxt 配置请参阅 [`OverlayHost`](/zh-Hans/components/overlay-host)。
+调用 `useOverlays()` 或 `createOverlayService(host)` 返回的函数前，请创建控制器并渲染 `<OverlayHost :host="overlays" />`。仅程序化浮层需要 host；声明式 `Dialog` 实例不需要。Vue 和 Nuxt 配置请参阅 [`OverlayHost`](/zh-Hans/components/overlay-host)。
 
 ## 基本用法
 
 ```ts
-import { showDialog } from '@chillet/m3-vue';
+import { useOverlays } from '@chillet/m3-vue';
 
+const { showDialog } = useOverlays(); // 在 setup 期间捕获。
 const result = await showDialog({
   headline: '删除文件？',
   content: '此操作无法撤销。',
@@ -50,6 +51,7 @@ Promise 会返回被点击操作的值。如果未提供显式的 `value`，则�
 
 - 在浏览器环境之外调用 `showDialog()` 会使 Promise 被拒绝。
 - 未挂载 `OverlayHost` 时调用 `showDialog()` 会使 Promise 被拒绝。
+- 卸载或处置目标 host 会拒绝尚未完成的调用。
 - 对话框会从宿主继承应用级 provide 和 CSS 自定义属性。
 - 如果操作回调抛出错误或返回被拒绝的 Promise，外层 Promise 会以该错误被拒绝。
 - 原生对话框关闭时 Promise 即返回结果。清理工作仍会等待 Dialog 自身的所有退出动画（包括背景层）结束后才从宿主移除，因此不会延迟既有的结果返回时机。

@@ -1,3 +1,4 @@
+import { isHTMLElement } from '@/internal/elementEnvironment';
 import { computed, type Ref } from 'vue';
 import { useLinkTag } from './useLinkTag';
 
@@ -83,7 +84,7 @@ export function useNavigationItem({ context, value, href, disabled, selected }: 
 
     const currentTarget = event.currentTarget;
 
-    if (!(currentTarget instanceof HTMLElement) || !isAnchorTag.value) {
+    if (!isHTMLElement(currentTarget) || !isAnchorTag.value) {
       return;
     }
 

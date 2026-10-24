@@ -1,3 +1,4 @@
+import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import { registerSharedAnimationFrame } from '@/internal/sharedAnimationFrame';
 import { getLoadingIndicatorFrame, getStaticLoadingIndicatorFrame } from './loadingIndicatorPath';
 
@@ -102,7 +103,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   };
 }
 
-export function registerLoadingIndicatorAnimation(path: SVGPathElement) {
+function registerInDocument(path: SVGPathElement) {
   const document = path.ownerDocument;
   let runtime = runtimes.get(document);
   if (!runtime) {
@@ -110,4 +111,21 @@ export function registerLoadingIndicatorAnimation(path: SVGPathElement) {
     runtimes.set(document, runtime);
   }
   return runtime.register(path);
+}
+
+export function registerLoadingIndicatorAnimation(path: SVGPathElement) {
+  let current: ReturnType<typeof registerInDocument>;
+  let active = false;
+  const cleanup = bindElementEnvironment(path, () => {
+    current = registerInDocument(path);
+    current.setActive(active);
+    return () => current.cleanup();
+  });
+  return {
+    cleanup,
+    setActive(value: boolean) {
+      active = value;
+      current.setActive(value);
+    },
+  };
 }

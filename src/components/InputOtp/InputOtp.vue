@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isHTMLTag } from '@/internal/elementEnvironment';
+
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue';
 import type { ComponentPublicInstance } from 'vue';
 
@@ -197,7 +199,7 @@ function applyText(value: string, startIndex: number) {
 }
 
 function setInputRef(el: Element | ComponentPublicInstance | null, index: number) {
-  if (el instanceof HTMLInputElement) {
+  if (isHTMLTag(el, 'input')) {
     inputRefs.value[index] = el;
   }
 }
@@ -215,7 +217,7 @@ function handleInput(event: Event, index: number) {
 
   const target = event.currentTarget;
 
-  if (!(target instanceof HTMLInputElement)) {
+  if (!isHTMLTag(target, 'input')) {
     return;
   }
 

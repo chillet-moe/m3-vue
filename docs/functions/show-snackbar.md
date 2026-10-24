@@ -5,7 +5,8 @@ title: showSnackbar
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Button } from '@/components/Button';
-import { showSnackbar } from '@/components/Snackbar';
+import { useOverlays } from '@/overlays';
+const { showSnackbar } = useOverlays();
 
 const result = ref('');
 
@@ -35,14 +36,15 @@ the outcome.
 
 ## Prerequisite
 
-Render one `OverlayHost` near the application root before using this function. The host is only required for
+Create a controller and render `<OverlayHost :host="overlays" />` before calling the function returned by `useOverlays()` or `createOverlayService(host)`. The host is only required for
 programmatic overlays; declarative `Snackbar` instances do not need it. See
 [`OverlayHost`](/components/overlay-host) for Vue and Nuxt setup.
 
 ## Basic Usage
 
 ```ts
-import { showSnackbar } from '@chillet/m3-vue';
+import { useOverlays } from '@chillet/m3-vue';
+const { showSnackbar } = useOverlays(); // Capture during setup.
 
 await showSnackbar({
   message: 'Saved',
@@ -69,8 +71,7 @@ app.use(M3VuePlugin, {
 ### Component Subtree Defaults
 
 Call `provideSnackbarDefaults()` in an ancestor and capture the nearest defaults with `useSnackbar()` in descendant
-components. The returned function can be used later in event handlers. The globally imported `showSnackbar()` keeps
-using application-level defaults because it has no component injection context.
+components. The returned function can be used later in event handlers. The imported `showSnackbar(host, options)` uses the defaults of its explicit host. Provide the host through `provideOverlayHost()` or the `OverlayHost` default slot before calling `useSnackbar()`.
 
 ```vue
 <!-- NotificationArea.vue -->
@@ -112,7 +113,7 @@ The promise resolves when the snackbar closes.
 - Dismiss button resolves to `dismissValue`, or `'dismiss'` by default.
 - Auto timeout resolves to `timeoutValue`, or `'timeout'` by default.
 
-The promise rejects if the function is called outside a browser environment, if `OverlayHost` is not mounted, or if
+The promise rejects if the function is called outside a browser environment, if the target host is absent or disposed, or if
 `action.onClick` throws or rejects.
 
 ## Options
@@ -135,7 +136,7 @@ The tables below are generated from source types and stay in sync with API chang
 
 - Programmatic snackbars include a dismiss button by default. Set `dismissible: false` to hide it.
 - Multiple snackbars can be shown at the same time.
-- Stacks are separated by `position`, so top and bottom placements do not interfere with each other.
+- Stacks are separated by host and `position`, so top and bottom placements do not interfere with each other.
 - Snackbar actions inherit application-level provides and CSS custom properties from `OverlayHost`.
 - Hovering or focusing the snackbar pauses the auto-close timer.
 - Leaving the snackbar resumes the remaining time instead of restarting the full duration.
