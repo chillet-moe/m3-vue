@@ -112,8 +112,10 @@ Mouse-wheel changes are opt-in: set `wheel` to enable them.
 
 ### Sizes
 
-The `size` prop overrides `sliderContextKey`'s `size`, with `medium` as the fallback. Set `sliderSize` in
-`M3VuePlugin` for an application default, or provide the context for a subtree. See [component defaults](/getting-started#component-defaults).
+The `size` prop overrides inherited defaults, with `medium` as the library default. Set `sliderDefaults.size` in
+`M3VuePlugin` for an application default, or call `provideSliderDefaults({ size: 'large' })` in an ancestor
+for a subtree default. The other defaults are `appearance="standard"`, `wheel=false`, and `valueIndicator=true`;
+all can be set in `sliderDefaults` or through the helper. See [component defaults](/getting-started#component-defaults).
 
 <DemoContainer :src="SliderSizesSrc" :viewport="false">
   <SliderSizes />
@@ -153,7 +155,7 @@ Standard sizing tokens are `--md-slider-track-thickness`, `--md-slider-thumb-siz
 
 Add `wheel` to instances that should retain mouse-wheel value changes.
 
-Set `appearance="expressive"` per instance, provide `sliderContextKey` with `{ appearance: 'expressive' }`, or use `sliderAppearance: 'expressive'` in M3 defaults to retain the previous appearance. For choosing appearance and density together, see [Styling](../guides/styling).
+Set `appearance="expressive"` per instance, call `provideSliderDefaults({ appearance: 'expressive' })` for a subtree, or set `sliderDefaults.appearance` in `M3VuePlugin` to retain the previous appearance. For choosing appearance and density together, see [Styling](../guides/styling).
 
 ## Reference
 

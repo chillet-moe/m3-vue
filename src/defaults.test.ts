@@ -3,6 +3,12 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, defineComponent, h, nextTick, provide, ref } from 'vue';
 import {
   Button,
+  ButtonGroup,
+  ListItem,
+  SelectItem,
+  provideButtonDefaults,
+  provideSliderDefaults,
+  provideListItemDefaults,
   IconButton,
   Slider,
   Menu,
@@ -74,10 +80,9 @@ describe('component defaults', () => {
       });
       const app = createApp(() => h('main', [controls('app'), controls('explicit', true), h(Subtree)]));
       const options = {
-        buttonSize: size,
+        buttonDefaults: { size },
         iconButtonSize: size,
-        sliderSize: size,
-        sliderAppearance: appearance,
+        sliderDefaults: { size, appearance },
         menuColor: color,
         datePickerDefaults: { firstDayOfWeek },
         timePickerDefaults: { format, inputMode },
@@ -152,4 +157,100 @@ describe('component defaults', () => {
       }
     },
   );
+});
+
+it('merges nested preferences per field, reacts to undefined, and preserves explicit false', async () => {
+  const appWheel = ref(true);
+  const localIndicator = ref<boolean | undefined>(false);
+  const localAppearance = ref<'standard' | 'expressive' | undefined>(undefined);
+  const localMorph = ref<boolean | undefined>(undefined);
+  const controls = (id: string, explicit = false) =>
+    h('section', { id }, [
+      h(Slider, {
+        min: 0,
+        max: 10,
+        step: 1,
+        value: 5,
+        wheel: explicit ? false : undefined,
+        valueIndicator: explicit ? true : undefined,
+        appearance: explicit ? 'standard' : undefined,
+      }),
+      h(ListItem, { title: 'Item', appearance: explicit ? 'standard' : undefined }),
+      h(SelectItem, {}, () => 'Option'),
+      h(Button, { pressShapeMorph: explicit ? true : undefined }, () => 'Action'),
+      h(ButtonGroup, {}, () => h(Button, {}, () => 'Grouped')),
+    ]);
+  const Inner = defineComponent({
+    setup() {
+      provideSliderDefaults({ size: 'small' });
+      provideButtonDefaults({ size: 'small' });
+      provideListItemDefaults({ appearance: undefined });
+      return () => h('div', [controls('inner'), controls('explicit', true)]);
+    },
+  });
+  const Outer = defineComponent({
+    setup() {
+      provideSliderDefaults({ valueIndicator: localIndicator });
+      provideButtonDefaults({ pressShapeMorph: localMorph });
+      provideListItemDefaults({ appearance: localAppearance });
+      return () => h(Inner);
+    },
+  });
+  const app = createApp(() => h('div', [controls('app'), h(Outer)]));
+  app.use(M3VuePlugin, {
+    shape: 'square',
+    sliderDefaults: { appearance: 'expressive', size: 'large', wheel: appWheel, valueIndicator: true },
+    buttonDefaults: { size: 'large', pressShapeMorph: false },
+    listItemDefaults: { appearance: 'expressive' },
+  });
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+  app.mount(container);
+  await nextTick();
+  const input = (id: string) => container.querySelector<HTMLInputElement>(`#${id} input[type="range"]`)!;
+  const wheel = (id: string) => {
+    const event = new WheelEvent('wheel', { deltaY: -1, cancelable: true });
+    input(id).dispatchEvent(event);
+    return event.defaultPrevented;
+  };
+  const root = (id: string, scope: string) =>
+    container.querySelector<HTMLElement>(`#${id} [data-scope="${scope}"][data-part="root"]`)!;
+  try {
+    expect(root('inner', 'slider').classList.contains('m3-slider-expressive')).toBe(true);
+    expect(root('inner', 'slider').classList.contains('m3-slider-small')).toBe(true);
+    expect(root('app', 'slider').classList.contains('m3-slider-large')).toBe(true);
+    expect(root('inner', 'item').dataset.appearance).toBe('expressive');
+    expect(root('inner', 'select-item').dataset.appearance).toBe('standard');
+    expect(root('inner', 'button').dataset.shape).toBe('square');
+    expect(root('inner', 'button').dataset.size).toBe('small');
+    expect(root('inner', 'button').dataset.pressShapeMorph).toBe('false');
+    expect(
+      container
+        .querySelector('#inner [data-scope="button-group"] [data-scope="button"]')
+        ?.getAttribute('data-press-shape-morph'),
+    ).toBe('false');
+    expect(input('app').hasAttribute('aria-controls')).toBe(true);
+    expect(input('inner').hasAttribute('aria-controls')).toBe(false);
+    expect(input('explicit').hasAttribute('aria-controls')).toBe(true);
+    expect(wheel('inner')).toBe(true);
+    expect(wheel('explicit')).toBe(false);
+    expect(root('explicit', 'item').dataset.appearance).toBe('standard');
+    expect(root('explicit', 'button').dataset.pressShapeMorph).toBe('true');
+    localIndicator.value = undefined;
+    localAppearance.value = 'standard';
+    localMorph.value = true;
+    appWheel.value = false;
+    await nextTick();
+    expect(input('inner').hasAttribute('aria-controls')).toBe(true);
+    expect(root('inner', 'item').dataset.appearance).toBe('standard');
+    expect(root('inner', 'button').dataset.pressShapeMorph).toBe('true');
+    expect(wheel('inner')).toBe(false);
+    localAppearance.value = undefined;
+    localMorph.value = undefined;
+    await nextTick();
+    expect(root('inner', 'item').dataset.appearance).toBe('expressive');
+    expect(root('inner', 'button').dataset.pressShapeMorph).toBe('false');
+  } finally {
+    app.unmount();
+  }
 });

@@ -112,7 +112,7 @@ Slider 会原样保留外部传入的 `value`，包括步进刻度之间的值�
 
 ### 尺寸
 
-`size` 属性优先于 `sliderContextKey` 中的 `size`，内置回退值为 `medium`。可在 `M3VuePlugin` 中设置 `sliderSize` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+`size` 属性优先于子树和应用默认值，内置回退值为 `medium`。应用级尺寸通过 `sliderDefaults.size` 设置；子树可在 setup 中调用 `provideSliderDefaults()`。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
 
 <DemoContainer :src="SliderSizesSrc" :viewport="false">
   <SliderSizes />
@@ -138,6 +138,8 @@ Slider 会原样保留外部传入的 `value`，包括步进刻度之间的值�
 
 ## Slider 外观
 
+应用和子树默认值可分别通过 `sliderDefaults` 与 `provideSliderDefaults()` 设置；字段包括 `size`、`appearance`、`wheel` 和 `valueIndicator`。默认值为 `appearance: 'standard'`、`wheel: false` 和 `valueIndicator: true`。实例属性优先于这些默认值。
+
 `appearance="standard"` 是默认值：中性非活动轨道厚 4px，中等尺寸下圆形滑块为 16px，并有独立的 32px 命中区域。Extra-small 和 small 使用 14px 滑块；large 和 extra-large 分别使用 18px 和 20px。`size` 与 `appearance` 相互独立。焦点状态会显示清晰轮廓；悬停和按压会添加轻微光晕，但不会改变几何尺寸。
 
 `appearance="expressive"` 保留原有的粗轨道和竖直手柄。内嵌图标仅支持 expressive 的 medium、large 和 extra-large 尺寸；standard 不显示图标。两种外观都支持停止标记、所有数值指示器位置、格式化、垂直方向、RTL、禁用状态、范围限制和步进量化。Standard 指示器更紧凑，并仍渲染在顶层弹出层中。`:value-indicator="false"` 仅隐藏视觉提示。
@@ -148,11 +150,11 @@ Standard 尺寸 Token 为 `--md-slider-track-thickness`、`--md-slider-thumb-siz
 
 <DemoContainer :src="SliderPreciseValueSrc" :viewport="false"><SliderPreciseValue /></DemoContainer>
 
-### 迁移默认外观
+### 迁移旧默认选项
 
-如需保留之前的外观，可在实例上设置 `appearance="expressive"`、通过 `sliderContextKey` 提供 `{ appearance: 'expressive' }`，或在 M3 默认值中设置 `sliderAppearance: 'expressive'`。外观与密度的搭配建议请参阅 [样式指南](../guides/styling#选择外观与密度)。
+`sliderSize` 和 `sliderAppearance` 已移除且没有兼容别名。将它们分别迁移到 `sliderDefaults.size` 和 `sliderDefaults.appearance`。如需保留之前的外观，可在实例上设置 `appearance="expressive"`，或将应用级 `sliderDefaults.appearance` 设为 `'expressive'`。也可通过 `provideSliderDefaults()` 为子树设置默认值。外观与密度的搭配建议请参阅 [样式指南](../guides/styling#选择外观与密度)。
 
-滚轮输入现在默认关闭。如果需要滚轮调整值，请显式添加 `wheel`，例如 `<Slider wheel />`。仅设置 `wheelStep` 不会启用滚轮；未启用滚轮或 Slider 已禁用时，页面滚动行为不变。
+滚轮输入默认关闭。如果需要单个 Slider 使用滚轮调整值，请显式添加 `wheel`，例如 `<Slider wheel />`；应用或子树默认值也可通过 `sliderDefaults.wheel` 或 `provideSliderDefaults({ wheel: true })` 开启。仅设置 `wheelStep` 不会启用滚轮；未启用滚轮或 Slider 已禁用时，页面滚动行为不变。`valueIndicator` 默认开启，可通过 `sliderDefaults.valueIndicator` 设置应用默认值。
 
 ## 参考
 

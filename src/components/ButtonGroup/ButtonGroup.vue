@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, provide, toRef } from 'vue';
+import { inject, provide, toRef, unref } from 'vue';
 import type { ButtonProps } from '@/components/Button/Button.vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<ButtonGroupProps>(), {
   type: 'standard',
   variant: 'tonal',
   size: 'small',
-  pressShapeMorph: true,
+  pressShapeMorph: undefined,
   disabled: false,
   selectionMode: 'single',
 });
@@ -28,7 +28,7 @@ const parentButtonContext = inject(buttonContextKey, undefined);
 provide(buttonContextKey, {
   size: toRef(() => props.size),
   variant: toRef(() => props.variant),
-  pressShapeMorph: toRef(() => props.pressShapeMorph),
+  pressShapeMorph: toRef(() => props.pressShapeMorph ?? unref(parentButtonContext?.pressShapeMorph)),
   toggleable: toRef(() => true),
   shape: parentButtonContext?.shape,
   disabled: toRef(() => props.disabled),

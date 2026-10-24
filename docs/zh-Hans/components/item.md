@@ -57,11 +57,11 @@ ListItem 提供丰富的列表项布局。默认情况下它可交互，并渲�
 
 ## 外观
 
-`appearance="standard"` 是默认值：活动指示器固定为整行宽度、转角紧凑，并且不会展开高亮或执行按压形状变换。`appearance="expressive"` 保留展开式指示器和按压形状变换。外观不会改变按钮/链接/展示语义、插槽或布局 Token。
+`appearance="standard"` 是默认值：活动指示器固定为整行宽度、转角紧凑，并且不会展开高亮或执行按压形状变换。`appearance="expressive"` 保留展开式指示器和按压形状变换。外观不会改变按钮/链接/展示语义、插槽或布局 Token。应用级外观可通过 `listItemDefaults.appearance` 设置，子树可在 setup 中调用 `provideListItemDefaults()`；实例的 `appearance` 属性优先级更高。
 
 <DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
 
-现有条目如需保留之前的外观，可设置 `appearance="expressive"`。`shape` 属性控制 expressive 外观的形状；standard 使用 `--md-shape-compact`。`--md-item-indicator-shape` 可定制两种外观中的指示器。
+现有条目如需保留之前的外观，可设置 `appearance="expressive"`。`shape` 属性控制 expressive 外观的形状；standard 使用 `--md-shape-compact`。`--md-item-indicator-shape` 可定制两种外观中的指示器。`SelectItem` 明确使用 `standard`，不受 `listItemDefaults` 影响。
 
 选择选项请使用 [SelectItem](./select#selectitem)，菜单命令请使用 [MenuItem](./menu)。ListItem 仍用于一般列表项。外观与密度建议请参阅[样式指南](../guides/styling#选择外观与密度)。
 

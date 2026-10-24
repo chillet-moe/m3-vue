@@ -61,7 +61,7 @@ When `ListItem` is acting as navigation, use `RouterLink custom` and feed its `h
 
 ## Appearance
 
-`appearance="standard"` is the default: a fixed whole-row active indicator, compact corners, and no expanding highlight or press shape morph. `appearance="expressive"` retains the expanding indicator and press morph. Appearance does not change button/link/presentation semantics, slots, or layout tokens.
+`appearance="standard"` is the default: a fixed whole-row active indicator, compact corners, and no expanding highlight or press shape morph. `appearance="expressive"` retains the expanding indicator and press morph. Appearance does not change button/link/presentation semantics, slots, or layout tokens. Set `listItemDefaults.appearance` in `M3VuePlugin` for an application default, or call `provideListItemDefaults({ appearance: 'expressive' })` for a subtree. An explicit `appearance` prop takes precedence. `SelectItem` has an explicit `standard` appearance and is unaffected by this default.
 
 <DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
 

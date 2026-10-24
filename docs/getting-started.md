@@ -52,84 +52,89 @@ import { Button } from '@chillet/m3-vue';
 
 ## Component Defaults
 
-Use `M3VuePlugin` for application-wide appearance and interaction preferences, a context provider for a component
-subtree, and props for individual controls. Explicit props take precedence over the nearest context; without either,
-each component uses its built-in default.
+Set application-wide preferences with `M3VuePlugin`, subtree preferences with a defaults helper, and individual
+values with component props. Precedence is instance prop > helper subtree field > application field > library default.
+The built-in defaults are Button `size="small"` and `pressShapeMorph=true`, Slider `size="medium"`,
+`appearance="standard"`, `wheel=false`, and `valueIndicator=true`, and ListItem `appearance="standard"`.
+`ButtonGroup` inherits its parent's `pressShapeMorph` when the prop is omitted.
 
-### Application Configuration
+### Application configuration
 
 ```ts
-import { ref } from 'vue';
-import { M3VuePlugin, type M3VuePluginOptions, type TimePickerFormat } from '@chillet/m3-vue';
+import { M3VuePlugin, type M3VuePluginOptions } from '@chillet/m3-vue';
 
-const format = ref<TimePickerFormat>('24h');
 const options = {
   shape: 'square',
   fieldSize: 'small',
-  buttonSize: 'small',
-  timePickerDefaults: { format, inputMode: 'keyboard' },
+  buttonDefaults: { size: 'small', pressShapeMorph: true },
+  sliderDefaults: { size: 'large', appearance: 'standard', wheel: false, valueIndicator: true },
+  listItemDefaults: { appearance: 'standard' },
+  timePickerDefaults: { format: '24h', inputMode: 'keyboard' },
 } satisfies M3VuePluginOptions;
 
 app.use(M3VuePlugin, options);
 ```
 
-Sizes, shape, menu color, week start, time format, and input mode accept values or refs. Updating a ref updates the
-controls that inherit it.
+`M3VuePluginOptions` adds `buttonDefaults?: Pick<ButtonContext, 'size' | 'pressShapeMorph'>`,
+`sliderDefaults?: SliderContext` (with `size`, `appearance`, `wheel`, and `valueIndicator`), and
+`listItemDefaults?: ListItemContext` (with `appearance`). Existing options such as `shape`, `fieldSize`,
+`iconButtonSize`, `menuColor`, and picker defaults remain available.
 
-| Plugin option                       | Applies to                                   | Context key and property                  |
-| ----------------------------------- | -------------------------------------------- | ----------------------------------------- |
-| `fieldSize`                         | Single-line TextField, Select, Combobox      | `fieldContextKey` → `size`                |
-| `buttonSize`                        | Button                                       | `buttonContextKey` → `size`               |
-| `iconButtonSize`                    | IconButton                                   | `iconButtonContextKey` → `size`           |
-| `sliderAppearance`                  | Slider                                       | `sliderContextKey` → `appearance`         |
-| `sliderSize`                        | Slider                                       | `sliderContextKey` → `size`               |
-| `menuColor`                         | Menu, Select and Combobox menus              | `menuDefaultsContextKey` → `color`        |
-| `datePickerDefaults.firstDayOfWeek` | DatePicker, including TextField date pickers | `datePickerContextKey` → `firstDayOfWeek` |
-| `timePickerDefaults.format`         | TimePicker, including TextField time pickers | `timePickerContextKey` → `format`         |
-| `timePickerDefaults.inputMode`      | TimePicker, including TextField time pickers | `timePickerContextKey` → `inputMode`      |
+| Plugin option                                                     | Applies to                                   | Context field                           |
+| ----------------------------------------------------------------- | -------------------------------------------- | --------------------------------------- |
+| `fieldSize`                                                       | Single-line TextField, Select, Combobox      | `fieldContextKey.size`                  |
+| `buttonDefaults.size`                                             | Button                                       | `buttonContextKey.size`                 |
+| `buttonDefaults.pressShapeMorph`                                  | Button and an inheriting ButtonGroup         | `buttonContextKey.pressShapeMorph`      |
+| `iconButtonSize`                                                  | IconButton                                   | `iconButtonContextKey.size`             |
+| `sliderDefaults.size`, `.appearance`, `.wheel`, `.valueIndicator` | Slider                                       | Corresponding `sliderContextKey` fields |
+| `listItemDefaults.appearance`                                     | ListItem                                     | `listItemContextKey.appearance`         |
+| `menuColor`                                                       | Menu, Select and Combobox menus              | `menuDefaultsContextKey.color`          |
+| `datePickerDefaults`                                              | DatePicker, including TextField date pickers | `datePickerContextKey` fields           |
+| `timePickerDefaults`                                              | TimePicker, including TextField time pickers | `timePickerContextKey` fields           |
 
 `shape` sets `rounded` or `square` across buttons, list items, text fields, pagination links, and navigation drawer
 items. It can be combined with size defaults. Textarea fields always use `medium`, regardless of `fieldSize`.
 
-### Subtree Configuration
+### Subtree configuration
 
-Provide a context from an ancestor component to configure its descendants. This example gives the subtree medium
-fields while keeping the inherited shape and floating-label clearance. The Reference field explicitly uses small;
-the Notes textarea uses medium.
+Use the field-specific helpers to override selected values in a subtree while inheriting every other field from the
+nearest provider. Helper fields accept refs and computed values. An omitted or `undefined` field inherits; explicit
+values such as `false` override the inherited value.
 
 ```vue
 <script setup lang="ts">
-import { inject, provide, ref } from 'vue';
-import { fieldContextKey, Select, TextField } from '@chillet/m3-vue';
+import { computed, ref } from 'vue';
+import { provideButtonDefaults, provideSliderDefaults, provideListItemDefaults } from '@chillet/m3-vue';
 
-const customer = ref('');
-const reference = ref('');
-const notes = ref('');
-const inherited = inject(fieldContextKey, {});
-provide(fieldContextKey, { ...inherited, size: 'medium' });
+const compact = ref(true);
+provideButtonDefaults({ size: computed(() => (compact.value ? 'small' : undefined)) });
+provideSliderDefaults({ wheel: false, valueIndicator: computed(() => !compact.value) });
+provideListItemDefaults({ appearance: 'expressive' });
 </script>
-
-<template>
-  <TextField v-model="customer" label="Customer" />
-  <Select label="Status" :options="[{ label: 'Open', value: 'open' }]" />
-  <TextField v-model="reference" label="Reference" size="small" />
-  <TextField v-model="notes" label="Notes" as="textarea" />
-</template>
 ```
 
-Vue replaces the whole context rather than merging individual properties. Spread the inherited context to retain
-its other values and refs. A component's provider applies to descendants, not to injections in its own setup.
+The helpers compute each field against the nearest provider, so an inner subtree can override one preference and
+continue inheriting the others. By contrast, direct `provide(contextKey, value)` replaces the entire context object.
+Spread the injected context when using direct provide if you need to retain its other fields and refs. A provider
+applies to descendants, not to injections in its own setup.
 
-All keys in the table are typed and exported, along with their context types. They also work with `app.provide()`:
+`SelectItem` has an explicit `standard` appearance, so `listItemDefaults.appearance` does not change its appearance.
+
+### Migrating removed options
+
+The old `buttonSize`, `sliderSize`, and `sliderAppearance` options have been removed, with no aliases. Move each
+value into the corresponding defaults object:
 
 ```ts
-import { fieldContextKey } from '@chillet/m3-vue';
+// Before
+app.use(M3VuePlugin, { buttonSize: 'small', sliderSize: 'large', sliderAppearance: 'expressive' });
 
-app.provide(fieldContextKey, { size: 'small', shape: 'square', labelClearance: '0.5rem' });
+// After
+app.use(M3VuePlugin, {
+  buttonDefaults: { size: 'small' },
+  sliderDefaults: { size: 'large', appearance: 'expressive' },
+});
 ```
-
-When combining `app.provide()` with plugin configuration for the same key, install the plugin first so the explicit
-application provider takes precedence.
 
 ### Snackbar Configuration
 

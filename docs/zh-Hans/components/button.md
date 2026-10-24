@@ -71,7 +71,9 @@ const props = ref({
 
 ### 尺寸
 
-`size` 属性优先于 `buttonContextKey` 中的 `size`，内置回退值为 `small`。可在 `M3VuePlugin` 中设置 `buttonSize` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+`size` 属性优先于子树和应用默认值，内置回退值为 `small`。应用级尺寸通过 `buttonDefaults.size` 设置；子树可在 setup 中调用 `provideButtonDefaults()`。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
+`pressShapeMorph` 的应用默认值为 `true`，可通过 `buttonDefaults.pressShapeMorph` 或 `provideButtonDefaults()` 覆盖。ButtonGroup 未显式设置该字段时会继承父级 Button context；单个 Button 的显式属性优先级最高。
 
 <DemoContainer :src="ButtonSizesSrc">
   <ButtonSizes />

@@ -1,5 +1,6 @@
 import type { App, MaybeRef } from 'vue';
 import type { M3ComponentDefaultsOptions } from '@/defaults';
+import { listItemContextKey } from '@/components/ListItem/ListItemContext';
 import { sliderContextKey } from '@/components/Slider/SliderContext';
 import { menuDefaultsContextKey } from '@/components/Menu/MenuDefaultsContext';
 import { buttonContextKey } from '@/components/Button/ButtonContext';
@@ -32,15 +33,16 @@ export function installM3StyleDefaults(
     app.provide(fieldContextKey, context);
   }
 
-  if (options.shape !== undefined || options.buttonSize !== undefined) {
-    app.provide(buttonContextKey, { shape: options.shape, size: options.buttonSize });
+  if (options.shape !== undefined || options.buttonDefaults !== undefined) {
+    app.provide(buttonContextKey, { shape: options.shape, ...options.buttonDefaults });
   }
   if (options.shape !== undefined || options.iconButtonSize !== undefined) {
     app.provide(iconButtonContextKey, { shape: options.shape, size: options.iconButtonSize });
   }
   if (options.shape !== undefined) app.provide(navigationDrawerShapeContextKey, { shape: options.shape });
-  if (options.sliderSize !== undefined || options.sliderAppearance !== undefined) {
-    app.provide(sliderContextKey, { size: options.sliderSize, appearance: options.sliderAppearance });
+  if (options.sliderDefaults !== undefined) {
+    app.provide(sliderContextKey, options.sliderDefaults);
   }
+  if (options.listItemDefaults !== undefined) app.provide(listItemContextKey, options.listItemDefaults);
   if (options.menuColor !== undefined) app.provide(menuDefaultsContextKey, { color: options.menuColor });
 }

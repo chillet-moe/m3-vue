@@ -73,8 +73,11 @@ when they need more emphasis than an outline.
 
 ### Sizes
 
-The `size` prop overrides `buttonContextKey`'s `size`, with `small` as the fallback. Set `buttonSize` in
-`M3VuePlugin` for an application default, or provide the context for a subtree. See [component defaults](/getting-started#component-defaults).
+The `size` prop overrides inherited defaults, with `small` as the library default. Set `buttonDefaults.size` in
+`M3VuePlugin` for an application default, or call `provideButtonDefaults({ size: 'small' })` in an ancestor
+for a subtree default. `pressShapeMorph` defaults to `true` and can also be set through `buttonDefaults` or the
+helper. `ButtonGroup` inherits its parent's `pressShapeMorph` when its own prop is omitted. See
+[component defaults](/getting-started#component-defaults).
 
 <DemoContainer :src="ButtonSizesSrc">
   <ButtonSizes />

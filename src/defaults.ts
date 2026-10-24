@@ -1,16 +1,17 @@
 import type { App } from 'vue';
-import type { ButtonContext } from './components/Button/ButtonContext';
+import type { ButtonDefaults } from './components/Button/ButtonContext';
 import type { IconButtonContext } from './components/IconButton/IconButtonContext';
+import type { ListItemContext } from './components/ListItem/ListItemContext';
 import type { SliderContext } from './components/Slider/SliderContext';
 import type { MenuDefaultsContext } from './components/Menu/MenuDefaultsContext';
 import { datePickerContextKey, type DatePickerContext } from './components/DatePicker/DatePickerContext';
 import { timePickerContextKey, type TimePickerContext } from './components/TimePicker/TimePickerContext';
 
 export type M3ComponentDefaultsOptions = {
-  buttonSize?: ButtonContext['size'];
+  buttonDefaults?: ButtonDefaults;
+  listItemDefaults?: ListItemContext;
   iconButtonSize?: IconButtonContext['size'];
-  sliderAppearance?: SliderContext['appearance'];
-  sliderSize?: SliderContext['size'];
+  sliderDefaults?: SliderContext;
   menuColor?: MenuDefaultsContext['color'];
   datePickerDefaults?: DatePickerContext;
   timePickerDefaults?: TimePickerContext;

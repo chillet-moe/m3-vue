@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { vStateLayer } from '@/components/StateLayer/state-layer';
+import { listItemContextKey } from './ListItemContext';
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
@@ -27,7 +28,7 @@ export type ListItemProps = ListItemButtonProps & {
 };
 
 const props = withDefaults(defineProps<ListItemProps>(), {
-  appearance: 'standard',
+  appearance: undefined,
   interactive: true,
   active: false,
   href: undefined,
@@ -41,6 +42,8 @@ const props = withDefaults(defineProps<ListItemProps>(), {
 });
 
 const context = inject(buttonContextKey, undefined);
+const defaults = inject(listItemContextKey, undefined);
+const appearance = computed(() => props.appearance ?? unref(defaults?.appearance) ?? 'standard');
 const interactive = computed(() => props.interactive);
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
@@ -52,7 +55,7 @@ const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
 });
 
 const { pressShapeMorphAttrs } = usePressShapeMorph({
-  enabled: computed(() => interactive.value && props.appearance === 'expressive'),
+  enabled: computed(() => interactive.value && appearance.value === 'expressive'),
   disabled,
 });
 
@@ -97,7 +100,7 @@ const slotProps = computed(() => ({
     :is="tag"
     :class="[
       'm3-item',
-      props.appearance === 'expressive' && 'm3-morph-host',
+      appearance === 'expressive' && 'm3-morph-host',
       {
         'm3-state-layer': interactive,
         'm3-button': interactive,
@@ -105,7 +108,7 @@ const slotProps = computed(() => ({
     ]"
     data-scope="item"
     data-part="root"
-    :data-appearance="props.appearance"
+    :data-appearance="appearance"
     data-list-group-item
     data-variant="text"
     data-size="small"
@@ -124,7 +127,7 @@ const slotProps = computed(() => ({
     <Icon
       v-if="props.leadingIcon"
       :name="props.leadingIcon"
-      :class="['m3-item-leading', 'm3-item-icon', props.appearance === 'expressive' && 'm3-icon-morph']"
+      :class="['m3-item-leading', 'm3-item-icon', appearance === 'expressive' && 'm3-icon-morph']"
       data-scope="item"
       data-part="leading"
       :disabled="disabled"
@@ -136,7 +139,7 @@ const slotProps = computed(() => ({
     <span class="m3-item-main" data-scope="item" data-part="main">
       <span
         v-if="hasHeader"
-        :class="['m3-item-header', props.appearance === 'expressive' && 'm3-text-morph']"
+        :class="['m3-item-header', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="header"
       >
@@ -145,7 +148,7 @@ const slotProps = computed(() => ({
 
       <span
         v-if="hasTitle"
-        :class="['m3-item-title', props.appearance === 'expressive' && 'm3-text-morph']"
+        :class="['m3-item-title', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="title"
       >
@@ -154,7 +157,7 @@ const slotProps = computed(() => ({
 
       <span
         v-if="hasDescription"
-        :class="['m3-item-description', props.appearance === 'expressive' && 'm3-text-morph']"
+        :class="['m3-item-description', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="description"
       >
@@ -163,7 +166,7 @@ const slotProps = computed(() => ({
 
       <span
         v-if="hasFooter"
-        :class="['m3-item-footer', props.appearance === 'expressive' && 'm3-text-morph']"
+        :class="['m3-item-footer', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="footer"
       >
@@ -174,7 +177,7 @@ const slotProps = computed(() => ({
     <Icon
       v-if="props.trailingIcon"
       :name="props.trailingIcon"
-      :class="['m3-item-trailing', 'm3-item-icon', props.appearance === 'expressive' && 'm3-icon-morph']"
+      :class="['m3-item-trailing', 'm3-item-icon', appearance === 'expressive' && 'm3-icon-morph']"
       data-scope="item"
       data-part="trailing"
       :disabled="disabled"

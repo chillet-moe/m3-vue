@@ -78,11 +78,11 @@ const {
   disabled = false,
   lowerLimit,
   upperLimit,
-  wheel = false,
+  wheel: wheelProp = undefined,
   wheelStep,
   startIcon,
   endIcon,
-  valueIndicator = true,
+  valueIndicator: valueIndicatorProp = undefined,
   valueIndicatorPlacement: valueIndicatorPlacementProp,
   formatter,
   stopIndicators,
@@ -91,6 +91,8 @@ const {
 const attrs = useAttrs();
 const defaults = inject(sliderContextKey, undefined);
 const appearance = computed(() => appearanceProp ?? unref(defaults?.appearance) ?? 'standard');
+const wheel = computed(() => wheelProp ?? unref(defaults?.wheel) ?? false);
+const valueIndicator = computed(() => valueIndicatorProp ?? unref(defaults?.valueIndicator) ?? true);
 const size = computed(() => sizeProp ?? unref(defaults?.size) ?? 'medium');
 
 const valueIndicatorPlacement = computed(() => {
@@ -222,7 +224,7 @@ const onChange = () => {
 };
 
 const onWheel = (event: WheelEvent) => {
-  if (!wheel || disabled || event.deltaY === 0) {
+  if (!wheel.value || disabled || event.deltaY === 0) {
     return;
   }
 
@@ -254,7 +256,7 @@ const isValueDragging = ref(false);
 const isValueIndicatorVisible = computed(
   () =>
     !disabled &&
-    valueIndicator &&
+    valueIndicator.value &&
     (isValueIndicatorHovered.value || isValueIndicatorFocused.value || isValueIndicatorDragging.value),
 );
 let syncValueIndicatorFocusFrame = 0;
@@ -495,7 +497,7 @@ const onWindowPointerMove = (event: PointerEvent) => {
 
 const shouldListenToWindowPointerMove = () => {
   return (
-    (!disabled && valueIndicator && isValueIndicatorHovered.value) ||
+    (!disabled && valueIndicator.value && isValueIndicatorHovered.value) ||
     isValueIndicatorDragging.value ||
     activePointerId !== null ||
     pointerDownPosition !== null
@@ -685,7 +687,7 @@ watch(
 );
 
 watch(
-  [sliderRef, hasStartInsetIcon, hasEndInsetIcon, stopIndicatorsFiltered, () => vertical, () => valueIndicator],
+  [sliderRef, hasStartInsetIcon, hasEndInsetIcon, stopIndicatorsFiltered, () => vertical, valueIndicator],
   async () => {
     syncSliderResizeObserver();
     await nextTick();

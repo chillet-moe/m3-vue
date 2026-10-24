@@ -57,7 +57,9 @@ const format = ref<TimePickerFormat>('24h');
 const options = {
   shape: 'square',
   fieldSize: 'small',
-  buttonSize: 'small',
+  buttonDefaults: { size: 'small', pressShapeMorph: true },
+  sliderDefaults: { size: 'large', appearance: 'standard', wheel: false, valueIndicator: true },
+  listItemDefaults: { appearance: 'standard' },
   timePickerDefaults: { format, inputMode: 'keyboard' },
 } satisfies M3VuePluginOptions;
 
@@ -66,19 +68,55 @@ app.use(M3VuePlugin, options);
 
 尺寸、形状、菜单颜色、星期起始日、时间格式和输入模式可接收普通值或 refs。更新 ref 会同步更新继承该值的控件。
 
-| 插件选项                            | 适用组件                              | 上下文 key 和属性                         |
-| ----------------------------------- | ------------------------------------- | ----------------------------------------- |
-| `fieldSize`                         | 单行 TextField、Select、Combobox      | `fieldContextKey` → `size`                |
-| `buttonSize`                        | Button                                | `buttonContextKey` → `size`               |
-| `iconButtonSize`                    | IconButton                            | `iconButtonContextKey` → `size`           |
-| `sliderAppearance`                  | Slider                                | `sliderContextKey` → `appearance`         |
-| `sliderSize`                        | Slider                                | `sliderContextKey` → `size`               |
-| `menuColor`                         | Menu、Select 和 Combobox 菜单         | `menuDefaultsContextKey` → `color`        |
-| `datePickerDefaults.firstDayOfWeek` | DatePicker，包括 TextField 日期选择器 | `datePickerContextKey` → `firstDayOfWeek` |
-| `timePickerDefaults.format`         | TimePicker，包括 TextField 时间选择器 | `timePickerContextKey` → `format`         |
-| `timePickerDefaults.inputMode`      | TimePicker，包括 TextField 时间选择器 | `timePickerContextKey` → `inputMode`      |
+| 插件选项                            | 适用组件                              | 对应默认值字段                        |
+| ----------------------------------- | ------------------------------------- | ------------------------------------- |
+| `fieldSize`                         | 单行 TextField、Select、Combobox      | `fieldContextKey.size`                |
+| `buttonDefaults.size`               | Button                                | `buttonContextKey.size`               |
+| `buttonDefaults.pressShapeMorph`    | Button、ButtonGroup                   | `buttonContextKey.pressShapeMorph`    |
+| `iconButtonSize`                    | IconButton                            | `iconButtonContextKey.size`           |
+| `sliderDefaults.size`               | Slider                                | `sliderContextKey.size`               |
+| `sliderDefaults.appearance`         | Slider                                | `sliderContextKey.appearance`         |
+| `sliderDefaults.wheel`              | Slider                                | `sliderContextKey.wheel`              |
+| `sliderDefaults.valueIndicator`     | Slider                                | `sliderContextKey.valueIndicator`     |
+| `listItemDefaults.appearance`       | ListItem                              | `listItemContextKey.appearance`       |
+| `menuColor`                         | Menu、Select 和 Combobox 菜单         | `menuDefaultsContextKey.color`        |
+| `datePickerDefaults.firstDayOfWeek` | DatePicker，包括 TextField 日期选择器 | `datePickerContextKey.firstDayOfWeek` |
+| `timePickerDefaults.format`         | TimePicker，包括 TextField 时间选择器 | `timePickerContextKey.format`         |
+| `timePickerDefaults.inputMode`      | TimePicker，包括 TextField 时间选择器 | `timePickerContextKey.inputMode`      |
 
 `shape` 可在支持的按钮、列表项、文本字段、分页链接和导航抽屉项中统一设置 `rounded` 或 `square`，并可与尺寸默认值组合使用。Textarea 始终使用 `medium`，不受 `fieldSize` 影响。
+
+`M3VuePluginOptions` 新增 `buttonDefaults?: Pick<ButtonContext, 'size' | 'pressShapeMorph'>`、`sliderDefaults?: SliderContext`（含 `size`、`appearance`、`wheel` 和 `valueIndicator`），以及 `listItemDefaults?: ListItemContext`（含 `appearance`）。其他顶层选项保持不变。库内默认值为 Button `pressShapeMorph: true`、Slider `appearance: 'standard'`、`wheel: false`、`valueIndicator: true`，以及 ListItem `appearance: 'standard'`。
+
+### 子树默认值
+
+在组件的 `setup` 中调用对应 helper，可为该组件的后代设置字段级默认值。各字段会分别与最近的 helper provider 合并；未提供的字段以及值为 `undefined` 的字段继承最近 provider。字段可以是 ref，`false` 是明确设置，会覆盖继承值。
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { provideButtonDefaults, provideSliderDefaults, provideListItemDefaults } from '@chillet/m3-vue';
+
+provideButtonDefaults({ size: 'small', pressShapeMorph: false });
+provideSliderDefaults({ size: 'large', wheel: ref(true), valueIndicator: false });
+provideListItemDefaults({ appearance: 'expressive' });
+</script>
+```
+
+优先级为：实例属性 > 最近的 helper 子树字段 > 应用级字段 > 库默认值。直接调用 `provide(contextKey, value)` 仍会整体替换该 key 的上下文对象，不会按字段合并；字段级继承请使用上述 helper。
+
+ButtonGroup 未显式设置 `pressShapeMorph` 时，会继承其父级 Button context 的该字段。`SelectItem` 显式使用 `standard` 外观，因此不会被 `listItemDefaults` 改变。
+
+### 迁移已移除的默认选项
+
+`buttonSize`、`sliderSize` 和 `sliderAppearance` 已移除且没有兼容别名。将它们分别迁移到 `buttonDefaults.size`、`sliderDefaults.size` 和 `sliderDefaults.appearance`：
+
+```ts
+app.use(M3VuePlugin, {
+  buttonDefaults: { size: 'small' },
+  sliderDefaults: { size: 'large', appearance: 'expressive' },
+});
+```
 
 ### 子树配置
 
