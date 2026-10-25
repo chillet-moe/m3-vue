@@ -70,4 +70,27 @@ describe('useTree', () => {
     expect(() => scope.run(() => useTree({ items: [...items, items[0]!] }))).toThrow('Duplicate tree value: root');
     scope.stop();
   });
+
+  it('represents unloaded branches without taking ownership of loading or cached data', async () => {
+    const nodes = ref<TreeNode[]>([{ value: 'remote', label: 'Remote', hasChildren: true }]);
+    const scope = effectScope();
+    const tree = scope.run(() => useTree({ items: nodes }))!;
+    expect(tree.getItemAttrs('remote')['aria-expanded']).toBe(false);
+    tree.toggle('remote');
+    expect(tree.expanded.value).toEqual(['remote']);
+    nodes.value[0]!.busy = true;
+    expect(tree.getItemAttrs('remote')['aria-busy']).toBe(true);
+    nodes.value[0]!.children = [{ value: 'loaded', label: 'Loaded' }];
+    nodes.value[0]!.busy = false;
+    expect(tree.visibleItems.value.map((entry) => entry.node.value)).toEqual(['remote', 'loaded']);
+    expect(tree.visibleIndexes.value.get('loaded')).toBe(1);
+    tree.select('loaded');
+    tree.toggle('remote');
+    expect(tree.visibleItems.value).toHaveLength(1);
+    expect(tree.entries.value.has('loaded')).toBe(true);
+    expect(tree.value.value).toBe('loaded');
+    tree.toggle('remote');
+    expect(tree.visibleItems.value).toHaveLength(2);
+    scope.stop();
+  });
 });

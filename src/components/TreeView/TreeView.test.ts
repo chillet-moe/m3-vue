@@ -2,7 +2,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, ref, type App } from 'vue';
 import TreeView from './TreeView.vue';
-import type { TreeNode } from '@/composables/useTree';
+import TreeItem from './TreeItem.vue';
+import type { TreeNode, UseTreeReturn } from '@/composables/useTree';
 import type { TreeItemSlotProps } from './TreeContext';
 
 const apps: App[] = [];
@@ -205,6 +206,44 @@ describe('TreeView', () => {
     expect(document.activeElement).toBe(outside);
   });
 
+  it.each([false, true])('does not steal focus moved outside during removal (empty: %s)', async (empty) => {
+    const tree = mountTree();
+    tree.node('Project').focus();
+    const outside = document.createElement('button');
+    document.body.append(outside);
+    tree.items.value = empty ? [] : tree.items.value.slice(1);
+    await nextTick();
+    outside.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(outside);
+  });
+
+  it('does not steal focus moved outside while an empty tree loads', async () => {
+    const tree = mountTree();
+    tree.items.value = [];
+    await nextTick();
+    tree.host.querySelector<HTMLElement>('[role="tree"]')!.focus();
+    const outside = document.createElement('button');
+    document.body.append(outside);
+    tree.items.value = [{ value: 'loaded', label: 'Loaded' }];
+    await nextTick();
+    outside.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(outside);
+  });
+
+  it('invalidates pending recovery when a newer keyboard focus request runs', async () => {
+    const onFocusRequest = vi.fn();
+    const tree = mountTree({ onFocusRequest });
+    tree.node('Project').focus();
+    tree.items.value = tree.items.value.slice(1);
+    await nextTick();
+    await tree.key('Settings', 'End');
+    await nextTick();
+    expect(document.activeElement).toBe(tree.node('Zulu'));
+    expect(onFocusRequest).toHaveBeenCalledExactlyOnceWith('zulu');
+  });
+
   it('offers opt-in selection following focus', async () => {
     const tree = mountTree({ selectWhenFocused: true });
     tree.node('Project').focus();
@@ -277,5 +316,63 @@ describe('TreeView', () => {
     expect(tree.node('Alpha').getAttribute('aria-disabled')).toBe('true');
     expect(tree.value.value).toBeUndefined();
     expect(tree.activated).toEqual([]);
+  });
+
+  it('mounts only expanded rows and declares hierarchy independently of DOM nesting', async () => {
+    const tree = mountTree();
+    expect(tree.host.querySelectorAll('[role="treeitem"]')).toHaveLength(3);
+    tree.expanded.value = ['project'];
+    await nextTick();
+    expect(tree.host.querySelectorAll('[role="treeitem"]')).toHaveLength(6);
+    expect(tree.node('Alpha').parentElement).toBe(tree.node('Project').parentElement);
+    expect(tree.node('Alpha').getAttribute('aria-level')).toBe('2');
+    expect(tree.node('Alpha').getAttribute('aria-setsize')).toBe('3');
+    expect(tree.node('Alpha').getAttribute('aria-posinset')).toBe('1');
+    tree.expanded.value = [];
+    await nextTick();
+    expect(tree.node('Alpha')).toBeNull();
+  });
+
+  it('hands focus to externally mounted rows and cancels obsolete or outside focus requests', async () => {
+    const rendered = ref('one');
+    let controller: UseTreeReturn;
+    const host = document.createElement('div');
+    document.body.append(host);
+    const app = createApp({
+      setup: () => () =>
+        h(
+          TreeView,
+          {
+            items: ['one', 'two', 'three'].map((value) => ({ value, label: value })),
+            onFocusRequest: (value: string) => {
+              rendered.value = value;
+            },
+          },
+          {
+            default: ({ tree }: { tree: UseTreeReturn }) => {
+              controller = tree;
+              return tree.visibleItems.value
+                .filter((entry) => entry.node.value === rendered.value)
+                .map((entry) => h(TreeItem, { key: entry.node.value, item: entry.node }));
+            },
+          },
+        ),
+    });
+    apps.push(app);
+    app.mount(host);
+    host.querySelector<HTMLElement>('[role="treeitem"]')!.focus();
+    controller!.focus('two');
+    await nextTick();
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('two');
+    controller!.focus('one');
+    controller!.focus('three');
+    await nextTick();
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('three');
+    const outside = document.createElement('button');
+    document.body.append(outside);
+    controller!.focus('one');
+    outside.focus();
+    await nextTick();
+    expect(document.activeElement).toBe(outside);
   });
 });

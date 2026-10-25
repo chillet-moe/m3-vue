@@ -18,6 +18,8 @@ const state = computed<TreeItemSlotProps>(() => ({
   expanded: actions.expanded.value.includes(props.item.value),
   focused: actions.focusedValue.value === props.item.value,
   disabled: !!actions.entries.value.get(props.item.value)?.disabled,
+  branch: !!actions.entries.value.get(props.item.value)?.branch,
+  busy: !!props.item.busy,
 }));
 defineSlots<{
   label(props: TreeItemSlotProps): any;
@@ -25,7 +27,7 @@ defineSlots<{
   trailing(props: TreeItemSlotProps): any;
 }>();
 function handleDisclosureClick(event: MouseEvent) {
-  if (!props.item.children?.length) return;
+  if (!state.value.branch) return;
   event.stopPropagation();
   actions.focus(props.item.value);
   actions.toggle(props.item.value);
@@ -85,7 +87,7 @@ function handleActionKey(event: KeyboardEvent) {
         aria-hidden="true"
         @click="handleDisclosureClick"
       >
-        <svg v-if="item.children?.length" viewBox="0 0 24 24" data-scope="tree-item" data-part="arrow">
+        <svg v-if="state.branch" viewBox="0 0 24 24" data-scope="tree-item" data-part="arrow">
           <path
             d="m9 6 6 6-6 6"
             fill="none"
@@ -125,18 +127,6 @@ function handleActionKey(event: KeyboardEvent) {
         @click.stop
         ><slot name="trailing" v-bind="state"
       /></span>
-    </div>
-    <div
-      v-if="item.children?.length"
-      v-bind="actions.getGroupAttrs(item.value)"
-      data-scope="tree-item"
-      data-part="group"
-    >
-      <TreeItem v-for="child in item.children" :key="child.value" :item="child">
-        <template v-if="$slots.label" #label="childState"><slot name="label" v-bind="childState" /></template>
-        <template v-if="$slots.leading" #leading="childState"><slot name="leading" v-bind="childState" /></template>
-        <template v-if="$slots.trailing" #trailing="childState"><slot name="trailing" v-bind="childState" /></template>
-      </TreeItem>
     </div>
   </div>
 </template>

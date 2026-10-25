@@ -35,7 +35,9 @@ const items: TreeNode[] = [
     :items="items"
     aria-label="Settings categories"
   >
-    <TreeItem v-for="item in items" :key="item.value" :item="item" />
+    <template #default="{ tree }">
+      <TreeItem v-for="entry in tree.visibleItems.value" :key="entry.node.value" :item="entry.node" />
+    </template>
   </TreeView>
 </template>
 

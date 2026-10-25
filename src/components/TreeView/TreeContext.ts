@@ -7,6 +7,8 @@ export type TreeItemSlotProps = {
   expanded: boolean;
   focused: boolean;
   disabled: boolean;
+  branch: boolean;
+  busy: boolean;
 };
 
 export const treeContextKey: InjectionKey<UseTreeReturn> = Symbol('TreeView');

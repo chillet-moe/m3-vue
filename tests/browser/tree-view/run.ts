@@ -50,7 +50,7 @@ try {
   await page.keyboard.press('ArrowRight');
   const main = project.getByRole('treeitem', { name: 'main.ts', exact: true });
   assert.equal(await main.evaluate((element) => element === document.activeElement), true);
-  assert.equal(await overview.getAttribute('aria-selected'), 'true');
+  assert.equal(await overview.count(), 0);
   await page.keyboard.press('Enter');
   assert.equal(await main.getAttribute('aria-selected'), 'true');
   const rootRow = project.locator('[data-part="row"]').first();
@@ -133,7 +133,64 @@ try {
     assert.equal(await documents.getAttribute('aria-selected'), 'true');
     assert.equal(await documents.getAttribute('aria-expanded'), 'false');
   }
-  console.log('TreeView browser keyboard, action isolation, layout, and RTL checks passed.');
+  const largeTree = page.getByRole('tree', { name: 'Large project' });
+  const files = largeTree.getByRole('treeitem', { name: 'Project files', exact: true });
+  await files.focus();
+  assert.ok((await largeTree.getByRole('treeitem').count()) < 40);
+  await page.keyboard.press('End');
+  const lastFile = largeTree.getByRole('treeitem', { name: 'File 10000', exact: true });
+  await lastFile.waitFor();
+  assert.equal(await lastFile.evaluate((element) => element === document.activeElement), true);
+  assert.equal(await lastFile.getAttribute('aria-level'), '2');
+  assert.equal(await lastFile.getAttribute('aria-posinset'), '10000');
+  assert.equal(await lastFile.getAttribute('aria-setsize'), '10000');
+  assert.ok((await largeTree.getByRole('treeitem').count()) < 40);
+  await largeTree.evaluate((element) => {
+    element.parentElement!.scrollTop = 0;
+  });
+  await page.waitForFunction(() => {
+    const tree = document.querySelector('[aria-label="Large project"]')!;
+    return tree.querySelector('[aria-label="File 00001"]') !== null;
+  });
+  assert.equal(await lastFile.evaluate((element) => element === document.activeElement), true);
+  await page.keyboard.press('Home');
+  assert.equal(await files.evaluate((element) => element === document.activeElement), true);
+  await page.keyboard.press('ArrowLeft');
+  assert.equal(await largeTree.getByRole('treeitem').count(), 1);
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('End');
+  assert.equal(await lastFile.evaluate((element) => element === document.activeElement), true);
+
+  const remoteTree = page.getByRole('tree', { name: 'Remote project' });
+  const remote = remoteTree.getByRole('treeitem', { name: 'Remote files', exact: true });
+  await page.getByRole('button', { name: 'Fail next request' }).click();
+  await remote.focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await remote.getAttribute('aria-busy'), 'true');
+  await page.keyboard.press('ArrowLeft');
+  assert.equal(await remote.getAttribute('aria-busy'), null);
+  assert.equal(await remoteTree.getByRole('treeitem').count(), 1);
+  await page.keyboard.press('ArrowRight');
+  const retry = remote.getByRole('button', { name: 'Retry loading Remote files' });
+  await retry.waitFor();
+  await remote.press('F2');
+  assert.equal(await retry.evaluate((element) => element === document.activeElement), true);
+  await page.keyboard.press('Enter');
+  assert.equal(await remote.evaluate((element) => element === document.activeElement), true);
+  const readme = remoteTree.getByRole('treeitem', { name: 'README.md', exact: true });
+  await readme.waitFor();
+  await remote.focus();
+  await remote.press('ArrowRight');
+  assert.equal(await readme.evaluate((element) => element === document.activeElement), true);
+  await readme.press('ArrowLeft');
+  await remote.press('ArrowLeft');
+  assert.equal(await readme.count(), 0);
+  await remote.press('ArrowRight');
+  assert.equal(await readme.count(), 1);
+  assert.equal(await remote.getAttribute('aria-busy'), null);
+  console.log(
+    'TreeView keyboard, feedback, flattened rendering, async data, and external virtualization checks passed.',
+  );
 } finally {
   await browser?.close();
   await server?.close();

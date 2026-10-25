@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { provide } from 'vue';
-import { useTree, type TreeNode } from '@/composables/useTree';
+import { useTree, type TreeNode, type UseTreeReturn } from '@/composables/useTree';
 import { treeContextKey, type TreeItemSlotProps } from './TreeContext';
 import TreeItem from './TreeItem.vue';
 
@@ -14,9 +14,9 @@ export type TreeViewProps = {
 const props = withDefaults(defineProps<TreeViewProps>(), { density: 'compact', selectWhenFocused: false });
 const value = defineModel<string>();
 const expanded = defineModel<string[]>('expanded', { default: () => [] });
-const emit = defineEmits<{ activate: [item: TreeNode] }>();
+const emit = defineEmits<{ activate: [item: TreeNode]; focusRequest: [value: string] }>();
 defineSlots<{
-  default(props: { items: readonly TreeNode[] }): any;
+  default(props: { tree: UseTreeReturn }): any;
   label(props: TreeItemSlotProps): any;
   leading(props: TreeItemSlotProps): any;
   trailing(props: TreeItemSlotProps): any;
@@ -32,6 +32,7 @@ const tree = useTree({
     expanded.value = next;
   },
   onActivate: (item) => emit('activate', item),
+  onFocusRequest: (value) => emit('focusRequest', value),
   selectWhenFocused: () => props.selectWhenFocused,
   dir: () => props.dir,
 });
@@ -48,8 +49,8 @@ defineExpose({ focus: tree.focus });
     :data-density="density"
     :dir="dir"
   >
-    <slot :items="items">
-      <TreeItem v-for="item in items" :key="item.value" :item="item">
+    <slot :tree="tree">
+      <TreeItem v-for="entry in tree.visibleItems.value" :key="entry.node.value" :item="entry.node">
         <template v-if="$slots.label" #label="state"><slot name="label" v-bind="state" /></template>
         <template v-if="$slots.leading" #leading="state"><slot name="leading" v-bind="state" /></template>
         <template v-if="$slots.trailing" #trailing="state"><slot name="trailing" v-bind="state" /></template>
