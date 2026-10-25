@@ -1,3 +1,4 @@
+import { triggerKeyboardRipple } from '@/components/StateLayer/state-layer';
 import { computed, nextTick, ref, shallowReactive, watch, type ComponentPublicInstance } from 'vue';
 import {
   getSelectedOptions,
@@ -160,7 +161,10 @@ export function useSelect(opts: UseSelectOptions) {
       if (!opts.open.value) openMenu();
       else {
         const option = filteredOptionEntries.value[activeIndex.value]?.option;
-        if (option) toggleOption(option);
+        if (!option || option.disabled) return;
+        const element = mounted.get(option.value);
+        if (element?.classList.contains('m3-state-layer')) triggerKeyboardRipple(event, element);
+        toggleOption(option);
       }
     }
   }

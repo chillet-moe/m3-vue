@@ -70,6 +70,22 @@ describe('SelectItem', () => {
       app.unmount();
     },
   );
+  it.each([false, true])('provides pointer feedback without button semantics (disabled=%s)', (disabled) => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    const app = createApp(() => h(SelectItem, { disabled }, () => 'Option'));
+    app.mount(container);
+    try {
+      const option = container.querySelector<HTMLElement>('[role="option"]')!;
+      expect(option.tagName).toBe('DIV');
+      expect(option.tabIndex).toBe(-1);
+      option.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, button: 0 }));
+      expect(option.querySelectorAll('.ripple')).toHaveLength(disabled ? 0 : 1);
+    } finally {
+      app.unmount();
+      container.remove();
+    }
+  });
   it('renders disabled semantics and supporting/trailing content', () => {
     const container = document.createElement('div');
     const app = createApp(() =>

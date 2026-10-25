@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
+import SelectItem from '@/components/Select/SelectItem.vue';
 import { useSelect, type UseSelectReturn, type UseSelectOption, type UseSelectModelValue } from './useSelect';
 
-function setup(multiple = false) {
+function setup(multiple = false, withFeedback = false, filterable = true) {
   const options = ref<UseSelectOption[]>(
     Array.from({ length: 10000 }, (_, i) => ({ value: i, label: `Item ${i}`, disabled: i % 17 === 0 })),
   );
@@ -21,7 +22,7 @@ function setup(multiple = false) {
       select = useSelect({
         options: () => options.value,
         multiple: () => multiple,
-        filterable: () => true,
+        filterable: () => filterable,
         filterMode: () => 'external',
         disabled: () => disabled.value,
         displaySeparator: () => ', ',
@@ -36,11 +37,19 @@ function setup(multiple = false) {
       return () =>
         h(
           'div',
-          select.filteredOptionEntries.value
-            .slice(windowStart.value, windowStart.value + 10)
-            .map(({ option }, i) =>
-              h('div', { ...select.optionProps(windowStart.value + i), key: option.value }, option.label),
-            ),
+          select.filteredOptionEntries.value.slice(windowStart.value, windowStart.value + 10).map(({ option }, i) =>
+            withFeedback
+              ? h(
+                  SelectItem,
+                  {
+                    ...select.optionProps(windowStart.value + i),
+                    disabled: option.disabled,
+                    selected: select.isOptionSelected(option),
+                  },
+                  () => option.label,
+                )
+              : h('div', { ...select.optionProps(windowStart.value + i), key: option.value }, option.label),
+          ),
         );
     },
   });
@@ -133,5 +142,61 @@ describe('logical select interaction', () => {
     expect(s.open.value).toBe(false);
     expect(s.value.value).toEqual([1, 2]);
     s.dispose();
+  });
+});
+
+describe('select keyboard feedback', () => {
+  it.each(['Enter', ' '])('animates a mounted custom option on %s without moving focus', async (key) => {
+    const s = setup(true, true, false);
+    const input = document.createElement('input');
+    document.body.append(input);
+    input.focus();
+    try {
+      await s.key('ArrowDown');
+      const option = s.host.querySelector('[aria-posinset="2"]')!;
+      expect(option.querySelector('.ripple')).toBeNull();
+      await s.key(key);
+      expect(option.querySelectorAll('.ripple')).toHaveLength(1);
+      expect(s.value.value).toEqual([1]);
+      expect(document.activeElement).toBe(input);
+      s.disabled.value = true;
+      await s.key(key);
+      expect(option.querySelectorAll('.ripple')).toHaveLength(1);
+    } finally {
+      s.dispose();
+      input.remove();
+    }
+  });
+  it('does not animate plain custom rows or unmounted virtual options', async () => {
+    const s = setup();
+    try {
+      await s.key('ArrowDown');
+      await s.key('Enter');
+      expect(s.host.querySelector('.ripple')).toBeNull();
+      s.value.value = 9998;
+      s.select.openMenu();
+      await nextTick();
+      await s.key('Enter');
+      expect(s.value.value).toBe(9998);
+      expect(s.open.value).toBe(false);
+      expect(s.host.querySelector('.ripple')).toBeNull();
+    } finally {
+      s.dispose();
+    }
+  });
+  it('keeps spaces as filter input and does not animate disabled options', async () => {
+    const s = setup(true, true);
+    try {
+      await s.key('ArrowDown');
+      await s.key(' ');
+      expect(s.host.querySelector('.ripple')).toBeNull();
+      s.options.value = [{ value: 1, label: 'Disabled', disabled: true }];
+      await nextTick();
+      await s.key('Enter');
+      expect(s.host.querySelector('.ripple')).toBeNull();
+      expect(s.value.value).toBe(9998);
+    } finally {
+      s.dispose();
+    }
   });
 });

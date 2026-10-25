@@ -132,7 +132,7 @@ DOM 焦点由输入框持有。上/下方向键会在完整逻辑结果集中导
 
 ## SelectItem
 
-SelectItem 负责选项呈现，不负责选择状态或键盘导航。可在 Select 或 Combobox 的 `list` 插槽中使用；普通 Select 列表内部也使用该组件。它渲染为非按钮行，`active` 与 `selected` 相互独立。其布局基于 standard ListItem，并支持公开的 `--md-item-*` 布局和颜色 Token。
+SelectItem 负责选项呈现，不负责选择状态或键盘导航。它保持非按钮的 option 语义，焦点由输入框持有；`active` 与 `selected` 相互独立，活动行保留静态高亮。可在 Select 或 Combobox 的 `list` 插槽中使用；普通 Select 列表内部也使用该组件。悬停和按下时会显示 state-layer，指针按下会触发 ripple；通过 Select、Combobox 或 `useSelect` 的键盘确认路径选择时，也会为已挂载的活动项触发 ripple。禁用项不显示状态反馈。其布局基于 standard ListItem，并支持公开的 `--md-item-*` 布局和颜色 Token。
 
 <AnatomyTable scope="select-item" />
 

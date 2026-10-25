@@ -158,7 +158,7 @@ The virtualizer owns visible ranges, scrolling and measurement. Register `scroll
 
 ## SelectItem
 
-SelectItem owns option presentation, not selection or keyboard navigation. Use it in the `list` slot of Select or Combobox. Ordinary Select lists use the same component internally. It renders a non-button row; `active` and `selected` are independent. It composes the standard ListItem layout and accepts its public `--md-item-*` tokens for layout and colors.
+SelectItem renders a non-button option row; selection and keyboard navigation remain with Select, Combobox, or `useSelect`, and DOM focus stays on the input. `active` and `selected` are independent, and the static highlight for the active row remains visible. Hover and pressed states show a state layer, while pointer press triggers a ripple. Keyboard confirmation through Select, Combobox, or `useSelect` also triggers a ripple on the mounted active item. Disabled items show no state layer or ripple. It composes the standard ListItem layout and accepts its public `--md-item-*` tokens for layout and colors.
 
 <AnatomyTable scope="select-item" />
 

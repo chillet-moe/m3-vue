@@ -33,7 +33,7 @@ defineSlots<{
 
 <template>
   <ListItem
-    class="m3-select-item"
+    class="m3-select-item m3-state-layer"
     data-scope="select-item"
     data-part="root"
     appearance="standard"
