@@ -30,6 +30,7 @@ export default defineConfig({
     }),
     copyFiles({
       targets: [
+        { src: 'src/styles/typography-compact.css' },
         {
           src: 'src/styles/typography-classes.css',
         },

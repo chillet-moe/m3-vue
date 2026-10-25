@@ -24,6 +24,41 @@ Customize component styles with CSS variables first.
 
 When a variable cannot express the desired result, override a specific `data-part`. M3 Vue components expose a stable CSS API through `data-scope` and `data-part`. Global styles can use these attribute selectors directly. In an SFC's `<style scoped>`, use `:deep()` only when you need to cross a component boundary to reach an internal part.
 
+## Compact typography
+
+For dense desktop workspaces, opt into the compact typography preset after the base stylesheet:
+
+```ts
+import '@chillet/m3-vue/style.css';
+import '@chillet/m3-vue/typography-compact.css';
+```
+
+The preset changes application-wide system font sizes and line heights. It does not change the root font size, component sizes, icon sizes, or hit areas. Choose component geometry separately, for example `fieldSize: 'extra-small'` and `buttonDefaults: { size: 'extra-small' }` in `M3VuePlugin`.
+
+| Roles                                      | Size / line height at a 16px root |
+| ------------------------------------------ | --------------------------------- |
+| `body-large`, `body-medium`, `label-large` | 12px / 18px                       |
+| `body-small`, `label-medium`               | 11px / 16px                       |
+| `label-small`                              | 10px / 14px                       |
+| `title-small`                              | 13px / 20px                       |
+| `title-medium`                             | 14px / 20px                       |
+| `title-large`, `headline-small`            | 18px / 24px                       |
+
+Emphasized versions use the same compact sizes and line heights. Font families, weights, and relative letter spacing remain unchanged; display roles and medium/large headlines retain their defaults. Reserve `label-small` for secondary short annotations, not primary controls or field values.
+
+TextField, Select, and Combobox keep the same input typography across their sizes. Button and Tabs select typography roles by size. The preset updates those roles together with menu and list typography; it does not make every size use the same font.
+
+For application-owned text, apply a typography class to the content root, or set its font size and line height from the appropriate system role. Do not reduce the `html` font size: rem-based component geometry would shrink too.
+
+```css
+.workspace {
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+```
+
+The preset also affects typography utilities and prose that use these roles. Import it only for an application-wide theme, not to style one panel. Existing component tokens still take precedence over their system fallbacks. Customize the preset with your own system tokens in an unlayered global stylesheet, and check long labels, floating labels, dropdown options, and narrow layouts in the languages your application supports.
+
 ## CSS token layers
 
 Components use five CSS token layers:

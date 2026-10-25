@@ -25,6 +25,41 @@ Slider 和 ListItem 默认使用 `appearance="standard"`。Expressive 保留原�
 属性选择器；在 SFC 的 `<style scoped>` 中，只有确实需要跨越组件边界访问
 内部部件时才使用 `:deep()`。
 
+## 紧凑排版
+
+对于密集的桌面工作区，可在基础样式表之后启用紧凑排版预设：
+
+```ts
+import '@chillet/m3-vue/style.css';
+import '@chillet/m3-vue/typography-compact.css';
+```
+
+该预设会调整整个应用的系统字体大小和行高，但不会改变根字体大小、组件尺寸、图标尺寸或点击区域。组件几何尺寸应单独选择，例如在 `M3VuePlugin` 中设置 `fieldSize: 'extra-small'` 和 `buttonDefaults: { size: 'extra-small' }`。
+
+| 角色                                       | 以 16px 根字体计算的字号 / 行高 |
+| ------------------------------------------ | ------------------------------- |
+| `body-large`、`body-medium`、`label-large` | 12px / 18px                     |
+| `body-small`、`label-medium`               | 11px / 16px                     |
+| `label-small`                              | 10px / 14px                     |
+| `title-small`                              | 13px / 20px                     |
+| `title-medium`                             | 14px / 20px                     |
+| `title-large`、`headline-small`            | 18px / 24px                     |
+
+强调样式使用相同的紧凑字号和行高。字体族、字重和相对字间距保持不变；display 角色以及 medium/large headline 保留默认值。`label-small` 仅用于次要的短注释，不用于主要控件或字段值。
+
+TextField、Select 和 Combobox 在不同尺寸下保持相同的输入文字排版。Button 和 Tabs 会根据尺寸选择排版角色。该预设会连同菜单和列表排版一起更新这些角色，但不会让所有尺寸都使用相同字号。
+
+对于应用自有的文字，可在内容根节点应用排版 class，或根据合适的系统角色设置字号和行高。不要缩小 `html` 的字体大小，否则基于 rem 的组件几何尺寸也会随之缩小。
+
+```css
+.workspace {
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+```
+
+该预设也会影响使用这些角色的排版工具类和正文内容。仅在应用范围的主题中导入，不要仅为一个面板设置。现有组件 token 仍优先于其系统 fallback。可在未分层的全局样式表中使用自定义系统 token 调整预设，并检查应用所支持语言中的长标签、浮动标签、下拉选项和窄布局。
+
 ## CSS token 分层
 
 组件使用五层 CSS token：
