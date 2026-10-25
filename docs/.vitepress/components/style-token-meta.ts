@@ -32,6 +32,7 @@ import { skeletonStyleTokens } from './style-tokens/Skeleton';
 import { snackbarStyleTokens } from './style-tokens/Snackbar';
 import { switchStyleTokens } from './style-tokens/Switch';
 import { tabsStyleTokens } from './style-tokens/Tabs';
+import { treeViewStyleTokens } from './style-tokens/TreeView';
 import { textFieldStyleTokens } from './style-tokens/TextField';
 import { timePickerStyleTokens } from './style-tokens/TimePicker';
 import { tooltipStyleTokens } from './style-tokens/Tooltip';
@@ -74,6 +75,7 @@ export const styleTokenMeta: Record<string, StyleTokenMeta[]> = {
   Snackbar: snackbarStyleTokens,
   Switch: switchStyleTokens,
   Tabs: tabsStyleTokens,
+  TreeView: treeViewStyleTokens,
   TextField: textFieldStyleTokens,
   TimePicker: timePickerStyleTokens,
   Tooltip: tooltipStyleTokens,

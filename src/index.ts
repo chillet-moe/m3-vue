@@ -17,6 +17,8 @@ export { usePressedState } from './composables/pressedState.ts';
 export { usePressShapeMorph } from './composables/usePressShapeMorph.ts';
 export type { PressShapeMorphAttrs, UsePressShapeMorphOptions } from './composables/usePressShapeMorph.ts';
 export { useTabs } from './composables/useTabs';
+export { useTree } from './composables/useTree';
+export type { TreeNode, TreeEntry, UseTreeOptions, UseTreeReturn } from './composables/useTree';
 export type { UseTabsOptions, UseTabsReturn } from './composables/useTabs';
 export { useMenu } from './composables/useMenu';
 export type { UseMenuOptions, UseMenuReturn } from './composables/useMenu';
@@ -82,6 +84,7 @@ export * from './components/Select';
 export * from './components/SideSheet';
 export * from './components/Combobox';
 export * from './components/Tabs';
+export * from './components/TreeView';
 export * from './components/TimePicker';
 
 // Resolver

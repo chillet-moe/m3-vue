@@ -68,6 +68,8 @@ export const m3VueComponentNames = [
   'TextField',
   'TimePicker',
   'Tooltip',
+  'TreeItem',
+  'TreeView',
 ] as const;
 
 const m3VueComponentNameSet = new Set<string>(m3VueComponentNames);

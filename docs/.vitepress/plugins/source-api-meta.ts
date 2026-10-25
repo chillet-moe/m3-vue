@@ -41,6 +41,12 @@ type ApiEntry = {
 
 const API_ENTRIES: ApiEntry[] = [
   {
+    id: 'useTree',
+    source: 'src/composables/useTree.ts',
+    functionName: 'useTree',
+    types: [{ name: 'TreeNode' }, { name: 'UseTreeOptions' }, { name: 'UseTreeReturn' }],
+  },
+  {
     id: 'useTabs',
     source: 'src/composables/useTabs.ts',
     functionName: 'useTabs',

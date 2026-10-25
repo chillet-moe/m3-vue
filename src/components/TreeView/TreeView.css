@@ -1,0 +1,109 @@
+@import '../../styles/typography.css';
+
+@layer tokens {
+  :where(:root) {
+    --md-tree-row-height: initial;
+    --md-tree-indent: initial;
+    --md-tree-padding-inline: initial;
+    --md-tree-gap: initial;
+    --md-tree-shape: initial;
+    --md-tree-container-color: initial;
+    --md-tree-label-color: initial;
+    --md-tree-selected-container-color: initial;
+    --md-tree-selected-label-color: initial;
+    --md-tree-icon-size: initial;
+  }
+  .m3-tree {
+    --_tree-row-height: var(--md-tree-row-height, --dp(32));
+    --_tree-indent: var(--md-tree-indent, --dp(16));
+    --_tree-padding: var(--md-tree-padding-inline, --dp(8));
+    --_tree-gap: var(--md-tree-gap, --dp(6));
+    --_tree-shape: var(--md-tree-shape, var(--md-shape-compact));
+    --_tree-container: var(--md-tree-container-color, var(--md-color-container, transparent));
+    --_tree-label: var(--md-tree-label-color, var(--md-color-on-container, var(--md-sys-color-on-surface)));
+    --_tree-selected-container: var(--md-tree-selected-container-color, var(--md-sys-color-secondary-container));
+    --_tree-selected-label: var(--md-tree-selected-label-color, var(--md-sys-color-on-secondary-container));
+    --_tree-icon-size: var(--md-tree-icon-size, --dp(18));
+  }
+  .m3-tree[data-density='comfortable'] {
+    --_tree-row-height: var(--md-tree-row-height, --dp(40));
+  }
+}
+
+@layer components {
+  .m3-tree {
+    min-inline-size: 0;
+    background: var(--_tree-container);
+    color: var(--_tree-label);
+  }
+  .m3-tree-item {
+    outline: none;
+  }
+  .m3-tree-row {
+    @apply body-medium;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-block-size: var(--_tree-row-height);
+    gap: var(--_tree-gap);
+    padding-inline: calc(var(--_tree-padding) + (var(--_tree-level) - 1) * var(--_tree-indent)) var(--_tree-padding);
+    border-radius: var(--_tree-shape);
+    color: var(--_tree-label);
+    cursor: var(--md-cursor-button, pointer);
+    --md-state-layer-color: var(--_tree-label);
+  }
+  .m3-tree-item[data-selected='true'] > .m3-tree-row {
+    background: var(--_tree-selected-container);
+    color: var(--_tree-selected-label);
+    --md-color-container: var(--_tree-selected-container);
+    --md-color-on-container: var(--_tree-selected-label);
+    --md-state-layer-color: var(--_tree-selected-label);
+  }
+  .m3-tree-item:focus-visible > .m3-tree-row {
+    outline: --dp(2) solid var(--md-sys-color-primary);
+    outline-offset: --dp(-2);
+  }
+  .m3-tree-item:focus-visible > .m3-tree-row::after {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+  .m3-tree-item[aria-disabled='true'] > .m3-tree-row {
+    color: --translucent(var(--_tree-label), 0.38);
+    cursor: default;
+  }
+  .m3-tree-disclosure,
+  .m3-tree-leading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 var(--_tree-icon-size);
+    inline-size: var(--_tree-icon-size);
+    min-block-size: var(--_tree-row-height);
+    --md-icon-size: var(--_tree-icon-size);
+  }
+  .m3-tree-disclosure > svg {
+    inline-size: var(--_tree-icon-size);
+    block-size: var(--_tree-icon-size);
+  }
+  .m3-tree-disclosure:dir(rtl) > svg {
+    rotate: 180deg;
+  }
+  .m3-tree-item[aria-expanded='true'] > .m3-tree-row > .m3-tree-disclosure > svg {
+    rotate: 90deg;
+  }
+  .m3-tree-label {
+    min-inline-size: 0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m3-tree-count {
+    @apply label-small;
+    font-variant-numeric: tabular-nums;
+  }
+  .m3-tree-trailing {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_tree-gap);
+  }
+}

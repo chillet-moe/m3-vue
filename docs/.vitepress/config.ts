@@ -149,6 +149,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
           { text: 'NavigationRail', link: '/components/navigation-rail' },
           { text: 'Pagination', link: '/components/pagination' },
           { text: 'Tabs', link: '/components/tabs' },
+          { text: 'TreeView', link: '/components/tree-view' },
         ],
       },
       {

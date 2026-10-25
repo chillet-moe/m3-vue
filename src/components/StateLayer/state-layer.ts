@@ -47,6 +47,14 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
   cleanups.add(cleanup);
 };
 
+export function triggerKeyboardRipple(event: KeyboardEvent, layer: HTMLElement) {
+  if (event.repeat || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  if (!isEnabled(layer)) return;
+  const rect = layer.getBoundingClientRect();
+  createRipple(layer, rect.width / 2, rect.height / 2, rect.width, rect.height);
+}
+
 function initStateLayer(document: Document = globalThis.document): () => void {
   if (!document) return () => {};
   let runtime = registrations.get(document);
@@ -61,12 +69,10 @@ function initStateLayer(document: Document = globalThis.document): () => void {
       createRipple(layer, event.clientX - rect.left, event.clientY - rect.top, rect.width, rect.height);
     };
     const keydown = (event: KeyboardEvent) => {
-      if (event.repeat) return;
-      const layer = (event.target as Element | null)?.closest?.('.m3-state-layer');
-      if (!layer || !isEnabled(layer)) return;
+      const layer = (event.target as Element | null)?.closest?.<HTMLElement>('.m3-state-layer');
+      if (!layer) return;
       if (event.key !== 'Enter' && !(event.key === ' ' && layer.tagName === 'BUTTON')) return;
-      const rect = layer.getBoundingClientRect();
-      createRipple(layer, rect.width / 2, rect.height / 2, rect.width, rect.height);
+      triggerKeyboardRipple(event, layer);
     };
     document.addEventListener('pointerdown', pointerdown);
     document.addEventListener('keydown', keydown);
