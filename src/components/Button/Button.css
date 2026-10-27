@@ -515,6 +515,7 @@
 
 @layer components {
   .m3-button {
+    min-block-size: calc(max(1lh, var(--_button-icon-size)) + 0.25rem + 2 * var(--_button-outline-inset, 0px));
     border: var(--_button-outline-inset, 0) solid transparent;
     user-select: none;
 
@@ -846,7 +847,7 @@
   .m3-button[data-size='extra-small'] {
     @apply label-large;
 
-    height: --dp(32);
+    height: --action-height(32);
     padding-inline: calc(--dp(12) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-xsmall-outlined-outline-width);
@@ -872,7 +873,7 @@
   .m3-button[data-size='small'] {
     @apply label-large;
 
-    height: --dp(40);
+    height: --action-height(40);
     padding-inline: calc(--dp(16) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-small-outlined-outline-width);
@@ -898,7 +899,7 @@
   .m3-button[data-size='medium'] {
     @apply title-medium;
 
-    height: --dp(56);
+    height: --action-height(56);
     padding-inline: calc(--dp(24) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-medium-outlined-outline-width);
@@ -924,7 +925,7 @@
   .m3-button[data-size='large'] {
     @apply headline-small;
 
-    height: --dp(96);
+    height: --action-height(96);
     padding-inline: calc(--dp(48) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-large-outlined-outline-width);
@@ -950,7 +951,7 @@
   .m3-button[data-size='extra-large'] {
     @apply headline-large;
 
-    height: --dp(136);
+    height: --action-height(136);
     padding-inline: calc(--dp(64) - var(--_button-outline-inset, 0px));
 
     --_button-reserved-outline-width: var(--_button-xlarge-outlined-outline-width);

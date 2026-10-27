@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, provide, toRef } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
 
 export type NavigationRailProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Accessible label for the navigation landmark. */
   ariaLabel?: string;
 
@@ -48,11 +51,13 @@ provide(navigationRailContextKey, {
   disabled: toRef(() => props.disabled),
   activate,
 });
+const rowSize = provideRowSize(() => props.size);
 </script>
 
 <template>
   <nav
     class="m3-navigation-rail"
+    :data-size="rowSize"
     role="navigation"
     data-scope="navigation-rail"
     data-part="root"

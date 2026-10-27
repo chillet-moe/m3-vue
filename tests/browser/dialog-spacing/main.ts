@@ -1,3 +1,4 @@
+import '@/styles/themes/default.css';
 import { createOverlayHost } from '@/internal/overlayHost/overlayHost';
 const overlayHost = createOverlayHost();
 import { createApp, h, nextTick, type App } from 'vue';

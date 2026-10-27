@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
@@ -6,6 +7,8 @@ import { computed, inject, useSlots } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
 
 export type NavigationRailItemProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Destination value used by NavigationRail v-model. */
   value?: string;
 
@@ -89,6 +92,7 @@ const slotProps = computed(() => ({
   disabled: mergedDisabled.value,
   state: railState.value,
 }));
+const rowSize = provideRowSize(() => props.size);
 </script>
 
 <template>
@@ -101,7 +105,8 @@ const slotProps = computed(() => ({
     :aria-label="resolvedAriaLabel"
     :tabindex="tabIndex"
     :type="type"
-    class="m3-navigation-rail-item m3-morph-host"
+    :data-size="rowSize"
+    class="m3-row-size m3-navigation-rail-item m3-morph-host"
     data-scope="navigation-rail-item"
     data-part="root"
     data-state-layer-hover-target

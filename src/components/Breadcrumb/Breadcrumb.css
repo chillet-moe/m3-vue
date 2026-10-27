@@ -37,7 +37,7 @@
       var(--md-state-layer-color, var(--_breadcrumb-link-color))
     );
     --_breadcrumb-item-space: var(--md-breadcrumb-item-space, --dp(4));
-    --_breadcrumb-item-height: var(--md-breadcrumb-item-height, --dp(32));
+    --_breadcrumb-item-height: var(--md-breadcrumb-item-height, --density-space(32));
     --_breadcrumb-link-padding-inline: var(--md-breadcrumb-link-padding-inline, --dp(8));
     --_breadcrumb-link-shape: var(--md-breadcrumb-link-shape, var(--md-shape-action));
     --_breadcrumb-separator-icon-size: var(--md-breadcrumb-separator-icon-size, --dp(18));
@@ -72,6 +72,8 @@
   .m3-breadcrumb-ellipsis,
   .m3-breadcrumb-separator {
     @apply label-large;
+    box-sizing: border-box;
+    padding-block: --dp(2);
     min-block-size: var(--_breadcrumb-item-height);
     display: inline-flex;
     align-items: center;
@@ -91,7 +93,6 @@
     cursor: var(--md-cursor-action);
     font: inherit;
     margin: 0;
-    padding-block: 0;
     padding-inline: var(--_breadcrumb-link-padding-inline);
     text-decoration: none;
     user-select: none;

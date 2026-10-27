@@ -33,6 +33,12 @@ Use `shape` to set the default shape for items and section triggers; an individu
 
 <DemoContainer><NavigationDrawer v-model="value" v-bind="props" style="block-size: 30rem"><NavigationDrawerItem value="home" icon="home" label="Home" /><NavigationDrawerItem value="inbox" icon="inbox" label="Inbox" /><NavigationDrawerSection icon="folder" label="Projects"><NavigationDrawerItem value="active" icon="task_alt" label="Active" /><NavigationDrawerItem value="archived" icon="archive" label="Archived" /></NavigationDrawerSection><NavigationDrawerSection icon="groups" label="Teams"><NavigationDrawerItem value="design" icon="palette" label="Design" /><NavigationDrawerItem value="engineering" icon="engineering" label="Engineering" /></NavigationDrawerSection><NavigationDrawerSection icon="list" label="Plain"><NavigationDrawerItem value="drafts" icon="draft" label="Drafts" /><NavigationDrawerItem value="sent" icon="send" label="Sent" /></NavigationDrawerSection><NavigationDrawerItem value="settings" icon="settings" label="Settings" /></NavigationDrawer></DemoContainer>
 
+## Row sizes
+
+Set `size` on NavigationDrawer for all destinations. NavigationDrawerItem can override one row; NavigationDrawerSection sets the size of its trigger and descendant destinations.
+
+See [Row sizes](../guides/styling#row-sizes) for the scale, shared `rowSize` default and density behavior.
+
 ## Examples
 
 ### Default

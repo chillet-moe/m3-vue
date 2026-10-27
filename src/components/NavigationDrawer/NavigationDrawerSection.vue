@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import vTooltip from '@/directives/Tooltip/vTooltip';
@@ -7,6 +8,8 @@ import { computed, inject, provide, unref, useId, useSlots } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerSectionProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Default icon name (Material Symbols Outlined). */
   icon?: string;
 
@@ -103,11 +106,13 @@ const toggle = () => {
 
   expanded.value = !expanded.value;
 };
+const rowSize = provideRowSize(() => props.size);
 </script>
 
 <template>
   <section
-    class="m3-navigation-drawer-section"
+    class="m3-navigation-drawer-section m3-row-size"
+    :data-size="rowSize"
     data-scope="navigation-drawer-section"
     data-part="root"
     :data-expanded="expanded ? 'true' : undefined"

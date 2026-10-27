@@ -31,6 +31,12 @@ const props = ref({});
 
 <StyleTokenTable component="TreeView" />
 
+## 行尺寸
+
+在 TreeView 上设置 `size` 可调整其所有行。自定义行渲染时，可在单个 TreeItem 上设置 `size`；扁平化后的行不会继承其逻辑父节点的尺寸。
+
+尺寸比例、共享的 `rowSize` 默认值和密度行为，详见[行尺寸](../guides/styling#row-sizes)。
+
 ## 示例
 
 ### 项目文件与操作
@@ -121,6 +127,6 @@ const tree = useTree({
 
 ## 布局与样式
 
-紧凑行高为 32 dp；`density="comfortable"` 时为 40 dp。可使用上方公开 token 自定义尺寸和选中颜色。`--md-color-container`、`--md-color-on-container` 和 `--md-state-layer-color` 会保留库中的语义颜色上下文。根布局可向 `TreeView` 或 `TreeItem` 传入 class；内部样式请使用文档说明的 `data-scope` / `data-part` 结构。`row` 是完整宽度的视觉与交互表面；`TreeItem` 根元素表示一个可聚焦节点。
+默认行高为 48dp。设置 `--md-density: -2` 可使用 40dp，设置 `--md-density: -4` 可使用 32dp；旧的 `density` 属性已移除。详见[密度](../guides/styling#密度)。可使用上方公开 token 自定义尺寸和选中颜色。`--md-color-container`、`--md-color-on-container` 和 `--md-state-layer-color` 会保留库中的语义颜色上下文。根布局可向 `TreeView` 或 `TreeItem` 传入 class；内部样式请使用文档说明的 `data-scope` / `data-part` 结构。`row` 是完整宽度的视觉与交互表面；`TreeItem` 根元素表示一个可聚焦节点。
 
 树本身不会创建滚动容器，也不实现虚拟滚动。应由外层面板负责滚动，并将内边距放在滚动区域内部，将固定工具栏放在滚动区域之外。此组件不包含拖放、复选框选择或多选。

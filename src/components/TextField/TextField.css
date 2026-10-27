@@ -97,7 +97,7 @@
   :where(.m3-text-field) {
     --_outlined-text-field-extra-small-container-height: var(
       --md-outlined-text-field-extra-small-container-height,
-      2rem
+      --density-height(32, var(--_outlined-text-field-input-text-line-height), 24, 4)
     );
     --_outlined-text-field-extra-small-container-horizontal-padding: var(
       --md-outlined-text-field-extra-small-container-horizontal-padding,
@@ -105,25 +105,31 @@
     );
     --_outlined-text-field-extra-small-container-vertical-padding: var(
       --md-outlined-text-field-extra-small-container-vertical-padding,
-      0.25rem
+      --density-space(4, 4, 2)
     );
-    --_outlined-text-field-small-container-height: var(--md-outlined-text-field-small-container-height, 2.5rem);
+    --_outlined-text-field-small-container-height: var(
+      --md-outlined-text-field-small-container-height,
+      --density-height(40, var(--_outlined-text-field-input-text-line-height), 24, 4)
+    );
     --_outlined-text-field-small-container-horizontal-padding: var(
       --md-outlined-text-field-small-container-horizontal-padding,
       0.75rem
     );
     --_outlined-text-field-small-container-vertical-padding: var(
       --md-outlined-text-field-small-container-vertical-padding,
-      0.5rem
+      --density-space(8, 4, 2)
     );
-    --_outlined-text-field-medium-container-height: var(--md-outlined-text-field-medium-container-height, 3.5rem);
+    --_outlined-text-field-medium-container-height: var(
+      --md-outlined-text-field-medium-container-height,
+      --density-height(56, var(--_outlined-text-field-input-text-line-height), 24, 4)
+    );
     --_outlined-text-field-medium-container-horizontal-padding: var(
       --md-outlined-text-field-medium-container-horizontal-padding,
       1rem
     );
     --_outlined-text-field-medium-container-vertical-padding: var(
       --md-outlined-text-field-medium-container-vertical-padding,
-      0.5rem
+      --density-space(8, 4, 2)
     );
     --_outlined-text-field-container-shape: var(
       --md-outlined-text-field-container-shape,
@@ -445,7 +451,7 @@
       0px,
       calc(var(--_floating-label-inline-start) - 0.25rem - var(--_outline-width))
     );
-    --_slot-action-height: 3rem;
+    --_slot-action-height: max(1.5rem, calc(var(--_container-height) - 2 * var(--_container-vertical-padding)));
     --_slot-action-space: 0.75rem;
     --_slot-action-margin: -0.75rem;
     --_trailing-action-size: 2rem;
@@ -479,7 +485,6 @@
     );
     /* Keep the notch clear of the 0.75rem square corner while preserving the compact input padding. */
     --_floating-label-inline-start: max(var(--_container-horizontal-padding), 0.75rem);
-    --_slot-action-height: 2rem;
     --_slot-action-space: 0.25rem;
     --_slot-action-margin: -0.25rem;
     --_trailing-action-size: 1.5rem;
@@ -507,7 +512,6 @@
       --md-outlined-text-field-container-vertical-padding,
       var(--_outlined-text-field-small-container-vertical-padding)
     );
-    --_slot-action-height: 2.5rem;
     --_slot-action-space: 0.5rem;
     --_slot-action-margin: -0.5rem;
   }

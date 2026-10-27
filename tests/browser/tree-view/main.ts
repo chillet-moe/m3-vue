@@ -1,3 +1,4 @@
+import '@/styles/themes/default.css';
 import { createApp, h } from 'vue';
 import '@/index';
 import TreeViewDefault from '../../../docs/demos/tree-view/TreeViewDefault.vue';

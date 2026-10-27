@@ -47,16 +47,26 @@
       --md-navigation-rail-item-collapsed-indicator-height,
       --dp(32)
     );
-    --_navigation-rail-item-collapsed-height: var(--md-navigation-rail-item-collapsed-height, --dp(64));
-    --_navigation-rail-item-collapsed-padding-block: var(--md-navigation-rail-item-collapsed-padding-block, --dp(6));
+    --_navigation-rail-item-collapsed-height: var(
+      --md-navigation-rail-item-collapsed-height,
+      calc(var(--_row-height) + 1rem)
+    );
+    --_navigation-rail-item-collapsed-padding-block: var(
+      --md-navigation-rail-item-collapsed-padding-block,
+      max(0.125rem, calc(var(--_row-base-padding) / 2 + var(--md-density, 0) * 0.125rem))
+    );
     --_navigation-rail-item-collapsed-icon-label-space: var(
       --md-navigation-rail-item-collapsed-icon-label-space,
       --dp(4)
     );
 
+    --_navigation-rail-item-expanded-content-height: max(
+      var(--_navigation-rail-item-icon-touch-target-size),
+      calc(var(--md-sys-typescale-label-medium-line-height) + 0.5rem)
+    );
     --_navigation-rail-item-expanded-indicator-height: var(
       --md-navigation-rail-item-expanded-indicator-height,
-      --dp(56)
+      max(var(--_row-height), var(--_navigation-rail-item-expanded-content-height))
     );
     --_navigation-rail-item-expanded-leading-space: var(--md-navigation-rail-item-expanded-leading-space, --dp(16));
     --_navigation-rail-item-expanded-trailing-space: var(--md-navigation-rail-item-expanded-trailing-space, --dp(24));
@@ -64,7 +74,10 @@
       --md-navigation-rail-item-expanded-icon-label-space,
       --dp(8)
     );
-    --_navigation-rail-item-expanded-height: var(--md-navigation-rail-item-expanded-height, --dp(56));
+    --_navigation-rail-item-expanded-height: var(
+      --md-navigation-rail-item-expanded-height,
+      max(var(--_row-height), var(--_navigation-rail-item-expanded-content-height))
+    );
 
     --_navigation-rail-item-active-indicator-color: var(
       --md-navigation-rail-item-active-indicator-color,

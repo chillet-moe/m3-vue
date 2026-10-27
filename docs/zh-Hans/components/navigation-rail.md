@@ -28,6 +28,12 @@ NavigationRail 通过 `NavigationRailItem` 提供纵向主要导航目标，并�
 
 <DemoContainer><NavigationRail v-model="value" v-bind="props" style="block-size: 28rem"><NavigationRailItem value="home" icon="home" label="主页" /><NavigationRailItem value="bookmarks" icon="bookmark" label="已保存" /><NavigationRailItem value="folder" icon="folder" label="文件" /><NavigationRailItem value="settings" icon="settings" label="设置" /></NavigationRail></DemoContainer>
 
+## 行尺寸
+
+在 NavigationRail 或 NavigationRailItem 上设置 `size`。展开状态的行使用共享的单行尺寸比例；折叠状态的行会为图标交互目标和标签预留空间，因此小尺寸也可能达到相同的内容下限。
+
+尺寸比例、共享的 `rowSize` 默认值和密度行为，详见[行尺寸](../guides/styling#row-sizes)。
+
 ## 示例
 
 ### 默认

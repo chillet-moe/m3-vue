@@ -27,7 +27,7 @@
   .m3-navigation-drawer-section,
   .m3-navigation-drawer-item,
   .m3-navigation-drawer-section-trigger {
-    --_navigation-drawer-item-height: var(--md-navigation-drawer-item-height, --dp(56));
+    --_navigation-drawer-item-height: var(--md-navigation-drawer-item-height, var(--_row-height));
     --_navigation-drawer-item-padding-inline: var(--md-navigation-drawer-item-padding-inline, --dp(16));
     --_navigation-drawer-item-gap: var(--md-navigation-drawer-item-gap, --dp(12));
     --_navigation-drawer-item-icon-size: var(--md-navigation-drawer-item-icon-size, --dp(24));
@@ -123,6 +123,7 @@
     inline-size: 100%;
     min-inline-size: 0;
     min-block-size: var(--_navigation-drawer-item-height);
+    padding-block: var(--_row-padding);
     padding-inline: var(--_navigation-drawer-item-padding-inline);
     border-radius: var(--_navigation-drawer-item-indicator-shape);
     color: var(--_navigation-drawer-item-current-label-color);

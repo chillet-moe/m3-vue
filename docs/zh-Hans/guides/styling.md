@@ -1,222 +1,225 @@
-# 样式
+<script setup>
+import CustomizationGallery from '../../.vitepress/components/CustomizationGallery.vue';
+</script>
 
-## 选择外观与密度
+# 定制
 
-先根据组件的语义角色选择组件，再独立决定其视觉外观和尺寸。
+先选择主题，再设置组件默认值，最后调整需要变化的样式。
 
-| 需求                         | 组件 / 选择                                                                |
-| ---------------------------- | -------------------------------------------------------------------------- |
-| 选择一个值                   | Select 或 Combobox。                                                       |
-| 执行命令或打开子菜单         | Menu 与 MenuItem。                                                         |
-| 展示一般列表内容或导航       | ListItem；选择按钮、链接或非交互展示语义。                                 |
-| 密集的属性面板和频繁浏览的行 | Standard Slider 和 ListItem，搭配紧凑字段尺寸。                            |
-| 突出的控件或丰富的导航表面   | 当较大的几何尺寸和动效适合当前表面时，使用 Expressive Slider 或 ListItem。 |
+| 定制内容             | 使用方式                                 |
+| -------------------- | ---------------------------------------- |
+| 默认或紧凑外观       | 主题样式表                               |
+| 组件尺寸、形状或行为 | `M3VuePlugin` 选项、子树默认值或组件属性 |
+| 控件内部的垂直留白   | `--md-density`                           |
+| 排版、颜色和圆角     | 系统与语义 CSS token                     |
+| 单个组件的外观       | 组件文档列出的公开 token                 |
+| 组件之间的布局和间距 | 组件或父级布局上的 class                 |
 
-Slider 和 ListItem 默认使用 `appearance="standard"`。Expressive 保留原有外观。这不是全库通用的变体；应使用各组件文档中的 API，而不是给所有控件传入 `appearance`。ListItem 的 standard 外观会让活动指示器保持整行宽度，不展开高亮，也不执行按压形状变换。
+## 组件预览
 
-使用 `size` 选择组件支持的尺寸，并通过公开 Token 做更细致的调整。视觉尺寸较小不代表命中区域也要变小：Slider 将滑块和轨道尺寸与目标区域尺寸分开控制。Slider 可搭配 TextField 实现精确输入，详见 [Slider](../components/slider#精确数字输入)。TextField、Select 和 Combobox 支持相同的 32px、40px 和 56px 字段高度。为浮动标签预留空间，详见[字段间距](./field-layout)。
+使用工具栏中的 **自定义** 对比这些组件在不同设置下的效果。选择一个类别；点击组件名称可查看完整示例和 API。单个示例可能会显式设置变体或尺寸。
 
-根据操作的重要性选择按钮强调层级。`filled` 可用于唯一的主要操作，但不是所有主要操作都必须使用。常规操作使用 text/outlined 按钮或 standard IconButton；Dialog 操作使用 text。确保两种主题下的焦点都清晰可见。优先使用语义 Token 表达颜色；进一步缩小间距前，先检查长标签和窄容器下的显示效果。
+<CustomizationGallery />
 
-组件样式优先通过 CSS 变量定制。
+## 主题选择
 
-当变量不能表达目标效果时，再覆盖具体的 `data-part`。M3 Vue 组件通过
-`data-scope` 和 `data-part` 暴露稳定的 CSS API。全局样式可以直接使用这些
-属性选择器；在 SFC 的 `<style scoped>` 中，只有确实需要跨越组件边界访问
-内部部件时才使用 `:deep()`。
-
-## 紧凑排版
-
-对于密集的桌面工作区，可在基础样式表之后启用紧凑排版预设：
+在应用启动时导入共享样式和**一个**主题：
 
 ```ts
 import '@chillet/m3-vue/style.css';
-import '@chillet/m3-vue/typography-compact.css';
+import '@chillet/m3-vue/themes/default.css';
 ```
 
-该预设会调整整个应用的系统字体大小和行高，但不会改变根字体大小、组件尺寸、图标尺寸或点击区域。组件几何尺寸应单独选择，例如在 `M3VuePlugin` 中设置 `fieldSize: 'extra-small'` 和 `buttonDefaults: { size: 'extra-small' }`。
+若要使用较小的排版和密度 `-2`，将 `themes/default.css` 替换为 `themes/compact.css`。默认主题使用 Material 排版和密度 `0`。两个主题都包含最终 token 值；加载紧凑主题前无需先加载默认主题。
 
-| 角色                                       | 以 16px 根字体计算的字号 / 行高 |
-| ------------------------------------------ | ------------------------------- |
-| `body-large`、`body-medium`、`label-large` | 12px / 18px                     |
-| `body-small`、`label-medium`               | 11px / 16px                     |
-| `label-small`                              | 10px / 14px                     |
-| `title-small`                              | 13px / 20px                     |
-| `title-medium`                             | 14px / 20px                     |
-| `title-large`、`headline-small`            | 18px / 24px                     |
+Nuxt 会自动加载默认主题。设置 `m3Vue: { theme: 'compact' }` 可选择紧凑主题；自行导入主题样式时设置 `theme: false`。
 
-强调样式使用相同的紧凑字号和行高。字体族、字重和相对字间距保持不变；display 角色以及 medium/large headline 保留默认值。`label-small` 仅用于次要的短注释，不用于主要控件或字段值。
+## 组件默认值
 
-TextField、Select 和 Combobox 在不同尺寸下保持相同的输入文字排版。Button 和 Tabs 会根据尺寸选择排版角色。该预设会连同菜单和列表排版一起更新这些角色，但不会让所有尺寸都使用相同字号。
+注册插件时设置应用级默认值：
 
-对于应用自有的文字，可在内容根节点应用排版 class，或根据合适的系统角色设置字号和行高。不要缩小 `html` 的字体大小，否则基于 rem 的组件几何尺寸也会随之缩小。
-
-```css
-.workspace {
-  font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: var(--md-sys-typescale-body-medium-line-height);
-}
+```ts
+app.use(M3VuePlugin, {
+  shape: 'square',
+  rowSize: 'extra-small',
+  fieldSize: 'small',
+  buttonDefaults: { size: 'small', pressShapeMorph: false },
+  sliderDefaults: { appearance: 'standard', wheel: false },
+  listItemDefaults: { size: 'small' },
+});
 ```
 
-该预设也会影响使用这些角色的排版工具类和正文内容。仅在应用范围的主题中导入，不要仅为一个面板设置。现有组件 token 仍优先于其系统 fallback。可在未分层的全局样式表中使用自定义系统 token 调整预设，并检查应用所支持语言中的长标签、浮动标签、下拉选项和窄布局。
+| 选项                                       | 适用范围                                                            |
+| ------------------------------------------ | ------------------------------------------------------------------- |
+| `shape`                                    | 共享的圆角/方角形状                                                 |
+| `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目 |
+| `fieldSize`                                | 单行 TextField、Select 和 Combobox                                  |
+| `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                 |
+| `iconButtonSize`                           | IconButton                                                          |
+| `sliderDefaults`                           | Slider 尺寸、外观、滚轮输入和数值指示器                             |
+| `listItemDefaults`                         | ListItem 尺寸和外观                                                 |
+| `appearance`                               | Slider 和 ListItem 的共享外观                                       |
+| `menuColor`                                | Menu、Select 和 Combobox 菜单                                       |
+| `datePickerDefaults`、`timePickerDefaults` | 日期与时间选择器偏好                                                |
+| `snackbarDefaults`                         | 程序化 [Snackbar](../components/snackbar) 偏好                      |
 
-## CSS token 分层
-
-组件使用五层 CSS token：
-
-1. `--md-sys-*`：全局 Material system token，用于主题级配置。不建议在单个组件实例上局部覆盖。
-2. `--md-shape-*`、`--md-control-*` 和 `--md-cursor-*`：库级语义 token，用少量变量把 system token 映射到组件共享的 shape、control outline 与交互 cursor 角色。
-3. `--md-color-container`、`--md-color-on-container`、`--md-state-layer-color`、`--md-icon-size`：上下文 token，
-   用于父组件向子组件传递容器色、内容色、state layer 颜色和图标尺寸。组件应在自己拥有的最小 icon 容器上设置
-   `--md-icon-size`，避免尺寸影响无关的后代 Icon。
-4. `--md-<component>-*`：组件 public token，是推荐的组件级定制入口。
-5. `--_*`：组件内部 private token，只用于实现细节，不作为外部 API。
-
-组件会用 `:where(:root)` 声明 public token 占位符，值为 `initial`。这只是给编辑器和 CSS API 一个明确声明，不是默认值；实际默认值集中在组件根元素的 private token fallback 上。这样 WebStorm 不需要解析深层 `var()` fallback，也不会因为组件 CSS 加载顺序覆盖用户自己的 `:root` 或局部定制。
-
-组件 public token 只覆盖有明确语义的部件或稳定状态，例如 container、label、selected、unselected、error、disabled。`hover`、`focus`、`pressed` 这类瞬时交互状态优先通过 state layer 表达，不默认展开成完整的颜色 token 矩阵。
-
-新增定制优先使用组件自己的 `--md-<component>-*` token。旧的 `--md-comp-*` token 不作为公开 API。
-
-普通 action 与真实 URL link 使用独立的全局 cursor token。需要把控件切换为桌面应用式默认箭头时，参阅
-[Interaction Cursors](/zh-Hans/guides/interaction-cursors)。
-
-每个组件页面的 **Styling** 表格由显式 metadata 生成，只列出推荐的 public token。metadata 按组件拆分在 `docs/.vitepress/zh-Hans/components/style-tokens/<ComponentName>.ts`，统一入口 `style-token-meta.ts` 只负责注册组件名到对应 metadata。
-
-## 主题级 shape token
-
-如果只是想统一整套组件的圆角风格，优先覆盖少量 `--md-shape-*` 语义 token，而不是逐个组件改 `--md-<component>-*` 或 `data-part`。
-
-文档右上角的 Shape 控制器会把这些变量写到文档根节点，因此调整会直接作用到整站组件。
-
-```css
-:root {
-  --md-shape-action: var(--md-sys-shape-corner-extra-large);
-  --md-shape-field: var(--md-sys-shape-corner-large);
-  --md-shape-field-square: var(--md-sys-shape-corner-medium);
-  --md-shape-chip: var(--md-sys-shape-corner-small);
-  --md-shape-card: var(--md-sys-shape-corner-medium);
-  --md-shape-popover: var(--md-sys-shape-corner-large);
-  --md-shape-compact: var(--md-sys-shape-corner-extra-small);
-  --md-shape-overlay: var(--md-sys-shape-corner-extra-large);
-  --md-shape-indicator: var(--md-sys-shape-corner-full);
-  --md-shape-fab: var(--md-sys-shape-corner-large);
-}
-```
-
-需要统一 action 的 square、pressed 或 selected 形变时，可以覆盖对应的 action 语义 token：
-
-`--md-shape-action` 建议使用有限圆角值，不要设为 `--md-sys-shape-corner-full`，否则 Button、IconButton 等组件在圆角动画中可能出现抖动。
-Square action 默认按比例派生自 `--md-shape-action`，只有需要让 square、pressed 或 selected 形变偏离 action 基准时，才需要覆盖下面这些 token。
-
-```css
-:root {
-  --md-shape-action-square: var(--md-sys-shape-corner-small);
-  --md-shape-action-pressed: var(--md-sys-shape-corner-extra-small);
-  --md-shape-action-selected: var(--md-sys-shape-corner-medium);
-}
-```
-
-当某个组件确实需要偏离全局语义时，再覆盖组件 public token：
-
-```css
-:root {
-  --md-outlined-text-field-container-shape: var(--md-sys-shape-corner-small);
-}
-```
-
-同尺寸的 outlined Button 与 TextField 共享静止状态的 control outline token。需要统一调整控件边界时，优先覆盖：
-
-```css
-:root {
-  --md-control-outline-color: var(--md-sys-color-outline-variant);
-  --md-control-outline-width-extra-small: 0.0625rem;
-  --md-control-outline-width-small: 0.078125rem;
-  --md-control-outline-width-medium: 0.09375rem;
-}
-```
-
-```css
-.custom-checkbox {
-  --md-checkbox-color: var(--md-sys-color-tertiary);
-  --md-checkbox-on-color: var(--md-sys-color-on-tertiary);
-  --md-checkbox-unselected-outline-color: var(--md-sys-color-tertiary);
-}
-
-.power-progress {
-  --md-progress-indicator-color: v-bind(powerConsumptionColor);
-}
-```
-
-如果需要定制 disabled 等稳定状态，可以覆盖对应的组件 token：
-
-```css
-.custom-checkbox {
-  --md-checkbox-disabled-color: var(--md-sys-color-outline);
-  --md-checkbox-disabled-opacity: 0.5;
-}
-```
-
-## data-scope 和 data-part
-
-- **`data-scope`**：标识组件的类型，例如 `button`、`text-field`、`menu-item`。
-- **`data-part`**：标识组件内部的具体元素，例如 `root`、`label`、`leading`。
-
-组件根元素使用 `data-part="root"`。给单个组件实例传入 class 是定制根元素
-的首选方式；这属于普通 Vue class fallthrough，不是 scope-boundary
-提供的授权机制。从父组件访问内部 `data-part` 则是显式的深层定制。
-
-在启用了 `@chillet/vue-scope-boundary` 的 scoped SFC 中，正向 HTML type
-selector（如 `button`、`.toolbar > button`、`button.primary`）只匹配本 SFC
-写出的原生元素。纯 class、ID 和 attribute selector 仍遵循 Vue 原生规则，
-可以命中子组件根元素。因此短 class 名碰撞仍需通过组件前缀、BEM、CSS
-Modules 或其他命名约定避免。
-
-## 用法
-
-在全局样式中，可以直接使用属性选择器：
-
-```css
-[data-scope='text-field'] [data-part='label'] {
-  font-weight: bold;
-}
-```
-
-在 scoped SFC 中，使用 `:deep()` 明确表示有意跨越组件边界：
-
-```css
-/* 自定义 TextField 的 label */
-[data-scope='text-field'] :deep([data-part='label']) {
-  font-weight: bold;
-}
-
-/* 自定义 Menu 中 MenuItem 的 label */
-[data-scope='menu-item'] :deep([data-part='label']) {
-  color: red;
-}
-```
-
-如果只需要定制组件根元素，给实例传入语义明确的 class，并使用纯 class
-selector：
+子树可使用现有 defaults helper。未指定的字段会继承，值也可使用 ref 或 computed：
 
 ```vue
-<Button class="checkout-action">Checkout</Button>
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { provideButtonDefaults, provideSliderDefaults } from '@chillet/m3-vue';
+
+const compact = ref(true);
+provideButtonDefaults({ size: computed(() => (compact.value ? 'small' : undefined)) });
+provideSliderDefaults({ wheel: false });
+</script>
+```
+
+优先级为：组件属性 > 子树默认值 > 应用默认值 > 库默认值。显式的 `false` 会覆盖继承值；`undefined` 表示继承。直接调用 `provide(contextKey, value)` 会替换整个上下文对象。若要保留未指定字段，请使用 defaults helper。
+
+### 行尺寸 {#row-sizes}
+
+Menu、TreeView、NavigationDrawer 和 NavigationRail 共用一套 `size` 尺寸：
+
+| 尺寸             | 单行基准高度 |
+| ---------------- | ------------ |
+| `extra-small`    | 32px         |
+| `small`          | 40px         |
+| `medium`（默认） | 48px         |
+| `large`          | 56px         |
+| `extra-large`    | 64px         |
+
+以上是在密度为 `0`、根字号为 16px 时的参考高度。文字和图标尺寸不会改变。多行内容和附加控件可能使行高增加。折叠状态的 NavigationRail 也会为堆叠显示的图标和标签预留空间。
+
+可在插件中设置 `rowSize` 作为应用默认值，也可在某个区域的现有祖先中使用 `provideRowSize`：
+
+```ts
+import { provideRowSize } from '@chillet/m3-vue';
+
+provideRowSize('extra-small');
+```
+
+该 helper 也接受 ref 或 getter。容器的 `size` 会覆盖继承值；`MenuItem`、`TreeItem`、`NavigationDrawerItem`、`NavigationDrawerSection` 或 `NavigationRailItem` 可以单独覆盖自身尺寸。子菜单继承其菜单的尺寸；`MenuSubMenu.size` 可为其触发项和内容设置不同尺寸。省略 `size` 或将其设为 `undefined` 时会继承。
+
+请先选择行尺寸，再使用 `--md-density` 微调垂直留白。自定义面板的 **Components → Row size** 控件与 **Code** 预览使用相同的应用选项。
+
+### 选择外观与密度
+
+`size` 选择组件几何尺寸，也可能决定排版和图标尺寸。`appearance` 选择 Slider 和 ListItem 的 standard 或 expressive 外观。组件专用外观默认值优先于共享外观设置，包括更近子树中的共享设置。
+
+值选择使用 Select/Combobox，命令使用 Menu，一般内容或导航使用 ListItem。按钮强调层级根据操作重要性选择：常规操作使用 text/outlined Button 或 standard IconButton；Dialog 操作使用 text Button。
+
+## 密度
+
+可在应用或特定区域设置密度：
+
+```css
+.property-panel {
+  --md-density: -2;
+}
+.property-panel__comfortable-section {
+  --md-density: 0;
+}
+```
+
+每个负向等级最多减少 4dp 垂直留白，正向等级则增加留白。文字和图标尺寸不变。组件会在内容与最小内边距需要剩余空间时停止收缩，因此没有通用的最小高度或数值范围限制。显式尺寸 token 优先级更高。
+
+密度会调整各组件当前所选的尺寸，不会让所有组件达到统一的目标高度。请先选择组件尺寸：菜单行和超小号按钮可能会在不同的密度值下达到各自的内容下限。
+
+密度适用于 Button、ButtonGroup、IconButton、Chip、字段、InputOtp、ListItem、TreeView、Tabs、菜单行（包括 Select/Combobox 菜单）、Breadcrumb、Pagination，以及 NavigationDrawer/NavigationRail 条目。密度只改变垂直留白：OTP 单元格宽度、导航宽度、字体和图标尺寸均保持不变。折叠状态的 NavigationRail 条目会保留图标交互目标和堆叠标签所需的空间，因此会更早达到密度下限。多行内容可能增高。Dialog、Snackbar、日期和时间选择器会将继承的密度重置为 0。密度不会调整页面间距，也不会随断点自动变化。为触屏选择紧凑布局时，请保留足够大的交互目标。
+
+## 排版
+
+主题预设提供完整的排版比例。调整某个角色时，应同时设置字号和行高：
+
+```css
+:root {
+  --md-ref-typeface-plain: 'Inter';
+  --md-ref-typeface-brand: 'Inter';
+  --md-sys-typescale-body-large-size: 0.875rem;
+  --md-sys-typescale-body-large-line-height: 1.25rem;
+}
+```
+
+请在应用中加载字体。各角色也提供 `font`、`weight` 和 `tracking`；强调角色使用 `--md-sys-typescale-emphasized-*` 前缀。密度与排版互相独立，但内容感知控件会为较大的文字增高。可用 `m3-typo-*` 类为自定义内容应用排版角色。
+
+## 颜色
+
+优先使用主题颜色角色，避免在组件内部写死颜色。例如，分别设置浅色和深色方案中的主色及其前景色：
+
+```css
+:root {
+  --md-sys-color-primary-light: #365e9d;
+  --md-sys-color-on-primary-light: #ffffff;
+  --md-sys-color-primary-dark: #aac7ff;
+  --md-sys-color-on-primary-dark: #003062;
+}
+```
+
+容器色和前景色是成对的角色。组件通过 `color-scheme` 解析浅色/深色角色。嵌套的自定义内容可使用 `--md-color-container`、`--md-color-on-container` 和 `--md-state-layer-color`，继承当前容器色、前景色和状态层颜色。
+
+## 主题级形状 token
+
+语义圆角 token 可协调整个组件库的圆角：
+
+```css
+:root {
+  --md-shape-action: 1.25rem;
+  --md-shape-field: 0.75rem;
+  --md-shape-field-square: 0.5rem;
+  --md-shape-chip: 0.5rem;
+  --md-shape-card: 0.75rem;
+  --md-shape-popover: 0.75rem;
+  --md-shape-overlay: 1.5rem;
+}
+```
+
+`--md-shape-action` 应使用有限圆角；完全圆角可能导致圆角形变不稳定。方角、按压和选中形状会从该值派生。仅当这些形状需要独立设置时，才配置 `--md-shape-action-square`、`--md-shape-action-pressed` 或 `--md-shape-action-selected`。`--md-shape-compact`、`--md-shape-indicator` 和 `--md-shape-fab` 分别控制紧凑元素、指示器和 FAB。
+
+## 组件样式
+
+每个组件页面的 **Styling** 部分会列出公开 token。可用它们处理局部差异：
+
+```vue
+<TextField class="search-field" label="Search" />
 
 <style scoped>
-.checkout-action {
+.search-field {
+  --md-outlined-text-field-container-shape: 0.5rem;
   inline-size: 100%;
 }
 </style>
 ```
 
-不要给这类规则附加组件内部的根标签或 private class。`button.checkout-action`
-会被视为对私有根标签的依赖，只匹配本 SFC 自己写出的 `<button>`；
-`.m3-button.checkout-action` 则依赖组件内部实现。
+共享修改应使用库的语义 token：`--md-control-outline-*` 可协调控件静止状态的边框，[交互光标 token](./interaction-cursors) 可统一光标，[浮动表面 token](../utilities/elevation#floating-surfaces) 可协调浮层。以 `--_` 开头的变量属于内部实现细节。
 
-## 查看组件的 Anatomy
+### data-scope 与 data-part
 
-每个组件文档页面都包含 **Anatomy** 部分，展示该组件的所有 `data-scope` 和 `data-part`，并支持交互式高亮。
+当属性和 token 不够用时，使用组件文档中的 **Anatomy**。`data-scope` 标识组件，`data-part` 标识稳定部件。在 scoped CSS 中，深层选择器应以自己的 class 为锚点：
 
-## 浮动表面
+```css
+.search-field :deep([data-part='label']) {
+  font-weight: 600;
+}
+```
 
-使用共享的[浮动表面 token](../utilities/elevation.md#floating-surfaces)，统一为菜单、下拉菜单、Popover、丰富 Tooltip 和 Dialog 设置主题，包括使用方自有的原生对话框。只有个别组件需要例外样式时，才使用组件 token。
+根布局使用普通 class。避免依赖私有 `.m3-*` class 或组件根 HTML 标签。选择器行为详见 [Vue Scope Boundaries](./vue-scope-isolation)。
+
+## 字段间距
+
+字段之间的间距由父级布局负责。可在该布局中使用共享间距 token：
+
+```css
+.form-fields {
+  display: grid;
+  row-gap: var(--md-field-row-gap);
+  column-gap: var(--md-field-column-gap);
+}
+```
+
+这两个 token 的默认值均为 `1rem`，可在全局或单个区域覆盖。密度不会改变它们。自定义面板的 **Theme** 页签可调整这些 token；**Code** 页签会提供 `.form-fields` 示例。将该 class 用于父级布局，并根据表单内容选择列数。`labelClearance` 会在浮动标签上方增加空间，并叠加在父级间距之上。响应式网格示例和交互式间距预览见[字段布局](./field-layout)。
+
+## 在文档中试用设置
+
+点击工具栏中的 **Customize**，试用主题、排版、形状和组件设置。预设会反映当前值；自定义修改后，对应分组可能不再选中任何预设。更改只保存在当前浏览器中，并作用于文档站点。**Code** 标签页会显示在应用中应用当前设置所需的主题导入、插件选项和 CSS。可分别复制各文件；CSS 仅包含对已导入主题的覆盖。**Reset all** 会重置面板设置；深色模式和固定预览仍是独立的工具栏偏好。

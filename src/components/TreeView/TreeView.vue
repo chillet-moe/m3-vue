@@ -1,17 +1,19 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { provide } from 'vue';
 import { useTree, type TreeNode, type UseTreeReturn } from '@/composables/useTree';
 import { treeContextKey, type TreeItemSlotProps } from './TreeContext';
 import TreeItem from './TreeItem.vue';
 
 export type TreeViewProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   items: readonly TreeNode[];
-  density?: 'compact' | 'comfortable';
   selectWhenFocused?: boolean;
   dir?: 'ltr' | 'rtl';
 };
 
-const props = withDefaults(defineProps<TreeViewProps>(), { density: 'compact', selectWhenFocused: false });
+const props = withDefaults(defineProps<TreeViewProps>(), { selectWhenFocused: false });
 const value = defineModel<string>();
 const expanded = defineModel<string[]>('expanded', { default: () => [] });
 const emit = defineEmits<{ activate: [item: TreeNode]; focusRequest: [value: string] }>();
@@ -38,15 +40,16 @@ const tree = useTree({
 });
 provide(treeContextKey, tree);
 defineExpose({ focus: tree.focus });
+const rowSize = provideRowSize(() => props.size);
 </script>
 
 <template>
   <div
     v-bind="tree.rootAttrs.value"
     class="m3-tree"
+    :data-size="rowSize"
     data-scope="tree-view"
     data-part="root"
-    :data-density="density"
     :dir="dir"
   >
     <slot :tree="tree">

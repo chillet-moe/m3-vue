@@ -129,8 +129,18 @@
   }
 
   .m3-tabs {
-    --_tabs-size-container-height: var(--md-tabs-medium-container-height, 3.5rem);
-    --_tabs-size-with-icon-and-label-container-height: var(--md-tabs-medium-with-icon-and-label-container-height, 5rem);
+    --_tabs-content-min-height: calc(var(--_tabs-label-text-line-height) + 0.5rem);
+    --_tabs-stacked-content-min-height: calc(
+      var(--_tabs-content-min-height) + var(--_tabs-icon-size) + var(--_tabs-icon-label-space)
+    );
+    --_tabs-size-container-height: var(
+      --md-tabs-medium-container-height,
+      max(var(--_tabs-content-min-height), --density-space(56))
+    );
+    --_tabs-size-with-icon-and-label-container-height: var(
+      --md-tabs-medium-with-icon-and-label-container-height,
+      max(var(--_tabs-stacked-content-min-height), --density-space(80))
+    );
     --_tabs-size-tab-padding-inline: var(--md-tabs-medium-tab-padding-inline, 1rem);
     --_tabs-size-label-text-font: var(--md-tabs-medium-label-text-font, var(--md-sys-typescale-title-medium-font));
     --_tabs-size-label-text-size: var(--md-tabs-medium-label-text-size, var(--md-sys-typescale-title-medium-size));
@@ -146,7 +156,10 @@
       --md-tabs-medium-label-text-tracking,
       var(--md-sys-typescale-title-medium-tracking)
     );
-    --_tabs-navigation-size-container-height: var(--md-tabs-navigation-medium-container-height, 3rem);
+    --_tabs-navigation-size-container-height: var(
+      --md-tabs-navigation-medium-container-height,
+      max(var(--_tabs-content-min-height), --density-space(48))
+    );
     --_tabs-navigation-size-tab-padding-inline: var(--md-tabs-navigation-medium-tab-padding-inline, 1.25rem);
 
     --_tabs-container-color: var(--md-tabs-container-color, var(--md-sys-color-surface));
@@ -307,10 +320,13 @@
   }
 
   .m3-tabs[data-size='extra-small'] {
-    --_tabs-size-container-height: var(--md-tabs-extra-small-container-height, 2.5rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-extra-small-container-height,
+      max(var(--_tabs-content-min-height), --density-space(40))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-extra-small-with-icon-and-label-container-height,
-      3.5rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(56))
     );
     --_tabs-size-tab-padding-inline: var(--md-tabs-extra-small-tab-padding-inline, 0.625rem);
     --_tabs-size-label-text-font: var(--md-tabs-extra-small-label-text-font, var(--md-sys-typescale-label-medium-font));
@@ -327,15 +343,21 @@
       --md-tabs-extra-small-label-text-tracking,
       var(--md-sys-typescale-label-medium-tracking)
     );
-    --_tabs-navigation-size-container-height: var(--md-tabs-navigation-extra-small-container-height, 2.25rem);
+    --_tabs-navigation-size-container-height: var(
+      --md-tabs-navigation-extra-small-container-height,
+      max(var(--_tabs-content-min-height), --density-space(36))
+    );
     --_tabs-navigation-size-tab-padding-inline: var(--md-tabs-navigation-extra-small-tab-padding-inline, 0.75rem);
   }
 
   .m3-tabs[data-size='small'] {
-    --_tabs-size-container-height: var(--md-tabs-small-container-height, 3rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-small-container-height,
+      max(var(--_tabs-content-min-height), --density-space(48))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-small-with-icon-and-label-container-height,
-      4.5rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(72))
     );
     --_tabs-size-tab-padding-inline: var(--md-tabs-small-tab-padding-inline, 0.75rem);
     --_tabs-size-label-text-font: var(--md-tabs-small-label-text-font, var(--md-sys-typescale-label-large-font));
@@ -349,15 +371,21 @@
       --md-tabs-small-label-text-tracking,
       var(--md-sys-typescale-label-large-tracking)
     );
-    --_tabs-navigation-size-container-height: var(--md-tabs-navigation-small-container-height, 2.5rem);
+    --_tabs-navigation-size-container-height: var(
+      --md-tabs-navigation-small-container-height,
+      max(var(--_tabs-content-min-height), --density-space(40))
+    );
     --_tabs-navigation-size-tab-padding-inline: var(--md-tabs-navigation-small-tab-padding-inline, 1rem);
   }
 
   .m3-tabs[data-size='large'] {
-    --_tabs-size-container-height: var(--md-tabs-large-container-height, 4rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-large-container-height,
+      max(var(--_tabs-content-min-height), --density-space(64))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-large-with-icon-and-label-container-height,
-      5.5rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(88))
     );
     --_tabs-size-tab-padding-inline: var(--md-tabs-large-tab-padding-inline, 1.25rem);
     --_tabs-size-label-text-font: var(--md-tabs-large-label-text-font, var(--md-sys-typescale-title-medium-font));
@@ -365,15 +393,21 @@
     --_tabs-size-label-text-line-height: var(--md-tabs-large-label-text-line-height, 1.5rem);
     --_tabs-size-label-text-weight: var(--md-tabs-large-label-text-weight, var(--md-sys-typescale-title-medium-weight));
     --_tabs-size-label-text-tracking: var(--md-tabs-large-label-text-tracking, 0em);
-    --_tabs-navigation-size-container-height: var(--md-tabs-navigation-large-container-height, 3.5rem);
+    --_tabs-navigation-size-container-height: var(
+      --md-tabs-navigation-large-container-height,
+      max(var(--_tabs-content-min-height), --density-space(56))
+    );
     --_tabs-navigation-size-tab-padding-inline: var(--md-tabs-navigation-large-tab-padding-inline, 1.5rem);
   }
 
   .m3-tabs[data-size='extra-large'] {
-    --_tabs-size-container-height: var(--md-tabs-extra-large-container-height, 4.5rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-extra-large-container-height,
+      max(var(--_tabs-content-min-height), --density-space(72))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-extra-large-with-icon-and-label-container-height,
-      6rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(96))
     );
     --_tabs-size-tab-padding-inline: var(--md-tabs-extra-large-tab-padding-inline, 1.5rem);
     --_tabs-size-label-text-font: var(--md-tabs-extra-large-label-text-font, var(--md-sys-typescale-title-large-font));
@@ -390,15 +424,21 @@
       --md-tabs-extra-large-label-text-tracking,
       var(--md-sys-typescale-title-large-tracking)
     );
-    --_tabs-navigation-size-container-height: var(--md-tabs-navigation-extra-large-container-height, 4rem);
+    --_tabs-navigation-size-container-height: var(
+      --md-tabs-navigation-extra-large-container-height,
+      max(var(--_tabs-content-min-height), --density-space(64))
+    );
     --_tabs-navigation-size-tab-padding-inline: var(--md-tabs-navigation-extra-large-tab-padding-inline, 1.75rem);
   }
 
   .m3-tabs[data-variant='line'] {
-    --_tabs-size-container-height: var(--md-tabs-medium-container-height, 2.75rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-medium-container-height,
+      max(var(--_tabs-content-min-height), --density-space(44))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-medium-with-icon-and-label-container-height,
-      3.5rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(56))
     );
     --_tabs-container-color: var(--md-tabs-container-color, transparent);
     --_tabs-active-label-color: var(--md-tabs-active-label-color, var(--md-sys-color-on-surface));
@@ -425,31 +465,46 @@
   }
 
   .m3-tabs[data-variant='line'][data-size='extra-small'] {
-    --_tabs-size-container-height: var(--md-tabs-extra-small-container-height, 2rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-extra-small-container-height,
+      max(var(--_tabs-content-min-height), --density-space(32))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-extra-small-with-icon-and-label-container-height,
-      2.75rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(44))
     );
   }
 
   .m3-tabs[data-variant='line'][data-size='small'] {
-    --_tabs-size-container-height: var(--md-tabs-small-container-height, 2.5rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-small-container-height,
+      max(var(--_tabs-content-min-height), --density-space(40))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-small-with-icon-and-label-container-height,
-      3.25rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(52))
     );
   }
 
   .m3-tabs[data-variant='line'][data-size='large'] {
-    --_tabs-size-container-height: var(--md-tabs-large-container-height, 3rem);
-    --_tabs-size-with-icon-and-label-container-height: var(--md-tabs-large-with-icon-and-label-container-height, 4rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-large-container-height,
+      max(var(--_tabs-content-min-height), --density-space(48))
+    );
+    --_tabs-size-with-icon-and-label-container-height: var(
+      --md-tabs-large-with-icon-and-label-container-height,
+      max(var(--_tabs-stacked-content-min-height), --density-space(64))
+    );
   }
 
   .m3-tabs[data-variant='line'][data-size='extra-large'] {
-    --_tabs-size-container-height: var(--md-tabs-extra-large-container-height, 3.5rem);
+    --_tabs-size-container-height: var(
+      --md-tabs-extra-large-container-height,
+      max(var(--_tabs-content-min-height), --density-space(56))
+    );
     --_tabs-size-with-icon-and-label-container-height: var(
       --md-tabs-extra-large-with-icon-and-label-container-height,
-      4.5rem
+      max(var(--_tabs-stacked-content-min-height), --density-space(72))
     );
   }
 
@@ -631,7 +686,7 @@
     flex: 0 0 auto;
     min-inline-size: 0;
     min-block-size: var(--_tabs-container-height);
-    padding-block: 0;
+    padding-block: 0.25rem;
     padding-inline: var(--_tabs-tab-padding-inline);
     border: none;
     border-radius: var(--_tabs-active-container-shape);

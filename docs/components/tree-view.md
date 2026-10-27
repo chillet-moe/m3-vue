@@ -31,6 +31,12 @@ A compact single-select tree for project files and settings categories. Expansio
 
 <StyleTokenTable component="TreeView" />
 
+## Row sizes
+
+Set `size` on TreeView for its rows. Custom row rendering can set `size` on individual TreeItem components; flattened rows do not inherit the size of their logical parent node.
+
+See [Row sizes](../guides/styling#row-sizes) for the scale, shared `rowSize` default and density behavior.
+
 ## Examples
 
 ### Project files and actions
@@ -123,6 +129,6 @@ Refs/getters for `value` and `expanded` are controlled sources; static values in
 
 ## Layout and styling
 
-Compact rows are 32 dp; `density="comfortable"` uses 40 dp. Customize dimensions and selected colors with the public tokens above. `--md-color-container`, `--md-color-on-container`, and `--md-state-layer-color` preserve the library's semantic color context. For root layout, pass a class to `TreeView` or `TreeItem`; for internal styling use the documented `data-scope` / `data-part` anatomy. `row` is the full-width visual and interaction surface; the `TreeItem` root represents one focusable node.
+Rows are 48dp by default. Set `--md-density: -2` for 40dp or `--md-density: -4` for 32dp; the old `density` prop has been removed. See [Density](../guides/styling#density). Customize dimensions and selected colors with the public tokens above. `--md-color-container`, `--md-color-on-container`, and `--md-state-layer-color` preserve the library's semantic color context. For root layout, pass a class to `TreeView` or `TreeItem`; for internal styling use the documented `data-scope` / `data-part` anatomy. `row` is the full-width visual and interaction surface; the `TreeItem` root represents one focusable node.
 
 The tree does not create a scroll container or implement a virtualizer. Let the containing panel own scrolling, with its padding inside the scrolling region and fixed toolbars outside it. Drag and drop, checkbox selection, and multiselect are not included.

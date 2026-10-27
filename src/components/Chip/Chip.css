@@ -282,7 +282,10 @@
     --_chip-with-icon-side-space: var(--md-chip-with-icon-side-space, 0.5rem);
 
     --_assist-chip-container-shape: var(--md-assist-chip-container-shape, var(--md-shape-chip));
-    --_assist-chip-container-height: var(--md-assist-chip-container-height, 2rem);
+    --_assist-chip-container-height: var(
+      --md-assist-chip-container-height,
+      --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
+    );
     --_assist-chip-flat-container-elevation: var(
       --md-assist-chip-flat-container-elevation,
       var(--md-sys-elevation-level0)
@@ -381,7 +384,10 @@
     );
 
     --_filter-chip-container-shape: var(--md-filter-chip-container-shape, var(--md-shape-chip));
-    --_filter-chip-container-height: var(--md-filter-chip-container-height, 2rem);
+    --_filter-chip-container-height: var(
+      --md-filter-chip-container-height,
+      --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
+    );
     --_filter-chip-flat-container-elevation: var(
       --md-filter-chip-flat-container-elevation,
       var(--md-sys-elevation-level0)
@@ -622,7 +628,10 @@
     );
 
     --_input-chip-container-shape: var(--md-input-chip-container-shape, var(--md-shape-chip));
-    --_input-chip-container-height: var(--md-input-chip-container-height, 2rem);
+    --_input-chip-container-height: var(
+      --md-input-chip-container-height,
+      --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
+    );
     --_input-chip-container-elevation: var(--md-input-chip-container-elevation, var(--md-sys-elevation-level0));
     --_input-chip-unselected-outline-color: var(
       --md-input-chip-unselected-outline-color,
@@ -806,7 +815,10 @@
     );
 
     --_suggestion-chip-container-shape: var(--md-suggestion-chip-container-shape, var(--md-shape-chip));
-    --_suggestion-chip-container-height: var(--md-suggestion-chip-container-height, 2rem);
+    --_suggestion-chip-container-height: var(
+      --md-suggestion-chip-container-height,
+      --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
+    );
     --_suggestion-chip-flat-container-elevation: var(
       --md-suggestion-chip-flat-container-elevation,
       var(--md-sys-elevation-level0)
@@ -952,6 +964,7 @@
     padding-inline-start: var(--_chip-leading-space);
     padding-inline-end: var(--_chip-trailing-space);
     block-size: var(--_chip-container-height);
+    min-block-size: calc(max(1lh, var(--_chip-avatar-size, 0px), var(--_chip-icon-size)) + 0.25rem);
 
     background-color: var(--_chip-container-color);
     color: var(--_chip-label-color);
@@ -969,7 +982,10 @@
     border-end-end-radius: var(--_chip-container-shape);
     border-end-start-radius: var(--_chip-container-shape);
 
-    --_chip-container-height: var(--md-chip-container-height, 2rem);
+    --_chip-container-height: var(
+      --md-chip-container-height,
+      --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
+    );
     --_chip-container-shape: var(--md-chip-container-shape, var(--md-shape-chip));
     --_chip-flat-container-elevation: var(--md-chip-flat-container-elevation, var(--md-sys-elevation-level0));
     --_chip-elevated-container-elevation: var(--md-chip-elevated-container-elevation, var(--md-sys-elevation-level1));

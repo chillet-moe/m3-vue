@@ -28,6 +28,12 @@ NavigationRail provides vertical primary destinations through `NavigationRailIte
 
 <DemoContainer><NavigationRail v-model="value" v-bind="props" style="block-size: 28rem"><NavigationRailItem value="home" icon="home" label="Home" /><NavigationRailItem value="bookmarks" icon="bookmark" label="Saved" /><NavigationRailItem value="folder" icon="folder" label="Files" /><NavigationRailItem value="settings" icon="settings" label="Settings" /></NavigationRail></DemoContainer>
 
+## Row sizes
+
+Set `size` on NavigationRail or NavigationRailItem. Expanded rows use the shared single-line scale. Collapsed rows retain room for the icon target and label; small sizes may reach the same content floor.
+
+See [Row sizes](../guides/styling#row-sizes) for the scale, shared `rowSize` default and density behavior.
+
 ## Examples
 
 ### Default

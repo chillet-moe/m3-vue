@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, provide, unref, useId, useTemplateRef } from 'vue';
 import { menuDefaultsContextKey } from './MenuDefaultsContext';
 import { useMenu } from '@/composables/useMenu';
@@ -9,6 +10,8 @@ import type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue } from '
 export type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue };
 
 export type MenuProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Visual color style of the menu surface. */
   color?: MenuColor;
 
@@ -19,7 +22,7 @@ export type MenuProps = {
   multiple?: boolean;
 };
 
-const { color: colorProp, items = undefined, multiple = false } = defineProps<MenuProps>();
+const { size = undefined, color: colorProp, items = undefined, multiple = false } = defineProps<MenuProps>();
 
 const defaults = inject(menuDefaultsContextKey, undefined);
 const color = computed(() => colorProp ?? unref(defaults?.color) ?? 'standard');
@@ -93,6 +96,7 @@ defineExpose({
   hide: menuActions.hide,
   toggle: menuActions.toggle,
 });
+const rowSize = provideRowSize(() => size);
 </script>
 
 <template>
@@ -102,6 +106,7 @@ defineExpose({
     role="menu"
     aria-orientation="vertical"
     class="m3-menu m3-dropdown"
+    :data-size="rowSize"
     data-scope="menu"
     data-part="root"
     :data-color="color"

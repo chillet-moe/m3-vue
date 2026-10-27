@@ -1,3 +1,4 @@
+import '@/styles/themes/default.css';
 import { createApp, h, ref } from 'vue';
 import Menu from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';

@@ -21,6 +21,12 @@ import MenuLinksSrc from '../../demos/menu/MenuLinks.vue?raw';
 
 Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单项渲染，并由组件组统一处理键盘与选择行为。
 
+## 行尺寸
+
+可在 Menu 上设置 `size` 统一调整所有菜单行，在 MenuItem 上设置以调整单行，或在 MenuSubMenu 上设置以调整一个分支。声明式菜单项和子菜单条目也接受 `size`。Select/Combobox 菜单会继承共享的行尺寸，其尺寸与输入框自身的尺寸相互独立。
+
+尺寸比例、共享的 `rowSize` 默认值和密度行为，详见[行尺寸](../guides/styling#row-sizes)。
+
 ## 颜色
 
 `color` 选择 `standard` 或 `vibrant` 调色板。显式属性优先于 `menuDefaultsContextKey` 中的 `color`，内置回退值为 `standard`。可在 `M3VuePlugin` 中设置 `menuColor` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
@@ -82,6 +88,10 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 ## 浮动表面
 
 共享主题颜色、边框、阴影，以及包含嵌套菜单和对话框的交互式示例，请参阅[浮动表面 token](../utilities/elevation.md#floating-surfaces)。
+
+## 密度
+
+菜单行会继承 `--md-density`，包括嵌套菜单以及 Select/Combobox 选项。每级密度会调整 4dp 的垂直留白；上下内边距最低为 4dp。标签、图标和多行内容保持原有尺寸。若要保留菜单的默认间距，可在菜单上设置 `--md-density: 0`。显式设置 `--md-menus-menu-item-height`、`--md-menus-menu-item-top-space` 和 `--md-menus-menu-item-bottom-space` 时，对应值会覆盖密度规则。
 
 ## 参考
 

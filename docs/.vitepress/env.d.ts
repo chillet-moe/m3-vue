@@ -23,3 +23,9 @@ declare module 'virtual:component-anatomy/*' {
   const anatomy: ComponentAnatomy | null;
   export default anatomy;
 }
+
+declare module 'virtual:source-api-meta' {
+  import type { SourceApiMeta } from './plugins/source-api-meta';
+  const meta: Record<string, SourceApiMeta>;
+  export default meta;
+}

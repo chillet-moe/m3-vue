@@ -14,7 +14,6 @@
     --md-tree-icon-size: initial;
   }
   .m3-tree {
-    --_tree-row-height: var(--md-tree-row-height, --dp(32));
     --_tree-indent: var(--md-tree-indent, --dp(16));
     --_tree-padding: var(--md-tree-padding-inline, --dp(8));
     --_tree-gap: var(--md-tree-gap, --dp(6));
@@ -24,9 +23,6 @@
     --_tree-selected-container: var(--md-tree-selected-container-color, var(--md-sys-color-secondary-container));
     --_tree-selected-label: var(--md-tree-selected-label-color, var(--md-sys-color-on-secondary-container));
     --_tree-icon-size: var(--md-tree-icon-size, --dp(18));
-  }
-  .m3-tree[data-density='comfortable'] {
-    --_tree-row-height: var(--md-tree-row-height, --dp(40));
   }
 }
 
@@ -40,11 +36,14 @@
     outline: none;
   }
   .m3-tree-row {
+    --_tree-row-height: var(--md-tree-row-height, var(--_row-height));
     @apply body-medium;
     position: relative;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
     min-block-size: var(--_tree-row-height);
+    padding-block: --dp(4);
     gap: var(--_tree-gap);
     padding-inline: calc(var(--_tree-padding) + (var(--_tree-level) - 1) * var(--_tree-indent)) var(--_tree-padding);
     border-radius: var(--_tree-shape);
@@ -77,7 +76,10 @@
     justify-content: center;
     flex: 0 0 var(--_tree-icon-size);
     inline-size: var(--_tree-icon-size);
-    min-block-size: var(--_tree-row-height);
+    min-block-size: var(--_tree-icon-size);
+    /* Keep the disclosure hit area as tall as the row, including its block padding. */
+    align-self: stretch;
+    margin-block: --dp(-4);
     --md-icon-size: var(--_tree-icon-size);
   }
   .m3-tree-disclosure > svg {

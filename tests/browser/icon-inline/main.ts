@@ -1,3 +1,4 @@
+import '@/styles/themes/default.css';
 import { createApp, h } from 'vue';
 import { Button, Icon } from '@/index';
 

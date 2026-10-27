@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { createOverlayHost, provideOverlayHost } from '@/internal/overlayHost/overlayHost';
-const overlayHost = provideOverlayHost(createOverlayHost());
 import { Content, useData, useRoute } from 'vitepress';
 import { computed, watch } from 'vue';
+import { provideDocsCustomization } from '../customization/state';
 import { OverlayHost } from '@/components/OverlayHost';
 
 import DocsContent from './components/DocsContent.vue';
@@ -11,6 +11,9 @@ import DocsTopBar from './components/DocsTopBar.vue';
 import HomeLayout from './components/HomeLayout.vue';
 import NotFoundView from './components/NotFoundView.vue';
 import { useSidebarControl } from './composables/sidebar';
+
+const overlayHost = provideOverlayHost(createOverlayHost());
+provideDocsCustomization();
 
 const { frontmatter, page } = useData();
 const route = useRoute();

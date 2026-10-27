@@ -1,3 +1,4 @@
+import type { RowSize } from '@/styles/rowSize';
 export type MenuColor = 'standard' | 'vibrant';
 
 export type MenuItemValue = string | number;
@@ -11,6 +12,7 @@ type MenuContentBase = {
 };
 
 type MenuTextContentBase = MenuContentBase & {
+  size?: RowSize;
   label: string;
   supportingText?: string;
   trailingText?: string;

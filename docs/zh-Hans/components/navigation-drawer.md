@@ -33,6 +33,12 @@ NavigationDrawer 提供纵向导航目标，其中的条目可供选择，分区
 
 <DemoContainer><NavigationDrawer v-model="value" v-bind="props" style="block-size: 30rem"><NavigationDrawerItem value="home" icon="home" label="主页" /><NavigationDrawerItem value="inbox" icon="inbox" label="收件箱" /><NavigationDrawerSection icon="folder" label="项目"><NavigationDrawerItem value="active" icon="task_alt" label="进行中" /><NavigationDrawerItem value="archived" icon="archive" label="已归档" /></NavigationDrawerSection><NavigationDrawerSection icon="groups" label="团队"><NavigationDrawerItem value="design" icon="palette" label="设计" /><NavigationDrawerItem value="engineering" icon="engineering" label="工程" /></NavigationDrawerSection><NavigationDrawerSection icon="list" label="纯文本"><NavigationDrawerItem value="drafts" icon="draft" label="草稿" /><NavigationDrawerItem value="sent" icon="send" label="已发送" /></NavigationDrawerSection><NavigationDrawerItem value="settings" icon="settings" label="设置" /></NavigationDrawer></DemoContainer>
 
+## 行尺寸
+
+在 NavigationDrawer 上设置 `size` 可调整所有导航目标。NavigationDrawerItem 可单独覆盖某一行；NavigationDrawerSection 可设置其触发项及后代导航目标的尺寸。
+
+尺寸比例、共享的 `rowSize` 默认值和密度行为，详见[行尺寸](../guides/styling#row-sizes)。
+
 ## 示例
 
 ### 默认

@@ -125,7 +125,12 @@ function contentKey(item: MenuContentItem, index: number) {
 
         <MenuDivider v-else-if="item.type === 'divider'" />
 
-        <MenuSubMenu v-else-if="isSubmenuItem(item)" :color="item.color" :debug-safe-triangle="item.debugSafeTriangle">
+        <MenuSubMenu
+          v-else-if="isSubmenuItem(item)"
+          :color="item.color"
+          :size="item.size"
+          :debug-safe-triangle="item.debugSafeTriangle"
+        >
           <template #trigger="{ open }">
             <MenuItem submenu :submenu-open="open" :disabled="item.disabled">
               <template v-if="item.leadingIcon" #leading>
@@ -156,6 +161,7 @@ function contentKey(item: MenuContentItem, index: number) {
         </MenuSubMenu>
 
         <MenuItem
+          :size="item.size"
           v-else-if="isActionItem(item)"
           :value="item.value"
           :disabled="item.disabled"

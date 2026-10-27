@@ -83,7 +83,7 @@ export default defineNuxtConfig({
 By default, the Nuxt module will:
 
 - register all components for auto import
-- add `@chillet/m3-vue/style.css` to `css`
+- add shared `@chillet/m3-vue/style.css` and `@chillet/m3-vue/themes/default.css` to `css`
 - install `M3VuePlugin` so `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` are available
 
 You can customize it with `m3Vue`:

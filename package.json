@@ -51,18 +51,19 @@
       "import": "./dist/locales/zh-Hant.mjs"
     },
     "./style.css": "./dist/style.css",
-    "./typography-compact.css": "./dist/typography-compact.css",
     "./typography-classes.css": "./dist/typography-classes.css",
     "./color-classes.css": "./dist/color-classes.css",
     "./typography.module.css": "./dist/typography.module.css",
-    "./colors.module.css": "./dist/colors.module.css"
+    "./colors.module.css": "./dist/colors.module.css",
+    "./themes/default.css": "./dist/themes/default.css",
+    "./themes/compact.css": "./dist/themes/compact.css"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "vite build && pnpm run build:types",
+    "build": "pnpm run themes:generate && vite build && pnpm run build:types",
     "build:types": "vue-tsc -p tsconfig.types.json && tsc-alias -p tsconfig.types.json",
     "prepublishOnly": "pnpm run build",
     "test": "vitest run",
@@ -77,7 +78,8 @@
     "docs:preview": "vitepress preview docs",
     "remove-unused-vars": "tsx scripts/remove-unused-vars/index.ts",
     "check": "pnpm run fmt:check && pnpm run lint && pnpm run typecheck && pnpm run docs:check",
-    "docs:check": "node scripts/check-docs.mjs"
+    "docs:check": "node scripts/check-docs.mjs",
+    "themes:generate": "node --import tsx scripts/generate-themes.ts"
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",

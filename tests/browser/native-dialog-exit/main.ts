@@ -1,3 +1,4 @@
+import '@/styles/themes/default.css';
 import { createApp, h, nextTick, ref } from 'vue';
 import { Dialog } from '@/index';
 

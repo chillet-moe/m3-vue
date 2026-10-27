@@ -4,7 +4,7 @@ export const treeViewStyleTokens = [
   {
     name: '--md-tree-row-height',
     description: 'Minimum row height.',
-    fallback: '32 dp (compact), 40 dp (comfortable)',
+    fallback: '48 dp at density 0; 32 dp at density -4',
     category: 'Size',
     targets: [
       {

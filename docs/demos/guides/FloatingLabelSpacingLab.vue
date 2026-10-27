@@ -5,14 +5,20 @@ import { CheckBox } from '@/components/CheckBox';
 import { Combobox } from '@/components/Combobox';
 import { Divider } from '@/components/Divider';
 import { Select, type SelectModelValue } from '@/components/Select';
-import { Slider } from '@/components/Slider';
 import { Switch } from '@/components/Switch';
 import { TextField } from '@/components/TextField';
 import { coffeeOptions, stateOptions } from '../shared/selectOptions';
 
-const spacing = ref(8);
+const rowGap = ref('');
+const columnGap = ref('');
+const density = ref('');
+const previewStyle = computed(() => ({
+  '--md-field-row-gap': rowGap.value.trim() || undefined,
+  '--md-field-column-gap': columnGap.value.trim() || undefined,
+  '--md-density': density.value.trim() || undefined,
+}));
 const showLayoutBoxes = ref(true);
-const labelClearanceInput = ref('0.5rem');
+const labelClearanceInput = ref('');
 const labelClearance = computed(() => labelClearanceInput.value.trim() || '0rem');
 
 const name = ref('');
@@ -29,21 +35,9 @@ const usageAnalytics = ref(false);
 <template>
   <div class="floating-label-spacing-lab">
     <div class="floating-label-spacing-lab__controls">
-      <label class="floating-label-spacing-lab__spacing-control">
-        <span class="floating-label-spacing-lab__control-label">
-          Vertical gap
-          <output class="floating-label-spacing-lab__value">{{ spacing }}px</output>
-        </span>
-        <Slider
-          v-model:value="spacing"
-          :min="0"
-          :max="40"
-          :step="1"
-          size="small"
-          :value-indicator="false"
-          aria-label="Vertical gap in pixels"
-        />
-      </label>
+      <TextField v-model="rowGap" label="Row gap" placeholder="Theme default" size="small" />
+      <TextField v-model="columnGap" label="Column gap" placeholder="Theme default" size="small" />
+      <TextField v-model="density" label="Density" type="number" placeholder="Inherited" size="small" />
 
       <Switch v-model:checked="showLayoutBoxes">Show nominal component boxes</Switch>
 
@@ -55,17 +49,16 @@ const usageAnalytics = ref(false);
       />
     </div>
 
-    <div class="floating-label-spacing-lab__previews">
+    <div class="floating-label-spacing-lab__previews" :style="previewStyle">
       <section class="floating-label-spacing-lab__preview">
         <div class="floating-label-spacing-lab__preview-heading">
-          <h3>Field-only stack</h3>
-          <p>Useful for comparing adjacent floating labels directly.</p>
+          <h3>Field grid</h3>
+          <p>Compare row and column gaps in a responsive form.</p>
         </div>
 
         <div
-          class="floating-label-spacing-lab__stack"
+          class="floating-label-spacing-lab__stack floating-label-spacing-lab__grid"
           :data-show-layout-boxes="showLayoutBoxes ? 'true' : undefined"
-          :style="{ rowGap: `${spacing}px` }"
         >
           <TextField
             v-model="name"
@@ -110,11 +103,7 @@ const usageAnalytics = ref(false);
           <p>Compare fields with the text, selection controls, divider, and actions that normally surround them.</p>
         </div>
 
-        <div
-          class="floating-label-spacing-lab__stack"
-          :data-show-layout-boxes="showLayoutBoxes ? 'true' : undefined"
-          :style="{ rowGap: `${spacing}px` }"
-        >
+        <div class="floating-label-spacing-lab__stack" :data-show-layout-boxes="showLayoutBoxes ? 'true' : undefined">
           <TextField
             v-model="search"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
@@ -168,12 +157,14 @@ const usageAnalytics = ref(false);
 .floating-label-spacing-lab {
   display: grid;
   gap: 2rem;
-  inline-size: min(100%, 28rem);
+  inline-size: 100%;
   margin-inline: auto;
 }
 
 .floating-label-spacing-lab__controls {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  align-items: center;
   gap: 1rem;
   padding: 1rem;
   border: 1px solid var(--md-sys-color-outline-variant);
@@ -181,31 +172,13 @@ const usageAnalytics = ref(false);
   background: var(--md-sys-color-surface-container-low);
 }
 
-.floating-label-spacing-lab__spacing-control {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.floating-label-spacing-lab__control-label {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--md-sys-color-on-surface);
-  font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: var(--md-sys-typescale-body-medium-line-height);
-  font-weight: var(--md-sys-typescale-body-medium-weight);
-}
-
-.floating-label-spacing-lab__value {
-  min-inline-size: 3.5rem;
-  color: var(--md-sys-color-primary);
-  font-variant-numeric: tabular-nums;
-  text-align: end;
-}
-
 .floating-label-spacing-lab__stack {
   display: grid;
+  row-gap: var(--md-field-row-gap);
+  column-gap: var(--md-field-column-gap);
+}
+.floating-label-spacing-lab__grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
 }
 
 .floating-label-spacing-lab__previews {
@@ -244,6 +217,7 @@ const usageAnalytics = ref(false);
 }
 
 .floating-label-spacing-lab__field {
+  min-inline-size: 0;
   inline-size: 100%;
 }
 

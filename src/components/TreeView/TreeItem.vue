@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, useTemplateRef } from 'vue';
 import { Icon } from '@/components/Icon';
 import { triggerKeyboardRipple, vStateLayer } from '@/components/StateLayer/state-layer';
 import type { TreeNode } from '@/composables/useTree';
 import { treeContextKey, type TreeItemSlotProps } from './TreeContext';
 
-export type TreeItemProps = { item: TreeNode };
+export type TreeItemProps = { item: TreeNode; size?: RowSize };
 const props = defineProps<TreeItemProps>();
 const tree = inject(treeContextKey);
 if (!tree) throw new Error('TreeItem must be used inside TreeView.');
@@ -57,12 +58,14 @@ function handleActionKey(event: KeyboardEvent) {
     actions.focus(props.item.value);
   }
 }
+const rowSize = provideRowSize(() => props.size);
 </script>
 
 <template>
   <div
     v-bind="actions.getItemAttrs(item.value)"
-    class="m3-tree-item"
+    class="m3-tree-item m3-row-size"
+    :data-size="rowSize"
     data-scope="tree-item"
     data-part="root"
     :data-selected="state.selected"

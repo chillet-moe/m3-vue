@@ -4,7 +4,7 @@ import { TreeView } from '@/components/TreeView';
 import { IconButton } from '@/components/IconButton';
 import type { TreeNode } from '@/composables/useTree';
 
-defineProps<{ density?: 'compact' | 'comfortable'; selectWhenFocused?: boolean }>();
+defineProps<{ selectWhenFocused?: boolean }>();
 const selected = ref('overview');
 const expanded = ref(['project', 'documents']);
 const pinned = ref<string[]>([]);
@@ -46,7 +46,6 @@ function togglePin(value: string) {
     v-model:expanded="expanded"
     class="tree-project-demo"
     :items="items"
-    :density="density"
     :select-when-focused="selectWhenFocused"
     aria-label="Project files"
   >

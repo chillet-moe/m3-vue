@@ -165,9 +165,6 @@
       var(--md-sys-typescale-label-large-weight)
     );
 
-    --_menus-menu-item-height: var(--md-menus-menu-item-height, --dp(48));
-    --_menus-menu-item-top-space: var(--md-menus-menu-item-top-space, --dp(12));
-    --_menus-menu-item-bottom-space: var(--md-menus-menu-item-bottom-space, --dp(12));
     --_menus-menu-item-leading-space: var(--md-menus-menu-item-leading-space, --dp(12));
     --_menus-menu-item-trailing-space: var(--md-menus-menu-item-trailing-space, --dp(12));
     --_menus-menu-item-between-space: var(--md-menus-menu-item-between-space, --dp(12));

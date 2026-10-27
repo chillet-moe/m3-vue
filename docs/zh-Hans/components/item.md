@@ -53,7 +53,7 @@ ListItem 提供丰富的列表项布局。默认情况下它可交互，并渲�
 
 公开 Token 会覆盖预设值：`--md-item-min-height`、`--md-item-padding-block`、`--md-item-padding-inline`、`--md-item-gap`、`--md-item-content-gap` 和 `--md-item-icon-size`。可在祖先元素或组件根元素上设置；根元素上的值优先于继承值。组件本身不会设置这些公开几何 Token。
 
-预设定义的是最小高度，因此描述和多行标题可使行增高。可选的 `typography-compact.css` 预设会独立改变字号和行高，不影响这些尺寸。
+表格显示密度 `0` 的尺寸。继承的 `--md-density` token 会降低最小高度和垂直内边距，不改变文字、图标或水平间距。公开尺寸 token 优先级更高。预设定义的是最小高度，因此描述和多行标题可使行增高。详见[密度](../guides/styling#密度)。
 
 ## 示例
 

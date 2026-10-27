@@ -26,6 +26,7 @@ const { isChinese } = useLocaleNavigation();
 <style scoped>
 .docs-pager {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem;
 

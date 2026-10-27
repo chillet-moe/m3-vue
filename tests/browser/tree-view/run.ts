@@ -54,7 +54,7 @@ try {
   assert.ok(rootBox && childBox);
   assert.equal(rootBox.x, childBox.x);
   assert.equal(rootBox.width, childBox.width);
-  assert.ok(childBox.height >= 32 && childBox.height <= 40);
+  assert.equal(childBox.height, 48);
   const indentation = await main
     .locator('[data-part="label"]')
     .evaluate((element) => element.getBoundingClientRect().left);

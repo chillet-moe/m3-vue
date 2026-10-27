@@ -1,3 +1,4 @@
+import '@/styles/themes/default.css';
 import { createApp, h, reactive, ref } from 'vue';
 import { Dialog, TextField } from '@/index';
 

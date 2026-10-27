@@ -21,6 +21,12 @@ import MenuLinksSrc from '../demos/menu/MenuLinks.vue?raw';
 
 Menu supports dropdown, context, submenu, and object-driven item rendering while keeping keyboard and selection behavior inside the component set.
 
+## Row sizes
+
+Set `size` on Menu for all rows, on MenuItem for one row, or on MenuSubMenu for a branch. Declarative item and submenu entries also accept `size`. Select/Combobox menus inherit the shared row size independently of their field size.
+
+See [Row sizes](../guides/styling#row-sizes) for the scale, shared `rowSize` default and density behavior.
+
 ## Color
 
 `color` selects the `standard` or `vibrant` palette. An explicit prop overrides `menuDefaultsContextKey`'s `color`,
@@ -85,6 +91,13 @@ If you are using Vue Router, keep `MenuItem` as the rendered anchor and let `Rou
 ## Floating surface
 
 See [floating surface tokens](../utilities/elevation.md#floating-surfaces) for shared theme colors, borders, shadows, and an interactive example with nested menus and dialogs.
+
+## Density
+
+Menu rows inherit `--md-density`, including nested menus and Select/Combobox options. Each step adjusts vertical
+whitespace by 4dp; top and bottom padding stop at 4dp each. Labels, icons and multiline content retain their size.
+Set `--md-density: 0` on a menu to keep its default spacing. Explicit `--md-menus-menu-item-height`,
+`--md-menus-menu-item-top-space` and `--md-menus-menu-item-bottom-space` values override the corresponding density rules.
 
 ## Reference
 

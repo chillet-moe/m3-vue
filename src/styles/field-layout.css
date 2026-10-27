@@ -1,0 +1,7 @@
+@layer tokens {
+  :root {
+    /* Opt-in parent layout gaps; independent of control density and label clearance. */
+    --md-field-row-gap: 1rem;
+    --md-field-column-gap: 1rem;
+  }
+}

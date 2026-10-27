@@ -245,8 +245,8 @@
   }
 
   .m3-item[data-size='extra-small'] {
-    --_item-min-height: var(--md-item-min-height, --dp(36));
-    --_item-padding-block: var(--md-item-padding-block, --dp(6));
+    --_item-min-height: var(--md-item-min-height, --density-space(36));
+    --_item-padding-block: var(--md-item-padding-block, --density-space(6, 4, 2));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(12));
     --_item-gap: var(--md-item-gap, --dp(8));
     --_item-content-gap: var(--md-item-content-gap, --dp(1));
@@ -254,8 +254,8 @@
   }
 
   .m3-item[data-size='small'] {
-    --_item-min-height: var(--md-item-min-height, --dp(48));
-    --_item-padding-block: var(--md-item-padding-block, --dp(6));
+    --_item-min-height: var(--md-item-min-height, --density-space(48));
+    --_item-padding-block: var(--md-item-padding-block, --density-space(6, 4, 2));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(16));
     --_item-gap: var(--md-item-gap, --dp(12));
     --_item-content-gap: var(--md-item-content-gap, --dp(1));
@@ -263,8 +263,8 @@
   }
 
   .m3-item[data-size='medium'] {
-    --_item-min-height: var(--md-item-min-height, --dp(56));
-    --_item-padding-block: var(--md-item-padding-block, --dp(6));
+    --_item-min-height: var(--md-item-min-height, --density-space(56));
+    --_item-padding-block: var(--md-item-padding-block, --density-space(6, 4, 2));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(16));
     --_item-gap: var(--md-item-gap, --dp(20));
     --_item-content-gap: var(--md-item-content-gap, --dp(1));
@@ -272,8 +272,8 @@
   }
 
   .m3-item[data-size='large'] {
-    --_item-min-height: var(--md-item-min-height, --dp(64));
-    --_item-padding-block: var(--md-item-padding-block, --dp(8));
+    --_item-min-height: var(--md-item-min-height, --density-space(64));
+    --_item-padding-block: var(--md-item-padding-block, --density-space(8, 4, 2));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(22));
     --_item-gap: var(--md-item-gap, --dp(20));
     --_item-content-gap: var(--md-item-content-gap, --dp(2));
@@ -281,8 +281,8 @@
   }
 
   .m3-item[data-size='extra-large'] {
-    --_item-min-height: var(--md-item-min-height, --dp(80));
-    --_item-padding-block: var(--md-item-padding-block, --dp(10));
+    --_item-min-height: var(--md-item-min-height, --density-space(80));
+    --_item-padding-block: var(--md-item-padding-block, --density-space(10, 4, 2));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(24));
     --_item-gap: var(--md-item-gap, --dp(24));
     --_item-content-gap: var(--md-item-content-gap, --dp(3));

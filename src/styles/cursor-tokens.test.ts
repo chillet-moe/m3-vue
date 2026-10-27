@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const componentsDirectory = 'src/components';
-const tokenStyles = readFileSync('src/styles/tokens.css', 'utf8');
+const tokenStyles = readFileSync('src/styles/themes/default.css', 'utf8');
 
 function collectCssFiles(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {

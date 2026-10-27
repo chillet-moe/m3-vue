@@ -8,6 +8,8 @@
   "include": [
     "env.d.ts",
     "docs/.vitepress/env.d.ts",
+    "docs/.vitepress/**/*.ts",
+    "docs/.vitepress/**/*.vue",
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",

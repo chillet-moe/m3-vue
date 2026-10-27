@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { isNode } from '@/internal/elementEnvironment';
 
@@ -8,6 +9,8 @@ import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
 import { createMenuSafeTriangle, isPointInsideTriangle, type Point, type Triangle } from './menuSafeTriangle';
 
 type MenuSubMenuProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Visual color style of the nested menu surface. Defaults to the parent menu color. */
   color?: MenuColor;
 
@@ -323,6 +326,7 @@ onUnmounted(() => {
   unregisterSubmenu?.();
 });
 useElementEnvironment(wrapperRef, () => clearSafeTriangle);
+provideRowSize(() => props.size);
 </script>
 
 <template>

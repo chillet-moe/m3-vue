@@ -61,8 +61,10 @@ Public tokens override preset values: `--md-item-min-height`, `--md-item-padding
 `--md-item-gap`, `--md-item-content-gap`, and `--md-item-icon-size`. Set them on an ancestor or on the component root;
 root values take precedence over inherited values. Components do not assign these public geometry tokens themselves.
 
-Presets specify minimum heights, so descriptions and multiline titles can grow the row. The optional
-`typography-compact.css` preset changes font sizes and line heights independently of these dimensions.
+The table shows density `0`. The inherited `--md-density` token reduces minimum height and vertical padding,
+without changing text, icons or horizontal spacing. Public dimension tokens take precedence. Presets specify minimum
+heights, so descriptions and multiline titles can grow the row.
+See [Density](../guides/styling#density).
 
 ## Examples
 

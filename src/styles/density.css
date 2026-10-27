@@ -1,0 +1,6 @@
+@layer components {
+  /* Focused selection and feedback surfaces keep their own spacing, including nested controls. */
+  :where(.m3-dialog, .m3-snackbar, .m3-date-picker, .m3-time-picker) {
+    --md-density: 0;
+  }
+}

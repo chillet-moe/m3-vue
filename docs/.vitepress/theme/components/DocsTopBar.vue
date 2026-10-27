@@ -1,25 +1,20 @@
 <script setup lang="ts">
 import { useData, withBase } from 'vitepress';
 import { VPNavBarSearch } from 'vitepress/theme';
-import { computed } from 'vue';
 
 import { Button, IconButton } from '@/index';
-import ShapeTokenControls from '../../components/ShapeTokenControls.vue';
+import CustomizationControls from '../../components/CustomizationControls.vue';
 import { useLocaleNavigation, useNav } from '../composables/nav';
 import { useStickyPreviewPreference } from '../composables/preferences';
 import { useSidebar, useSidebarControl } from '../composables/sidebar';
 import { normalizePath, resolveSocialLabel } from '../utils';
 
-const { page, frontmatter, site, isDark } = useData();
+const { isDark } = useData();
 const { navItems, socialLinks } = useNav();
 const { isChinese, languageLink } = useLocaleNavigation();
 const { currentPath } = useSidebar();
 const { toggle: toggleSidebar } = useSidebarControl();
 const stickyPreviewEnabled = useStickyPreviewPreference();
-
-const pageTitle = computed(() => {
-  return page.value.title || frontmatter.value.title || site.value.title || 'M3 Vue';
-});
 
 function isActiveLink(path: string) {
   return normalizePath(path) === currentPath.value;
@@ -28,11 +23,9 @@ function isActiveLink(path: string) {
 function resolveLink(path: string) {
   return withBase(path);
 }
-
 function toggleAppearance() {
   isDark.value = !isDark.value;
 }
-
 function toggleStickyPreview() {
   stickyPreviewEnabled.value = !stickyPreviewEnabled.value;
 }
@@ -59,10 +52,11 @@ function toggleStickyPreview() {
           v-for="item in navItems"
           :key="item.link"
           class="docs-nav-link"
-          variant="text"
-          size="medium"
+          :variant="isActiveLink(item.link) ? 'tonal' : 'text'"
+          size="small"
+          :press-shape-morph="false"
           :href="resolveLink(item.link)"
-          :data-active="isActiveLink(item.link) ? 'true' : 'false'"
+          :aria-current="isActiveLink(item.link) ? 'page' : undefined"
         >
           {{ item.text }}
         </Button>
@@ -89,6 +83,7 @@ function toggleStickyPreview() {
           variant="standard"
           size="small"
           width="default"
+          class="docs-sticky-toggle"
           icon="push_pin"
           :aria-label="
             stickyPreviewEnabled
@@ -99,11 +94,11 @@ function toggleStickyPreview() {
                 ? '开启预览置顶'
                 : 'Enable sticky preview'
           "
-          :data-active="stickyPreviewEnabled ? 'true' : 'false'"
+          :aria-pressed="stickyPreviewEnabled"
           @click="toggleStickyPreview"
         />
 
-        <ShapeTokenControls />
+        <CustomizationControls />
 
         <IconButton
           variant="standard"
@@ -128,6 +123,7 @@ function toggleStickyPreview() {
 
 <style scoped>
 .docs-topbar {
+  --md-density: 0;
   position: sticky;
   inset-block-start: 0;
   z-index: 20;
@@ -154,15 +150,6 @@ function toggleStickyPreview() {
   display: none;
 }
 
-.docs-page-title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .docs-nav {
   display: flex;
   flex-wrap: wrap;
@@ -170,7 +157,7 @@ function toggleStickyPreview() {
   gap: 0.5rem;
 }
 
-.docs-nav-link[data-active='true'] {
+.docs-sticky-toggle[aria-pressed='true'] {
   color: var(--md-sys-color-primary);
   background: --translucent(var(--md-sys-color-primary), 0.12);
 }
@@ -179,11 +166,6 @@ function toggleStickyPreview() {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.docs-topbar-actions :deep([data-active='true']) {
-  color: var(--md-sys-color-primary);
-  background: --translucent(var(--md-sys-color-primary), 0.12);
 }
 
 .docs-search :deep(.VPNavBarSearchButton) {

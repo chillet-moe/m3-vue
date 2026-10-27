@@ -53,6 +53,10 @@
     --_outline-color: var(--_input-otp-outline-color);
     --_outline-width: var(--_input-otp-outline-width);
     --_container-size: var(--_input-otp-medium-container-size);
+    --_container-height: var(
+      --md-input-otp-medium-container-size,
+      --density-height(48, var(--_input-otp-input-text-line-height), 24, 4)
+    );
     --_input-color: var(--_input-otp-input-text-color);
     --_caret-color: var(--_input-otp-caret-color);
 
@@ -63,6 +67,10 @@
 
   .m3-input-otp[data-size='small'] {
     --_container-size: var(--_input-otp-small-container-size);
+    --_container-height: var(
+      --md-input-otp-small-container-size,
+      --density-height(40, var(--_input-otp-input-text-line-height), 20, 4)
+    );
     --_input-otp-input-text-size: var(--md-input-otp-input-text-size, var(--md-sys-typescale-title-small-size));
     --_input-otp-input-text-line-height: var(
       --md-input-otp-input-text-line-height,
@@ -72,6 +80,10 @@
 
   .m3-input-otp[data-size='large'] {
     --_container-size: var(--_input-otp-large-container-size);
+    --_container-height: var(
+      --md-input-otp-large-container-size,
+      --density-height(56, var(--_input-otp-input-text-line-height), 28, 4)
+    );
     --_input-otp-input-text-size: var(--md-input-otp-input-text-size, var(--md-sys-typescale-title-large-size));
     --_input-otp-input-text-line-height: var(
       --md-input-otp-input-text-line-height,
@@ -93,7 +105,7 @@
   .m3-input-otp-input {
     box-sizing: border-box;
     inline-size: var(--_container-size);
-    block-size: var(--_container-size);
+    block-size: var(--_container-height);
     padding: 0;
     border: var(--_outline-width) solid var(--_outline-color);
     border-radius: var(--_input-otp-container-shape);

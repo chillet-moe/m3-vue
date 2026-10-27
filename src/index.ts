@@ -102,3 +102,5 @@ export { createOverlayHost, provideOverlayHost, useOverlayHost } from './interna
 export type { OverlayHostController } from './internal/overlayHost/overlayHost';
 export { createOverlayService, useOverlays } from './overlays';
 export type { OverlayService } from './overlays';
+
+export { provideRowSize, rowSizeContextKey, type RowSize } from './styles/rowSize';

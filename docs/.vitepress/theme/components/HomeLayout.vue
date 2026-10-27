@@ -4,7 +4,7 @@ import { VPNavBarSearch } from 'vitepress/theme';
 import { computed } from 'vue';
 
 import { Button, Icon, IconButton } from '@/index';
-import ShapeTokenControls from '../../components/ShapeTokenControls.vue';
+import CustomizationControls from '../../components/CustomizationControls.vue';
 import { useHero, useLocaleNavigation, useNav, useSiteInfo } from '../composables/nav';
 import { mapHeroActionVariant, resolveSocialLabel } from '../utils';
 
@@ -63,7 +63,6 @@ const componentLinks = computed(() => [
 function resolveLink(path: string) {
   return withBase(path);
 }
-
 function toggleAppearance() {
   isDark.value = !isDark.value;
 }
@@ -110,7 +109,7 @@ function toggleAppearance() {
             {{ resolveSocialLabel(link.link) }}
           </Button>
 
-          <ShapeTokenControls />
+          <CustomizationControls />
 
           <IconButton
             variant="standard"

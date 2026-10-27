@@ -14,7 +14,7 @@ const sidebarLabels: Record<string, string> = {
   Installation: '安装',
   Guides: '指南',
   'Multiple windows': '多窗口',
-  Styling: '样式定制',
+  Customization: '样式定制',
   'Interaction Cursors': '交互光标',
   'Field Layout': '字段布局',
   'Appearance and Layout': '外观与布局',
@@ -62,7 +62,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'Appearance and Layout',
     items: [
-      { text: 'Styling', link: '/guides/styling' },
+      { text: 'Customization', link: '/guides/styling' },
       { text: 'Field Layout', link: '/guides/field-layout' },
       { text: 'Interaction Cursors', link: '/guides/interaction-cursors' },
       { text: 'Scrollable Content Visual Overflow', link: '/guides/scrollable-content-visual-overflow' },

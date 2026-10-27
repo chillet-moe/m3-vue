@@ -1,3 +1,4 @@
+import { rowSizeContextKey } from './rowSize';
 import { appearanceContextKey } from './appearance';
 import type { App, MaybeRef } from 'vue';
 import type { M3ComponentDefaultsOptions } from '@/defaults';
@@ -27,6 +28,7 @@ export function installM3StyleDefaults(
   app: App,
   options: M3ShapeOptions & M3FieldOptions & M3ComponentDefaultsOptions = {},
 ): void {
+  if (options.rowSize !== undefined) app.provide(rowSizeContextKey, options.rowSize);
   if (options.appearance !== undefined) app.provide(appearanceContextKey, { appearance: options.appearance });
   const context: FieldContext = {};
   if (options.shape !== undefined) context.shape = options.shape;

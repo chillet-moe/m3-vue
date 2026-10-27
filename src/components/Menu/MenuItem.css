@@ -28,8 +28,9 @@
     inline-size: 100%;
     box-sizing: border-box;
 
-    min-block-size: var(--_menus-menu-item-height, 2.75rem);
-    padding-block: var(--_menus-menu-item-top-space, 0.5rem) var(--_menus-menu-item-bottom-space, 0.5rem);
+    min-block-size: var(--md-menus-menu-item-height, var(--_row-height));
+    padding-block: var(--md-menus-menu-item-top-space, var(--_row-padding))
+      var(--md-menus-menu-item-bottom-space, var(--_row-padding));
     padding-inline: var(--_menus-menu-item-leading-space, 1rem) var(--_menus-menu-item-trailing-space, 1rem);
 
     border-radius: var(--_menus-menu-item-shape, var(--md-shape-popover-item));

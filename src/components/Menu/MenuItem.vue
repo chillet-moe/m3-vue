@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
 import { vStateLayer } from '@/components/StateLayer/state-layer';
@@ -10,6 +11,8 @@ import { menuItemOwnerContextKey, menuSelectionContextKey } from './MenuContext'
 import type { MenuItemValue } from './MenuTypes';
 
 export type MenuItemProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Optional value that participates in Menu selection state. */
   value?: MenuItemValue;
 
@@ -39,6 +42,7 @@ export type MenuItemProps = {
 };
 
 const {
+  size = undefined,
   value = undefined,
   href = undefined,
   disabled = false,
@@ -194,6 +198,7 @@ function hasTrailingText() {
 function hasSuffix() {
   return hasTrailing() || hasBadge() || hasTrailingText();
 }
+const rowSize = provideRowSize(() => size);
 </script>
 
 <template>
@@ -215,7 +220,8 @@ function hasSuffix() {
     :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
     :aria-checked="resolvedRole === 'menuitem' ? undefined : resolvedChecked ? 'true' : 'false'"
     :aria-describedby="hasSupporting() ? supportingId : undefined"
-    :class="['m3-state-layer', 'm3-menu-item']"
+    :class="['m3-state-layer', 'm3-menu-item', 'm3-row-size']"
+    :data-size="rowSize"
     data-scope="menu-item"
     data-part="root"
     @click="handleClick"

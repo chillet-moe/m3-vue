@@ -13,5 +13,4 @@ await import('./overlay-appearance/run');
 await import('./menu-reanchor/run');
 await import('./tree-view/run');
 
-await import('./typography-compact/run');
-
+await import('./density/run');

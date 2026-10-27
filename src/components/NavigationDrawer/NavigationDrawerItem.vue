@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
@@ -10,6 +11,8 @@ import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './N
 export type NavigationDrawerItemShape = 'rounded' | 'square';
 
 export type NavigationDrawerItemProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Destination value used by NavigationDrawer v-model. */
   value?: string;
 
@@ -119,6 +122,7 @@ const tooltip = computed<VTooltipBinding>(() => {
     interactive: false,
   };
 });
+const rowSize = provideRowSize(() => props.size);
 </script>
 
 <template>
@@ -133,7 +137,8 @@ const tooltip = computed<VTooltipBinding>(() => {
     :tabindex="tabIndex"
     :type="type"
     v-tooltip="tooltip"
-    class="m3-navigation-drawer-item m3-state-layer m3-morph-host"
+    :data-size="rowSize"
+    class="m3-row-size m3-navigation-drawer-item m3-state-layer m3-morph-host"
     data-scope="navigation-drawer-item"
     data-part="root"
     :data-item-value="props.value"

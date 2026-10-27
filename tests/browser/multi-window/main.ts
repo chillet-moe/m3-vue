@@ -1,9 +1,9 @@
+import '@/styles/themes/default.css';
 import { createApp } from 'vue';
 import { M3VuePlugin } from '@/index';
 import { lockPageScroll } from '@/internal/scrollLock/scrollLock';
 import Panel from './Panel.vue';
 import '@/styles/theme.css';
-import '@/styles/tokens.css';
 
 function trackDocumentListeners(document: Document) {
   const entries = new Set<{

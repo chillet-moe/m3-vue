@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, provide, toRef, unref } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
@@ -6,6 +7,8 @@ export type NavigationDrawerIconSpace = 'none' | 'root' | 'all';
 export type NavigationDrawerShape = 'rounded' | 'square';
 
 export type NavigationDrawerProps = {
+  /** Row size; inherits the nearest row size or defaults to medium. */
+  size?: RowSize;
   /** Accessible label for the navigation landmark. */
   ariaLabel?: string;
 
@@ -66,11 +69,13 @@ provide(navigationDrawerContextKey, {
   shape,
   activate,
 });
+const rowSize = provideRowSize(() => props.size);
 </script>
 
 <template>
   <nav
     class="m3-navigation-drawer"
+    :data-size="rowSize"
     role="navigation"
     data-scope="navigation-drawer"
     data-part="root"

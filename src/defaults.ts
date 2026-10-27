@@ -1,5 +1,6 @@
 import type { M3AppearanceContext } from './styles/appearance';
-import type { App } from 'vue';
+import type { RowSize } from './styles/rowSize';
+import type { App, MaybeRef } from 'vue';
 import type { ButtonDefaults } from './components/Button/ButtonContext';
 import type { IconButtonContext } from './components/IconButton/IconButtonContext';
 import type { ListItemContext } from './components/ListItem/ListItemContext';
@@ -9,6 +10,8 @@ import { datePickerContextKey, type DatePickerContext } from './components/DateP
 import { timePickerContextKey, type TimePickerContext } from './components/TimePicker/TimePickerContext';
 
 export type M3ComponentDefaultsOptions = {
+  /** Shared size for menu, tree and navigation rows. */
+  rowSize?: MaybeRef<RowSize>;
   /** Shared appearance; component-specific defaults and props take precedence. */
   appearance?: M3AppearanceContext['appearance'];
   buttonDefaults?: ButtonDefaults;

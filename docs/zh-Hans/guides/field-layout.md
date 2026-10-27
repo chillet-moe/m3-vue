@@ -13,6 +13,50 @@ import FloatingLabelSpacingLabSrc from '../../demos/guides/FloatingLabelSpacingL
 
 带描边的 `TextField`、`Select` 和 `Combobox` 标签会浮到字段顶部边缘，并可能超出组件的名义边界。仅当这种浮动标签的视觉溢出确实需要额外净空时，再添加 `labelClearance`。它会叠加在父级 `gap` 之上，不负责设定整体布局密度。
 
+## 布局间距 token
+
+在父级 grid 或 flex 布局中使用以下 token：
+
+| Token                   | 默认值 | 用途   |
+| ----------------------- | ------ | ------ |
+| `--md-field-row-gap`    | `1rem` | 行间距 |
+| `--md-field-column-gap` | `1rem` | 列间距 |
+
+这两个 token 已包含在 `style.css` 中，并且在两种主题下默认值相同。它们不会为组件添加外边距，也不会影响未引用它们的布局。请根据表单内容选择合适的值；默认值仅供起步参考。
+
+```vue
+<template>
+  <div class="profile-fields">
+    <TextField label="Name" />
+    <TextField label="Email" type="email" />
+    <TextField label="City" />
+    <TextField label="Postal code" />
+  </div>
+</template>
+
+<style scoped>
+.profile-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  row-gap: var(--md-field-row-gap);
+  column-gap: var(--md-field-column-gap);
+}
+</style>
+```
+
+可以在全局或某个容器区域设置 token，让多个表单共用间距：
+
+```css
+.account-settings {
+  --md-field-row-gap: 1.5rem;
+  --md-field-column-gap: 1rem;
+}
+```
+
+嵌套布局会继承这些值，也可以分别覆盖任一方向。对于 flex 布局，CSS 的 `row-gap` 和 `column-gap` 会根据容器方向和换行方式生效；纵向堆叠时，项目之间使用 `row-gap`。
+
+修改 `--md-density` 会改变控件内部留白，不会改变这些间距。修改 `labelClearance` 会在字段上方增加外边距，不会改变父级间距。这些 token 也可用于混合设置组；区块间距和操作行间距仍由对应布局决定。
+
 ## 标签留白
 
 `TextField`、`Select` 和 `Combobox` 接受 `labelClearance`，这是一个应用于块起始外边距的 CSS 长度。默认未设置，因此组件不会增加留白，也不会覆盖语义类中的布局样式。
@@ -43,12 +87,9 @@ provide(fieldContextKey, { labelClearance });
 
 不要仅因为子树中包含字段就提供留白。请保留现有密度，并只在共享视觉样式确有需要时提供该值。
 
-## 比较示例
+## 在示例中比较
 
-- 相邻浮动标签和字段轮廓之间是否有足够的视觉间隔。
-- 同一个间距值是否适用于已填字段，以及带占位符的空字段。
-- 与标题、正文、选择控件、分隔线和操作相邻时，所选间距是否仍然合适。
-- 具体的 `labelClearance` 长度如何叠加到所选父级间距上。
+使用 `1rem` 或 `24px` 等 CSS 长度调整行间距和列间距；清空任一输入框即可继承对应 token。分别调整密度和标签留白，对比控件高度、布局间距和浮动标签的空间。空间不足时，字段网格会折叠为单列。混合面板使用相同的行间距。
 
 <DemoContainer :src="FloatingLabelSpacingLabSrc" :viewport="false">
   <FloatingLabelSpacingLab />

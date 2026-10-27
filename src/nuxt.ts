@@ -8,6 +8,7 @@ const DEFAULT_PLUGIN_FILENAME = 'm3-vue.plugin.mjs';
 export interface M3VueNuxtOptions {
   components?: boolean;
   css?: boolean;
+  theme?: 'default' | 'compact' | false;
   directives?: boolean;
   imports?: boolean;
   prefix?: string;
@@ -21,6 +22,7 @@ export default defineNuxtModule<M3VueNuxtOptions>({
   defaults: {
     components: true,
     css: true,
+    theme: 'default',
     directives: true,
     imports: false,
     prefix: '',
@@ -30,6 +32,11 @@ export default defineNuxtModule<M3VueNuxtOptions>({
 
     if (options.css && !nuxt.options.css.includes(STYLE_PATH)) {
       nuxt.options.css.push(STYLE_PATH);
+    }
+
+    if (options.css && options.theme !== false) {
+      const themePath = `${PACKAGE_NAME}/themes/${options.theme ?? 'default'}.css`;
+      if (!nuxt.options.css.includes(themePath)) nuxt.options.css.push(themePath);
     }
 
     if (options.components) {

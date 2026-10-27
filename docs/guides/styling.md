@@ -1,208 +1,270 @@
-# Styling
+<script setup>
+import CustomizationGallery from '../.vitepress/components/CustomizationGallery.vue';
+</script>
 
-## Choosing appearance and density
+# Customization
 
-Start with the component's semantic role, then choose its visual appearance and size independently.
+Choose a theme, set component defaults, then adjust the few styles that need to differ.
 
-| Need                                                | Component / choice                                                                  |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Choose a value                                      | Select or Combobox.                                                                 |
-| Invoke a command or open a submenu                  | Menu with MenuItem.                                                                 |
-| Present general list content or navigation          | ListItem; choose button, link, or non-interactive presentation semantics.           |
-| Dense property panels and frequently traversed rows | Standard Slider and ListItem, with compact field sizes.                             |
-| Prominent controls or rich navigation surfaces      | Expressive Slider or ListItem when the larger geometry and motion suit the surface. |
+| Change                                | Use                                                        |
+| ------------------------------------- | ---------------------------------------------------------- |
+| Default or compact presentation       | A theme stylesheet                                         |
+| Component size, shape or behavior     | `M3VuePlugin` options, subtree defaults or component props |
+| Vertical whitespace inside controls   | `--md-density`                                             |
+| Typography, colors and corners        | System and semantic CSS tokens                             |
+| One component's appearance            | Its documented public tokens                               |
+| Layout and spacing between components | A class on the component or its parent layout              |
 
-Slider and ListItem default to `appearance="standard"`. Expressive preserves their original appearance. This is not a library-wide variant: use each component's documented API rather than passing `appearance` to every control. For ListItem, standard keeps its active indicator at full width without expansion or press morph.
+## Component previews
 
-Use `size` to choose supported component dimensions, and public tokens for finer adjustments. Small visuals do not require small hit areas: Slider separates thumb and track dimensions from its target size. Pair a Slider with TextField for exact input; see [Slider](../components/slider#precise-numeric-input). TextField, Select and Combobox support the same 32px, 40px and 56px field heights. Allow space for floating labels; see [field spacing](./field-layout).
+Use the toolbar's **Customize** control to compare settings across these components. Choose a category; each
+component name links to its full examples and API. Individual examples may set an explicit variant or size.
 
-Choose button emphasis by action importance. Filled is available for the unique primary action, not required for every primary action. Routine actions use text/outlined buttons or standard icon buttons; Dialog actions use text. Keep focus visible in both themes. Prefer colors from semantic tokens, and verify long labels and narrow containers before reducing spacing further.
+<CustomizationGallery />
 
-The sections below explain how to customize these choices without depending on private component DOM.
+## Theme selection
 
-Customize component styles with CSS variables first.
-
-When a variable cannot express the desired result, override a specific `data-part`. M3 Vue components expose a stable CSS API through `data-scope` and `data-part`. Global styles can use these attribute selectors directly. In an SFC's `<style scoped>`, use `:deep()` only when you need to cross a component boundary to reach an internal part.
-
-## Compact typography
-
-For dense desktop workspaces, opt into the compact typography preset after the base stylesheet:
+Import the shared styles and **one** theme at application startup:
 
 ```ts
 import '@chillet/m3-vue/style.css';
-import '@chillet/m3-vue/typography-compact.css';
+import '@chillet/m3-vue/themes/default.css';
 ```
 
-The preset changes application-wide system font sizes and line heights. It does not change the root font size, component sizes, icon sizes, or hit areas. Choose component geometry separately, for example `fieldSize: 'extra-small'` and `buttonDefaults: { size: 'extra-small' }` in `M3VuePlugin`.
+Use `themes/compact.css` instead of `themes/default.css` for smaller typography and density `-2`.
+The default theme uses Material typography and density `0`. Both themes contain their final token values;
+loading the compact theme does not require loading the default theme first.
 
-| Roles                                      | Size / line height at a 16px root |
-| ------------------------------------------ | --------------------------------- |
-| `body-large`, `body-medium`, `label-large` | 12px / 18px                       |
-| `body-small`, `label-medium`               | 11px / 16px                       |
-| `label-small`                              | 10px / 14px                       |
-| `title-small`                              | 13px / 20px                       |
-| `title-medium`                             | 14px / 20px                       |
-| `title-large`, `headline-small`            | 18px / 24px                       |
+Nuxt loads the default theme automatically. Use `m3Vue: { theme: 'compact' }` to select compact,
+or `theme: false` if you import theme styles yourself.
 
-Emphasized versions use the same compact sizes and line heights. Font families, weights, and relative letter spacing remain unchanged; display roles and medium/large headlines retain their defaults. Reserve `label-small` for secondary short annotations, not primary controls or field values.
+## Component defaults
 
-TextField, Select, and Combobox keep the same input typography across their sizes. Button and Tabs select typography roles by size. The preset updates those roles together with menu and list typography; it does not make every size use the same font.
+Set application defaults when registering the plugin:
 
-For application-owned text, apply a typography class to the content root, or set its font size and line height from the appropriate system role. Do not reduce the `html` font size: rem-based component geometry would shrink too.
+```ts
+app.use(M3VuePlugin, {
+  shape: 'square',
+  rowSize: 'extra-small',
+  fieldSize: 'small',
+  buttonDefaults: { size: 'small', pressShapeMorph: false },
+  sliderDefaults: { appearance: 'standard', wheel: false },
+  listItemDefaults: { size: 'small' },
+});
+```
+
+| Option                                     | Applies to                                                                             |
+| ------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `shape`                                    | Shared rounded/square shapes                                                           |
+| `rowSize`                                  | Menu rows (including Select/Combobox menus), TreeView and navigation drawer/rail items |
+| `fieldSize`                                | Single-line TextField, Select and Combobox                                             |
+| `buttonDefaults`                           | Button size and press shape morph; ButtonGroup inherits press morph                    |
+| `iconButtonSize`                           | IconButton                                                                             |
+| `sliderDefaults`                           | Slider size, appearance, wheel input and value indicator                               |
+| `listItemDefaults`                         | ListItem size and appearance                                                           |
+| `appearance`                               | Shared Slider and ListItem appearance                                                  |
+| `menuColor`                                | Menu and Select/Combobox menus                                                         |
+| `datePickerDefaults`, `timePickerDefaults` | Picker preferences                                                                     |
+| `snackbarDefaults`                         | Programmatic [Snackbar](../components/snackbar) preferences                            |
+
+For one subtree, use the existing defaults helpers. They inherit fields you omit and accept refs or computed values:
+
+```vue
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { provideButtonDefaults, provideSliderDefaults } from '@chillet/m3-vue';
+
+const compact = ref(true);
+provideButtonDefaults({ size: computed(() => (compact.value ? 'small' : undefined)) });
+provideSliderDefaults({ wheel: false });
+</script>
+```
+
+A component prop wins over subtree defaults, then application defaults, then the library default.
+Explicit `false` overrides an inherited value; `undefined` inherits. Direct `provide(contextKey, value)` replaces
+that context object, so use a defaults helper when you want to retain unspecified fields.
+
+### Row sizes
+
+Menu, TreeView, NavigationDrawer and NavigationRail share a `size` scale:
+
+| Size               | Single-line base height |
+| ------------------ | ----------------------- |
+| `extra-small`      | 32px                    |
+| `small`            | 40px                    |
+| `medium` (default) | 48px                    |
+| `large`            | 56px                    |
+| `extra-large`      | 64px                    |
+
+These are reference heights at density `0` with a 16px root font size. Text and icon sizes do not change.
+Multiline content and accessories can grow the row. Collapsed rails also reserve room for their stacked icon and label.
+
+Set `rowSize` in the plugin for application defaults, or use `provideRowSize` in an existing ancestor for one region:
+
+```ts
+import { provideRowSize } from '@chillet/m3-vue';
+
+provideRowSize('extra-small');
+```
+
+The helper also accepts a ref or getter. A container's `size` overrides the inherited size; a
+`MenuItem`, `TreeItem`, `NavigationDrawerItem`, `NavigationDrawerSection` or `NavigationRailItem` can override
+its own size. Submenus inherit their menu's size; `MenuSubMenu.size` sets a different size for its trigger and contents.
+An omitted or `undefined` size inherits.
+
+Choose the row size first, then use `--md-density` to tune vertical whitespace. The customization panel's
+**Components → Row size** control and **Code** preview use the same application option.
+
+### Choosing appearance and density
+
+`size` chooses component geometry and may also choose typography and icon dimensions. `appearance` selects the
+standard or expressive treatment of Slider and ListItem. Component-specific appearance defaults take precedence
+over the shared appearance setting, including a shared setting in a nearer subtree.
+
+Use Select/Combobox for value selection, Menu for commands, and ListItem for general content or navigation.
+Choose Button emphasis by action importance: routine actions use text/outlined buttons or standard IconButtons;
+Dialog actions use text buttons.
+
+## Density
+
+Set density on the application or a particular region:
 
 ```css
-.workspace {
-  font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: var(--md-sys-typescale-body-medium-line-height);
+.property-panel {
+  --md-density: -2;
+}
+.property-panel__comfortable-section {
+  --md-density: 0;
 }
 ```
 
-The preset also affects typography utilities and prose that use these roles. Import it only for an application-wide theme, not to style one panel. Existing component tokens still take precedence over their system fallbacks. Customize the preset with your own system tokens in an unlayered global stylesheet, and check long labels, floating labels, dropdown options, and narrow layouts in the languages your application supports.
+Each negative step removes up to 4dp of vertical whitespace; positive steps add whitespace. Text and icons retain
+their sizes. Components stop shrinking when their content and minimum padding need the remaining space, so there
+is no universal minimum height or numeric clamp. Explicit dimension tokens take precedence.
 
-## CSS token layers
+Density adjusts each component's chosen size; it is not a shared target height. Choose sizes first: a menu row
+and an extra-small button can reach their content floors at different density values.
 
-Components use five CSS token layers:
+Density applies to Button, ButtonGroup, IconButton, Chip, fields, InputOtp, ListItem, TreeView, Tabs,
+menu rows (including Select/Combobox menus), Breadcrumb, Pagination and navigation drawer/rail items.
+Only vertical whitespace changes: OTP cell widths, navigation widths, fonts and icons stay unchanged.
+Collapsed rail items retain room for the icon target and stacked label, so they reach their density floor sooner.
+Multiline content can grow taller. Dialog, Snackbar and date/time pickers reset inherited density to zero.
+Density does not adjust page gaps or automatically change at breakpoints. Preserve adequate interaction targets
+when choosing a dense layout for touch input.
 
-1. `--md-sys-*`: global Material system tokens for theme-level configuration. Avoid overriding these locally on an individual component instance.
-2. `--md-shape-*`, `--md-control-*`, and `--md-cursor-*`: library semantic tokens that map system tokens to shared shape, control-outline, and interaction-cursor roles with a small set of variables.
-3. `--md-color-container`, `--md-color-on-container`, `--md-state-layer-color`, and `--md-icon-size`: contextual tokens that let parent components pass container, content, state-layer colors, and icon size to children. Set `--md-icon-size` on the smallest icon container the component owns, so it does not affect unrelated descendant icons.
-4. `--md-<component>-*`: public component tokens and the recommended entry point for component-level customization.
-5. `--_*`: private component tokens used only for implementation details and not exposed as public API.
+## Typography
 
-Components declare public-token placeholders with `:where(:root)` and a value of `initial`. This gives editors and the CSS API an explicit declaration; it is not the default value. Actual defaults live in private-token fallbacks on component roots. This keeps WebStorm from having to resolve deeply nested `var()` fallbacks and prevents component CSS load order from overriding user `:root` or local customizations.
+Theme presets provide complete type scales. To adjust a role, set its size and line height together:
 
-Public component tokens cover parts or stable states with clear meaning, such as container, label, selected, unselected, error, and disabled. Transient interaction states such as `hover`, `focus`, and `pressed` should use the state layer rather than expanding into a complete matrix of color tokens.
+```css
+:root {
+  --md-ref-typeface-plain: 'Inter';
+  --md-ref-typeface-brand: 'Inter';
+  --md-sys-typescale-body-large-size: 0.875rem;
+  --md-sys-typescale-body-large-line-height: 1.25rem;
+}
+```
 
-Prefer each component's `--md-<component>-*` tokens for new customizations. Legacy `--md-comp-*` tokens are not public API.
+Load the font in your application. Roles also expose `font`, `weight` and `tracking`; emphasized roles use the
+`--md-sys-typescale-emphasized-*` prefix. Density stays independent of typography, while content-aware controls
+can grow to accommodate larger text. Use the `m3-typo-*` classes to apply a type role to your own content.
 
-Ordinary actions and real URL links use separate global cursor tokens. To use the default arrow cursor for a desktop-app feel, see [Interaction Cursors](/guides/interaction-cursors).
+## Colors
 
-The **Styling** table on each component page is generated from explicit metadata and lists only recommended public tokens. Metadata is split by component under `docs/.vitepress/components/style-tokens/<ComponentName>.ts`; the shared `style-token-meta.ts` entry point only maps component names to metadata.
+Use theme color roles rather than hard-coded colors in component internals. For example, change the primary color
+and its foreground in each color scheme:
+
+```css
+:root {
+  --md-sys-color-primary-light: #365e9d;
+  --md-sys-color-on-primary-light: #ffffff;
+  --md-sys-color-primary-dark: #aac7ff;
+  --md-sys-color-on-primary-dark: #003062;
+}
+```
+
+Container and foreground roles are separate pairs. Components resolve light/dark roles through `color-scheme`.
+For nested custom content, `--md-color-container`, `--md-color-on-container` and `--md-state-layer-color` carry the
+current container, foreground and state-layer colors.
 
 ## Theme-level shape tokens
 
-To apply a consistent corner style across the library, override a small set of semantic `--md-shape-*` tokens instead of changing each `--md-<component>-*` token or `data-part` individually.
-
-The Shape control at the top right of the documentation writes these variables to the document root, so changes apply to components across the site.
+Semantic corner tokens coordinate components across the library:
 
 ```css
 :root {
-  --md-shape-action: var(--md-sys-shape-corner-extra-large);
-  --md-shape-field: var(--md-sys-shape-corner-large);
-  --md-shape-field-square: var(--md-sys-shape-corner-medium);
-  --md-shape-chip: var(--md-sys-shape-corner-small);
-  --md-shape-card: var(--md-sys-shape-corner-medium);
-  --md-shape-popover: var(--md-sys-shape-corner-large);
-  --md-shape-compact: var(--md-sys-shape-corner-extra-small);
-  --md-shape-overlay: var(--md-sys-shape-corner-extra-large);
-  --md-shape-indicator: var(--md-sys-shape-corner-full);
-  --md-shape-fab: var(--md-sys-shape-corner-large);
+  --md-shape-action: 1.25rem;
+  --md-shape-field: 0.75rem;
+  --md-shape-field-square: 0.5rem;
+  --md-shape-chip: 0.5rem;
+  --md-shape-card: 0.75rem;
+  --md-shape-popover: 0.75rem;
+  --md-shape-overlay: 1.5rem;
 }
 ```
 
-To align the square, pressed, or selected morph of actions, override the corresponding action semantic tokens:
+Use bounded radii for `--md-shape-action`; a fully rounded value can cause unstable corner morphing.
+Square, pressed and selected action shapes derive from it. Set `--md-shape-action-square`,
+`--md-shape-action-pressed` or `--md-shape-action-selected` only when those shapes need separate treatment.
+`--md-shape-compact`, `--md-shape-indicator` and `--md-shape-fab` control compact elements, indicators and FABs.
 
-Use a bounded corner value for `--md-shape-action`; avoid setting it to `--md-sys-shape-corner-full`, which can make corner animations on Button, IconButton, and similar components jitter. Square actions derive proportionally from `--md-shape-action` by default. Override the tokens below only when square, pressed, or selected shapes need to differ from that baseline.
+## Component styling
 
-```css
-:root {
-  --md-shape-action-square: var(--md-sys-shape-corner-small);
-  --md-shape-action-pressed: var(--md-sys-shape-corner-extra-small);
-  --md-shape-action-selected: var(--md-sys-shape-corner-medium);
-}
-```
-
-Override a component public token only when that component needs to differ from the global semantic:
-
-```css
-:root {
-  --md-outlined-text-field-container-shape: var(--md-sys-shape-corner-small);
-}
-```
-
-Outlined Buttons and TextFields of the same size share the control-outline tokens in their resting state. To adjust control borders consistently, override:
-
-```css
-:root {
-  --md-control-outline-color: var(--md-sys-color-outline-variant);
-  --md-control-outline-width-extra-small: 0.0625rem;
-  --md-control-outline-width-small: 0.078125rem;
-  --md-control-outline-width-medium: 0.09375rem;
-}
-```
-
-```css
-.custom-checkbox {
-  --md-checkbox-color: var(--md-sys-color-tertiary);
-  --md-checkbox-on-color: var(--md-sys-color-on-tertiary);
-  --md-checkbox-unselected-outline-color: var(--md-sys-color-tertiary);
-}
-
-.power-progress {
-  --md-progress-indicator-color: v-bind(powerConsumptionColor);
-}
-```
-
-To customize stable states such as disabled, override the corresponding component tokens:
-
-```css
-.custom-checkbox {
-  --md-checkbox-disabled-color: var(--md-sys-color-outline);
-  --md-checkbox-disabled-opacity: 0.5;
-}
-```
-
-## data-scope and data-part
-
-- **`data-scope`** identifies a component type, such as `button`, `text-field`, or `menu-item`.
-- **`data-part`** identifies an element within a component, such as `root`, `label`, or `leading`.
-
-Component roots use `data-part="root"`. Passing a class to an individual component instance is the preferred way to style its root. This uses ordinary Vue class fallthrough; it is not an authorization mechanism provided by scope-boundary. Accessing an internal `data-part` from a parent is an explicit deep customization.
-
-In a scoped SFC with `@chillet/vue-scope-boundary`, positive HTML type selectors such as `button`, `.toolbar > button`, and `button.primary` match only native elements written by that SFC. Plain class, ID, and attribute selectors retain Vue's native behavior and can match child component roots. Avoid short class-name collisions with component prefixes, BEM, CSS Modules, or another naming convention.
-
-## Usage
-
-In global styles, use attribute selectors directly:
-
-```css
-[data-scope='text-field'] [data-part='label'] {
-  font-weight: bold;
-}
-```
-
-In a scoped SFC, use `:deep()` to make an intentional component-boundary crossing explicit:
-
-```css
-/* Customize the TextField label */
-[data-scope='text-field'] :deep([data-part='label']) {
-  font-weight: bold;
-}
-
-/* Customize the MenuItem label inside Menu */
-[data-scope='menu-item'] :deep([data-part='label']) {
-  color: red;
-}
-```
-
-If you only need to style a component root, pass a descriptive class to the instance and use a plain class selector:
+Each component page lists its public tokens under **Styling**. Use them for local exceptions:
 
 ```vue
-<Button class="checkout-action">Checkout</Button>
+<TextField class="search-field" label="Search" />
 
 <style scoped>
-.checkout-action {
+.search-field {
+  --md-outlined-text-field-container-shape: 0.5rem;
   inline-size: 100%;
 }
 </style>
 ```
 
-Do not add an internal root tag or private class to these rules. `button.checkout-action` is treated as a dependency on a private root tag and matches only `<button>` elements written by the SFC. `.m3-button.checkout-action` depends on the component's internal implementation.
+Use library semantics for shared changes: `--md-control-outline-*` coordinates resting control borders,
+[interaction cursor tokens](./interaction-cursors) coordinate cursors, and
+[floating surface tokens](../utilities/elevation#floating-surfaces) coordinate overlays.
+Variables starting with `--_` are private implementation details.
 
-## Inspect component anatomy
+### data-scope and data-part
 
-Each component documentation page includes an **Anatomy** section that lists its `data-scope` and `data-part` attributes and supports interactive highlighting.
+When props and tokens are insufficient, use the component's documented **Anatomy**. `data-scope` identifies the
+component and `data-part` identifies a stable part. In scoped CSS, anchor deep selectors to your own class:
 
-## Floating surfaces
+```css
+.search-field :deep([data-part='label']) {
+  font-weight: 600;
+}
+```
 
-Use the shared [floating surface tokens](../utilities/elevation.md#floating-surfaces) to theme menus, dropdowns, popovers, rich tooltips, and dialogs together, including consumer-owned native dialogs. Use component tokens only for individual exceptions.
+Use a plain class for root layout. Avoid private `.m3-*` classes or assumptions about a component's root HTML tag.
+See [Vue Scope Boundaries](./vue-scope-isolation) for selector behavior.
+
+## Field spacing
+
+The parent layout owns spacing between fields. Opt in to the shared gap tokens on that layout:
+
+```css
+.form-fields {
+  display: grid;
+  row-gap: var(--md-field-row-gap);
+  column-gap: var(--md-field-column-gap);
+}
+```
+
+Both default to `1rem` and can be overridden globally or per region. Density does not change them.
+The customization panel’s **Theme** tab adjusts these tokens. Its **Code** tab includes a `.form-fields` example;
+apply that class to your parent layout and choose its columns for your form.
+`labelClearance` adds space above a floating label in addition to the parent gap.
+See [Field Layout](./field-layout) for a responsive grid example and interactive spacing preview.
+
+## Try settings in the documentation
+
+Open **Customize** in the toolbar to try theme, typography, shape and component settings. The selected preset
+reflects the current values; after a custom edit, a group may have no selected preset. Changes persist only in this
+browser and affect the documentation site. The **Code** tab shows the theme imports, plugin options and CSS needed
+to apply the current settings in your app. Copy each file; the CSS contains only overrides of the imported theme.
+**Reset all** resets the panel's settings; dark mode and sticky previews remain separate toolbar preferences.

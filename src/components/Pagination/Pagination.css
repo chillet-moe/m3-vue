@@ -78,7 +78,7 @@
 
   .m3-pagination-ellipsis {
     inline-size: var(--_pagination-ellipsis-size);
-    block-size: var(--_pagination-ellipsis-size);
+    block-size: var(--md-pagination-ellipsis-size, --density-height(40, var(--_pagination-nav-icon-size), 20));
     display: inline-flex;
     align-items: center;
     justify-content: center;
