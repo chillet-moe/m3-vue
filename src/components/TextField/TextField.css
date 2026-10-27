@@ -137,11 +137,11 @@
     );
     --_outlined-text-field-container-shape-round: var(
       --md-outlined-text-field-container-shape-round,
-      var(--md-button-container-shape-round, var(--md-shape-field))
+      var(--md-button-container-shape-round, var(--_shape-radius, var(--md-shape-field)))
     );
     --_outlined-text-field-container-shape-square: var(
       --md-outlined-text-field-container-shape-square,
-      var(--md-button-medium-container-shape-square, var(--md-shape-action-square-medium))
+      var(--md-button-medium-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-medium)))
     );
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,
@@ -465,7 +465,7 @@
   .m3-text-field[data-size='extra-small'] {
     --_outlined-text-field-container-shape-square: var(
       --md-outlined-text-field-container-shape-square,
-      var(--md-button-xsmall-container-shape-square, var(--md-shape-action-square-small))
+      var(--md-button-xsmall-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-small)))
     );
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,
@@ -494,7 +494,7 @@
   .m3-text-field[data-size='small'] {
     --_outlined-text-field-container-shape-square: var(
       --md-outlined-text-field-container-shape-square,
-      var(--md-button-small-container-shape-square, var(--md-shape-action-square-small))
+      var(--md-button-small-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-small)))
     );
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,
@@ -519,7 +519,7 @@
   .m3-text-field[data-size='medium'] {
     --_outlined-text-field-container-shape-square: var(
       --md-outlined-text-field-container-shape-square,
-      var(--md-button-medium-container-shape-square, var(--md-shape-action-square-medium))
+      var(--md-button-medium-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-medium)))
     );
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,
@@ -546,7 +546,7 @@
     );
   }
 
-  .m3-text-field[data-shape='square'] {
+  .m3-text-field:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']) {
     --_outlined-text-field-container-shape: var(
       --md-outlined-text-field-container-shape,
       var(--_outlined-text-field-container-shape-square)

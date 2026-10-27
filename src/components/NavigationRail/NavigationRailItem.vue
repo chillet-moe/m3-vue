@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
@@ -7,6 +8,8 @@ import { computed, inject, useSlots } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
 
 export type NavigationRailItemProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   /** Destination value used by NavigationRail v-model. */
@@ -93,6 +96,7 @@ const slotProps = computed(() => ({
   state: railState.value,
 }));
 const rowSize = provideRowSize(() => props.size);
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -109,6 +113,8 @@ const rowSize = provideRowSize(() => props.size);
     class="m3-row-size m3-navigation-rail-item m3-morph-host"
     data-scope="navigation-rail-item"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     data-state-layer-hover-target
     :data-item-value="props.value"
     :data-state="railState"

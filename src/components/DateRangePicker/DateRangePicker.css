@@ -80,7 +80,7 @@
     min-inline-size: 0;
     min-block-size: 3rem;
     padding-inline: 0.75rem;
-    border-radius: var(--md-shape-field);
+    border-radius: var(--_shape-control-radius, var(--md-shape-field));
     color: var(--_date-range-picker-summary-value-text-color);
     background: var(--md-sys-color-surface-container-highest);
     cursor: var(--md-cursor-action);

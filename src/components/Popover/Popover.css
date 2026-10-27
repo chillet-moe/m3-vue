@@ -18,7 +18,7 @@
     --_popover-container-border-color: var(--md-popover-container-border-color, var(--md-overlay-border-color));
     --_popover-container-color: var(--md-popover-container-color, var(--md-overlay-container-color));
     --_popover-container-elevation: var(--md-popover-container-elevation, var(--md-overlay-elevation));
-    --_popover-container-shape: var(--md-popover-container-shape, var(--md-shape-popover));
+    --_popover-container-shape: var(--md-popover-container-shape, var(--_shape-radius, var(--md-shape-popover)));
     --_popover-max-height: var(--md-popover-max-height, 32rem);
     --_popover-max-width: var(--md-popover-max-width, 28rem);
     --_popover-min-width: var(--md-popover-min-width, 0rem);

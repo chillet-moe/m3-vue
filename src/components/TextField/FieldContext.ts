@@ -9,7 +9,7 @@ import {
   type MaybeRefOrGetter,
 } from 'vue';
 import type { TextFieldSize } from './TextField.vue';
-import type { M3Shape } from '@/styles/context';
+import type { M3Shape } from '@/styles/shape';
 
 export interface FieldContext {
   /** Default size for single-line TextField and Select controls. */

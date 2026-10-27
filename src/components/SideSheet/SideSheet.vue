@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { useNativeDialog } from '@/composables/useNativeDialog';
 import { computed, type CSSProperties, useId, useSlots, useTemplateRef } from 'vue';
 
 export type SideSheetProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Whether clicking the backdrop closes the sheet. */
   closeOnBackdrop?: boolean;
 
@@ -91,6 +94,7 @@ defineExpose({
   close,
   dialogRef,
 });
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -99,6 +103,8 @@ defineExpose({
     class="m3-side-sheet"
     data-scope="side-sheet"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-side="props.side"
     :data-variant="props.variant"
     :data-has-headline="hasHeadline ? 'true' : 'false'"

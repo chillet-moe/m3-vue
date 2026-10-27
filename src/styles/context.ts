@@ -9,12 +9,10 @@ import { buttonContextKey } from '@/components/Button/ButtonContext';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext';
 import type { FieldContext } from '@/components/TextField/FieldContext';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
-import { navigationDrawerShapeContextKey } from '@/components/NavigationDrawer/NavigationDrawerContext';
-
-export type M3Shape = 'rounded' | 'square';
+import { shapeContextKey, type M3Shape } from './shape';
 
 export type M3ShapeOptions = {
-  /** Default shape for components with a rounded or square shape variant. */
+  /** Default shape for shape-aware components. */
   shape?: MaybeRef<M3Shape>;
 };
 
@@ -30,20 +28,17 @@ export function installM3StyleDefaults(
 ): void {
   if (options.rowSize !== undefined) app.provide(rowSizeContextKey, options.rowSize);
   if (options.appearance !== undefined) app.provide(appearanceContextKey, { appearance: options.appearance });
-  const context: FieldContext = {};
-  if (options.shape !== undefined) context.shape = options.shape;
-  if (options.fieldSize !== undefined) context.size = options.fieldSize;
-  if (options.shape !== undefined || options.fieldSize !== undefined) {
-    app.provide(fieldContextKey, context);
+  if (options.shape !== undefined) app.provide(shapeContextKey, options.shape);
+  if (options.fieldSize !== undefined) {
+    app.provide(fieldContextKey, { size: options.fieldSize });
   }
 
-  if (options.shape !== undefined || options.buttonDefaults !== undefined) {
-    app.provide(buttonContextKey, { shape: options.shape, ...options.buttonDefaults });
+  if (options.buttonDefaults !== undefined) {
+    app.provide(buttonContextKey, options.buttonDefaults);
   }
-  if (options.shape !== undefined || options.iconButtonSize !== undefined) {
-    app.provide(iconButtonContextKey, { shape: options.shape, size: options.iconButtonSize });
+  if (options.iconButtonSize !== undefined) {
+    app.provide(iconButtonContextKey, { size: options.iconButtonSize });
   }
-  if (options.shape !== undefined) app.provide(navigationDrawerShapeContextKey, { shape: options.shape });
   if (options.sliderDefaults !== undefined) {
     app.provide(sliderContextKey, options.sliderDefaults);
   }

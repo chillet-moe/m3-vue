@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, provide, toRef, unref } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerIconSpace = 'none' | 'root' | 'all';
-export type NavigationDrawerShape = 'rounded' | 'square';
+export type NavigationDrawerShape = M3Shape;
 
 export type NavigationDrawerProps = {
   /** Row size; inherits the nearest row size or defaults to medium. */
@@ -36,7 +37,7 @@ const props = withDefaults(defineProps<NavigationDrawerProps>(), {
 const modelValue = defineModel<string>();
 const selectedValue = computed(() => modelValue.value);
 const globalShape = inject(navigationDrawerShapeContextKey, undefined);
-const shape = computed(() => props.shape ?? unref(globalShape?.shape) ?? 'rounded');
+const shape = useShape(() => props.shape ?? unref(globalShape?.shape));
 const slotProps = computed(() => ({
   value: selectedValue.value,
   disabled: props.disabled,
@@ -79,6 +80,8 @@ const rowSize = provideRowSize(() => props.size);
     role="navigation"
     data-scope="navigation-drawer"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-disabled="props.disabled ? 'true' : undefined"
     :data-icon-space="props.iconSpace"
     :data-icon-only="props.iconOnly ? 'true' : undefined"

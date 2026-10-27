@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, nextTick, ref, useId, watch } from 'vue';
 import Button from '@/components/Button/Button.vue';
@@ -17,6 +18,8 @@ import { useM3Locale } from '@/locales/context';
 export type { DateRangePickerCalendars, DateRangePickerModelValue, DateRangePickerRangeValue, DateRangePickerVariant };
 
 export type DateRangePickerProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Optional explicit id for the popover element. */
   id?: string;
 
@@ -242,6 +245,7 @@ defineExpose({
   hide: popover.hide,
   toggle: popover.toggle,
 });
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -253,6 +257,8 @@ defineExpose({
     role="dialog"
     data-scope="date-range-picker"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-variant="props.variant"
     :data-calendars="props.calendars"
     :aria-label="ariaLabel"

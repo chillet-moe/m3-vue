@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { provide } from 'vue';
 import { useTree, type TreeNode, type UseTreeReturn } from '@/composables/useTree';
@@ -6,6 +7,8 @@ import { treeContextKey, type TreeItemSlotProps } from './TreeContext';
 import TreeItem from './TreeItem.vue';
 
 export type TreeViewProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   items: readonly TreeNode[];
@@ -41,6 +44,7 @@ const tree = useTree({
 provide(treeContextKey, tree);
 defineExpose({ focus: tree.focus });
 const rowSize = provideRowSize(() => props.size);
+const shape = provideShape(() => props.shape);
 </script>
 
 <template>
@@ -50,6 +54,8 @@ const rowSize = provideRowSize(() => props.size);
     :data-size="rowSize"
     data-scope="tree-view"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :dir="dir"
   >
     <slot :tree="tree">

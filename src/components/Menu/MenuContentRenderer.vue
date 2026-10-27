@@ -129,6 +129,7 @@ function contentKey(item: MenuContentItem, index: number) {
           v-else-if="isSubmenuItem(item)"
           :color="item.color"
           :size="item.size"
+          :shape="item.shape"
           :debug-safe-triangle="item.debugSafeTriangle"
         >
           <template #trigger="{ open }">
@@ -162,6 +163,7 @@ function contentKey(item: MenuContentItem, index: number) {
 
         <MenuItem
           :size="item.size"
+          :shape="item.shape"
           v-else-if="isActionItem(item)"
           :value="item.value"
           :disabled="item.disabled"

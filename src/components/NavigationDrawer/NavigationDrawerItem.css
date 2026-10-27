@@ -33,7 +33,7 @@
     --_navigation-drawer-item-icon-size: var(--md-navigation-drawer-item-icon-size, --dp(24));
     --_navigation-drawer-item-indicator-shape: var(
       --md-navigation-drawer-item-indicator-shape,
-      var(--md-shape-indicator)
+      var(--_shape-radius, var(--md-shape-indicator))
     );
     --_navigation-drawer-item-active-indicator-color: var(
       --md-navigation-drawer-item-active-indicator-color,
@@ -89,15 +89,15 @@
   .m3-navigation-drawer-section-trigger[data-shape='rounded'] {
     --_navigation-drawer-item-indicator-shape: var(
       --md-navigation-drawer-item-indicator-shape,
-      var(--md-shape-indicator)
+      var(--_shape-radius, var(--md-shape-indicator))
     );
   }
 
-  .m3-navigation-drawer-item[data-shape='square'],
-  .m3-navigation-drawer-section-trigger[data-shape='square'] {
+  .m3-navigation-drawer-item:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']),
+  .m3-navigation-drawer-section-trigger:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']) {
     --_navigation-drawer-item-indicator-shape: var(
       --md-navigation-drawer-item-indicator-shape,
-      var(--md-shape-action-square-small)
+      var(--_shape-radius, var(--md-shape-action-square-small))
     );
   }
 

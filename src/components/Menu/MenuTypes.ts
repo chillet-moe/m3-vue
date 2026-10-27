@@ -1,3 +1,4 @@
+import type { M3Shape } from '@/styles/shape';
 import type { RowSize } from '@/styles/rowSize';
 export type MenuColor = 'standard' | 'vibrant';
 
@@ -12,6 +13,7 @@ type MenuContentBase = {
 };
 
 type MenuTextContentBase = MenuContentBase & {
+  shape?: M3Shape;
   size?: RowSize;
   label: string;
   supportingText?: string;

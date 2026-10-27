@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { computed, ref, useId, watch } from 'vue';
 import { usePopover, type UsePopoverReturn } from '@/composables/usePopover';
 import { acquireAnchorName } from '@/internal/anchorName';
@@ -18,6 +19,8 @@ export type PopoverPlacement =
   | 'end-bottom';
 
 export type PopoverProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Optional explicit id for the popover element. */
   id?: string;
 
@@ -122,6 +125,7 @@ defineExpose({
   hide: popover.hide,
   toggle: popover.toggle,
 });
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -131,6 +135,8 @@ defineExpose({
     class="m3-popover"
     data-scope="popover"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-placement="placement"
     :data-match-anchor-width="matchAnchorWidth ? 'true' : 'false'"
     :popover="props.popover"

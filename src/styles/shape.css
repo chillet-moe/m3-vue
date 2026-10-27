@@ -60,3 +60,50 @@
     --md-shape-fab-large: var(--md-shape-fab, var(--md-sys-shape-corner-extra-large));
   }
 }
+
+@layer tokens {
+  /* Reset each host so explicit Material modes do not inherit a parent's minimal/sharp policy. */
+  [data-m3-shape] {
+    --_shape-compact-radius: initial;
+    --_shape-control-radius: initial;
+    --_shape-surface-radius: initial;
+    --_shape-overlay-radius: initial;
+    --_shape-radius: var(--_shape-compact-radius);
+
+    /* Component identity stays stable when consumers override public anatomy attributes. */
+    &:is(
+      .m3-button:where(:not(.m3-item)),
+      .m3-icon-button,
+      .m3-button-group,
+      .m3-text-field,
+      .m3-input-otp,
+      .m3-chip,
+      .m3-fab-menu-item
+    ) {
+      --_shape-radius: var(--_shape-control-radius);
+    }
+    &:is(.m3-card, .m3-menu, .m3-popover, .m3-fab, .m3-fab-menu, .m3-navigation-drawer, .m3-navigation-rail) {
+      --_shape-radius: var(--_shape-surface-radius);
+    }
+    &:is(.m3-dialog, .m3-bottom-sheet, .m3-side-sheet, .m3-date-picker, .m3-time-picker) {
+      --_shape-radius: var(--_shape-overlay-radius);
+    }
+  }
+  [data-m3-shape][data-shape='minimal'] {
+    --_shape-compact-radius: 0.125rem;
+    --_shape-control-radius: 0.1875rem;
+    --_shape-surface-radius: 0.25rem;
+    --_shape-overlay-radius: 0.375rem;
+
+    /* Interaction owners decide whether to publish a pressed state. */
+    &[data-pressed='true'] {
+      --_shape-radius: var(--_shape-compact-radius);
+    }
+  }
+  [data-m3-shape][data-shape='sharp'] {
+    --_shape-compact-radius: 0px;
+    --_shape-control-radius: 0px;
+    --_shape-surface-radius: 0px;
+    --_shape-overlay-radius: 0px;
+  }
+}

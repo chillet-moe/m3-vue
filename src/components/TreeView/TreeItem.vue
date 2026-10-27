@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, useTemplateRef } from 'vue';
 import { Icon } from '@/components/Icon';
@@ -6,7 +7,12 @@ import { triggerKeyboardRipple, vStateLayer } from '@/components/StateLayer/stat
 import type { TreeNode } from '@/composables/useTree';
 import { treeContextKey, type TreeItemSlotProps } from './TreeContext';
 
-export type TreeItemProps = { item: TreeNode; size?: RowSize };
+export type TreeItemProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
+  item: TreeNode;
+  size?: RowSize;
+};
 const props = defineProps<TreeItemProps>();
 const tree = inject(treeContextKey);
 if (!tree) throw new Error('TreeItem must be used inside TreeView.');
@@ -59,6 +65,7 @@ function handleActionKey(event: KeyboardEvent) {
   }
 }
 const rowSize = provideRowSize(() => props.size);
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -68,6 +75,8 @@ const rowSize = provideRowSize(() => props.size);
     :data-size="rowSize"
     data-scope="tree-item"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-selected="state.selected"
     :style="{ '--_tree-level': actions.entries.value.get(item.value)?.level ?? 1 }"
     @keydown="handleActionKey"

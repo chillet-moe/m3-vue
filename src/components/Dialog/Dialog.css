@@ -38,7 +38,7 @@
     --_dialog-container-border-color: var(--md-dialog-container-border-color, var(--md-overlay-border-color));
     --_dialog-container-color: var(--md-dialog-container-color, var(--md-overlay-modal-color));
     --_dialog-container-elevation: var(--md-dialog-container-elevation, var(--md-overlay-modal-elevation));
-    --_dialog-container-shape: var(--md-dialog-container-shape, var(--md-shape-overlay));
+    --_dialog-container-shape: var(--md-dialog-container-shape, var(--_shape-radius, var(--md-shape-overlay)));
     --_dialog-container-width: var(--md-dialog-container-width, 35rem);
     --_dialog-content-visual-overflow-inset: var(--md-dialog-content-visual-overflow-inset, 0.5rem);
     --_dialog-action-label-text-font: var(--md-dialog-action-label-text-font, var(--md-sys-typescale-label-large-font));

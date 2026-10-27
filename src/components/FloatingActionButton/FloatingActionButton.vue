@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, mergeProps } from 'vue';
 
@@ -12,6 +13,8 @@ defineOptions({
 });
 
 export type FloatingActionButtonProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** The color style of the FAB. */
   color?: 'primary' | 'secondary' | 'tertiary' | 'primary-container' | 'secondary-container' | 'tertiary-container';
 
@@ -57,6 +60,7 @@ const extended = computed(() => Boolean(slots.default));
 const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
 const { rootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
 const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttrs.value));
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -66,6 +70,8 @@ const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttr
     :class="['m3-state-layer', 'm3-fab']"
     data-scope="floating-action-button"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-color="color"
     :data-size="size"
     :data-extended="extended ? 'true' : 'false'"

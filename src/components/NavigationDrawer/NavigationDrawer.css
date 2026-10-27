@@ -16,7 +16,10 @@
   .m3-navigation-drawer {
     --_navigation-drawer-container-width: var(--md-navigation-drawer-container-width, --dp(360));
     --_navigation-drawer-icon-only-container-width: var(--md-navigation-drawer-icon-only-container-width, --dp(80));
-    --_navigation-drawer-container-shape: var(--md-navigation-drawer-container-shape, var(--md-shape-docked));
+    --_navigation-drawer-container-shape: var(
+      --md-navigation-drawer-container-shape,
+      var(--_shape-radius, var(--md-shape-docked))
+    );
     --_navigation-drawer-container-color: var(
       --md-navigation-drawer-container-color,
       var(--md-color-container, var(--md-sys-color-surface-container-low))

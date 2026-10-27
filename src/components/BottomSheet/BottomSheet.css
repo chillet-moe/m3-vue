@@ -34,10 +34,13 @@
       --md-sheet-bottom-docked-standard-container-elevation,
       var(--md-sys-elevation-level1)
     );
-    --_sheet-bottom-docked-container-shape: var(--md-sheet-bottom-docked-container-shape, var(--md-shape-overlay-top));
+    --_sheet-bottom-docked-container-shape: var(
+      --md-sheet-bottom-docked-container-shape,
+      var(--_shape-radius, var(--md-shape-overlay-top))
+    );
     --_sheet-bottom-docked-minimized-container-shape: var(
       --md-sheet-bottom-docked-minimized-container-shape,
-      var(--md-shape-docked)
+      var(--_shape-radius, var(--md-shape-docked))
     );
     --_sheet-bottom-docked-drag-handle-color: var(
       --md-sheet-bottom-docked-drag-handle-color,

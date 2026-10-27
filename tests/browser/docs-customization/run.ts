@@ -79,6 +79,10 @@ try {
   await page.waitForFunction(
     () => document.documentElement.style.getPropertyValue('--md-shape-indicator') === '9999px',
   );
+  await panel.getByLabel('Component shape', { exact: true }).click();
+  await page.getByRole('menuitemradio', { name: 'minimal', exact: true }).click();
+  await page.getByRole('menuitemradio', { name: 'minimal', exact: true }).waitFor({ state: 'hidden' });
+  assert.equal(await panel.getByRole('slider').count(), 0);
   await panel.getByRole('tab', { name: 'Components', exact: true }).click();
   await panel.getByLabel('Row size', { exact: true }).click();
   await page.getByRole('menuitemradio', { name: 'extra-small', exact: true }).click();
@@ -91,6 +95,7 @@ try {
   assert((await setupCode.textContent())?.includes('themes/compact.css'));
   assert((await setupCode.textContent())?.includes('"size": "extra-small"'));
   assert((await setupCode.textContent())?.includes('"rowSize": "extra-small"'));
+  assert((await setupCode.textContent())?.includes('"shape": "minimal"'));
   assert((await panel.locator('.customization-code').last().textContent())?.includes('--md-density: 3;'));
   const cssCode = await panel.locator('.customization-code').last().textContent();
   assert(cssCode?.includes('--md-field-row-gap: 24px;'));

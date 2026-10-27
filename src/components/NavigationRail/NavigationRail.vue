@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { provideShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, provide, toRef } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
 
 export type NavigationRailProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   /** Accessible label for the navigation landmark. */
@@ -52,6 +55,7 @@ provide(navigationRailContextKey, {
   activate,
 });
 const rowSize = provideRowSize(() => props.size);
+const shape = provideShape(() => props.shape);
 </script>
 
 <template>
@@ -61,6 +65,8 @@ const rowSize = provideRowSize(() => props.size);
     role="navigation"
     data-scope="navigation-rail"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-state="railState"
     :data-disabled="props.disabled ? 'true' : undefined"
     :aria-label="props.ariaLabel"

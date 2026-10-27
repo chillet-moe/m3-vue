@@ -1,3 +1,4 @@
+import type { M3Shape } from './styles/shape';
 // @vitest-environment jsdom
 import type { App } from 'vue';
 import { createApp, h, nextTick, ref } from 'vue';
@@ -14,7 +15,6 @@ import TextField from '@/components/TextField/TextField.vue';
 import { buttonContextKey } from '@/components/Button/ButtonContext';
 import { iconButtonContextKey } from '@/components/IconButton/IconButtonContext';
 import { snackbarDefaultsContextKey } from '@/components/Snackbar/config';
-import { navigationDrawerShapeContextKey } from '@/components/NavigationDrawer/NavigationDrawerContext';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
 import { M3VuePlugin, m3VueDirectiveNames, m3VueDirectives } from './plugin';
 
@@ -38,7 +38,7 @@ describe('M3VuePlugin', () => {
   });
 
   it('installs one reactive shape default for shape-aware components', async () => {
-    const shape = ref<'rounded' | 'square'>('square');
+    const shape = ref<M3Shape>('square');
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -84,42 +84,17 @@ describe('M3VuePlugin', () => {
     expect(container.querySelector<HTMLElement>('.override-button')?.dataset.shape).toBe('rounded');
     expect(container.querySelector<HTMLElement>('.override-field')?.dataset.shape).toBe('rounded');
 
-    shape.value = 'rounded';
-    await nextTick();
-
-    for (const selector of globalShapeElements) {
-      expect(container.querySelector<HTMLElement>(selector)?.dataset.shape).toBe('rounded');
+    for (const value of ['rounded', 'minimal', 'sharp'] as const) {
+      shape.value = value;
+      await nextTick();
+      for (const selector of globalShapeElements) {
+        expect(container.querySelector<HTMLElement>(selector)?.dataset.shape).toBe(value);
+      }
     }
     expect(container.querySelector<HTMLElement>('.override-button')?.dataset.shape).toBe('rounded');
     expect(container.querySelector<HTMLElement>('.override-field')?.dataset.shape).toBe('rounded');
 
     app.unmount();
-  });
-
-  it('provides the same configured shape ref to every shape-aware context', () => {
-    const directive = vi.fn();
-    const provide = vi.fn();
-    const shape = ref<'rounded' | 'square'>('square');
-
-    M3VuePlugin.install(
-      {
-        directive,
-        provide,
-      } as unknown as App,
-      { shape },
-    );
-
-    const buttonContext = provide.mock.calls.find(([key]) => key === buttonContextKey)?.[1];
-    const iconButtonContext = provide.mock.calls.find(([key]) => key === iconButtonContextKey)?.[1];
-    const fieldContext = provide.mock.calls.find(([key]) => key === fieldContextKey)?.[1];
-    const navigationDrawerShapeContext = provide.mock.calls.find(
-      ([key]) => key === navigationDrawerShapeContextKey,
-    )?.[1];
-
-    expect(buttonContext).toEqual({ shape });
-    expect(iconButtonContext).toEqual(buttonContext);
-    expect(fieldContext).toEqual({ shape });
-    expect(navigationDrawerShapeContext).toEqual({ shape });
   });
 
   it('installs field size without requiring or changing other component defaults', () => {

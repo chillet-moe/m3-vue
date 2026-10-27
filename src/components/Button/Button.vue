@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
@@ -27,7 +28,7 @@ export type ButtonProps = {
   size?: 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
 
   /** The shape of the button. */
-  shape?: 'rounded' | 'square';
+  shape?: M3Shape;
 
   /** Whether pressed-state shape morphing is enabled. */
   pressShapeMorph?: boolean;
@@ -56,7 +57,7 @@ const context = inject(buttonContextKey, undefined);
 const toggleable = computed(() => props.toggleable ?? unref(context?.toggleable) ?? false);
 const variant = computed(() => props.variant ?? unref(context?.variant) ?? 'text');
 const size = computed(() => props.size ?? unref(context?.size) ?? 'small');
-const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
+const shape = useShape(() => props.shape ?? unref(context?.shape), 'rounded');
 const pressShapeMorph = computed(() => props.pressShapeMorph ?? unref(context?.pressShapeMorph) ?? true);
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
@@ -100,6 +101,7 @@ const slots = defineSlots<{
     :data-variant="variant"
     :data-size="size"
     :data-shape="shape"
+    data-m3-shape
     :data-press-shape-morph="pressShapeMorph ? 'true' : 'false'"
     :data-toggleable="toggleable ? 'true' : 'false'"
     :href="href"

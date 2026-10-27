@@ -33,7 +33,10 @@
       var(--md-menus-menu-item-bottom-space, var(--_row-padding));
     padding-inline: var(--_menus-menu-item-leading-space, 1rem) var(--_menus-menu-item-trailing-space, 1rem);
 
-    border-radius: var(--_menus-menu-item-shape, var(--md-shape-popover-item));
+    border-radius: var(
+      --md-menus-menu-item-shape,
+      var(--_shape-radius, var(--_menus-menu-item-shape, var(--md-shape-popover-item)))
+    );
     cursor: var(--md-cursor-action);
 
     color: var(--_menu-item-current-label-color);
@@ -298,23 +301,29 @@
   }
 
   .m3-menu-container > .m3-menu-item:first-child {
-    border-start-start-radius: var(--_menu-item-first-start-radius);
-    border-start-end-radius: var(--_menu-item-first-end-radius);
+    border-start-start-radius: var(
+      --md-menus-menu-item-shape,
+      var(--_shape-radius, var(--_menu-item-first-start-radius))
+    );
+    border-start-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-first-end-radius)));
   }
 
   .m3-menu-container > .m3-menu-submenu:first-child > .m3-menu-submenu-trigger > .m3-menu-item {
-    border-start-start-radius: var(--_menu-item-first-start-radius);
-    border-start-end-radius: var(--_menu-item-first-end-radius);
+    border-start-start-radius: var(
+      --md-menus-menu-item-shape,
+      var(--_shape-radius, var(--_menu-item-first-start-radius))
+    );
+    border-start-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-first-end-radius)));
   }
 
   .m3-menu-container > .m3-menu-item:last-child {
-    border-end-start-radius: var(--_menu-item-last-start-radius);
-    border-end-end-radius: var(--_menu-item-last-end-radius);
+    border-end-start-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-start-radius)));
+    border-end-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-end-radius)));
   }
 
   .m3-menu-container > .m3-menu-submenu:last-child > .m3-menu-submenu-trigger > .m3-menu-item {
-    border-end-start-radius: var(--_menu-item-last-start-radius);
-    border-end-end-radius: var(--_menu-item-last-end-radius);
+    border-end-start-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-start-radius)));
+    border-end-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-end-radius)));
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -102,7 +102,10 @@
     );
     --_fab-menu-close-button-container-height: var(--md-fab-menu-close-button-container-height, --dp(56));
     --_fab-menu-close-button-container-width: var(--md-fab-menu-close-button-container-width, --dp(56));
-    --_fab-menu-close-button-container-shape: var(--md-fab-menu-close-button-container-shape, var(--md-shape-action));
+    --_fab-menu-close-button-container-shape: var(
+      --md-fab-menu-close-button-container-shape,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     --_fab-menu-close-button-icon-size: var(--md-fab-menu-close-button-icon-size, --dp(20));
     --_fab-menu-close-button-between-space: var(--md-fab-menu-close-button-between-space, --dp(8));
 
@@ -130,7 +133,6 @@
       var(--md-sys-elevation-level0)
     );
     --_fab-menu-item-container-height: var(--md-fab-menu-item-container-height, --dp(56));
-    --_fab-menu-item-container-shape: var(--md-fab-menu-item-container-shape, var(--md-shape-action));
     --_fab-menu-item-icon-size: var(--md-fab-menu-item-icon-size, --dp(24));
     --_fab-menu-item-leading-space: var(--md-fab-menu-item-leading-space, --dp(24));
     --_fab-menu-item-icon-label-space: var(--md-fab-menu-item-icon-label-space, --dp(8));
@@ -290,7 +292,10 @@
   .m3-fab-menu-popover[data-size='regular'] {
     --_fab-menu-trigger-container-height: var(--md-fab-menu-trigger-container-height, --dp(56));
     --_fab-menu-trigger-container-width: var(--md-fab-menu-trigger-container-width, --dp(56));
-    --_fab-menu-trigger-container-shape: var(--md-fab-menu-trigger-container-shape, var(--md-shape-fab-regular));
+    --_fab-menu-trigger-container-shape: var(
+      --md-fab-menu-trigger-container-shape,
+      var(--_shape-radius, var(--md-shape-fab-regular))
+    );
     --_fab-menu-trigger-icon-size: var(--md-fab-menu-trigger-icon-size, --dp(24));
   }
 
@@ -298,7 +303,10 @@
   .m3-fab-menu-popover[data-size='medium'] {
     --_fab-menu-trigger-container-height: var(--md-fab-menu-trigger-container-height, --dp(80));
     --_fab-menu-trigger-container-width: var(--md-fab-menu-trigger-container-width, --dp(80));
-    --_fab-menu-trigger-container-shape: var(--md-fab-menu-trigger-container-shape, var(--md-shape-fab-medium));
+    --_fab-menu-trigger-container-shape: var(
+      --md-fab-menu-trigger-container-shape,
+      var(--_shape-radius, var(--md-shape-fab-medium))
+    );
     --_fab-menu-trigger-icon-size: var(--md-fab-menu-trigger-icon-size, --dp(28));
   }
 
@@ -306,7 +314,10 @@
   .m3-fab-menu-popover[data-size='large'] {
     --_fab-menu-trigger-container-height: var(--md-fab-menu-trigger-container-height, --dp(96));
     --_fab-menu-trigger-container-width: var(--md-fab-menu-trigger-container-width, --dp(96));
-    --_fab-menu-trigger-container-shape: var(--md-fab-menu-trigger-container-shape, var(--md-shape-fab-large));
+    --_fab-menu-trigger-container-shape: var(
+      --md-fab-menu-trigger-container-shape,
+      var(--_shape-radius, var(--md-shape-fab-large))
+    );
     --_fab-menu-trigger-icon-size: var(--md-fab-menu-trigger-icon-size, --dp(36));
   }
 
@@ -373,7 +384,7 @@
     block-size: var(--_fab-menu-item-container-height);
     padding-inline-start: var(--_fab-menu-item-leading-space);
     padding-inline-end: var(--_fab-menu-item-trailing-space);
-    border-radius: var(--_fab-menu-item-container-shape);
+    border-radius: var(--md-fab-menu-item-container-shape, var(--_shape-radius, var(--md-shape-action)));
     text-decoration: none;
     cursor: var(--md-cursor-action);
     user-select: none;

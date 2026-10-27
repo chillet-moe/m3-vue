@@ -55,7 +55,7 @@ app.use(M3VuePlugin, {
 
 | Option                                     | Applies to                                                                             |
 | ------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `shape`                                    | Shared rounded/square shapes                                                           |
+| `shape`                                    | Shared component shapes                                                                |
 | `rowSize`                                  | Menu rows (including Select/Combobox menus), TreeView and navigation drawer/rail items |
 | `fieldSize`                                | Single-line TextField, Select and Combobox                                             |
 | `buttonDefaults`                           | Button size and press shape morph; ButtonGroup inherits press morph                    |
@@ -187,6 +187,59 @@ and its foreground in each color scheme:
 Container and foreground roles are separate pairs. Components resolve light/dark roles through `color-scheme`.
 For nested custom content, `--md-color-container`, `--md-color-on-container` and `--md-state-layer-color` carry the
 current container, foreground and state-layer colors.
+
+## Component shape modes
+
+Set `shape` on the plugin or a component to choose a corner treatment:
+
+| Shape     | Behavior                                                                          |
+| --------- | --------------------------------------------------------------------------------- |
+| `rounded` | Existing Material round treatment; surfaces retain their role-specific radii.     |
+| `square`  | Existing Material square treatment where supported; it does not mean zero radius. |
+| `minimal` | Subtle role-based corners: 2px, 3px, 4px or 6px.                                  |
+| `sharp`   | 0px corners, including selected and pressed states.                               |
+
+`minimal` uses the following role scale:
+
+| Radius | Components                                                                          |
+| ------ | ----------------------------------------------------------------------------------- |
+| 2px    | CheckBox, calendar cells, menu/tree/list rows, navigation items and Snackbar        |
+| 3px    | Button, IconButton, ButtonGroup, fields (including OTP), Chip and FAB menu items    |
+| 4px    | Card, Menu, Popover, FAB, FAB menu trigger and navigation containers                |
+| 6px    | Dialog, BottomSheet, SideSheet, DatePicker, DateRangePicker and TimePicker surfaces |
+
+Press morphing remains independently configurable. When enabled, supported `minimal` controls use 2px while pressed;
+when disabled, they retain their role radius. Selected controls also retain their role radius.
+To use minimal corners without button press morphing, set
+`{ shape: 'minimal', buttonDefaults: { pressShapeMorph: false } }` on the plugin.
+
+Values above assume a 16px root font size. Shape does not change size, density or typography.
+
+```ts
+import { M3VuePlugin, provideShape } from '@chillet/m3-vue';
+
+app.use(M3VuePlugin, { shape: 'minimal' });
+
+// In an existing ancestor component's setup, override one region:
+provideShape('sharp');
+```
+
+`provideShape` accepts a value, ref or getter. An omitted component `shape` inherits the nearest shared default;
+component-specific context preferences and explicit props take precedence. `Menu`, `MenuSubMenu`, `TreeView`,
+`NavigationRail`, `Select` and `Combobox` pass their shape to their owned descendants. `ButtonGroup` and
+`NavigationDrawer` set their members' defaults through their component contexts. A Card or Dialog's local shape
+changes its surface; use `provideShape` when the whole region should change.
+
+Shape-aware components include Button, IconButton, ButtonGroup, ListItem, TextField, Select, Combobox, InputOtp,
+CheckBox, Chip, Card, FloatingActionButton and its menu, Menu/MenuItem, TreeView/TreeItem, navigation drawer/rail items,
+Popover, Dialog, Snackbar, BottomSheet, SideSheet, DatePicker, DateRangePicker and TimePicker.
+Radio circles, switch thumbs, progress indicators, clock faces and avatars retain their semantic shapes.
+
+`rounded` and `square` retain their existing press/selection behavior. `minimal` never morphs into a pill;
+`sharp` keeps square corners while state layers, colors and other interaction feedback still work.
+`Button.pressShapeMorph` and `ButtonGroup.pressShapeMorph` continue to disable press morphing.
+Explicit component radius tokens override the mode; supplying those tokens means owning that component's geometry.
+The semantic role tokens below customize the Material modes.
 
 ## Theme-level shape tokens
 

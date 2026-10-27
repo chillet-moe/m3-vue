@@ -148,10 +148,19 @@
     --_button-label-text-selected-color: var(--md-button-label-text-selected-color, var(--md-sys-color-on-primary));
     --_button-icon-size: var(--md-button-icon-size, 1.25rem);
     --_button-container-shape: var(--md-button-container-shape, var(--_button-container-shape-round));
-    --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
-    --_button-container-shape-square: var(--md-button-container-shape-square, var(--md-shape-action-square-small));
+    --_button-container-shape-round: var(
+      --md-button-container-shape-round,
+      var(--_shape-radius, var(--md-shape-action))
+    );
+    --_button-container-shape-square: var(
+      --md-button-container-shape-square,
+      var(--_shape-radius, var(--md-shape-action-square-small))
+    );
     --_button-icon-label-space: var(--md-button-icon-label-space, 0.5rem);
-    --_button-pressed-container-shape: var(--md-button-pressed-container-shape, var(--md-shape-action-pressed-small));
+    --_button-pressed-container-shape: var(
+      --md-button-pressed-container-shape,
+      var(--_shape-radius, var(--md-shape-action-pressed-small))
+    );
     --_button-focus-indicator-color: var(--md-button-focus-indicator-color, var(--md-sys-color-secondary));
     --_button-focus-indicator-thickness: var(
       --md-button-focus-indicator-thickness,
@@ -429,16 +438,16 @@
     --_button-xsmall-icon-size: var(--md-button-xsmall-icon-size, 1.25rem);
     --_button-xsmall-container-shape-square: var(
       --md-button-xsmall-container-shape-square,
-      var(--md-shape-action-square-small)
+      var(--_shape-radius, var(--md-shape-action-square-small))
     );
     --_button-xsmall-icon-label-space: var(--md-button-xsmall-icon-label-space, 0.5rem);
     --_button-xsmall-pressed-container-shape: var(
       --md-button-xsmall-pressed-container-shape,
-      var(--md-shape-action-pressed-small)
+      var(--_shape-radius, var(--md-shape-action-pressed-small))
     );
     --_button-xsmall-selected-container-shape-round: var(
       --md-button-xsmall-selected-container-shape-round,
-      var(--md-shape-action-selected-small)
+      var(--_shape-radius, var(--md-shape-action-selected-small))
     );
 
     --_button-small-outlined-outline-width: var(
@@ -448,16 +457,16 @@
     --_button-small-icon-size: var(--md-button-small-icon-size, 1.25rem);
     --_button-small-container-shape-square: var(
       --md-button-small-container-shape-square,
-      var(--md-shape-action-square-small)
+      var(--_shape-radius, var(--md-shape-action-square-small))
     );
     --_button-small-icon-label-space: var(--md-button-small-icon-label-space, 0.5rem);
     --_button-small-pressed-container-shape: var(
       --md-button-small-pressed-container-shape,
-      var(--md-shape-action-pressed-small)
+      var(--_shape-radius, var(--md-shape-action-pressed-small))
     );
     --_button-small-selected-container-shape-round: var(
       --md-button-small-selected-container-shape-round,
-      var(--md-shape-action-selected-small)
+      var(--_shape-radius, var(--md-shape-action-selected-small))
     );
 
     --_button-medium-outlined-outline-width: var(
@@ -467,48 +476,48 @@
     --_button-medium-icon-size: var(--md-button-medium-icon-size, 1.5rem);
     --_button-medium-container-shape-square: var(
       --md-button-medium-container-shape-square,
-      var(--md-shape-action-square-medium)
+      var(--_shape-radius, var(--md-shape-action-square-medium))
     );
     --_button-medium-icon-label-space: var(--md-button-medium-icon-label-space, 0.5rem);
     --_button-medium-pressed-container-shape: var(
       --md-button-medium-pressed-container-shape,
-      var(--md-shape-action-pressed-medium)
+      var(--_shape-radius, var(--md-shape-action-pressed-medium))
     );
     --_button-medium-selected-container-shape-round: var(
       --md-button-medium-selected-container-shape-round,
-      var(--md-shape-action-selected-medium)
+      var(--_shape-radius, var(--md-shape-action-selected-medium))
     );
 
     --_button-large-outlined-outline-width: var(--md-button-large-outlined-outline-width, 0.125rem);
     --_button-large-icon-size: var(--md-button-large-icon-size, 2rem);
     --_button-large-container-shape-square: var(
       --md-button-large-container-shape-square,
-      var(--md-shape-action-square-large)
+      var(--_shape-radius, var(--md-shape-action-square-large))
     );
     --_button-large-icon-label-space: var(--md-button-large-icon-label-space, 0.75rem);
     --_button-large-pressed-container-shape: var(
       --md-button-large-pressed-container-shape,
-      var(--md-shape-action-pressed-large)
+      var(--_shape-radius, var(--md-shape-action-pressed-large))
     );
     --_button-large-selected-container-shape-round: var(
       --md-button-large-selected-container-shape-round,
-      var(--md-shape-action-selected-large)
+      var(--_shape-radius, var(--md-shape-action-selected-large))
     );
 
     --_button-xlarge-outlined-outline-width: var(--md-button-xlarge-outlined-outline-width, 0.1875rem);
     --_button-xlarge-icon-size: var(--md-button-xlarge-icon-size, 2.5rem);
     --_button-xlarge-container-shape-square: var(
       --md-button-xlarge-container-shape-square,
-      var(--md-shape-action-square-large)
+      var(--_shape-radius, var(--md-shape-action-square-large))
     );
     --_button-xlarge-icon-label-space: var(--md-button-xlarge-icon-label-space, 1rem);
     --_button-xlarge-pressed-container-shape: var(
       --md-button-xlarge-pressed-container-shape,
-      var(--md-shape-action-pressed-large)
+      var(--_shape-radius, var(--md-shape-action-pressed-large))
     );
     --_button-xlarge-selected-container-shape-round: var(
       --md-button-xlarge-selected-container-shape-round,
-      var(--md-shape-action-selected-large)
+      var(--_shape-radius, var(--md-shape-action-selected-large))
     );
   }
 }
@@ -852,7 +861,10 @@
 
     --_button-reserved-outline-width: var(--_button-xsmall-outlined-outline-width);
 
-    --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
+    --_button-container-shape-round: var(
+      --md-button-container-shape-round,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
       var(--_button-xsmall-container-shape-square)
@@ -878,7 +890,10 @@
 
     --_button-reserved-outline-width: var(--_button-small-outlined-outline-width);
 
-    --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
+    --_button-container-shape-round: var(
+      --md-button-container-shape-round,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
       var(--_button-small-container-shape-square)
@@ -904,7 +919,10 @@
 
     --_button-reserved-outline-width: var(--_button-medium-outlined-outline-width);
 
-    --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
+    --_button-container-shape-round: var(
+      --md-button-container-shape-round,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
       var(--_button-medium-container-shape-square)
@@ -930,7 +948,10 @@
 
     --_button-reserved-outline-width: var(--_button-large-outlined-outline-width);
 
-    --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
+    --_button-container-shape-round: var(
+      --md-button-container-shape-round,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
       var(--_button-large-container-shape-square)
@@ -956,7 +977,10 @@
 
     --_button-reserved-outline-width: var(--_button-xlarge-outlined-outline-width);
 
-    --_button-container-shape-round: var(--md-button-container-shape-round, var(--md-shape-action));
+    --_button-container-shape-round: var(
+      --md-button-container-shape-round,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
       var(--_button-xlarge-container-shape-square)
@@ -983,7 +1007,7 @@
     }
   }
 
-  .m3-button[data-shape='square'] {
+  .m3-button:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']) {
     --_button-container-shape: var(--md-button-container-shape, var(--_button-container-shape-square));
 
     &[data-press-shape-morph='true'][data-pressed='true'] {
@@ -1029,21 +1053,45 @@
   }
 
   [data-type='connected'] .m3-button {
-    border-start-start-radius: var(--_button-group-connected-container-shape);
-    border-start-end-radius: var(--_button-group-connected-inner-corner-corner-size);
-    border-end-end-radius: var(--_button-group-connected-inner-corner-corner-size);
-    border-end-start-radius: var(--_button-group-connected-container-shape);
+    border-start-start-radius: var(
+      --md-button-group-connected-container-shape,
+      var(--_shape-radius, var(--_button-group-connected-container-shape))
+    );
+    border-start-end-radius: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+    );
+    border-end-end-radius: var(
+      --md-button-group-connected-inner-corner-corner-size,
+      var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+    );
+    border-end-start-radius: var(
+      --md-button-group-connected-container-shape,
+      var(--_shape-radius, var(--_button-group-connected-container-shape))
+    );
 
     &:first-of-type {
-      border-start-start-radius: var(--_button-group-connected-container-shape);
-      border-start-end-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-end-end-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-end-start-radius: var(--_button-group-connected-container-shape);
+      border-start-start-radius: var(
+        --md-button-group-connected-container-shape,
+        var(--_shape-radius, var(--_button-group-connected-container-shape))
+      );
+      border-start-end-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
+      border-end-end-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
+      border-end-start-radius: var(
+        --md-button-group-connected-container-shape,
+        var(--_shape-radius, var(--_button-group-connected-container-shape))
+      );
 
       &[data-pressed='true'] {
         --_button-group-connected-inner-corner-corner-size: var(
           --md-button-group-connected-inner-corner-corner-size,
-          var(--_button-group-connected-pressed-inner-corner-corner-size)
+          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
         );
       }
     }
@@ -1051,18 +1099,30 @@
     &:last-of-type {
       --_button-container-shape: var(
         --md-button-container-shape,
-        var(--_button-group-connected-inner-corner-corner-size)
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
       );
 
-      border-start-start-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-start-end-radius: var(--_button-group-connected-container-shape);
-      border-end-end-radius: var(--_button-group-connected-container-shape);
-      border-end-start-radius: var(--_button-group-connected-inner-corner-corner-size);
+      border-start-start-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
+      border-start-end-radius: var(
+        --md-button-group-connected-container-shape,
+        var(--_shape-radius, var(--_button-group-connected-container-shape))
+      );
+      border-end-end-radius: var(
+        --md-button-group-connected-container-shape,
+        var(--_shape-radius, var(--_button-group-connected-container-shape))
+      );
+      border-end-start-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
 
       &[data-pressed='true'] {
         --_button-group-connected-inner-corner-corner-size: var(
           --md-button-group-connected-inner-corner-corner-size,
-          var(--_button-group-connected-pressed-inner-corner-corner-size)
+          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
         );
       }
     }
@@ -1070,18 +1130,30 @@
     &:not(:first-of-type):not(:last-of-type) {
       --_button-container-shape: var(
         --md-button-container-shape,
-        var(--_button-group-connected-inner-corner-corner-size)
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
       );
 
-      border-start-start-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-start-end-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-end-end-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-end-start-radius: var(--_button-group-connected-inner-corner-corner-size);
+      border-start-start-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
+      border-start-end-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
+      border-end-end-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
+      border-end-start-radius: var(
+        --md-button-group-connected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+      );
 
       &[data-pressed='true'] {
         --_button-group-connected-inner-corner-corner-size: var(
           --md-button-group-connected-inner-corner-corner-size,
-          var(--_button-group-connected-pressed-inner-corner-corner-size)
+          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
         );
       }
     }
@@ -1092,50 +1164,77 @@
     &[data-press-shape-morph='true']:last-of-type:active {
       --_button-group-connected-inner-corner-corner-size: var(
         --md-button-group-connected-inner-corner-corner-size,
-        var(--_button-group-connected-pressed-inner-corner-corner-size)
+        var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
       );
     }
 
     &[data-press-shape-morph='true']:not(:first-of-type):not(:last-of-type):active {
-      border-radius: var(--_button-group-connected-pressed-inner-corner-corner-size);
+      border-radius: var(
+        --md-button-group-connected-pressed-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
+      );
     }
 
     /* Selected state border-radius overrides */
 
     &:first-of-type:has(input:checked) {
-      border-start-end-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
-      border-end-end-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
+      border-start-end-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
+      border-end-end-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
 
       &[data-pressed='true'] {
         --_button-group-connected-selected-inner-corner-corner-size: var(
           --md-button-group-connected-selected-inner-corner-corner-size,
-          var(--_button-group-connected-pressed-inner-corner-corner-size)
+          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
         );
       }
     }
 
     &:last-of-type:has(input:checked) {
-      border-start-start-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
-      border-end-start-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
+      border-start-start-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
+      border-end-start-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
 
       &[data-pressed='true'] {
         --_button-group-connected-selected-inner-corner-corner-size: var(
           --md-button-group-connected-selected-inner-corner-corner-size,
-          var(--_button-group-connected-pressed-inner-corner-corner-size)
+          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
         );
       }
     }
 
     &:not(:first-of-type):not(:last-of-type):has(input:checked) {
-      border-start-start-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
-      border-start-end-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
-      border-end-end-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
-      border-end-start-radius: var(--_button-group-connected-selected-inner-corner-corner-size);
+      border-start-start-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
+      border-start-end-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
+      border-end-end-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
+      border-end-start-radius: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
+      );
 
       &[data-pressed='true'] {
         --_button-group-connected-selected-inner-corner-corner-size: var(
           --md-button-group-connected-selected-inner-corner-corner-size,
-          var(--_button-group-connected-pressed-inner-corner-corner-size)
+          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
         );
       }
     }

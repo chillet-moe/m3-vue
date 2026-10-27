@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
@@ -11,6 +12,8 @@ import { menuItemOwnerContextKey, menuSelectionContextKey } from './MenuContext'
 import type { MenuItemValue } from './MenuTypes';
 
 export type MenuItemProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   /** Optional value that participates in Menu selection state. */
@@ -42,6 +45,7 @@ export type MenuItemProps = {
 };
 
 const {
+  shape: shapeProp,
   size = undefined,
   value = undefined,
   href = undefined,
@@ -199,6 +203,7 @@ function hasSuffix() {
   return hasTrailing() || hasBadge() || hasTrailingText();
 }
 const rowSize = provideRowSize(() => size);
+const shape = useShape(() => shapeProp);
 </script>
 
 <template>
@@ -224,6 +229,8 @@ const rowSize = provideRowSize(() => size);
     :data-size="rowSize"
     data-scope="menu-item"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     @click="handleClick"
     @keydown="handleKeydown"
   >

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
 
@@ -20,6 +21,8 @@ import { useM3Locale } from '@/locales/context';
 export type { TimePickerFormat, TimePickerInputMode, TimePickerModelValue, TimePickerVariant };
 
 export type TimePickerProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Optional explicit id for the popover element. */
   id?: string;
 
@@ -399,6 +402,7 @@ defineExpose({
   hide: popover.hide,
   toggle: popover.toggle,
 });
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -410,6 +414,8 @@ defineExpose({
     role="dialog"
     data-scope="time-picker"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-variant="props.variant"
     :data-format="picker.format.value"
     :data-input-mode="picker.inputMode.value"

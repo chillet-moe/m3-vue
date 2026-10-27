@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape } from '@/styles/shape';
 import { appearanceContextKey } from '@/styles/appearance';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { listItemContextKey } from './ListItemContext';
@@ -55,7 +56,7 @@ const appearance = computed(
 );
 const size = computed(() => props.size ?? unref(defaults?.size) ?? 'medium');
 const interactive = computed(() => props.interactive);
-const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
+const shape = useShape(() => props.shape ?? unref(context?.shape), 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
 const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
@@ -122,6 +123,7 @@ const slotProps = computed(() => ({
     data-variant="text"
     :data-size="size"
     :data-shape="shape"
+    data-m3-shape
     :data-interactive="interactive ? 'true' : 'false'"
     :data-active="isSelected ? 'true' : undefined"
     :data-selected="isSelected ? 'true' : undefined"

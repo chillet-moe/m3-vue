@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { computed, useId, useSlots } from 'vue';
 import { Button } from '@/components/Button';
 import { IconButton } from '@/components/IconButton';
 
 export type SnackbarProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Label for the optional action button. */
   actionLabel?: string;
 
@@ -24,6 +27,7 @@ export type SnackbarProps = {
 };
 
 const {
+  shape: shapeProp,
   actionLabel = undefined,
   actionDisabled = false,
   actionAutofocus = false,
@@ -56,6 +60,7 @@ const contentId = `snackbar-content-${useId()}`;
 const hasAction = computed(() => Boolean(actionLabel || slots.action));
 const hasDismiss = computed(() => dismissible || Boolean(slots.dismiss));
 const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-line' : 'inline'));
+const shape = useShape(() => shapeProp);
 </script>
 
 <template>
@@ -63,6 +68,8 @@ const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-l
     :class="'m3-snackbar'"
     data-scope="snackbar"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-action-layout="actionLayout"
     role="status"
     aria-live="polite"

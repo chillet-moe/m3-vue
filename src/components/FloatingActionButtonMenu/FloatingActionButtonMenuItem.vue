@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
 import { vStateLayer } from '@/components/StateLayer/state-layer';
@@ -12,6 +13,8 @@ import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { floatingActionButtonMenuContextKey } from './FloatingActionButtonMenuContext';
 
 export type FloatingActionButtonMenuItemProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Optional href. When provided, the item renders as an anchor. */
   href?: string;
 
@@ -90,6 +93,7 @@ function handleKeydown(event: KeyboardEvent) {
   event.preventDefault();
   currentTarget.click();
 }
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -107,6 +111,8 @@ function handleKeydown(event: KeyboardEvent) {
     :class="['m3-state-layer', 'm3-fab-menu-item']"
     data-scope="floating-action-button-menu"
     data-part="item"
+    data-m3-shape
+    :data-shape="shape"
     @click="handleClick"
     @keydown="handleKeydown"
     v-bind="pressShapeMorphAttrs"

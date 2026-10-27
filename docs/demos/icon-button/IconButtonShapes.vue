@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IconButton } from '@/components/IconButton';
 
-const shapes = ['rounded', 'square'] as const;
+const shapes = ['rounded', 'square', 'minimal', 'sharp'] as const;
 </script>
 
 <template>

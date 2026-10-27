@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue';
 import type { ComponentPublicInstance } from 'vue';
 
 export type InputOtpProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Optional explicit id prefix for the native controls. */
   id?: string;
 
@@ -332,6 +335,7 @@ defineExpose({
   blur,
   select,
 });
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -340,6 +344,8 @@ defineExpose({
     class="m3-input-otp"
     data-scope="input-otp"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-size="props.size"
     :data-invalid="props.invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"

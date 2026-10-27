@@ -26,7 +26,10 @@
     --_navigation-rail-expanded-item-gap: var(--md-navigation-rail-expanded-item-gap, --dp(2));
     --_navigation-rail-collapsed-padding-inline: var(--md-navigation-rail-collapsed-padding-inline, 0);
     --_navigation-rail-expanded-padding-inline: var(--md-navigation-rail-expanded-padding-inline, --dp(8));
-    --_navigation-rail-container-shape: var(--md-navigation-rail-container-shape, var(--md-shape-docked));
+    --_navigation-rail-container-shape: var(
+      --md-navigation-rail-container-shape,
+      var(--_shape-radius, var(--md-shape-docked))
+    );
     --_navigation-rail-container-color: var(--md-navigation-rail-container-color, var(--md-sys-color-surface));
     --_navigation-rail-layout-motion: var(
       --md-navigation-rail-layout-motion,

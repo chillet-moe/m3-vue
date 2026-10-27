@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
@@ -8,7 +9,7 @@ import type { VTooltipBinding } from '@/directives/Tooltip/types';
 import { computed, inject, unref, useSlots } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
-export type NavigationDrawerItemShape = 'rounded' | 'square';
+export type NavigationDrawerItemShape = M3Shape;
 
 export type NavigationDrawerItemProps = {
   /** Row size; inherits the nearest row size or defaults to medium. */
@@ -65,7 +66,7 @@ const drawer = inject(navigationDrawerContextKey, null);
 const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
-const resolvedShape = computed(() => props.shape ?? drawer?.shape.value ?? unref(globalShape?.shape) ?? 'rounded');
+const resolvedShape = useShape(() => props.shape ?? drawer?.shape.value ?? unref(globalShape?.shape));
 const {
   mergedDisabled,
   isSelected,
@@ -143,6 +144,7 @@ const rowSize = provideRowSize(() => props.size);
     data-part="root"
     :data-item-value="props.value"
     :data-shape="resolvedShape"
+    data-m3-shape
     :data-selected="isSelected ? 'true' : undefined"
     :data-disabled="mergedDisabled ? 'true' : undefined"
     @click="handleClick"

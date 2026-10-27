@@ -47,7 +47,7 @@ describe('customization code preview', () => {
         defaults: {
           rowSize: 'extra-small',
           appearance: 'expressive',
-          shape: 'square',
+          shape: 'minimal',
           fieldSize: 'small',
           buttonSize: 'extra-small',
           pressShapeMorph: 'false',
@@ -71,7 +71,7 @@ describe('customization code preview', () => {
     expect(options).toEqual({
       rowSize: 'extra-small',
       appearance: 'expressive',
-      shape: 'square',
+      shape: 'minimal',
       fieldSize: 'small',
       buttonDefaults: { size: 'extra-small', pressShapeMorph: false },
       iconButtonSize: 'large',

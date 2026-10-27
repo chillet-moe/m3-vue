@@ -59,10 +59,13 @@
       --md-date-picker-docked-container-elevation,
       var(--md-sys-elevation-level3)
     );
-    --_date-picker-docked-container-shape: var(--md-date-picker-docked-container-shape, var(--md-shape-overlay));
+    --_date-picker-docked-container-shape: var(
+      --md-date-picker-docked-container-shape,
+      var(--_shape-radius, var(--md-shape-overlay))
+    );
     --_date-picker-docked-date-container-shape: var(
       --md-date-picker-docked-date-container-shape,
-      var(--md-shape-indicator)
+      var(--_shape-compact-radius, var(--md-shape-indicator))
     );
     --_date-picker-docked-date-today-container-outline-color: var(
       --md-date-picker-docked-date-today-container-outline-color,
@@ -147,10 +150,7 @@
       --md-date-picker-docked-date-selected-label-text-color,
       var(--md-sys-color-on-primary)
     );
-    --_date-picker-docked-menu-button-container-shape: var(
-      --md-date-picker-docked-menu-button-container-shape,
-      var(--md-shape-action)
-    );
+
     --_date-picker-docked-menu-button-label-text-color: var(
       --md-date-picker-docked-menu-button-label-text-color,
       var(--md-sys-color-on-surface-variant)
@@ -297,6 +297,10 @@
   }
 
   .m3-date-picker-switch {
+    --_date-picker-docked-menu-button-container-shape: var(
+      --md-date-picker-docked-menu-button-container-shape,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     min-inline-size: 0;
     min-block-size: 2.5rem;
     padding-inline: 0.75rem;

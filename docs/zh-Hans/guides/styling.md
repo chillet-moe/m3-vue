@@ -51,7 +51,7 @@ app.use(M3VuePlugin, {
 
 | 选项                                       | 适用范围                                                            |
 | ------------------------------------------ | ------------------------------------------------------------------- |
-| `shape`                                    | 共享的圆角/方角形状                                                 |
+| `shape`                                    | 共享组件形状                                                        |
 | `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目 |
 | `fieldSize`                                | 单行 TextField、Select 和 Combobox                                  |
 | `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                 |
@@ -158,6 +158,47 @@ provideRowSize('extra-small');
 ```
 
 容器色和前景色是成对的角色。组件通过 `color-scheme` 解析浅色/深色角色。嵌套的自定义内容可使用 `--md-color-container`、`--md-color-on-container` 和 `--md-state-layer-color`，继承当前容器色、前景色和状态层颜色。
+
+## 组件形状模式 {#component-shape-modes}
+
+在插件或组件上设置 `shape`，选择一种圆角处理方式：
+
+| 形状      | 行为                                                               |
+| --------- | ------------------------------------------------------------------ |
+| `rounded` | 保留现有的 Material 圆角处理方式；各类表面仍使用其对应的圆角半径。 |
+| `square`  | 在支持的地方采用现有的 Material 方角处理方式；这不代表半径为零。   |
+| `minimal` | 按角色采用细微圆角：2px、3px、4px 或 6px。                         |
+| `sharp`   | 圆角为 0px，包括选中和按压状态。                                   |
+
+`minimal` 使用以下角色半径：
+
+| 半径 | 组件                                                                           |
+| ---- | ------------------------------------------------------------------------------ |
+| 2px  | CheckBox、菜单/树/列表行、导航条目、日历日期格和 Snackbar                      |
+| 3px  | Button、IconButton、ButtonGroup、字段（包括 OTP）、Chip 和 FAB 菜单项          |
+| 4px  | Card、Menu、Popover、FAB、FAB 菜单触发器和导航容器                             |
+| 6px  | Dialog、BottomSheet、SideSheet、DatePicker、DateRangePicker 和 TimePicker 表面 |
+
+按压形变仍可单独配置。启用时，支持该行为的 `minimal` 控件在按压时使用 2px 圆角；禁用时则保留其角色半径。选中状态的控件也保留其角色半径。若要使用 minimal 圆角但禁用按钮按压形变，可在插件中设置 `{ shape: 'minimal', buttonDefaults: { pressShapeMorph: false } }`。
+
+以上数值以根字号 16px 为前提。形状不会改变尺寸、密度或排版。
+
+```ts
+import { M3VuePlugin, provideShape } from '@chillet/m3-vue';
+
+app.use(M3VuePlugin, { shape: 'minimal' });
+
+// 在现有祖先组件的 setup 中，为一个区域设置覆盖值：
+provideShape('sharp');
+```
+
+`provideShape` 接受普通值、ref 或 getter。组件未指定 `shape` 时会继承最近的共享默认值；组件专属的上下文偏好和显式属性优先级更高。`Menu`、`MenuSubMenu`、`TreeView`、`NavigationRail`、`Select` 和 `Combobox` 会将自己的形状传给其拥有的后代。`ButtonGroup` 和 `NavigationDrawer` 会通过组件上下文设置其成员的默认值。Card 或 Dialog 的局部形状只会改变其表面；若要改变整个区域，请使用 `provideShape`。
+
+支持形状设置的组件包括 Button、IconButton、ButtonGroup、ListItem、TextField、Select、Combobox、InputOtp、CheckBox、Chip、Card、FloatingActionButton 及其菜单、Menu/MenuItem、TreeView/TreeItem、导航抽屉/导航栏条目、Popover、Dialog、Snackbar、BottomSheet、SideSheet、DatePicker、DateRangePicker 和 TimePicker。Radio 圆形、switch 拨钮、进度指示器、钟面和头像会保留其语义形状。
+
+`rounded` 和 `square` 保留现有的按压与选中行为。`minimal` 不会形变为药丸形；`sharp` 在状态层、颜色及其他交互反馈正常工作的同时保持方角。`Button.pressShapeMorph` 和 `ButtonGroup.pressShapeMorph` 仍可用于禁用按压形变。
+
+显式设置组件圆角 token 会覆盖形状模式；提供这些 token 即表示由你负责该组件的几何形状。下方的语义角色 token 可用于定制 Material 形状模式。
 
 ## 主题级形状 token
 

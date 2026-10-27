@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideShape, type M3Shape } from '@/styles/shape';
 import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isNode } from '@/internal/elementEnvironment';
@@ -12,6 +13,8 @@ import { useMenu } from '@/composables/useMenu';
 import { floatingActionButtonMenuContextKey } from './FloatingActionButtonMenuContext';
 
 export type FloatingActionButtonMenuProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** The color set of the FAB menu. */
   color?: 'primary' | 'secondary' | 'tertiary';
 
@@ -348,6 +351,7 @@ defineExpose({
   menuRef,
   triggerRef,
 });
+const shape = provideShape(() => props.shape);
 </script>
 
 <template>
@@ -356,6 +360,8 @@ defineExpose({
     class="m3-fab-menu"
     data-scope="floating-action-button-menu"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-color="color"
     :data-size="size"
     :data-alignment="alignment"

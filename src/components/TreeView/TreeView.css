@@ -17,7 +17,6 @@
     --_tree-indent: var(--md-tree-indent, --dp(16));
     --_tree-padding: var(--md-tree-padding-inline, --dp(8));
     --_tree-gap: var(--md-tree-gap, --dp(6));
-    --_tree-shape: var(--md-tree-shape, var(--md-shape-compact));
     --_tree-container: var(--md-tree-container-color, var(--md-color-container, transparent));
     --_tree-label: var(--md-tree-label-color, var(--md-color-on-container, var(--md-sys-color-on-surface)));
     --_tree-selected-container: var(--md-tree-selected-container-color, var(--md-sys-color-secondary-container));
@@ -46,7 +45,7 @@
     padding-block: --dp(4);
     gap: var(--_tree-gap);
     padding-inline: calc(var(--_tree-padding) + (var(--_tree-level) - 1) * var(--_tree-indent)) var(--_tree-padding);
-    border-radius: var(--_tree-shape);
+    border-radius: var(--md-tree-shape, var(--_shape-radius, var(--md-shape-compact)));
     color: var(--_tree-label);
     cursor: var(--md-cursor-button, pointer);
     --md-state-layer-color: var(--_tree-label);

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, provide, unref, useId, useTemplateRef } from 'vue';
 import { menuDefaultsContextKey } from './MenuDefaultsContext';
@@ -10,6 +11,8 @@ import type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue } from '
 export type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue };
 
 export type MenuProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   /** Visual color style of the menu surface. */
@@ -22,7 +25,13 @@ export type MenuProps = {
   multiple?: boolean;
 };
 
-const { size = undefined, color: colorProp, items = undefined, multiple = false } = defineProps<MenuProps>();
+const {
+  shape: shapeProp,
+  size = undefined,
+  color: colorProp,
+  items = undefined,
+  multiple = false,
+} = defineProps<MenuProps>();
 
 const defaults = inject(menuDefaultsContextKey, undefined);
 const color = computed(() => colorProp ?? unref(defaults?.color) ?? 'standard');
@@ -97,6 +106,7 @@ defineExpose({
   toggle: menuActions.toggle,
 });
 const rowSize = provideRowSize(() => size);
+const shape = provideShape(() => shapeProp);
 </script>
 
 <template>
@@ -109,6 +119,8 @@ const rowSize = provideRowSize(() => size);
     :data-size="rowSize"
     data-scope="menu"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-color="color"
     :data-menu-id="menuId"
     @toggle="menuActions.onMenuToggle"

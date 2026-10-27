@@ -19,7 +19,7 @@ const choices = (...values: string[]) => values;
 export const defaultSettings = [
   { key: 'rowSize', options: sizes },
   { key: 'appearance', options: choices('standard', 'expressive') },
-  { key: 'shape', options: choices('rounded', 'square') },
+  { key: 'shape', options: choices('rounded', 'square', 'minimal', 'sharp') },
   { key: 'fieldSize', options: choices('extra-small', 'small', 'medium') },
   { key: 'buttonSize', options: sizes },
   { key: 'iconButtonSize', options: sizes },

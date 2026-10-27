@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, inject, unref } from 'vue';
 import { cardContextKey } from '@/components/Card/CardContext.ts';
 import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 
 export type CardProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** The color style of the card. */
   color?: 'elevated' | 'filled' | 'outlined';
 
@@ -24,10 +27,19 @@ const slots = defineSlots<{
   /** Default slot for the main content of the card. */
   default(): any;
 }>();
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
-  <div v-if="!clickable" :class="['m3-card']" data-scope="card" data-part="root" :data-color="color">
+  <div
+    v-if="!clickable"
+    :class="['m3-card']"
+    data-scope="card"
+    data-part="root"
+    data-m3-shape
+    :data-shape="shape"
+    :data-color="color"
+  >
     <slot />
   </div>
   <button
@@ -36,6 +48,8 @@ const slots = defineSlots<{
     :class="['m3-card', 'm3-state-layer']"
     data-scope="card"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-color="color"
     v-bind="pressShapeMorphAttrs"
   >

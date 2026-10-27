@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
@@ -8,6 +9,7 @@ import { computed, inject, provide, unref, useId, useSlots } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerSectionProps = {
+  shape?: M3Shape;
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   /** Default icon name (Material Symbols Outlined). */
@@ -49,7 +51,7 @@ const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 const contentId = `navigation-drawer-section-content-${useId()}`;
-const shape = computed(() => drawer?.shape.value ?? unref(globalShape?.shape) ?? 'rounded');
+const shape = useShape(() => props.shape ?? drawer?.shape.value ?? unref(globalShape?.shape));
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
 const mergedDisabled = computed(() => props.disabled || drawer?.disabled.value || false);
@@ -129,6 +131,7 @@ const rowSize = provideRowSize(() => props.size);
       :aria-controls="contentId"
       :aria-label="resolvedAriaLabel"
       :data-shape="shape"
+      data-m3-shape
       v-tooltip="tooltip"
       @click="toggle"
     >

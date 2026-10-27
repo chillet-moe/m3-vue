@@ -3,6 +3,7 @@ import { computed, nextTick, provide, ref, useId, useTemplateRef, watch } from '
 import { useData } from 'vitepress';
 import {
   Button,
+  provideShape,
   ButtonGroup,
   ButtonGroupItem,
   Switch,
@@ -35,6 +36,7 @@ const t = (key: CopyKey) => (lang.value === 'zh-Hans' ? zh : en)[key];
 const customization = useDocsCustomization();
 const { state, baseline, resolvedTokens, setToken, setDefault, setPreset, reset, storageError } = customization;
 // Editing controls retain usable dimensions while component defaults change in the page.
+provideShape('rounded');
 provide(rowSizeContextKey, 'small');
 provide(fieldContextKey, { size: 'small', shape: 'rounded', labelClearance: '0.5rem' });
 provide(buttonContextKey, { size: 'small', pressShapeMorph: false });
@@ -193,7 +195,7 @@ watch(open, async (value) => {
             </div>
             <p class="customization-code-empty">{{ t('fieldGapHint') }}</p>
             <Select
-              v-for="name in ['appearance', 'shape']"
+              v-for="name in ['appearance']"
               :key="name"
               :label="t(name as CopyKey)"
               :model-value="state.defaults[name] ?? ''"
@@ -232,39 +234,52 @@ watch(open, async (value) => {
             </div>
           </TabPanel>
           <TabPanel value="shapes" class="customization-section">
-            <div v-for="role in shapeRoles" :key="role.key" class="customization-shape">
-              <div class="customization-row">
-                <span>{{ t(role.key) }}</span
-                ><output>{{
-                  role.full && shapeNumber(role.token) > role.max
-                    ? t('full')
-                    : (state.tokens[role.token] ?? baseline[role.token])
-                }}</output>
+            <Select
+              :label="t('shape')"
+              :model-value="state.defaults.shape ?? ''"
+              :options="[
+                { value: '', label: t('inherited') },
+                ...defaultSettings
+                  .find((setting) => setting.key === 'shape')!
+                  .options.map((value) => ({ value, label: value })),
+              ]"
+              @update:model-value="setDefault('shape', String($event ?? ''))"
+            />
+            <template v-if="state.defaults.shape !== 'minimal' && state.defaults.shape !== 'sharp'">
+              <div v-for="role in shapeRoles" :key="role.key" class="customization-shape">
+                <div class="customization-row">
+                  <span>{{ t(role.key) }}</span
+                  ><output>{{
+                    role.full && shapeNumber(role.token) > role.max
+                      ? t('full')
+                      : (state.tokens[role.token] ?? baseline[role.token])
+                  }}</output>
+                </div>
+                <div class="customization-row">
+                  <Slider
+                    class="customization-slider"
+                    :value="Math.min(role.max, shapeNumber(role.token))"
+                    :min="role.min"
+                    :max="role.max"
+                    :step="1"
+                    :aria-label="`${t(role.key)} ${t('radius')}`"
+                    @update:value="setToken(role.token, `${$event}px`)"
+                    @input="previewShape(role.token, $event)"
+                  />
+                  <Switch
+                    v-if="role.full"
+                    :checked="shapeNumber(role.token) > role.max"
+                    @update:checked="setToken(role.token, $event ? '9999px' : `${role.max}px`)"
+                    >{{ t('full') }}</Switch
+                  >
+                  <IconButton
+                    icon="restart_alt"
+                    :aria-label="`${t('remove')}: ${t(role.key)}`"
+                    @click="setToken(role.token, '')"
+                  />
+                </div>
               </div>
-              <div class="customization-row">
-                <Slider
-                  class="customization-slider"
-                  :value="Math.min(role.max, shapeNumber(role.token))"
-                  :min="role.min"
-                  :max="role.max"
-                  :step="1"
-                  :aria-label="`${t(role.key)} ${t('radius')}`"
-                  @update:value="setToken(role.token, `${$event}px`)"
-                  @input="previewShape(role.token, $event)"
-                />
-                <Switch
-                  v-if="role.full"
-                  :checked="shapeNumber(role.token) > role.max"
-                  @update:checked="setToken(role.token, $event ? '9999px' : `${role.max}px`)"
-                  >{{ t('full') }}</Switch
-                >
-                <IconButton
-                  icon="restart_alt"
-                  :aria-label="`${t('remove')}: ${t(role.key)}`"
-                  @click="setToken(role.token, '')"
-                />
-              </div>
-            </div>
+            </template>
           </TabPanel>
           <TabPanel value="components" class="customization-section customization-form">
             <Select

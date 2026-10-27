@@ -281,7 +281,7 @@
     --_chip-icon-gap: var(--md-chip-icon-gap, 0.5rem);
     --_chip-with-icon-side-space: var(--md-chip-with-icon-side-space, 0.5rem);
 
-    --_assist-chip-container-shape: var(--md-assist-chip-container-shape, var(--md-shape-chip));
+    --_assist-chip-container-shape: var(--md-assist-chip-container-shape, var(--_shape-radius, var(--md-shape-chip)));
     --_assist-chip-container-height: var(
       --md-assist-chip-container-height,
       --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
@@ -383,7 +383,7 @@
       var(--md-sys-color-primary)
     );
 
-    --_filter-chip-container-shape: var(--md-filter-chip-container-shape, var(--md-shape-chip));
+    --_filter-chip-container-shape: var(--md-filter-chip-container-shape, var(--_shape-radius, var(--md-shape-chip)));
     --_filter-chip-container-height: var(
       --md-filter-chip-container-height,
       --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
@@ -627,7 +627,7 @@
       var(--md-sys-color-on-surface-variant)
     );
 
-    --_input-chip-container-shape: var(--md-input-chip-container-shape, var(--md-shape-chip));
+    --_input-chip-container-shape: var(--md-input-chip-container-shape, var(--_shape-radius, var(--md-shape-chip)));
     --_input-chip-container-height: var(
       --md-input-chip-container-height,
       --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
@@ -814,7 +814,10 @@
       var(--md-sys-color-on-secondary-container)
     );
 
-    --_suggestion-chip-container-shape: var(--md-suggestion-chip-container-shape, var(--md-shape-chip));
+    --_suggestion-chip-container-shape: var(
+      --md-suggestion-chip-container-shape,
+      var(--_shape-radius, var(--md-shape-chip))
+    );
     --_suggestion-chip-container-height: var(
       --md-suggestion-chip-container-height,
       --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
@@ -986,7 +989,7 @@
       --md-chip-container-height,
       --density-height(32, max(var(--md-sys-typescale-label-large-line-height), var(--_chip-icon-size)), 20)
     );
-    --_chip-container-shape: var(--md-chip-container-shape, var(--md-shape-chip));
+    --_chip-container-shape: var(--md-chip-container-shape, var(--_shape-radius, var(--md-shape-chip)));
     --_chip-flat-container-elevation: var(--md-chip-flat-container-elevation, var(--md-sys-elevation-level0));
     --_chip-elevated-container-elevation: var(--md-chip-elevated-container-elevation, var(--md-sys-elevation-level1));
     --_chip-elevated-container-color: var(
@@ -2101,16 +2104,16 @@
 
   [data-type='connected'] .m3-chip {
     &:first-of-type {
-      border-start-start-radius: var(--_button-group-connected-container-shape);
+      border-start-start-radius: var(--_shape-radius, var(--_button-group-connected-container-shape));
       border-start-end-radius: var(--_button-group-connected-inner-corner-corner-size);
       border-end-end-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-end-start-radius: var(--_button-group-connected-container-shape);
+      border-end-start-radius: var(--_shape-radius, var(--_button-group-connected-container-shape));
     }
 
     &:last-of-type {
       border-start-start-radius: var(--_button-group-connected-inner-corner-corner-size);
-      border-start-end-radius: var(--_button-group-connected-container-shape);
-      border-end-end-radius: var(--_button-group-connected-container-shape);
+      border-start-end-radius: var(--_shape-radius, var(--_button-group-connected-container-shape));
+      border-end-end-radius: var(--_shape-radius, var(--_button-group-connected-container-shape));
       border-end-start-radius: var(--_button-group-connected-inner-corner-corner-size);
     }
 

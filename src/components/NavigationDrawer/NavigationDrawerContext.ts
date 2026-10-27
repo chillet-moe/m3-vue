@@ -1,7 +1,8 @@
+import type { M3Shape } from '@/styles/shape';
 import type { InjectionKey, MaybeRef, Ref } from 'vue';
 import type { NavigationItemContext } from '@/composables/useNavigationItem';
 
-export type NavigationDrawerShape = 'rounded' | 'square';
+export type NavigationDrawerShape = M3Shape;
 
 export type NavigationDrawerContext = NavigationItemContext & {
   iconOnly: Readonly<Ref<boolean>>;

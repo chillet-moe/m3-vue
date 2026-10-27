@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { isNode } from '@/internal/elementEnvironment';
@@ -9,6 +10,7 @@ import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
 import { createMenuSafeTriangle, isPointInsideTriangle, type Point, type Triangle } from './menuSafeTriangle';
 
 type MenuSubMenuProps = {
+  shape?: M3Shape;
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   /** Visual color style of the nested menu surface. Defaults to the parent menu color. */
@@ -327,6 +329,7 @@ onUnmounted(() => {
 });
 useElementEnvironment(wrapperRef, () => clearSafeTriangle);
 provideRowSize(() => props.size);
+provideShape(() => props.shape);
 </script>
 
 <template>

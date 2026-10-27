@@ -286,14 +286,17 @@
     --_icon-button-default-trailing-space: var(--md-icon-button-default-trailing-space, 0.5rem);
     --_icon-button-wide-leading-space: var(--md-icon-button-wide-leading-space, 0.875rem);
     --_icon-button-wide-trailing-space: var(--md-icon-button-wide-trailing-space, 0.875rem);
-    --_icon-button-container-shape-round: var(--md-icon-button-container-shape-round, var(--md-shape-action));
+    --_icon-button-container-shape-round: var(
+      --md-icon-button-container-shape-round,
+      var(--_shape-radius, var(--md-shape-action))
+    );
     --_icon-button-container-shape-square: var(
       --md-icon-button-container-shape-square,
-      var(--md-shape-action-square-small)
+      var(--_shape-radius, var(--md-shape-action-square-small))
     );
     --_icon-button-pressed-container-shape: var(
       --md-icon-button-pressed-container-shape,
-      var(--md-shape-action-pressed-small)
+      var(--_shape-radius, var(--md-shape-action-pressed-small))
     );
     --_icon-button-pressed-container-corner-size-motion-spring-damping: var(
       --md-icon-button-pressed-container-corner-size-motion-spring-damping,
@@ -305,11 +308,11 @@
     );
     --_icon-button-selected-container-shape-round: var(
       --md-icon-button-selected-container-shape-round,
-      var(--md-shape-action-selected-small)
+      var(--_shape-radius, var(--md-shape-action-selected-small))
     );
     --_icon-button-selected-container-shape-square: var(
       --md-icon-button-selected-container-shape-square,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-focus-indicator-color: var(--md-icon-button-focus-indicator-color, var(--md-sys-color-secondary));
     --_icon-button-focus-indicator-thickness: var(
@@ -872,16 +875,16 @@
     --_icon-button-xsmall-wide-trailing-space: var(--md-icon-button-xsmall-wide-trailing-space, 0.625rem);
     --_icon-button-xsmall-container-shape-round: var(
       --md-icon-button-xsmall-container-shape-round,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-xsmall-container-shape-square: var(
       --md-icon-button-xsmall-container-shape-square,
-      var(--md-shape-action-square-small)
+      var(--_shape-radius, var(--md-shape-action-square-small))
     );
     --_icon-button-xsmall-outlined-outline-width: var(--md-icon-button-xsmall-outlined-outline-width, 0.0625rem);
     --_icon-button-xsmall-pressed-container-shape: var(
       --md-icon-button-xsmall-pressed-container-shape,
-      var(--md-shape-action-pressed-small)
+      var(--_shape-radius, var(--md-shape-action-pressed-small))
     );
     --_icon-button-xsmall-pressed-container-corner-size-motion-spring-damping: var(
       --md-icon-button-xsmall-pressed-container-corner-size-motion-spring-damping,
@@ -893,11 +896,11 @@
     );
     --_icon-button-xsmall-selected-container-shape-round: var(
       --md-icon-button-xsmall-selected-container-shape-round,
-      var(--md-shape-action-selected-small)
+      var(--_shape-radius, var(--md-shape-action-selected-small))
     );
     --_icon-button-xsmall-selected-container-shape-square: var(
       --md-icon-button-xsmall-selected-container-shape-square,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-small-container-height: var(
       --md-icon-button-small-container-height,
@@ -912,16 +915,16 @@
     --_icon-button-small-wide-trailing-space: var(--md-icon-button-small-wide-trailing-space, 0.875rem);
     --_icon-button-small-container-shape-round: var(
       --md-icon-button-small-container-shape-round,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-small-container-shape-square: var(
       --md-icon-button-small-container-shape-square,
-      var(--md-shape-action-square-small)
+      var(--_shape-radius, var(--md-shape-action-square-small))
     );
     --_icon-button-small-outlined-outline-width: var(--md-icon-button-small-outlined-outline-width, 0.0625rem);
     --_icon-button-small-pressed-container-shape: var(
       --md-icon-button-small-pressed-container-shape,
-      var(--md-shape-action-pressed-small)
+      var(--_shape-radius, var(--md-shape-action-pressed-small))
     );
     --_icon-button-small-pressed-container-corner-size-motion-spring-damping: var(
       --md-icon-button-small-pressed-container-corner-size-motion-spring-damping,
@@ -933,11 +936,11 @@
     );
     --_icon-button-small-selected-container-shape-round: var(
       --md-icon-button-small-selected-container-shape-round,
-      var(--md-shape-action-selected-small)
+      var(--_shape-radius, var(--md-shape-action-selected-small))
     );
     --_icon-button-small-selected-container-shape-square: var(
       --md-icon-button-small-selected-container-shape-square,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-medium-container-height: var(
       --md-icon-button-medium-container-height,
@@ -952,16 +955,16 @@
     --_icon-button-medium-wide-trailing-space: var(--md-icon-button-medium-wide-trailing-space, 1.5rem);
     --_icon-button-medium-container-shape-round: var(
       --md-icon-button-medium-container-shape-round,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-medium-container-shape-square: var(
       --md-icon-button-medium-container-shape-square,
-      var(--md-shape-action-square-medium)
+      var(--_shape-radius, var(--md-shape-action-square-medium))
     );
     --_icon-button-medium-outlined-outline-width: var(--md-icon-button-medium-outlined-outline-width, 0.0625rem);
     --_icon-button-medium-pressed-container-shape: var(
       --md-icon-button-medium-pressed-container-shape,
-      var(--md-shape-action-pressed-medium)
+      var(--_shape-radius, var(--md-shape-action-pressed-medium))
     );
     --_icon-button-medium-pressed-container-corner-size-motion-spring-damping: var(
       --md-icon-button-medium-pressed-container-corner-size-motion-spring-damping,
@@ -973,11 +976,11 @@
     );
     --_icon-button-medium-selected-container-shape-round: var(
       --md-icon-button-medium-selected-container-shape-round,
-      var(--md-shape-action-selected-medium)
+      var(--_shape-radius, var(--md-shape-action-selected-medium))
     );
     --_icon-button-medium-selected-container-shape-square: var(
       --md-icon-button-medium-selected-container-shape-square,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-large-container-height: var(
       --md-icon-button-large-container-height,
@@ -992,16 +995,16 @@
     --_icon-button-large-wide-trailing-space: var(--md-icon-button-large-wide-trailing-space, 3rem);
     --_icon-button-large-container-shape-round: var(
       --md-icon-button-large-container-shape-round,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-large-container-shape-square: var(
       --md-icon-button-large-container-shape-square,
-      var(--md-shape-action-square-large)
+      var(--_shape-radius, var(--md-shape-action-square-large))
     );
     --_icon-button-large-outlined-outline-width: var(--md-icon-button-large-outlined-outline-width, 0.125rem);
     --_icon-button-large-pressed-container-shape: var(
       --md-icon-button-large-pressed-container-shape,
-      var(--md-shape-action-pressed-large)
+      var(--_shape-radius, var(--md-shape-action-pressed-large))
     );
     --_icon-button-large-pressed-container-corner-size-motion-spring-damping: var(
       --md-icon-button-large-pressed-container-corner-size-motion-spring-damping,
@@ -1013,11 +1016,11 @@
     );
     --_icon-button-large-selected-container-shape-round: var(
       --md-icon-button-large-selected-container-shape-round,
-      var(--md-shape-action-selected-large)
+      var(--_shape-radius, var(--md-shape-action-selected-large))
     );
     --_icon-button-large-selected-container-shape-square: var(
       --md-icon-button-large-selected-container-shape-square,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-xlarge-container-height: var(
       --md-icon-button-xlarge-container-height,
@@ -1032,16 +1035,16 @@
     --_icon-button-xlarge-wide-trailing-space: var(--md-icon-button-xlarge-wide-trailing-space, 4.5rem);
     --_icon-button-xlarge-container-shape-round: var(
       --md-icon-button-xlarge-container-shape-round,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
     --_icon-button-xlarge-container-shape-square: var(
       --md-icon-button-xlarge-container-shape-square,
-      var(--md-shape-action-square-large)
+      var(--_shape-radius, var(--md-shape-action-square-large))
     );
     --_icon-button-xlarge-outlined-outline-width: var(--md-icon-button-xlarge-outlined-outline-width, 0.1875rem);
     --_icon-button-xlarge-pressed-container-shape: var(
       --md-icon-button-xlarge-pressed-container-shape,
-      var(--md-shape-action-pressed-large)
+      var(--_shape-radius, var(--md-shape-action-pressed-large))
     );
     --_icon-button-xlarge-pressed-container-corner-size-motion-spring-damping: var(
       --md-icon-button-xlarge-pressed-container-corner-size-motion-spring-damping,
@@ -1053,11 +1056,11 @@
     );
     --_icon-button-xlarge-selected-container-shape-round: var(
       --md-icon-button-xlarge-selected-container-shape-round,
-      var(--md-shape-action-selected-large)
+      var(--_shape-radius, var(--md-shape-action-selected-large))
     );
     --_icon-button-xlarge-selected-container-shape-square: var(
       --md-icon-button-xlarge-selected-container-shape-square,
-      var(--md-shape-action)
+      var(--_shape-radius, var(--md-shape-action))
     );
   }
 }
@@ -1595,7 +1598,7 @@
     }
   }
 
-  .m3-icon-button[data-shape='square'] {
+  .m3-icon-button:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']) {
     --_icon-button-container-shape: var(--md-icon-button-container-shape, var(--_icon-button-container-shape-square));
 
     &[data-pressed='true'] {

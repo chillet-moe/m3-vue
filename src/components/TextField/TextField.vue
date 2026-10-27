@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import type { StyleValue } from 'vue';
 defineOptions({ inheritAttrs: false });
 import { isHTMLTag } from '@/internal/elementEnvironment';
@@ -37,7 +38,7 @@ type TextFieldSharedProps = {
   type?: string;
 
   /** The shape of the text field. Matches Button shape sizes. */
-  shape?: 'rounded' | 'square';
+  shape?: M3Shape;
 
   /** CSS length reserved at block-start for the floating label. Overrides FieldContext. */
   labelClearance?: string;
@@ -148,7 +149,7 @@ const timePickerContext = inject(timePickerContextKey, undefined);
 // Keep the input's historical 24-hour fallback while honoring shared picker preferences.
 const timePickerFormat = computed(() => props.timePickerFormat ?? unref(timePickerContext?.format) ?? '24h');
 const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
-const shape = computed(() => props.shape ?? unref(fieldContext?.shape) ?? 'square');
+const shape = useShape(() => props.shape ?? unref(fieldContext?.shape), 'square');
 
 const emit = defineEmits<{
   input: [event: Event];
@@ -422,6 +423,7 @@ defineExpose({
     :data-invalid="invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-shape="shape"
+    data-m3-shape
     :data-size="effectiveSize"
     :data-multiline="props.as === 'textarea' ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"

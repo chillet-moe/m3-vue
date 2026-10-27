@@ -95,7 +95,7 @@ export { M3VueResolver } from './resolver';
 export { M3VuePlugin } from './plugin';
 
 export type { M3VuePluginOptions } from './plugin';
-export type { M3FieldOptions, M3Shape, M3ShapeOptions } from './styles/context';
+export type { M3FieldOptions, M3ShapeOptions } from './styles/context';
 export type { M3ComponentDefaultsOptions } from './defaults';
 
 export { createOverlayHost, provideOverlayHost, useOverlayHost } from './internal/overlayHost/overlayHost';
@@ -104,3 +104,5 @@ export { createOverlayService, useOverlays } from './overlays';
 export type { OverlayService } from './overlays';
 
 export { provideRowSize, rowSizeContextKey, type RowSize } from './styles/rowSize';
+
+export { provideShape, shapeContextKey, type M3Shape } from './styles/shape';

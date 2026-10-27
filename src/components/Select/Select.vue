@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provideShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
 
@@ -39,6 +40,8 @@ export type SelectOption = {
 export type SelectModelValue = SelectOptionValue | SelectOptionValue[] | undefined;
 
 export type SelectProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Visible label. If omitted, provide aria-label via attrs. */
   label?: string;
 
@@ -320,6 +323,7 @@ defineExpose({
   hide: select.hide,
   toggle: select.toggle,
 });
+provideShape(() => props.shape);
 </script>
 
 <template>
@@ -347,6 +351,7 @@ defineExpose({
       <TextField
         :id="triggerId"
         ref="textFieldRef"
+        :shape="props.shape"
         v-model="textFieldValue"
         class="m3-select-field"
         :label="props.label"

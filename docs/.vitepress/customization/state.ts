@@ -1,6 +1,8 @@
 import { computed, inject, onMounted, onScopeDispose, provide, reactive, ref, watch, type InjectionKey } from 'vue';
 import {
   appearanceContextKey,
+  provideShape,
+  type M3Shape,
   rowSizeContextKey,
   type RowSize,
   fieldContextKey,
@@ -12,7 +14,6 @@ import {
   datePickerContextKey,
   timePickerContextKey,
 } from '@/index';
-import { navigationDrawerShapeContextKey } from '@/components/NavigationDrawer/NavigationDrawerContext';
 import { defaultSettings, tokenNames } from './catalog';
 import { themePresets, typographyPresets, type Preset } from '@/theme/presets';
 
@@ -50,20 +51,17 @@ export function provideDocsCustomization() {
   const choice = <T>(name: string) => computed(() => state.defaults[name] as T | undefined);
   const boolean = (name: string) =>
     computed(() => (state.defaults[name] === undefined ? undefined : state.defaults[name] === 'true'));
-  const shape = computed(() => (state.defaults.shape ?? 'rounded') as 'rounded' | 'square');
+  provideShape(choice<M3Shape>('shape'));
   provide(rowSizeContextKey, choice<RowSize>('rowSize'));
   provide(appearanceContextKey, { appearance: choice<'standard' | 'expressive'>('appearance') });
-  provide(fieldContextKey, { shape, size: choice<'extra-small' | 'small' | 'medium'>('fieldSize') });
+  provide(fieldContextKey, { size: choice<'extra-small' | 'small' | 'medium'>('fieldSize') });
   provide(buttonContextKey, {
-    shape,
     size: choice<'extra-small' | 'small' | 'medium' | 'large' | 'extra-large'>('buttonSize'),
     pressShapeMorph: boolean('pressShapeMorph'),
   });
   provide(iconButtonContextKey, {
-    shape,
     size: choice<'extra-small' | 'small' | 'medium' | 'large' | 'extra-large'>('iconButtonSize'),
   });
-  provide(navigationDrawerShapeContextKey, { shape });
   provide(listItemContextKey, {
     size: choice<'extra-small' | 'small' | 'medium' | 'large' | 'extra-large'>('listSize'),
     appearance: choice<'standard' | 'expressive'>('listAppearance'),

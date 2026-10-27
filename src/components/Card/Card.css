@@ -87,7 +87,10 @@
       var(--md-sys-color-surface-container-low)
     );
     --_elevated-card-container-elevation: var(--md-elevated-card-container-elevation, var(--md-sys-elevation-level1));
-    --_elevated-card-container-shape: var(--md-elevated-card-container-shape, var(--md-shape-card));
+    --_elevated-card-container-shape: var(
+      --md-elevated-card-container-shape,
+      var(--_shape-radius, var(--md-shape-card))
+    );
     --_elevated-card-container-shadow-color: var(--md-elevated-card-container-shadow-color, var(--md-sys-color-shadow));
     --_elevated-card-icon-color: var(--md-elevated-card-icon-color, var(--md-sys-color-primary));
     --_elevated-card-icon-size: var(--md-elevated-card-icon-size, 1.5rem);
@@ -165,7 +168,7 @@
       var(--md-sys-color-surface-container-highest)
     );
     --_filled-card-container-elevation: var(--md-filled-card-container-elevation, var(--md-sys-elevation-level0));
-    --_filled-card-container-shape: var(--md-filled-card-container-shape, var(--md-shape-card));
+    --_filled-card-container-shape: var(--md-filled-card-container-shape, var(--_shape-radius, var(--md-shape-card)));
     --_filled-card-container-shadow-color: var(--md-filled-card-container-shadow-color, var(--md-sys-color-shadow));
     --_filled-card-icon-color: var(--md-filled-card-icon-color, var(--md-sys-color-primary));
     --_filled-card-icon-size: var(--md-filled-card-icon-size, 1.5rem);
@@ -237,7 +240,10 @@
     );
     --_outlined-card-container-color: var(--md-outlined-card-container-color, var(--md-sys-color-surface));
     --_outlined-card-container-elevation: var(--md-outlined-card-container-elevation, var(--md-sys-elevation-level0));
-    --_outlined-card-container-shape: var(--md-outlined-card-container-shape, var(--md-shape-card));
+    --_outlined-card-container-shape: var(
+      --md-outlined-card-container-shape,
+      var(--_shape-radius, var(--md-shape-card))
+    );
     --_outlined-card-container-shadow-color: var(--md-outlined-card-container-shadow-color, var(--md-sys-color-shadow));
     --_outlined-card-outline-width: var(--md-outlined-card-outline-width, 0.0625rem);
     --_outlined-card-outline-color: var(--md-outlined-card-outline-color, var(--md-sys-color-outline-variant));

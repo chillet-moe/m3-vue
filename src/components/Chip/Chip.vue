@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed } from 'vue';
 
@@ -8,6 +9,8 @@ import type { SelectionGroupValue } from '@/components/SelectionGroup/SelectionG
 import { useSelectionGroupItem } from '@/components/SelectionGroup/useSelectionGroupItem';
 
 export type ChipProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Material 3 chip variant. */
   variant?: 'assist' | 'filter' | 'input' | 'suggestion';
 
@@ -161,6 +164,7 @@ defineSlots<{
   /** Main chip label. */
   default(): any;
 }>();
+const shape = useShape(() => props.shape);
 </script>
 
 <template>
@@ -170,6 +174,8 @@ defineSlots<{
     :class="['m3-state-layer', 'm3-chip']"
     data-scope="chip"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-variant="variant"
     :data-selected="isSelected ? 'true' : 'false'"
     :data-elevated="elevated ? 'true' : 'false'"

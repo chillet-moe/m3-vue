@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 export type CheckBoxProps = {
+  /** Corner style; inherits the shared shape default. */
+  shape?: M3Shape;
   /** Whether the checkbox is disabled. */
   disabled?: boolean;
 
@@ -17,7 +20,14 @@ export type CheckBoxProps = {
   ariaLabel?: string;
 };
 
-const { disabled = false, presentation = false, name, value, ariaLabel } = defineProps<CheckBoxProps>();
+const {
+  shape: shapeProp,
+  disabled = false,
+  presentation = false,
+  name,
+  value,
+  ariaLabel,
+} = defineProps<CheckBoxProps>();
 
 const indeterminate = defineModel<boolean>('indeterminate', { default: false });
 
@@ -33,6 +43,7 @@ defineSlots<{
   /** Optional label content rendered next to checkbox. */
   default(): any;
 }>();
+const shape = useShape(() => shapeProp);
 </script>
 
 <template>
@@ -41,6 +52,8 @@ defineSlots<{
     :class="'m3-checkbox'"
     data-scope="checkbox"
     data-part="root"
+    data-m3-shape
+    :data-shape="shape"
     :data-checked="checked || indeterminate ? 'true' : 'false'"
     :data-indeterminate="indeterminate ? 'true' : 'false'"
     :data-disabled="disabled ? 'true' : 'false'"
