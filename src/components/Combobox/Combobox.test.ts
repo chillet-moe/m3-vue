@@ -64,9 +64,7 @@ function installPopoverPolyfill() {
 }
 
 function getCurrentMenuItems(container: HTMLElement) {
-  return Array.from(
-    container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]'),
-  ).filter(
+  return Array.from(container.querySelectorAll<HTMLButtonElement>('button[role="option"]')).filter(
     (item) =>
       !item.classList.contains('m3-select-options-leave-active') &&
       !item.classList.contains('m3-select-options-leave-to'),
@@ -164,7 +162,7 @@ describe('Combobox', () => {
     app.mount(container);
     await nextTick();
 
-    container.querySelector<HTMLElement>('[role="menu"]')?.hidePopover();
+    container.querySelector<HTMLElement>('[role="listbox"]')?.hidePopover();
     await nextTick();
     await Promise.resolve();
 

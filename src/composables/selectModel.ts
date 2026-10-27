@@ -9,17 +9,21 @@ export function getSelectedOptions(
   options: UseSelectOption[],
   modelValue: UseSelectModelValue,
   multiple: boolean,
+  resolveLabel?: (value: string | number) => string | undefined,
 ): UseSelectOption[] {
-  if (!multiple) {
-    return options.filter((option) => option.value === modelValue);
-  }
+  if (modelValue === undefined || multiple !== Array.isArray(modelValue)) return [];
 
-  if (!Array.isArray(modelValue)) {
-    return [];
+  const remaining = new Set(Array.isArray(modelValue) ? modelValue : [modelValue]);
+  const selected: UseSelectOption[] = [];
+  for (const option of options) {
+    if (!remaining.has(option.value)) continue;
+    selected.push(option);
+    remaining.delete(option.value);
   }
-
-  const selectedValues = new Set(modelValue);
-  return options.filter((option) => selectedValues.has(option.value));
+  for (const value of remaining) {
+    selected.push({ value, label: resolveLabel?.(value) ?? String(value) });
+  }
+  return selected;
 }
 
 export function formatSelectedOptions(options: UseSelectOption[], separator: string): string {

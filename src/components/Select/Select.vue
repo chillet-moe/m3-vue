@@ -3,11 +3,13 @@ import { provideShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
 
-import { TransitionGroup, computed, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
+import { TransitionGroup, computed, provide, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
 import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
-import MenuItem from '@/components/Menu/MenuItem.vue';
+import SelectItem from './SelectItem.vue';
+import { selectContextKey } from './SelectContext';
+import type { SelectListSlot } from '@/composables/selectTypes';
 import { useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
 import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
@@ -51,6 +53,11 @@ export type SelectProps = {
   /** Selectable options rendered in the menu. */
   options: SelectOption[];
 
+  /** Consumer-owned search results bypass local filtering. */
+  filterMode?: 'local' | 'external';
+  /** Resolve selected values absent from current results; reactive caches are supported. */
+  resolveLabel?: (value: SelectOptionValue) => string | undefined;
+
   /** Supporting text shown below the field when not in error state. */
   supportingText?: string;
 
@@ -90,10 +97,10 @@ export type SelectProps = {
   /** Separator used when showing multiple selected labels. */
   displaySeparator?: string;
 
-  /** Enables a filter field inside the menu to narrow long option lists. */
+  /** Enables typing in the field to filter the option collection. */
   filterable?: boolean;
 
-  /** Placeholder shown in the menu filter field. */
+  /** Placeholder shown in the field while filtering. */
   filterPlaceholder?: string;
 
   /** Message shown when filtering returns no matching options. */
@@ -159,6 +166,7 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
+  list(props: SelectListSlot): any;
   leading(): any;
   prefix(): any;
   suffix(): any;
@@ -168,11 +176,13 @@ defineSlots<{
 }>();
 
 const modelValue = defineModel<SelectModelValue>();
+const query = defineModel<string>('query', { default: '' });
 const open = defineModel<boolean>('open', { default: false });
 
 const triggerRef = ref<HTMLElement>();
 const menuRef = ref<SelectExposed>();
 const textFieldRef = ref<TextFieldExposed>();
+const containerRef = ref<InstanceType<typeof MenuContainer>>();
 const anchorName = `--m3-select-anchor-${generatedId}`;
 let releaseAnchorName: (() => void) | undefined;
 let cleanupPressDrag: (() => void) | undefined;
@@ -205,9 +215,23 @@ const select = useSelect({
   open,
   onChange: (value) => emit('change', value),
   onClosed: () => emit('closed'),
-  menuRef: menuRef as any,
-  triggerRef,
-  textFieldRef: textFieldRef as any,
+  query,
+  scrollElement: () => containerRef.value?.$el,
+  id: () => menuId.value,
+  filterMode: () => props.filterMode ?? 'local',
+  resolveLabel: (value) => props.resolveLabel?.(value),
+  focus: () => textFieldRef.value?.focus(),
+  blur: () => textFieldRef.value?.blur(),
+  showMenu: () => {
+    void menuRef.value?.show(false, triggerRef.value);
+  },
+  hideMenu: () => menuRef.value?.hide(),
+});
+
+provide(selectContextKey, {
+  optionProps: select.optionProps,
+  isOptionSelected: select.isOptionSelected,
+  customList: Boolean(slots.list),
 });
 
 const textFieldPlaceholder = computed(() => {
@@ -364,10 +388,12 @@ provideShape(() => props.shape);
         :placeholder="textFieldPlaceholder"
         :size="effectiveSize"
         label-clearance="0rem"
-        :role="props.filterable ? undefined : 'button'"
+        role="combobox"
+        :aria-activedescendant="select.activeDescendant.value"
+        :aria-autocomplete="props.filterable ? 'list' : 'none'"
         :aria-controls="menuId"
         :aria-expanded="open ? 'true' : 'false'"
-        :aria-haspopup="'menu'"
+        aria-haspopup="listbox"
         :aria-invalid="invalid ? 'true' : undefined"
         :aria-required="props.required ? 'true' : undefined"
         :aria-label="props.label ? undefined : filterAriaLabel"
@@ -425,77 +451,47 @@ provideShape(() => props.shape);
       data-part="menu"
       :color="props.menuColor"
       :style="{ 'position-anchor': anchorName }"
-      @select="select.handleMenuSelect"
+      role="listbox"
+      :aria-label="props.label ?? attrs['aria-label'] ?? filterAriaLabel"
+      :aria-multiselectable="props.multiple || undefined"
+      @keydown="select.handleFilterKeydown"
       @closed="select.handleMenuClosed"
     >
-      <MenuContainer>
-        <TransitionGroup
-          tag="div"
-          name="m3-select-options"
-          class="m3-select-options"
-          data-scope="select"
-          data-part="options"
-        >
-          <MenuItem
-            v-for="{ option, index } in select.filteredOptionEntries.value"
-            :key="`${index}-${option.value}`"
-            class="m3-select-option"
+      <MenuContainer ref="containerRef">
+        <slot name="list" v-bind="select.list.value">
+          <TransitionGroup
+            tag="div"
+            name="m3-select-options"
+            class="m3-select-options"
             data-scope="select"
-            data-part="option"
-            :data-option-index="index"
-            :data-has-option-leading="option.leadingIcon || slots.optionLeading ? 'true' : undefined"
-            :disabled="option.disabled"
-            :role="props.multiple ? 'menuitemcheckbox' : 'menuitemradio'"
-            :checked="select.isOptionSelected(option)"
-            :selected="select.isOptionSelected(option)"
-            :close-on-select="!props.multiple"
+            data-part="options"
           >
-            <template #leading>
-              <span class="m3-select-option-leading-content" data-scope="select" data-part="option-leading-content">
-                <span class="m3-select-option-check" data-scope="select" data-part="option-check" aria-hidden="true">
-                  <Icon name="check" />
-                </span>
+            <SelectItem
+              v-for="({ option }, index) in select.filteredOptionEntries.value"
+              :key="option.value"
+              :index="index"
+              :option="option"
+            >
+              <template v-if="slots.optionLeading" #leading="slotProps">
+                <slot name="optionLeading" v-bind="slotProps" />
+              </template>
+              <template v-if="slots.optionTrailing" #trailing="slotProps">
+                <slot name="optionTrailing" v-bind="slotProps" />
+              </template>
+            </SelectItem>
 
-                <span
-                  v-if="option.leadingIcon || slots.optionLeading"
-                  class="m3-select-option-icon"
-                  data-scope="select"
-                  data-part="option-icon"
-                  aria-hidden="true"
-                >
-                  <slot name="optionLeading" :option="option" :selected="false">
-                    <Icon v-if="option.leadingIcon" :name="option.leadingIcon" />
-                  </slot>
-                </span>
-              </span>
-            </template>
-
-            {{ option.label }}
-
-            <template v-if="option.supportingText" #supporting>
-              {{ option.supportingText }}
-            </template>
-
-            <template v-if="slots.optionTrailing" #trailing>
-              <slot name="optionTrailing" :option="option" :selected="select.isOptionSelected(option)" />
-            </template>
-
-            <template v-else-if="option.trailingText" #trailingText>
-              {{ option.trailingText }}
-            </template>
-          </MenuItem>
-
-          <div
-            v-if="props.filterable && !select.hasFilteredOptions.value"
-            key="no-results"
-            class="m3-select-empty"
-            data-scope="select"
-            data-part="empty"
-            aria-live="polite"
-          >
-            {{ filterNoResultsText }}
-          </div>
-        </TransitionGroup>
+            <div
+              v-if="props.filterable && !select.hasFilteredOptions.value"
+              key="no-results"
+              class="m3-select-empty"
+              data-scope="select"
+              data-part="empty"
+              aria-live="polite"
+            >
+              {{ filterNoResultsText }}
+            </div>
+          </TransitionGroup>
+        </slot>
       </MenuContainer>
     </Menu>
   </div>

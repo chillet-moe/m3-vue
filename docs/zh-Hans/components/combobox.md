@@ -45,6 +45,10 @@ Combobox 与 Select 共用尺寸和菜单颜色偏好。尺寸说明见 [Select 
 Combobox 封装了 Select，并共享其 `select` scope。详见 [Select Anatomy](./select)。
 :::
 
+## 虚拟列表与外部搜索
+
+Combobox 会将 `list`、`v-model:query`、`filterMode` 和 `resolveLabel` 转发给 Select。虚拟行使用相同的 `SelectItem`；筛选和导航针对完整逻辑结果集进行，焦点仍保留在输入框中。详见[外部虚拟列表](./select#外部虚拟列表)和[搜索结果与选中标签](./select#搜索结果与选中标签)。
+
 ## 示例
 
 ### 默认

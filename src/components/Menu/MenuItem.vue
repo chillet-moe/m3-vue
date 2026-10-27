@@ -32,7 +32,7 @@ export type MenuItemProps = {
   selected?: boolean;
 
   /** Accessible menu item role for selectable items. */
-  role?: 'menuitem' | 'menuitemradio' | 'menuitemcheckbox';
+  role?: 'menuitem' | 'menuitemradio' | 'menuitemcheckbox' | 'option';
 
   /** Checked state for radio/checkbox menu items. */
   checked?: boolean;
@@ -223,7 +223,10 @@ const shape = useShape(() => shapeProp);
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"
     :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
-    :aria-checked="resolvedRole === 'menuitem' ? undefined : resolvedChecked ? 'true' : 'false'"
+    :aria-checked="
+      resolvedRole === 'menuitemradio' || resolvedRole === 'menuitemcheckbox' ? resolvedChecked : undefined
+    "
+    :aria-selected="resolvedRole === 'option' ? resolvedSelected : undefined"
     :aria-describedby="hasSupporting() ? supportingId : undefined"
     :class="['m3-state-layer', 'm3-menu-item', 'm3-row-size']"
     :data-size="rowSize"

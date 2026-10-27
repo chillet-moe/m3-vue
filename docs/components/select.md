@@ -8,6 +8,9 @@ import type { SelectModelValue } from '@/components/Select';
 import { Select } from '@/components/Select';
 import { coffeeOptions } from '../demos/shared/selectOptions';
 
+import SelectVirtual from '../demos/select/SelectVirtual.vue';
+import SelectVirtualSrc from '../demos/select/SelectVirtual.vue?raw';
+
 import SelectDefault from '../demos/select/SelectDefault.vue';
 import SelectDefaultSrc from '../demos/select/SelectDefault.vue?raw';
 import SelectWithoutIcons from '../demos/select/SelectWithoutIcons.vue';
@@ -56,6 +59,51 @@ default from `fieldContextKey`; it adds to any parent gap. See the
 
 `menuColor` overrides the shared Menu color preference, with `standard` as the fallback. Configure the plugin's
 `menuColor` or provide `menuDefaultsContextKey` to share a palette across menus. See [Menu](./menu#color).
+
+## External virtual lists
+
+The `list` slot replaces only the option rendering. Select retains the Menu surface, scroll container,
+selection, filtering, keyboard navigation, and close lifecycle. Render `SelectItem` with each entry's `option`
+and its index **in the filtered entries**, keyed by `option.value`. Values must be unique and stable.
+`SelectItem` uses the same MenuItem presentation as the built-in list, including icons, selection motion and
+endpoint shapes. Its `default`, `leading`, and `trailing` slots receive `{ option, selected }`.
+
+The slot provides:
+
+- `entries`: the complete filtered collection of `{ option, index }`; each entry's `index` refers to the original options.
+- `scrollElement`: the existing MenuContainer scroll element; use it as the virtualizer's scroll element.
+- `open`: whether the popup is open; disable measurement while closed.
+- `activeIndex`: the active index in the filtered collection, independent of selection.
+- `setScrollToIndex(callback)`: register a virtualizer scroll callback and unregister with `undefined` on unmount.
+
+Keep the full logical result set in `options`. Do not pass only the mounted window. The virtualizer owns row
+measurement and placement; it should not add a second scroll container or selection state. Virtual rows do not
+use the built-in list's filtering transitions, and remounting a selected row does not replay selection keyframes.
+Use `list` for custom lists with either Select or Combobox. TanStack is used only in this example, not by the library.
+
+<DemoContainer :src="SelectVirtualSrc"><SelectVirtual /></DemoContainer>
+
+<details><summary>Shared virtual-list component</summary>
+
+<<< ../demos/select/VirtualSelectList.vue
+
+</details>
+
+## Search results and selected labels
+
+`v-model:query` exposes the filter text. Local filtering is the default. With `filterMode="external"`, the caller
+loads and supplies the complete current result set; it owns request cancellation and stale-response handling.
+`resolveLabel(value)` supplies a label for a selected value absent from those results. Read a reactive label cache
+in this synchronous callback; update that cache when asynchronous data arrives. Missing labels fall back to the
+string value. Clearing and form submission continue to use the selected values, independent of mounted rows.
+
+## Keyboard and accessibility
+
+The field has `combobox` semantics and controls a `listbox` containing `option` rows. Focus remains in the field.
+Arrow keys navigate the full enabled collection with wrapping; Home/End move to its endpoints while open.
+Enter selects the active option; Space also selects for non-filterable Select. Escape and Tab close the popup.
+Navigation does not select an option. `aria-activedescendant` is present only while the active row is mounted.
+Consumers migrating custom DOM queries should use these roles instead of the previous menu item roles.
 
 ## Close lifecycle
 

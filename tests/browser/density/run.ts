@@ -151,8 +151,8 @@ try {
       await page.keyboard.press('Escape');
     }
     await page.locator('.workspace').evaluate((el) => (el as HTMLElement).style.setProperty('--md-density', '0'));
-    await page.getByLabel('分类 Category', { exact: true }).click();
-    const option = page.getByRole('menuitemradio').first();
+    await page.getByRole('combobox', { name: '分类 Category', exact: true }).click();
+    const option = page.getByRole('listbox').getByRole('option').first();
     await option.waitFor();
     assert.equal(await option.evaluate((el) => getComputedStyle(el).minHeight), `${baseHeight}px`);
     await page.keyboard.press('Escape');
@@ -161,9 +161,9 @@ try {
   await page.locator('.workspace').evaluate((el) => (el as HTMLElement).style.setProperty('--md-density', '-4'));
   // Selection surfaces inherit density from their trigger region.
   for (const name of ['分类 Category', '搜索 Search']) {
-    const input = page.getByLabel(name, { exact: true });
+    const input = page.getByRole('combobox', { name, exact: true });
     await input.click();
-    const row = page.getByRole('menuitemradio').first();
+    const row = page.getByRole('listbox').getByRole('option').first();
     await row.waitFor();
     assert.equal(await row.evaluate((el) => getComputedStyle(el).minHeight), '32px');
     await input.press('ArrowDown');

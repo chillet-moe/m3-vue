@@ -7,6 +7,9 @@ export type UseMenuOptions = {
   /** Unique ID for the menu instance. */
   menuId: string;
 
+  /** Listbox callers own navigation over their complete logical collection. */
+  role?: () => 'menu' | 'listbox';
+
   /** Ref to the menu DOM element. */
   menuRef: Ref<HTMLElement | undefined>;
 
@@ -210,6 +213,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   }
 
   function onMenuKeydown(event: KeyboardEvent) {
+    if (options.role?.() === 'listbox') return;
     const menuItems = getMenuItemElements();
 
     if (!menuItems.length) {
@@ -276,6 +280,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   }
 
   function onMenuClick(event: MouseEvent) {
+    if (options.role?.() === 'listbox') return;
     const target = event.target as HTMLElement | null;
     if (!target) return;
 
@@ -294,6 +299,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
   }
 
   function onMenuFocusIn(event: FocusEvent) {
+    if (options.role?.() === 'listbox') return;
     const target = event.target as HTMLElement | null;
     if (!target) return;
 

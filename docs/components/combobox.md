@@ -49,6 +49,13 @@ intended density and add clearance only when its floating label needs it. See th
 Combobox wraps Select and shares its `select` scope. See [Select Anatomy](./select).
 :::
 
+## Virtual lists and external search
+
+Combobox forwards `list`, `v-model:query`, `filterMode`, and `resolveLabel` to Select. Use the same `SelectItem`
+composition for virtual rows; filtering and navigation operate on the complete logical result set while focus
+stays in the input. See [external virtual lists](./select#external-virtual-lists) and
+[selected label resolution](./select#search-results-and-selected-labels).
+
 ## Examples
 
 ### Default

@@ -158,18 +158,28 @@
     transform: translateX(calc(var(--_menus-menu-item-leading-icon-size) + var(--_menus-menu-item-between-space)));
   }
 
+  /* The listbox keeps DOM focus in the field; reflect keyboard focus on its active option. */
+  .m3-select-option[data-keyboard-active='true'] {
+    outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
+    outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
+  }
+
+  .m3-select-option[data-keyboard-active='true']::after {
+    opacity: var(--md-sys-state-focus-state-layer-opacity);
+  }
+
   .m3-select-options {
     position: relative;
     display: flex;
     flex-direction: column;
   }
 
-  .m3-select-options > .m3-menu-item:first-child {
+  .m3-select-option[data-first='true'] {
     border-start-start-radius: var(--_menu-item-first-start-radius);
     border-start-end-radius: var(--_menu-item-first-end-radius);
   }
 
-  .m3-select-options > .m3-menu-item:last-child {
+  .m3-select-option[data-last='true'] {
     border-end-start-radius: var(--_menu-item-last-start-radius);
     border-end-end-radius: var(--_menu-item-last-end-radius);
   }
@@ -218,6 +228,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .m3-select-options-move,
+    .m3-select-options-enter-active,
+    .m3-select-options-leave-active,
     .m3-select-option .m3-select-option-check,
     .m3-select-option .m3-select-option-icon,
     .m3-select-option:not([data-has-option-leading='true']) .m3-menu-item-content,

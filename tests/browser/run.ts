@@ -16,3 +16,5 @@ await import('./tree-view/run');
 await import('./density/run');
 
 await import('./shapes/run');
+
+await import('./select-virtual/run');

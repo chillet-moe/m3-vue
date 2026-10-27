@@ -65,7 +65,7 @@ try {
   await child.keyboard.press('Escape');
   assert.equal(await child.evaluate(() => document.activeElement?.classList.contains('menu-trigger')), true);
 
-  const layer = child.getByLabel('Window layers', { exact: true });
+  const layer = child.getByRole('combobox', { name: 'Window layers', exact: true });
   await layer.click();
   await child.keyboard.press('ArrowDown');
   await child.keyboard.press('End');
@@ -124,7 +124,7 @@ try {
   await page.locator('.menu-trigger').click();
   await page.getByRole('menuitem', { name: 'First', exact: true }).click();
   assert.equal(await page.locator('.selected').textContent(), 'first');
-  const adoptedLayer = page.getByLabel('Window layers', { exact: true });
+  const adoptedLayer = page.getByRole('combobox', { name: 'Window layers', exact: true });
   await adoptedLayer.click();
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Home');

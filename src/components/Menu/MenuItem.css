@@ -266,6 +266,11 @@
     animation: m3-menu-item-leading-select 220ms var(--md-timing-function-fast-spatial);
   }
 
+  .m3-menu-item[data-selection-motion='none']::before,
+  .m3-menu-item[data-selection-motion='none'] .m3-menu-item-leading {
+    animation: none;
+  }
+
   @keyframes m3-menu-item-select {
     0% {
       opacity: 0;
@@ -329,7 +334,9 @@
   @media (prefers-reduced-motion: reduce) {
     .m3-menu-item,
     .m3-menu-item::before,
+    .m3-menu-item[data-selected]::before,
     .m3-menu-item-leading,
+    .m3-menu-item[data-selected] .m3-menu-item-leading,
     .m3-menu-item-trailing,
     .m3-menu-item-content,
     .m3-menu-item-badge,

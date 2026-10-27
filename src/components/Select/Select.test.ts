@@ -104,9 +104,7 @@ function isPopoverOpen(element: HTMLElement | null) {
 }
 
 function getCurrentMenuItems(container: HTMLElement) {
-  return Array.from(
-    container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]'),
-  ).filter(
+  return Array.from(container.querySelectorAll<HTMLButtonElement>('button[role="option"]')).filter(
     (item) =>
       !item.classList.contains('m3-select-options-leave-active') &&
       !item.classList.contains('m3-select-options-leave-to'),
@@ -237,10 +235,8 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
-    const menuItems = container.querySelectorAll<HTMLButtonElement>(
-      'button[role="menuitemradio"], button[role="menuitemcheckbox"]',
-    );
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="option"]');
 
     expect(getSelectInput(container)?.value).toBe('');
 
@@ -274,7 +270,7 @@ describe('Select', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
     const items = getCurrentMenuItems(container);
 
     trigger?.dispatchEvent(createMousePointerEvent('pointerdown', 10, 10));
@@ -325,8 +321,8 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
-    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitemcheckbox"]');
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="option"]');
 
     expect(isPopoverOpen(menu)).toBe(true);
 
@@ -407,7 +403,7 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
     const clearButton = container.querySelector<HTMLButtonElement>('[data-part="clear-button"]');
 
     expect(clearButton?.getAttribute('aria-label')).toBe('Clear coffee');
@@ -489,7 +485,7 @@ describe('Select', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
-    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
     const textField = container.querySelector<HTMLElement>('.m3-select-field');
 
     trigger?.click();
@@ -597,7 +593,7 @@ describe('Select', () => {
     await nextTick();
 
     const selectedItemLeading = container.querySelector<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
+      'button[role="option"][data-selected="true"] .m3-select-option-check',
     );
 
     expect(selectedItemLeading?.textContent?.trim()).toBe('check');
@@ -627,7 +623,7 @@ describe('Select', () => {
     await nextTick();
 
     const selectedItemLeading = container.querySelector<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-leading',
+      'button[role="option"][data-selected="true"] .m3-menu-item-leading',
     );
 
     expect(selectedItemLeading?.textContent?.trim()).toBe('check');
@@ -664,7 +660,7 @@ describe('Select', () => {
     trigger?.click();
     await nextTick();
 
-    let menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"]');
+    let menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="option"]');
     menuItems[2]?.click();
     await nextTick();
 
@@ -673,10 +669,10 @@ describe('Select', () => {
     await nextTick();
 
     const selectedLeadings = container.querySelectorAll<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
+      'button[role="option"][data-selected="true"] .m3-select-option-check',
     );
     const selectedLabels = container.querySelectorAll<HTMLElement>(
-      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-label',
+      'button[role="option"][data-selected="true"] .m3-menu-item-label',
     );
 
     expect(selectedLeadings).toHaveLength(1);

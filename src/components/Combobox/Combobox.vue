@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useAttrs } from 'vue';
+import type { SelectListSlot } from '@/composables/selectTypes';
 import Select from '@/components/Select/Select.vue';
 import type { SelectModelValue, SelectOption, SelectProps } from '@/components/Select/Select.vue';
 
@@ -30,6 +31,7 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
+  list(props: SelectListSlot): any;
   leading(): any;
   prefix(): any;
   suffix(): any;
@@ -39,6 +41,7 @@ defineSlots<{
 }>();
 
 const modelValue = defineModel<SelectModelValue>();
+const query = defineModel<string>('query', { default: '' });
 const open = defineModel<boolean>('open', { default: false });
 
 const selectRef = ref<SelectInstance>();
@@ -79,12 +82,16 @@ defineExpose({
     v-bind="forwardedProps"
     v-model="modelValue"
     v-model:open="open"
+    v-model:query="query"
     filterable
     @change="emit('change', $event)"
     @focus="emit('focus', $event)"
     @blur="emit('blur', $event)"
     @closed="emit('closed')"
   >
+    <template v-if="$slots.list" #list="list">
+      <slot name="list" v-bind="list" />
+    </template>
     <template v-if="$slots.leading" #leading>
       <slot name="leading" />
     </template>

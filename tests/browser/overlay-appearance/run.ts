@@ -66,7 +66,7 @@ try {
       await page.keyboard.press('Escape');
       await page.keyboard.press('Escape');
       for (const label of ['Workspace', 'Find workspace']) {
-        await page.getByLabel(label, { exact: true }).click();
+        await page.getByRole('combobox', { name: label, exact: true }).click();
         await page.keyboard.press('ArrowDown');
         await capture(
           label === 'Workspace' ? 'select-focus' : 'combobox-focus',
@@ -91,7 +91,7 @@ try {
       await page.keyboard.press('Escape');
       await page.getByRole('button', { name: 'Dialog', exact: true }).click();
       await capture('dialog', '.m3-dialog [data-part="surface"]');
-      await page.getByLabel('Active workspace', { exact: true }).click();
+      await page.getByRole('combobox', { name: 'Active workspace', exact: true }).click();
       await capture('dialog-select', '.m3-select-menu:popover-open [data-part="container"]');
       await page.keyboard.press('Escape');
       await page.locator('[data-scope="dialog"][data-part="content"]').evaluate((element) => {

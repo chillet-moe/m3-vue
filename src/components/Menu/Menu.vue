@@ -13,6 +13,8 @@ export type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue };
 export type MenuProps = {
   /** Corner style; inherits the shared shape default. */
   shape?: M3Shape;
+  /** Listbox mode retains the menu surface while the caller owns option navigation. */
+  role?: 'menu' | 'listbox';
   /** Row size; inherits the nearest row size or defaults to medium. */
   size?: RowSize;
   /** Visual color style of the menu surface. */
@@ -27,6 +29,7 @@ export type MenuProps = {
 
 const {
   shape: shapeProp,
+  role = 'menu',
   size = undefined,
   color: colorProp,
   items = undefined,
@@ -70,6 +73,7 @@ const notifySelect = (event: MouseEvent, itemElement: HTMLElement) => {
 
 const menuActions = useMenu({
   menuId,
+  role: () => role,
   menuRef: menuRef as any,
   open,
   modelValue,
@@ -113,7 +117,7 @@ const shape = provideShape(() => shapeProp);
   <div
     ref="menu"
     popover="auto"
-    role="menu"
+    :role="role"
     aria-orientation="vertical"
     class="m3-menu m3-dropdown"
     :data-size="rowSize"

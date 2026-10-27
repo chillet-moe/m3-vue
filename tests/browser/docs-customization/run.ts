@@ -79,16 +79,16 @@ try {
   await page.waitForFunction(
     () => document.documentElement.style.getPropertyValue('--md-shape-indicator') === '9999px',
   );
-  await panel.getByLabel('Component shape', { exact: true }).click();
-  await page.getByRole('menuitemradio', { name: 'minimal', exact: true }).click();
-  await page.getByRole('menuitemradio', { name: 'minimal', exact: true }).waitFor({ state: 'hidden' });
+  await panel.getByRole('combobox', { name: 'Component shape', exact: true }).click();
+  await page.getByRole('option', { name: 'minimal', exact: true }).click();
+  await page.getByRole('option', { name: 'minimal', exact: true }).waitFor({ state: 'hidden' });
   assert.equal(await panel.getByRole('slider').count(), 0);
   await panel.getByRole('tab', { name: 'Components', exact: true }).click();
-  await panel.getByLabel('Row size', { exact: true }).click();
-  await page.getByRole('menuitemradio', { name: 'extra-small', exact: true }).click();
-  await page.getByRole('menuitemradio', { name: 'extra-small', exact: true }).waitFor({ state: 'hidden' });
-  await panel.getByLabel('Button size', { exact: true }).click();
-  await page.getByRole('menuitemradio', { name: 'extra-small', exact: true }).click();
+  await panel.getByRole('combobox', { name: 'Row size', exact: true }).click();
+  await page.getByRole('option', { name: 'extra-small', exact: true }).click();
+  await page.getByRole('option', { name: 'extra-small', exact: true }).waitFor({ state: 'hidden' });
+  await panel.getByRole('combobox', { name: 'Button size', exact: true }).click();
+  await page.getByRole('option', { name: 'extra-small', exact: true }).click();
   assert(await panel.isVisible(), 'Nested option popover should keep the customization open');
   await panel.getByRole('tab', { name: 'Code', exact: true }).click();
   const setupCode = panel.locator('.customization-code').first();

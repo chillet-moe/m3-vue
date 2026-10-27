@@ -635,7 +635,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .m3-menu,
+    .m3-menu[popover],
+    .m3-menu[popover]:popover-open > .m3-menu-surface,
     .m3-menu-surface {
       transition-duration: 0ms;
     }
