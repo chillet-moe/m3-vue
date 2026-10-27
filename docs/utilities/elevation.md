@@ -88,8 +88,8 @@ Menu, Popover (including Select and Combobox dropdowns), rich Tooltip, and Dialo
 | `--md-overlay-on-container-color`   | on-surface text for custom surfaces                                                          |
 | `--md-overlay-border-width`         | 1px                                                                                          |
 | `--md-overlay-border-color`         | Black at 8% in light, white at 12% in dark                                                   |
-| `--md-overlay-shadow-key-color`     | Black at 12% in light, 38% in dark                                                           |
-| `--md-overlay-shadow-ambient-color` | Black at 6% in light, 32% in dark                                                            |
+| `--md-overlay-shadow-key-color`     | Black at 8% in light, 38% in dark                                                            |
+| `--md-overlay-shadow-ambient-color` | Black at 4% in light, 32% in dark                                                            |
 | `--md-overlay-elevation`            | `0 2px 6px` near shadow + `0 8px 24px` diffuse shadow                                        |
 | `--md-overlay-modal-elevation`      | `0 4px 8px` near shadow + `0 12px 32px` diffuse shadow                                       |
 
@@ -105,6 +105,7 @@ Override shared tokens at the theme root. Color values may use `light-dark()` so
 /* A consumer-owned native dialog uses exactly the same contract. */
 dialog.settings {
   background: var(--md-overlay-modal-color);
+  background-clip: padding-box;
   color: var(--md-overlay-on-container-color);
   border: var(--md-overlay-border-width) solid var(--md-overlay-border-color);
   border-radius: var(--md-shape-overlay);
@@ -113,3 +114,5 @@ dialog.settings {
 ```
 
 Component color, shape, and elevation overrides remain available. For an individual border, use `--md-menu-container-border-color`, `--md-popover-container-border-color`, `--md-dialog-container-border-color`, or `--md-rich-tooltip-container-border-color`. Borders do not occupy `box-shadow` or `outline`, leaving focus indicators independent. The unused Menu and rich Tooltip `container-shadow-color` tokens have been removed; use the shared shadow color tokens or a component elevation override instead.
+
+Use `background-clip: padding-box` on custom floating surfaces. It keeps the surface fill out of the translucent border, so the border and outer shadow both blend with the backdrop. In the light theme, this keeps the border close to the near shadow in darkness instead of producing a pale seam.

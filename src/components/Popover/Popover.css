@@ -146,6 +146,7 @@
     border-radius: var(--_popover-container-shape);
     padding: var(--_popover-padding);
     background: var(--md-color-container);
+    background-clip: padding-box;
     color: var(--md-color-on-container);
     box-shadow: var(--_popover-container-elevation);
     transform: scale(0.98, 0.9);

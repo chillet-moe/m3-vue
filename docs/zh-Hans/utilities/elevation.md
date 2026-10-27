@@ -88,8 +88,8 @@ Menu、Popover（包括 Select 和 Combobox 下拉菜单）、丰富 Tooltip 与
 | `--md-overlay-on-container-color`   | 自定义表面的 on-surface 文本色                                                                       |
 | `--md-overlay-border-width`         | 1px                                                                                                  |
 | `--md-overlay-border-color`         | 浅色主题为 8% 黑色，深色主题为 12% 白色                                                              |
-| `--md-overlay-shadow-key-color`     | 浅色主题为 12% 黑色，深色主题为 38% 黑色                                                             |
-| `--md-overlay-shadow-ambient-color` | 浅色主题为 6% 黑色，深色主题为 32% 黑色                                                              |
+| `--md-overlay-shadow-key-color`     | 浅色主题为 8% 黑色，深色主题为 38% 黑色                                                              |
+| `--md-overlay-shadow-ambient-color` | 浅色主题为 4% 黑色，深色主题为 32% 黑色                                                              |
 | `--md-overlay-elevation`            | `0 2px 6px` 近层阴影 + `0 8px 24px` 扩散阴影                                                         |
 | `--md-overlay-modal-elevation`      | `0 4px 8px` 近层阴影 + `0 12px 32px` 扩散阴影                                                        |
 
@@ -105,6 +105,7 @@ Menu、Popover（包括 Select 和 Combobox 下拉菜单）、丰富 Tooltip 与
 /* 使用方自有的原生 dialog 也采用相同约定。 */
 dialog.settings {
   background: var(--md-overlay-modal-color);
+  background-clip: padding-box;
   color: var(--md-overlay-on-container-color);
   border: var(--md-overlay-border-width) solid var(--md-overlay-border-color);
   border-radius: var(--md-shape-overlay);
@@ -113,3 +114,5 @@ dialog.settings {
 ```
 
 仍可覆盖组件颜色、形状和海拔。若要单独设置边框，请使用 `--md-menu-container-border-color`、`--md-popover-container-border-color`、`--md-dialog-container-border-color` 或 `--md-rich-tooltip-container-border-color`。边框不占用 `box-shadow` 或 `outline`，因此焦点指示器仍可独立显示。Menu 和丰富 Tooltip 中未使用的 `container-shadow-color` token 已移除；请改用共享阴影颜色 token 或组件海拔覆盖。
+
+自定义浮动表面请使用 `background-clip: padding-box`。它会将表面填充限制在内边距框内，使半透明边框和外部阴影都能与背景融合。在浅色主题中，这会让边框的暗度接近近层阴影，避免出现浅色接缝。

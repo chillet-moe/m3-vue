@@ -72,6 +72,7 @@ const items: MenuContentItem[] = [
 }
 .native-overlay {
   background: var(--md-overlay-modal-color);
+  background-clip: padding-box;
   color: var(--md-overlay-on-container-color);
   border: var(--md-overlay-border-width) solid var(--md-overlay-border-color);
   border-radius: var(--md-shape-overlay);

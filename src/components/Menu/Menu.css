@@ -573,6 +573,7 @@
     border: var(--md-overlay-border-width) solid var(--_menu-container-border-color);
     border-radius: var(--_menus-inactive-container-shape);
     background: var(--_menu-container-color);
+    background-clip: padding-box;
     box-shadow: var(--_menu-container-elevation);
   }
 

@@ -231,6 +231,7 @@
 
   .m3-tooltip[data-variant='rich'] {
     background-color: var(--_rich-tooltip-container-color);
+    background-clip: padding-box;
     border: var(--md-overlay-border-width) solid var(--_rich-tooltip-container-border-color);
     box-shadow: var(--_rich-tooltip-container-elevation);
     color: var(--_rich-tooltip-supporting-text-color);

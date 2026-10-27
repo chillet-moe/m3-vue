@@ -155,6 +155,7 @@
     border-radius: var(--_dialog-container-shape);
 
     background-color: var(--_dialog-container-color);
+    background-clip: padding-box;
     box-shadow: var(--_dialog-container-elevation);
 
     opacity: 0;
