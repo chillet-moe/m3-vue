@@ -215,9 +215,14 @@ export default defineConfig({
 
   vite: {
     resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('../../src', import.meta.url)),
-      },
+      alias: [
+        { find: '@', replacement: fileURLToPath(new URL('../../src', import.meta.url)) },
+        // Keep VitePress search behavior while using the library's themed trigger.
+        {
+          find: /^.*\/VPNavBarSearchButton\.vue$/,
+          replacement: fileURLToPath(new URL('./theme/components/SearchButton.vue', import.meta.url)),
+        },
+      ],
     },
     plugins: [
       layerPreludePlugin({ layers: m3LayerOrder }),

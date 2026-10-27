@@ -3,7 +3,7 @@ import { useData, withBase } from 'vitepress';
 import { VPNavBarSearch } from 'vitepress/theme';
 import { computed } from 'vue';
 
-import { Button, Icon, IconButton } from '@/index';
+import { Button, Card, IconButton, ListItem } from '@/index';
 import CustomizationControls from '../../components/CustomizationControls.vue';
 import { useHero, useLocaleNavigation, useNav, useSiteInfo } from '../composables/nav';
 import { mapHeroActionVariant, resolveSocialLabel } from '../utils';
@@ -72,20 +72,27 @@ function toggleAppearance() {
   <div class="home-layout vp-raw">
     <header class="home-header">
       <div class="home-header-inner">
-        <Button class="home-brand" variant="text" size="medium" :href="resolveLink(homeLink)">
-          <span class="home-brand-mark">
+        <Button class="home-brand" variant="text" size="small" :href="resolveLink(homeLink)">
+          <span class="home-brand-content">
             <span
               v-if="siteLogo"
               class="home-brand-logo"
               :style="{ maskImage: `url(${siteLogo})`, WebkitMaskImage: `url(${siteLogo})` }"
               aria-hidden="true"
             />
+            <span class="m3-typo-title-medium">{{ siteTitle }}</span>
           </span>
-          <span class="m3-typo-title-medium">{{ siteTitle }}</span>
         </Button>
 
         <nav v-if="navItems.length" class="home-nav" :aria-label="isChinese ? '主导航' : 'Primary'">
-          <Button v-for="item in navItems" :key="item.link" variant="text" size="medium" :href="resolveLink(item.link)">
+          <Button
+            v-for="item in navItems"
+            :key="item.link"
+            variant="text"
+            size="small"
+            :press-shape-morph="false"
+            :href="resolveLink(item.link)"
+          >
             {{ item.text }}
           </Button>
         </nav>
@@ -151,17 +158,22 @@ function toggleAppearance() {
           </div>
         </div>
 
-        <div class="home-install" :aria-label="isChinese ? '安装组件库' : 'Package installation'">
+        <Card color="outlined" class="home-install" :aria-label="isChinese ? '安装组件库' : 'Package installation'">
           <div class="home-install-header">
             <span class="m3-typo-label-medium">{{ isChinese ? '安装' : 'Install' }}</span>
             <span class="m3-typo-body-small">pnpm</span>
           </div>
           <pre><code>pnpm add @chillet/m3-vue</code></pre>
-          <a class="home-install-link m3-typo-label-large" :href="resolveLink(localizePath('/getting-started'))">
+          <Button
+            variant="text"
+            size="small"
+            trailing-icon="arrow_forward"
+            class="home-install-link"
+            :href="resolveLink(localizePath('/getting-started'))"
+          >
             {{ isChinese ? '安装说明' : 'Setup instructions' }}
-            <Icon name="arrow_forward" />
-          </a>
-        </div>
+          </Button>
+        </Card>
       </section>
 
       <section class="home-section" aria-labelledby="home-docs-title">
@@ -177,14 +189,15 @@ function toggleAppearance() {
         </div>
 
         <div class="home-guide-grid">
-          <a v-for="guide in guideLinks" :key="guide.title" class="home-guide-link" :href="resolveLink(guide.link)">
-            <span class="home-guide-icon"><Icon :name="guide.icon" /></span>
-            <span class="home-guide-copy">
-              <strong class="m3-typo-title-medium">{{ guide.title }}</strong>
-              <span class="m3-typo-body-medium">{{ guide.description }}</span>
-            </span>
-            <Icon class="home-link-arrow" name="arrow_forward" />
-          </a>
+          <ListItem
+            v-for="guide in guideLinks"
+            :key="guide.title"
+            :href="resolveLink(guide.link)"
+            :title="guide.title"
+            :description="guide.description"
+            :leading-icon="guide.icon"
+            trailing-icon="arrow_forward"
+          />
         </div>
       </section>
 
@@ -195,15 +208,13 @@ function toggleAppearance() {
         </div>
 
         <div class="home-component-grid">
-          <a
+          <ListItem
             v-for="component in componentLinks"
             :key="component.label"
-            class="home-component-link"
             :href="resolveLink(component.link)"
-          >
-            <Icon :name="component.icon" />
-            <span class="m3-typo-title-small">{{ component.label }}</span>
-          </a>
+            :title="component.label"
+            :leading-icon="component.icon"
+          />
         </div>
       </section>
 
@@ -213,15 +224,16 @@ function toggleAppearance() {
 
       <footer class="home-footer">
         <span class="m3-typo-body-small">{{ siteTitle }} {{ isChinese ? '文档' : 'documentation' }}</span>
-        <a
+        <Button
           v-if="socialLinks[0]"
-          class="m3-typo-label-medium"
+          variant="text"
+          size="small"
           :href="socialLinks[0].link"
           target="_blank"
           rel="noreferrer"
         >
           GitHub
-        </a>
+        </Button>
       </footer>
     </main>
   </div>
@@ -262,26 +274,17 @@ function toggleAppearance() {
   flex-shrink: 0;
 }
 
-.home-brand :deep([data-part='text']) {
+.home-brand-content {
   display: inline-flex;
   align-items: center;
   gap: 0.625rem;
   white-space: nowrap;
 }
 
-.home-brand-mark {
-  display: grid;
-  place-items: center;
-  inline-size: 2rem;
-  block-size: 2rem;
-  border-radius: 0.625rem;
-  background: var(--md-sys-color-primary-container);
-}
-
 .home-brand-logo {
   inline-size: 1.125rem;
   block-size: 1.125rem;
-  background: var(--md-sys-color-on-primary-container);
+  background: currentColor;
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -298,18 +301,9 @@ function toggleAppearance() {
   justify-content: end;
 }
 
-.home-search :deep(.VPNavBarSearchButton) {
-  block-size: 2.5rem;
-  padding-inline: 0.875rem;
-  border: 0;
-  border-radius: 1.25rem;
-  color: var(--md-sys-color-on-surface-variant);
-  background: var(--md-sys-color-surface-container);
-  font-family: var(--md-sys-typescale-label-large-font), sans-serif;
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  font-size: var(--md-sys-typescale-label-large-size);
-  letter-spacing: var(--md-sys-typescale-label-large-tracking);
-  line-height: var(--md-sys-typescale-label-large-line-height);
+.home-search {
+  padding: 0;
+  flex-grow: 0;
 }
 
 .home-main {
@@ -361,10 +355,10 @@ function toggleAppearance() {
 }
 
 .home-install {
+  flex-direction: column;
+  align-items: stretch;
   overflow: hidden;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: 1.5rem;
-  background: var(--md-sys-color-surface-container-low);
+  min-inline-size: 0;
 }
 
 .home-install-header {
@@ -381,19 +375,14 @@ function toggleAppearance() {
   padding: 1.5rem 1.25rem;
   overflow: auto;
   color: var(--md-sys-color-on-surface);
-  background: var(--md-sys-color-surface-container-lowest);
   font-family: var(--vp-font-family-mono);
   font-size: 0.8125rem;
   line-height: 1.5;
 }
 
 .home-install-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 1.25rem;
-  color: var(--md-sys-color-primary);
-  text-decoration: none;
+  margin: 0.75rem;
+  align-self: start;
 }
 
 .home-section {
@@ -422,84 +411,10 @@ function toggleAppearance() {
   gap: 0.75rem;
 }
 
-.home-guide-link {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 1rem;
-  min-block-size: 7rem;
-  padding: 1.25rem;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: 1.25rem;
-  color: var(--md-sys-color-on-surface);
-  background: var(--md-sys-color-surface-container-lowest);
-  text-decoration: none;
-  transition:
-    border-color 160ms ease,
-    background-color 160ms ease;
-}
-
-.home-guide-link:hover {
-  border-color: var(--md-sys-color-outline);
-  background: var(--md-sys-color-surface-container-low);
-}
-
-.home-guide-icon {
-  display: grid;
-  place-items: center;
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
-  border-radius: 0.875rem;
-  color: var(--md-sys-color-primary);
-  background: var(--md-sys-color-primary-container);
-}
-
-.home-guide-copy {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.home-guide-copy > span {
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.home-link-arrow {
-  color: var(--md-sys-color-on-surface-variant);
-}
-
 .home-component-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
-}
-
-.home-component-link {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-block-size: 4rem;
-  padding-inline: 1rem;
-  border-radius: 1rem;
-  color: var(--md-sys-color-on-surface);
-  background: var(--md-sys-color-surface-container-low);
-  text-decoration: none;
-  transition: background-color 160ms ease;
-}
-
-.home-component-link:hover {
-  background: var(--md-sys-color-surface-container);
-}
-
-.home-component-link > :deep(.m3-icon) {
-  color: var(--md-sys-color-primary);
-}
-
-.home-guide-link:focus-visible,
-.home-component-link:focus-visible,
-.home-install-link:focus-visible,
-.home-footer a:focus-visible {
-  outline: 0.1875rem solid var(--md-sys-color-primary);
-  outline-offset: 0.1875rem;
 }
 
 .home-content:empty {
@@ -516,12 +431,11 @@ function toggleAppearance() {
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.home-footer a {
-  color: var(--md-sys-color-primary);
-  text-decoration: none;
-}
-
 @media (max-width: 64rem) {
+  .home-header-inner {
+    grid-template-columns: 1fr auto;
+  }
+
   .home-nav {
     display: none;
   }
@@ -529,11 +443,6 @@ function toggleAppearance() {
 
 @media (max-width: 48rem) {
   .home-social-link {
-    display: none;
-  }
-
-  .home-search :deep(.VPNavBarSearchButton .text),
-  .home-search :deep(.VPNavBarSearchButton .keys) {
     display: none;
   }
 

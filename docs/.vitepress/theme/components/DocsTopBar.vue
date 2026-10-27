@@ -123,7 +123,6 @@ function toggleStickyPreview() {
 
 <style scoped>
 .docs-topbar {
-  --md-density: 0;
   position: sticky;
   inset-block-start: 0;
   z-index: 20;
@@ -168,24 +167,9 @@ function toggleStickyPreview() {
   gap: 0.5rem;
 }
 
-.docs-search :deep(.VPNavBarSearchButton) {
-  border: 1px solid --translucent(var(--vp-c-divider), 0.7);
-  border-radius: 999px;
-  background: --translucent(var(--vp-c-bg-alt), 0.5);
-  block-size: 2.25rem;
-  padding-inline: 0.75rem;
-  font-family: inherit;
-  font-size: 0.875rem;
-  color: var(--vp-c-text-2);
-}
-
-.docs-search :deep(.VPNavBarSearchButton:hover) {
-  border-color: var(--md-sys-color-primary);
-  background: --translucent(var(--md-sys-color-primary), 0.06);
-}
-
-.docs-search :deep(.VPNavBarSearchButton .vpi-search) {
-  font-size: 1.125rem;
+.docs-search {
+  padding: 0;
+  flex-grow: 0;
 }
 
 @media (max-width: 80rem) {
@@ -209,19 +193,6 @@ function toggleStickyPreview() {
 
   .docs-social-link {
     display: none;
-  }
-
-  .docs-search :deep(.VPNavBarSearchButton .text),
-  .docs-search :deep(.VPNavBarSearchButton .keys) {
-    display: none;
-  }
-}
-
-@media (min-width: 768px) {
-  .VPNavBarSearch {
-    gap: 8px;
-    flex-grow: 1;
-    padding-left: 0.5rem;
   }
 }
 </style>

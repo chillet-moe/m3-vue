@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed, nextTick, provide, ref, useId, useTemplateRef, watch } from 'vue';
+import { computed, inject, nextTick, provide, ref, useId, useTemplateRef, watch } from 'vue';
 import { useData } from 'vitepress';
 import {
   Button,
-  provideShape,
   ButtonGroup,
   ButtonGroupItem,
   Switch,
@@ -18,9 +17,9 @@ import {
   Tab,
   TabPanel,
   fieldContextKey,
-  buttonContextKey,
+  provideButtonDefaults,
   iconButtonContextKey,
-  sliderContextKey,
+  provideSliderDefaults,
   rowSizeContextKey,
 } from '@/index';
 import { useDocsCustomization } from '../customization/state';
@@ -35,13 +34,12 @@ const { lang } = useData();
 const t = (key: CopyKey) => (lang.value === 'zh-Hans' ? zh : en)[key];
 const customization = useDocsCustomization();
 const { state, baseline, resolvedTokens, setToken, setDefault, setPreset, reset, storageError } = customization;
-// Editing controls retain usable dimensions while component defaults change in the page.
-provideShape('rounded');
+// Keep editor dimensions and slider interaction stable; inherit the remaining theme preferences.
 provide(rowSizeContextKey, 'small');
-provide(fieldContextKey, { size: 'small', shape: 'rounded', labelClearance: '0.5rem' });
-provide(buttonContextKey, { size: 'small', pressShapeMorph: false });
-provide(iconButtonContextKey, { size: 'small' });
-provide(sliderContextKey, { size: 'small', appearance: 'standard', wheel: false, valueIndicator: false });
+provide(fieldContextKey, { ...inject(fieldContextKey, undefined), size: 'small' });
+provideButtonDefaults({ size: 'small' });
+provide(iconButtonContextKey, { ...inject(iconButtonContextKey, undefined), size: 'small' });
+provideSliderDefaults({ size: 'small', wheel: false, valueIndicator: false });
 
 const open = ref(false);
 const section = ref('theme');
@@ -331,7 +329,6 @@ watch(open, async (value) => {
 <style scoped>
 .customization-trigger {
   display: inline-flex;
-  --md-density: 0;
 }
 .customization-panel {
   --md-density: 0;

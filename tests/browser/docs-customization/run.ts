@@ -83,6 +83,18 @@ try {
   await page.getByRole('option', { name: 'minimal', exact: true }).click();
   await page.getByRole('option', { name: 'minimal', exact: true }).waitFor({ state: 'hidden' });
   assert.equal(await panel.getByRole('slider').count(), 0);
+  assert.equal(await panel.getAttribute('data-shape'), 'minimal');
+  assert.equal(
+    await page.getByRole('button', { name: 'Customize', exact: true }).getAttribute('data-shape'),
+    'minimal',
+  );
+  assert.equal(
+    await panel
+      .getByRole('combobox', { name: 'Component shape', exact: true })
+      .evaluate((el) => el.closest('[data-m3-shape]')?.getAttribute('data-shape')),
+    'minimal',
+  );
+  assert.equal(await panel.evaluate((el) => getComputedStyle(el).getPropertyValue('--md-density').trim()), '0');
   await panel.getByRole('tab', { name: 'Components', exact: true }).click();
   await panel.getByRole('combobox', { name: 'Row size', exact: true }).click();
   await page.getByRole('option', { name: 'extra-small', exact: true }).click();
@@ -90,6 +102,17 @@ try {
   await panel.getByRole('combobox', { name: 'Button size', exact: true }).click();
   await page.getByRole('option', { name: 'extra-small', exact: true }).click();
   assert(await panel.isVisible(), 'Nested option popover should keep the customization open');
+  const resetButton = panel.getByRole('button', { name: /Reset all$/ });
+  for (const enabled of [false, true]) {
+    await panel.getByRole('combobox', { name: 'Button press morph', exact: true }).click();
+    await page.getByRole('option', { name: String(enabled), exact: true }).click();
+    await resetButton.hover();
+    await page.mouse.down();
+    assert.equal((await resetButton.getAttribute('data-pressed')) === 'true', enabled);
+    // Release outside the button so the preferences being tested are not reset.
+    await panel.getByRole('heading', { name: 'Customize', exact: true }).hover();
+    await page.mouse.up();
+  }
   await panel.getByRole('tab', { name: 'Code', exact: true }).click();
   const setupCode = panel.locator('.customization-code').first();
   assert((await setupCode.textContent())?.includes('themes/compact.css'));
