@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser } from 'playwright';
@@ -14,7 +15,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 800, height: 600 }, reducedMotion: 'reduce' });
   // tsx preserves names on local functions inside serialized page callbacks.
   await page.addInitScript('window.__name = (fn) => fn');
-  await page.goto(new URL('/tests/browser/dialog-spacing/', server.resolvedUrls!.local[0]).href);
+  await openFixture(page, new URL('/tests/browser/dialog-spacing/', server.resolvedUrls!.local[0]).href);
   await page.waitForFunction(() => typeof window.__dialogSpacing === 'function');
   const pixel = async (x: number, y: number) => {
     const png = await page.screenshot({ clip: { x, y, width: 1, height: 1 } });

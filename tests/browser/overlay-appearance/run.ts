@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { chromium } from 'playwright';
@@ -8,11 +9,6 @@ await server.listen();
 const chrome = process.env.CHROME_PATH ?? '/usr/bin/google-chrome-stable';
 const browser = await chromium.launch({ ...(existsSync(chrome) ? { executablePath: chrome } : {}), headless: true });
 const output = '.tmp/overlay-appearance';
-const iconFont = process.env.OVERLAY_ICON_FONT_PATH;
-const fontCss = iconFont
-  ? `@font-face { font-family: 'Material Symbols Outlined'; font-weight: 100 700; src: url(data:font/ttf;base64,${readFileSync(iconFont).toString('base64')}); }`
-  : '';
-
 mkdirSync(output, { recursive: true });
 try {
   const page = await browser.newPage({ viewport: { width: 1000, height: 760 }, reducedMotion: 'reduce' });
@@ -21,12 +17,8 @@ try {
   for (const scheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: scheme });
     for (const background of ['surface', 'surface-container-highest']) {
-      await page.goto(new URL('/tests/browser/overlay-appearance/', server.resolvedUrls!.local[0]).href);
+      await openFixture(page, new URL('/tests/browser/overlay-appearance/', server.resolvedUrls!.local[0]).href);
       await page.getByRole('button', { name: 'Menu', exact: true }).waitFor();
-      if (fontCss) {
-        await page.addStyleTag({ content: fontCss });
-        await page.evaluate(() => document.fonts.ready);
-      }
       await page.evaluate(
         ({ scheme, background }) => {
           document.documentElement.style.colorScheme = scheme;
@@ -74,20 +66,22 @@ try {
       await page.keyboard.press('Escape');
       await page.keyboard.press('Escape');
       for (const label of ['Workspace', 'Find workspace']) {
-        await page.getByRole('combobox', { name: label, exact: true }).click();
+        await page.getByLabel(label, { exact: true }).click();
         await page.keyboard.press('ArrowDown');
         await capture(
           label === 'Workspace' ? 'select-focus' : 'combobox-focus',
-          '.m3-popover:popover-open [data-part="surface"]',
+          '.m3-select-menu:popover-open [data-part="container"]',
         );
-        const scroll = await page.locator('.m3-popover:popover-open [data-part="surface"]').evaluate((element) => {
-          element.scrollTop = element.scrollHeight;
-          return { scrollTop: element.scrollTop, overflow: element.scrollHeight > element.clientHeight };
-        });
+        const scroll = await page
+          .locator('.m3-select-menu:popover-open [data-part="container"]')
+          .evaluate((element) => {
+            element.scrollTop = element.scrollHeight;
+            return { scrollTop: element.scrollTop, overflow: element.scrollHeight > element.clientHeight };
+          });
         assert(scroll.overflow && scroll.scrollTop > 0, `${label} scrolls`);
         await capture(
           label === 'Workspace' ? 'select-scroll' : 'combobox-scroll',
-          '.m3-popover:popover-open [data-part="surface"]',
+          '.m3-select-menu:popover-open [data-part="container"]',
         );
         await page.keyboard.press('Escape');
       }
@@ -97,8 +91,8 @@ try {
       await page.keyboard.press('Escape');
       await page.getByRole('button', { name: 'Dialog', exact: true }).click();
       await capture('dialog', '.m3-dialog [data-part="surface"]');
-      await page.getByRole('combobox', { name: 'Active workspace', exact: true }).click();
-      await capture('dialog-select', '.m3-popover:popover-open [data-part="surface"]');
+      await page.getByLabel('Active workspace', { exact: true }).click();
+      await capture('dialog-select', '.m3-select-menu:popover-open [data-part="container"]');
       await page.keyboard.press('Escape');
       await page.locator('[data-scope="dialog"][data-part="content"]').evaluate((element) => {
         element.scrollTop = element.scrollHeight;

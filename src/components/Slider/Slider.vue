@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { appearanceContextKey } from '@/styles/appearance';
 import { useElementEnvironment } from '@/internal/elementEnvironment';
 import {
   computed,
@@ -90,7 +91,10 @@ const {
 
 const attrs = useAttrs();
 const defaults = inject(sliderContextKey, undefined);
-const appearance = computed(() => appearanceProp ?? unref(defaults?.appearance) ?? 'standard');
+const appearanceDefaults = inject(appearanceContextKey, undefined);
+const appearance = computed(
+  () => appearanceProp ?? unref(defaults?.appearance) ?? unref(appearanceDefaults?.appearance) ?? 'standard',
+);
 const wheel = computed(() => wheelProp ?? unref(defaults?.wheel) ?? false);
 const valueIndicator = computed(() => valueIndicatorProp ?? unref(defaults?.valueIndicator) ?? true);
 const size = computed(() => sizeProp ?? unref(defaults?.size) ?? 'medium');

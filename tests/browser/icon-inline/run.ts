@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser } from 'playwright';
@@ -12,7 +13,7 @@ try {
   browser = await chromium.launch({ ...(existsSync(chrome) ? { executablePath: chrome } : {}), headless: true });
   const page = await browser.newPage();
   await page.addInitScript('window.__name = (fn) => fn');
-  await page.goto(new URL('/tests/browser/icon-inline/', server.resolvedUrls!.local[0]).href);
+  await openFixture(page, new URL('/tests/browser/icon-inline/', server.resolvedUrls!.local[0]).href);
   await page.locator('.text-case').first().waitFor();
   const offsets = await page.evaluate(() => {
     const center = (element: Element) => {

@@ -1,3 +1,4 @@
+import { appearanceContextKey } from './appearance';
 import type { App, MaybeRef } from 'vue';
 import type { M3ComponentDefaultsOptions } from '@/defaults';
 import { listItemContextKey } from '@/components/ListItem/ListItemContext';
@@ -26,6 +27,7 @@ export function installM3StyleDefaults(
   app: App,
   options: M3ShapeOptions & M3FieldOptions & M3ComponentDefaultsOptions = {},
 ): void {
+  if (options.appearance !== undefined) app.provide(appearanceContextKey, { appearance: options.appearance });
   const context: FieldContext = {};
   if (options.shape !== undefined) context.shape = options.shape;
   if (options.fieldSize !== undefined) context.size = options.fieldSize;

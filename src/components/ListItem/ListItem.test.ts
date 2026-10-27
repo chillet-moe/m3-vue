@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
-import { createApp, h, nextTick } from 'vue';
-import ListItem from './ListItem.vue';
+import { createApp, defineComponent, h, nextTick, ref } from 'vue';
+import ListItem, { type ListItemSize } from './ListItem.vue';
+import { M3VuePlugin } from '@/plugin';
+import { provideListItemDefaults } from './ListItemContext';
 
 afterEach(() => {
   document.body.innerHTML = '';
@@ -32,7 +34,7 @@ describe('ListItem', () => {
 
     expect(root?.tagName).toBe('BUTTON');
     expect(root?.hasAttribute('data-list-group-item')).toBe(true);
-    expect(root?.dataset.size).toBe('small');
+    expect(root?.dataset.size).toBe('medium');
     expect(title?.textContent).toContain('Profile');
     expect(description?.textContent).toContain('Manage your account settings.');
     expect(leading).not.toBeNull();
@@ -152,4 +154,46 @@ it('defaults to standard and opts into expressive morphs without changing semant
   expect(items[1]?.querySelector('.m3-text-morph')).not.toBeNull();
   expect([...items].map((item) => item.tagName)).toEqual(['BUTTON', 'BUTTON']);
   app.unmount();
+});
+
+it('inherits row sizes per field without inheriting Button size defaults', async () => {
+  const applicationSize = ref<ListItemSize>('small');
+  const subtreeSize = ref<ListItemSize>();
+  const instanceSize = ref<ListItemSize>();
+  const Child = defineComponent({
+    setup() {
+      provideListItemDefaults({ appearance: 'expressive' });
+      return () => h(ListItem, { size: instanceSize.value, title: 'Row' });
+    },
+  });
+  const Root = defineComponent({
+    setup() {
+      provideListItemDefaults({ size: subtreeSize });
+      return () => h(Child);
+    },
+  });
+  const app = createApp(Root);
+  app.use(M3VuePlugin, { listItemDefaults: { size: applicationSize }, buttonDefaults: { size: 'extra-large' } });
+  const container = document.createElement('div');
+  app.mount(container);
+  const root = container.querySelector<HTMLElement>('[data-scope="item"]')!;
+  try {
+    expect(root.dataset.size).toBe('small');
+    expect(root.dataset.appearance).toBe('expressive');
+    subtreeSize.value = 'large';
+    await nextTick();
+    expect(root.dataset.size).toBe('large');
+    instanceSize.value = 'extra-small';
+    await nextTick();
+    expect(root.dataset.size).toBe('extra-small');
+    instanceSize.value = undefined;
+    await nextTick();
+    expect(root.dataset.size).toBe('large');
+    subtreeSize.value = undefined;
+    applicationSize.value = 'medium';
+    await nextTick();
+    expect(root.dataset.size).toBe('medium');
+  } finally {
+    app.unmount();
+  }
 });

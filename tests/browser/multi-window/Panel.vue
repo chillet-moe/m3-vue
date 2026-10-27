@@ -11,7 +11,6 @@ import {
   createOverlayHost,
   createOverlayService,
 } from '@/index';
-import VirtualOptions from '../../../docs/demos/select/VirtualOptions.vue';
 import { vDropdown } from '@/directives/Menu';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 const host = createOverlayHost();
@@ -19,7 +18,7 @@ const { showDialog, showSnackbar } = createOverlayService(host);
 const value = ref(25);
 const selected = ref('');
 const layer = ref<number>(1);
-const layers = Array.from({ length: 10000 }, (_, value) => ({
+const layers = Array.from({ length: 40 }, (_, value) => ({
   value,
   label: `Layer ${value}`,
   disabled: value % 17 === 0,
@@ -71,9 +70,7 @@ defineExpose({ host, results, isUnmounted: () => unmounted });
       >Tooltip</Button
     >
     <Slider v-model:value="value" :step="1" :min="0" :max="100" value-indicator />
-    <Combobox v-model="layer" label="Window layers" :options="layers" size="extra-small">
-      <template #list="list"><VirtualOptions :list="list" /></template>
-    </Combobox>
+    <Combobox v-model="layer" label="Window layers" :options="layers" size="extra-small" />
     <output class="value">{{ value }}</output
     ><output class="selected">{{ selected }}</output
     ><output class="results">{{ results.join('|') }}</output>

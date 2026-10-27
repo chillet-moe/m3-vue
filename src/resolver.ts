@@ -57,7 +57,6 @@ export const m3VueComponentNames = [
   'Slider',
   'Snackbar',
   'Select',
-  'SelectItem',
   'SelectionGroup',
   'SideSheet',
   'Switch',

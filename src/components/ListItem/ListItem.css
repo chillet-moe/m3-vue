@@ -18,8 +18,6 @@
     --md-item-inactive-state-layer-color: initial;
     --md-item-indicator-collapsed-visual-width: initial;
     --md-item-indicator-shape: initial;
-    --md-item-main-padding-block: initial;
-    --md-item-main-padding-inline: initial;
     --md-item-min-height: initial;
     --md-item-motion: initial;
     --md-item-padding-block: initial;
@@ -27,14 +25,6 @@
   }
 
   .m3-item {
-    --_item-min-height: var(--md-item-min-height, --dp(56));
-    --_item-padding-block: var(--md-item-padding-block, --dp(8));
-    --_item-padding-inline: var(--md-item-padding-inline, --dp(8));
-    --_item-main-padding-block: var(--md-item-main-padding-block, --dp(8));
-    --_item-main-padding-inline: var(--md-item-main-padding-inline, --dp(12));
-    --_item-gap: var(--md-item-gap, --dp(12));
-    --_item-content-gap: var(--md-item-content-gap, --dp(2));
-    --_item-icon-size: var(--md-item-icon-size, --dp(20));
     --_item-header-color: var(--md-item-header-color, var(--md-sys-color-on-surface-variant));
     --_item-footer-color: var(--md-item-footer-color, var(--md-sys-color-on-surface-variant));
 
@@ -255,15 +245,24 @@
   }
 
   .m3-item[data-size='extra-small'] {
-    --_item-min-height: var(--md-item-min-height, --dp(48));
-    --_item-padding-block: var(--md-item-padding-block, --dp(4));
-    --_item-padding-inline: var(--md-item-padding-inline, --dp(16));
+    --_item-min-height: var(--md-item-min-height, --dp(36));
+    --_item-padding-block: var(--md-item-padding-block, --dp(6));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(12));
     --_item-gap: var(--md-item-gap, --dp(8));
     --_item-content-gap: var(--md-item-content-gap, --dp(1));
     --_item-icon-size: var(--md-item-icon-size, --dp(20));
   }
 
   .m3-item[data-size='small'] {
+    --_item-min-height: var(--md-item-min-height, --dp(48));
+    --_item-padding-block: var(--md-item-padding-block, --dp(6));
+    --_item-padding-inline: var(--md-item-padding-inline, --dp(16));
+    --_item-gap: var(--md-item-gap, --dp(12));
+    --_item-content-gap: var(--md-item-content-gap, --dp(1));
+    --_item-icon-size: var(--md-item-icon-size, --dp(24));
+  }
+
+  .m3-item[data-size='medium'] {
     --_item-min-height: var(--md-item-min-height, --dp(56));
     --_item-padding-block: var(--md-item-padding-block, --dp(6));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(16));
@@ -272,30 +271,21 @@
     --_item-icon-size: var(--md-item-icon-size, --dp(24));
   }
 
-  .m3-item[data-size='medium'] {
+  .m3-item[data-size='large'] {
     --_item-min-height: var(--md-item-min-height, --dp(64));
     --_item-padding-block: var(--md-item-padding-block, --dp(8));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(22));
-    --_item-gap: var(--md-item-gap, --dp(14));
+    --_item-gap: var(--md-item-gap, --dp(20));
     --_item-content-gap: var(--md-item-content-gap, --dp(2));
     --_item-icon-size: var(--md-item-icon-size, --dp(24));
   }
 
-  .m3-item[data-size='large'] {
+  .m3-item[data-size='extra-large'] {
     --_item-min-height: var(--md-item-min-height, --dp(80));
     --_item-padding-block: var(--md-item-padding-block, --dp(10));
     --_item-padding-inline: var(--md-item-padding-inline, --dp(24));
-    --_item-gap: var(--md-item-gap, --dp(16));
+    --_item-gap: var(--md-item-gap, --dp(24));
     --_item-content-gap: var(--md-item-content-gap, --dp(3));
-    --_item-icon-size: var(--md-item-icon-size, --dp(24));
-  }
-
-  .m3-item[data-size='extra-large'] {
-    --_item-min-height: var(--md-item-min-height, --dp(96));
-    --_item-padding-block: var(--md-item-padding-block, --dp(12));
-    --_item-padding-inline: var(--md-item-padding-inline, --dp(32));
-    --_item-gap: var(--md-item-gap, --dp(20));
-    --_item-content-gap: var(--md-item-content-gap, --dp(4));
     --_item-icon-size: var(--md-item-icon-size, --dp(28));
   }
 
@@ -321,10 +311,6 @@
     transition: none;
   }
 
-  /*.m3-button.m3-item[data-size='extra-small'] .m3-item-title,
-  .m3-button.m3-item[data-size='small'] .m3-item-title {
-    @apply body-medium;
-  }*/
   @media (prefers-reduced-motion: reduce) {
     .m3-item,
     .m3-item::before {

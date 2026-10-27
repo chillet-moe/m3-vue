@@ -63,8 +63,14 @@ function installPopoverPolyfill() {
   }
 }
 
-function getCurrentOptions(container: HTMLElement) {
-  return Array.from(container.querySelectorAll<HTMLElement>('[role="option"]'));
+function getCurrentMenuItems(container: HTMLElement) {
+  return Array.from(
+    container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]'),
+  ).filter(
+    (item) =>
+      !item.classList.contains('m3-select-options-leave-active') &&
+      !item.classList.contains('m3-select-options-leave-to'),
+  );
 }
 
 describe('Combobox', () => {
@@ -127,8 +133,8 @@ describe('Combobox', () => {
     await nextTick();
     await nextTick();
 
-    const visibleLabels = getCurrentOptions(container).map((item) =>
-      item.querySelector('.m3-item-title')?.textContent?.trim(),
+    const visibleLabels = getCurrentMenuItems(container).map((item) =>
+      item.querySelector('.m3-menu-item-label')?.textContent?.trim(),
     );
 
     expect(visibleLabels).toEqual(['Colorado', 'Connecticut']);
@@ -158,7 +164,7 @@ describe('Combobox', () => {
     app.mount(container);
     await nextTick();
 
-    container.querySelector<HTMLElement>('[role="listbox"]')?.hidePopover();
+    container.querySelector<HTMLElement>('[role="menu"]')?.hidePopover();
     await nextTick();
     await Promise.resolve();
 

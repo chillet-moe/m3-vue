@@ -6,13 +6,13 @@
 
 | 需求                         | 组件 / 选择                                                                |
 | ---------------------------- | -------------------------------------------------------------------------- |
-| 选择一个值                   | Select 或 Combobox；自定义或虚拟结果行使用 SelectItem。                    |
+| 选择一个值                   | Select 或 Combobox。                                                       |
 | 执行命令或打开子菜单         | Menu 与 MenuItem。                                                         |
 | 展示一般列表内容或导航       | ListItem；选择按钮、链接或非交互展示语义。                                 |
 | 密集的属性面板和频繁浏览的行 | Standard Slider 和 ListItem，搭配紧凑字段尺寸。                            |
 | 突出的控件或丰富的导航表面   | 当较大的几何尺寸和动效适合当前表面时，使用 Expressive Slider 或 ListItem。 |
 
-Slider 和 ListItem 默认使用 `appearance="standard"`。Expressive 保留原有外观。这不是全库通用的变体；应使用各组件文档中的 API，而不是给所有控件传入 `appearance`。ListItem 的 standard 外观会让活动指示器保持整行宽度，不展开高亮，也不执行按压形状变换。普通列表和虚拟列表中的 SelectItem 都采用这种克制的呈现方式；键盘活动状态与选中状态彼此独立。
+Slider 和 ListItem 默认使用 `appearance="standard"`。Expressive 保留原有外观。这不是全库通用的变体；应使用各组件文档中的 API，而不是给所有控件传入 `appearance`。ListItem 的 standard 外观会让活动指示器保持整行宽度，不展开高亮，也不执行按压形状变换。
 
 使用 `size` 选择组件支持的尺寸，并通过公开 Token 做更细致的调整。视觉尺寸较小不代表命中区域也要变小：Slider 将滑块和轨道尺寸与目标区域尺寸分开控制。Slider 可搭配 TextField 实现精确输入，详见 [Slider](../components/slider#精确数字输入)。TextField、Select 和 Combobox 支持相同的 32px、40px 和 56px 字段高度。为浮动标签预留空间，详见[字段间距](./field-layout)。
 

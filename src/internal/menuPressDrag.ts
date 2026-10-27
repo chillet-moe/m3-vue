@@ -65,9 +65,7 @@ export function startMenuPressDrag(
 
     const target = releaseEvent.target;
     const item = isElement(target)
-      ? target.closest<HTMLElement>(
-          '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="option"]',
-        )
+      ? target.closest<HTMLElement>('[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]')
       : null;
 
     if (item && menu.contains(item) && !item.matches('[disabled], [aria-disabled="true"]')) {

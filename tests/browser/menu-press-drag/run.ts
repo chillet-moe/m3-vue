@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
@@ -33,7 +34,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 800, height: 600 } });
   const serverUrl = server.resolvedUrls?.local[0];
   assert(serverUrl, 'Vite did not expose a local development URL');
-  await page.goto(new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
+  await openFixture(page, new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
 
   await page.locator('#menu-trigger').click();
   assert.equal(await page.locator('#press-menu').evaluate((menu) => menu.matches(':popover-open')), true);
@@ -54,7 +55,7 @@ try {
   assert.equal(await page.locator('#menu-selection').textContent(), 'Second');
   assert.equal(await page.locator('#press-menu').evaluate((menu) => menu.matches(':popover-open')), false);
 
-  await pressDragTo(page, '.m3-select-trigger', '.m3-select-item:nth-child(2)');
+  await pressDragTo(page, '.m3-select-trigger', '.m3-select-option:nth-child(2)');
   assert.equal(await page.locator('#select-value').textContent(), 'pour-over');
   assert.equal(await page.locator('.m3-select-menu').evaluate((menu) => menu.matches(':popover-open')), false);
 

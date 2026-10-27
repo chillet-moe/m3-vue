@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser } from 'playwright';
@@ -27,7 +28,7 @@ try {
   const serverUrl = server.resolvedUrls?.local[0];
   assert(serverUrl, 'Vite did not expose a local development URL');
 
-  await page.goto(new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
+  await openFixture(page, new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
   await page.waitForSelector('.m3-dialog[open] .m3-dialog-actions');
   await page.waitForTimeout(700);
 

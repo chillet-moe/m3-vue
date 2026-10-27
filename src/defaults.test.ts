@@ -5,7 +5,6 @@ import {
   Button,
   ButtonGroup,
   ListItem,
-  SelectItem,
   provideButtonDefaults,
   provideSliderDefaults,
   provideListItemDefaults,
@@ -176,7 +175,6 @@ it('merges nested preferences per field, reacts to undefined, and preserves expl
         appearance: explicit ? 'standard' : undefined,
       }),
       h(ListItem, { title: 'Item', appearance: explicit ? 'standard' : undefined }),
-      h(SelectItem, {}, () => 'Option'),
       h(Button, { pressShapeMorph: explicit ? true : undefined }, () => 'Action'),
       h(ButtonGroup, {}, () => h(Button, {}, () => 'Grouped')),
     ]);
@@ -220,7 +218,6 @@ it('merges nested preferences per field, reacts to undefined, and preserves expl
     expect(root('inner', 'slider').classList.contains('m3-slider-small')).toBe(true);
     expect(root('app', 'slider').classList.contains('m3-slider-large')).toBe(true);
     expect(root('inner', 'item').dataset.appearance).toBe('expressive');
-    expect(root('inner', 'select-item').dataset.appearance).toBe('standard');
     expect(root('inner', 'button').dataset.shape).toBe('square');
     expect(root('inner', 'button').dataset.size).toBe('small');
     expect(root('inner', 'button').dataset.pressShapeMorph).toBe('false');

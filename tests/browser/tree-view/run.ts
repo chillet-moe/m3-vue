@@ -1,5 +1,6 @@
+import { openFixture, loadTestFonts } from '../fonts';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { chromium, type Browser } from 'playwright';
 import { createServer, type ViteDevServer } from 'vite';
@@ -13,18 +14,11 @@ try {
   browser = await chromium.launch({ ...(existsSync(chrome) ? { executablePath: chrome } : {}), headless: true });
   const page = await browser.newPage({ viewport: { width: 640, height: 640 } });
   await page.addInitScript('window.__name = (fn) => fn');
-  await page.goto(new URL('/tests/browser/tree-view/', server.resolvedUrls!.local[0]).href);
+  await openFixture(page, new URL('/tests/browser/tree-view/', server.resolvedUrls!.local[0]).href);
   const project = page.getByRole('tree', { name: 'Project files' });
   const overview = project.getByRole('treeitem', { name: 'Overview', exact: true, includeHidden: true });
   const documents = project.getByRole('treeitem', { name: 'Documents', exact: true });
   await overview.waitFor();
-  const iconFont = process.env.TREE_ICON_FONT_PATH;
-  if (iconFont) {
-    await page.addStyleTag({
-      content: `@font-face { font-family: 'Material Symbols Outlined'; font-weight: 100 700; src: url(data:font/ttf;base64,${readFileSync(iconFont).toString('base64')}); }`,
-    });
-    await page.evaluate(() => document.fonts.ready);
-  }
   await page.locator('#before').focus();
   await page.keyboard.press('Tab');
   assert.equal(await overview.evaluate((element) => element === document.activeElement), true);
@@ -93,6 +87,7 @@ try {
   await page.keyboard.press('ArrowRight');
   assert.equal(await source.getAttribute('aria-expanded'), 'false');
   await page.reload();
+  await loadTestFonts(page);
   const notes = project.getByRole('treeitem', { name: 'Notes', exact: true });
   const notesRow = notes.locator('[data-part="row"]').first();
   const clearRipples = async () => {

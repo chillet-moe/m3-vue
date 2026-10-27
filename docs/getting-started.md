@@ -55,9 +55,8 @@ import { Button } from '@chillet/m3-vue';
 Set application-wide preferences with `M3VuePlugin`, subtree preferences with a defaults helper, and individual
 values with component props. Precedence is instance prop > helper subtree field > application field > library default.
 The built-in defaults are Button `size="small"` and `pressShapeMorph=true`, Slider `size="medium"`,
-`appearance="standard"`, `wheel=false`, and `valueIndicator=true`, and ListItem `appearance="standard"`.
-Select and SelectItem show the selection mark by default. `ButtonGroup` inherits its parent's `pressShapeMorph`
-when the prop is omitted.
+`appearance="standard"`, `wheel=false`, and `valueIndicator=true`, and ListItem `appearance="standard"` with `size="medium"` (56px).
+`ButtonGroup` inherits its parent's `pressShapeMorph` when the prop is omitted.
 
 ### Application configuration
 
@@ -70,7 +69,6 @@ const options = {
   buttonDefaults: { size: 'small', pressShapeMorph: true },
   sliderDefaults: { size: 'large', appearance: 'standard', wheel: false, valueIndicator: true },
   listItemDefaults: { appearance: 'standard' },
-  selectDefaults: { showSelectedIcon: false },
   timePickerDefaults: { format: '24h', inputMode: 'keyboard' },
 } satisfies M3VuePluginOptions;
 
@@ -79,22 +77,20 @@ app.use(M3VuePlugin, options);
 
 `M3VuePluginOptions` adds `buttonDefaults?: Pick<ButtonContext, 'size' | 'pressShapeMorph'>`,
 `sliderDefaults?: SliderContext` (with `size`, `appearance`, `wheel`, and `valueIndicator`), and
-`listItemDefaults?: ListItemContext` (with `appearance`), and `selectDefaults?: SelectContext` (with
-`showSelectedIcon`). Existing options such as `shape`, `fieldSize`,
+`listItemDefaults?: ListItemContext` (with `size` and `appearance`). Existing options such as `shape`, `fieldSize`,
 `iconButtonSize`, `menuColor`, and picker defaults remain available.
 
-| Plugin option                                                     | Applies to                                   | Context field                           |
-| ----------------------------------------------------------------- | -------------------------------------------- | --------------------------------------- |
-| `fieldSize`                                                       | Single-line TextField, Select, Combobox      | `fieldContextKey.size`                  |
-| `buttonDefaults.size`                                             | Button                                       | `buttonContextKey.size`                 |
-| `buttonDefaults.pressShapeMorph`                                  | Button and an inheriting ButtonGroup         | `buttonContextKey.pressShapeMorph`      |
-| `iconButtonSize`                                                  | IconButton                                   | `iconButtonContextKey.size`             |
-| `sliderDefaults.size`, `.appearance`, `.wheel`, `.valueIndicator` | Slider                                       | Corresponding `sliderContextKey` fields |
-| `listItemDefaults.appearance`                                     | ListItem                                     | `listItemContextKey.appearance`         |
-| `selectDefaults.showSelectedIcon`                                 | Select and SelectItem                        | `selectContextKey.showSelectedIcon`     |
-| `menuColor`                                                       | Menu, Select and Combobox menus              | `menuDefaultsContextKey.color`          |
-| `datePickerDefaults`                                              | DatePicker, including TextField date pickers | `datePickerContextKey` fields           |
-| `timePickerDefaults`                                              | TimePicker, including TextField time pickers | `timePickerContextKey` fields           |
+| Plugin option                                                     | Applies to                                   | Context field                             |
+| ----------------------------------------------------------------- | -------------------------------------------- | ----------------------------------------- |
+| `fieldSize`                                                       | Single-line TextField, Select, Combobox      | `fieldContextKey.size`                    |
+| `buttonDefaults.size`                                             | Button                                       | `buttonContextKey.size`                   |
+| `buttonDefaults.pressShapeMorph`                                  | Button and an inheriting ButtonGroup         | `buttonContextKey.pressShapeMorph`        |
+| `iconButtonSize`                                                  | IconButton                                   | `iconButtonContextKey.size`               |
+| `sliderDefaults.size`, `.appearance`, `.wheel`, `.valueIndicator` | Slider                                       | Corresponding `sliderContextKey` fields   |
+| `listItemDefaults.size`, `.appearance`                            | ListItem                                     | Corresponding `listItemContextKey` fields |
+| `menuColor`                                                       | Menu, Select and Combobox menus              | `menuDefaultsContextKey.color`            |
+| `datePickerDefaults`                                              | DatePicker, including TextField date pickers | `datePickerContextKey` fields             |
+| `timePickerDefaults`                                              | TimePicker, including TextField time pickers | `timePickerContextKey` fields             |
 
 `shape` sets `rounded` or `square` across buttons, list items, text fields, pagination links, and navigation drawer
 items. It can be combined with size defaults. Textarea fields always use `medium`, regardless of `fieldSize`.
@@ -108,18 +104,12 @@ values such as `false` override the inherited value.
 ```vue
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import {
-  provideButtonDefaults,
-  provideSliderDefaults,
-  provideListItemDefaults,
-  provideSelectDefaults,
-} from '@chillet/m3-vue';
+import { provideButtonDefaults, provideSliderDefaults, provideListItemDefaults } from '@chillet/m3-vue';
 
 const compact = ref(true);
 provideButtonDefaults({ size: computed(() => (compact.value ? 'small' : undefined)) });
 provideSliderDefaults({ wheel: false, valueIndicator: computed(() => !compact.value) });
 provideListItemDefaults({ appearance: 'expressive' });
-provideSelectDefaults({ showSelectedIcon: false });
 </script>
 ```
 
@@ -128,7 +118,18 @@ continue inheriting the others. By contrast, direct `provide(contextKey, value)`
 Spread the injected context when using direct provide if you need to retain its other fields and refs. A provider
 applies to descendants, not to injections in its own setup.
 
-`SelectItem` has an explicit `standard` appearance, so `listItemDefaults.appearance` does not change its appearance.
+### Shared appearance
+
+Set `app.use(M3VuePlugin, { appearance: 'expressive' })` to choose the appearance for Slider and ListItem.
+These are the components with a standard/expressive appearance API.
+`appearanceContextKey` and `provideAppearanceDefaults({ appearance })` provide the same reactive preference for a
+subtree; refs, computed values, and `undefined` inheritance are supported. Component props take precedence over
+component-specific defaults, then the shared appearance preference, then the library's `standard` fallback.
+A component-specific application default therefore also overrides a shared subtree preference; omit that specific
+default when the subtree should control the style.
+
+Appearance does not change sizes, shape, or Button's independent `pressShapeMorph` setting. The selected ListItem
+preset supplies row geometry, and public `--md-item-*` tokens override individual dimensions. `typography-compact.css` changes only typography.
 
 ### Migrating removed options
 

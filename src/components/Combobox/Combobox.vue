@@ -1,8 +1,7 @@
 <script setup lang="ts">
-defineOptions({ inheritAttrs: false });
 import { computed, ref, useAttrs } from 'vue';
 import Select from '@/components/Select/Select.vue';
-import type { SelectModelValue, SelectOption, SelectProps, SelectListSlot } from '@/components/Select/Select.vue';
+import type { SelectModelValue, SelectOption, SelectProps } from '@/components/Select/Select.vue';
 
 export type ComboboxProps = Omit<SelectProps, 'filterable'>;
 
@@ -31,8 +30,6 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
-  list(props: SelectListSlot): any;
-  empty(): any;
   leading(): any;
   prefix(): any;
   suffix(): any;
@@ -43,7 +40,6 @@ defineSlots<{
 
 const modelValue = defineModel<SelectModelValue>();
 const open = defineModel<boolean>('open', { default: false });
-const query = defineModel<string>('query', { default: '' });
 
 const selectRef = ref<SelectInstance>();
 
@@ -83,15 +79,12 @@ defineExpose({
     v-bind="forwardedProps"
     v-model="modelValue"
     v-model:open="open"
-    v-model:query="query"
     filterable
     @change="emit('change', $event)"
     @focus="emit('focus', $event)"
     @blur="emit('blur', $event)"
     @closed="emit('closed')"
   >
-    <template v-if="$slots.list" #list="list"><slot name="list" v-bind="list" /></template>
-    <template v-if="$slots.empty" #empty><slot name="empty" /></template>
     <template v-if="$slots.leading" #leading>
       <slot name="leading" />
     </template>

@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
@@ -81,7 +82,7 @@ try {
   const serverUrl = server.resolvedUrls?.local[0];
   assert(serverUrl, 'Vite did not expose a local development URL');
 
-  await page.goto(new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
+  await openFixture(page, new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
   await page.waitForSelector('.m3-dialog[open] .m3-dialog-content');
   await page.locator(".text-field-outline-alignment-fixture .m3-text-field[data-size='extra-small'] input").focus();
   await waitForNotchTransition(page);

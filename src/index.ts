@@ -11,6 +11,7 @@ export * from './locales';
 export * from './shapes/animatable';
 export * from './shapes/animatableSmall';
 export * from './styles/context';
+export * from './styles/appearance';
 
 // Composables
 export { usePressedState } from './composables/pressedState.ts';

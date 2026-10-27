@@ -1,9 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, provide, ref } from 'vue';
-import { M3VuePlugin } from '@/plugin';
-import { selectContextKey, provideSelectDefaults } from './SelectContext';
-import SelectItem from './SelectItem.vue';
 import { fieldContextKey } from '@/components/TextField/FieldContext';
 import Select, { type SelectModelValue, type SelectOption } from './Select.vue';
 
@@ -106,8 +103,14 @@ function isPopoverOpen(element: HTMLElement | null) {
   return element ? popoverOpenElements.has(element) : false;
 }
 
-function getCurrentOptions(container: HTMLElement) {
-  return Array.from(container.querySelectorAll<HTMLElement>('[role="option"]'));
+function getCurrentMenuItems(container: HTMLElement) {
+  return Array.from(
+    container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"], button[role="menuitemcheckbox"]'),
+  ).filter(
+    (item) =>
+      !item.classList.contains('m3-select-options-leave-active') &&
+      !item.classList.contains('m3-select-options-leave-to'),
+  );
 }
 
 function getSelectInput(container: HTMLElement) {
@@ -234,8 +237,10 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
-    const menuItems = container.querySelectorAll<HTMLButtonElement>('[role="option"]');
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>(
+      'button[role="menuitemradio"], button[role="menuitemcheckbox"]',
+    );
 
     expect(getSelectInput(container)?.value).toBe('');
 
@@ -269,12 +274,11 @@ describe('Select', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
-    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
-    const items = getCurrentOptions(container);
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const items = getCurrentMenuItems(container);
 
     trigger?.dispatchEvent(createMousePointerEvent('pointerdown', 10, 10));
     document.dispatchEvent(createMousePointerEvent('pointermove', 20, 20));
-    await nextTick();
     expect(isPopoverOpen(menu)).toBe(true);
     items[1]?.dispatchEvent(createMousePointerEvent('pointerup', 30, 30));
     await nextTick();
@@ -285,7 +289,6 @@ describe('Select', () => {
     trigger?.dispatchEvent(createMousePointerEvent('pointerdown', 10, 10));
     document.dispatchEvent(createMousePointerEvent('pointermove', 20, 20));
     document.body.dispatchEvent(createMousePointerEvent('pointerup', 30, 30));
-    await nextTick();
     expect(isPopoverOpen(menu)).toBe(false);
     expect(value.value).toBe('pour-over');
 
@@ -322,8 +325,8 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
-    const menuItems = container.querySelectorAll<HTMLButtonElement>('[role="option"]');
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
+    const menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitemcheckbox"]');
 
     expect(isPopoverOpen(menu)).toBe(true);
 
@@ -404,7 +407,7 @@ describe('Select', () => {
     app.mount(container);
     await nextTick();
 
-    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
     const clearButton = container.querySelector<HTMLButtonElement>('[data-part="clear-button"]');
 
     expect(clearButton?.getAttribute('aria-label')).toBe('Clear coffee');
@@ -486,7 +489,7 @@ describe('Select', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLElement>('.m3-select-trigger');
-    const menu = container.querySelector<HTMLElement>('[role="listbox"]');
+    const menu = container.querySelector<HTMLElement>('[role="menu"]');
     const textField = container.querySelector<HTMLElement>('.m3-select-field');
 
     trigger?.click();
@@ -594,7 +597,7 @@ describe('Select', () => {
     await nextTick();
 
     const selectedItemLeading = container.querySelector<HTMLElement>(
-      '[role="option"][data-selected="true"] [data-scope="select-item"][data-part="check"]',
+      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
     );
 
     expect(selectedItemLeading?.textContent?.trim()).toBe('check');
@@ -624,7 +627,7 @@ describe('Select', () => {
     await nextTick();
 
     const selectedItemLeading = container.querySelector<HTMLElement>(
-      '[role="option"][data-selected="true"] .m3-item-leading-slot',
+      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-leading',
     );
 
     expect(selectedItemLeading?.textContent?.trim()).toBe('check');
@@ -661,7 +664,7 @@ describe('Select', () => {
     trigger?.click();
     await nextTick();
 
-    let menuItems = container.querySelectorAll<HTMLButtonElement>('[role="option"]');
+    let menuItems = container.querySelectorAll<HTMLButtonElement>('button[role="menuitemradio"]');
     menuItems[2]?.click();
     await nextTick();
 
@@ -670,10 +673,10 @@ describe('Select', () => {
     await nextTick();
 
     const selectedLeadings = container.querySelectorAll<HTMLElement>(
-      '[role="option"][data-selected="true"] [data-scope="select-item"][data-part="check"]',
+      'button[role="menuitemradio"][data-selected="true"] .m3-select-option-check',
     );
     const selectedLabels = container.querySelectorAll<HTMLElement>(
-      '[role="option"][data-selected="true"] .m3-item-title',
+      'button[role="menuitemradio"][data-selected="true"] .m3-menu-item-label',
     );
 
     expect(selectedLeadings).toHaveLength(1);
@@ -722,8 +725,8 @@ describe('Select', () => {
     await nextTick();
     await nextTick();
 
-    const visibleLabels = getCurrentOptions(container).map((item) =>
-      item.querySelector('.m3-item-title')?.textContent?.trim(),
+    const visibleLabels = getCurrentMenuItems(container).map((item) =>
+      item.querySelector('.m3-menu-item-label')?.textContent?.trim(),
     );
 
     expect(visibleLabels).toEqual(['Colorado', 'Connecticut']);
@@ -732,7 +735,7 @@ describe('Select', () => {
     const finished = new Promise<void>((resolve) => {
       finishExit = resolve;
     });
-    const surface = container.querySelector<HTMLElement>('.m3-popover-surface')!;
+    const surface = container.querySelector<HTMLElement>('.m3-menu-surface')!;
     Object.defineProperty(surface, 'getAnimations', {
       configurable: true,
       value: () => [{ finished } as unknown as Animation],
@@ -744,7 +747,7 @@ describe('Select', () => {
 
     expect(onClosed).not.toHaveBeenCalled();
     expect(
-      getCurrentOptions(container).map((item) => item.querySelector('.m3-item-title')?.textContent?.trim()),
+      getCurrentMenuItems(container).map((item) => item.querySelector('.m3-menu-item-label')?.textContent?.trim()),
     ).toEqual(['Colorado', 'Connecticut']);
 
     finishExit();
@@ -753,7 +756,7 @@ describe('Select', () => {
     await nextTick();
 
     expect(onClosed).toHaveBeenCalledOnce();
-    expect(getCurrentOptions(container)).toHaveLength(stateOptions.length);
+    expect(getCurrentMenuItems(container)).toHaveLength(stateOptions.length);
 
     app.unmount();
   });
@@ -791,112 +794,9 @@ describe('Select', () => {
     await nextTick();
     await nextTick();
 
-    expect(getCurrentOptions(container)).toHaveLength(0);
+    expect(getCurrentMenuItems(container)).toHaveLength(0);
     expect(container.querySelector('.m3-select-empty')?.textContent?.trim()).toBe('No matching options');
 
     app.unmount();
   });
-});
-
-it('exposes only one combobox and keeps ARIA on the native input', async () => {
-  const host = document.createElement('div');
-  document.body.append(host);
-  const app = createApp(() =>
-    h(Select, { options, 'aria-label': 'Choose', class: 'consumer-field', style: 'width: 300px' }),
-  );
-  app.mount(host);
-  await nextTick();
-  expect(host.querySelectorAll('[role="combobox"]')).toHaveLength(1);
-  expect(host.querySelector('[role="combobox"]')?.tagName).toBe('INPUT');
-  expect(host.querySelector<HTMLElement>('.consumer-field')?.style.width).toBe('300px');
-  app.unmount();
-});
-
-describe('selected icon defaults', () => {
-  it.each(['plugin', 'provide'] as const)(
-    'resolves reactive %s defaults, subtree preferences, and explicit props for ordinary and custom lists',
-    async (mode) => {
-      installPopoverPolyfill();
-      const preference = ref<boolean | undefined>(false);
-      const explicit = ref<boolean | undefined>(true);
-      const renderSelect = (id: string, custom: boolean, override?: boolean) =>
-        h(
-          Select,
-          {
-            id,
-            options,
-            modelValue: 'espresso',
-            showSelectedIcon: override,
-          },
-          custom
-            ? {
-                list: () =>
-                  h('div', [
-                    h(SelectItem, { selected: true, leadingIcon: 'local_cafe' }, () => 'Espresso'),
-                    h(
-                      SelectItem,
-                      { selected: true, showSelectedIcon: false, 'data-test': 'item-override' },
-                      () => 'Override',
-                    ),
-                  ]),
-              }
-            : undefined,
-        );
-      const Subtree = {
-        setup() {
-          provideSelectDefaults({ showSelectedIcon: false });
-          return () => h('section', { id: 'subtree' }, [renderSelect('subtree-select', false)]);
-        },
-      };
-      const app = createApp(() =>
-        h('main', [
-          ...[false, true].flatMap((custom) => [
-            h('section', { id: `inherited-${custom}` }, [renderSelect(`select-${custom}`, custom)]),
-            h('section', { id: `explicit-${custom}` }, [renderSelect(`override-${custom}`, custom, explicit.value)]),
-          ]),
-          h(Subtree),
-        ]),
-      );
-      if (mode === 'plugin') app.use(M3VuePlugin, { selectDefaults: { showSelectedIcon: preference } });
-      else app.provide(selectContextKey, { showSelectedIcon: preference });
-      const container = document.createElement('div');
-      document.body.appendChild(container);
-      app.mount(container);
-      await nextTick();
-      const assertMark = (id: string, expected: boolean) => {
-        const option = container.querySelector(`#${id} [role="option"]`)!;
-        expect(option.getAttribute('aria-selected')).toBe('true');
-        expect(Boolean(option.querySelector('[data-part="check"]'))).toBe(expected);
-        expect(option.querySelector('.m3-item-leading-slot')?.textContent?.trim()).toBe(
-          expected ? 'check' : 'local_cafe',
-        );
-      };
-      try {
-        for (const custom of [false, true]) {
-          assertMark(`inherited-${custom}`, false);
-          assertMark(`explicit-${custom}`, true);
-        }
-        preference.value = true;
-        explicit.value = false;
-        await nextTick();
-        for (const custom of [false, true]) {
-          assertMark(`inherited-${custom}`, true);
-          assertMark(`explicit-${custom}`, false);
-        }
-        preference.value = undefined;
-        explicit.value = undefined;
-        await nextTick();
-        for (const custom of [false, true]) {
-          assertMark(`inherited-${custom}`, true);
-          assertMark(`explicit-${custom}`, true);
-        }
-        assertMark('subtree', false);
-        for (const option of container.querySelectorAll('[data-test="item-override"]')) {
-          expect(option.querySelector('[data-part="check"]')).toBeNull();
-        }
-      } finally {
-        app.unmount();
-      }
-    },
-  );
 });

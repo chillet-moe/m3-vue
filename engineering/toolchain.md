@@ -28,4 +28,9 @@ Documentation structure and page authoring conventions are described in [Documen
 
 Run `pnpm exec tsx tests/browser/overlay-appearance/run.ts` to check real menus, nested menus, Select/Combobox dropdowns, Popover, Dialog, and a consumer-owned native dialog in light/dark schemes on two backgrounds. The test covers hover, selection, keyboard navigation, scrolling, viewport-edge placement, shared tokens, and component border overrides. Screenshots and side-by-side comparisons are written to `.tmp/overlay-appearance/`.
 
-For screenshots with Material Symbols, set `OVERLAY_ICON_FONT_PATH` to a local Material Symbols Outlined TTF file. Without it, geometry and interaction assertions still run, but icon ligatures may appear as text. `CHROME_PATH` selects a local Chrome binary.
+Browser runners use `openFixture(page, url)` from `tests/browser/fonts.ts`. It loads the pinned development dependency
+`material-symbols` locally and awaits the actual font face before geometry assertions or screenshots. A missing or
+failed font is a test failure; browser tests do not depend on Google Fonts, another checkout, or font-path environment
+variables. After a reload or when testing an independently created iframe/Document, call `loadTestFonts(pageOrFrame)`.
+Use this helper for new browser fixtures as well. `CHROME_PATH` selects a local Chrome binary.
+

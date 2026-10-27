@@ -6,13 +6,13 @@ Start with the component's semantic role, then choose its visual appearance and 
 
 | Need                                                | Component / choice                                                                  |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Choose a value                                      | Select or Combobox; use SelectItem for custom or virtual result rows.               |
+| Choose a value                                      | Select or Combobox.                                                                 |
 | Invoke a command or open a submenu                  | Menu with MenuItem.                                                                 |
 | Present general list content or navigation          | ListItem; choose button, link, or non-interactive presentation semantics.           |
 | Dense property panels and frequently traversed rows | Standard Slider and ListItem, with compact field sizes.                             |
 | Prominent controls or rich navigation surfaces      | Expressive Slider or ListItem when the larger geometry and motion suit the surface. |
 
-Slider and ListItem default to `appearance="standard"`. Expressive preserves their original appearance. This is not a library-wide variant: use each component's documented API rather than passing `appearance` to every control. For ListItem, standard keeps its active indicator at full width without expansion or press morph. SelectItem uses this restrained presentation for both ordinary and virtual lists; keyboard activity is distinct from selection.
+Slider and ListItem default to `appearance="standard"`. Expressive preserves their original appearance. This is not a library-wide variant: use each component's documented API rather than passing `appearance` to every control. For ListItem, standard keeps its active indicator at full width without expansion or press morph.
 
 Use `size` to choose supported component dimensions, and public tokens for finer adjustments. Small visuals do not require small hit areas: Slider separates thumb and track dimensions from its target size. Pair a Slider with TextField for exact input; see [Slider](../components/slider#precise-numeric-input). TextField, Select and Combobox support the same 32px, 40px and 56px field heights. Allow space for floating labels; see [field spacing](./field-layout).
 

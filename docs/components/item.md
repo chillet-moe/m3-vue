@@ -43,6 +43,27 @@ interaction; passive items render as `div` elements without button, link, focus,
 `ListItem` automatically participates in the [List Grouping](/utilities/list-grouping) CSS utility, which can also group
 other elements and components.
 
+## Sizes
+
+`size` selects row geometry independently of `appearance`. It inherits from `listItemDefaults.size` or
+`provideListItemDefaults({ size })`, with `medium` (56px) as the library default. Helpers merge fields reactively;
+`undefined` restores inheritance. Button size defaults do not control list rows.
+
+| Size          | Minimum height | Block padding | Inline padding | Icon gap | Icon size |
+| ------------- | -------------- | ------------- | -------------- | -------- | --------- |
+| `extra-small` | 36px           | 6px           | 12px           | 8px      | 20px      |
+| `small`       | 48px           | 6px           | 16px           | 12px     | 24px      |
+| `medium`      | 56px           | 6px           | 16px           | 20px     | 24px      |
+| `large`       | 64px           | 8px           | 22px           | 20px     | 24px      |
+| `extra-large` | 80px           | 10px          | 24px           | 24px     | 28px      |
+
+Public tokens override preset values: `--md-item-min-height`, `--md-item-padding-block`, `--md-item-padding-inline`,
+`--md-item-gap`, `--md-item-content-gap`, and `--md-item-icon-size`. Set them on an ancestor or on the component root;
+root values take precedence over inherited values. Components do not assign these public geometry tokens themselves.
+
+Presets specify minimum heights, so descriptions and multiline titles can grow the row. The optional
+`typography-compact.css` preset changes font sizes and line heights independently of these dimensions.
+
 ## Examples
 
 ### Default
@@ -61,13 +82,13 @@ When `ListItem` is acting as navigation, use `RouterLink custom` and feed its `h
 
 ## Appearance
 
-`appearance="standard"` is the default: a fixed whole-row active indicator, compact corners, and no expanding highlight or press shape morph. `appearance="expressive"` retains the expanding indicator and press morph. Appearance does not change button/link/presentation semantics, slots, or layout tokens. Set `listItemDefaults.appearance` in `M3VuePlugin` for an application default, or call `provideListItemDefaults({ appearance: 'expressive' })` for a subtree. An explicit `appearance` prop takes precedence. `SelectItem` has an explicit `standard` appearance and is unaffected by this default.
+`appearance="standard"` is the default: a fixed whole-row active indicator, compact corners, and no expanding highlight or press shape morph. `appearance="expressive"` retains the expanding indicator and press morph. Appearance does not change button/link/presentation semantics, slots, or layout tokens. Set `listItemDefaults.appearance` in `M3VuePlugin` for an application default, or call `provideListItemDefaults({ appearance: 'expressive' })` for a subtree. An explicit `appearance` prop takes precedence.
 
 <DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
 
 Set `appearance="expressive"` on existing items to retain the previous appearance. The `shape` prop controls the expressive shape; standard uses `--md-shape-compact`. `--md-item-indicator-shape` can customize the indicator in either appearance.
 
-Use [SelectItem](./select#selectitem) for selection options and [MenuItem](./menu) for menu commands. ListItem remains a general list entry. See [Styling](../guides/styling) for appearance and density choices.
+Use [MenuItem](./menu) for menu commands. ListItem remains a general list entry. See [Styling](../guides/styling) for appearance and density choices.
 
 ## Selection Controls in List Items {#selection-controls}
 

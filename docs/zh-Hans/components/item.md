@@ -39,6 +39,22 @@ ListItem 提供丰富的列表项布局。默认情况下它可交互，并渲�
 
 `ListItem` 会自动参与 [List Grouping](/zh-Hans/utilities/list-grouping) CSS 工具类的分组；该工具类也可用于分组其他元素和组件。
 
+## 尺寸
+
+`size` 独立于 `appearance`，用于选择行几何尺寸。它继承自 `listItemDefaults.size` 或 `provideListItemDefaults({ size })`，库默认值为 `medium`（56px）。Helper 会响应式地合并字段；设为 `undefined` 可恢复继承。Button 尺寸默认值不会控制列表行。
+
+| 尺寸          | 最小高度 | 块方向内边距 | 行内方向内边距 | 图标间距 | 图标尺寸 |
+| ------------- | -------- | ------------ | -------------- | -------- | -------- |
+| `extra-small` | 36px     | 6px          | 12px           | 8px      | 20px     |
+| `small`       | 48px     | 6px          | 16px           | 12px     | 24px     |
+| `medium`      | 56px     | 6px          | 16px           | 20px     | 24px     |
+| `large`       | 64px     | 8px          | 22px           | 20px     | 24px     |
+| `extra-large` | 80px     | 10px         | 24px           | 24px     | 28px     |
+
+公开 Token 会覆盖预设值：`--md-item-min-height`、`--md-item-padding-block`、`--md-item-padding-inline`、`--md-item-gap`、`--md-item-content-gap` 和 `--md-item-icon-size`。可在祖先元素或组件根元素上设置；根元素上的值优先于继承值。组件本身不会设置这些公开几何 Token。
+
+预设定义的是最小高度，因此描述和多行标题可使行增高。可选的 `typography-compact.css` 预设会独立改变字号和行高，不影响这些尺寸。
+
 ## 示例
 
 ### 默认
@@ -61,9 +77,9 @@ ListItem 提供丰富的列表项布局。默认情况下它可交互，并渲�
 
 <DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
 
-现有条目如需保留之前的外观，可设置 `appearance="expressive"`。`shape` 属性控制 expressive 外观的形状；standard 使用 `--md-shape-compact`。`--md-item-indicator-shape` 可定制两种外观中的指示器。`SelectItem` 明确使用 `standard`，不受 `listItemDefaults` 影响。
+现有条目如需保留之前的外观，可设置 `appearance="expressive"`。`shape` 属性控制 expressive 外观的形状；standard 使用 `--md-shape-compact`。`--md-item-indicator-shape` 可定制两种外观中的指示器。
 
-选择选项请使用 [SelectItem](./select#selectitem)，菜单命令请使用 [MenuItem](./menu)。ListItem 仍用于一般列表项。外观与密度建议请参阅[样式指南](../guides/styling#选择外观与密度)。
+菜单命令请使用 [MenuItem](./menu)。ListItem 仍用于一般列表项。外观与密度建议请参阅[样式指南](../guides/styling#选择外观与密度)。
 
 ## 列表项中的选择控件 {#selection-controls}
 

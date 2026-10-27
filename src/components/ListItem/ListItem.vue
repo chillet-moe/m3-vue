@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { appearanceContextKey } from '@/styles/appearance';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { listItemContextKey } from './ListItemContext';
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
@@ -8,9 +9,14 @@ import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
 import { computed, inject, unref, useSlots } from 'vue';
 import type { ButtonProps } from '@/components/Button';
 
+export type ListItemSize = NonNullable<ButtonProps['size']>;
+
 type ListItemButtonProps = Omit<ButtonProps, 'toggleable' | 'variant' | 'size' | 'pressShapeMorph'>;
 
 export type ListItemProps = ListItemButtonProps & {
+  /** Row geometry preset. Public item tokens override individual dimensions. */
+  size?: ListItemSize;
+
   /** Standard fixed highlight or expressive expanding indicator and press morph. */
   appearance?: 'standard' | 'expressive';
 
@@ -43,7 +49,11 @@ const props = withDefaults(defineProps<ListItemProps>(), {
 
 const context = inject(buttonContextKey, undefined);
 const defaults = inject(listItemContextKey, undefined);
-const appearance = computed(() => props.appearance ?? unref(defaults?.appearance) ?? 'standard');
+const appearanceDefaults = inject(appearanceContextKey, undefined);
+const appearance = computed(
+  () => props.appearance ?? unref(defaults?.appearance) ?? unref(appearanceDefaults?.appearance) ?? 'standard',
+);
+const size = computed(() => props.size ?? unref(defaults?.size) ?? 'medium');
 const interactive = computed(() => props.interactive);
 const shape = computed(() => props.shape ?? unref(context?.shape) ?? 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
@@ -110,7 +120,7 @@ const slotProps = computed(() => ({
     :data-appearance="appearance"
     data-list-group-item
     data-variant="text"
-    data-size="small"
+    :data-size="size"
     :data-shape="shape"
     :data-interactive="interactive ? 'true' : 'false'"
     :data-active="isSelected ? 'true' : undefined"

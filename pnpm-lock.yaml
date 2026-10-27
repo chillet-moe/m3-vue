@@ -76,6 +76,9 @@ importers:
       lightningcss:
         specifier: ^1.32.0
         version: 1.32.0
+      material-symbols:
+        specifier: 0.48.1
+        version: 0.48.1
       oxc-minify:
         specifier: ^0.124.0
         version: 0.124.0(@emnapi/core@1.11.3)(@emnapi/runtime@1.10.0)
@@ -2092,6 +2095,9 @@ packages:
 
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
+
+  material-symbols@0.48.1:
+    resolution: {integrity: sha512-rDJyd4SAEXNSZIX1sBTwRtbOrEzta4aN7hNQPKAhFqOY0yayXIJbXf0R1s8YR+ODbzDD9bdiPCabqrGn5NUikA==}
 
   mdast-util-to-hast@13.2.1:
     resolution: {integrity: sha512-cctsq2wp5vTsLIcaymblUriiTcZd0CwWtCbLvrOzYCDZoWyMNV8sZ7krj09FSnsiJi3WVsHLM4k6Dq/yaPyCXA==}
@@ -4264,6 +4270,8 @@ snapshots:
       source-map-js: 1.2.1
 
   mark.js@8.11.1: {}
+
+  material-symbols@0.48.1: {}
 
   mdast-util-to-hast@13.2.1:
     dependencies:

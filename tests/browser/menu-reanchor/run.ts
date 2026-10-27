@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
@@ -20,7 +21,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 800, height: 600 } });
   const serverUrl = server.resolvedUrls?.local[0];
   assert(serverUrl, 'Vite did not expose a local development URL');
-  await page.goto(new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
+  await openFixture(page, new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
 
   const call = (method: string, ...args: unknown[]) =>
     page.evaluate(({ method, args }) => (window as any).fixture[method](...args), { method, args });

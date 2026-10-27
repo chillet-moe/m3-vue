@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import SliderPreciseValue from '../../../docs/demos/slider/SliderPreciseValue.vue';
-import SelectVirtual from '../../../docs/demos/select/SelectVirtual.vue';
-import ComboboxAsync from '../../../docs/demos/combobox/ComboboxAsync.vue';
 import CheckBoxGroup from '../../../docs/demos/checkbox/CheckBoxGroup.vue';
 import { Select } from '@/components/Select';
 import { ListItem } from '@/components/ListItem';
@@ -19,7 +17,7 @@ import { ListItem } from '@/components/ListItem';
       ]"
       :model-value="1"
     />
-    <SelectVirtual /><ComboboxAsync /><CheckBoxGroup />
+    <CheckBoxGroup />
     <ListItem title="Standard item" data-testid="standard-item" active />
     <ListItem title="Expressive item" data-testid="expressive-item" appearance="expressive" active />
   </section>

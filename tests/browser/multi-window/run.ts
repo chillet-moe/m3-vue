@@ -1,3 +1,4 @@
+import { openFixture } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { chromium, type Browser } from 'playwright';
@@ -14,7 +15,7 @@ try {
   page.setDefaultNavigationTimeout(15000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto(new URL('/tests/browser/multi-window/', server.resolvedUrls!.local[0]).href);
+  await openFixture(page, new URL('/tests/browser/multi-window/', server.resolvedUrls!.local[0]).href);
   const popup = page.waitForEvent('popup');
   await page.evaluate(() => (window as any).multiWindow.open());
   const child = await popup;
@@ -64,18 +65,12 @@ try {
   await child.keyboard.press('Escape');
   assert.equal(await child.evaluate(() => document.activeElement?.classList.contains('menu-trigger')), true);
 
-  const layer = child.getByRole('combobox', { name: 'Window layers', exact: true });
+  const layer = child.getByLabel('Window layers', { exact: true });
   await layer.click();
-  await layer.press('End');
-  await child.waitForFunction(() =>
-    document
-      .querySelector('input[role="combobox"]:focus')
-      ?.getAttribute('aria-activedescendant')
-      ?.endsWith('number-9999'),
-  );
-  assert((await child.getByRole('option').count()) < 40);
-  await layer.press('Enter');
-  assert.equal(await layer.inputValue(), 'Layer 9999');
+  await child.keyboard.press('ArrowDown');
+  await child.keyboard.press('End');
+  await child.keyboard.press('Enter');
+  assert.equal(await layer.inputValue(), 'Layer 39');
 
   // Foreign-realm nodes and CustomEvent must work with the shared module instance.
   await child.evaluate(() => {
@@ -129,10 +124,11 @@ try {
   await page.locator('.menu-trigger').click();
   await page.getByRole('menuitem', { name: 'First', exact: true }).click();
   assert.equal(await page.locator('.selected').textContent(), 'first');
-  const adoptedLayer = page.getByRole('combobox', { name: 'Window layers', exact: true });
+  const adoptedLayer = page.getByLabel('Window layers', { exact: true });
   await adoptedLayer.click();
-  await adoptedLayer.press('Home');
-  await adoptedLayer.press('Enter');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Home');
+  await page.keyboard.press('Enter');
   assert.equal(await adoptedLayer.inputValue(), 'Layer 1');
   await page.locator('.tooltip-trigger').hover();
   await page.getByRole('tooltip').waitFor({ state: 'visible' });
@@ -178,7 +174,7 @@ try {
   const independent = await browser.newPage();
   independent.setDefaultTimeout(7000);
   independent.on('pageerror', (error) => errors.push(error.message));
-  await independent.goto(page.url());
+  await openFixture(independent, page.url());
   await independent.locator('.dialog-trigger').click();
   await page.locator('.dialog-trigger').click();
   await independent.getByRole('button', { name: 'Finish', exact: true }).click();

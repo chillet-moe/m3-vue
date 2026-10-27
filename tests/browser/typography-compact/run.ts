@@ -1,3 +1,4 @@
+import { openFixture, loadTestFonts } from '../fonts';
 import assert from 'node:assert/strict';
 import { existsSync, mkdirSync } from 'node:fs';
 import { chromium, type Browser } from 'playwright';
@@ -12,28 +13,13 @@ try {
   browser = await chromium.launch({ ...(existsSync(chrome) ? { executablePath: chrome } : {}), headless: true });
   const page = await browser.newPage({ viewport: { width: 640, height: 860 }, deviceScaleFactor: 1 });
   await page.addInitScript('window.__name = (fn) => fn');
-  const iconFont = process.env.TYPOGRAPHY_ICON_FONT_PATH;
-  if (iconFont) {
-    await page.route('**/typography-font.woff2', (route) =>
-      route.fulfill({ path: iconFont, contentType: 'font/woff2' }),
-    );
-    await page.addInitScript(() => {
-      document.addEventListener('DOMContentLoaded', () => {
-        const style = document.createElement('style');
-        style.textContent =
-          '@font-face { font-family: "Material Symbols Outlined"; src: url(/typography-font.woff2) format("woff2"); }';
-        document.head.append(style);
-      });
-    });
-  }
   const base = new URL('/tests/browser/typography-compact/', server.resolvedUrls!.local[0]).href;
   const output = '.tmp/typography-compact';
   mkdirSync(output, { recursive: true });
   for (const compact of [false, true]) {
-    await page.goto(base + (compact ? '?compact' : ''));
+    await openFixture(page, base + (compact ? '?compact' : ''));
     const input = page.getByRole('textbox', { name: '名称 / Name', exact: true });
     await input.waitFor();
-    await page.evaluate(() => document.fonts.ready);
     assert.equal(await input.evaluate((e) => getComputedStyle(e).fontSize), compact ? '12px' : '16px');
     assert.equal(await input.evaluate((e) => getComputedStyle(e).lineHeight), compact ? '18px' : '24px');
     const button = page.getByRole('button', { name: '应用 Apply', exact: true });
@@ -63,13 +49,13 @@ try {
     }
   }
   await page.setViewportSize({ width: 1280, height: 860 });
-  await page.goto(base);
+  await openFixture(page, base);
   await page.setContent(
     `<style>body{margin:0;display:flex}iframe{border:0;width:50%;height:860px}</style><iframe src="${base}"></iframe><iframe src="${base}?compact"></iframe>`,
   );
   for (const frame of page.frames().slice(1))
     await frame.getByRole('textbox', { name: '名称 / Name', exact: true }).waitFor();
-  for (const frame of page.frames().slice(1)) await frame.evaluate(() => document.fonts.ready);
+  for (const frame of page.frames().slice(1)) await loadTestFonts(frame);
   await page.screenshot({ path: `${output}/comparison.png` });
   console.log(`Typography, geometry, dropdowns and consumer overrides passed. Screenshots: ${output}`);
 } finally {
