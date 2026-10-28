@@ -581,6 +581,14 @@
     background: var(--_menu-container-color);
     background-clip: padding-box;
     box-shadow: var(--_menu-container-elevation);
+
+    /* Keep native scrolling inside the same painted, rounded surface. */
+    scrollbar-width: thin;
+    scrollbar-color: --translucent(var(--_menu-item-label-color), 0.35) var(--_menu-container-color);
+  }
+
+  .m3-menu-container:hover {
+    scrollbar-color: --translucent(var(--_menu-item-label-color), 0.55) var(--_menu-container-color);
   }
 
   .m3-menu-container:first-of-type {

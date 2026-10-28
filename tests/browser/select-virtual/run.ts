@@ -7,7 +7,13 @@ import { openFixture } from '../fonts';
 const server = await createServer({ server: { host: '127.0.0.1', port: 0 } });
 await server.listen();
 const chrome = process.env.CHROME_PATH ?? '/usr/bin/google-chrome-stable';
-const browser = await chromium.launch({ ...(existsSync(chrome) ? { executablePath: chrome } : {}), headless: true });
+const browser = await chromium.launch({
+  ...(existsSync(chrome) ? { executablePath: chrome } : {}),
+  headless: true,
+  // Exercise visible, space-taking native scrollbars rather than hiding them in screenshots.
+  ignoreDefaultArgs: ['--hide-scrollbars'],
+  args: ['--disable-features=OverlayScrollbar,FluentOverlayScrollbar'],
+});
 const output = '.tmp/select-virtual';
 mkdirSync(output, { recursive: true });
 try {
@@ -163,6 +169,98 @@ try {
   await page.locator('#show-checks').check();
   await coffee.click();
   assert((await listbox.locator('[data-part="option-check"]').count()) > 0);
+  await coffee.press('Escape');
+  for (const scheme of ['light', 'dark'] as const) {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'no-preference' });
+    for (const name of ['Long list', 'Layer']) {
+      const input = page.getByRole('combobox', { name, exact: true });
+      await input.click();
+      await page.mouse.move(1050, 950);
+      const popup = page.getByRole('listbox', { name, exact: true });
+      const scroller = popup.locator('[data-part="container"]');
+      const samples = await scroller.evaluate(async (element) => {
+        const samples = [];
+        const surface = element.parentElement!;
+        for (let i = 0; i < 24; i++) {
+          const style = getComputedStyle(element);
+          samples.push({
+            transform: getComputedStyle(surface).transform,
+            radius: style.borderTopRightRadius,
+            overflowX: element.scrollWidth - element.clientWidth,
+            gutter:
+              (element as HTMLElement).offsetWidth -
+              element.clientWidth -
+              parseFloat(style.borderLeftWidth) -
+              parseFloat(style.borderRightWidth),
+            scrollbar: style.scrollbarColor,
+            background: style.backgroundColor,
+            width: style.scrollbarWidth,
+          });
+          await new Promise(requestAnimationFrame);
+        }
+        return samples;
+      });
+      assert(
+        samples.every((sample) => sample.gutter > 0),
+        'test must exercise classic scrollbars',
+      );
+      assert(
+        samples.every((sample) => sample.width === 'thin' && sample.scrollbar.endsWith(sample.background)),
+        'native scrollbar track matches the menu surface',
+      );
+      assert(
+        samples.every((sample) => sample.overflowX <= 1 && parseFloat(sample.radius) > 0),
+        'rounded scroll container without horizontal overflow throughout opening',
+      );
+      assert(
+        samples.some((sample) => sample.transform !== 'matrix(1, 0, 0, 1, 0, 0)'),
+        'opening animation is sampled',
+      );
+      await scroller.evaluate((element) => {
+        element.scrollTop = 0;
+      });
+      await popup.screenshot({ path: `${output}/${scheme}-${name.replace(' ', '-')}-top.png` });
+      const restingColor = await scroller.evaluate((element) => getComputedStyle(element).scrollbarColor);
+      await scroller.hover();
+      assert.notEqual(
+        await scroller.evaluate((element) => getComputedStyle(element).scrollbarColor),
+        restingColor,
+        'hover strengthens the thumb',
+      );
+      await page.mouse.wheel(0, 800);
+      await page.waitForFunction(
+        (id) => {
+          const scroller = id ? document.getElementById(id)?.querySelector('[data-part="container"]') : null;
+          return (scroller?.scrollTop ?? 0) > 0;
+        },
+        await popup.getAttribute('id'),
+      );
+      await input.press('End');
+      await popup.getByRole('option').last().waitFor();
+      await popup.screenshot({ path: `${output}/${scheme}-${name.replace(' ', '-')}-end.png` });
+      await input.press('Escape');
+      const closing = await scroller.evaluate(async (element) => {
+        const surface = element.parentElement!;
+        const samples = [];
+        for (let i = 0; i < 16; i++) {
+          samples.push({
+            transform: getComputedStyle(surface).transform,
+            overflow: element.scrollWidth - element.clientWidth,
+          });
+          await new Promise(requestAnimationFrame);
+        }
+        return samples;
+      });
+      assert(
+        closing.every((sample) => sample.overflow <= 1),
+        'no horizontal overflow during exit',
+      );
+      assert(
+        closing.some((sample) => sample.transform !== 'matrix(1, 0, 0, 1, 0, 0)'),
+        'exit animation retained',
+      );
+    }
+  }
   assert.deepEqual(errors, []);
   console.log('Select shared presentation, motion, virtual collection, focus and ARIA checks passed.');
 } finally {
