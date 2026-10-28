@@ -1,3 +1,4 @@
+@import '../../styles/scrollbar.css';
 @import '../../styles/typography.css';
 
 @layer tokens {
@@ -349,6 +350,10 @@
   }
 
   .m3-date-picker-calendar {
+    --_scrollbar-container-color: var(--md-color-container);
+    --_scrollbar-content-color: var(--md-color-on-container);
+    @apply surface-scrollbar;
+
     container-type: inline-size;
     overflow: auto;
     padding-inline: var(--_date-picker-calendar-padding);
@@ -448,6 +453,10 @@
   }
 
   .m3-date-picker-list {
+    --_scrollbar-container-color: var(--md-color-container);
+    --_scrollbar-content-color: var(--md-color-on-container);
+    @apply surface-scrollbar;
+
     display: grid;
     align-content: start;
     max-block-size: min(27rem, calc(100dvb - 10rem));

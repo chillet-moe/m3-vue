@@ -1,3 +1,4 @@
+@import '../../styles/scrollbar.css';
 @import '../../styles/typography.css';
 
 @layer tokens {
@@ -238,6 +239,10 @@
   }
 
   .m3-side-sheet-content {
+    --_scrollbar-container-color: var(--_sheet-side-docked-modal-container-color);
+    --_scrollbar-content-color: var(--md-sys-color-on-surface-variant);
+    @apply surface-scrollbar;
+
     @apply body-medium;
 
     box-sizing: border-box;

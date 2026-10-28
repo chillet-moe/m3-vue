@@ -1,3 +1,4 @@
+@import '../../styles/scrollbar.css';
 @import '../../styles/typography.css';
 
 @layer tokens {
@@ -209,6 +210,10 @@
   }
 
   .m3-dialog-content {
+    --_scrollbar-container-color: var(--_dialog-container-color);
+    --_scrollbar-content-color: var(--_dialog-supporting-text-color);
+    @apply surface-scrollbar;
+
     flex: 0 1 auto;
     min-block-size: 0;
     margin-block: calc(-1 * var(--_dialog-content-visual-overflow-inset));

@@ -1,3 +1,4 @@
+@import '../../styles/scrollbar.css';
 @import '../DatePicker/DatePicker.css';
 
 @layer tokens {
@@ -127,6 +128,10 @@
   }
 
   .m3-date-range-picker-calendars {
+    --_scrollbar-container-color: var(--md-color-container);
+    --_scrollbar-content-color: var(--md-color-on-container);
+    @apply surface-scrollbar;
+
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: calc(2 * var(--_date-picker-calendar-padding));

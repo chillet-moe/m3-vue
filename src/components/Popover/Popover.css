@@ -1,3 +1,4 @@
+@import '../../styles/scrollbar.css';
 @import '../../styles/typography.css';
 
 @layer tokens {
@@ -134,6 +135,10 @@
   }
 
   .m3-popover-surface {
+    --_scrollbar-container-color: var(--md-color-container);
+    --_scrollbar-content-color: var(--md-color-on-container);
+    @apply surface-scrollbar;
+
     @apply body-medium;
 
     display: block;

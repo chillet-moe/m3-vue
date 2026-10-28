@@ -1,3 +1,4 @@
+@import '../../styles/scrollbar.css';
 @import '../../styles/typography.css';
 
 @layer tokens {
@@ -110,6 +111,10 @@
   }
 
   .m3-time-picker-surface {
+    --_scrollbar-container-color: var(--md-color-container);
+    --_scrollbar-content-color: var(--md-color-on-container);
+    @apply surface-scrollbar;
+
     display: grid;
     grid-template-rows: auto auto auto;
     box-sizing: border-box;
