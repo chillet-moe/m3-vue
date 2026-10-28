@@ -19,6 +19,14 @@
   }
 
   :where(.m3-time-picker) {
+    --_time-picker-display-font-size: clamp(2.75rem, 16vw, var(--md-sys-typescale-display-large-size));
+    /* The shared row must fit either large digits or two period labels without scaling the clock. */
+    --_time-picker-input-height: --density-height(
+      80,
+      max(var(--_time-picker-display-font-size), calc(2 * var(--md-sys-typescale-title-medium-line-height) + 2px)),
+      57,
+      4
+    );
     --_time-picker-container-color: var(--md-time-picker-container-color, var(--md-sys-color-surface-container-high));
     --_time-picker-container-elevation: var(--md-time-picker-container-elevation, var(--md-sys-elevation-level3));
     --_time-picker-container-shape: var(
@@ -103,10 +111,11 @@
 
   .m3-time-picker-surface {
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto;
     box-sizing: border-box;
     inline-size: 100%;
-    overflow: hidden;
+    max-block-size: calc(100dvb - 2rem);
+    overflow: auto;
     border-radius: var(--_time-picker-container-shape);
     background: var(--md-color-container);
     color: var(--md-color-on-container);
@@ -125,7 +134,7 @@
   .m3-time-picker-header {
     display: grid;
     gap: 0.75rem;
-    padding-block: 1.5rem 0.5rem;
+    padding-block: --density-space(24, 8, 2) --density-space(8, 4, 2);
     padding-inline: 1.5rem;
   }
 
@@ -160,7 +169,7 @@
     display: grid;
     place-items: center;
     min-inline-size: 0;
-    min-block-size: 5rem;
+    min-block-size: var(--_time-picker-input-height);
     border-radius: var(--_shape-control-radius, var(--md-shape-chip));
     background: var(--_time-picker-selector-container-color);
     color: var(--_time-picker-selector-unselected-label-text-color);
@@ -171,7 +180,7 @@
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: clamp(2.75rem, 16vw, var(--md-sys-typescale-display-large-size));
+    font-size: var(--_time-picker-display-font-size);
     line-height: 1;
     font-weight: var(--md-sys-typescale-display-large-weight);
     letter-spacing: 0;
@@ -209,7 +218,7 @@
 
   .m3-time-picker-period-button {
     border: none;
-    min-block-size: 2.5rem;
+    min-block-size: calc((var(--_time-picker-input-height) - 2px) / 2);
     padding-inline: 0.75rem;
     color: var(--_time-picker-selector-unselected-label-text-color);
     font-family:
@@ -238,7 +247,7 @@
   .m3-time-picker-clock {
     display: grid;
     place-items: center;
-    padding-block: 1rem 0.5rem;
+    padding-block: --density-space(16, 4, 2) --density-space(8, 4, 2);
     padding-inline: 1.5rem;
   }
 
@@ -321,7 +330,7 @@
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 4.5rem;
     align-items: start;
     gap: 0.75rem;
-    padding-block: 0.5rem 1rem;
+    padding-block: --density-space(8, 4, 2) --density-space(16, 4, 2);
     padding-inline: 1.5rem;
   }
 
@@ -369,7 +378,7 @@
     box-sizing: border-box;
     inline-size: 100%;
     min-inline-size: 0;
-    block-size: 5rem;
+    block-size: var(--_time-picker-input-height);
     border: 2px solid transparent;
     border-radius: var(--_shape-control-radius, var(--md-shape-chip));
     padding-inline: 0.75rem;
@@ -382,7 +391,7 @@
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: clamp(2.75rem, 16vw, var(--md-sys-typescale-display-large-size));
+    font-size: var(--_time-picker-display-font-size);
     line-height: 1;
     font-weight: var(--md-sys-typescale-display-large-weight);
     letter-spacing: 0;
@@ -393,12 +402,12 @@
     align-self: start;
     display: grid;
     place-items: center;
-    block-size: 5rem;
+    block-size: var(--_time-picker-input-height);
   }
 
   .m3-time-picker-inputs .m3-time-picker-period {
     align-self: start;
-    block-size: 5rem;
+    block-size: var(--_time-picker-input-height);
   }
 
   .m3-time-picker-inputs .m3-time-picker-period-button {
@@ -428,7 +437,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding-block: 0.5rem 0.75rem;
+    padding-block: --density-space(8, 4, 2) --density-space(12, 4, 2);
     padding-inline: 1rem;
   }
 

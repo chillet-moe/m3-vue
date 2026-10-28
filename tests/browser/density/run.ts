@@ -66,7 +66,7 @@ try {
   const pickerActions = () =>
     page
       .locator(
-        '[data-scope="date-picker"][data-part="root"] [data-scope="button"], [data-scope="date-range-picker"][data-part="root"] [data-scope="button"], [data-scope="time-picker"][data-part="root"] [data-scope="button"]',
+        '[data-scope="date-picker"][data-part="root"] [data-scope="button"][data-part="root"], [data-scope="date-range-picker"][data-part="root"] [data-scope="button"][data-part="root"], [data-scope="time-picker"][data-part="root"] [data-scope="button"][data-part="root"]',
       )
       .evaluateAll((elements) => elements.map((el) => getComputedStyle(el).height));
   const initialPickerActions = await pickerActions();
@@ -77,7 +77,13 @@ try {
       .locator('.workspace')
       .evaluate((el, value) => (el as HTMLElement).style.setProperty('--md-density', String(value)), density);
     const current = await measure();
-    assert.deepEqual(await pickerActions(), initialPickerActions);
+    const actions = await pickerActions();
+    actions.forEach((height, index) =>
+      assert.equal(
+        Number.parseFloat(height),
+        Math.max(24, Number.parseFloat(initialPickerActions[index]!) + density * 4),
+      ),
+    );
     const delta = density * 4;
     const floors = [24, 28, 24, 32, 32, 28, 32, 24];
     current.forEach((value, index) => {

@@ -47,6 +47,10 @@ DatePicker is a standalone date surface. TextField uses it automatically for `ty
 `update:open(false)` is emitted when the native popover closes. `closed` follows after the DatePicker-owned exit motion
 finishes. The current calendar view is preserved during the exit and reset afterward.
 
+## Density
+
+DatePicker and DateRangePicker inherit `--md-density`. Date cells keep equal width and height, while calendar width, weekday rows, month/year lists and action spacing adapt to density. Narrow viewports constrain cells to the available column width. Explicit component dimension tokens take precedence.
+
 ## Week Start
 
 `firstDayOfWeek` uses `0` for Sunday through `6` for Saturday. An explicit prop overrides `datePickerContextKey`'s

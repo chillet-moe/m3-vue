@@ -11,7 +11,10 @@
   }
 
   :where(.m3-date-range-picker) {
-    --_date-range-picker-docked-container-width: var(--md-date-range-picker-docked-container-width, 45rem);
+    --_date-range-picker-docked-container-width: var(
+      --md-date-range-picker-docked-container-width,
+      calc(2 * var(--_date-picker-docked-container-width))
+    );
     --_date-range-picker-range-container-color: var(
       --md-date-range-picker-range-container-color,
       var(--md-sys-color-primary-container)
@@ -47,7 +50,7 @@
   .m3-date-range-picker-summary {
     display: grid;
     gap: 0.5rem;
-    padding-block: 1rem 0.75rem;
+    padding-block: --density-space(16, 4, 2) --density-space(12, 4, 2);
     padding-inline: 1.5rem;
     border-block-end: 1px solid --translucent(var(--md-sys-color-on-surface), 0.12);
   }
@@ -78,7 +81,7 @@
     display: grid;
     align-items: center;
     min-inline-size: 0;
-    min-block-size: 3rem;
+    min-block-size: --density-height(48, var(--md-sys-typescale-title-medium-line-height), 24, 4);
     padding-inline: 0.75rem;
     border-radius: var(--_shape-control-radius, var(--md-shape-field));
     color: var(--_date-range-picker-summary-value-text-color);
@@ -126,9 +129,10 @@
   .m3-date-range-picker-calendars {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    padding-inline: 1rem;
-    padding-block: 0.25rem 1rem;
+    gap: calc(2 * var(--_date-picker-calendar-padding));
+    padding-inline: var(--_date-picker-calendar-padding);
+    padding-block: 0.25rem --density-space(16, 4, 2);
+    overflow: auto;
   }
 
   .m3-date-range-picker[data-calendars='1'] .m3-date-range-picker-calendars {
@@ -136,6 +140,7 @@
   }
 
   .m3-date-range-picker-calendar-pane {
+    container-type: inline-size;
     display: grid;
     align-content: start;
     min-inline-size: 0;
@@ -144,7 +149,7 @@
   .m3-date-range-picker-calendar-title {
     display: grid;
     place-items: center;
-    min-block-size: 2.5rem;
+    min-block-size: --density-height(40, var(--_date-picker-docked-menu-button-label-text-line-height), 20, 4);
     color: var(--_date-picker-docked-menu-button-label-text-color);
     font-family:
       var(--_date-picker-docked-menu-button-label-text-font),
@@ -168,7 +173,7 @@
     display: grid;
     place-items: center;
     min-inline-size: 0;
-    block-size: var(--_date-picker-docked-date-container-height);
+    block-size: var(--md-date-picker-docked-date-container-height, min(var(--_date-picker-day-size), calc(100cqi / 7)));
     isolation: isolate;
   }
 

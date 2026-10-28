@@ -46,6 +46,10 @@ TimePicker 是独立的时间选择界面。TextField 在 `type="time"` 时会�
 
 原生弹出层关闭时会触发 `update:open(false)`。如果清理操作需要等到 TimePicker 自身的视觉退出完成后再执行，请使用 `closed`。
 
+## 密度
+
+TimePicker 的数字显示、键盘输入、时段控件及周围间距会继承 `--md-density` 并随之调整。钟面、时钟标签和指针几何尺寸保持不变，以确保指针选择行为一致。
+
 ## 格式和输入模式
 
 `format` 选择 `12h` 或 `24h`；`inputMode` 选择 `clock` 或 `keyboard`。显式属性优先于 `timePickerContextKey` 中对应的值。未设置格式偏好时，独立 TimePicker 遵循配置的区域设置或浏览器区域设置，TextField 内嵌的时间选择器使用 `24h`。未设置输入模式偏好时，12 小时制选择器默认使用时钟，24 小时制选择器默认使用键盘输入。用户可在选择器打开时切换模式。

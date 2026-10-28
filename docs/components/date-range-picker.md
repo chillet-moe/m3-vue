@@ -53,6 +53,10 @@ DateRangePicker is a standalone surface for choosing a start and end date. By de
 `update:open(false)` is emitted when the native popover closes. `closed` follows after the DateRangePicker-owned exit
 motion finishes. The current calendar view is preserved during the exit and reset afterward.
 
+## Density
+
+DatePicker and DateRangePicker inherit `--md-density`. Date cells keep equal width and height, while calendar width, weekday rows, month/year lists and action spacing adapt to density. Narrow viewports constrain cells to the available column width. Explicit component dimension tokens take precedence.
+
 ## Examples
 
 ### Default

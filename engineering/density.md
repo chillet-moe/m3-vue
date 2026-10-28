@@ -30,7 +30,7 @@ its stacked contents; it does not redefine the single-line scale.
 | Pagination                                                                    | Links inherit Button density; ellipsis height follows density without changing its width or icon size.                                                                                      | Ellipsis reserves at least 2dp above and below its icon.                                                        |
 | NavigationDrawer                                                              | Items and section triggers share density-adjusted minimum height.                                                                                                                           | At least 4dp above and below content; wider layout and icons stay unchanged.                                    |
 | NavigationRail                                                                | Expanded item and indicator heights follow row size, density and content. Collapsed row height and outer block padding follow density; the icon target and stacked label retain their size. | Expanded rows reserve at least 4dp above and below content; collapsed rows at least 2dp outer padding per side. |
-| Dialog / Snackbar / DatePicker / TimePicker                                   | Focused interaction and feedback preserve their spacing, including nested actions.                                                                                                          | Density resets to zero; typography still inherits the theme.                                                    |
+| Dialog / Snackbar                                                             | Focused interaction and feedback preserve their spacing, including nested actions.                                                                                                          | Density resets to zero; typography still inherits the theme.                                                    |
 | Checkbox / Radio / Switch / Slider                                            | Control geometry and interaction targets are not spacing to remove.                                                                                                                         | No density transformation.                                                                                      |
 | FAB / FAB menu                                                                | Dedicated action/navigation sizes remain their existing specifications.                                                                                                                     | No additional density transformation.                                                                           |
 | Other containers, sheets, Popover, Tooltip, Badge, progress, layout utilities | Own layout or content determines dimensions.                                                                                                                                                | No global scaling. Nested density-aware components inherit unless a surface explicitly resets density.          |
@@ -55,3 +55,18 @@ indicators, field icons and picker actions aligned with the field's changing
 whitespace. Embedded action targets derive their inline expansion from that
 padding, retaining 4dp to the outline. Explicit field padding tokens still win.
 This rule does not change list indentation or standalone IconButton width presets.
+
+## Picker geometry
+
+DatePicker and DateRangePicker inherit density. Dates start at 48dp square, use
+4dp density steps and retain a text-line-height plus 8dp floor. Calendar widths
+derive from seven cells and surrounding padding, with a 280dp header floor.
+On narrow viewports the default cells fit the available columns; explicit date
+width/height tokens still override these defaults. Range bands use the same
+rendered cell height. Month/year rows and picker actions inherit density.
+
+TimePicker preserves the clock face and pointer coordinate system. Its display
+and input rows share a content-aware 80dp baseline (57dp reference digits), with
+room for the display font or two period labels plus at least 8dp whitespace.
+Header, clock-area, input-area and footer spacing also follow density. The
+surface scrolls when its contents exceed the viewport; the clock is not scaled.

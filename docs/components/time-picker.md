@@ -47,6 +47,10 @@ TimePicker is a standalone time selection surface. TextField uses it automatical
 `update:open(false)` is emitted when the native popover closes. Use `closed` for cleanup that must wait until the
 TimePicker-owned visual exit finishes.
 
+## Density
+
+TimePicker inherits `--md-density` for its numeric display, keyboard inputs, period controls and surrounding spacing. The clock face, clock labels and hand geometry keep their dimensions so pointer selection remains consistent.
+
 ## Format and Input Mode
 
 `format` selects `12h` or `24h`; `inputMode` selects `clock` or `keyboard`. Explicit props override the corresponding

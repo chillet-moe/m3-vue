@@ -39,6 +39,10 @@ import {
 const rowSize = ref<RowSize>('medium');
 provideRowSize(rowSize);
 const open = ref(false);
+const dateOpen = ref(false);
+const rangeOpen = ref(false);
+const timeOpen = ref(false);
+const pickerVariant = ref<'modal' | 'docked'>('modal');
 const menu = ref<{ menuRef?: HTMLDivElement } | null>(null);
 const menuItems = [
   { label: 'Command', leadingIcon: 'edit' },
@@ -125,7 +129,16 @@ const options = [
       </NavigationRail>
     </div>
     <div class="comfortable"><Button data-testid="reset">默认密度 Default density</Button></div>
-    <DatePicker today="2026-10-27" /><DateRangePicker today="2026-10-27" /><TimePicker />
+    <select v-model="pickerVariant" data-testid="picker-variant" aria-label="Picker variant">
+      <option value="modal">Modal</option>
+      <option value="docked">Docked</option>
+    </select>
+    <Button data-testid="open-date" @click="dateOpen = true">Open date</Button>
+    <Button data-testid="open-range" @click="rangeOpen = true">Open range</Button>
+    <Button data-testid="open-time" @click="timeOpen = true">Open time</Button>
+    <DatePicker v-model:open="dateOpen" :variant="pickerVariant" today="2026-10-27" />
+    <DateRangePicker v-model:open="rangeOpen" :variant="pickerVariant" today="2026-10-27" />
+    <TimePicker v-model:open="timeOpen" :variant="pickerVariant" format="12h" input-mode="clock" />
     <Snackbar action-label="Undo">已保存 Saved</Snackbar>
     <Button @click="open = true">Open dialog</Button>
     <Dialog v-model:open="open"

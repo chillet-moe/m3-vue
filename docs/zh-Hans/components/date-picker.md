@@ -46,6 +46,10 @@ DatePicker 是独立的日期选择界面。TextField 在 `type="date"` 和 `typ
 
 原生弹出层关闭时会触发 `update:open(false)`。DatePicker 自身的退出动画结束后会触发 `closed`。退出期间会保留当前日历视图，动画结束后再重置。
 
+## 密度
+
+DatePicker 和 DateRangePicker 继承 `--md-density`。日期单元格保持等宽等高，日历宽度、星期行、月份／年份列表和操作间距会随密度调整。视口较窄时，单元格会限制在可用列宽内。显式设置的组件尺寸 token 优先。
+
 ## 星期起始日
 
 `firstDayOfWeek` 使用 `0` 表示星期日，`6` 表示星期六。显式属性优先于 `datePickerContextKey` 中的 `firstDayOfWeek`；否则根据配置的区域设置或浏览器区域设置确定星期起始日。
