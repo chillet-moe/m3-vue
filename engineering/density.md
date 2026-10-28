@@ -1,7 +1,8 @@
 # Density and theme sizing
 
-Density is a vertical spacing adjustment in 4dp steps. Typography, component size,
-icon size and horizontal spacing are independent. A theme preset selects typography
+Density adjusts vertical spacing in 4dp steps. Fields also adjust horizontal padding
+as described below; other horizontal geometry remains independent. Typography,
+component size and icon size are independent. A theme preset selects typography
 and a density together; it does not change component props.
 
 ## Row sizing ownership
@@ -47,3 +48,10 @@ and preset density. Generated theme CSS contains one resolved token declaration 
 name. Shared component CSS contains no default theme selection. Consumers load one
 theme alongside shared styles. The documentation editor uses the same typography and density presets. Theme generation
 is an internal build step; it is not a consumer API.
+
+Field horizontal padding changes by 2dp per density step, with a 4dp floor;
+extra-small, small and medium start at 8/12/16dp. This keeps Select and Combobox
+indicators, field icons and picker actions aligned with the field's changing
+whitespace. Embedded action targets derive their inline expansion from that
+padding, retaining 4dp to the outline. Explicit field padding tokens still win.
+This rule does not change list indentation or standalone IconButton width presets.

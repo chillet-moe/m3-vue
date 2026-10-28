@@ -101,7 +101,7 @@
     );
     --_outlined-text-field-extra-small-container-horizontal-padding: var(
       --md-outlined-text-field-extra-small-container-horizontal-padding,
-      0.5rem
+      --density-space(8, 4, 2)
     );
     --_outlined-text-field-extra-small-container-vertical-padding: var(
       --md-outlined-text-field-extra-small-container-vertical-padding,
@@ -113,7 +113,7 @@
     );
     --_outlined-text-field-small-container-horizontal-padding: var(
       --md-outlined-text-field-small-container-horizontal-padding,
-      0.75rem
+      --density-space(12, 4, 2)
     );
     --_outlined-text-field-small-container-vertical-padding: var(
       --md-outlined-text-field-small-container-vertical-padding,
@@ -125,7 +125,7 @@
     );
     --_outlined-text-field-medium-container-horizontal-padding: var(
       --md-outlined-text-field-medium-container-horizontal-padding,
-      1rem
+      --density-space(16, 4, 2)
     );
     --_outlined-text-field-medium-container-vertical-padding: var(
       --md-outlined-text-field-medium-container-vertical-padding,
@@ -452,8 +452,9 @@
       calc(var(--_floating-label-inline-start) - 0.25rem - var(--_outline-width))
     );
     --_slot-action-height: max(1.5rem, calc(var(--_container-height) - 2 * var(--_container-vertical-padding)));
-    --_slot-action-space: 0.75rem;
-    --_slot-action-margin: -0.75rem;
+    /* Keep the icon aligned with field padding and its action target 4dp inside the outline. */
+    --_slot-action-space: max(0px, calc(var(--_container-horizontal-padding) - 0.25rem));
+    --_slot-action-margin-block: -0.75rem;
     --_trailing-action-size: 2rem;
     --_trailing-action-margin-block: -0.25rem;
 
@@ -485,8 +486,7 @@
     );
     /* Keep the notch clear of the 0.75rem square corner while preserving the compact input padding. */
     --_floating-label-inline-start: max(var(--_container-horizontal-padding), 0.75rem);
-    --_slot-action-space: 0.25rem;
-    --_slot-action-margin: -0.25rem;
+    --_slot-action-margin-block: -0.25rem;
     --_trailing-action-size: 1.5rem;
     --_trailing-action-margin-block: 0;
   }
@@ -512,8 +512,7 @@
       --md-outlined-text-field-container-vertical-padding,
       var(--_outlined-text-field-small-container-vertical-padding)
     );
-    --_slot-action-space: 0.5rem;
-    --_slot-action-margin: -0.5rem;
+    --_slot-action-margin-block: -0.5rem;
   }
 
   .m3-text-field[data-size='medium'] {
@@ -742,7 +741,7 @@
 
   .m3-text-field-leading-slot > .m3-icon-button,
   .m3-text-field-trailing-slot > .m3-icon-button {
-    margin-block: var(--_slot-action-margin);
+    margin-block: var(--_slot-action-margin-block);
 
     --md-icon-button-container-height: var(--_slot-action-height);
     --md-icon-button-default-leading-space: var(--_slot-action-space);
@@ -758,11 +757,11 @@
   }
 
   .m3-text-field-leading-slot > .m3-icon-button:first-child {
-    margin-inline-start: var(--_slot-action-margin);
+    margin-inline-start: calc(-1 * var(--_slot-action-space));
   }
 
   .m3-text-field-trailing-slot > .m3-icon-button:last-child {
-    margin-inline-end: var(--_slot-action-margin);
+    margin-inline-end: calc(-1 * var(--_slot-action-space));
   }
 
   .m3-text-field-date-picker-button {

@@ -69,6 +69,20 @@ const options = [
       ><Button><input type="radio" value="second" />Second</Button></ButtonGroup
     >
     <div data-testid="field"><TextField label="名称 Name" model-value="示例 Sample" /></div>
+    <section class="field-icon-probes">
+      <div v-for="size in ['extra-small', 'small', 'medium'] as const" :key="size" :data-field-size="size">
+        <TextField :size="size" label="Icons" model-value="Value">
+          <template #leading><Icon name="search" /></template>
+          <template #trailing><Icon name="info" /></template>
+        </TextField>
+        <TextField :size="size" label="Action" model-value="Value">
+          <template #trailing><IconButton icon="close" aria-label="Clear value" /></template>
+        </TextField>
+        <TextField :size="size" label="Date" type="date" model-value="" />
+        <Select :size="size" label="Select" :options="options" />
+        <Combobox :size="size" label="Combobox" :options="options" />
+      </div>
+    </section>
     <Button v-dropdown="menu?.menuRef">Open menu</Button>
     <Menu ref="menu" :items="menuItems" />
     <Select label="分类 Category" :options="options" />

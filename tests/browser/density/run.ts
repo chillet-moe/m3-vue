@@ -88,8 +88,35 @@ try {
       );
       assert.equal(value.font, initial[index]!.font);
       assert.equal(value.line, initial[index]!.line);
-      assert.equal(value.padding, initial[index]!.padding);
+      if (index === 3) assert.equal(Number.parseFloat(value.padding), Math.max(4, 16 + density * 2));
+      else assert.equal(value.padding, initial[index]!.padding);
     });
+    for (const direction of ['ltr', 'rtl']) {
+      const fields = page.locator('.field-icon-probes');
+      await fields.evaluate((el, dir) => el.setAttribute('dir', dir), direction);
+      const geometry = await fields.evaluate((root) =>
+        [...root.querySelectorAll('[data-part="container"][data-scope="text-field"]')].map((container) => {
+          const rect = container.getBoundingClientRect();
+          const style = getComputedStyle(container);
+          const trailing = container.querySelector('[data-part="trailing"]')!;
+          const glyph = trailing.querySelector('[data-scope="icon"], [data-part="icon"]')!;
+          const icon = glyph.getBoundingClientRect();
+          const action = trailing.querySelector('[data-scope="icon-button"]')?.getBoundingClientRect();
+          return {
+            size: container.closest('[data-field-size]')!.getAttribute('data-field-size'),
+            padding: Number.parseFloat(style.paddingInlineEnd),
+            gap: style.direction === 'rtl' ? icon.left - rect.left : rect.right - icon.right,
+            actionInside: !action || (action.left >= rect.left && action.right <= rect.right),
+          };
+        }),
+      );
+      for (const field of geometry) {
+        const base = { 'extra-small': 8, small: 12, medium: 16 }[field.size!];
+        assert.equal(field.padding, Math.max(4, base! + density * 2));
+        assert(Math.abs(field.gap - field.padding) < 0.1, JSON.stringify({ density, direction, field }));
+        assert(field.actionInside, 'Field actions must stay inside the outline');
+      }
+    }
     const auditValues = await audit();
     const auditFloors = [28, 32, 36, 28, 24, 32, 32, 56, 32];
     auditValues.forEach((value, index) => {
