@@ -301,7 +301,7 @@
       var(--md-sys-color-surface-container-low)
     );
     --_assist-chip-label-text-color: var(--md-assist-chip-label-text-color, var(--md-sys-color-on-surface));
-    --_assist-chip-with-icon-icon-size: var(--md-assist-chip-with-icon-icon-size, 1.125rem);
+    --_assist-chip-with-icon-icon-size: var(--md-assist-chip-with-icon-icon-size, --density-icon(18));
     --_assist-chip-with-icon-icon-color: var(--md-assist-chip-with-icon-icon-color, var(--md-sys-color-primary));
     --_assist-chip-flat-disabled-outline-color: var(
       --md-assist-chip-flat-disabled-outline-color,
@@ -422,7 +422,7 @@
       --md-filter-chip-selected-label-text-color,
       var(--md-sys-color-on-secondary-container)
     );
-    --_filter-chip-with-icon-icon-size: var(--md-filter-chip-with-icon-icon-size, 1.125rem);
+    --_filter-chip-with-icon-icon-size: var(--md-filter-chip-with-icon-icon-size, --density-icon(18));
     --_filter-chip-with-leading-icon-selected-leading-icon-color: var(
       --md-filter-chip-with-leading-icon-selected-leading-icon-color,
       var(--md-sys-color-on-secondary-container)
@@ -668,7 +668,7 @@
     );
     --_input-chip-with-leading-icon-leading-icon-size: var(
       --md-input-chip-with-leading-icon-leading-icon-size,
-      1.125rem
+      --density-icon(18)
     );
     --_input-chip-with-leading-icon-selected-leading-icon-color: var(
       --md-input-chip-with-leading-icon-selected-leading-icon-color,
@@ -845,7 +845,7 @@
     );
     --_suggestion-chip-with-leading-icon-leading-icon-size: var(
       --md-suggestion-chip-with-leading-icon-leading-icon-size,
-      1.125rem
+      --density-icon(18)
     );
     --_suggestion-chip-label-text-color: var(
       --md-suggestion-chip-label-text-color,
@@ -1004,7 +1004,7 @@
     --_chip-pressed-label-color: var(--md-chip-pressed-label-color, var(--_chip-label-default-color));
     --_chip-disabled-label-color: var(--md-chip-disabled-label-color, var(--md-sys-color-on-surface));
     --_chip-disabled-label-opacity: var(--md-chip-disabled-label-opacity, 0.38);
-    --_chip-icon-size: var(--md-chip-icon-size, 1.125rem);
+    --_chip-icon-size: var(--md-chip-icon-size, --density-icon(18));
     --_chip-leading-default-color: var(--md-chip-leading-default-color, currentColor);
     --_chip-trailing-default-color: var(--md-chip-trailing-default-color, currentColor);
     --_chip-hover-leading-color: var(--md-chip-hover-leading-color, var(--_chip-leading-default-color));
@@ -2005,10 +2005,6 @@
   }
 
   .m3-chip-icon {
-    inline-size: var(--_chip-icon-size);
-    block-size: var(--_chip-icon-size);
-    font-size: var(--_chip-icon-size);
-
     --md-icon-size: var(--_chip-icon-size);
   }
 

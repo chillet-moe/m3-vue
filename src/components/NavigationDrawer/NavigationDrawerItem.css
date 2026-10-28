@@ -30,7 +30,7 @@
     --_navigation-drawer-item-height: var(--md-navigation-drawer-item-height, var(--_row-height));
     --_navigation-drawer-item-padding-inline: var(--md-navigation-drawer-item-padding-inline, --dp(16));
     --_navigation-drawer-item-gap: var(--md-navigation-drawer-item-gap, --dp(12));
-    --_navigation-drawer-item-icon-size: var(--md-navigation-drawer-item-icon-size, --dp(24));
+    --_navigation-drawer-item-icon-size: var(--md-navigation-drawer-item-icon-size, --density-icon(24));
     --_navigation-drawer-item-indicator-shape: var(
       --md-navigation-drawer-item-indicator-shape,
       var(--_shape-radius, var(--md-shape-indicator))
@@ -284,10 +284,6 @@
   .m3-navigation-drawer-item-icon,
   .m3-navigation-drawer-section-icon,
   .m3-navigation-drawer-section-chevron {
-    font-size: var(--_navigation-drawer-item-icon-size);
-    inline-size: var(--_navigation-drawer-item-icon-size);
-    block-size: var(--_navigation-drawer-item-icon-size);
-
     --md-icon-size: var(--_navigation-drawer-item-icon-size);
 
     transition:

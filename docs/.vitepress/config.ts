@@ -38,6 +38,7 @@ const sidebarLabels: Record<string, string> = {
   Utilities: '工具',
   Elevation: '海拔高度',
   'List Grouping': '列表分组',
+  'Icon sizing': '图标尺寸',
   'Material Shape Paths': 'Material 形状路径',
   'State Layer': '状态层',
 };
@@ -63,6 +64,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     text: 'Appearance and Layout',
     items: [
       { text: 'Customization', link: '/guides/styling' },
+      { text: 'Icon sizing', link: '/guides/icon-sizing' },
       { text: 'Field Layout', link: '/guides/field-layout' },
       { text: 'Interaction Cursors', link: '/guides/interaction-cursors' },
       { text: 'Scrollable Content Visual Overflow', link: '/guides/scrollable-content-visual-overflow' },

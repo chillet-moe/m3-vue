@@ -33,6 +33,10 @@ Icon 组件可直接渲染 Material Symbols 名称，便于在整个组件库和
   <IconDefault />
 </DemoContainer>
 
+## 尺寸与自定义来源
+
+使用[图标尺寸演示](../guides/icon-sizing)对比密度、组件尺寸、来源校准和相对文本的图标。`Icon` 可在默认插槽中接收 SVG；`contentRatio` 可校准 SVG 内部留白，且不会改变布局。
+
 ## 参考
 
 <AnatomyTable scope="icon" />

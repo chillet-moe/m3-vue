@@ -35,7 +35,7 @@
   }
 
   .m3-navigation-rail-item {
-    --_navigation-rail-item-icon-size: var(--md-navigation-rail-item-icon-size, --dp(24));
+    --_navigation-rail-item-icon-size: var(--md-navigation-rail-item-icon-size, --density-icon(24));
     --_navigation-rail-item-icon-touch-target-size: var(--md-navigation-rail-item-icon-touch-target-size, --dp(32));
     --_navigation-rail-item-indicator-shape: var(
       --md-navigation-rail-item-indicator-shape,
@@ -254,12 +254,6 @@
     transition: color var(--md-easing-fast);
 
     --md-icon-size: var(--_navigation-rail-item-icon-size);
-  }
-
-  .m3-navigation-rail-item-icon-glyph {
-    font-size: var(--_navigation-rail-item-icon-size);
-    inline-size: var(--_navigation-rail-item-icon-size);
-    block-size: var(--_navigation-rail-item-icon-size);
   }
 
   .m3-navigation-rail-item-label {

@@ -23,7 +23,7 @@ import {
   rowSizeContextKey,
 } from '@/index';
 import { useDocsCustomization } from '../customization/state';
-import { defaultSettings, fieldGapSettings, typeProperties, typeRoles } from '../customization/catalog';
+import { defaultSettings, fieldGapSettings, iconSettings, typeProperties, typeRoles } from '../customization/catalog';
 import { themePresets, typographyPresets } from '@/theme/presets';
 import { customizationCode } from '../customization/code';
 import { shapeRoles } from '../customization/shapes';
@@ -192,6 +192,20 @@ watch(open, async (value) => {
               />
             </div>
             <p class="customization-code-empty">{{ t('fieldGapHint') }}</p>
+            <div class="customization-fields">
+              <TextField
+                v-for="setting in iconSettings"
+                :key="setting.token"
+                type="number"
+                step="0.05"
+                :min="String(setting.min)"
+                :max="String(setting.max)"
+                :label="t(setting.key)"
+                :model-value="state.tokens[setting.token] ?? ''"
+                :placeholder="setting.fallback"
+                @update:model-value="setToken(setting.token, $event)"
+              />
+            </div>
             <Select
               v-for="name in ['appearance']"
               :key="name"

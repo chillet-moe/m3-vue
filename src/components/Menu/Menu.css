@@ -174,8 +174,8 @@
     --_menus-menu-item-leading-space: var(--md-menus-menu-item-leading-space, --dp(12));
     --_menus-menu-item-trailing-space: var(--md-menus-menu-item-trailing-space, --dp(12));
     --_menus-menu-item-between-space: var(--md-menus-menu-item-between-space, --dp(12));
-    --_menus-menu-item-leading-icon-size: var(--md-menus-menu-item-leading-icon-size, --dp(20));
-    --_menus-menu-item-trailing-icon-size: var(--md-menus-menu-item-trailing-icon-size, --dp(20));
+    --_menus-menu-item-leading-icon-size: var(--md-menus-menu-item-leading-icon-size, --density-icon(20));
+    --_menus-menu-item-trailing-icon-size: var(--md-menus-menu-item-trailing-icon-size, --density-icon(20));
     --_menus-menu-item-shape: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--md-shape-popover-item)));
     --_menus-gap: var(--md-menus-gap, 0.125rem);
     --_menus-group-padding: var(--md-menus-group-padding, --dp(4));

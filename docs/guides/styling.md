@@ -22,6 +22,10 @@ component name links to its full examples and API. Individual examples may set a
 
 <CustomizationGallery />
 
+## Icon sizing
+
+Use **Theme → Icon size multiplier** to scale default component icons and **Icon source content ratio** to calibrate source whitespace. Both settings appear in the generated CSS. Explicit sizes remain authoritative. See the [icon sizing playground](./icon-sizing) for side-by-side comparisons and SVG examples.
+
 ## Theme selection
 
 Import the shared styles and **one** theme at application startup:
@@ -148,7 +152,7 @@ and an extra-small button can reach their content floors at different density va
 
 Density applies to Button, ButtonGroup, IconButton, Chip, fields, InputOtp, ListItem, TreeView, Tabs,
 menu rows (including Select/Combobox menus), Breadcrumb, Pagination and navigation drawer/rail items.
-Density primarily adjusts vertical whitespace. TextField, Select and Combobox also adjust horizontal padding by 2px per step, down to 4px, so field icons follow the surrounding whitespace. Explicit padding tokens override this rule. OTP cell widths, navigation widths, fonts and icons stay unchanged.
+Density primarily adjusts vertical whitespace. TextField, Select and Combobox also adjust horizontal padding by 2px per step, down to 4px, so field icons follow the surrounding whitespace. Explicit padding tokens override this rule. OTP cell widths, navigation widths, fonts stay unchanged. Default action and row icons adjust by 1px per density step within bounded sizes.
 Collapsed rail items retain room for the icon target and stacked label, so they reach their density floor sooner.
 Multiline content can grow taller. Dialog and Snackbar reset inherited density to zero. Date and time pickers inherit density: calendar cells and lists, time inputs and actions adapt, while the time-picker clock keeps its geometry.
 Density does not adjust page gaps or automatically change at breakpoints. Preserve adequate interaction targets

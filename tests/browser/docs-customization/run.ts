@@ -113,6 +113,9 @@ try {
     await panel.getByRole('heading', { name: 'Customize', exact: true }).hover();
     await page.mouse.up();
   }
+  await panel.getByRole('tab', { name: 'Theme', exact: true }).click();
+  await panel.getByRole('spinbutton', { name: 'Icon size multiplier', exact: true }).fill('1.1');
+  await panel.getByRole('spinbutton', { name: 'Icon source content ratio', exact: true }).fill('0.8');
   await panel.getByRole('tab', { name: 'Code', exact: true }).click();
   const setupCode = panel.locator('.customization-code').first();
   assert((await setupCode.textContent())?.includes('themes/compact.css'));
@@ -121,6 +124,8 @@ try {
   assert((await setupCode.textContent())?.includes('"shape": "minimal"'));
   assert((await panel.locator('.customization-code').last().textContent())?.includes('--md-density: 3;'));
   const cssCode = await panel.locator('.customization-code').last().textContent();
+  assert(cssCode?.includes('--md-icon-scale: 1.1;'));
+  assert(cssCode?.includes('--md-icon-content-ratio: 0.8;'));
   assert(cssCode?.includes('--md-field-row-gap: 24px;'));
   assert(cssCode?.includes('--md-field-column-gap: 12px;'));
   assert(cssCode?.includes('row-gap: var(--md-field-row-gap);'));

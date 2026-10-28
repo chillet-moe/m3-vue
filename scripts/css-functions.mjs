@@ -9,6 +9,9 @@ export const cssFunctions = {
   '--density-space': (base, minimum = '0', step = '4') =>
     `max(${Number(minimum) / 16}rem, calc(${Number(base) / 16}rem + var(--md-density, 0) * ${Number(step) / 16}rem))`,
   '--density-height': densityHeight,
+  // Icon content changes more slowly than control whitespace; explicit sizes bypass this helper.
+  '--density-icon': (base) =>
+    `calc(clamp(${Math.max(16, Number(base) - 4) / 16}rem, calc(${Number(base) / 16}rem + var(--md-density, 0) * 0.0625rem), ${(Number(base) + 4) / 16}rem) * clamp(0.5, var(--md-icon-scale, 1), 2))`,
   // Buttons and connected groups share typography and geometry for each size.
   '--action-height': (base) => {
     const [role, content] = {
@@ -18,7 +21,11 @@ export const cssFunctions = {
       96: ['headline-small', 32],
       136: ['headline-large', 40],
     }[base];
-    return densityHeight(base, `max(var(--md-sys-typescale-${role}-line-height), ${content / 16}rem)`, content);
+    return densityHeight(
+      base,
+      `max(var(--md-sys-typescale-${role}-line-height), var(--_button-icon-size, --density-icon(${content})))`,
+      content,
+    );
   },
   // Preserve the input color channels and replace its opacity.
   '--translucent': (color, opacity) => `rgba(from ${color} r g b / ${opacity})`,

@@ -229,6 +229,7 @@
   }
 
   .m3-menu-item-suffix {
+    --md-icon-size: var(--_menus-menu-item-trailing-icon-size);
     min-inline-size: 0;
     display: inline-flex;
     align-items: center;

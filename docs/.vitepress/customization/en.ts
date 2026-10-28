@@ -15,6 +15,8 @@ export const en = {
   storageError: 'Changes are applied but could not be saved on this device.',
   fieldRowGap: 'Field row gap',
   fieldColumnGap: 'Field column gap',
+  iconScale: 'Icon size multiplier',
+  iconContentRatio: 'Icon source content ratio',
   fieldGapHint: 'Apply these gaps to the parent layout using the example in Code.',
   density: 'Density',
   densityHint: 'Negative values compress; positive values add space.',

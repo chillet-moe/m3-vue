@@ -81,15 +81,26 @@ try {
     actions.forEach((height, index) =>
       assert.equal(
         Number.parseFloat(height),
-        Math.max(24, Number.parseFloat(initialPickerActions[index]!) + density * 4),
+        Math.max(24, Number.parseFloat(initialPickerActions[index]!) + density * 4) + Math.max(0, Math.min(4, density)),
       ),
     );
     const delta = density * 4;
+    const iconDelta = Math.max(-4, Math.min(4, density));
+    const contentDelta = [
+      Math.max(0, iconDelta),
+      iconDelta,
+      Math.max(0, Math.min(4, density) - 2),
+      0,
+      0,
+      0,
+      0,
+      Math.max(0, iconDelta),
+    ];
     const floors = [24, 28, 24, 32, 32, 28, 32, 24];
     current.forEach((value, index) => {
       assert.equal(
         value.height,
-        Math.max(floors[index]!, initial[index]!.height + delta),
+        Math.max(floors[index]!, initial[index]!.height + delta) + contentDelta[index]!,
         `height ${index} at ${density}`,
       );
       assert.equal(value.font, initial[index]!.font);
@@ -124,14 +135,15 @@ try {
       }
     }
     const auditValues = await audit();
-    const auditFloors = [28, 32, 36, 28, 24, 32, 32, 56, 32];
+    const auditFloors = [28, 32, 36, 28, 24, 28, 28, 56, 32];
     auditValues.forEach((value, index) => {
       assert.equal(
         value.height,
-        Math.max(auditFloors[index]!, initialAudit[index]!.height + delta),
+        Math.max(auditFloors[index]!, initialAudit[index]!.height + delta) +
+          ([4, 5, 6].includes(index) ? Math.max(0, iconDelta) : 0),
         `audit ${index} at ${density}`,
       );
-      assert.equal(value.width, initialAudit[index]!.width, `width ${index} at ${density}`);
+      if (index !== 4) assert.equal(value.width, initialAudit[index]!.width, `width ${index} at ${density}`);
       assert.equal(value.font, initialAudit[index]!.font);
     });
     assert.equal(
@@ -170,7 +182,11 @@ try {
       const rows = await audit();
       assert.equal((await measure())[5]!.height, Math.max(28, baseHeight + density * 4), `tree ${size}`);
       for (const index of [5, 6, 8])
-        assert.equal(rows[index]!.height, Math.max(32, baseHeight + density * 4), `navigation ${index} ${size}`);
+        assert.equal(
+          rows[index]!.height,
+          Math.max(index === 8 ? 32 : 32 + density, baseHeight + density * 4),
+          `navigation ${index} ${size}`,
+        );
       await page.getByRole('button', { name: 'Open menu', exact: true }).click();
       const command = page.getByRole('menuitem').filter({ has: page.getByText('Command', { exact: true }) });
       await command.waitFor();

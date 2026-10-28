@@ -35,6 +35,10 @@ follow the surrounding text size and weight.
   <IconDefault />
 </DemoContainer>
 
+## Sizing and custom sources
+
+Use the [icon sizing playground](../guides/icon-sizing) to compare density, component sizes, source calibration and text-relative icons. `Icon` accepts an SVG in its default slot; `contentRatio` calibrates its internal whitespace without changing layout.
+
 ## Reference
 
 <AnatomyTable scope="icon" />

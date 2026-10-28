@@ -14,6 +14,8 @@ export const zh = {
   noCss: '导入的主题已提供这些样式。',
   fieldRowGap: '字段行间距',
   fieldColumnGap: '字段列间距',
+  iconScale: '图标尺寸倍率',
+  iconContentRatio: '图标来源内容比例',
   fieldGapHint: '请使用“代码”页签中的示例，将这些间距应用到父级布局。',
   reset: '重置全部',
   close: '关闭自定义面板',

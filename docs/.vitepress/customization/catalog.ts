@@ -5,9 +5,14 @@ export const fieldGapSettings = [
   { key: 'fieldRowGap', token: '--md-field-row-gap' },
   { key: 'fieldColumnGap', token: '--md-field-column-gap' },
 ] as const;
+export const iconSettings = [
+  { key: 'iconScale', token: '--md-icon-scale', fallback: '1', min: 0.5, max: 2 },
+  { key: 'iconContentRatio', token: '--md-icon-content-ratio', fallback: '0.8333333333', min: 0.1, max: 1 },
+] as const;
 export const tokenNames = new Set([
   ...Object.keys(typographyPresets.default),
   ...shapeRoles.map((role) => role.token),
+  ...iconSettings.map((setting) => setting.token),
   ...fieldGapSettings.map((setting) => setting.token),
 ]);
 export const typeRoles = ['display', 'headline', 'title', 'body', 'label'].flatMap((role) =>

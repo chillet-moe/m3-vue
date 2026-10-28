@@ -5,7 +5,10 @@ type IconWeight = number | string | 'inherit';
 
 type IconProps = {
   /** The name of the Material Symbols Outlined icon to display. */
-  name: string;
+  name?: string;
+
+  /** Nominal visible fraction of the source canvas (0.1–1). Defaults to 5/6 for Symbols and 1 for SVG slots. */
+  contentRatio?: number;
 
   /** An explicit Icon size that overrides the variant default and --md-icon-size context. Accepts any valid CSS font-size value, such as "24px", "1.5em". */
   size?: string;
@@ -17,7 +20,11 @@ type IconProps = {
   variant?: 'standalone' | 'inline';
 };
 
-const { size, weight, variant = 'standalone' } = defineProps<IconProps>();
+const { size, weight, contentRatio, variant = 'standalone' } = defineProps<IconProps>();
+const slots = defineSlots<{
+  /** Alternative SVG source. Takes precedence over name; set its contentRatio when the viewBox includes whitespace. */
+  default?(): any;
+}>();
 
 const resolvedWeight = computed<IconWeight>(() => {
   const defaultWeight = variant === 'standalone' ? 400 : 'inherit';
@@ -29,6 +36,9 @@ const iconStyle = computed<CSSProperties>(() => {
 
   if (size) {
     style.fontSize = size;
+  }
+  if (contentRatio !== undefined) {
+    style['--md-icon-content-ratio'] = String(contentRatio);
   }
 
   if (resolvedWeight.value === 'inherit') {
@@ -42,7 +52,18 @@ const iconStyle = computed<CSSProperties>(() => {
 </script>
 
 <template>
-  <span class="m3-icon" data-scope="icon" data-part="root" :data-variant="variant" :style="iconStyle">{{ name }}</span>
+  <span
+    class="m3-icon"
+    data-scope="icon"
+    data-part="root"
+    :data-variant="variant"
+    :data-source="slots.default ? 'svg' : 'symbol'"
+    :style="iconStyle"
+  >
+    <span class="m3-icon-glyph" data-part="glyph"
+      ><slot>{{ name }}</slot></span
+    >
+  </span>
 </template>
 
 <style src="./Icon.css"></style>

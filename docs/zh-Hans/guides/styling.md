@@ -21,6 +21,10 @@ import CustomizationGallery from '../../.vitepress/components/CustomizationGalle
 
 <CustomizationGallery />
 
+## 图标尺寸
+
+使用 **主题 → 图标尺寸倍率** 缩放默认组件图标，并使用 **图标来源内容比例** 校准来源留白。这两项设置都会显示在生成的 CSS 中。显式尺寸仍具有优先权。请参阅[图标尺寸演示](./icon-sizing)，查看并排对比和 SVG 示例。
+
 ## 主题选择
 
 在应用启动时导入共享样式和**一个**主题：
@@ -124,11 +128,11 @@ provideRowSize('extra-small');
 }
 ```
 
-每个负向等级最多减少 4dp 垂直留白，正向等级则增加留白。文字和图标尺寸不变。组件会在内容与最小内边距需要剩余空间时停止收缩，因此没有通用的最小高度或数值范围限制。显式尺寸 token 优先级更高。
+每个负向等级最多减少 4dp 垂直留白，正向等级则增加留白。文字尺寸不变。组件会在内容与最小内边距需要剩余空间时停止收缩，因此没有通用的最小高度或数值范围限制。显式尺寸 token 优先级更高。
 
 密度会调整各组件当前所选的尺寸，不会让所有组件达到统一的目标高度。请先选择组件尺寸：菜单行和超小号按钮可能会在不同的密度值下达到各自的内容下限。
 
-密度适用于 Button、ButtonGroup、IconButton、Chip、字段、InputOtp、ListItem、TreeView、Tabs、菜单行（包括 Select/Combobox 菜单）、Breadcrumb、Pagination，以及 NavigationDrawer/NavigationRail 条目。密度主要调整垂直留白。TextField、Select 和 Combobox 也会按每级调整 2px 水平内边距，最低为 4px，使字段图标与周围留白协调。显式设置的内边距 token 优先。OTP 单元格宽度、导航宽度、字体和图标尺寸均保持不变。折叠状态的 NavigationRail 条目会保留图标交互目标和堆叠标签所需的空间，因此会更早达到密度下限。多行内容可能增高。Dialog 和 Snackbar 会将继承的密度重置为 0。日期和时间选择器会继承密度：日历单元格和列表、时间输入及操作会随密度调整，而时间选择器钟面的几何尺寸保持不变。密度不会调整页面间距，也不会随断点自动变化。为触屏选择紧凑布局时，请保留足够大的交互目标。
+密度适用于 Button、ButtonGroup、IconButton、Chip、字段、InputOtp、ListItem、TreeView、Tabs、菜单行（包括 Select/Combobox 菜单）、Breadcrumb、Pagination，以及 NavigationDrawer/NavigationRail 条目。密度主要调整垂直留白。TextField、Select 和 Combobox 也会按每级调整 2px 水平内边距，最低为 4px，使字段图标与周围留白协调。显式设置的内边距 token 优先。OTP 单元格宽度、导航宽度和字体保持不变。默认操作图标和行图标会随每级密度调整 1px，并限制在一定尺寸范围内。折叠状态的 NavigationRail 条目会保留图标交互目标和堆叠标签所需的空间，因此会更早达到密度下限。多行内容可能增高。Dialog 和 Snackbar 会将继承的密度重置为 0。日期和时间选择器会继承密度：日历单元格和列表、时间输入及操作会随密度调整，而时间选择器钟面的几何尺寸保持不变。密度不会调整页面间距，也不会随断点自动变化。为触屏选择紧凑布局时，请保留足够大的交互目标。
 
 ## 排版
 

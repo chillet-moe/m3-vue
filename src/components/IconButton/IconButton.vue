@@ -94,14 +94,7 @@ const slots = defineSlots<{
     ref="rootRef"
     v-bind="rootProps"
   >
-    <Icon
-      v-if="props.icon"
-      :name="props.icon"
-      :class="['m3-icon-button-icon']"
-      data-scope="icon-button"
-      data-part="icon"
-      :disabled="disabled"
-    />
+    <Icon v-if="props.icon" :name="props.icon" data-scope="icon-button" data-part="icon" :disabled="disabled" />
     <slot name="default" :disabled="disabled" />
   </component>
 </template>

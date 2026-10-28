@@ -10,12 +10,11 @@
 
 .m3-icon-morph {
   --m3-icon-morph-weight: 400;
-  --m3-icon-morph-optical-size: 24;
 
   font-variation-settings:
     'FILL' var(--m3-morph-selected),
     'wght' var(--m3-icon-morph-weight),
-    'opsz' var(--m3-icon-morph-optical-size);
+    'opsz' var(--m3-icon-morph-optical-size, clamp(20, calc(1em / 1px), 48));
   transition: font-variation-settings var(--md-easing);
 }
 

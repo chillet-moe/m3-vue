@@ -21,3 +21,5 @@ await import('./picker-density/run');
 await import('./shapes/run');
 
 await import('./select-virtual/run');
+
+await import('./icon-sizing/run');

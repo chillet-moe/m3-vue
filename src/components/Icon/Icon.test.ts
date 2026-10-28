@@ -35,7 +35,7 @@ describe('Icon', () => {
 
     expect(root?.dataset.variant).toBe('standalone');
     expect(root?.style.fontSize).toBe('');
-    expect(iconStyles).toContain('font-size: var(--md-icon-size, 1.5rem)');
+    expect(iconStyles).toContain('font-size: var(--md-icon-size, --density-icon(24))');
 
     app.unmount();
   });

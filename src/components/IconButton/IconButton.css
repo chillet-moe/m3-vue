@@ -279,7 +279,8 @@
       --md-icon-button-container-height,
       --density-height(40, var(--_icon-button-icon-size), 24)
     );
-    --_icon-button-icon-size: var(--md-icon-button-icon-size, 1.5rem);
+    --_icon-button-icon-size: var(--md-icon-button-icon-size, --density-icon(24));
+    --md-icon-size: var(--_icon-button-icon-size);
     --_icon-button-narrow-leading-space: var(--md-icon-button-narrow-leading-space, 0.25rem);
     --_icon-button-narrow-trailing-space: var(--md-icon-button-narrow-trailing-space, 0.25rem);
     --_icon-button-default-leading-space: var(--md-icon-button-default-leading-space, 0.5rem);
@@ -866,7 +867,7 @@
       --md-icon-button-xsmall-container-height,
       --density-height(32, var(--_icon-button-icon-size), 20)
     );
-    --_icon-button-xsmall-icon-size: var(--md-icon-button-xsmall-icon-size, 1.25rem);
+    --_icon-button-xsmall-icon-size: var(--md-icon-button-xsmall-icon-size, --density-icon(20));
     --_icon-button-xsmall-narrow-leading-space: var(--md-icon-button-xsmall-narrow-leading-space, 0.25rem);
     --_icon-button-xsmall-narrow-trailing-space: var(--md-icon-button-xsmall-narrow-trailing-space, 0.25rem);
     --_icon-button-xsmall-default-leading-space: var(--md-icon-button-xsmall-default-leading-space, 0.375rem);
@@ -906,7 +907,7 @@
       --md-icon-button-small-container-height,
       --density-height(40, var(--_icon-button-icon-size), 24)
     );
-    --_icon-button-small-icon-size: var(--md-icon-button-small-icon-size, 1.5rem);
+    --_icon-button-small-icon-size: var(--md-icon-button-small-icon-size, --density-icon(24));
     --_icon-button-small-narrow-leading-space: var(--md-icon-button-small-narrow-leading-space, 0.25rem);
     --_icon-button-small-narrow-trailing-space: var(--md-icon-button-small-narrow-trailing-space, 0.25rem);
     --_icon-button-small-default-leading-space: var(--md-icon-button-small-default-leading-space, 0.5rem);
@@ -946,7 +947,7 @@
       --md-icon-button-medium-container-height,
       --density-height(56, var(--_icon-button-icon-size), 24)
     );
-    --_icon-button-medium-icon-size: var(--md-icon-button-medium-icon-size, 1.5rem);
+    --_icon-button-medium-icon-size: var(--md-icon-button-medium-icon-size, --density-icon(24));
     --_icon-button-medium-narrow-leading-space: var(--md-icon-button-medium-narrow-leading-space, 0.75rem);
     --_icon-button-medium-narrow-trailing-space: var(--md-icon-button-medium-narrow-trailing-space, 0.75rem);
     --_icon-button-medium-default-leading-space: var(--md-icon-button-medium-default-leading-space, 1rem);
@@ -986,7 +987,7 @@
       --md-icon-button-large-container-height,
       --density-height(96, var(--_icon-button-icon-size), 32)
     );
-    --_icon-button-large-icon-size: var(--md-icon-button-large-icon-size, 2rem);
+    --_icon-button-large-icon-size: var(--md-icon-button-large-icon-size, --density-icon(32));
     --_icon-button-large-narrow-leading-space: var(--md-icon-button-large-narrow-leading-space, 1rem);
     --_icon-button-large-narrow-trailing-space: var(--md-icon-button-large-narrow-trailing-space, 1rem);
     --_icon-button-large-default-leading-space: var(--md-icon-button-large-default-leading-space, 2rem);
@@ -1026,7 +1027,7 @@
       --md-icon-button-xlarge-container-height,
       --density-height(136, var(--_icon-button-icon-size), 40)
     );
-    --_icon-button-xlarge-icon-size: var(--md-icon-button-xlarge-icon-size, 2.5rem);
+    --_icon-button-xlarge-icon-size: var(--md-icon-button-xlarge-icon-size, --density-icon(40));
     --_icon-button-xlarge-narrow-leading-space: var(--md-icon-button-xlarge-narrow-leading-space, 2rem);
     --_icon-button-xlarge-narrow-trailing-space: var(--md-icon-button-xlarge-narrow-trailing-space, 2rem);
     --_icon-button-xlarge-default-leading-space: var(--md-icon-button-xlarge-default-leading-space, 3rem);
@@ -1662,17 +1663,5 @@
         );
       }
     }
-  }
-
-  .m3-icon-button-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: var(--_icon-button-icon-size);
-    height: var(--_icon-button-icon-size);
-    font-size: var(--_icon-button-icon-size);
-
-    --md-icon-size: var(--_icon-button-icon-size);
   }
 }

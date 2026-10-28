@@ -134,7 +134,7 @@ const shape = useShape(() => props.shape);
       <span class="m3-navigation-rail-item-icon-layer" data-scope="navigation-rail-item" data-part="icon-layer">
         <span class="m3-navigation-rail-item-icon" data-scope="navigation-rail-item" data-part="icon">
           <slot name="icon" v-bind="slotProps">
-            <Icon v-if="props.icon" :name="props.icon" class="m3-icon-morph m3-navigation-rail-item-icon-glyph" />
+            <Icon v-if="props.icon" :name="props.icon" class="m3-icon-morph" />
           </slot>
         </span>
       </span>
