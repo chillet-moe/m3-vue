@@ -194,6 +194,7 @@ watch(stickyEnabled, async () => {
 }
 
 .demo-source :deep(pre) {
+  scrollbar-color: --translucent(currentColor, 0.35) transparent;
   overflow: auto;
   padding: 1.25rem;
   margin: 0;

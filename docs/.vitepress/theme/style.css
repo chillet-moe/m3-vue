@@ -26,6 +26,7 @@
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   scrollbar-width: thin;
+  scrollbar-color: --translucent(var(--vp-c-text-1), 0.35) var(--vp-c-bg);
 }
 
 *,
@@ -44,6 +45,9 @@ html:not(.dark) {
 }
 
 body {
+  /* Nested document surfaces keep their own painted backgrounds, including gradients and code themes.
+     Component-owned scroll regions override this inherited color with their own surface rules. */
+  scrollbar-color: --translucent(var(--vp-c-text-1), 0.35) transparent;
   background: var(--vp-c-bg);
 }
 
@@ -137,6 +141,7 @@ body {
 }
 
 .vp-doc pre:not(:where(.vp-raw, .vp-raw *)) {
+  scrollbar-color: --translucent(currentColor, 0.35) transparent;
   border: 1px solid --translucent(var(--vp-c-divider), 0.75);
   border-radius: var(--docs-shape-surface);
 }
