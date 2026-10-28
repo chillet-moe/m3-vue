@@ -133,7 +133,8 @@
     transform: translateX(0) scale(1);
   }
 
-  .m3-select-option[data-has-option-leading='true'][data-selected='true'] .m3-select-option-icon {
+  .m3-select-option[data-show-selected-icon='true'][data-has-option-leading='true'][data-selected='true']
+    .m3-select-option-icon {
     opacity: 0;
     transform: translateX(0.25rem) scale(0.72);
   }
@@ -153,8 +154,10 @@
     transition: transform 220ms var(--md-timing-function-fast-spatial);
   }
 
-  .m3-select-option:not([data-has-option-leading='true'])[data-selected='true'] .m3-menu-item-content,
-  .m3-select-option:not([data-has-option-leading='true'])[data-selected='true'] .m3-menu-item-suffix {
+  .m3-select-option[data-show-selected-icon='true']:not([data-has-option-leading='true'])[data-selected='true']
+    .m3-menu-item-content,
+  .m3-select-option[data-show-selected-icon='true']:not([data-has-option-leading='true'])[data-selected='true']
+    .m3-menu-item-suffix {
     transform: translateX(calc(var(--_menus-menu-item-leading-icon-size) + var(--_menus-menu-item-between-space)));
   }
 

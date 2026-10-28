@@ -60,6 +60,18 @@ default from `fieldContextKey`; it adds to any parent gap. See the
 `menuColor` overrides the shared Menu color preference, with `standard` as the fallback. Configure the plugin's
 `menuColor` or provide `menuDefaultsContextKey` to share a palette across menus. See [Menu](./menu#color).
 
+### Selected checkmarks
+
+Set `:show-selected-icon="false"` on Select or Combobox to hide checkmarks while keeping the selected background,
+leading content, and selection semantics. Rows without leading content reserve no checkmark space and their text
+does not shift on selection. This also applies to `SelectItem` rows in a custom `list` slot.
+
+For an application default, use `app.use(M3VuePlugin, { selectDefaults: { showSelectedIcon: false } })`.
+For a subtree, call `provideSelectDefaults({ showSelectedIcon: ref(false) })` in setup. The public
+`selectContextKey` is also available for direct provision. Precedence is instance prop → subtree defaults →
+application defaults → `true`. `provideSelectDefaults` inherits omitted fields; refs remain reactive and setting
+a preference or prop to `undefined` restores inheritance.
+
 ## External virtual lists
 
 The `list` slot replaces only the option rendering. Select retains the Menu surface, scroll container,

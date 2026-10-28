@@ -58,6 +58,7 @@ app.use(M3VuePlugin, {
 | `iconButtonSize`                           | IconButton                                                          |
 | `sliderDefaults`                           | Slider 尺寸、外观、滚轮输入和数值指示器                             |
 | `listItemDefaults`                         | ListItem 尺寸和外观                                                 |
+| `selectDefaults`                           | Select 和 Combobox 的选中标记（`showSelectedIcon`）                 |
 | `appearance`                               | Slider 和 ListItem 的共享外观                                       |
 | `menuColor`                                | Menu、Select 和 Combobox 菜单                                       |
 | `datePickerDefaults`、`timePickerDefaults` | 日期与时间选择器偏好                                                |

@@ -3,7 +3,7 @@ import { computed, inject, ref, useSlots, watch } from 'vue';
 import MenuItem from '@/components/Menu/MenuItem.vue';
 import Icon from '@/components/Icon/Icon.vue';
 import type { SelectOption } from './Select.vue';
-import { selectContextKey } from './SelectContext';
+import { selectItemContextKey } from './SelectItemContext';
 
 export type SelectItemProps = {
   /** Index in the list slot's filtered entries, not the source options array. */
@@ -12,9 +12,10 @@ export type SelectItemProps = {
   option: SelectOption;
 };
 const { option, index } = defineProps<SelectItemProps>();
-const context = inject(selectContextKey);
+const context = inject(selectItemContextKey);
 if (!context) throw new Error('SelectItem must be rendered inside Select or Combobox.');
 const slots = useSlots();
+const showSelectedIcon = context.showSelectedIcon;
 const selected = computed(() => context.isOptionSelected(option));
 // A recycled/just-mounted virtual row is already selected; only a subsequent
 // selection change should run MenuItem's selection keyframes.
@@ -41,14 +42,21 @@ defineSlots<{
     data-scope="select"
     data-part="option"
     :data-has-option-leading="option.leadingIcon || slots.leading ? 'true' : undefined"
+    :data-show-selected-icon="showSelectedIcon ? 'true' : undefined"
     :data-selection-motion="animateSelection ? undefined : 'none'"
     :disabled="option.disabled"
     :selected="selected"
     :close-on-select="false"
   >
-    <template #leading>
+    <template v-if="showSelectedIcon || option.leadingIcon || slots.leading" #leading>
       <span class="m3-select-option-leading-content" data-scope="select" data-part="option-leading-content">
-        <span class="m3-select-option-check" data-scope="select" data-part="option-check" aria-hidden="true">
+        <span
+          v-if="showSelectedIcon"
+          class="m3-select-option-check"
+          data-scope="select"
+          data-part="option-check"
+          aria-hidden="true"
+        >
           <Icon name="check" />
         </span>
 

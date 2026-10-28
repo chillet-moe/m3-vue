@@ -56,6 +56,12 @@ Select 提供锚定菜单以供选择一个或多个选项，并支持可选图�
 
 `menuColor` 会覆盖共享的 Menu 颜色偏好，内置回退值为 `standard`。可通过插件的 `menuColor` 配置，或提供 `menuDefaultsContextKey`，让菜单共享调色板。详见[Menu 颜色](./menu#颜色)。
 
+### 选中标记
+
+在 Select 或 Combobox 上设置 `:show-selected-icon="false"`，可隐藏选中标记，同时保留选中背景、前置内容和选择语义。没有前置内容的行不会预留选中标记的空间，选中时文本也不会偏移。使用自定义 `list` 插槽中的 `SelectItem` 行时同样适用。
+
+如需设置应用级默认值，可使用 `app.use(M3VuePlugin, { selectDefaults: { showSelectedIcon: false } })`。如需设置子树默认值，可在 setup 中调用 `provideSelectDefaults({ showSelectedIcon: ref(false) })`。也可直接使用公开的 `selectContextKey` 提供默认值。优先级为：实例 prop → 子树默认值 → 应用默认值 → `true`。`provideSelectDefaults` 会继承未指定的字段；ref 保持响应性，将偏好值或 prop 设为 `undefined` 即可恢复继承。
+
 ## 外部虚拟列表
 
 `list` 插槽只替换选项的呈现方式。Select 仍负责菜单界面、滚动容器、选择、筛选、键盘导航和关闭生命周期。使用每个条目的 `option` 及其在**筛选结果中的索引**渲染 `SelectItem`，并以 `option.value` 作为 key。选项值必须唯一且稳定。`SelectItem` 与内置列表使用相同的 MenuItem 呈现方式，包括图标、选中动效和首尾选项的形状。其 `default`、`leading` 和 `trailing` 插槽会接收 `{ option, selected }`。

@@ -135,6 +135,34 @@ try {
   await rows.first().click();
   assert.equal(await rows.first().evaluate((el) => getComputedStyle(el, '::before').transitionDuration), '0s');
   await page.screenshot({ path: `${output}/select.png` });
+  await coffee.press('Escape');
+  await page.locator('#show-checks').uncheck();
+  await coffee.click();
+  assert.equal(await listbox.locator('[data-part="option-check"]').count(), 0);
+  const leading = rows.nth(1).locator('[data-part="option-icon"]');
+  assert.equal(await leading.evaluate((el) => getComputedStyle(el).opacity), '1');
+  assert.equal(
+    await rows
+      .nth(1)
+      .locator('[data-part="content"]')
+      .evaluate((el) => getComputedStyle(el).transform),
+    'none',
+  );
+  await coffee.press('Escape');
+  await find.fill('Layer 1');
+  await find.press('Home');
+  const plain = page
+    .getByRole('listbox', { name: 'Find layers', exact: true })
+    .getByRole('option', { name: 'Layer 1', exact: true });
+  await plain.waitFor();
+  assert.equal(await plain.locator('[data-part="leading"]').count(), 0);
+  assert.equal(await plain.locator('[data-part="content"]').evaluate((el) => getComputedStyle(el).transform), 'none');
+  await find.press('Enter');
+  assert.equal(await plain.locator('[data-part="content"]').evaluate((el) => getComputedStyle(el).transform), 'none');
+  await find.press('Escape');
+  await page.locator('#show-checks').check();
+  await coffee.click();
+  assert((await listbox.locator('[data-part="option-check"]').count()) > 0);
   assert.deepEqual(errors, []);
   console.log('Select shared presentation, motion, virtual collection, focus and ARIA checks passed.');
 } finally {

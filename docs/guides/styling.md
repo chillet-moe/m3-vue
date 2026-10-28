@@ -62,6 +62,7 @@ app.use(M3VuePlugin, {
 | `iconButtonSize`                           | IconButton                                                                             |
 | `sliderDefaults`                           | Slider size, appearance, wheel input and value indicator                               |
 | `listItemDefaults`                         | ListItem size and appearance                                                           |
+| `selectDefaults`                           | Select and Combobox selected checkmarks (`showSelectedIcon`)                           |
 | `appearance`                               | Shared Slider and ListItem appearance                                                  |
 | `menuColor`                                | Menu and Select/Combobox menus                                                         |
 | `datePickerDefaults`, `timePickerDefaults` | Picker preferences                                                                     |

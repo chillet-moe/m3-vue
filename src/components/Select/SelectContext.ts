@@ -1,7 +1,18 @@
-import type { InjectionKey } from 'vue';
-import type { UseSelectReturn } from '@/composables/selectTypes';
+import { computed, inject, provide, unref, type InjectionKey, type MaybeRef } from 'vue';
 
-/** Internal presentation bridge; Select remains the only selection/navigation owner. */
-export const selectContextKey: InjectionKey<
-  Pick<UseSelectReturn, 'optionProps' | 'isOptionSelected'> & { customList: boolean }
-> = Symbol('m3-select');
+/** Presentation defaults for descendant Select and Combobox components. */
+export interface SelectContext {
+  showSelectedIcon?: MaybeRef<boolean | undefined>;
+}
+
+export const selectContextKey: InjectionKey<SelectContext> = Symbol('SelectContext');
+
+/** Merge preferences with the enclosing provider; undefined inherits. */
+export function provideSelectDefaults(defaults: SelectContext): SelectContext {
+  const inherited = inject(selectContextKey, undefined);
+  const context: SelectContext = {
+    showSelectedIcon: computed(() => unref(defaults.showSelectedIcon) ?? unref(inherited?.showSelectedIcon)),
+  };
+  provide(selectContextKey, context);
+  return context;
+}

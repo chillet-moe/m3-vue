@@ -15,7 +15,7 @@ type SelectInstance = InstanceType<typeof Select> & {
   toggle?: () => void;
 };
 
-const props = defineProps<ComboboxProps>();
+const props = withDefaults(defineProps<ComboboxProps>(), { showSelectedIcon: undefined });
 const attrs = useAttrs();
 const forwardedProps = computed(() => ({
   ...attrs,

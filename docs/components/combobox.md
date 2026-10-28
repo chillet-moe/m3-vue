@@ -49,6 +49,8 @@ intended density and add clearance only when its floating label needs it. See th
 Combobox wraps Select and shares its `select` scope. See [Select Anatomy](./select).
 :::
 
+`showSelectedIcon` and `selectDefaults` are shared with Select; see [selected checkmarks](./select#selected-checkmarks).
+
 ## Virtual lists and external search
 
 Combobox forwards `list`, `v-model:query`, `filterMode`, and `resolveLabel` to Select. Use the same `SelectItem`

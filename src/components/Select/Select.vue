@@ -3,12 +3,25 @@ import { provideShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
 
-import { TransitionGroup, computed, provide, onBeforeUnmount, ref, useAttrs, useId, useSlots, watch } from 'vue';
+import {
+  TransitionGroup,
+  computed,
+  inject,
+  provide,
+  unref,
+  onBeforeUnmount,
+  ref,
+  useAttrs,
+  useId,
+  useSlots,
+  watch,
+} from 'vue';
 import Icon from '@/components/Icon/Icon.vue';
 import Menu, { type MenuColor } from '@/components/Menu/Menu.vue';
 import MenuContainer from '@/components/Menu/MenuContainer.vue';
 import SelectItem from './SelectItem.vue';
 import { selectContextKey } from './SelectContext';
+import { selectItemContextKey } from './SelectItemContext';
 import type { SelectListSlot } from '@/composables/selectTypes';
 import { useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
 import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
@@ -85,6 +98,9 @@ export type SelectProps = {
   /** Enables multi-select behavior. */
   multiple?: boolean;
 
+  /** Show selected checkmarks; inherits Select defaults, then falls back to true. */
+  showSelectedIcon?: boolean;
+
   /** Shows a trailing button that clears the current selection. */
   clearable?: boolean;
 
@@ -139,6 +155,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   size: undefined,
   labelClearance: undefined,
   multiple: false,
+  showSelectedIcon: undefined,
   clearable: false,
   clearLabel: undefined,
   menuColor: undefined,
@@ -147,6 +164,9 @@ const props = withDefaults(defineProps<SelectProps>(), {
   filterPlaceholder: undefined,
   filterNoResultsText: undefined,
 });
+
+const defaults = inject(selectContextKey, undefined);
+const showSelectedIcon = computed(() => props.showSelectedIcon ?? unref(defaults?.showSelectedIcon) ?? true);
 
 const effectiveSize = useFieldSize(() => props.size);
 const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
@@ -228,7 +248,8 @@ const select = useSelect({
   hideMenu: () => menuRef.value?.hide(),
 });
 
-provide(selectContextKey, {
+provide(selectItemContextKey, {
+  showSelectedIcon,
   optionProps: select.optionProps,
   isOptionSelected: select.isOptionSelected,
   customList: Boolean(slots.list),
