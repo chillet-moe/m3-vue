@@ -35,6 +35,24 @@ export function provideDocsCustomization() {
       ...state.tokens,
     };
   });
+  const appliedTokens = computed<Record<string, string>>(() => {
+    // Markdown and VitePress search are not Vue library components. Keep their shape adapter here.
+    const minimal = state.defaults.shape === 'minimal';
+    const sharp = state.defaults.shape === 'sharp';
+    return {
+      ...resolvedTokens.value,
+      '--docs-shape-surface': sharp ? '0px' : minimal ? '0.25rem' : 'var(--md-shape-card)',
+      '--docs-shape-overlay': sharp ? '0px' : minimal ? '0.375rem' : 'var(--md-shape-overlay)',
+      '--docs-shape-control': sharp
+        ? '0px'
+        : minimal
+          ? '0.1875rem'
+          : state.defaults.shape === 'square'
+            ? 'var(--md-shape-field-square)'
+            : 'var(--md-shape-field)',
+      '--docs-shape-compact': sharp ? '0px' : minimal ? '0.125rem' : 'var(--md-shape-compact)',
+    };
+  });
   const clearTypography = () => {
     for (const name of Object.keys(state.tokens)) if (name in typographyPresets.default) delete state.tokens[name];
   };
@@ -130,12 +148,12 @@ export function provideDocsCustomization() {
     }
     const apply = () => {
       for (const [name, previous] of original)
-        if (!(name in resolvedTokens.value)) {
+        if (!(name in appliedTokens.value)) {
           if (previous.value) root.style.setProperty(name, previous.value, previous.priority);
           else root.style.removeProperty(name);
           original.delete(name);
         }
-      for (const [name, value] of Object.entries(resolvedTokens.value)) {
+      for (const [name, value] of Object.entries(appliedTokens.value)) {
         if (!original.has(name))
           original.set(name, {
             value: root.style.getPropertyValue(name),

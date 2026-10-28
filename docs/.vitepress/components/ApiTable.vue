@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { Button } from '@/index';
 import { computed, onMounted, ref, useId } from 'vue';
 import allMeta from 'virtual:component-meta';
 import { useLocalStorage } from '@vueuse/core';
-import { Icon } from '@/components/Icon';
 import { useData } from 'vitepress';
 
 import ControlItem from './ControlItem.vue';
@@ -135,9 +135,11 @@ function getSectionContentId(key: string) {
               <h2 :id="getSectionHeadingId(section.key)" class="api-table-title">
                 {{ section.title }}
               </h2>
-              <button
-                class="api-table-toggle m3-state-layer"
-                type="button"
+              <Button
+                class="api-table-toggle"
+                variant="text"
+                size="small"
+                :leading-icon="isSectionCollapsed(section.key) ? 'expand_more' : 'expand_less'"
                 :aria-expanded="!isSectionCollapsed(section.key)"
                 :aria-controls="getSectionContentId(section.key)"
                 :aria-label="
@@ -151,9 +153,8 @@ function getSectionContentId(key: string) {
                 "
                 @click="toggleSection(section.key)"
               >
-                <Icon class="api-table-toggle-icon ignore-header" name="expand_more" aria-hidden="true" />
                 <span class="api-table-count ignore-header">{{ section.rows.length }}</span>
-              </button>
+              </Button>
             </div>
 
             <div v-show="!isSectionCollapsed(section.key)" :id="getSectionContentId(section.key)">
@@ -286,7 +287,7 @@ function getSectionContentId(key: string) {
 
   overflow: clip;
   border: 1px solid var(--docs-table-divider);
-  border-radius: 1.25rem;
+  border-radius: var(--docs-shape-surface);
   background: var(--vp-c-bg-soft);
 }
 
@@ -309,35 +310,8 @@ function getSectionContentId(key: string) {
 }
 
 .api-table-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
   flex: none;
-  inline-size: fit-content;
-  min-inline-size: 0;
-  margin: 0;
-  border: 0;
-  border-radius: 999px;
-  padding-block: 0.25rem;
-  padding-inline: 0.5rem;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
-}
-
-.api-table-toggle:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 2px;
-}
-
-.api-table-toggle-icon {
-  font-size: 1.125rem;
-  color: var(--vp-c-text-3);
-  transition: transform 0.15s;
-}
-
-.api-table-toggle[aria-expanded='true'] .api-table-toggle-icon {
-  transform: rotate(180deg);
+  justify-self: start;
 }
 
 .api-table-title {
@@ -364,7 +338,7 @@ function getSectionContentId(key: string) {
   justify-content: center;
   min-inline-size: 1.375rem;
   block-size: 1.375rem;
-  border-radius: 999px;
+  border-radius: var(--docs-shape-compact);
   padding-inline: 0.375rem;
   color: var(--vp-c-text-2);
   font-size: 0.6875rem;
@@ -443,7 +417,7 @@ function getSectionContentId(key: string) {
   display: inline-flex;
   align-items: center;
   inline-size: fit-content;
-  border-radius: 999px;
+  border-radius: var(--docs-shape-compact);
   padding-block: 0.25rem;
   padding-inline: 0.625rem;
   font-size: 0.75rem;

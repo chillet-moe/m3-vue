@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Card } from '@/index';
+import { ListItem } from '@/index';
 import { useOutline } from '../composables/outline';
 import { useLocaleNavigation } from '../composables/nav';
 
@@ -17,18 +17,18 @@ function isActiveOutlineLink(link: string) {
       <h2 class="docs-outline-title">{{ label }}</h2>
 
       <nav class="docs-outline-links" :aria-label="isChinese ? '本页目录' : 'On this page'">
-        <Button
+        <ListItem
           v-for="item in items"
           :key="item.link"
           class="docs-outline-link"
-          variant="text"
           size="small"
           :href="item.link"
           :style="{ '--outline-depth': item.depth }"
-          :data-active="isActiveOutlineLink(item.link) ? 'true' : 'false'"
+          :active="isActiveOutlineLink(item.link)"
+          :aria-current="isActiveOutlineLink(item.link) ? 'location' : undefined"
         >
           {{ item.title }}
-        </Button>
+        </ListItem>
       </nav>
     </div>
   </aside>
@@ -63,15 +63,6 @@ function isActiveOutlineLink(link: string) {
 .docs-outline-links {
   display: grid;
   gap: 0.375rem;
-}
-
-.docs-outline-link[data-active='true'],
-.docs-outline-link:hover {
-  color: var(--md-sys-color-primary);
-}
-
-.docs-outline-link[data-active='true'] {
-  background: --translucent(var(--md-sys-color-primary), 0.12);
 }
 
 .docs-outline-link {

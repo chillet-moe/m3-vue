@@ -381,7 +381,7 @@ onMounted(() => {
 
   overflow: clip;
   border: 1px solid var(--docs-table-divider);
-  border-radius: 1.25rem;
+  border-radius: var(--docs-shape-surface);
   background: var(--vp-c-bg-soft);
 }
 
@@ -422,7 +422,7 @@ onMounted(() => {
   justify-content: center;
   min-inline-size: 1.375rem;
   block-size: 1.375rem;
-  border-radius: 999px;
+  border-radius: var(--docs-shape-compact);
   padding-inline: 0.375rem;
   color: var(--vp-c-text-2);
   font-size: 0.6875rem;
@@ -529,7 +529,7 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   inline-size: fit-content;
-  border-radius: 999px;
+  border-radius: var(--docs-shape-compact);
   padding-block: 0.25rem;
   padding-inline: 0.625rem;
   color: var(--vp-c-text-2);
@@ -543,7 +543,7 @@ onMounted(() => {
 [data-styling-preview='true'] {
   outline: 2px dashed var(--md-sys-color-primary, #6750a4) !important;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: var(--docs-shape-compact);
   box-shadow: 0 0 0 3px --translucent(var(--md-sys-color-primary, #6750a4), 0.12) !important;
 }
 </style>

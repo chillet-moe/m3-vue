@@ -64,6 +64,102 @@ try {
   await search.click();
   await searchInput.waitFor();
   await page.keyboard.press('Escape');
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await openFixture(page, `${base}/components/button`);
+  const demo = page.locator('.demo-surface').first();
+  await demo.waitFor();
+  assert.equal(await demo.getAttribute('data-scope'), 'card');
+  assert.equal(await demo.evaluate((el) => getComputedStyle(el).borderTopLeftRadius), '0px');
+  assert.equal(
+    await page
+      .locator('.api-table-panel')
+      .first()
+      .evaluate((el) => getComputedStyle(el).borderTopLeftRadius),
+    '0px',
+  );
+  const source = page.locator('.demo-toolbar').first().getByRole('button');
+  await source.click();
+  assert.equal(await source.getAttribute('aria-expanded'), 'true');
+  await page.locator('.demo-source pre').first().waitFor();
+  const sourceSurface = page
+    .locator('.demo-surface')
+    .filter({ has: page.locator('.demo-source') })
+    .first();
+  const sourceGeometry = await sourceSurface.evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    const parts = ['.demo-preview', '.demo-toolbar', '.demo-source'].map((selector) => {
+      const child = el.querySelector(selector)!.getBoundingClientRect();
+      return { left: child.left - rect.left, right: rect.right - child.right };
+    });
+    return { parts, shadow: getComputedStyle(el).boxShadow };
+  });
+  for (const part of sourceGeometry.parts) {
+    assert(Math.abs(part.left - 1) < 0.1 && Math.abs(part.right - 1) < 0.1, JSON.stringify(sourceGeometry));
+  }
+  assert(sourceGeometry.shadow.includes('inset'), 'The outlined surface must retain its border.');
+  await source.click();
+
+  await page.evaluate(() =>
+    localStorage.setItem(
+      'm3-vue-docs-theme',
+      JSON.stringify({
+        theme: { preset: 'default' },
+        defaults: { shape: 'minimal' },
+      }),
+    ),
+  );
+  await page.reload();
+  await page.locator('.demo-surface[data-shape="minimal"]').first().waitFor();
+  await page.locator('.search-label').click();
+  await page.getByRole('searchbox').waitFor();
+  assert.equal(
+    await page.locator('.VPLocalSearchBox .shell').evaluate((el) => getComputedStyle(el).borderTopLeftRadius),
+    '6px',
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(
+    await page.locator('.VPLocalSearchBox .shell').evaluate((el) => getComputedStyle(el).borderTopLeftRadius),
+    '0px',
+  );
+  await page.keyboard.press('Escape');
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  for (const path of ['/getting-started', '/zh-Hans/getting-started']) {
+    await openFixture(page, `${base}${path}`);
+    const codeBlock = page.locator('.vp-doc div[class*="language-"]').first();
+    const copy = codeBlock.locator('button.copy');
+    for (const dark of [false, true]) {
+      await page.evaluate((dark) => document.documentElement.classList.toggle('dark', dark), dark);
+      await copy.focus();
+      const before = await copy.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          image: style.backgroundImage,
+          size: style.backgroundSize,
+          radius: style.borderRadius,
+          width: el.getBoundingClientRect().width,
+        };
+      });
+      assert.notEqual(before.image, 'none');
+      assert.equal(Number.parseFloat(before.size), 20);
+      await copy.click();
+      await codeBlock.locator('button.copy.copied').waitFor();
+      const after = await copy.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          image: style.backgroundImage,
+          size: style.backgroundSize,
+          radius: style.borderRadius,
+          width: el.getBoundingClientRect().width,
+        };
+      });
+      assert.notEqual(after.image, before.image);
+      assert.equal(after.size, before.size);
+      assert.equal(after.radius, before.radius);
+      assert.equal(after.width, before.width);
+      assert((await page.evaluate(() => navigator.clipboard.readText())).trim().length > 0);
+      await codeBlock.locator('button.copy.copied').waitFor({ state: 'hidden' });
+    }
+  }
   assert.deepEqual(errors, []);
   console.log('Home components, theme inheritance, responsive search and shortcuts passed.');
 } finally {

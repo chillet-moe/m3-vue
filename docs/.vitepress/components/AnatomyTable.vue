@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/index';
 import { useOverlays } from '@/overlays';
 const { showSnackbar } = useOverlays();
 import { computed, ref, useId, watch } from 'vue';
@@ -102,9 +103,11 @@ const headingId = computed(() => {
           <span class="anatomy-header-title">{{ isZhHans ? '结构' : 'Anatomy' }}</span>
         </h2>
 
-        <button
-          class="anatomy-toggle m3-state-layer"
-          type="button"
+        <Button
+          class="anatomy-toggle"
+          variant="text"
+          size="small"
+          :leading-icon="collapsed ? 'expand_more' : 'expand_less'"
           :aria-expanded="!collapsed"
           :aria-controls="`anatomy-parts-${partSelectorId}`"
           :aria-label="
@@ -118,9 +121,8 @@ const headingId = computed(() => {
           "
           @click="toggleCollapsed"
         >
-          <Icon class="anatomy-toggle-icon" name="expand_more" aria-hidden="true" />
           <span class="anatomy-part-count">{{ anatomyData.length }}</span>
-        </button>
+        </Button>
 
         <CheckBox
           v-model:checked="highlightEnabled"
@@ -201,7 +203,7 @@ const headingId = computed(() => {
 
   overflow: clip;
   border: 1px solid var(--docs-table-divider);
-  border-radius: 1.25rem;
+  border-radius: var(--docs-shape-surface);
   background: var(--vp-c-bg-soft);
 }
 
@@ -230,34 +232,8 @@ const headingId = computed(() => {
 }
 
 .anatomy-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
   flex: none;
-  min-inline-size: 0;
-  margin: 0;
-  border: 0;
-  border-radius: 999px;
-  padding-block: 0.25rem;
-  padding-inline: 0.5rem;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
-}
-
-.anatomy-toggle:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 2px;
-}
-
-.anatomy-toggle-icon {
-  font-size: 1.125rem;
-  color: var(--vp-c-text-3);
-  transition: transform 0.15s;
-}
-
-.anatomy-toggle[aria-expanded='true'] .anatomy-toggle-icon {
-  transform: rotate(180deg);
+  justify-self: start;
 }
 
 .anatomy-header-title {
@@ -274,7 +250,7 @@ const headingId = computed(() => {
   justify-content: center;
   min-inline-size: 1.375rem;
   block-size: 1.375rem;
-  border-radius: 999px;
+  border-radius: var(--docs-shape-compact);
   padding-inline: 0.375rem;
   color: var(--vp-c-text-2);
   font-size: 0.6875rem;
@@ -392,7 +368,7 @@ const headingId = computed(() => {
 [data-anatomy-highlight='true'] {
   outline: 2px dashed var(--md-sys-color-tertiary, #6750a4) !important;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: var(--docs-shape-compact);
   filter: brightness(2) !important;
 }
 </style>

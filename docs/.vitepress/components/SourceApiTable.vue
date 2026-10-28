@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { Button } from '@/index';
 import { computed, useId } from 'vue';
 import allMeta from 'virtual:source-api-meta';
 import { useLocalStorage } from '@vueuse/core';
-import { Icon } from '@/components/Icon';
 import { useData } from 'vitepress';
 
 type SourceApiFieldMeta = {
@@ -82,9 +82,11 @@ function getSectionContentId(name: string) {
 
       <template v-if="sections.length > 0">
         <section v-for="section in sections" :key="section.name" class="source-api-section">
-          <button
-            class="source-api-toggle m3-state-layer"
-            type="button"
+          <Button
+            class="source-api-toggle"
+            variant="text"
+            size="small"
+            :leading-icon="collapsed ? 'expand_more' : 'expand_less'"
             :aria-expanded="!collapsed"
             :aria-controls="getSectionContentId(section.name)"
             :aria-label="
@@ -98,10 +100,9 @@ function getSectionContentId(name: string) {
             "
             @click="toggleCollapsed"
           >
-            <Icon class="source-api-toggle-icon" name="expand_more" aria-hidden="true" />
             <span class="source-api-title">{{ section.name }}</span>
             <span class="source-api-count">{{ section.fields.length }}</span>
-          </button>
+          </Button>
 
           <div v-show="!collapsed" :id="getSectionContentId(section.name)" class="source-api-scroll">
             <table class="source-api-grid">
@@ -152,7 +153,7 @@ function getSectionContentId(name: string) {
 .source-api-signature {
   padding: 0.875rem 1rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 1rem;
+  border-radius: var(--docs-shape-surface);
   background: var(--vp-c-bg-soft);
 }
 
@@ -181,34 +182,8 @@ function getSectionContentId(name: string) {
 }
 
 .source-api-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  inline-size: fit-content;
-  min-inline-size: 0;
-  margin: 0;
-  border: 0;
-  border-radius: 999px;
-  padding-block: 0.375rem;
-  padding-inline: 0.625rem;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
-}
-
-.source-api-toggle:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
-  outline-offset: 2px;
-}
-
-.source-api-toggle-icon {
-  font-size: 1.125rem;
-  color: var(--vp-c-text-3);
-  transition: transform 0.15s;
-}
-
-.source-api-toggle[aria-expanded='true'] .source-api-toggle-icon {
-  transform: rotate(180deg);
+  flex: none;
+  justify-self: start;
 }
 
 .source-api-title {
@@ -223,7 +198,7 @@ function getSectionContentId(name: string) {
   justify-content: center;
   min-inline-size: 1.375rem;
   block-size: 1.375rem;
-  border-radius: 999px;
+  border-radius: var(--docs-shape-compact);
   padding-inline: 0.375rem;
   color: var(--vp-c-text-2);
   font-size: 0.6875rem;
@@ -234,7 +209,7 @@ function getSectionContentId(name: string) {
 .source-api-scroll {
   overflow: auto;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 1rem;
+  border-radius: var(--docs-shape-surface);
   background: var(--vp-c-bg-soft);
 }
 
@@ -276,7 +251,7 @@ function getSectionContentId(name: string) {
   margin: 0;
   padding: 0.875rem 1rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 1rem;
+  border-radius: var(--docs-shape-surface);
   color: var(--vp-c-text-2);
   background: var(--vp-c-bg-soft);
 }

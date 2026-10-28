@@ -398,7 +398,7 @@ watch(open, async (value) => {
 .customization-type-preview {
   padding: 1rem;
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: 0.75rem;
+  border-radius: var(--docs-shape-surface);
   overflow-wrap: anywhere;
 }
 .customization-code-file {
@@ -416,7 +416,7 @@ watch(open, async (value) => {
   overflow-wrap: anywhere;
   font: 0.8125rem/1.5 monospace;
   background: var(--md-sys-color-surface-container);
-  border-radius: var(--md-shape-card);
+  border-radius: var(--docs-shape-surface);
   user-select: text;
 }
 .customization-code-empty {

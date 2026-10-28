@@ -36,7 +36,6 @@ const { isChinese, homeLink } = useLocaleNavigation();
   justify-items: center;
   text-align: center;
   padding: 3rem;
-  border-radius: 1.75rem;
   overflow: clip;
 }
 

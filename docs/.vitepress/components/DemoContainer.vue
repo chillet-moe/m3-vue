@@ -2,14 +2,8 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue';
 import { codeToHtml } from 'shiki';
 import { useData } from 'vitepress';
+import { Button, Card } from '@/index';
 import { useStickyPreviewPreference } from '../theme/composables/preferences';
-
-type ViewportPreset = {
-  height: number;
-  key: string;
-  label: string;
-  width: number | 'full';
-};
 
 const props = withDefaults(
   defineProps<{
@@ -129,40 +123,43 @@ watch(stickyEnabled, async () => {
     :data-sticky="stickyEnabled ? 'true' : undefined"
     :data-stuck="isStuck ? 'true' : undefined"
   >
-    <div class="demo-preview">
-      <div>
-        <slot />
+    <Card color="outlined" class="demo-surface">
+      <div class="demo-preview">
+        <div>
+          <slot />
+        </div>
       </div>
-    </div>
 
-    <div class="demo-toolbar" v-if="hasToolbar">
-      <button
-        v-if="src"
-        class="demo-toolbar-button"
-        :data-selected="sourceOpen ? 'true' : 'false'"
-        type="button"
-        :aria-expanded="sourceOpen ? 'true' : 'false'"
-        @click="sourceOpen = !sourceOpen"
-      >
-        {{ isZhHans ? (sourceOpen ? '隐藏源码' : '显示源码') : sourceOpen ? 'Hide source' : 'Show source' }}
-      </button>
-    </div>
+      <div class="demo-toolbar" v-if="hasToolbar">
+        <Button
+          v-if="src"
+          variant="text"
+          size="small"
+          leading-icon="code"
+          :aria-expanded="sourceOpen ? 'true' : 'false'"
+          @click="sourceOpen = !sourceOpen"
+        >
+          {{ isZhHans ? (sourceOpen ? '隐藏源码' : '显示源码') : sourceOpen ? 'Hide source' : 'Show source' }}
+        </Button>
+      </div>
 
-    <div v-if="src && sourceOpen" class="demo-source" v-html="highlightedSource" />
+      <div v-if="src && sourceOpen" class="demo-source" v-html="highlightedSource" />
+    </Card>
   </section>
 </template>
 
 <style scoped>
 .demo-container {
-  display: grid;
-  gap: 0;
   margin-block: 1.25rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 1.5rem;
+}
+
+.demo-surface {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  /* Card draws its outline inside the surface; keep opaque source content inside that line. */
+  padding: var(--md-outlined-card-outline-width, 1px);
   overflow: clip;
-  background: var(--vp-c-bg-soft);
-  box-shadow: var(--md-sys-elevation-level0);
-  transition: box-shadow 160ms ease;
 }
 
 .demo-container[data-sticky='true']:first-of-type {
@@ -172,10 +169,12 @@ watch(stickyEnabled, async () => {
 }
 
 .demo-container[data-sticky='true'][data-stuck='true']:first-of-type {
-  box-shadow: 0 0.75rem 2rem --translucent(var(--md-sys-color-shadow), 0.16);
+  border-radius: var(--docs-shape-surface);
+  box-shadow: var(--md-sys-elevation-level2);
 }
 
 .demo-preview {
+  min-inline-size: 0;
   padding: 1.25rem;
 }
 
@@ -186,35 +185,16 @@ watch(stickyEnabled, async () => {
   justify-content: flex-start;
   gap: 0.625rem;
   border-block-start: 1px solid var(--vp-c-divider);
-  padding-block: 0.75rem;
-  padding-inline: 1rem;
-  background: --translucent(var(--vp-c-bg), 0.72);
-  backdrop-filter: blur(16px);
-}
-
-.demo-toolbar-button {
-  border: 1px solid --translucent(var(--vp-c-divider), 0.9);
-  border-radius: 999px;
   padding-block: 0.5rem;
-  padding-inline: 0.75rem;
-  color: var(--vp-c-text-2);
-  background: transparent;
-  font: inherit;
-  line-height: 1;
-  cursor: pointer;
-  transition:
-    color 160ms ease,
-    background-color 160ms ease,
-    border-color 160ms ease;
+  padding-inline: 1rem;
 }
 
-.demo-toolbar-button[data-selected='true'] {
-  border-color: --translucent(var(--vp-c-brand-1), 0.4);
-  color: var(--vp-c-brand-1);
-  background: --translucent(var(--vp-c-brand-1), 0.12);
+.demo-source {
+  min-inline-size: 0;
 }
 
 .demo-source :deep(pre) {
+  overflow: auto;
   padding: 1.25rem;
   margin: 0;
   border-radius: 0;
@@ -224,13 +204,13 @@ watch(stickyEnabled, async () => {
   font-size: 0.8125rem;
 }
 
-html.dark .demo-source :deep(.shiki),
-html.dark .demo-source :deep(.shiki span) {
+:global(html.dark) .demo-source :deep(.shiki),
+:global(html.dark) .demo-source :deep(.shiki span) {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
 
-html.dark .demo-source :deep(.shiki span) {
+:global(html.dark) .demo-source :deep(.shiki span) {
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;

@@ -185,7 +185,7 @@ const groups = [
 .gallery-item {
   min-inline-size: 0;
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-shape-card);
+  border-radius: var(--docs-shape-surface);
 }
 .gallery-heading {
   margin: 0;

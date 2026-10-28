@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Content } from 'vitepress';
+import { Card } from '@/index';
 
 import DocsOutline from './DocsOutline.vue';
 import DocsPager from './DocsPager.vue';
@@ -8,10 +9,12 @@ import DocsPager from './DocsPager.vue';
 <template>
   <div class="docs-content-shell">
     <main class="docs-main">
-      <article class="docs-page-card vp-doc">
-        <Content />
-        <div id="docs-api-appendix" class="docs-api-appendix" />
-      </article>
+      <Card color="filled" class="docs-page-card">
+        <article class="vp-doc">
+          <Content />
+          <div id="docs-api-appendix" class="docs-api-appendix" />
+        </article>
+      </Card>
 
       <DocsPager />
     </main>
@@ -40,8 +43,7 @@ import DocsPager from './DocsPager.vue';
   inline-size: 100%;
   margin-inline: auto;
   padding: 1.25rem;
-  border-radius: 1.75rem;
-  background: var(--vp-c-bg);
+  --md-filled-card-container-color: var(--md-sys-color-surface);
 }
 
 .docs-api-appendix:empty {
@@ -82,7 +84,6 @@ import DocsPager from './DocsPager.vue';
 
   .docs-page-card {
     padding: 1rem 0.75rem;
-    border-radius: 1rem;
     overflow-x: auto;
   }
 }
