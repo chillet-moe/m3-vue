@@ -86,6 +86,7 @@
     "vue": "^3.5.39"
   },
   "devDependencies": {
+    "@chillet/material-color-utilities": "^0.4.0",
     "@chillet/postcss-custom-mixins": "^0.3.0",
     "@chillet/vue-scope-boundary": "^0.2.0",
     "@emnapi/core": "^1.11.3",

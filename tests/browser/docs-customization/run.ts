@@ -28,7 +28,41 @@ try {
   await panel.waitFor();
   assert.equal(await panel.getAttribute('data-scope'), 'popover');
   assert(await panel.getByRole('radio', { name: 'Default', exact: true }).isChecked());
+  const themeColor = panel.getByLabel('Theme color', { exact: true });
+  await themeColor.evaluate((input: HTMLInputElement) => {
+    input.value = '#84ceb7';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  assert.equal(
+    await page.evaluate(() => document.documentElement.style.getPropertyValue('--md-ref-palette-primary40')),
+    '',
+    'Dragging the native color picker should not apply the theme before committing',
+  );
+  await themeColor.dispatchEvent('change');
+  await page.waitForFunction(
+    () => document.documentElement.style.getPropertyValue('--md-ref-palette-primary40') !== '',
+  );
+  const palette = await page.evaluate(() =>
+    document.documentElement.style.getPropertyValue('--md-ref-palette-primary40'),
+  );
+  const primaryColor = () =>
+    page.evaluate(() => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--md-sys-color-primary)';
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+  const darkColor = await primaryColor();
+  await page.getByRole('button', { name: 'Switch to light mode', exact: true }).click();
+  assert.notEqual(await primaryColor(), darkColor);
+  await page.getByRole('button', { name: 'Switch to dark mode', exact: true }).click();
+  // Header interactions dismiss the popover.
+  await page.getByRole('button', { name: 'Customize', exact: true }).click();
+  await panel.waitFor();
   await choosePreset(panel, 'Compact');
+  assert.equal(await themeColor.inputValue(), '#84ceb7');
   await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-density') === '-2');
   assert(await panel.getByRole('radio', { name: 'Compact', exact: true }).isChecked());
   await panel.getByRole('spinbutton', { name: 'Density', exact: true }).fill('3');
@@ -124,6 +158,7 @@ try {
   assert((await setupCode.textContent())?.includes('"shape": "minimal"'));
   assert((await panel.locator('.customization-code').last().textContent())?.includes('--md-density: 3;'));
   const cssCode = await panel.locator('.customization-code').last().textContent();
+  assert(cssCode?.includes(`--md-ref-palette-primary40: ${palette};`));
   assert(cssCode?.includes('--md-icon-scale: 1.1;'));
   assert(cssCode?.includes('--md-icon-content-ratio: 0.8;'));
   assert(cssCode?.includes('--md-field-row-gap: 24px;'));
@@ -155,6 +190,10 @@ try {
   assert.equal(
     await page.evaluate(() => document.documentElement.style.getPropertyValue('--md-field-row-gap')),
     '24px',
+  );
+  assert.equal(
+    await page.evaluate(() => document.documentElement.style.getPropertyValue('--md-ref-palette-primary40')),
+    palette,
   );
   await page.setViewportSize({ width: 390, height: 740 });
   await page.getByRole('button', { name: 'Customize', exact: true }).click();
@@ -190,6 +229,10 @@ try {
   assert.equal(
     await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--md-field-row-gap').trim()),
     '1rem',
+  );
+  assert.equal(
+    await page.evaluate(() => document.documentElement.style.getPropertyValue('--md-ref-palette-primary40')),
+    '',
   );
   assert.equal(await panel.locator('.customization-code').count(), 1);
   assert((await panel.locator('.customization-code').textContent())?.includes('themes/default.css'));

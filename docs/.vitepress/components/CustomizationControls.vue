@@ -26,6 +26,7 @@ import { useDocsCustomization } from '../customization/state';
 import { defaultSettings, fieldGapSettings, iconSettings, typeProperties, typeRoles } from '../customization/catalog';
 import { themePresets, typographyPresets } from '@/theme/presets';
 import { customizationCode } from '../customization/code';
+import { defaultSourceColor } from '../customization/colors';
 import { shapeRoles } from '../customization/shapes';
 import { en, type CopyKey } from '../customization/en';
 import { zh } from '../customization/zh';
@@ -109,6 +110,10 @@ const previewStyle = computed(() => {
     fontFamily: resolve(typeToken('font')),
   };
 });
+function updateSourceColor(event: Event) {
+  const input = event.target;
+  if (input instanceof HTMLInputElement) customization.setSourceColor(input.value);
+}
 function previewShape(token: string, event: Event) {
   const input = event.target;
   if (!(input instanceof HTMLInputElement) || !Number.isFinite(input.valueAsNumber)) return;
@@ -174,6 +179,22 @@ watch(open, async (value) => {
               <ButtonGroupItem value="default">{{ t('standard') }}</ButtonGroupItem>
               <ButtonGroupItem value="compact">{{ t('compact') }}</ButtonGroupItem>
             </ButtonGroup>
+            <div class="customization-row">
+              <label class="customization-color">
+                <span>{{ t('themeColor') }}</span>
+                <input
+                  type="color"
+                  :value="state.theme.sourceColor ?? defaultSourceColor"
+                  @change="updateSourceColor"
+                />
+              </label>
+              <IconButton
+                icon="restart_alt"
+                :aria-label="t('resetThemeColor')"
+                :disabled="!state.theme.sourceColor"
+                @click="customization.setSourceColor('')"
+              />
+            </div>
             <TextField
               :model-value="density"
               type="number"
@@ -402,6 +423,20 @@ watch(open, async (value) => {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+}
+.customization-color {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.customization-color input {
+  inline-size: 3rem;
+  block-size: 2.5rem;
+  padding: 0.125rem;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 0.25rem;
+  background: var(--md-sys-color-surface);
+  cursor: pointer;
 }
 .customization-fields {
   display: grid;

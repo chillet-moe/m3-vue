@@ -25,6 +25,9 @@ importers:
         specifier: ^3.5.39
         version: 3.5.39(typescript@6.0.3)
     devDependencies:
+      '@chillet/material-color-utilities':
+        specifier: ^0.4.0
+        version: 0.4.0
       '@chillet/postcss-custom-mixins':
         specifier: ^0.3.0
         version: 0.3.0(postcss@8.5.16)(vite@8.3.1(@types/node@25.6.0)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0))
@@ -162,6 +165,9 @@ packages:
   '@bcoe/v8-coverage@1.0.2':
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
+
+  '@chillet/material-color-utilities@0.4.0':
+    resolution: {integrity: sha512-l9by6kcaC/9VhYbdicVdJkQ1UaH8tj0peTKg7TqEsjanngj4vBRaSyY7XK+an+FZmSitmRYp/laotFWHmOu0JQ==}
 
   '@chillet/postcss-custom-mixins@0.3.0':
     resolution: {integrity: sha512-JzV7JnZRBnfqD7LiB5J0UQyePNzsp+KcqNVqdZmM8QKm3vCdqCNb6gGIMw955A8D0MIu2NYxK2xwZ39UjONxJw==}
@@ -2792,6 +2798,8 @@ snapshots:
       '@babel/helper-validator-identifier': 7.29.7
 
   '@bcoe/v8-coverage@1.0.2': {}
+
+  '@chillet/material-color-utilities@0.4.0': {}
 
   '@chillet/postcss-custom-mixins@0.3.0(postcss@8.5.16)(vite@8.3.1(@types/node@25.6.0)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0))':
     dependencies:

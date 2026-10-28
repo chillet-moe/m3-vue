@@ -17,21 +17,25 @@ import {
 import { defaultSettings, tokenNames } from './catalog';
 import { themePresets, typographyPresets, type Preset } from '@/theme/presets';
 
+import { colorTokens, isSourceColor } from './colors';
+
 const storageKey = 'm3-vue-docs-theme';
 const key: InjectionKey<ReturnType<typeof provideDocsCustomization>> = Symbol('DocsCustomization');
 
 /** One owner per documentation layout; no process-global state during SSR. */
 export function provideDocsCustomization() {
   const state = reactive({
-    theme: { preset: 'default' } as { preset: Preset; typography?: Preset; density?: number },
+    theme: { preset: 'default' } as { preset: Preset; typography?: Preset; density?: number; sourceColor?: string },
     tokens: {} as Record<string, string>,
     defaults: {} as Record<string, string>,
   });
+  const paletteTokens = computed(() => (state.theme.sourceColor ? colorTokens(state.theme.sourceColor) : {}));
   const resolvedTokens = computed<Record<string, string>>(() => {
     const preset = themePresets[state.theme.preset];
     return {
       ...typographyPresets[state.theme.typography ?? preset.typography],
       '--md-density': String(state.theme.density ?? preset.density),
+      ...paletteTokens.value,
       ...state.tokens,
     };
   });
@@ -57,7 +61,7 @@ export function provideDocsCustomization() {
     for (const name of Object.keys(state.tokens)) if (name in typographyPresets.default) delete state.tokens[name];
   };
   const setPreset = (preset: Preset) => {
-    state.theme = { preset };
+    state.theme = { preset, sourceColor: state.theme.sourceColor };
     clearTypography();
   };
   const setTypography = (typography: Preset) => {
@@ -103,6 +107,10 @@ export function provideDocsCustomization() {
     inputMode: choice<'clock' | 'keyboard'>('timeInputMode'),
   });
 
+  const setSourceColor = (value: string) => {
+    if (!value) delete state.theme.sourceColor;
+    else if (isSourceColor(value)) state.theme.sourceColor = value.toLowerCase();
+  };
   const setToken = (name: string, value: string) => {
     if (!tokenNames.has(name)) return;
     if (value.trim()) state.tokens[name] = value.trim();
@@ -136,6 +144,7 @@ export function provideDocsCustomization() {
           state.theme.typography = saved.theme.typography;
         if (typeof saved.theme?.density === 'number' && Number.isFinite(saved.theme.density))
           state.theme.density = saved.theme.density;
+        if (isSourceColor(saved.theme?.sourceColor)) setSourceColor(saved.theme.sourceColor);
         if (saved.tokens && typeof saved.tokens === 'object')
           for (const [name, value] of Object.entries(saved.tokens))
             if (typeof value === 'string') setToken(name, value);
@@ -191,6 +200,7 @@ export function provideDocsCustomization() {
     baseline,
     storageError,
     setToken,
+    setSourceColor,
     setDefault,
     reset,
     resolvedTokens,
