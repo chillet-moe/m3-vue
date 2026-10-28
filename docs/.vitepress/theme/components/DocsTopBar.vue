@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { useData, withBase } from 'vitepress';
+import { withBase } from 'vitepress';
 import { VPNavBarSearch } from 'vitepress/theme';
 
 import { Button, IconButton } from '@/index';
-import CustomizationControls from '../../components/CustomizationControls.vue';
+import SiteHeaderActions from './SiteHeaderActions.vue';
 import { useLocaleNavigation, useNav } from '../composables/nav';
 import { useStickyPreviewPreference } from '../composables/preferences';
 import { useSidebar, useSidebarControl } from '../composables/sidebar';
-import { normalizePath, resolveSocialLabel } from '../utils';
+import { normalizePath } from '../utils';
 
-const { isDark } = useData();
-const { navItems, socialLinks } = useNav();
-const { isChinese, languageLink } = useLocaleNavigation();
+const { navItems } = useNav();
+const { isChinese } = useLocaleNavigation();
 const { currentPath } = useSidebar();
 const { toggle: toggleSidebar } = useSidebarControl();
 const stickyPreviewEnabled = useStickyPreviewPreference();
@@ -22,9 +21,6 @@ function isActiveLink(path: string) {
 
 function resolveLink(path: string) {
   return withBase(path);
-}
-function toggleAppearance() {
-  isDark.value = !isDark.value;
 }
 function toggleStickyPreview() {
   stickyPreviewEnabled.value = !stickyPreviewEnabled.value;
@@ -62,23 +58,7 @@ function toggleStickyPreview() {
         </Button>
       </nav>
 
-      <div class="docs-topbar-actions">
-        <Button variant="text" size="small" :href="resolveLink(languageLink)" :lang="isChinese ? 'en' : 'zh-Hans'">
-          {{ isChinese ? 'English' : '简体中文' }}
-        </Button>
-
-        <Button
-          v-for="link in socialLinks"
-          :key="link.link"
-          class="docs-social-link"
-          variant="text"
-          size="small"
-          :href="link.link"
-          trailing-icon="open_in_new"
-        >
-          {{ resolveSocialLabel(link.link) }}
-        </Button>
-
+      <SiteHeaderActions>
         <IconButton
           variant="standard"
           size="small"
@@ -97,26 +77,7 @@ function toggleStickyPreview() {
           :aria-pressed="stickyPreviewEnabled"
           @click="toggleStickyPreview"
         />
-
-        <CustomizationControls />
-
-        <IconButton
-          variant="standard"
-          size="small"
-          width="default"
-          :icon="isDark ? 'light_mode' : 'dark_mode'"
-          :aria-label="
-            isDark
-              ? isChinese
-                ? '切换到浅色模式'
-                : 'Switch to light mode'
-              : isChinese
-                ? '切换到深色模式'
-                : 'Switch to dark mode'
-          "
-          @click="toggleAppearance"
-        />
-      </div>
+      </SiteHeaderActions>
     </div>
   </header>
 </template>
@@ -161,12 +122,6 @@ function toggleStickyPreview() {
   background: --translucent(var(--md-sys-color-primary), 0.12);
 }
 
-.docs-topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .docs-search {
   padding: 0;
   flex-grow: 0;
@@ -189,10 +144,6 @@ function toggleStickyPreview() {
 
   .docs-menu-toggle {
     display: inline-flex;
-  }
-
-  .docs-social-link {
-    display: none;
   }
 }
 </style>

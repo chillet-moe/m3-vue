@@ -1,26 +1,37 @@
 import type { DefaultTheme } from 'vitepress';
-import { useData, useRoute, withBase } from 'vitepress';
+import { useData, withBase } from 'vitepress';
 import { computed } from 'vue';
 
-import { normalizePath, type HeroAction, type ThemeNavItem, type ThemeSocialLink } from '../utils';
+import type { HeroAction, ThemeNavItem, ThemeSocialLink } from '../utils';
 
 export function useLocaleNavigation() {
-  const { lang } = useData();
-  const route = useRoute();
+  const { lang, site, localeIndex, page, hash, theme } = useData();
   const isChinese = computed(() => lang.value === 'zh-Hans');
-  const homeLink = computed(() => (isChinese.value ? '/zh-Hans/' : '/'));
-  const languageLink = computed(() => {
-    const currentPath = normalizePath(route.path);
-    const englishPath = isChinese.value ? currentPath.replace(/^\/zh-Hans(?=\/|$)/, '') || '/' : currentPath;
-
-    return isChinese.value ? englishPath : `/zh-Hans${englishPath === '/' ? '/' : englishPath}`;
+  const localeRoot = (key: string) => site.value.locales[key]?.link || (key === 'root' ? '/' : `/${key}/`);
+  const homeLink = computed(() => localeRoot(localeIndex.value));
+  const languages = computed(() => {
+    const relativePath = page.value.relativePath
+      .slice(homeLink.value.length - 1)
+      .replace(/(^|\/)index\.md$/, '$1')
+      .replace(/\.md$/, site.value.cleanUrls ? '' : '.html');
+    return Object.entries(site.value.locales).map(([key, locale]) => ({
+      key,
+      label: locale.label,
+      lang: locale.lang,
+      dir: locale.dir,
+      current: key === localeIndex.value,
+      link:
+        theme.value.i18nRouting === false
+          ? localeRoot(key)
+          : `${localeRoot(key).replace(/\/$/, '')}/${relativePath}${hash.value}`,
+    }));
   });
 
   function localizePath(path: string) {
-    return isChinese.value ? `/zh-Hans${path === '/' ? '/' : path}` : path;
+    return `${homeLink.value.replace(/\/$/, '')}${path}`;
   }
 
-  return { isChinese, homeLink, languageLink, localizePath };
+  return { isChinese, homeLink, languages, localizePath };
 }
 
 export function useNav() {

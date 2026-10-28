@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { useData, withBase } from 'vitepress';
+import { withBase } from 'vitepress';
 import { VPNavBarSearch } from 'vitepress/theme';
 import { computed } from 'vue';
 
-import { Button, Card, IconButton, ListItem } from '@/index';
-import CustomizationControls from '../../components/CustomizationControls.vue';
+import { Button, Card, ListItem } from '@/index';
+import SiteHeaderActions from './SiteHeaderActions.vue';
 import { useHero, useLocaleNavigation, useNav, useSiteInfo } from '../composables/nav';
-import { mapHeroActionVariant, resolveSocialLabel } from '../utils';
+import { mapHeroActionVariant } from '../utils';
 
-const { isDark } = useData();
 const { navItems, socialLinks } = useNav();
 const { siteLogo, siteTitle } = useSiteInfo();
 const { hero } = useHero();
-const { isChinese, homeLink, languageLink, localizePath } = useLocaleNavigation();
+const { isChinese, homeLink, localizePath } = useLocaleNavigation();
 
 const guideLinks = computed(() => [
   {
@@ -63,26 +62,26 @@ const componentLinks = computed(() => [
 function resolveLink(path: string) {
   return withBase(path);
 }
-function toggleAppearance() {
-  isDark.value = !isDark.value;
-}
 </script>
 
 <template>
   <div class="home-layout vp-raw">
     <header class="home-header">
       <div class="home-header-inner">
-        <Button class="home-brand" variant="text" size="small" :href="resolveLink(homeLink)">
-          <span class="home-brand-content">
-            <span
-              v-if="siteLogo"
-              class="home-brand-logo"
-              :style="{ maskImage: `url(${siteLogo})`, WebkitMaskImage: `url(${siteLogo})` }"
-              aria-hidden="true"
-            />
-            <span class="m3-typo-title-medium">{{ siteTitle }}</span>
-          </span>
-        </Button>
+        <div class="home-header-leading">
+          <Button class="home-brand" variant="text" size="small" :href="resolveLink(homeLink)">
+            <span class="home-brand-content">
+              <span
+                v-if="siteLogo"
+                class="home-brand-logo"
+                :style="{ maskImage: `url(${siteLogo})`, WebkitMaskImage: `url(${siteLogo})` }"
+                aria-hidden="true"
+              />
+              <span class="m3-typo-title-medium">{{ siteTitle }}</span>
+            </span>
+          </Button>
+          <VPNavBarSearch class="home-search" />
+        </div>
 
         <nav v-if="navItems.length" class="home-nav" :aria-label="isChinese ? '主导航' : 'Primary'">
           <Button
@@ -97,44 +96,7 @@ function toggleAppearance() {
           </Button>
         </nav>
 
-        <div class="home-actions">
-          <VPNavBarSearch class="home-search" />
-
-          <Button variant="text" size="small" :href="resolveLink(languageLink)" :lang="isChinese ? 'en' : 'zh-Hans'">
-            {{ isChinese ? 'English' : '简体中文' }}
-          </Button>
-
-          <Button
-            v-for="link in socialLinks"
-            :key="link.link"
-            class="home-social-link"
-            variant="text"
-            size="small"
-            :href="link.link"
-            trailing-icon="open_in_new"
-          >
-            {{ resolveSocialLabel(link.link) }}
-          </Button>
-
-          <CustomizationControls />
-
-          <IconButton
-            variant="standard"
-            size="small"
-            width="default"
-            :icon="isDark ? 'light_mode' : 'dark_mode'"
-            :aria-label="
-              isDark
-                ? isChinese
-                  ? '切换到浅色模式'
-                  : 'Switch to light mode'
-                : isChinese
-                  ? '切换到深色模式'
-                  : 'Switch to dark mode'
-            "
-            @click="toggleAppearance"
-          />
-        </div>
+        <SiteHeaderActions />
       </div>
     </header>
 
@@ -291,7 +253,7 @@ function toggleAppearance() {
 }
 
 .home-nav,
-.home-actions {
+.home-header-leading {
   display: flex;
   align-items: center;
   gap: 0.375rem;
@@ -442,10 +404,6 @@ function toggleAppearance() {
 }
 
 @media (max-width: 48rem) {
-  .home-social-link {
-    display: none;
-  }
-
   .home-main {
     gap: 3.5rem;
     padding-block-start: 3rem;
@@ -486,7 +444,7 @@ function toggleAppearance() {
     padding-inline: 1rem;
   }
 
-  .home-actions {
+  .home-header-leading {
     gap: 0.125rem;
   }
 

@@ -201,6 +201,7 @@ export default defineConfig({
       lang: 'zh-Hans',
       description: '适用于 Vue 的 Material Design 3 组件',
       themeConfig: {
+        langMenuLabel: '切换语言',
         nav: [{ text: '文档', link: '/zh-Hans/components/button' }],
         sidebar: { '/zh-Hans/': translateSidebar(sidebar) },
         outline: { label: '本页目录' },

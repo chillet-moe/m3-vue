@@ -99,6 +99,20 @@ try {
   assert(sourceGeometry.shadow.includes('inset'), 'The outlined surface must retain its border.');
   await source.click();
 
+  await page.getByRole('button', { name: 'Change language', exact: true }).click();
+  const english = page.getByRole('menuitem', { name: 'English', exact: true });
+  assert.equal(await english.getAttribute('aria-current'), 'true');
+  const chinese = page.getByRole('menuitem', { name: '简体中文', exact: true });
+  assert((await chinese.getAttribute('href'))?.includes('/zh-Hans/components/button'));
+  await chinese.click();
+  await page.waitForURL(/\/zh-Hans\/components\/button(?:\.html)?$/);
+  await page.getByRole('button', { name: '切换语言', exact: true }).click();
+  assert.equal(
+    await page.getByRole('menuitem', { name: '简体中文', exact: true }).getAttribute('aria-current'),
+    'true',
+  );
+  await page.keyboard.press('Escape');
+
   await page.evaluate(() =>
     localStorage.setItem(
       'm3-vue-docs-theme',
