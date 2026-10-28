@@ -793,8 +793,8 @@
     letter-spacing: var(--_outlined-text-field-supporting-text-tracking);
   }
 
-  /* Baseline 2025: :has is required for parent-state styling without JS. */
-  .m3-text-field:where(:has(.m3-text-field-input:not(:disabled):hover)) {
+  /* Hover covers the input container, not supporting text; native disabled inputs stay excluded. */
+  .m3-text-field:where(:has(> .m3-text-field-container:hover .m3-text-field-input:not(:disabled))) {
     --_outline-width: var(--_outlined-text-field-hover-outline-width);
     --_outline-color: var(--_outlined-text-field-hover-outline-color);
     --_label-color: var(--_outlined-text-field-hover-label-text-color);
@@ -814,7 +814,9 @@
     --_trailing-icon-color: var(--_outlined-text-field-error-trailing-icon-color);
   }
 
-  .m3-text-field[data-invalid='true']:where(:has(.m3-text-field-input:not(:disabled):hover)) {
+  .m3-text-field[data-invalid='true']:where(
+      :has(> .m3-text-field-container:hover .m3-text-field-input:not(:disabled))
+    ) {
     --_outline-color: var(--_outlined-text-field-error-hover-outline-color);
     --_label-color: var(--_outlined-text-field-error-hover-label-text-color);
     --_trailing-icon-color: var(--_outlined-text-field-error-hover-trailing-icon-color);
