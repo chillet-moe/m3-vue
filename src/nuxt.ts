@@ -1,3 +1,4 @@
+import { presets } from './presets/definitions';
 import { addComponent, addImports, addPluginTemplate, defineNuxtModule } from '@nuxt/kit';
 import { m3VueComponentNames } from './resolver';
 
@@ -58,7 +59,7 @@ export default defineNuxtModule<M3VueNuxtOptions>({
       }
     }
 
-    if (options.directives) {
+    if (options.directives || options.theme !== false) {
       addPluginTemplate({
         filename: DEFAULT_PLUGIN_FILENAME,
         getContents: () =>
@@ -69,7 +70,7 @@ import { M3VuePlugin } from '${PACKAGE_NAME}';
 export default defineNuxtPlugin({
   name: 'm3-vue',
   setup(nuxtApp) {
-    nuxtApp.vueApp.use(M3VuePlugin);
+    nuxtApp.vueApp.use(M3VuePlugin, ${JSON.stringify({ directives: options.directives ?? true, ...(options.theme === false ? {} : { preset: presets[options.theme ?? 'default'] }) })});
   },
 });
 `.trimStart(),

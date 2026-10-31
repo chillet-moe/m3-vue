@@ -61,6 +61,8 @@ export default defineConfig({
       entry: {
         index: 'src/index.ts',
         nuxt: 'src/nuxt.ts',
+        'presets/compact': 'src/presets/compact.ts',
+        'presets/default': 'src/presets/default.ts',
         'locales/en': 'src/locales/en.ts',
         'locales/zh-Hans': 'src/locales/zh-Hans.ts',
         'locales/zh-Hant': 'src/locales/zh-Hant.ts',
@@ -71,7 +73,7 @@ export default defineConfig({
       cssFileName: 'style',
     },
     rolldownOptions: {
-      external: externalPackages,
+      external: [...externalPackages, '@chillet/m3-vue/themes/default.css', '@chillet/m3-vue/themes/compact.css'],
       output: {
         assetFileNames: '[name][extname]',
         entryFileNames: (chunkInfo) => {

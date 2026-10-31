@@ -22,7 +22,9 @@
   "sideEffects": [
     "**/*.css",
     "**/state-layer.ts",
-    "**/index.ts"
+    "**/index.ts",
+    "**/presets/compact.*",
+    "**/presets/default.*"
   ],
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -56,7 +58,15 @@
     "./typography.module.css": "./dist/typography.module.css",
     "./colors.module.css": "./dist/colors.module.css",
     "./themes/default.css": "./dist/themes/default.css",
-    "./themes/compact.css": "./dist/themes/compact.css"
+    "./themes/compact.css": "./dist/themes/compact.css",
+    "./presets/compact": {
+      "types": "./dist/presets/compact.d.ts",
+      "import": "./dist/presets/compact.mjs"
+    },
+    "./presets/default": {
+      "types": "./dist/presets/default.d.ts",
+      "import": "./dist/presets/default.mjs"
+    }
   },
   "publishConfig": {
     "access": "public",
@@ -79,7 +89,8 @@
     "remove-unused-vars": "tsx scripts/remove-unused-vars/index.ts",
     "check": "pnpm run fmt:check && pnpm run lint && pnpm run typecheck && pnpm run docs:check",
     "docs:check": "node scripts/check-docs.mjs",
-    "themes:generate": "node --import tsx scripts/generate-themes.ts"
+    "themes:generate": "node --import tsx scripts/generate-themes.ts",
+    "test:package": "pnpm run build && tsx tests/browser/preset-package/run.ts"
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",

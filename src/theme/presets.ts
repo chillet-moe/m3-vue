@@ -11,7 +11,4 @@ export const typographyPresets: Record<Preset, Record<string, string>> = {
   default: defaultTypography,
   compact: { ...defaultTypography, ...compactTypography },
 };
-export const themePresets = {
-  default: { typography: 'default', density: 0 },
-  compact: { typography: 'compact', density: -2 },
-} as const;
+export { presets as themePresets } from '../presets/definitions';

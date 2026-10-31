@@ -1,3 +1,4 @@
+import type { M3Preset } from './presets/types';
 import type { App, Directive, Plugin } from 'vue';
 import { installM3InteractionDefaults, type M3ComponentDefaultsOptions } from './defaults';
 import type { DropdownTargetBinding } from '@/directives/Dropdown';
@@ -23,14 +24,46 @@ export type M3VuePluginOptions = M3LocaleOptions &
   M3ShapeOptions &
   M3FieldOptions &
   M3SnackbarOptions &
-  M3ComponentDefaultsOptions;
+  M3ComponentDefaultsOptions & {
+    preset?: M3Preset;
+    /** Register the global directives. Component defaults are installed independently. */
+    directives?: boolean;
+  };
+
+/** Merge only defaults objects; refs remain intact and undefined inherits the preset. */
+function resolveM3Preset(options: M3VuePluginOptions): M3VuePluginOptions {
+  const { preset, ...overrides } = options;
+  const resolved = { ...preset?.defaults } as M3VuePluginOptions;
+  const groups = new Set([
+    'buttonDefaults',
+    'listItemDefaults',
+    'sliderDefaults',
+    'selectDefaults',
+    'datePickerDefaults',
+    'timePickerDefaults',
+  ]);
+  for (const [key, value] of Object.entries(overrides)) {
+    if (value === undefined) continue;
+    if (groups.has(key)) {
+      const base = (resolved as Record<string, unknown>)[key] as object | undefined;
+      (resolved as Record<string, unknown>)[key] = {
+        ...base,
+        ...Object.fromEntries(Object.entries(value).filter(([, field]) => field !== undefined)),
+      };
+    } else {
+      (resolved as Record<string, unknown>)[key] = value;
+    }
+  }
+  return resolved;
+}
 
 export const M3VuePlugin = {
   install(app: App, options: M3VuePluginOptions = {}) {
-    for (const name of m3VueDirectiveNames) {
-      app.directive(name, m3VueDirectives[name] as Directive);
+    if (options.directives !== false) {
+      for (const name of m3VueDirectiveNames) app.directive(name, m3VueDirectives[name] as Directive);
     }
 
+    options = resolveM3Preset(options);
     installM3Locale(app, options);
     installM3StyleDefaults(app, options);
     installM3InteractionDefaults(app, options);

@@ -106,3 +106,5 @@ export type { OverlayService } from './overlays';
 export { provideRowSize, rowSizeContextKey, type RowSize } from './styles/rowSize';
 
 export { provideShape, shapeContextKey, type M3Shape } from './styles/shape';
+
+export type { M3Preset } from './presets/types';
