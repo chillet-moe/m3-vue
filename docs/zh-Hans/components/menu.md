@@ -3,6 +3,8 @@ title: Menu
 ---
 
 <script setup lang="ts">
+import MenuCheckbox from '../../demos/menu/MenuCheckbox.vue';
+import MenuCheckboxSrc from '../../demos/menu/MenuCheckbox.vue?raw';
 import MenuDropdown from '../../demos/menu/MenuDropdown.vue';
 import MenuDropdownSrc from '../../demos/menu/MenuDropdown.vue?raw';
 import MenuContext from '../../demos/menu/MenuContext.vue';
@@ -21,21 +23,9 @@ import MenuLinksSrc from '../../demos/menu/MenuLinks.vue?raw';
 
 Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单项渲染，并由组件组统一处理键盘与选择行为。
 
-## 行尺寸
+## 基本菜单
 
-可在 Menu 上设置 `size` 统一调整所有菜单行，在 MenuItem 上设置以调整单行，或在 MenuSubMenu 上设置以调整一个分支。声明式菜单项和子菜单条目也接受 `size`。Select/Combobox 菜单会继承共享的行尺寸，其尺寸与输入框自身的尺寸相互独立。
-
-尺寸比例、共享的 `rowSize` 默认值和密度行为，详见[行尺寸](../guides/styling#row-sizes)。
-
-## 颜色
-
-`color` 选择 `standard` 或 `vibrant` 调色板。显式属性优先于 `menuDefaultsContextKey` 中的 `color`，内置回退值为 `standard`。可在 `M3VuePlugin` 中设置 `menuColor` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
-
-子菜单会继承父菜单解析后的颜色，除非显式覆盖。Select 和 Combobox 菜单也使用相同的共享偏好，其 `menuColor` 属性优先。
-
-## 示例
-
-### 下拉菜单
+### 下拉菜单和子菜单
 
 <DemoContainer :src="MenuDropdownSrc" :viewport="false">
   <MenuDropdown />
@@ -47,11 +37,35 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
   <MenuContext />
 </DemoContainer>
 
-### 可选值
+## 选择
+
+### 单选值和多选值
+
+为 Menu 绑定 `v-model`，并为每个可选的 `MenuItem` 设置唯一的 `value`。单选值会选中一行；启用 `multiple` 后，模型值为数组。Menu 会根据每行的值推导其 `checked` 状态，以及 `menuitemradio` 或 `menuitemcheckbox` 角色。不要再单独维护每行的 checked 模型，也不要在点击处理程序中切换该值。
+
+互斥选项使用 `Radio presentation`，独立选项使用 `CheckBox presentation`。将行插槽中的 `checked` 和 `disabled` 传给它们。若要在连续选择时保持菜单打开，请设置 `:close-on-select="false"`。
 
 <DemoContainer :src="MenuSelectableSrc" :viewport="false">
   <MenuSelectable />
 </DemoContainer>
+
+### 调用方管理状态
+
+对于由现有布尔值管理的选项，省略 `value`：设置 `role="menuitemcheckbox"`，绑定 `checked`，并在行的点击处理程序中更新状态。对于由调用方管理的单选组，设置 `role="menuitemradio"`，根据共享值推导每行的 `checked`，并在激活时赋予相应值。
+
+<DemoContainer :src="MenuCheckboxSrc" :viewport="false">
+  <MenuCheckbox />
+</DemoContainer>
+
+### 交互和呈现
+
+MenuItem 负责焦点、激活、无障碍状态和禁用行为。请在行上设置 `disabled`。Presentation 控件不会渲染原生 input，也不会增加焦点目标；它们只显示插槽状态。`selected` 控制行的强调样式，不能替代手动控制的复选框或单选项上的 `checked`。
+
+上/下方向键会在可用行之间移动。Enter 或 Space 会激活当前聚焦的行；复选框会切换状态，单选项则会选中其值。Escape 会关闭菜单。子菜单使用右方向键进入、左方向键返回。
+
+Presentation CheckBox 和 Radio 仅占用可见的方框或圆圈。独立控件的 target-size token 不会增加菜单内的占用空间。行尺寸、密度和菜单内边距 token 仍控制行间距；较大的内容可能会撑高菜单行。
+
+## 其他组合
 
 ### 内嵌 Select
 
@@ -85,21 +99,35 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 </RouterLink>
 ```
 
-## 浮动表面
+## 外观
 
-共享主题颜色、边框、阴影，以及包含嵌套菜单和对话框的交互式示例，请参阅[浮动表面 token](../utilities/elevation.md#floating-surfaces)。
+### 行尺寸
 
-## 密度
+可在 Menu 上设置 `size` 统一调整所有菜单行，在 MenuItem 上设置以调整单行，或在 MenuSubMenu 上设置以调整一个分支。声明式菜单项和子菜单条目也接受 `size`。Select/Combobox 菜单会继承共享的行尺寸，其尺寸与输入框自身的尺寸相互独立。
+
+尺寸比例、共享的 `rowSize` 默认值和密度行为，详见[行尺寸](../guides/styling#row-sizes)。
+
+### 颜色
+
+`color` 选择 `standard` 或 `vibrant` 调色板。显式属性优先于 `menuDefaultsContextKey` 中的 `color`，内置回退值为 `standard`。可在 `M3VuePlugin` 中设置 `menuColor` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
+
+子菜单会继承父菜单解析后的颜色，除非显式覆盖。Select 和 Combobox 菜单也使用相同的共享偏好，其 `menuColor` 属性优先。
+
+### 密度
 
 菜单行会继承 `--md-density`，包括嵌套菜单以及 Select/Combobox 选项。每级密度会调整 4dp 的垂直留白；上下内边距最低为 4dp。标签、图标和多行内容保持原有尺寸。若要保留菜单的默认间距，可在菜单上设置 `--md-density: 0`。显式设置 `--md-menus-menu-item-height`、`--md-menus-menu-item-top-space` 和 `--md-menus-menu-item-bottom-space` 时，对应值会覆盖密度规则。
 
+### 浮动表面
+
+共享主题颜色、边框、阴影，以及包含嵌套菜单和对话框的交互式示例，请参阅[浮动表面 token](../utilities/elevation.md#floating-surfaces)。
+
 ## 参考
+
+### Menu
 
 <ApiTable component="Menu" />
 
 <StyleTokenTable component="Menu" />
-
-### Menu
 
 原生弹出层关闭时会立即触发 `update:open(false)`。如果清理操作需要等到 Menu 自身的透明度和缩放退出动画结束后再执行，请使用 `closed`。插槽菜单内容内部的动画不计入等待范围。
 

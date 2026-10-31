@@ -2,8 +2,8 @@
 import { computed, ref } from 'vue';
 import { vDropdown } from '@/directives/Menu';
 import { Button } from '@/components/Button';
-import type { MenuContentItem, MenuModelValue } from '@/components/Menu';
-import { Menu, MenuContainer, MenuItem } from '@/components/Menu';
+import type { MenuContentItem } from '@/components/Menu';
+import { Menu } from '@/components/Menu';
 
 const items: MenuContentItem[] = [
   {
@@ -11,12 +11,10 @@ const items: MenuContentItem[] = [
     items: [
       {
         label: 'Cut',
-        value: 'cut',
         leadingIcon: 'content_cut',
       },
       {
         label: 'Copy',
-        value: 'copy',
         leadingIcon: 'content_copy',
         supportingText: 'Recommended',
       },
@@ -27,11 +25,9 @@ const items: MenuContentItem[] = [
         items: [
           {
             label: 'Archive',
-            value: 'archive',
           },
           {
             label: 'Favorite',
-            value: 'favorite',
           },
         ],
       },
@@ -57,19 +53,12 @@ const items: MenuContentItem[] = [
 
 const objectMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
 const objectBinding = computed(() => objectMenu.value?.menuRef ?? null);
-const value = ref<MenuModelValue>('copy');
 </script>
 
 <template>
   <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start">
     <Button v-dropdown="objectBinding">Open object-driven menu</Button>
 
-    <Menu ref="objectMenu" v-model="value" :items="items">
-      <MenuContainer>
-        <MenuItem selected>Extra slotted item</MenuItem>
-      </MenuContainer>
-    </Menu>
-
-    <div>Current value: {{ value ?? 'None' }}</div>
+    <Menu ref="objectMenu" :items="items" />
   </div>
 </template>

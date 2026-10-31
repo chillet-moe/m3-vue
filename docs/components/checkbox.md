@@ -33,6 +33,8 @@ Use `presentation` when the checkbox is only a visual indicator inside another a
   </div>
 </DemoContainer>
 
+In `presentation` mode, the control occupies only `--md-checkbox-container-size` (18dp by default), without an independent hit target. `--md-checkbox-target-size` applies only to standalone interactive checkboxes (40dp by default). The parent owns spacing and interaction; this works with both ListItem and [MenuItem](/components/menu#consumer-owned-state). Density does not scale the checkbox box or standalone target. An explicitly larger container can grow the parent row.
+
 ## Examples
 
 ### Default

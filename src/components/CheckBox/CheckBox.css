@@ -93,6 +93,8 @@
   }
 
   .m3-checkbox[data-presentation='true'] {
+    /* The owning row supplies the hit target; presentation reserves only the visible box. */
+    --_target-size: var(--_container-size);
     cursor: inherit;
   }
 

@@ -32,6 +32,8 @@ import CheckBoxGroupSrc from '../../demos/checkbox/CheckBoxGroup.vue?raw';
   </div>
 </DemoContainer>
 
+在 `presentation` 模式下，控件仅占用 `--md-checkbox-container-size`（默认为 18dp），不提供独立的点击区域。`--md-checkbox-target-size` 仅适用于独立的交互式复选框（默认为 40dp）。间距和交互由父级负责；此模式适用于 ListItem 和 [MenuItem](/zh-Hans/components/menu#调用方管理状态)。密度不会缩放复选框方框或独立点击区域。显式增大容器尺寸可能会使父级行高增大。
+
 ## 示例
 
 ### 默认

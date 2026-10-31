@@ -78,6 +78,8 @@
   }
 
   .m3-radio[data-presentation='true'] {
+    /* The owning row supplies the hit target; presentation reserves only the visible circle. */
+    --_radio-target-size: var(--_radio-icon-size);
     cursor: inherit;
   }
 

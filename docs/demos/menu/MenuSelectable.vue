@@ -2,7 +2,8 @@
 import { computed, ref } from 'vue';
 import { vDropdown } from '@/directives/Menu';
 import { Button } from '@/components/Button';
-import { Icon } from '@/components/Icon';
+import { CheckBox } from '@/components/CheckBox';
+import { Radio } from '@/components/Radio';
 import type { MenuModelValue } from '@/components/Menu';
 import { Menu, MenuContainer, MenuItem } from '@/components/Menu';
 
@@ -10,62 +11,46 @@ const singleMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
 const multipleMenu = ref<{ menuRef?: HTMLDivElement } | null>(null);
 const singleBinding = computed(() => singleMenu.value?.menuRef ?? null);
 const multipleBinding = computed(() => multipleMenu.value?.menuRef ?? null);
-const single = ref<MenuModelValue>('copy');
-const multiple = ref<MenuModelValue>(['archive']);
+const single = ref<MenuModelValue>('name');
+const multiple = ref<MenuModelValue>(['size']);
 </script>
 
 <template>
   <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start">
     <div style="display: flex; flex-wrap: wrap; gap: 1rem">
-      <Button v-dropdown="singleBinding">Open single-select menu</Button>
-      <Button v-dropdown="multipleBinding">Open multi-select menu</Button>
+      <Button v-dropdown="singleBinding">Sort by</Button>
+      <Button v-dropdown="multipleBinding">Visible columns</Button>
     </div>
 
     <Menu ref="singleMenu" v-model="single">
       <MenuContainer>
-        <MenuItem value="cut">
-          <template #leading="{ selected }">
-            <Icon :name="selected ? 'check' : 'content_cut'" />
+        <MenuItem v-for="option in ['Name', 'Modified', 'Size']" :key="option" :value="option.toLowerCase()">
+          <template #leading="{ checked, disabled }">
+            <Radio presentation :checked="checked" :disabled="disabled" />
           </template>
-          Cut
-        </MenuItem>
-        <MenuItem value="copy">
-          <template #leading="{ selected }">
-            <Icon :name="selected ? 'check' : 'content_copy'" />
-          </template>
-          Copy
-        </MenuItem>
-        <MenuItem value="paste">
-          <template #leading="{ selected }">
-            <Icon :name="selected ? 'check' : 'content_paste'" />
-          </template>
-          Paste
+          {{ option }}
         </MenuItem>
       </MenuContainer>
     </Menu>
 
     <Menu ref="multipleMenu" v-model="multiple" multiple>
       <MenuContainer>
-        <MenuItem value="archive" :close-on-select="false">
-          <template #leading="{ selected }">
-            <Icon :name="selected ? 'check_box' : 'check_box_outline_blank'" />
+        <MenuItem
+          v-for="option in ['Size', 'Modified', 'Owner']"
+          :key="option"
+          :value="option.toLowerCase()"
+          :disabled="option === 'Owner'"
+          :close-on-select="false"
+        >
+          <template #leading="{ checked, disabled }">
+            <CheckBox presentation :checked="checked" :disabled="disabled" />
           </template>
-          Archive
-        </MenuItem>
-        <MenuItem value="favorite" :close-on-select="false">
-          <template #leading="{ selected }">
-            <Icon :name="selected ? 'check_box' : 'check_box_outline_blank'" />
-          </template>
-          Favorite
-        </MenuItem>
-        <MenuItem selected>
-          <template #leading><Icon name="push_pin" /></template>
-          Manual item without value
+          {{ option }}
         </MenuItem>
       </MenuContainer>
     </Menu>
 
-    <div>Single value: {{ single ?? 'None' }}</div>
-    <div>Multiple values: {{ Array.isArray(multiple) ? multiple.join(', ') : 'None' }}</div>
+    <div>Sort by: {{ single ?? 'None' }}</div>
+    <div>Visible columns: {{ Array.isArray(multiple) ? multiple.join(', ') : 'None' }}</div>
   </div>
 </template>

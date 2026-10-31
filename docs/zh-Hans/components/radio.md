@@ -33,6 +33,8 @@ const checked = ref(false);
   </div>
 </DemoContainer>
 
+在 `presentation` 模式下，单选按钮仅占用 `--md-radio-icon-size`（默认为 20dp）。`--md-radio-target-size` 保留独立交互目标（默认为 40dp），不会影响呈现模式的布局。间距、焦点和激活行为由父级负责；详见[Menu 选择](/zh-Hans/components/menu#选择)。密度不会缩放圆形控件或独立交互目标。
+
 ## 示例
 
 ### 默认

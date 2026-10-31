@@ -35,6 +35,8 @@ selected value.
   </div>
 </DemoContainer>
 
+In `presentation` mode, the radio occupies only `--md-radio-icon-size` (20dp by default). `--md-radio-target-size` retains the standalone interaction target (40dp by default) and does not affect presentation layout. The parent owns spacing, focus, and activation; see [Menu selection](/components/menu#selection). Density does not scale the circle or standalone target.
+
 ## Examples
 
 ### Default
