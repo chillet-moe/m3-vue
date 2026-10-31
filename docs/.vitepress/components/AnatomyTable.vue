@@ -198,9 +198,6 @@ const headingId = computed(() => {
 }
 
 .anatomy-panel {
-  --docs-table-divider: --translucent(var(--md-sys-color-on-surface), 0.12);
-  --docs-table-header-bg: rgba(from var(--vp-c-default-soft) r g b / 0.5);
-
   overflow: clip;
   border: 1px solid var(--docs-table-divider);
   border-radius: var(--docs-shape-surface);
@@ -366,7 +363,7 @@ const headingId = computed(() => {
 
 <style>
 [data-anatomy-highlight='true'] {
-  outline: 2px dashed var(--md-sys-color-tertiary, #6750a4) !important;
+  outline: 2px dashed var(--md-sys-color-tertiary) !important;
   outline-offset: 2px;
   border-radius: var(--docs-shape-compact);
   filter: brightness(2) !important;

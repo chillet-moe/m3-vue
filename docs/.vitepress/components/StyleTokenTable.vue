@@ -161,7 +161,7 @@ function getPreviewValue(token: StyleTokenMeta) {
   const category = token.category?.toLowerCase();
 
   if (category === 'color' || category === 'state' || category === 'focus' || name.includes('color')) {
-    return '#ff2d55';
+    return 'var(--md-sys-color-tertiary)';
   }
 
   if (category === 'elevation' || name.includes('elevation')) {
@@ -376,9 +376,6 @@ onMounted(() => {
 }
 
 .style-token-table-panel {
-  --docs-table-divider: --translucent(var(--md-sys-color-on-surface), 0.12);
-  --docs-table-header-bg: rgba(from var(--vp-c-default-soft) r g b / 0.5);
-
   overflow: clip;
   border: 1px solid var(--docs-table-divider);
   border-radius: var(--docs-shape-surface);
@@ -541,9 +538,9 @@ onMounted(() => {
 
 <style>
 [data-styling-preview='true'] {
-  outline: 2px dashed var(--md-sys-color-primary, #6750a4) !important;
+  outline: 2px dashed var(--md-sys-color-primary) !important;
   outline-offset: 2px;
   border-radius: var(--docs-shape-compact);
-  box-shadow: 0 0 0 3px --translucent(var(--md-sys-color-primary, #6750a4), 0.12) !important;
+  box-shadow: 0 0 0 3px --translucent(var(--md-sys-color-primary), 0.12) !important;
 }
 </style>

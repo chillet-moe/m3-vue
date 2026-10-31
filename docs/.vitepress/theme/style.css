@@ -8,21 +8,50 @@
  */
 :root,
 :root.dark {
+  --docs-content-max-width: 72rem;
+  --docs-table-divider: --translucent(var(--md-sys-color-on-surface), 0.12);
+  --docs-table-header-bg: var(--md-sys-color-surface-container);
+
   --vp-c-brand-1: var(--md-sys-color-primary);
   --vp-c-brand-2: var(--md-sys-color-primary-container);
   --vp-c-brand-3: var(--md-sys-color-on-primary-container);
+  --vp-c-brand-soft: --translucent(var(--md-sys-color-primary), 0.12);
   --vp-font-family-base: var(--md-sys-typescale-body-large-font), sans-serif;
   --vp-c-bg: var(--md-sys-color-surface);
   --vp-c-bg-alt: var(--md-sys-color-surface-container);
   --vp-c-bg-soft: var(--md-sys-color-surface-container-low);
   --vp-c-text-1: var(--md-sys-color-on-surface);
   --vp-c-text-2: var(--md-sys-color-on-surface-variant);
+  --vp-c-text-3: var(--md-sys-color-on-surface-variant);
+  --vp-c-border: var(--md-sys-color-outline);
   --vp-c-divider: var(--md-sys-color-outline-variant);
+  --vp-c-gutter: var(--md-sys-color-outline-variant);
+  --vp-c-default-1: var(--md-sys-color-surface-container-highest);
+  --vp-c-default-2: var(--md-sys-color-surface-container-high);
+  --vp-c-default-3: var(--md-sys-color-surface-container);
+  --vp-c-default-soft: --translucent(var(--md-sys-color-on-surface), 0.06);
+  --vp-c-success-1: var(--md-sys-color-primary);
+  --vp-c-success-soft: --translucent(var(--md-sys-color-primary), 0.12);
+  --vp-c-important-1: var(--md-sys-color-tertiary);
+  --vp-c-important-2: var(--md-sys-color-tertiary);
+  --vp-c-important-soft: --translucent(var(--md-sys-color-tertiary), 0.08);
+  --vp-c-warning-1: var(--md-sys-color-tertiary);
+  --vp-c-warning-2: var(--md-sys-color-tertiary);
+  --vp-c-warning-soft: --translucent(var(--md-sys-color-tertiary), 0.08);
+  --vp-c-danger-1: var(--md-sys-color-error);
+  --vp-c-danger-2: var(--md-sys-color-error);
+  --vp-c-danger-soft: --translucent(var(--md-sys-color-error), 0.12);
+  --vp-c-caution-1: var(--md-sys-color-error);
+  --vp-c-caution-2: var(--md-sys-color-error);
+  --vp-c-caution-soft: --translucent(var(--md-sys-color-error), 0.12);
+  --vp-backdrop-bg-color: --translucent(var(--md-sys-color-scrim), 0.6);
   --vp-local-search-bg: var(--md-sys-color-surface-container-high);
   --vp-local-search-result-bg: var(--md-sys-color-surface-container-low);
   --vp-local-search-result-border: var(--md-sys-color-outline-variant);
   --vp-local-search-result-selected-bg: var(--md-sys-color-secondary-container);
   --vp-local-search-result-selected-border: var(--md-sys-color-primary);
+  --vp-local-search-highlight-bg: var(--md-sys-color-primary-container);
+  --vp-local-search-highlight-text: var(--md-sys-color-on-primary-container);
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   scrollbar-width: thin;
@@ -192,16 +221,12 @@ body {
 }
 
 .vp-doc .custom-block.warning:not(:where(.vp-raw, .vp-raw *)) {
-  border-inline-start-color: #f59e0b;
-  background: --translucent(#f59e0b, 0.08);
+  border-inline-start-color: var(--md-sys-color-tertiary);
+  background: var(--vp-c-warning-soft);
 }
 
 .vp-doc .custom-block.warning .custom-block-title:not(:where(.vp-raw, .vp-raw *)) {
-  color: #d97706;
-}
-
-html.dark .vp-doc .custom-block.warning .custom-block-title:not(:where(.vp-raw, .vp-raw *)) {
-  color: #fbbf24;
+  color: var(--md-sys-color-tertiary);
 }
 
 .vp-doc .custom-block.danger:not(:where(.vp-raw, .vp-raw *)) {
@@ -330,6 +355,12 @@ html.dark .vp-doc .custom-block.warning .custom-block-title:not(:where(.vp-raw, 
 
 :root .VPLocalSearchBox :is(.result, .search-keyboard-shortcuts kbd) {
   border-radius: var(--docs-shape-compact);
+}
+
+:root .VPLocalSearchBox .search-keyboard-shortcuts kbd {
+  background: var(--md-sys-color-surface-container);
+  border-color: var(--md-sys-color-outline-variant);
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
 @media (max-width: 767px) {

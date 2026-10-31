@@ -282,9 +282,6 @@ function getSectionContentId(key: string) {
 }
 
 .api-table-panel {
-  --docs-table-divider: --translucent(var(--md-sys-color-on-surface), 0.12);
-  --docs-table-header-bg: rgba(from var(--vp-c-default-soft) r g b / 0.5);
-
   overflow: clip;
   border: 1px solid var(--docs-table-divider);
   border-radius: var(--docs-shape-surface);

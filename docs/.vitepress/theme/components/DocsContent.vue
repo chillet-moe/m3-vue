@@ -39,7 +39,7 @@ import DocsPager from './DocsPager.vue';
 
 .docs-page-card {
   display: block;
-  max-inline-size: 60rem;
+  max-inline-size: var(--docs-content-max-width);
   inline-size: 100%;
   margin-inline: auto;
   padding: 1.25rem;

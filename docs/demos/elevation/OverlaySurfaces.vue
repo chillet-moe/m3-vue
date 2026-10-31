@@ -83,6 +83,6 @@ const items: MenuContentItem[] = [
   font: var(--md-sys-typescale-title-large);
 }
 .native-overlay::backdrop {
-  background: rgb(0 0 0 / 30%);
+  background: --translucent(var(--md-sys-color-scrim), 0.3);
 }
 </style>

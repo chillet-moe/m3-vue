@@ -30,8 +30,7 @@ const { isChinese } = useLocaleNavigation();
   justify-content: space-between;
   gap: 0.75rem;
 
-  /* .docs-page-card */
-  max-inline-size: 60rem;
+  max-inline-size: var(--docs-content-max-width);
   inline-size: 100%;
   margin-inline: auto;
   padding: 1.25rem;

@@ -73,7 +73,7 @@ const isHome = computed(() => frontmatter.value.layout === 'home');
   position: fixed;
   inset: 0;
   z-index: 30;
-  background: --translucent(#000000, 0.28);
+  background: --translucent(var(--md-sys-color-scrim), 0.28);
   opacity: 0;
   pointer-events: none;
   transition: opacity 180ms ease;
