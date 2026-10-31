@@ -872,32 +872,34 @@ onBeforeUnmount(() => {
         />
       </div>
     </template>
-    <Icon
+    <span
       v-if="hasStartInsetIcon"
       data-inset-icon="start"
       data-slider-percent-target="true"
       aria-hidden="true"
-      :name="startInsetIconName"
       :class="[
         'm3-slider-inset-icon',
         'm3-slider-inset-icon-start',
         isStartInsetIconFlipped ? 'm3-slider-inset-icon-flipped' : 'm3-slider-inset-icon-default',
         isStartInsetIconFlipped ? 'm3-slider-inset-icon-on-inactive' : 'm3-slider-inset-icon-on-active',
       ]"
-    />
-    <Icon
+    >
+      <Icon class="m3-slider-inset-icon-image" :name="startInsetIconName" />
+    </span>
+    <span
       v-if="hasEndInsetIcon"
       data-inset-icon="end"
       data-slider-percent-target="true"
       aria-hidden="true"
-      :name="endInsetIconName"
       :class="[
         'm3-slider-inset-icon',
         'm3-slider-inset-icon-end',
         isEndInsetIconFlipped ? 'm3-slider-inset-icon-flipped' : 'm3-slider-inset-icon-default',
         isEndInsetIconFlipped ? 'm3-slider-inset-icon-on-active' : 'm3-slider-inset-icon-on-inactive',
       ]"
-    />
+    >
+      <Icon class="m3-slider-inset-icon-image" :name="endInsetIconName" />
+    </span>
 
     <div
       data-value-indicator-anchor="true"

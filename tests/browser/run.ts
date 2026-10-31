@@ -35,3 +35,5 @@ await import('./surface-density/run');
 await import('./field-labels/run');
 
 await import('./field-sizing/run');
+
+await import('./slider-icons/run');

@@ -354,11 +354,11 @@
     inline-size: calc(var(--icon-size) + 1rem);
     block-size: var(--track-height);
 
-    writing-mode: horizontal-tb;
-    font-size: var(--icon-size);
-    line-height: 1;
-
     --md-icon-size: var(--icon-size);
+  }
+
+  .m3-slider-inset-icon-image {
+    writing-mode: horizontal-tb;
   }
 
   .m3-slider-inset-icon-start {
