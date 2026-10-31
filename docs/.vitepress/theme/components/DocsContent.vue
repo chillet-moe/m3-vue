@@ -61,7 +61,7 @@ import DocsPager from './DocsPager.vue';
   margin-block: -1.75rem 1.25rem;
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   content: 'API Reference';

@@ -55,7 +55,7 @@ function isActiveOutlineLink(link: string) {
   margin-inline-start: 0.75rem;
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }

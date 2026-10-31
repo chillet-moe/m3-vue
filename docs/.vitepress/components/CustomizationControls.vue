@@ -423,7 +423,7 @@ watch(open, async (value) => {
   gap: 0.5rem;
 }
 .customization-header h2 {
-  font: 600 1.125rem/1.5 sans-serif;
+  font: 500 1.125rem/1.5 sans-serif;
   margin: 0;
 }
 .customization-footer {
@@ -491,7 +491,7 @@ watch(open, async (value) => {
 .customization-code-title {
   margin: 0;
   font: inherit;
-  font-weight: 600;
+  font-weight: 500;
 }
 .customization-code {
   margin: 0;

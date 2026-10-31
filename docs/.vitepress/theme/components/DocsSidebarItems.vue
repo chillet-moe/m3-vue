@@ -108,7 +108,7 @@ function resolveItemKey(item: DefaultTheme.SidebarItem, index: number) {
   margin: 0.25rem 0 0.125rem 0.5rem;
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.25;
 }
 

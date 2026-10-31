@@ -81,7 +81,7 @@ function resolveLink(path: string) {
 
 .docs-brand-text {
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .docs-sidebar-nav {
@@ -103,7 +103,7 @@ function resolveLink(path: string) {
   margin: 0;
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   line-height: 1.25;

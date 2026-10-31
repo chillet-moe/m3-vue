@@ -409,7 +409,7 @@ onMounted(() => {
   margin: 0;
   color: var(--vp-c-text-1);
   font-size: 1rem;
-  font-weight: 650;
+  font-weight: 500;
   line-height: 1.4;
 }
 
@@ -423,7 +423,7 @@ onMounted(() => {
   padding-inline: 0.375rem;
   color: var(--vp-c-text-2);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   background: var(--vp-c-bg-alt);
 }
 
@@ -473,7 +473,7 @@ onMounted(() => {
 .style-token-table-grid th {
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
   background: var(--docs-table-header-bg);
 }
 
@@ -512,7 +512,7 @@ onMounted(() => {
 .style-token-table-label {
   color: var(--vp-c-text-3);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
   text-transform: uppercase;
 }

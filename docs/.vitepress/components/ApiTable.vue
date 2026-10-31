@@ -318,14 +318,14 @@ function getSectionContentId(key: string) {
   padding: 0;
   color: var(--vp-c-text-1);
   font-size: 1rem;
-  font-weight: 650;
+  font-weight: 500;
   line-height: 1.4;
 }
 
 .api-table-static-title {
   margin-inline-start: 0.5rem;
   font-size: 1rem;
-  font-weight: 650;
+  font-weight: 500;
   line-height: 1.4;
 }
 
@@ -339,7 +339,7 @@ function getSectionContentId(key: string) {
   padding-inline: 0.375rem;
   color: var(--vp-c-text-2);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   background: var(--vp-c-bg-alt);
 }
 
@@ -378,7 +378,7 @@ function getSectionContentId(key: string) {
 .api-table-grid th {
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
   background: var(--docs-table-header-bg);
 }
 

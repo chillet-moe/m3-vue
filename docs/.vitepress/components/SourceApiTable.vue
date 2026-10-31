@@ -202,7 +202,7 @@ function getSectionContentId(name: string) {
   padding-inline: 0.375rem;
   color: var(--vp-c-text-2);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   background: var(--vp-c-bg-alt);
 }
 
@@ -234,7 +234,7 @@ function getSectionContentId(name: string) {
 .source-api-grid th {
   color: var(--vp-c-text-2);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .source-api-grid td {
