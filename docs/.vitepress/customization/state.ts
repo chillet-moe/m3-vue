@@ -1,3 +1,4 @@
+import { switchSizeContextKey, type SwitchSize } from '@/components/Switch';
 import { computed, inject, onMounted, onScopeDispose, provide, reactive, ref, watch, type InjectionKey } from 'vue';
 import {
   appearanceContextKey,
@@ -74,6 +75,7 @@ export function provideDocsCustomization() {
   const boolean = (name: string) =>
     computed(() => (state.defaults[name] === undefined ? undefined : state.defaults[name] === 'true'));
   provideShape(choice<M3Shape>('shape'));
+  provide(switchSizeContextKey, choice<SwitchSize>('switchSize'));
   provide(rowSizeContextKey, choice<RowSize>('rowSize'));
   provide(appearanceContextKey, { appearance: choice<'standard' | 'expressive'>('appearance') });
   provide(fieldContextKey, { size: choice<'extra-small' | 'small' | 'medium'>('fieldSize') });

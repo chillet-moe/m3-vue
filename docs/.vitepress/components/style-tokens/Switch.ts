@@ -100,13 +100,13 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-pressed-handle-height',
     description: 'Controls pressed handle height.',
-    fallback: '1.75rem',
+    fallback: 'Resolved track height × 28 / 32',
     category: 'State',
   },
   {
     name: '--md-switch-pressed-handle-width',
     description: 'Controls pressed handle width.',
-    fallback: '1.75rem',
+    fallback: 'Resolved track height × 28 / 32',
     category: 'State',
   },
   {
@@ -118,13 +118,13 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-selected-handle-height',
     description: 'Controls selected handle height.',
-    fallback: '1.5rem',
+    fallback: 'Resolved track height × 24 / 32',
     category: 'State',
   },
   {
     name: '--md-switch-selected-handle-width',
     description: 'Controls selected handle width.',
-    fallback: '1.5rem',
+    fallback: 'Resolved track height × 24 / 32',
     category: 'State',
   },
   {
@@ -148,7 +148,7 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-selected-icon-size',
     description: 'Controls selected icon size.',
-    fallback: '1rem',
+    fallback: 'Resolved track height × 16 / 32',
     category: 'State',
   },
   {
@@ -172,19 +172,19 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-target-size',
     description: 'Controls the minimum interaction target height.',
-    fallback: '2.5rem',
+    fallback: 'Size baseline + 2dp per density step; at least track height + 8dp; presentation uses track height',
     category: 'Layout',
   },
   {
     name: '--md-switch-track-height',
     description: 'Controls track height.',
-    fallback: '2rem',
+    fallback: 'Size, typography and density (small: 24dp; medium: 32dp at default typography and density 0)',
     category: 'Layout',
   },
   {
     name: '--md-switch-track-outline-width',
     description: 'Controls track outline width.',
-    fallback: '0.125rem',
+    fallback: 'Resolved track height / 16',
     category: 'Layout',
   },
   {
@@ -196,7 +196,7 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-track-width',
     description: 'Controls track width.',
-    fallback: '3.25rem',
+    fallback: 'Resolved track height × 52 / 32',
     category: 'Layout',
   },
   {
@@ -208,13 +208,13 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-unselected-handle-height',
     description: 'Controls unselected handle height.',
-    fallback: '1rem',
+    fallback: 'Resolved track height × 16 / 32',
     category: 'State',
   },
   {
     name: '--md-switch-unselected-handle-width',
     description: 'Controls unselected handle width.',
-    fallback: '1rem',
+    fallback: 'Resolved track height × 16 / 32',
     category: 'State',
   },
   {
@@ -238,7 +238,7 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-unselected-icon-size',
     description: 'Controls unselected icon size.',
-    fallback: '1rem',
+    fallback: 'Resolved track height × 16 / 32',
     category: 'State',
   },
   {
@@ -268,13 +268,13 @@ export const switchStyleTokens = [
   {
     name: '--md-switch-with-icon-handle-height',
     description: 'Controls with icon handle height.',
-    fallback: '1.5rem',
+    fallback: 'Resolved track height × 24 / 32',
     category: 'Layout',
   },
   {
     name: '--md-switch-with-icon-handle-width',
     description: 'Controls with icon handle width.',
-    fallback: '1.5rem',
+    fallback: 'Resolved track height × 24 / 32',
     category: 'Layout',
   },
 ] satisfies StyleTokenMeta[];

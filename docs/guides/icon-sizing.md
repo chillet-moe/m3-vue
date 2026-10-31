@@ -10,7 +10,9 @@ Use **Customize → Theme** to change density, the icon size multiplier and sour
 
 ## Sizing rules
 
-Component size selects the baseline. Default icons change by 1px per density step, limited to 4px below or above that baseline and never below 16px, before applying `--md-icon-scale`. Button, IconButton, Chip, fields, menu and list rows, trees and navigation items use this rule. Explicit component icon-size tokens and `Icon size` bypass automatic sizing. Inline icons follow text and do not shrink with density.
+Component size selects the baseline. Icons paired with text derive that baseline and its bounds from the corresponding typography role's font size. Button uses its size-specific label/title/headline role; Chip, Menu and Breadcrumb use label-large; fields and ListItem use body-large; TreeView uses body-medium; navigation drawer and rail items use label-large and label-medium respectively. Density then changes the size by 1px per step within those bounds, followed by `--md-icon-scale`. At default typography the bounds are baseline ±4px with a 16px lower limit; these bounds scale with the typography role.
+
+Standalone IconButton and Icon retain their size-based baselines. Explicit component icon-size tokens and `Icon size` bypass automatic sizing. Inline icons follow text and do not shrink with density.
 
 ```css
 :root {

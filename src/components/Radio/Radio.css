@@ -17,22 +17,23 @@
     --md-radio-selected-dot-size: initial;
     --md-radio-selected-outline-color: initial;
     --md-radio-selected-outline-width: initial;
-    --md-radio-state-layer-size: initial;
     --md-radio-target-size: initial;
     --md-radio-unselected-outline-color: initial;
     --md-radio-unselected-outline-width: initial;
   }
 
   .m3-radio {
-    --_radio-icon-size: var(--md-radio-icon-size, --dp(20));
-    --_radio-target-size: var(--md-radio-target-size, --dp(40));
-    --_radio-state-layer-size: var(--md-radio-state-layer-size, --dp(40));
+    --_radio-icon-size: var(--md-radio-icon-size, --density-graphic(20, body-medium, 14));
+    --_radio-target-size: var(
+      --md-radio-target-size,
+      max(calc(var(--_radio-icon-size) + --dp(8)), --density-space(40, 0, 2))
+    );
     --_radio-icon-shape: var(--md-radio-icon-shape, var(--md-sys-shape-corner-full));
-    --_radio-unselected-outline-width: var(--md-radio-unselected-outline-width, --dp(2));
-    --_radio-selected-outline-width: var(--md-radio-selected-outline-width, --dp(2));
+    --_radio-unselected-outline-width: var(--md-radio-unselected-outline-width, calc(var(--_radio-icon-size) / 10));
+    --_radio-selected-outline-width: var(--md-radio-selected-outline-width, calc(var(--_radio-icon-size) / 10));
     --_radio-unselected-outline-color: var(--md-radio-unselected-outline-color, var(--md-sys-color-on-surface-variant));
     --_radio-selected-outline-color: var(--md-radio-selected-outline-color, var(--md-sys-color-primary));
-    --_radio-selected-dot-size: var(--md-radio-selected-dot-size, --dp(10));
+    --_radio-selected-dot-size: var(--md-radio-selected-dot-size, calc(var(--_radio-icon-size) / 2));
     --_radio-selected-dot-color: var(--md-radio-selected-dot-color, var(--md-sys-color-primary));
     --_radio-focus-indicator-color: var(--md-radio-focus-indicator-color, var(--md-sys-color-secondary));
     --_radio-focus-indicator-thickness: var(

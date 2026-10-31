@@ -106,7 +106,7 @@ export const menuStyleTokens = [
   {
     name: '--md-menus-menu-item-leading-icon-size',
     description: 'Controls menu item leading icon size.',
-    fallback: '--dp(20)',
+    fallback: 'Typography, density and icon scale (default reference: --dp(20))',
     category: 'Layout',
   },
   {
@@ -160,7 +160,7 @@ export const menuStyleTokens = [
   {
     name: '--md-menus-menu-item-trailing-icon-size',
     description: 'Controls menu item trailing icon size.',
-    fallback: '--dp(20)',
+    fallback: 'Typography, density and icon scale (default reference: --dp(20))',
     category: 'Layout',
   },
   {

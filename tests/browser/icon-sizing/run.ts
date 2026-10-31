@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { typographyPresets } from '../../../src/theme/presets';
 import { chromium } from 'playwright';
 import { createServer } from 'vite';
 import { openFixture } from '../fonts';
@@ -24,6 +25,7 @@ try {
         ...sizes.map((size, i) => [`icon-${size}`, [20, 24, 24, 32, 40][i]]),
         ['slotted-icon', 32],
         ['chip', 18],
+        ['tabs', 24],
         ['menu', 20],
         ['list', 24],
         ['field', 24],
@@ -41,6 +43,10 @@ try {
         const expected = Math.max(Math.max(16, base - 4), Math.min(base + 4, base + density)) * scale;
         assert.equal(metric.size, expected, JSON.stringify({ key, density, scale, metric }));
         assert(metric.host >= metric.size, `Content fits ${key}`);
+        if (key.startsWith('icon-')) {
+          const baseHeight = [32, 40, 56, 96, 136][sizes.indexOf(key.slice(5))]!;
+          assert.equal(metric.host, Math.max(expected + 8, baseHeight + density * 2));
+        }
         assert(metric.variations.includes('opsz'), 'Variable font optical sizing remains enabled');
       }
       assert.equal(
@@ -53,6 +59,40 @@ try {
       );
     }
   }
+  for (const density of [0, -2]) {
+    await page.locator('main').evaluate(
+      (el, { tokens, density }) => {
+        for (const [key, value] of Object.entries(tokens)) el.style.setProperty(key, value);
+        el.style.setProperty('--md-density', String(density));
+        el.style.setProperty('--md-icon-scale', '1');
+      },
+      { tokens: typographyPresets.compact, density },
+    );
+    for (const [key, expected] of [
+      ['button-small', (20 * 12) / 14 + density],
+      ['chip', Math.max((16 * 12) / 14, (18 * 12) / 14 + density)],
+      ['menu', (20 * 12) / 14 + density],
+      ['field', (24 * 12) / 16 + density],
+      ['list', (24 * 12) / 16 + density],
+      ['tree', Math.max((16 * 12) / 14, (18 * 12) / 14 + density)],
+      ['icon-small', 24 + density],
+      ['tabs', (24 * 14) / 16 + density],
+      ['override', 30],
+    ] as const) {
+      const actual = await page
+        .locator(`[data-test="${key}"] [data-source]`)
+        .first()
+        .evaluate((el) => el.getBoundingClientRect().height);
+      assert(Math.abs(actual - expected) < 0.05, `Compact ${key}: ${actual} != ${expected}`);
+    }
+  }
+  const clearIcon = await page.locator('[data-test="select-clear"] [data-part="clear-icon"]').evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return { width: rect.width, height: rect.height, font: parseFloat(getComputedStyle(el).fontSize) };
+  });
+  assert(Math.abs(clearIcon.height - 13) < 0.05);
+  assert.equal(clearIcon.width, clearIcon.height);
+  assert.equal(clearIcon.font, clearIcon.height);
   const measure = () =>
     page.locator('[data-test="symbol"]').evaluate((root) => ({
       box: root.getBoundingClientRect().width,

@@ -220,7 +220,7 @@ export const tabsStyleTokens = [
   {
     name: '--md-tabs-icon-size',
     description: 'Controls icon size.',
-    fallback: '1.5rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.5rem)',
     category: 'Layout',
   },
   {

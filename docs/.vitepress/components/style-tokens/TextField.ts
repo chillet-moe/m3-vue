@@ -400,7 +400,7 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-leading-icon-size',
     description: 'Controls text field leading icon size.',
-    fallback: '1.5rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.5rem)',
     category: 'Layout',
   },
   {
@@ -460,7 +460,7 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-trailing-icon-size',
     description: 'Controls text field trailing icon size.',
-    fallback: '1.5rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.5rem)',
     category: 'Layout',
   },
 ] satisfies StyleTokenMeta[];

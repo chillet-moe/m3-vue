@@ -19,12 +19,15 @@ import {
   NavigationRail,
   NavigationRailItem,
   Switch,
+  CheckBox,
+  Radio,
 } from '@/index';
 const { lang } = useData();
 const zh = computed(() => lang.value === 'zh-Hans');
 const icon = ref('settings');
 const menu = ref<InstanceType<typeof Menu>>();
 const guides = ref(true);
+const selected = ref(true);
 const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as const;
 const densities = [0, -2, -4, 2];
 const options = ['settings', 'search', 'add', 'favorite', 'arrow_forward'].map((value) => ({ value, label: value }));
@@ -45,6 +48,11 @@ const options = ['settings', 'search', 'add', 'favorite', 'arrow_forward'].map((
         ><template #leading><Icon :name="icon" /></template
       ></TextField>
       <Select label="Select" :options="options" :model-value="icon" />
+    </div>
+    <div class="icon-lab-current">
+      <Switch v-model:checked="selected">Switch</Switch>
+      <CheckBox v-model:checked="selected">Checkbox</CheckBox>
+      <Radio v-model:checked="selected">Radio</Radio>
     </div>
     <ListItem :leading-icon="icon">ListItem</ListItem>
     <Button leading-icon="menu" v-dropdown="menu?.menuRef ?? null">Menu</Button

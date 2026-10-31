@@ -99,6 +99,8 @@ Use the `useTabs` composable directly to build custom tab UIs without any predef
   <TabsHeadless />
 </DemoContainer>
 
+Default tab icons follow the size-specific typography role and density. `--md-tabs-icon-size` sets an explicit final size.
+
 ## Reference
 
 <AnatomyTable scope="tabs" />

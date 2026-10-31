@@ -52,6 +52,10 @@ for a high-emphasis icon action; use `outlined` or `tonal` for intermediate emph
   </IconButton>
 </DemoContainer>
 
+## Density
+
+The container changes by 2dp per density step independently of icon sizing, retaining at least 4dp above and below the icon. For the default small size, density 0 / -2 / -4 produces heights of 40 / 36 / 32dp. Explicit container-height tokens take precedence.
+
 ## Examples
 
 ### Default

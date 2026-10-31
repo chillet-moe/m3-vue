@@ -40,7 +40,7 @@
     --_breadcrumb-item-height: var(--md-breadcrumb-item-height, --density-space(32));
     --_breadcrumb-link-padding-inline: var(--md-breadcrumb-link-padding-inline, --dp(8));
     --_breadcrumb-link-shape: var(--md-breadcrumb-link-shape, var(--md-shape-action));
-    --_breadcrumb-separator-icon-size: var(--md-breadcrumb-separator-icon-size, --density-icon(18));
+    --_breadcrumb-separator-icon-size: var(--md-breadcrumb-separator-icon-size, --density-icon(18, label-large, 14));
   }
 }
 

@@ -28,6 +28,7 @@ export const defaultSettings = [
   { key: 'fieldSize', options: choices('extra-small', 'small', 'medium') },
   { key: 'buttonSize', options: sizes },
   { key: 'iconButtonSize', options: sizes },
+  { key: 'switchSize', options: choices('small', 'medium') },
   { key: 'listSize', options: sizes },
   { key: 'listAppearance', options: choices('standard', 'expressive') },
   { key: 'sliderSize', options: sizes },

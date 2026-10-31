@@ -63,6 +63,7 @@ app.use(M3VuePlugin, {
 | `rowSize`                                  | Menu rows (including Select/Combobox menus), TreeView and navigation drawer/rail items |
 | `fieldSize`                                | Single-line TextField, Select and Combobox                                             |
 | `buttonDefaults`                           | Button size and press shape morph; ButtonGroup inherits press morph                    |
+| `switchSize`                               | Switch (`small` / `medium`)                                                            |
 | `iconButtonSize`                           | IconButton                                                                             |
 | `sliderDefaults`                           | Slider size, appearance, wheel input and value indicator                               |
 | `listItemDefaults`                         | ListItem size and appearance                                                           |
@@ -101,7 +102,7 @@ Menu, TreeView, NavigationDrawer and NavigationRail share a `size` scale:
 | `large`            | 56px                    |
 | `extra-large`      | 64px                    |
 
-These are reference heights at density `0` with a 16px root font size. Text and icon sizes do not change.
+These are reference heights at density `0` with a 16px root font size. Changing row size alone does not change text or icon sizes; typography and density still affect their respective dimensions.
 Multiline content and accessories can grow the row. Collapsed rails also reserve room for their stacked icon and label.
 
 Set `rowSize` in the plugin for application defaults, or use `provideRowSize` in an existing ancestor for one region:
@@ -150,7 +151,9 @@ is no universal minimum height or numeric clamp. Explicit dimension tokens take 
 Density adjusts each component's chosen size; it is not a shared target height. Choose sizes first: a menu row
 and an extra-small button can reach their content floors at different density values.
 
-Density applies to Button, ButtonGroup, IconButton, Chip, fields, InputOtp, ListItem, TreeView, Tabs,
+The compact preset combines compact typography with density -2. Typography, component size and density remain independent settings. Text-associated icons and Checkbox, Radio and Switch geometry derive their default proportions from their typography role, so custom font sizes work without a preset-specific CSS override. Density then adjusts geometry and whitespace. Standalone IconButton and FAB sizes remain size-driven; explicit component dimensions override automatic sizing.
+
+Density applies to Button, ButtonGroup, IconButton, Chip, Checkbox, Radio, Switch, fields, InputOtp, ListItem, TreeView, Tabs,
 menu rows (including Select/Combobox menus), Breadcrumb, Pagination and navigation drawer/rail items.
 Density primarily adjusts vertical whitespace. TextField, Select and Combobox also adjust horizontal padding by 2px per step, down to 4px, so field icons follow the surrounding whitespace. Explicit padding tokens override this rule. OTP cell widths, navigation widths, fonts stay unchanged. Default action and row icons adjust by 1px per density step within bounded sizes.
 Collapsed rail items retain room for the icon target and stacked label, so they reach their density floor sooner.

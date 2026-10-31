@@ -11,6 +11,7 @@ const optionPaths = {
   fieldSize: ['fieldSize'],
   buttonSize: ['buttonDefaults', 'size'],
   iconButtonSize: ['iconButtonSize'],
+  switchSize: ['switchSize'],
   listSize: ['listItemDefaults', 'size'],
   listAppearance: ['listItemDefaults', 'appearance'],
   sliderSize: ['sliderDefaults', 'size'],

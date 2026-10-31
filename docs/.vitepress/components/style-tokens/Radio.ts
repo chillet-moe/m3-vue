@@ -58,7 +58,7 @@ export const radioStyleTokens = [
   {
     name: '--md-radio-icon-size',
     description: 'Controls icon size.',
-    fallback: '--dp(20)',
+    fallback: 'Typography and density (20dp at default typography and density 0)',
     category: 'Layout',
   },
   {
@@ -70,7 +70,7 @@ export const radioStyleTokens = [
   {
     name: '--md-radio-selected-dot-size',
     description: 'Controls selected dot size.',
-    fallback: '--dp(10)',
+    fallback: 'Resolved circle size / 2',
     category: 'State',
   },
   {
@@ -82,19 +82,13 @@ export const radioStyleTokens = [
   {
     name: '--md-radio-selected-outline-width',
     description: 'Controls selected outline width.',
-    fallback: '--dp(2)',
-    category: 'State',
-  },
-  {
-    name: '--md-radio-state-layer-size',
-    description: 'Controls state layer size.',
-    fallback: '--dp(40)',
+    fallback: 'Resolved circle size / 10',
     category: 'State',
   },
   {
     name: '--md-radio-target-size',
     description: 'Controls target size.',
-    fallback: '--dp(40)',
+    fallback: '40dp + 2dp per density step; at least circle size + 8dp; presentation uses circle size',
     category: 'Layout',
   },
   {
@@ -106,7 +100,7 @@ export const radioStyleTokens = [
   {
     name: '--md-radio-unselected-outline-width',
     description: 'Controls unselected outline width.',
-    fallback: '--dp(2)',
+    fallback: 'Resolved circle size / 10',
     category: 'State',
   },
 ] satisfies StyleTokenMeta[];

@@ -2,12 +2,31 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 import Switch from './Switch.vue';
+import { M3VuePlugin } from '@/plugin';
 
 afterEach(() => {
   document.body.innerHTML = '';
 });
 
 describe('Switch', () => {
+  it('inherits reactive size defaults while explicit props take precedence', async () => {
+    const container = document.createElement('div');
+    const size = ref<'small' | 'medium'>('small');
+    const app = createApp(() =>
+      h('div', [h(Switch, { checked: false }), h(Switch, { checked: false, size: 'medium' })]),
+    );
+    app.use(M3VuePlugin, { switchSize: size });
+    app.mount(container);
+    const sizes = () =>
+      [...container.querySelectorAll('[data-scope="switch"][data-part="root"]')].map(
+        (el) => (el as HTMLElement).dataset.size,
+      );
+    expect(sizes()).toEqual(['small', 'medium']);
+    size.value = 'medium';
+    await nextTick();
+    expect(sizes()).toEqual(['medium', 'medium']);
+    app.unmount();
+  });
   it('renders a native checkbox input by default', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

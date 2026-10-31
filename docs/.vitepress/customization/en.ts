@@ -40,6 +40,7 @@ export const en = {
   fieldSize: 'Field size',
   rowSize: 'Row size',
   buttonSize: 'Button size',
+  switchSize: 'Switch size',
   iconButtonSize: 'Icon button size',
   listSize: 'List row size',
   listAppearance: 'List appearance',

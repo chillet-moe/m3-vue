@@ -292,7 +292,7 @@ export const buttonStyleTokens = [
   {
     name: '--md-button-icon-size',
     description: 'Controls icon size.',
-    fallback: '1.25rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.25rem)',
     category: 'Layout',
   },
   {
@@ -328,7 +328,7 @@ export const buttonStyleTokens = [
   {
     name: '--md-button-large-icon-size',
     description: 'Controls large icon size.',
-    fallback: '2rem',
+    fallback: 'Typography, density and icon scale (default reference: 2rem)',
     category: 'Layout',
   },
   {
@@ -364,7 +364,7 @@ export const buttonStyleTokens = [
   {
     name: '--md-button-medium-icon-size',
     description: 'Controls medium icon size.',
-    fallback: '1.5rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.5rem)',
     category: 'Layout',
   },
   {
@@ -490,7 +490,7 @@ export const buttonStyleTokens = [
   {
     name: '--md-button-small-icon-size',
     description: 'Controls small icon size.',
-    fallback: '1.25rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.25rem)',
     category: 'Layout',
   },
   {
@@ -682,7 +682,7 @@ export const buttonStyleTokens = [
   {
     name: '--md-button-xlarge-icon-size',
     description: 'Controls xlarge icon size.',
-    fallback: '2.5rem',
+    fallback: 'Typography, density and icon scale (default reference: 2.5rem)',
     category: 'Layout',
   },
   {
@@ -718,7 +718,7 @@ export const buttonStyleTokens = [
   {
     name: '--md-button-xsmall-icon-size',
     description: 'Controls xsmall icon size.',
-    fallback: '1.25rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.25rem)',
     category: 'Layout',
   },
   {

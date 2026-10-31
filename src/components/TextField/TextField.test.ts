@@ -622,7 +622,7 @@ describe('TextField', () => {
     expect(
       fields.every((field) => field.querySelector('.m3-text-field-trailing-slot > .m3-icon-button:last-child')),
     ).toBe(true);
-    expect(actionRule).toContain('margin-block: var(--_slot-action-margin)');
+    expect(actionRule).toContain('margin-block: var(--_slot-action-margin-block)');
     expect(actionRule).toContain('--md-icon-button-container-height: var(--_slot-action-height)');
     expect(actionRule).toContain('--md-icon-button-default-leading-space: var(--_slot-action-space)');
     expect(actionRule).toContain('--md-icon-button-default-trailing-space: var(--_slot-action-space)');
@@ -632,8 +632,8 @@ describe('TextField', () => {
     expect(trailingIconButtonRule).toContain(
       '--md-icon-button-icon-size: var(--_outlined-text-field-trailing-icon-size)',
     );
-    expect(leadingEdgeRule).toContain('margin-inline-start: var(--_slot-action-margin)');
-    expect(trailingEdgeRule).toContain('margin-inline-end: var(--_slot-action-margin)');
+    expect(leadingEdgeRule).toContain('margin-inline-start: calc(-1 * var(--_slot-action-space))');
+    expect(trailingEdgeRule).toContain('margin-inline-end: calc(-1 * var(--_slot-action-space))');
 
     app.unmount();
   });

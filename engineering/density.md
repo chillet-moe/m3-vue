@@ -1,7 +1,8 @@
 # Density and theme sizing
 
-Density adjusts vertical spacing in 4dp steps. Fields also adjust horizontal padding
-as described below; other horizontal geometry remains independent. Typography
+Density usually adjusts vertical spacing in 4dp steps. Standalone selection targets
+and IconButton containers use 2dp steps to preserve hover feedback. Fields also adjust horizontal padding
+as described below; Switch width follows its track proportions. Other horizontal geometry remains independent. Typography
 and component size are independent; default icons use the bounded scaling described below. A theme preset selects typography
 and a density together; it does not change component props.
 
@@ -18,7 +19,7 @@ its stacked contents; it does not redefine the single-line scale.
 | Family                                                                        | Content and spacing rule                                                                                                                                                                    | Boundary                                                                                                        |
 | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | Button / ButtonGroup                                                          | Size selects typography and base height; shared action metrics keep groups aligned. Height follows the larger of text line height and icon size, plus density-adjusted whitespace.          | At least 2dp above and below content.                                                                           |
-| IconButton                                                                    | Size selects icon and base height; density adjusts remaining vertical whitespace.                                                                                                           | At least 2dp above and below the icon. Icon size follows the bounded icon rule.                                 |
+| IconButton                                                                    | Size selects icon and base height; container height changes independently by 2dp per density step.                                                                                          | At least 4dp above and below the icon. Icon size follows the bounded icon rule.                                 |
 | Chip                                                                          | Label line height and icon determine content height.                                                                                                                                        | At least 2dp above and below; avatar/content must still fit.                                                    |
 | TextField / Select / Combobox                                                 | Shared field geometry: input line height plus vertical space. Label clearance remains outside the outlined field. Multiline inputs grow with content.                                       | At least 4dp above and below content. Slot actions must fit without shrinking icons.                            |
 | ListItem / List                                                               | Size selects minimum height and block padding. Actual grid content determines final height, including descriptions and accessories.                                                         | Block padding stops at 4dp per side; no fixed maximum height.                                                   |
@@ -31,7 +32,7 @@ its stacked contents; it does not redefine the single-line scale.
 | NavigationDrawer                                                              | Items and section triggers share density-adjusted minimum height.                                                                                                                           | At least 4dp above and below content; wider layout remains independent.                                         |
 | NavigationRail                                                                | Expanded item and indicator heights follow row size, density and content. Collapsed row height and outer block padding follow density; the icon target and stacked label retain their size. | Expanded rows reserve at least 4dp above and below content; collapsed rows at least 2dp outer padding per side. |
 | Dialog / Snackbar                                                             | Focused interaction and feedback preserve their spacing, including nested actions.                                                                                                          | Density resets to zero; typography still inherits the theme.                                                    |
-| Checkbox / Radio / Switch / Slider                                            | Control geometry and interaction targets are not spacing to remove.                                                                                                                         | No density transformation.                                                                                      |
+| Slider                                                                        | Control geometry and interaction targets are not spacing to remove.                                                                                                                         | No density transformation.                                                                                      |
 | FAB / FAB menu                                                                | Dedicated action/navigation sizes remain their existing specifications.                                                                                                                     | No additional density transformation.                                                                           |
 | Other containers, sheets, Popover, Tooltip, Badge, progress, layout utilities | Own layout or content determines dimensions.                                                                                                                                                | No global scaling. Nested density-aware components inherit unless a surface explicitly resets density.          |
 
@@ -74,7 +75,7 @@ surface scrolls when its contents exceed the viewport; the clock is not scaled.
 ## Icon geometry
 
 Default action, field and row icons use `--density-icon`: 1dp per density step,
-bounded to baseline ±4dp and at least 16dp, multiplied by `--md-icon-scale`
+bounded at default typography to baseline ±4dp and at least 16dp, multiplied by `--md-icon-scale`
 (clamped to 0.5–2). Explicit component sizes bypass this calculation. Inline
 icons retain text-relative sizing. Selection-control geometry is independent.
 
@@ -83,3 +84,35 @@ uses `(5/6) / contentRatio`. The default ratio is nominal 5/6 for Symbols and 1
 for SVG slots; a local prop overrides the inherited token. No glyph bounding-box
 measurement or source registry is involved. Optical size follows the font size
 within 20–48, including morphing icons.
+
+## Checkbox and Radio
+
+Visible Checkbox / Radio shapes start at 18 / 20dp and change by 1dp per density
+step, clamped to baseline ±4dp. Default strokes and selection marks follow the
+resolved shape size, including explicit shape overrides. Icon scale and source
+calibration are independent and do not apply to selection controls.
+Standalone targets start at 40dp and change by 2dp per density step, with a floor
+of the visible shape plus 8dp. This preserves at least 4dp per side for hover
+feedback and avoids counting shape shrinkage a second time.
+Explicit target-size tokens take precedence. The state layer occupies the target.
+Presentation mode reserves only the density-adjusted shape because the parent
+owns interaction.
+
+## Switch
+
+At default typography, medium track height changes from 32dp by 1dp per density step, clamped to 28–36dp. Small uses a 24dp baseline, clamped to 20–28dp.
+Default width, handles, outlines, internal icons and travel insets derive from
+track height. Explicit dimension tokens take precedence. Target and hover size
+change from 40dp (medium) or 32dp (small) by 2dp per step with a floor of track height plus 8dp. Presentation reserves only track height.
+
+## Typography-linked geometry
+
+The compact preset remains compact typography plus density -2. It has no
+component-specific override sheet. Build-time graphic sizing takes a baseline,
+typography role and reference font size; baseline and bounds follow that role's
+font size before the density offset. Selection geometry uses body-medium.
+Text-associated icons use their component's label role, while standalone
+IconButton, Icon and FAB retain size-based geometry. Explicit component dimension
+tokens bypass automatic sizing. Icon scale and source calibration remain separate.
+
+Tabs icons use the tab size typography role and density; explicit icon size takes precedence.

@@ -50,11 +50,7 @@
   }
 
   .m3-select-clear-icon {
-    inline-size: 1.25rem;
-    block-size: 1.25rem;
-    font-size: 1.25rem;
-
-    --md-icon-size: --density-icon(20);
+    --md-icon-size: --density-icon(20, body-large, 16);
   }
 
   .m3-select[data-open='true'] {

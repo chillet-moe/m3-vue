@@ -27,3 +27,5 @@ await import('./icon-sizing/run');
 await import('./scrollbars/run');
 
 await import('./menu-checkbox/run');
+
+await import('./selection-density/run');

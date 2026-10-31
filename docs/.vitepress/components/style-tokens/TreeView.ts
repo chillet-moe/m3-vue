@@ -112,7 +112,7 @@ export const treeViewStyleTokens = [
   {
     name: '--md-tree-icon-size',
     description: 'Leading icon and disclosure size.',
-    fallback: '18 dp',
+    fallback: 'Typography, density and icon scale (default reference: 18 dp)',
     category: 'Size',
     targets: [
       {

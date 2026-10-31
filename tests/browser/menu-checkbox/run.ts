@@ -27,7 +27,7 @@ try {
     for (const density of [-4, -2, 0, 2]) {
       await root.evaluate((el, value) => (el as HTMLElement).style.setProperty('--md-density', String(value)), density);
       assert.equal(await height(row), await height(command), size + ' density ' + density);
-      assert.equal(await height(indicator), 18);
+      assert.equal(await height(indicator), 18 + Math.max(-4, Math.min(4, density)));
       assert.equal(await height(page.getByTestId('standalone')), 40);
     }
   }
@@ -39,7 +39,7 @@ try {
     style.setProperty('--md-checkbox-target-size', '72px');
   });
   assert.equal(await height(row), 60);
-  assert.equal(await height(indicator), 18, 'Standalone target token must not enlarge presentation');
+  assert.equal(await height(indicator), 20, 'Standalone target token must not enlarge presentation');
   await indicator.evaluate((el) => (el as HTMLElement).style.setProperty('--md-checkbox-container-size', '48px'));
   assert.equal(await height(indicator), 48);
   assert.equal(await height(row), 68, 'Explicit visible box grows the row without clipping');
@@ -80,6 +80,12 @@ try {
   const radio = name.locator('[data-scope="radio"][data-part="root"]');
   assert.equal(await height(name), 48, 'Presentation radio must not enlarge the menu row');
   assert.equal(await height(radio), 20);
+  for (const density of [-4, -2, 0, 2]) {
+    await page.evaluate((value) => document.documentElement.style.setProperty('--md-density', String(value)), density);
+    assert.equal(await height(name), 48 + density * 4, 'Single-value demo row follows inherited density');
+    assert.equal(await height(radio), 20 + density, 'Presentation circle follows density');
+  }
+  await page.evaluate(() => document.documentElement.style.removeProperty('--md-density'));
   const standaloneRadio = page.getByTestId('standalone-radio');
   assert.equal(await height(standaloneRadio), 40);
   await radio.evaluate((el) => (el as HTMLElement).style.setProperty('--md-radio-target-size', '64px'));
@@ -101,6 +107,12 @@ try {
   await page.getByRole('button', { name: 'Visible columns', exact: true }).click();
   const size = page.getByRole('menuitemcheckbox', { name: 'Size', exact: true });
   const column = page.getByRole('menuitemcheckbox', { name: 'Modified', exact: true });
+  for (const density of [-4, -2, 0, 2]) {
+    await page.evaluate((value) => document.documentElement.style.setProperty('--md-density', String(value)), density);
+    assert.equal(await height(size), 48 + density * 4, 'Multiple-value demo row follows inherited density');
+    assert.equal(await height(size.locator('[data-scope="checkbox"][data-part="root"]')), 18 + density);
+  }
+  await page.evaluate(() => document.documentElement.style.removeProperty('--md-density'));
   assert.equal(await size.getAttribute('aria-checked'), 'true');
   await column.click();
   assert.equal(await column.getAttribute('aria-checked'), 'true');

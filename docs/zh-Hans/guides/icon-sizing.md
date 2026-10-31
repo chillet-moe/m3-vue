@@ -10,7 +10,9 @@ import IconSizingLab from '../../.vitepress/components/IconSizingLab.vue';
 
 ## 尺寸规则
 
-组件尺寸决定基准值。默认图标会随每级密度变化 1px，最多比基准值小或大 4px，且不会小于 16px，然后再应用 `--md-icon-scale`。Button、IconButton、Chip、字段、菜单和列表行、树形视图及导航条目均遵循此规则。显式组件图标尺寸 token 和 `Icon size` 不受自动尺寸调整影响。行内图标跟随文本，不会随密度缩小。
+与文本搭配的图标会根据相应排版角色的字号确定基准值及其范围。Button 使用对应尺寸的 label/title/headline 角色；Chip、Menu 和 Breadcrumb 使用 label-large；字段和 ListItem 使用 body-large；TreeView 使用 body-medium；navigation drawer 和 rail 条目分别使用 label-large 和 label-medium。随后密度会在该范围内按每级 1px 调整尺寸，再应用 `--md-icon-scale`。默认排版下，尺寸范围为基准值上下各 4px，且下限为 16px；范围会随排版角色缩放。
+
+独立的 IconButton 和 Icon 仍使用基于尺寸的基准值。显式组件图标尺寸 token 和 `Icon size` 不受自动尺寸调整影响。行内图标跟随文本，不会随密度缩小。
 
 ```css
 :root {

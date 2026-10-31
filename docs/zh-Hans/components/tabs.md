@@ -99,6 +99,8 @@ Tabs 基于 `useTabs` composable 构建：键盘导航、ARIA 属性和值管理
   <TabsHeadless />
 </DemoContainer>
 
+默认标签图标会根据尺寸对应的排版角色和密度调整大小。`--md-tabs-icon-size` 可设置最终尺寸。
+
 ## 参考
 
 <AnatomyTable scope="tabs" />

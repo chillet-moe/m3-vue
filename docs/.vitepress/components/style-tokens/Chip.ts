@@ -190,7 +190,7 @@ export const chipStyleTokens = [
   {
     name: '--md-assist-chip-with-icon-icon-size',
     description: 'Controls chip with icon icon size.',
-    fallback: '1.125rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.125rem)',
     category: 'Layout',
   },
   {
@@ -490,7 +490,7 @@ export const chipStyleTokens = [
   {
     name: '--md-chip-icon-size',
     description: 'Controls icon size.',
-    fallback: '1.125rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.125rem)',
     category: 'Layout',
   },
   {
@@ -982,7 +982,7 @@ export const chipStyleTokens = [
   {
     name: '--md-filter-chip-with-icon-icon-size',
     description: 'Controls chip with icon icon size.',
-    fallback: '1.125rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.125rem)',
     category: 'Layout',
   },
   {
@@ -1318,7 +1318,7 @@ export const chipStyleTokens = [
   {
     name: '--md-input-chip-with-leading-icon-leading-icon-size',
     description: 'Controls chip with leading icon leading icon size.',
-    fallback: '1.125rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.125rem)',
     category: 'Layout',
   },
   {
@@ -1612,7 +1612,7 @@ export const chipStyleTokens = [
   {
     name: '--md-suggestion-chip-with-leading-icon-leading-icon-size',
     description: 'Controls chip with leading icon leading icon size.',
-    fallback: '1.125rem',
+    fallback: 'Typography, density and icon scale (default reference: 1.125rem)',
     category: 'Layout',
   },
   {

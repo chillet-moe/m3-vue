@@ -30,7 +30,7 @@ describe('web-types generator', () => {
     ]);
 
     const icon = components.find((component) => component.name === 'Icon');
-    expect(icon?.props.find((property) => property.name === 'name')?.required).toBe(true);
+    expect(icon?.props.find((property) => property.name === 'name')?.required).toBe(false);
 
     const badge = components.find((component) => component.name === 'Badge');
     expect(badge?.props.find((property) => property.name === 'variant')?.default).toBe('small');

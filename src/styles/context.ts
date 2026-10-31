@@ -1,3 +1,4 @@
+import { switchSizeContextKey } from '@/components/Switch/SwitchContext';
 import { rowSizeContextKey } from './rowSize';
 import { appearanceContextKey } from './appearance';
 import type { App, MaybeRef } from 'vue';
@@ -26,6 +27,7 @@ export function installM3StyleDefaults(
   app: App,
   options: M3ShapeOptions & M3FieldOptions & M3ComponentDefaultsOptions = {},
 ): void {
+  if (options.switchSize !== undefined) app.provide(switchSizeContextKey, options.switchSize);
   if (options.rowSize !== undefined) app.provide(rowSizeContextKey, options.rowSize);
   if (options.appearance !== undefined) app.provide(appearanceContextKey, { appearance: options.appearance });
   if (options.shape !== undefined) app.provide(shapeContextKey, options.shape);

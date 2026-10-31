@@ -1,6 +1,21 @@
 import '@/styles/themes/default.css';
 import { createApp, h } from 'vue';
-import { Button, IconButton, Icon, Chip, Menu, MenuContainer, MenuItem, TextField, ListItem, TreeView } from '@/index';
+import {
+  Button,
+  IconButton,
+  Icon,
+  Chip,
+  Menu,
+  MenuContainer,
+  MenuItem,
+  TextField,
+  ListItem,
+  TreeView,
+  Tabs,
+  TabList,
+  Tab,
+  Select,
+} from '@/index';
 const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as const;
 createApp({
   render: () =>
@@ -9,6 +24,17 @@ createApp({
         h(Button, { size, leadingIcon: 'settings', 'data-test': `button-${size}` }, () => 'Export'),
         h(IconButton, { size, icon: 'settings', 'data-test': `icon-${size}` }),
       ]),
+      h(Tabs, { modelValue: 'one', 'data-test': 'tabs' }, () =>
+        h(TabList, {}, () =>
+          h(Tab, { value: 'one' }, { default: () => 'Tab', icon: () => h(Icon, { name: 'settings' }) }),
+        ),
+      ),
+      h(Select, {
+        modelValue: 'one',
+        options: [{ value: 'one', label: 'One' }],
+        clearable: true,
+        'data-test': 'select-clear',
+      }),
       h(Chip, { leadingIcon: 'settings', 'data-test': 'chip' }, () => 'Chip'),
       h(Menu, { open: true }, () =>
         h(MenuContainer, {}, () =>

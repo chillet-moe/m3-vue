@@ -33,7 +33,21 @@ Use `presentation` when the checkbox is only a visual indicator inside another a
   </div>
 </DemoContainer>
 
-In `presentation` mode, the control occupies only `--md-checkbox-container-size` (18dp by default), without an independent hit target. `--md-checkbox-target-size` applies only to standalone interactive checkboxes (40dp by default). The parent owns spacing and interaction; this works with both ListItem and [MenuItem](/components/menu#consumer-owned-state). Density does not scale the checkbox box or standalone target. An explicitly larger container can grow the parent row.
+In `presentation` mode, the control occupies only `--md-checkbox-container-size` (18dp by default), without an independent hit target. `--md-checkbox-target-size` applies only to standalone interactive checkboxes (40dp by default). The parent owns spacing and interaction; this works with both ListItem and [MenuItem](/components/menu#consumer-owned-state). An explicitly larger container can grow the parent row.
+
+## Density
+
+Default geometry follows the `body-medium` font size. The dimensions below describe default typography; compact and custom typography scale the baseline and its bounds before applying density. Explicit geometry tokens bypass this calculation.
+
+The visible shape starts at 18dp and changes by 1dp per `--md-density` step, clamped to 14–22dp. Selection marks and default stroke widths scale proportionally. This also applies in `presentation` mode, where the parent owns spacing and interaction.
+
+Standalone targets start at 40dp and change by 2dp per density step, retaining at least 4dp on each side of the visible shape. The state layer follows the target, shrinking more slowly than menu row spacing to keep hover feedback visible. Explicit shape and target-size tokens override their respective defaults. Icon source calibration and `--md-icon-scale` do not affect these controls.
+
+<DemoContainer :viewport="false">
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+    <CheckBox v-for="density in [0, -2, -4]" :key="density" :style="{ '--md-density': density }" v-model:checked="checked">density {{ density }}</CheckBox>
+  </div>
+</DemoContainer>
 
 ## Examples
 

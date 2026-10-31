@@ -32,7 +32,21 @@ import CheckBoxGroupSrc from '../../demos/checkbox/CheckBoxGroup.vue?raw';
   </div>
 </DemoContainer>
 
-在 `presentation` 模式下，控件仅占用 `--md-checkbox-container-size`（默认为 18dp），不提供独立的点击区域。`--md-checkbox-target-size` 仅适用于独立的交互式复选框（默认为 40dp）。间距和交互由父级负责；此模式适用于 ListItem 和 [MenuItem](/zh-Hans/components/menu#调用方管理状态)。密度不会缩放复选框方框或独立点击区域。显式增大容器尺寸可能会使父级行高增大。
+在 `presentation` 模式下，控件仅占用 `--md-checkbox-container-size`（默认为 18dp），不提供独立的点击区域。`--md-checkbox-target-size` 仅适用于独立的交互式复选框（默认为 40dp）。间距和交互由父级负责。此模式适用于 ListItem 和 [MenuItem](/zh-Hans/components/menu#调用方管理状态)。显式增大容器尺寸可能会使父级行高增大。
+
+## 密度
+
+默认几何尺寸根据 `body-medium` 字号确定。下方尺寸针对默认排版；紧凑排版和自定义排版会先按比例缩放基准值及其范围，再应用密度。显式几何尺寸 token 会绕过此计算。
+
+可见形状的默认尺寸为 18dp，每个 `--md-density` 等级会改变 1dp，并限制在 14–22dp。选中标记和默认描边宽度会按比例缩放。此规则同样适用于 `presentation` 模式，此时父级负责间距和交互。
+
+独立交互目标的默认尺寸为 40dp，每个密度等级会改变 2dp，并且形状每侧至少保留 4dp。状态层会随目标变化，其收缩速度慢于菜单行间距，以保持悬停反馈清晰可见。显式设置形状和目标尺寸 token 会分别覆盖对应的默认值。图标源校准和 `--md-icon-scale` 不会影响这些控件。
+
+<DemoContainer :viewport="false">
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+    <CheckBox v-for="density in [0, -2, -4]" :key="density" :style="{ '--md-density': density }" v-model:checked="checked">密度 {{ density }}</CheckBox>
+  </div>
+</DemoContainer>
 
 ## 示例
 

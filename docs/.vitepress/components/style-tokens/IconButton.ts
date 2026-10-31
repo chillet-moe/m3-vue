@@ -10,7 +10,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-container-height',
     description: 'Controls container height.',
-    fallback: '2.5rem',
+    fallback: 'Size baseline + 2dp per density step; at least icon size + 8dp',
     category: 'Layout',
   },
   {
@@ -316,13 +316,13 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-icon-size',
     description: 'Controls icon size.',
-    fallback: '1.5rem',
+    fallback: 'Size, density and icon scale (default reference: 1.5rem)',
     category: 'Layout',
   },
   {
     name: '--md-icon-button-large-container-height',
     description: 'Controls large container height.',
-    fallback: '6rem',
+    fallback: 'Size baseline + 2dp per density step; at least icon size + 8dp',
     category: 'Layout',
   },
   {
@@ -352,7 +352,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-large-icon-size',
     description: 'Controls large icon size.',
-    fallback: '2rem',
+    fallback: 'Size, density and icon scale (default reference: 2rem)',
     category: 'Layout',
   },
   {
@@ -424,7 +424,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-medium-container-height',
     description: 'Controls medium container height.',
-    fallback: '3.5rem',
+    fallback: 'Size baseline + 2dp per density step; at least icon size + 8dp',
     category: 'Layout',
   },
   {
@@ -454,7 +454,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-medium-icon-size',
     description: 'Controls medium icon size.',
-    fallback: '1.5rem',
+    fallback: 'Size, density and icon scale (default reference: 1.5rem)',
     category: 'Layout',
   },
   {
@@ -832,7 +832,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-small-container-height',
     description: 'Controls small container height.',
-    fallback: '2.5rem',
+    fallback: 'Size baseline + 2dp per density step; at least icon size + 8dp',
     category: 'Layout',
   },
   {
@@ -862,7 +862,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-small-icon-size',
     description: 'Controls small icon size.',
-    fallback: '1.5rem',
+    fallback: 'Size, density and icon scale (default reference: 1.5rem)',
     category: 'Layout',
   },
   {
@@ -1336,7 +1336,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xlarge-container-height',
     description: 'Controls xlarge container height.',
-    fallback: '8.5rem',
+    fallback: 'Size baseline + 2dp per density step; at least icon size + 8dp',
     category: 'Layout',
   },
   {
@@ -1366,7 +1366,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xlarge-icon-size',
     description: 'Controls xlarge icon size.',
-    fallback: '2.5rem',
+    fallback: 'Size, density and icon scale (default reference: 2.5rem)',
     category: 'Layout',
   },
   {
@@ -1432,7 +1432,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xsmall-container-height',
     description: 'Controls xsmall container height.',
-    fallback: '2rem',
+    fallback: 'Size baseline + 2dp per density step; at least icon size + 8dp',
     category: 'Layout',
   },
   {
@@ -1462,7 +1462,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xsmall-icon-size',
     description: 'Controls xsmall icon size.',
-    fallback: '1.25rem',
+    fallback: 'Size, density and icon scale (default reference: 1.25rem)',
     category: 'Layout',
   },
   {

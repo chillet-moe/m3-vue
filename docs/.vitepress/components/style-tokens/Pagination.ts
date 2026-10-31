@@ -34,7 +34,7 @@ export const paginationStyleTokens = [
   {
     name: '--md-pagination-nav-icon-size',
     description: 'Controls nav icon size.',
-    fallback: '--dp(20)',
+    fallback: 'Typography, density and icon scale (default reference: --dp(20))',
     category: 'Layout',
   },
   {

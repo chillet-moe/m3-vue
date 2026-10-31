@@ -17,7 +17,7 @@
     --_pagination-link-min-width: var(--md-pagination-link-min-width, --dp(40));
     --_pagination-link-padding-inline: var(--md-pagination-link-padding-inline, --dp(12));
     --_pagination-nav-inline-space: var(--md-pagination-nav-inline-space, --dp(4));
-    --_pagination-nav-icon-size: var(--md-pagination-nav-icon-size, --density-icon(20));
+    --_pagination-nav-icon-size: var(--md-pagination-nav-icon-size, --density-icon(20, label-large, 14));
     --_pagination-ellipsis-size: var(--md-pagination-ellipsis-size, --dp(40));
     --_pagination-ellipsis-color: var(--md-pagination-ellipsis-color, var(--md-sys-color-on-surface-variant));
   }

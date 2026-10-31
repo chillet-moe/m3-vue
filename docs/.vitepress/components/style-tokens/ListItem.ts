@@ -52,7 +52,7 @@ export const listItemStyleTokens = [
   {
     name: '--md-item-icon-size',
     description: 'Controls icon size.',
-    fallback: '--dp(20)',
+    fallback: 'Size, typography, density and icon scale (default medium reference: 24dp)',
     category: 'Layout',
   },
   {

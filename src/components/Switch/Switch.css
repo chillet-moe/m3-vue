@@ -52,35 +52,41 @@
   }
 
   .m3-switch {
+    --_switch-size-track-height: --density-graphic(32, body-medium, 14);
+    --_switch-size-target-height: --density-space(40, 0, 2);
     --_switch-selected-icon-color: var(--md-switch-selected-icon-color, var(--md-sys-color-primary));
-    --_switch-selected-icon-size: var(--md-switch-selected-icon-size, 1rem);
+    --_switch-selected-icon-size: var(--md-switch-selected-icon-size, calc(var(--_switch-unit) * 16));
     --_switch-unselected-icon-color: var(
       --md-switch-unselected-icon-color,
       var(--md-sys-color-surface-container-highest)
     );
-    --_switch-unselected-icon-size: var(--md-switch-unselected-icon-size, 1rem);
-    --_switch-target-size: var(--md-switch-target-size, 2.5rem);
-    --_switch-track-height: var(--md-switch-track-height, 2rem);
-    --_switch-track-width: var(--md-switch-track-width, 3.25rem);
+    --_switch-unselected-icon-size: var(--md-switch-unselected-icon-size, calc(var(--_switch-unit) * 16));
+    --_switch-target-size: var(
+      --md-switch-target-size,
+      max(calc(var(--_switch-track-height) + --dp(8)), var(--_switch-size-target-height))
+    );
+    --_switch-track-height: var(--md-switch-track-height, var(--_switch-size-track-height));
+    --_switch-unit: calc(var(--_switch-track-height) / 32);
+    --_switch-track-width: var(--md-switch-track-width, calc(var(--_switch-unit) * 52));
     --_switch-unselected-track-outline-color: var(
       --md-switch-unselected-track-outline-color,
       var(--md-sys-color-outline)
     );
-    --_switch-track-outline-width: var(--md-switch-track-outline-width, 0.125rem);
+    --_switch-track-outline-width: var(--md-switch-track-outline-width, calc(var(--_switch-unit) * 2));
     --_switch-track-shape: var(--md-switch-track-shape, var(--md-sys-shape-corner-full));
     --_switch-selected-track-color: var(--md-switch-selected-track-color, var(--md-sys-color-primary));
     --_switch-unselected-track-color: var(
       --md-switch-unselected-track-color,
       var(--md-sys-color-surface-container-highest)
     );
-    --_switch-unselected-handle-height: var(--md-switch-unselected-handle-height, 1rem);
-    --_switch-with-icon-handle-height: var(--md-switch-with-icon-handle-height, 1.5rem);
-    --_switch-selected-handle-height: var(--md-switch-selected-handle-height, 1.5rem);
-    --_switch-pressed-handle-height: var(--md-switch-pressed-handle-height, 1.75rem);
-    --_switch-unselected-handle-width: var(--md-switch-unselected-handle-width, 1rem);
-    --_switch-with-icon-handle-width: var(--md-switch-with-icon-handle-width, 1.5rem);
-    --_switch-selected-handle-width: var(--md-switch-selected-handle-width, 1.5rem);
-    --_switch-pressed-handle-width: var(--md-switch-pressed-handle-width, 1.75rem);
+    --_switch-unselected-handle-height: var(--md-switch-unselected-handle-height, calc(var(--_switch-unit) * 16));
+    --_switch-with-icon-handle-height: var(--md-switch-with-icon-handle-height, calc(var(--_switch-unit) * 24));
+    --_switch-selected-handle-height: var(--md-switch-selected-handle-height, calc(var(--_switch-unit) * 24));
+    --_switch-pressed-handle-height: var(--md-switch-pressed-handle-height, calc(var(--_switch-unit) * 28));
+    --_switch-unselected-handle-width: var(--md-switch-unselected-handle-width, calc(var(--_switch-unit) * 16));
+    --_switch-with-icon-handle-width: var(--md-switch-with-icon-handle-width, calc(var(--_switch-unit) * 24));
+    --_switch-selected-handle-width: var(--md-switch-selected-handle-width, calc(var(--_switch-unit) * 24));
+    --_switch-pressed-handle-width: var(--md-switch-pressed-handle-width, calc(var(--_switch-unit) * 28));
     --_switch-handle-shape: var(--md-switch-handle-shape, var(--md-sys-shape-corner-full));
     --_switch-selected-handle-color: var(--md-switch-selected-handle-color, var(--md-sys-color-on-primary));
     --_switch-unselected-handle-color: var(--md-switch-unselected-handle-color, var(--md-sys-color-outline));
@@ -175,7 +181,13 @@
     cursor: default;
   }
 
+  .m3-switch[data-size='small'] {
+    --_switch-size-target-height: --density-space(32, 0, 2);
+    --_switch-size-track-height: --density-graphic(24, body-medium, 14);
+  }
+
   .m3-switch[data-presentation='true'] {
+    --_switch-target-size: var(--_switch-track-height);
     cursor: inherit;
   }
 
@@ -198,9 +210,9 @@
     --switch-handle-base-height: var(--_switch-unselected-handle-height);
     --switch-handle-width: var(--switch-handle-base-width);
     --switch-handle-height: var(--switch-handle-base-height);
-    --switch-handle-unchecked-inset: 0.5rem;
+    --switch-handle-unchecked-inset: calc(var(--_switch-unit) * 8);
     --switch-handle-center-unchecked: calc(var(--switch-handle-unchecked-inset) + var(--switch-handle-base-width) / 2);
-    --switch-handle-center-checked: calc(100% - 0.25rem - var(--_switch-selected-handle-width) / 2);
+    --switch-handle-center-checked: calc(100% - var(--_switch-unit) * 4 - var(--_switch-selected-handle-width) / 2);
     --switch-handle-center: var(--switch-handle-center-unchecked);
   }
 
@@ -239,14 +251,14 @@
   .m3-switch-handle.m3-state-layer > .ripple {
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: 2.5rem;
-    block-size: 2.5rem;
+    inline-size: var(--_switch-target-size);
+    block-size: var(--_switch-target-size);
     border-radius: var(--md-sys-shape-corner-full);
     transform: translate(-50%, -50%);
   }
 
   .m3-switch-control[data-with-icon='true'] {
-    --switch-handle-unchecked-inset: 0.25rem;
+    --switch-handle-unchecked-inset: calc(var(--_switch-unit) * 4);
 
     --switch-handle-base-width: var(--_switch-with-icon-handle-width);
     --switch-handle-base-height: var(--_switch-with-icon-handle-height);

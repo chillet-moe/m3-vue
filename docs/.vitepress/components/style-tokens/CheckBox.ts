@@ -106,13 +106,13 @@ export const checkBoxStyleTokens = [
   {
     name: '--md-checkbox-container-size',
     description: 'Size of the visible checkbox box.',
-    fallback: '--dp(18)',
+    fallback: 'Typography and density (18dp at default typography and density 0)',
     category: 'Layout',
   },
   {
     name: '--md-checkbox-target-size',
     description: 'Size of the interactive control and state layer area.',
-    fallback: '--dp(40)',
+    fallback: '40dp + 2dp per density step; at least box size + 8dp; presentation uses box size',
     category: 'Layout',
   },
   {
@@ -130,7 +130,7 @@ export const checkBoxStyleTokens = [
   {
     name: '--md-checkbox-outline-width',
     description: 'Outline width of the unchecked box.',
-    fallback: '--dp(2)',
+    fallback: 'Resolved box size / 9',
     category: 'Layout',
   },
   {

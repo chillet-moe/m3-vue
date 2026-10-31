@@ -42,6 +42,7 @@ export const zh = {
   fieldSize: '输入框尺寸',
   rowSize: '行尺寸',
   buttonSize: '按钮尺寸',
+  switchSize: 'Switch 尺寸',
   iconButtonSize: '图标按钮尺寸',
   listSize: '列表行尺寸',
   listAppearance: '列表外观',

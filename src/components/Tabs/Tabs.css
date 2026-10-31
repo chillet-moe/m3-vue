@@ -131,7 +131,7 @@
   .m3-tabs {
     --_tabs-content-min-height: calc(var(--_tabs-label-text-line-height) + 0.5rem);
     --_tabs-stacked-content-min-height: calc(
-      var(--_tabs-content-min-height) + var(--_tabs-icon-size) + var(--_tabs-icon-label-space)
+      var(--_tabs-label-text-line-height) + 0.5rem + var(--_tabs-icon-size) + var(--_tabs-icon-label-space)
     );
     --_tabs-size-container-height: var(
       --md-tabs-medium-container-height,
@@ -250,7 +250,8 @@
     --_tabs-label-text-weight: var(--md-tabs-label-text-weight, var(--_tabs-size-label-text-weight));
     --_tabs-label-text-tracking: var(--md-tabs-label-text-tracking, var(--_tabs-size-label-text-tracking));
 
-    --_tabs-icon-size: var(--md-tabs-icon-size, 1.5rem);
+    --_tabs-size-icon-size: --density-icon(24, title-medium, 16);
+    --_tabs-icon-size: var(--md-tabs-icon-size, var(--_tabs-size-icon-size));
     --_tabs-icon-label-space: var(--md-tabs-icon-label-space, 0.5rem);
     --_tabs-tab-padding-inline: var(--md-tabs-tab-padding-inline, var(--_tabs-size-tab-padding-inline));
     --_tabs-scrollable-tab-min-width: var(--md-tabs-scrollable-tab-min-width, 4.5rem);
@@ -319,7 +320,12 @@
     );
   }
 
+  .m3-tabs:has(.m3-tab-icon) {
+    --_tabs-content-min-height: calc(max(var(--_tabs-label-text-line-height), var(--_tabs-icon-size)) + 0.5rem);
+  }
+
   .m3-tabs[data-size='extra-small'] {
+    --_tabs-size-icon-size: --density-icon(24, label-medium, 12);
     --_tabs-size-container-height: var(
       --md-tabs-extra-small-container-height,
       max(var(--_tabs-content-min-height), --density-space(40))
@@ -351,6 +357,7 @@
   }
 
   .m3-tabs[data-size='small'] {
+    --_tabs-size-icon-size: --density-icon(24, label-large, 14);
     --_tabs-size-container-height: var(
       --md-tabs-small-container-height,
       max(var(--_tabs-content-min-height), --density-space(48))
@@ -379,6 +386,7 @@
   }
 
   .m3-tabs[data-size='large'] {
+    --_tabs-size-icon-size: --density-icon(24, title-medium, 16);
     --_tabs-size-container-height: var(
       --md-tabs-large-container-height,
       max(var(--_tabs-content-min-height), --density-space(64))
@@ -401,6 +409,7 @@
   }
 
   .m3-tabs[data-size='extra-large'] {
+    --_tabs-size-icon-size: --density-icon(24, title-large, 22);
     --_tabs-size-container-height: var(
       --md-tabs-extra-large-container-height,
       max(var(--_tabs-content-min-height), --density-space(72))

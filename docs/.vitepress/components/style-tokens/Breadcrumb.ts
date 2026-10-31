@@ -52,7 +52,7 @@ export const breadcrumbStyleTokens = [
   {
     name: '--md-breadcrumb-separator-icon-size',
     description: 'Controls separator and ellipsis icon size.',
-    fallback: '--dp(18)',
+    fallback: 'Typography, density and icon scale (default reference: --dp(18))',
     category: 'Layout',
   },
   {

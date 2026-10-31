@@ -1,5 +1,6 @@
 import { selectContextKey, type SelectContext } from './components/Select/SelectContext';
 import type { M3AppearanceContext } from './styles/appearance';
+import type { SwitchSize } from './components/Switch/SwitchContext';
 import type { RowSize } from './styles/rowSize';
 import type { App, MaybeRef } from 'vue';
 import type { ButtonDefaults } from './components/Button/ButtonContext';
@@ -17,6 +18,7 @@ export type M3ComponentDefaultsOptions = {
   appearance?: M3AppearanceContext['appearance'];
   buttonDefaults?: ButtonDefaults;
   listItemDefaults?: ListItemContext;
+  switchSize?: MaybeRef<SwitchSize>;
   iconButtonSize?: IconButtonContext['size'];
   sliderDefaults?: SliderContext;
   selectDefaults?: SelectContext;

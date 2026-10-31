@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import { computed } from 'vue';
+import { computed, inject, unref } from 'vue';
+import { switchSizeContextKey, type SwitchSize } from './SwitchContext';
 
 export type SwitchProps = {
+  /** Track size; inherits the configured default. */
+  size?: SwitchSize;
   /** Whether the switch is disabled. */
   disabled?: boolean;
 
@@ -26,6 +29,7 @@ export type SwitchProps = {
 };
 
 const {
+  size: sizeProp,
   disabled = false,
   presentation = false,
   checkedIcon = 'check',
@@ -34,6 +38,9 @@ const {
   value,
   ariaLabel,
 } = defineProps<SwitchProps>();
+
+const inheritedSize = inject(switchSizeContextKey, undefined);
+const size = computed(() => sizeProp ?? unref(inheritedSize) ?? 'medium');
 
 const checked = defineModel<boolean>('checked', { required: true });
 
@@ -51,6 +58,7 @@ defineSlots<{
   <component
     :is="presentation ? 'span' : 'label'"
     :class="'m3-switch'"
+    :data-size="size"
     data-scope="switch"
     data-part="root"
     :data-checked="checked ? 'true' : 'false'"

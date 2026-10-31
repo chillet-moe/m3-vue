@@ -184,7 +184,7 @@ export const navigationRailStyleTokens = [
   {
     name: '--md-navigation-rail-item-icon-size',
     description: 'Controls item icon size.',
-    fallback: '--dp(24)',
+    fallback: 'Typography, density and icon scale (default reference: --dp(24))',
     category: 'Layout',
   },
   {

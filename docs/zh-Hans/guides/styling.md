@@ -59,6 +59,7 @@ app.use(M3VuePlugin, {
 | `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目 |
 | `fieldSize`                                | 单行 TextField、Select 和 Combobox                                  |
 | `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                 |
+| `switchSize`                               | Switch（`small` / `medium`）                                        |
 | `iconButtonSize`                           | IconButton                                                          |
 | `sliderDefaults`                           | Slider 尺寸、外观、滚轮输入和数值指示器                             |
 | `listItemDefaults`                         | ListItem 尺寸和外观                                                 |
@@ -95,7 +96,7 @@ Menu、TreeView、NavigationDrawer 和 NavigationRail 共用一套 `size` 尺寸
 | `large`          | 56px         |
 | `extra-large`    | 64px         |
 
-以上是在密度为 `0`、根字号为 16px 时的参考高度。文字和图标尺寸不会改变。多行内容和附加控件可能使行高增加。折叠状态的 NavigationRail 也会为堆叠显示的图标和标签预留空间。
+以上是在密度为 `0`、根字号为 16px 时的参考高度。仅更改行尺寸不会改变文字或图标尺寸；排版和密度仍会影响各自对应的尺寸。多行内容和附加控件可能使行高增加。折叠状态的 NavigationRail 也会为堆叠显示的图标和标签预留空间。
 
 可在插件中设置 `rowSize` 作为应用默认值，也可在某个区域的现有祖先中使用 `provideRowSize`：
 
@@ -132,7 +133,9 @@ provideRowSize('extra-small');
 
 密度会调整各组件当前所选的尺寸，不会让所有组件达到统一的目标高度。请先选择组件尺寸：菜单行和超小号按钮可能会在不同的密度值下达到各自的内容下限。
 
-密度适用于 Button、ButtonGroup、IconButton、Chip、字段、InputOtp、ListItem、TreeView、Tabs、菜单行（包括 Select/Combobox 菜单）、Breadcrumb、Pagination，以及 NavigationDrawer/NavigationRail 条目。密度主要调整垂直留白。TextField、Select 和 Combobox 也会按每级调整 2px 水平内边距，最低为 4px，使字段图标与周围留白协调。显式设置的内边距 token 优先。OTP 单元格宽度、导航宽度和字体保持不变。默认操作图标和行图标会随每级密度调整 1px，并限制在一定尺寸范围内。折叠状态的 NavigationRail 条目会保留图标交互目标和堆叠标签所需的空间，因此会更早达到密度下限。多行内容可能增高。Dialog 和 Snackbar 会将继承的密度重置为 0。日期和时间选择器会继承密度：日历单元格和列表、时间输入及操作会随密度调整，而时间选择器钟面的几何尺寸保持不变。密度不会调整页面间距，也不会随断点自动变化。为触屏选择紧凑布局时，请保留足够大的交互目标。
+紧凑预设结合了紧凑排版和密度 `-2`。排版、组件尺寸和密度仍是独立设置。与文本关联的图标以及复选框、单选按钮和开关的几何尺寸会根据其排版角色确定默认比例，因此自定义字号无需针对预设编写 CSS 覆盖。密度随后调整几何尺寸和留白。独立 IconButton 和 FAB 的尺寸仍由尺寸选项决定；显式组件尺寸会覆盖自动计算值。
+
+密度适用于 Button、ButtonGroup、IconButton、Chip、复选框、单选按钮和开关、字段、InputOtp、ListItem、TreeView、Tabs、菜单行（包括 Select/Combobox 菜单）、Breadcrumb、Pagination，以及 NavigationDrawer/NavigationRail 条目。密度主要调整垂直留白。TextField、Select 和 Combobox 也会按每级调整 2px 水平内边距，最低为 4px，使字段图标与周围留白协调。显式设置的内边距 token 优先。OTP 单元格宽度、导航宽度和字体保持不变。默认操作图标和行图标会随每级密度调整 1px，并限制在一定尺寸范围内。折叠状态的 NavigationRail 条目会保留图标交互目标和堆叠标签所需的空间，因此会更早达到密度下限。多行内容可能增高。Dialog 和 Snackbar 会将继承的密度重置为 0。日期和时间选择器会继承密度：日历单元格和列表、时间输入及操作会随密度调整，而时间选择器钟面的几何尺寸保持不变。密度不会调整页面间距，也不会随断点自动变化。为触屏选择紧凑布局时，请保留足够大的交互目标。
 
 ## 排版
 

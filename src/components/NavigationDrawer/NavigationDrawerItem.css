@@ -30,7 +30,10 @@
     --_navigation-drawer-item-height: var(--md-navigation-drawer-item-height, var(--_row-height));
     --_navigation-drawer-item-padding-inline: var(--md-navigation-drawer-item-padding-inline, --dp(16));
     --_navigation-drawer-item-gap: var(--md-navigation-drawer-item-gap, --dp(12));
-    --_navigation-drawer-item-icon-size: var(--md-navigation-drawer-item-icon-size, --density-icon(24));
+    --_navigation-drawer-item-icon-size: var(
+      --md-navigation-drawer-item-icon-size,
+      --density-icon(24, label-large, 14)
+    );
     --_navigation-drawer-item-indicator-shape: var(
       --md-navigation-drawer-item-indicator-shape,
       var(--_shape-radius, var(--md-shape-indicator))

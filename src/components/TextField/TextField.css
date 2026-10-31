@@ -187,12 +187,18 @@
       --md-outlined-text-field-leading-icon-color,
       var(--md-sys-color-on-surface-variant)
     );
-    --_outlined-text-field-leading-icon-size: var(--md-outlined-text-field-leading-icon-size, --density-icon(24));
+    --_outlined-text-field-leading-icon-size: var(
+      --md-outlined-text-field-leading-icon-size,
+      --density-icon(24, body-large, 16)
+    );
     --_outlined-text-field-trailing-icon-color: var(
       --md-outlined-text-field-trailing-icon-color,
       var(--md-sys-color-on-surface-variant)
     );
-    --_outlined-text-field-trailing-icon-size: var(--md-outlined-text-field-trailing-icon-size, --density-icon(24));
+    --_outlined-text-field-trailing-icon-size: var(
+      --md-outlined-text-field-trailing-icon-size,
+      --density-icon(24, body-large, 16)
+    );
     --_outlined-text-field-supporting-text-color: var(
       --md-outlined-text-field-supporting-text-color,
       var(--md-sys-color-on-surface-variant)
