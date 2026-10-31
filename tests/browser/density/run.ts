@@ -90,7 +90,7 @@ try {
       Math.max(0, iconDelta),
       iconDelta,
       Math.max(0, Math.min(4, density) - 2),
-      0,
+      Math.max(0, iconDelta),
       0,
       0,
       0,
@@ -100,12 +100,14 @@ try {
     current.forEach((value, index) => {
       assert.equal(
         value.height,
-        Math.max(floors[index]!, initial[index]!.height + delta) + contentDelta[index]!,
+        index === 1
+          ? Math.max(32 + iconDelta, 40 + density * 2)
+          : Math.max(floors[index]!, initial[index]!.height + delta) + contentDelta[index]!,
         `height ${index} at ${density}`,
       );
       assert.equal(value.font, initial[index]!.font);
       assert.equal(value.line, initial[index]!.line);
-      if (index === 3) assert.equal(Number.parseFloat(value.padding), Math.max(4, 16 + density * 2));
+      if (index === 3) assert.equal(Number.parseFloat(value.padding), Math.max(8, 16 + density * 2));
       else assert.equal(value.padding, initial[index]!.padding);
     });
     for (const direction of ['ltr', 'rtl']) {
@@ -129,7 +131,7 @@ try {
       );
       for (const field of geometry) {
         const base = { 'extra-small': 8, small: 12, medium: 16 }[field.size!];
-        assert.equal(field.padding, Math.max(4, base! + density * 2));
+        assert.equal(field.padding, Math.max(8, base! + density * 2));
         assert(Math.abs(field.gap - field.padding) < 0.1, JSON.stringify({ density, direction, field }));
         assert(field.actionInside, 'Field actions must stay inside the outline');
       }
@@ -267,13 +269,13 @@ try {
   });
   assert.equal(
     await dialog.getByRole('button', { name: 'Close dialog' }).evaluate((el) => el.getBoundingClientRect().height),
-    40,
+    24,
   );
   assert.equal(
     await dialog
       .locator('[data-scope="text-field"][data-part="container"]')
       .evaluate((el) => el.getBoundingClientRect().height),
-    56,
+    40,
   );
   await dialog.getByRole('button', { name: 'Close dialog' }).click();
   // Explicit geometry overrides win over density; removing them restores density.

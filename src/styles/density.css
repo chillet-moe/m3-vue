@@ -1,6 +1,6 @@
 @layer components {
-  /* Focused selection and feedback surfaces keep their own spacing, including nested controls. */
-  :where(.m3-dialog, .m3-snackbar) {
+  /* Transient feedback surfaces keep their own spacing, including nested controls. */
+  :where(.m3-snackbar) {
     --md-density: 0;
   }
 }

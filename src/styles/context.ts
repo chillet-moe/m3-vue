@@ -20,6 +20,8 @@ export type M3ShapeOptions = {
 export type M3FieldOptions = {
   /** Default size for single-line TextField and Select controls. Accepts a reactive ref. */
   fieldSize?: FieldContext['size'];
+  /** Default label presentation for TextField, Select and Combobox. */
+  fieldLabelBehavior?: FieldContext['labelBehavior'];
 };
 
 /** Installs appearance defaults, providing each context once so shape and size coexist. */
@@ -31,8 +33,8 @@ export function installM3StyleDefaults(
   if (options.rowSize !== undefined) app.provide(rowSizeContextKey, options.rowSize);
   if (options.appearance !== undefined) app.provide(appearanceContextKey, { appearance: options.appearance });
   if (options.shape !== undefined) app.provide(shapeContextKey, options.shape);
-  if (options.fieldSize !== undefined) {
-    app.provide(fieldContextKey, { size: options.fieldSize });
+  if (options.fieldSize !== undefined || options.fieldLabelBehavior !== undefined) {
+    app.provide(fieldContextKey, { size: options.fieldSize, labelBehavior: options.fieldLabelBehavior });
   }
 
   if (options.buttonDefaults !== undefined) {

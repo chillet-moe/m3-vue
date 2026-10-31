@@ -21,15 +21,24 @@ import {
   type TimePickerModelValue,
   type TimePickerVariant,
 } from '@/components/TimePicker';
-import { fieldContextKey, useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
+import {
+  fieldContextKey,
+  useFieldLabelClearanceStyle,
+  useFieldSize,
+  useFieldLabelBehavior,
+  type FieldLabelBehavior,
+} from '@/components/TextField/FieldContext';
 import { acquireAnchorName } from '@/internal/anchorName';
 import { useM3Locale } from '@/locales/context';
 
 export type TextFieldSize = 'extra-small' | 'small' | 'medium';
 
 type TextFieldSharedProps = {
-  /** Visible label. If omitted, provide aria-label via attrs. */
+  /** Floating label, or accessible-name fallback in external mode. Otherwise supply an external label or ARIA name. */
   label?: string;
+
+  /** Floating label or externally arranged visible label; label remains an accessible-name fallback. */
+  labelBehavior?: FieldLabelBehavior;
 
   /** Optional explicit id for native control element. */
   id?: string;
@@ -73,7 +82,7 @@ type TextFieldSharedProps = {
   /** Placeholder shown when value is empty. */
   placeholder?: string;
 
-  /** Always render the label in the floating position. */
+  /** Always float the label when labelBehavior is floating. */
   alwaysFloatLabel?: boolean;
 
   /** Forces the visual focused state without requiring DOM focus. */
@@ -148,7 +157,8 @@ const fieldContext = inject(fieldContextKey, undefined);
 const timePickerContext = inject(timePickerContextKey, undefined);
 // Keep the input's historical 24-hour fallback while honoring shared picker preferences.
 const timePickerFormat = computed(() => props.timePickerFormat ?? unref(timePickerContext?.format) ?? '24h');
-const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
+const labelBehavior = useFieldLabelBehavior(() => props.labelBehavior);
+const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance, labelBehavior);
 const shape = useShape(() => props.shape ?? unref(fieldContext?.shape), 'square');
 
 const emit = defineEmits<{
@@ -289,6 +299,9 @@ const controlAttrs = computed(() => {
   const forwarded = { ...attrs };
   delete forwarded.class;
   delete forwarded.style;
+  if (labelBehavior.value === 'external' && !forwarded['aria-label'] && !forwarded['aria-labelledby']) {
+    forwarded['aria-label'] = props.label;
+  }
   return forwarded;
 });
 
@@ -425,6 +438,7 @@ defineExpose({
     :data-shape="shape"
     data-m3-shape
     :data-size="effectiveSize"
+    :data-label-behavior="labelBehavior"
     :data-multiline="props.as === 'textarea' ? 'true' : 'false'"
     :data-populated="hasValue ? 'true' : 'false'"
     :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"
@@ -437,7 +451,7 @@ defineExpose({
   >
     <div ref="containerRef" :class="'m3-text-field-container'" data-scope="text-field" data-part="container">
       <label
-        v-if="props.label"
+        v-if="props.label && labelBehavior === 'floating'"
         :class="'m3-text-field-label'"
         data-scope="text-field"
         data-part="label"
@@ -540,7 +554,7 @@ defineExpose({
       </span>
 
       <fieldset :class="'m3-text-field-outline'" data-scope="text-field" data-part="outline" aria-hidden="true">
-        <legend v-if="props.label">{{ props.label }}</legend>
+        <legend v-if="props.label && labelBehavior === 'floating'">{{ props.label }}</legend>
       </fieldset>
     </div>
 

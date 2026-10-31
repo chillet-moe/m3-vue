@@ -50,7 +50,7 @@
   }
 
   .m3-select-clear-icon {
-    --md-icon-size: --density-icon(20, body-large, 16);
+    --md-icon-size: var(--_field-clear-icon-size);
   }
 
   .m3-select[data-open='true'] {

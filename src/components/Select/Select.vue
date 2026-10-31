@@ -23,7 +23,12 @@ import SelectItem from './SelectItem.vue';
 import { selectContextKey } from './SelectContext';
 import { selectItemContextKey } from './SelectItemContext';
 import type { SelectListSlot } from '@/composables/selectTypes';
-import { useFieldLabelClearanceStyle, useFieldSize } from '@/components/TextField/FieldContext';
+import {
+  useFieldLabelClearanceStyle,
+  useFieldSize,
+  useFieldLabelBehavior,
+  type FieldLabelBehavior,
+} from '@/components/TextField/FieldContext';
 import TextField, { type TextFieldSize } from '@/components/TextField/TextField.vue';
 import { useSelect } from '@/composables/useSelect';
 import { acquireAnchorName } from '@/internal/anchorName';
@@ -57,8 +62,11 @@ export type SelectModelValue = SelectOptionValue | SelectOptionValue[] | undefin
 export type SelectProps = {
   /** Corner style; inherits the shared shape default. */
   shape?: M3Shape;
-  /** Visible label. If omitted, provide aria-label via attrs. */
+  /** Floating label, or accessible-name fallback in external mode. Otherwise supply an external label or ARIA name. */
   label?: string;
+
+  /** Floating label or externally arranged visible label; label remains an accessible-name fallback. */
+  labelBehavior?: FieldLabelBehavior;
 
   /** Optional explicit id for the trigger element. */
   id?: string;
@@ -169,7 +177,8 @@ const defaults = inject(selectContextKey, undefined);
 const showSelectedIcon = computed(() => props.showSelectedIcon ?? unref(defaults?.showSelectedIcon) ?? true);
 
 const effectiveSize = useFieldSize(() => props.size);
-const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance);
+const labelBehavior = useFieldLabelBehavior(() => props.labelBehavior);
+const labelClearanceStyle = useFieldLabelClearanceStyle(() => props.labelClearance, labelBehavior);
 
 const localeContext = useM3Locale();
 const messages = computed(() => localeContext.messages.value);
@@ -380,6 +389,7 @@ provideShape(() => props.shape);
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-populated="select.hasValue.value ? 'true' : 'false'"
     :data-size="effectiveSize"
+    :data-label-behavior="labelBehavior"
     :data-open="open ? 'true' : 'false'"
     :data-filterable="props.filterable ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
@@ -400,6 +410,7 @@ provideShape(() => props.shape);
         v-model="textFieldValue"
         class="m3-select-field"
         :label="props.label"
+        :label-behavior="labelBehavior"
         :supporting-text="props.supportingText"
         :error="props.error"
         :disabled="props.disabled"
@@ -417,7 +428,6 @@ provideShape(() => props.shape);
         aria-haspopup="listbox"
         :aria-invalid="invalid ? 'true' : undefined"
         :aria-required="props.required ? 'true' : undefined"
-        :aria-label="props.label ? undefined : filterAriaLabel"
         v-bind="controlAttrs"
         @input="select.handleFieldInput"
         @focus="handleFocus"

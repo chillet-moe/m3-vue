@@ -103,8 +103,8 @@
     --_side-sheet-width: var(--md-side-sheet-width, var(--_sheet-side-docked-container-width));
     --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, 100%);
     --_side-sheet-content-visual-overflow-inset: var(--md-side-sheet-content-visual-overflow-inset, 0.5rem);
-    --_side-sheet-container-padding-block: 1.5rem;
-    --_side-sheet-container-padding-inline: 1.5rem;
+    --_side-sheet-container-padding-block: --density-space(24, 12, 2);
+    --_side-sheet-container-padding-inline: --density-space(24, 12, 2);
   }
 }
 
@@ -194,7 +194,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: --density-space(16, 8, 2);
 
     inline-size: 100%;
     block-size: 100%;
@@ -262,7 +262,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: end;
-    gap: 0.5rem;
+    gap: --density-space(8, 4, 1);
     padding-inline: var(--_side-sheet-container-padding-inline);
   }
 

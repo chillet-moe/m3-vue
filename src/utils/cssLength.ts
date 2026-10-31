@@ -1,4 +1,4 @@
-export function parseCssLength(value: string | undefined, fallback: number, fontSize = 16) {
+function parseCssLength(value: string | undefined, fallback: number, fontSize = 16, rootFontSize = 16) {
   if (!value) {
     return fallback;
   }
@@ -9,7 +9,11 @@ export function parseCssLength(value: string | undefined, fallback: number, font
     return fallback;
   }
 
-  if (trimmed.endsWith('rem') || trimmed.endsWith('em')) {
+  if (trimmed.endsWith('rem')) {
+    return numericValue * rootFontSize;
+  }
+
+  if (trimmed.endsWith('em')) {
     return numericValue * fontSize;
   }
 
@@ -21,12 +25,8 @@ export function readCssLength(
   token: string,
   propValue: string | undefined,
   fallback: number,
+  rootFontSize = 16,
 ) {
   const fontSize = parseCssLength(styles.fontSize, 16);
-  return parseCssLength(propValue ?? styles.getPropertyValue(token), fallback, fontSize);
-}
-
-export function readCssToken(styles: CSSStyleDeclaration, token: string) {
-  const value = styles.getPropertyValue(token).trim();
-  return value && value !== 'initial' ? value : undefined;
+  return parseCssLength(propValue ?? styles.getPropertyValue(token), fallback, fontSize, rootFontSize);
 }

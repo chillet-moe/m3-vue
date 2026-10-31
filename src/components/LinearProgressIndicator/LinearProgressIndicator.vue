@@ -95,23 +95,23 @@ const syncLayout = () => {
   }
 
   const styles = root.ownerDocument.defaultView!.getComputedStyle(root);
-  const thickness = readCssLength(styles, '--md-linear-progress-indicator-track-thickness', props.thickness, 4);
-  const waveAmplitude = readCssLength(styles, '--md-linear-progress-indicator-wave-amplitude', props.waveAmplitude, 3);
-  const wavelengthDeterminate = readCssLength(
-    styles,
-    '--md-linear-progress-indicator-wave-wavelength',
-    props.wavelength,
-    40,
+  const rootFontSize = parseFloat(
+    root.ownerDocument.defaultView!.getComputedStyle(root.ownerDocument.documentElement).fontSize,
   );
+  const thickness = readCssLength(styles, '--_track-thickness', props.thickness, 4, rootFontSize);
+  const waveAmplitude = readCssLength(styles, '--_wave-amplitude', props.waveAmplitude, 3, rootFontSize);
+  const wavelengthDeterminate = readCssLength(styles, '--_wave-wavelength', props.wavelength, 40, rootFontSize);
   const wavelengthIndeterminate = readCssLength(
     styles,
-    '--md-linear-progress-indicator-indeterminate-wave-wavelength',
-    props.indeterminateWavelength,
+    '--_indeterminate-wave-wavelength',
+    undefined,
     20,
+    rootFontSize,
   );
+  const waveHeight = readCssLength(styles, '--_with-wave-height', undefined, 10, rootFontSize);
   const rect = root.getBoundingClientRect();
   const width = Math.max(1, rect.width || root.clientWidth || layout.value.width);
-  const height = isWavy.value ? Math.max(thickness + waveAmplitude * 2, 10) : thickness;
+  const height = isWavy.value ? Math.max(thickness + waveAmplitude * 2, waveHeight) : thickness;
 
   layout.value = {
     width,

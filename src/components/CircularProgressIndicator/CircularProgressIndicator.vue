@@ -3,7 +3,7 @@ import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { useProgressIndicatorState } from '@/composables/useProgressIndicatorState';
 import { registerSharedAnimationFrame } from '@/internal/sharedAnimationFrame';
-import { parseCssLength, readCssLength, readCssToken } from '@/utils/cssLength';
+import { readCssLength } from '@/utils/cssLength';
 import {
   createCircularArcPath,
   createCircularWaveArcPath,
@@ -96,25 +96,14 @@ const syncLayout = () => {
   }
 
   const styles = root.ownerDocument.defaultView!.getComputedStyle(root);
-  const fallbackSize = isWavy.value ? 48 : 40;
-  const cssSize =
-    readCssToken(styles, '--md-circular-progress-indicator-size') ??
-    (isWavy.value ? readCssToken(styles, '--md-circular-progress-indicator-with-wave-size') : undefined);
-  const size = parseCssLength(props.size ?? cssSize, fallbackSize, parseCssLength(styles.fontSize, 16));
-  const thickness = readCssLength(styles, '--md-circular-progress-indicator-track-thickness', props.thickness, 4);
-  const trackGap = readCssLength(
-    styles,
-    '--md-circular-progress-indicator-track-active-indicator-gap',
-    props.trackGap,
-    4,
+  const rootFontSize = parseFloat(
+    root.ownerDocument.defaultView!.getComputedStyle(root.ownerDocument.documentElement).fontSize,
   );
-  const waveAmplitude = readCssLength(
-    styles,
-    '--md-circular-progress-indicator-wave-amplitude',
-    props.waveAmplitude,
-    1.6,
-  );
-  const wavelength = readCssLength(styles, '--md-circular-progress-indicator-wave-wavelength', props.wavelength, 15);
+  const size = readCssLength(styles, '--_current-size', props.size, isWavy.value ? 48 : 40, rootFontSize);
+  const thickness = readCssLength(styles, '--_track-thickness', props.thickness, 4, rootFontSize);
+  const trackGap = readCssLength(styles, '--_track-active-indicator-gap', props.trackGap, 4, rootFontSize);
+  const waveAmplitude = readCssLength(styles, '--_wave-amplitude', props.waveAmplitude, 1.6, rootFontSize);
+  const wavelength = readCssLength(styles, '--_wave-wavelength', props.wavelength, 15, rootFontSize);
 
   layout.value = {
     size,

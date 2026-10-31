@@ -101,7 +101,7 @@ describe('M3VuePlugin', () => {
     const provide = vi.fn();
     M3VuePlugin.install({ directive: vi.fn(), provide } as unknown as App, { fieldSize: 'small' });
     expect(provide.mock.calls.filter(([key]) => key === fieldContextKey)).toEqual([
-      [fieldContextKey, { size: 'small' }],
+      [fieldContextKey, { size: 'small', labelBehavior: undefined }],
     ]);
     expect(provide.mock.calls.some(([key]) => key === buttonContextKey || key === iconButtonContextKey)).toBe(false);
   });

@@ -15,6 +15,7 @@
 
   .m3-circular-progress-indicator {
     --_progress: 0;
+    font-size: --density-graphic(16, body-medium, 14, 12);
     --_progress-indicator-color: var(
       --md-progress-indicator-color,
       var(--md-color-on-container, var(--md-sys-color-primary))
@@ -28,13 +29,13 @@
       var(--_progress-indicator-color)
     );
     --_track-color: var(--md-circular-progress-indicator-track-color, var(--_progress-indicator-track-color));
-    --_size: var(--md-circular-progress-indicator-size, --dp(40));
-    --_with-wave-size: var(--md-circular-progress-indicator-with-wave-size, --dp(48));
+    --_size: var(--md-circular-progress-indicator-size, 2.5em);
+    --_with-wave-size: var(--md-circular-progress-indicator-with-wave-size, 3em);
     --_current-size: var(--_size);
-    --_track-thickness: var(--md-circular-progress-indicator-track-thickness, --dp(4));
-    --_track-active-indicator-gap: var(--md-circular-progress-indicator-track-active-indicator-gap, --dp(4));
-    --_wave-amplitude: var(--md-circular-progress-indicator-wave-amplitude, --dp(1.6));
-    --_wave-wavelength: var(--md-circular-progress-indicator-wave-wavelength, --dp(15));
+    --_track-thickness: var(--md-circular-progress-indicator-track-thickness, 0.25em);
+    --_track-active-indicator-gap: var(--md-circular-progress-indicator-track-active-indicator-gap, 0.25em);
+    --_wave-amplitude: var(--md-circular-progress-indicator-wave-amplitude, 0.1em);
+    --_wave-wavelength: var(--md-circular-progress-indicator-wave-wavelength, 0.9375em);
   }
 }
 

@@ -29,3 +29,9 @@ await import('./scrollbars/run');
 await import('./menu-checkbox/run');
 
 await import('./selection-density/run');
+
+await import('./surface-density/run');
+
+await import('./field-labels/run');
+
+await import('./field-sizing/run');
