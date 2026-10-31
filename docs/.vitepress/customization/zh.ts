@@ -40,6 +40,7 @@ export const zh = {
   appearance: '通用外观',
   shape: '组件形状',
   fieldSize: '输入框尺寸',
+  fieldLabelBehavior: '字段标签',
   rowSize: '行尺寸',
   buttonSize: '按钮尺寸',
   switchSize: 'Switch 尺寸',

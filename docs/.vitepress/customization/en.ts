@@ -38,6 +38,7 @@ export const en = {
   appearance: 'Shared appearance',
   shape: 'Component shape',
   fieldSize: 'Field size',
+  fieldLabelBehavior: 'Field labels',
   rowSize: 'Row size',
   buttonSize: 'Button size',
   switchSize: 'Switch size',

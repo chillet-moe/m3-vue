@@ -4,7 +4,7 @@ title: Getting Started
 
 # Getting Started
 
-Install the package, import the shared styles and a theme, then register the plugin once at app startup.
+Install the package, import the shared styles and a preset, then register the plugin once at app startup.
 
 ## Install
 
@@ -20,11 +20,11 @@ import { M3VuePlugin } from '@chillet/m3-vue';
 import App from './App.vue';
 
 import '@chillet/m3-vue/style.css';
-import '@chillet/m3-vue/themes/default.css';
+import { defaultPreset } from '@chillet/m3-vue/presets/default';
 
 const app = createApp(App);
 
-app.use(M3VuePlugin);
+app.use(M3VuePlugin, { preset: defaultPreset });
 app.mount('#app');
 ```
 
@@ -43,19 +43,13 @@ import { Button } from '@chillet/m3-vue';
 </template>
 ```
 
-## Component Defaults
+## Choose compact or customize
 
-Configure common preferences when registering the plugin:
+For a complete compact interface, import `compact` from `@chillet/m3-vue/presets/compact` and pass it as `preset`. It applies compact typography, density -2 and coordinated component sizes; no per-component setup is required.
 
-```ts
-app.use(M3VuePlugin, {
-  fieldSize: 'small',
-  buttonDefaults: { size: 'small' },
-});
-```
+See [Customization](./guides/styling) for preset overrides and [Preset preview](./guides/presets) to compare the layouts.
 
-Continue with [Customization](./guides/styling) for theme selection, subtree defaults, density, typography, colors,
-shapes and local component styling.
+Compact uses external field labels. Arrange visible labels in your form layout, or provide an accessible name for fields without a visible label. See [Field layout](./guides/field-layout#label-behavior).
 
 ## Mount The Overlay Host
 

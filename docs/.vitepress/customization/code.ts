@@ -1,41 +1,21 @@
-import type { M3VuePluginOptions } from '@/plugin';
 import { themePresets, typographyPresets } from '@/theme/presets';
 import type { useDocsCustomization } from './state';
-import { fieldGapSettings, type defaultSettings } from './catalog';
-
-// The panel's flat controls map to the public plugin options here.
-const optionPaths = {
-  rowSize: ['rowSize'],
-  appearance: ['appearance'],
-  shape: ['shape'],
-  fieldSize: ['fieldSize'],
-  buttonSize: ['buttonDefaults', 'size'],
-  iconButtonSize: ['iconButtonSize'],
-  switchSize: ['switchSize'],
-  listSize: ['listItemDefaults', 'size'],
-  listAppearance: ['listItemDefaults', 'appearance'],
-  sliderSize: ['sliderDefaults', 'size'],
-  sliderAppearance: ['sliderDefaults', 'appearance'],
-  menuColor: ['menuColor'],
-  firstDayOfWeek: ['datePickerDefaults', 'firstDayOfWeek'],
-  timeFormat: ['timePickerDefaults', 'format'],
-  timeInputMode: ['timePickerDefaults', 'inputMode'],
-  pressShapeMorph: ['buttonDefaults', 'pressShapeMorph'],
-  sliderWheel: ['sliderDefaults', 'wheel'],
-  valueIndicator: ['sliderDefaults', 'valueIndicator'],
-} satisfies Record<(typeof defaultSettings)[number]['key'], [keyof M3VuePluginOptions, string?]>;
+import { fieldGapSettings } from './catalog';
+import { optionPaths, presetDefaultValues } from './defaults';
 
 export function customizationCode(
   state: ReturnType<typeof useDocsCustomization>['state'],
   resolvedTokens: Record<string, string>,
   baseline: Record<string, string>,
 ) {
-  // Import the stylesheet that already contains the chosen type scale.
-  const theme = state.theme.typography ?? themePresets[state.theme.preset].typography;
+  // Keep the selected full preset; typography-only edits belong in the CSS overrides.
+  const preset = state.theme.preset;
+  const presetName = preset === 'compact' ? 'compact' : 'defaultPreset';
+  const inherited = presetDefaultValues(preset);
   const defaults: Record<string, unknown> = {};
   for (const [key, path] of Object.entries(optionPaths)) {
     const raw = state.defaults[key];
-    if (raw === undefined) continue;
+    if (raw === undefined || raw === inherited[key]) continue;
     const value = raw === 'true' ? true : raw === 'false' ? false : key === 'firstDayOfWeek' ? Number(raw) : raw;
     const [group, property] = path;
     if (property) {
@@ -47,8 +27,8 @@ export function customizationCode(
   }
   const base: Record<string, string> = {
     ...baseline,
-    ...typographyPresets[theme],
-    '--md-density': String(themePresets[theme].density),
+    ...typographyPresets[themePresets[preset].typography],
+    '--md-density': String(themePresets[preset].density),
   };
   const declarations = Object.entries(resolvedTokens)
     .filter(([name, value]) => value !== base[name])
@@ -68,17 +48,17 @@ export function customizationCode(
     );
   }
   const css = rules.length ? `${rules.join('\n\n')}\n` : '';
-  const options = Object.keys(defaults).length ? `, ${JSON.stringify(defaults, null, 2)}` : '';
+  const options = JSON.stringify({ preset: '__preset__', ...defaults }, null, 2).replace('"__preset__"', presetName);
   const setup = [
     "import { createApp } from 'vue';",
     "import { M3VuePlugin } from '@chillet/m3-vue';",
     "import App from './App.vue';",
     "import '@chillet/m3-vue/style.css';",
-    `import '@chillet/m3-vue/themes/${theme}.css';`,
+    `import { ${presetName} } from '@chillet/m3-vue/presets/${preset}';`,
     ...(css ? ["import './customization.css';"] : []),
     '',
     'const app = createApp(App);',
-    `app.use(M3VuePlugin${options});`,
+    `app.use(M3VuePlugin, ${options});`,
     "app.mount('#app');",
     '',
   ].join('\n');

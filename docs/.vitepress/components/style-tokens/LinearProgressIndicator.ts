@@ -40,19 +40,19 @@ export const linearProgressIndicatorStyleTokens = [
   {
     name: '--md-linear-progress-indicator-track-thickness',
     description: 'Height of the track and active segment.',
-    fallback: '--dp(4)',
+    fallback: '4dp × typography/density scale',
     category: 'Layout',
   },
   {
     name: '--md-linear-progress-indicator-track-active-indicator-gap',
     description: 'Gap between active segment and track in determinate partial state.',
-    fallback: '--dp(4)',
+    fallback: '4dp × typography/density scale',
     category: 'Layout',
   },
   {
     name: '--md-linear-progress-indicator-stop-indicator-size',
     description: 'Size of the stop indicator dot.',
-    fallback: '--dp(4)',
+    fallback: '4dp × typography/density scale',
     category: 'Layout',
   },
   {
@@ -64,25 +64,25 @@ export const linearProgressIndicatorStyleTokens = [
   {
     name: '--md-linear-progress-indicator-wave-amplitude',
     description: 'Amplitude for the wavy active segment.',
-    fallback: '--dp(3)',
+    fallback: '3dp × typography/density scale',
     category: 'Wave',
   },
   {
     name: '--md-linear-progress-indicator-wave-wavelength',
     description: 'Wavelength for determinate wavy progress.',
-    fallback: '--dp(40)',
+    fallback: '40dp × typography/density scale',
     category: 'Wave',
   },
   {
     name: '--md-linear-progress-indicator-indeterminate-wave-wavelength',
     description: 'Wavelength for indeterminate wavy progress.',
-    fallback: '--dp(20)',
+    fallback: '20dp × typography/density scale',
     category: 'Wave',
   },
   {
     name: '--md-linear-progress-indicator-with-wave-height',
     description: 'Minimum height when using the wavy shape.',
-    fallback: '--dp(10)',
+    fallback: '10dp × typography/density scale',
     category: 'Wave',
   },
 ] satisfies StyleTokenMeta[];

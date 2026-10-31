@@ -16,6 +16,7 @@ import ComboboxMultiSelectSrc from '../../demos/combobox/ComboboxMultiSelect.vue
 const props = ref({
   label: 'State',
   labelClearance: undefined,
+  labelBehavior: undefined,
   disabled: false,
   required: false,
   placeholder: 'Choose a state',
@@ -46,6 +47,8 @@ Combobox 封装了 Select，并共享其 `select` scope。详见 [Select Anatomy
 :::
 
 `showSelectedIcon` 和 `selectDefaults` 与 Select 共享；详见[选中标记](./select#选中标记)。
+
+标签遵循共享的 `fieldLabelBehavior` 默认值（`floating`；compact 中为 `external`）。可用 `label-behavior` 覆盖。External 模式不显示内置标签和描边缺口，不应用 `labelClearance`，且仅将 `label` 用作无障碍名称的回退值。自定义标签布局请参阅[字段布局](../guides/field-layout#标签行为)。
 
 ## 虚拟列表与外部搜索
 

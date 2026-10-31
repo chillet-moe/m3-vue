@@ -15,6 +15,7 @@ const sidebarLabels: Record<string, string> = {
   Guides: '指南',
   'Multiple windows': '多窗口',
   Customization: '样式定制',
+  'Preset preview': '预设预览',
   'Interaction Cursors': '交互光标',
   'Field Layout': '字段布局',
   'Appearance and Layout': '外观与布局',
@@ -64,6 +65,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     text: 'Appearance and Layout',
     items: [
       { text: 'Customization', link: '/guides/styling' },
+      { text: 'Preset preview', link: '/guides/presets' },
       { text: 'Icon sizing', link: '/guides/icon-sizing' },
       { text: 'Field Layout', link: '/guides/field-layout' },
       { text: 'Interaction Cursors', link: '/guides/interaction-cursors' },

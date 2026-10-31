@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, nextTick, provide, ref, useId, useTemplateRef, watch } from 'vue';
+import { computed, inject, nextTick, provide, ref, unref, useId, useTemplateRef, watch } from 'vue';
 import { useData } from 'vitepress';
 import {
   Button,
@@ -24,7 +24,7 @@ import {
 } from '@/index';
 import { useDocsCustomization } from '../customization/state';
 import { defaultSettings, fieldGapSettings, iconSettings, typeProperties, typeRoles } from '../customization/catalog';
-import { themePresets, typographyPresets } from '@/theme/presets';
+import { typographyPresets } from '@/theme/presets';
 import { customizationCode } from '../customization/code';
 import { defaultSourceColor } from '../customization/colors';
 import { shapeRoles } from '../customization/shapes';
@@ -34,10 +34,13 @@ import { zh } from '../customization/zh';
 const { lang } = useData();
 const t = (key: CopyKey) => (lang.value === 'zh-Hans' ? zh : en)[key];
 const customization = useDocsCustomization();
-const { state, baseline, resolvedTokens, setToken, setDefault, setPreset, reset, storageError } = customization;
+const { state, inheritedDefaults, baseline, resolvedTokens, setToken, setDefault, setPreset, reset, storageError } =
+  customization;
 // Keep editor dimensions and slider interaction stable; inherit the remaining theme preferences.
 provide(rowSizeContextKey, 'small');
-provide(fieldContextKey, { ...inject(fieldContextKey, undefined), size: 'small' });
+const fieldDefaults = inject(fieldContextKey, undefined);
+const externalLabels = computed(() => unref(fieldDefaults?.labelBehavior) === 'external');
+provide(fieldContextKey, { ...fieldDefaults, size: 'small' });
 provideButtonDefaults({ size: 'small' });
 provide(iconButtonContextKey, { ...inject(iconButtonContextKey, undefined), size: 'small' });
 provideSliderDefaults({ size: 'small', wheel: false, valueIndicator: false });
@@ -82,13 +85,8 @@ const selectedTypography = computed(() =>
     Object.entries(typographyPresets[preset]).every(([name, value]) => resolvedTokens.value[name] === value),
   ),
 );
-const selectedTheme = computed(() =>
-  (['default', 'compact'] as const).find(
-    (preset) =>
-      selectedTypography.value === themePresets[preset].typography &&
-      Number(density.value) === themePresets[preset].density,
-  ),
-);
+const selectedTheme = computed(() => state.theme.preset);
+
 function selectTheme(value: unknown) {
   if (value === 'default' || value === 'compact') setPreset(value);
 }
@@ -195,51 +193,61 @@ watch(open, async (value) => {
                 @click="customization.setSourceColor('')"
               />
             </div>
-            <TextField
-              :model-value="density"
-              type="number"
-              :label="t('density')"
-              :supporting-text="t('densityHint')"
-              @update:model-value="updateDensity"
-            />
-            <div class="customization-fields">
+            <div class="customization-labeled-field">
+              <label v-if="externalLabels" :for="`${panelId}-field-1`">{{ t('density') }}</label>
               <TextField
-                v-for="setting in fieldGapSettings"
-                :key="setting.token"
-                :label="t(setting.key)"
-                :model-value="state.tokens[setting.token] ?? ''"
-                :placeholder="baseline[setting.token]"
-                @update:model-value="setToken(setting.token, $event)"
+                :id="`${panelId}-field-1`"
+                :model-value="density"
+                type="number"
+                :label="t('density')"
+                :supporting-text="t('densityHint')"
+                @update:model-value="updateDensity"
               />
+            </div>
+            <div class="customization-fields">
+              <div v-for="setting in fieldGapSettings" :key="setting.token" class="customization-labeled-field">
+                <label v-if="externalLabels" :for="`${panelId}-field-2-${setting.token}`">{{ t(setting.key) }}</label>
+                <TextField
+                  :id="`${panelId}-field-2-${setting.token}`"
+                  :label="t(setting.key)"
+                  :model-value="state.tokens[setting.token] ?? ''"
+                  :placeholder="baseline[setting.token]"
+                  @update:model-value="setToken(setting.token, $event)"
+                />
+              </div>
             </div>
             <p class="customization-code-empty">{{ t('fieldGapHint') }}</p>
             <div class="customization-fields">
-              <TextField
-                v-for="setting in iconSettings"
-                :key="setting.token"
-                type="number"
-                step="0.05"
-                :min="String(setting.min)"
-                :max="String(setting.max)"
-                :label="t(setting.key)"
-                :model-value="state.tokens[setting.token] ?? ''"
-                :placeholder="setting.fallback"
-                @update:model-value="setToken(setting.token, $event)"
+              <div v-for="setting in iconSettings" :key="setting.token" class="customization-labeled-field">
+                <label v-if="externalLabels" :for="`${panelId}-field-3-${setting.token}`">{{ t(setting.key) }}</label>
+                <TextField
+                  :id="`${panelId}-field-3-${setting.token}`"
+                  type="number"
+                  step="0.05"
+                  :min="String(setting.min)"
+                  :max="String(setting.max)"
+                  :label="t(setting.key)"
+                  :model-value="state.tokens[setting.token] ?? ''"
+                  :placeholder="setting.fallback"
+                  @update:model-value="setToken(setting.token, $event)"
+                />
+              </div>
+            </div>
+            <div v-for="name in ['appearance']" :key="name" class="customization-labeled-field">
+              <label v-if="externalLabels" :for="`${panelId}-field-4-${name}`">{{ t(name as CopyKey) }}</label>
+              <Select
+                :id="`${panelId}-field-4-${name}`"
+                :label="t(name as CopyKey)"
+                :model-value="state.defaults[name] ?? ''"
+                :options="[
+                  { value: '', label: t('inherited') },
+                  ...defaultSettings
+                    .find((setting) => setting.key === name)!
+                    .options.map((value) => ({ value, label: value })),
+                ]"
+                @update:model-value="setDefault(name, String($event ?? ''))"
               />
             </div>
-            <Select
-              v-for="name in ['appearance']"
-              :key="name"
-              :label="t(name as CopyKey)"
-              :model-value="state.defaults[name] ?? ''"
-              :options="[
-                { value: '', label: t('inherited') },
-                ...defaultSettings
-                  .find((setting) => setting.key === name)!
-                  .options.map((value) => ({ value, label: value })),
-              ]"
-              @update:model-value="setDefault(name, String($event ?? ''))"
-            />
           </TabPanel>
           <TabPanel value="typography" class="customization-section customization-form">
             <ButtonGroup
@@ -253,31 +261,40 @@ watch(open, async (value) => {
               <ButtonGroupItem value="default">{{ t('standard') }}</ButtonGroupItem>
               <ButtonGroupItem value="compact">{{ t('compact') }}</ButtonGroupItem>
             </ButtonGroup>
-            <Combobox v-model="currentRole" :label="t('role')" :options="roleOptions" />
+            <div class="customization-labeled-field">
+              <label v-if="externalLabels" :for="`${panelId}-field-5`">{{ t('role') }}</label>
+              <Combobox :id="`${panelId}-field-5`" v-model="currentRole" :label="t('role')" :options="roleOptions" />
+            </div>
             <div class="customization-type-preview" :style="previewStyle">{{ t('preview') }}</div>
             <div class="customization-fields">
-              <TextField
-                v-for="property in typeProperties"
-                :key="property"
-                :label="t(property)"
-                :model-value="state.tokens[typeToken(property)] ?? ''"
-                :placeholder="resolvedTokens[typeToken(property)]"
-                @update:model-value="setToken(typeToken(property), $event)"
-              />
+              <div v-for="property in typeProperties" :key="property" class="customization-labeled-field">
+                <label v-if="externalLabels" :for="`${panelId}-field-6-${property}`">{{ t(property) }}</label>
+                <TextField
+                  :id="`${panelId}-field-6-${property}`"
+                  :label="t(property)"
+                  :model-value="state.tokens[typeToken(property)] ?? ''"
+                  :placeholder="resolvedTokens[typeToken(property)]"
+                  @update:model-value="setToken(typeToken(property), $event)"
+                />
+              </div>
             </div>
           </TabPanel>
           <TabPanel value="shapes" class="customization-section">
-            <Select
-              :label="t('shape')"
-              :model-value="state.defaults.shape ?? ''"
-              :options="[
-                { value: '', label: t('inherited') },
-                ...defaultSettings
-                  .find((setting) => setting.key === 'shape')!
-                  .options.map((value) => ({ value, label: value })),
-              ]"
-              @update:model-value="setDefault('shape', String($event ?? ''))"
-            />
+            <div class="customization-labeled-field">
+              <label v-if="externalLabels" :for="`${panelId}-field-7`">{{ t('shape') }}</label>
+              <Select
+                :id="`${panelId}-field-7`"
+                :label="t('shape')"
+                :model-value="state.defaults.shape ?? ''"
+                :options="[
+                  { value: '', label: t('inherited') },
+                  ...defaultSettings
+                    .find((setting) => setting.key === 'shape')!
+                    .options.map((value) => ({ value, label: value })),
+                ]"
+                @update:model-value="setDefault('shape', String($event ?? ''))"
+              />
+            </div>
             <template v-if="state.defaults.shape !== 'minimal' && state.defaults.shape !== 'sharp'">
               <div v-for="role in shapeRoles" :key="role.key" class="customization-shape">
                 <div class="customization-row">
@@ -315,17 +332,28 @@ watch(open, async (value) => {
             </template>
           </TabPanel>
           <TabPanel value="components" class="customization-section customization-form">
-            <Select
+            <div
               v-for="setting in defaultSettings.filter((item) => item.key !== 'appearance' && item.key !== 'shape')"
               :key="setting.key"
-              :label="t(setting.key)"
-              :model-value="state.defaults[setting.key] ?? ''"
-              :options="[
-                { value: '', label: t('inherited') },
-                ...setting.options.map((value) => ({ value, label: value })),
-              ]"
-              @update:model-value="setDefault(setting.key, String($event ?? ''))"
-            />
+              class="customization-labeled-field"
+            >
+              <label v-if="externalLabels" :for="`${panelId}-field-8-${setting.key}`">{{ t(setting.key) }}</label>
+              <Select
+                :id="`${panelId}-field-8-${setting.key}`"
+                :label="t(setting.key)"
+                :model-value="state.defaults[setting.key] ?? ''"
+                :options="[
+                  {
+                    value: '',
+                    label: inheritedDefaults[setting.key]
+                      ? `${t('inherited')} (${inheritedDefaults[setting.key]})`
+                      : t('inherited'),
+                  },
+                  ...setting.options.map((value) => ({ value, label: value })),
+                ]"
+                @update:model-value="setDefault(setting.key, String($event ?? ''))"
+              />
+            </div>
           </TabPanel>
           <TabPanel value="code" class="customization-section">
             <section
@@ -362,6 +390,13 @@ watch(open, async (value) => {
 </template>
 
 <style scoped>
+.customization-labeled-field {
+  display: grid;
+  gap: 0.375rem;
+  min-inline-size: 0;
+  font: var(--md-sys-typescale-body-small);
+}
+
 .customization-trigger {
   display: inline-flex;
 }

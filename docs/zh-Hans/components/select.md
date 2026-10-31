@@ -26,6 +26,7 @@ const props = ref({
   label: 'Coffee',
   size: 'medium',
   labelClearance: undefined,
+  labelBehavior: undefined,
   disabled: false,
   required: false,
   placeholder: 'Choose an option',
@@ -51,6 +52,8 @@ Select 提供锚定菜单以供选择一个或多个选项，并支持可选图�
 <AnatomyTable scope="select" />
 
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
+
+标签遵循共享的 `fieldLabelBehavior` 默认值（`floating`；compact 中为 `external`）。可用 `label-behavior` 覆盖。External 模式不显示内置标签和描边缺口，不应用 `labelClearance`，且仅将 `label` 用作无障碍名称的回退值。自定义标签布局请参阅[字段布局](../guides/field-layout#标签行为)。
 
 ## 菜单外观
 

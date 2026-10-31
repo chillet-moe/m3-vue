@@ -22,6 +22,7 @@ const props = ref({
   shape: 'square',
   size: 'medium',
   labelClearance: undefined,
+  labelBehavior: undefined,
   disabled: false,
   required: false,
   supportingText: 'Supporting text',
@@ -51,6 +52,8 @@ default from `fieldContextKey`; it is additive with any parent gap. See the
     <TextField v-bind="props" v-model="modelValue" />
   </div>
 </DemoContainer>
+
+Labels follow the shared `fieldLabelBehavior` default (`floating`, or `external` in compact). Override it with `label-behavior`. External mode omits the visible label and notch, ignores `labelClearance`, and uses `label` only as an accessible-name fallback. See [Field layout](../guides/field-layout#label-behavior) for custom label layouts.
 
 ## Examples
 

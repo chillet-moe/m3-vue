@@ -1,75 +1,71 @@
-<script setup>
-import CustomizationGallery from '../../.vitepress/components/CustomizationGallery.vue';
-</script>
-
 # 定制
 
-先选择主题，再设置组件默认值，最后调整需要变化的样式。
+从完整预设开始，再覆盖应用所需的偏好。使用[预设预览](./presets)比较实际布局和组件图库。文档工具栏会编辑相同设置；其 **Code** 页签可导出预设导入、插件覆盖项和 CSS 修改。
 
-| 定制内容             | 使用方式                                 |
-| -------------------- | ---------------------------------------- |
-| 默认或紧凑外观       | 主题样式表                               |
-| 组件尺寸、形状或行为 | `M3VuePlugin` 选项、子树默认值或组件属性 |
-| 控件内部的垂直留白   | `--md-density`                           |
-| 排版、颜色和圆角     | 系统与语义 CSS token                     |
-| 单个组件的外观       | 组件文档列出的公开 token                 |
-| 组件之间的布局和间距 | 组件或父级布局上的 class                 |
-
-## 组件预览
-
-使用工具栏中的 **自定义** 对比这些组件在不同设置下的效果。选择一个类别；点击组件名称可查看完整示例和 API。单个示例可能会显式设置变体或尺寸。
-
-<CustomizationGallery />
-
-## 图标尺寸
-
-使用 **主题 → 图标尺寸倍率** 缩放默认组件图标，并使用 **图标来源内容比例** 校准来源留白。这两项设置都会显示在生成的 CSS 中。显式尺寸仍具有优先权。请参阅[图标尺寸演示](./icon-sizing)，查看并排对比和 SVG 示例。
-
-## 主题选择
-
-在应用启动时导入共享样式和**一个**主题：
+## 选择预设
 
 ```ts
+import { M3VuePlugin } from '@chillet/m3-vue';
 import '@chillet/m3-vue/style.css';
-import '@chillet/m3-vue/themes/default.css';
+import { compact } from '@chillet/m3-vue/presets/compact';
+
+app.use(M3VuePlugin, { preset: compact });
 ```
 
-若要使用较小的排版和密度 `-2`，将 `themes/default.css` 替换为 `themes/compact.css`。默认主题使用 Material 排版和密度 `0`。两个主题都包含最终 token 值；加载紧凑主题前无需先加载默认主题。
+预设入口会导入主题样式表并提供组件默认值。每个应用样式表只导入一个预设。标准 Material 外观请使用 `@chillet/m3-vue/presets/default` 中的 `defaultPreset`。
 
-Nuxt 会自动加载默认主题。设置 `m3Vue: { theme: 'compact' }` 可选择紧凑主题；自行导入主题样式时设置 `theme: false`。
+| 设置             | default  | compact     |
+| ---------------- | -------- | ----------- |
+| 排版             | Material | Compact     |
+| 密度             | 0        | -2          |
+| Switch           | medium   | small       |
+| 字段             | medium   | small       |
+| 字段标签         | floating | external    |
+| Button           | small    | small       |
+| IconButton       | small    | extra-small |
+| 菜单、树和导航行 | medium   | small       |
+| ListItem         | medium   | small       |
 
-## 组件默认值
+compact 使用 small 字段和 body-medium 排版，与常见工具栏布局中的 small 按钮相匹配。未修改的 compact 预设在根字号为 16px 时，两者的高度均为 30px。字段内容上下至少保留 4px 内边距，因此在更低的密度下，字段高度可能仍高于按钮。对话框和面板会继承密度，并缩小内边距和分区间距。进度指示器会根据正文排版和密度缩放几何尺寸；显式设置的尺寸和粗细仍彼此独立。
 
-注册插件时设置应用级默认值：
+compact 保留 Slider 和 FAB 现有的默认值，不会改变形状、颜色或交互行为。排版仍决定与文本关联的几何尺寸，密度则调整间距。
+
+compact 将可见字段标签交由父级布局负责。`label` 属性仍可作为无障碍名称的回退值；在 external 模式下，它不会显示为标签或占位符。请参阅[字段布局](./field-layout#标签行为)，了解标签置于上方、字段旁边以及无可见标签的示例。
+
+独立的 `themes/default.css` 和 `themes/compact.css` 文件仍可用于纯 CSS 主题选择，但不会设置 Vue 组件尺寸。预设入口已导入其样式表，因此不要同时再导入另一个主题。Nuxt 的 `m3Vue: { theme: 'compact' }` 会通过生成的插件安装紧凑默认值；`theme: false` 会停用此选择。设置 `directives: false` 会停用指令注册，同时保留所选预设。
+
+## 覆盖组件默认值
 
 ```ts
 app.use(M3VuePlugin, {
-  shape: 'square',
-  rowSize: 'extra-small',
-  fieldSize: 'small',
-  buttonDefaults: { size: 'small', pressShapeMorph: false },
-  sliderDefaults: { appearance: 'standard', wheel: false },
-  listItemDefaults: { size: 'small' },
+  preset: compact,
+  switchSize: 'medium',
+  buttonDefaults: { pressShapeMorph: false },
 });
 ```
 
-| 选项                                       | 适用范围                                                            |
-| ------------------------------------------ | ------------------------------------------------------------------- |
-| `shape`                                    | 共享组件形状                                                        |
-| `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目 |
-| `fieldSize`                                | 单行 TextField、Select 和 Combobox                                  |
-| `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                 |
-| `switchSize`                               | Switch（`small` / `medium`）                                        |
-| `iconButtonSize`                           | IconButton                                                          |
-| `sliderDefaults`                           | Slider 尺寸、外观、滚轮输入和数值指示器                             |
-| `listItemDefaults`                         | ListItem 尺寸和外观                                                 |
-| `selectDefaults`                           | Select 和 Combobox 的选中标记（`showSelectedIcon`）                 |
-| `appearance`                               | Slider 和 ListItem 的共享外观                                       |
-| `menuColor`                                | Menu、Select 和 Combobox 菜单                                       |
-| `datePickerDefaults`、`timePickerDefaults` | 日期与时间选择器偏好                                                |
-| `snackbarDefaults`                         | 程序化 [Snackbar](../components/snackbar) 偏好                      |
+这会保留 compact 的按钮尺寸，同时改变按压行为。嵌套默认值按属性合并；`undefined` 表示继承，显式的 `false` 会覆盖继承值。优先级为**组件属性 → 子树默认值 → 应用覆盖项 → 预设 → 组件默认值**。响应式 ref 会继续保持响应性。
 
-子树可使用现有 defaults helper。未指定的字段会继承，值也可使用 ref 或 computed：
+定制面板在切换预设时会保留显式组件覆盖项。继承设置会显示预设值；移除覆盖项即可重新跟随所选预设。仅选择排版不会改变组件默认值。重置会恢复默认预设。
+
+| 选项                                       | 适用范围                                                                |
+| ------------------------------------------ | ----------------------------------------------------------------------- |
+| `shape`                                    | 共享组件形状                                                            |
+| `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目     |
+| `fieldSize`                                | 单行 TextField、Select 和 Combobox                                      |
+| `fieldLabelBehavior`                       | TextField、Select 和 Combobox 的标签呈现方式（`floating` / `external`） |
+| `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                     |
+| `switchSize`                               | Switch（`small` / `medium`）                                            |
+| `iconButtonSize`                           | IconButton                                                              |
+| `sliderDefaults`                           | Slider 尺寸、外观、滚轮输入和数值指示器                                 |
+| `listItemDefaults`                         | ListItem 尺寸和外观                                                     |
+| `selectDefaults`                           | Select 和 Combobox 的选中标记（`showSelectedIcon`）                     |
+| `appearance`                               | Slider 和 ListItem 的共享外观                                           |
+| `menuColor`                                | Menu、Select 和 Combobox 菜单                                           |
+| `datePickerDefaults`、`timePickerDefaults` | 日期与时间选择器偏好                                                    |
+| `snackbarDefaults`                         | 程序化 [Snackbar](../components/snackbar) 偏好                          |
+
+对于一个子树，可使用现有 defaults helper。未指定的字段会继承，值也可使用 ref 或 computed：
 
 ```vue
 <script setup lang="ts">
@@ -82,7 +78,7 @@ provideSliderDefaults({ wheel: false });
 </script>
 ```
 
-优先级为：组件属性 > 子树默认值 > 应用默认值 > 库默认值。显式的 `false` 会覆盖继承值；`undefined` 表示继承。直接调用 `provide(contextKey, value)` 会替换整个上下文对象。若要保留未指定字段，请使用 defaults helper。
+直接调用 `provide(contextKey, value)` 会替换整个上下文对象。若要保留未指定字段，请使用 defaults helper。
 
 ### 行尺寸 {#row-sizes}
 
@@ -133,7 +129,7 @@ provideRowSize('extra-small');
 
 密度会调整各组件当前所选的尺寸，不会让所有组件达到统一的目标高度。请先选择组件尺寸：菜单行和超小号按钮可能会在不同的密度值下达到各自的内容下限。
 
-紧凑预设结合了紧凑排版和密度 `-2`。排版、组件尺寸和密度仍是独立设置。与文本关联的图标以及复选框、单选按钮和开关的几何尺寸会根据其排版角色确定默认比例，因此自定义字号无需针对预设编写 CSS 覆盖。密度随后调整几何尺寸和留白。独立 IconButton 和 FAB 的尺寸仍由尺寸选项决定；显式组件尺寸会覆盖自动计算值。
+排版、组件尺寸和密度可独立于预设进行覆盖。与文本关联的图标以及复选框、单选按钮和开关的几何尺寸会根据其排版角色确定默认比例，因此自定义字号无需针对预设编写 CSS 覆盖。密度随后调整几何尺寸和留白。独立 IconButton 和 FAB 的尺寸仍由尺寸选项决定；显式组件尺寸会覆盖自动计算值。
 
 密度适用于 Button、ButtonGroup、IconButton、Chip、复选框、单选按钮和开关、字段、InputOtp、ListItem、TreeView、Tabs、菜单行（包括 Select/Combobox 菜单）、Breadcrumb、Pagination，以及 NavigationDrawer/NavigationRail 条目。密度主要调整垂直留白。TextField、Select 和 Combobox 也会按每级调整 2px 水平内边距，最低为 4px，使字段图标与周围留白协调。显式设置的内边距 token 优先。OTP 单元格宽度、导航宽度和字体保持不变。默认操作图标和行图标会随每级密度调整 1px，并限制在一定尺寸范围内。折叠状态的 NavigationRail 条目会保留图标交互目标和堆叠标签所需的空间，因此会更早达到密度下限。多行内容可能增高。Dialog 和 Snackbar 会将继承的密度重置为 0。日期和时间选择器会继承密度：日历单元格和列表、时间输入及操作会随密度调整，而时间选择器钟面的几何尺寸保持不变。密度不会调整页面间距，也不会随断点自动变化。为触屏选择紧凑布局时，请保留足够大的交互目标。
 
@@ -271,4 +267,6 @@ provideShape('sharp');
 
 ## 在文档中试用设置
 
-点击工具栏中的 **Customize**，试用主题、排版、形状和组件设置。预设会反映当前值；自定义修改后，对应分组可能不再选中任何预设。更改只保存在当前浏览器中，并作用于文档站点。**Code** 标签页会显示在应用中应用当前设置所需的主题导入、插件选项和 CSS。可分别复制各文件；CSS 仅包含对已导入主题的覆盖。**Reset all** 会重置面板设置；深色模式和固定预览仍是独立的工具栏偏好。
+点击工具栏中的 **Customize**，试用主题、排版、形状和组件设置。所选预设会反映当前值；自定义修改后，某个分组可能不再选中任何预设。更改仅保存在当前浏览器中，并作用于文档站点。**Code** 页签会显示在应用中应用当前设置所需的主题导入、插件选项和 CSS。可分别复制各文件；CSS 仅包含对已导入主题的覆盖。**Reset all** 会重置面板设置；深色模式和固定预览仍是独立的工具栏偏好。
+
+有关图标缩放和来源校准，请参阅[图标尺寸](./icon-sizing)。

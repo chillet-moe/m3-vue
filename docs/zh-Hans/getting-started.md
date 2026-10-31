@@ -4,7 +4,7 @@ title: 开始使用
 
 # 开始使用
 
-安装此包，导入共享样式和主题，然后在应用启动时注册一次插件。
+安装此包，导入共享样式和预设，然后在应用启动时注册一次插件。
 
 ## 安装
 
@@ -20,11 +20,11 @@ import { M3VuePlugin } from '@chillet/m3-vue';
 import App from './App.vue';
 
 import '@chillet/m3-vue/style.css';
-import '@chillet/m3-vue/themes/default.css';
+import { defaultPreset } from '@chillet/m3-vue/presets/default';
 
 const app = createApp(App);
 
-app.use(M3VuePlugin);
+app.use(M3VuePlugin, { preset: defaultPreset });
 app.mount('#app');
 ```
 
@@ -42,18 +42,13 @@ import { Button } from '@chillet/m3-vue';
 </template>
 ```
 
-## 组件默认值
+## 选择紧凑预设或进行定制
 
-注册插件时配置常用偏好：
+如需完整的紧凑界面，请从 `@chillet/m3-vue/presets/compact` 导入 `compact` 并将其作为 `preset` 传入。它会应用紧凑排版、密度 `-2` 和协调一致的组件尺寸，无需逐个配置组件。
 
-```ts
-app.use(M3VuePlugin, {
-  fieldSize: 'small',
-  buttonDefaults: { size: 'small' },
-});
-```
+请参阅[定制](./guides/styling)了解预设覆盖方式，并查看[预设预览](./guides/presets)比较布局。
 
-继续阅读[定制](./guides/styling)，了解主题选择、子树默认值、密度、排版、颜色、形状和组件局部样式。
+compact 使用外部字段标签。请在表单布局中安排可见标签；若字段没有可见标签，请提供无障碍名称。详见[字段布局](./guides/field-layout#标签行为)。
 
 ## 挂载 OverlayHost
 

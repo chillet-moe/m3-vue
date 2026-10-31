@@ -1,66 +1,58 @@
-<script setup>
-import CustomizationGallery from '../.vitepress/components/CustomizationGallery.vue';
-</script>
-
 # Customization
 
-Choose a theme, set component defaults, then adjust the few styles that need to differ.
+Start with a complete preset, then override only the preferences your application needs. Use the [preset preview](./presets) to compare a working layout and the component gallery. The documentation toolbar edits these same settings; its Code tab exports the preset import, plugin overrides and any CSS changes.
 
-| Change                                | Use                                                        |
-| ------------------------------------- | ---------------------------------------------------------- |
-| Default or compact presentation       | A theme stylesheet                                         |
-| Component size, shape or behavior     | `M3VuePlugin` options, subtree defaults or component props |
-| Vertical whitespace inside controls   | `--md-density`                                             |
-| Typography, colors and corners        | System and semantic CSS tokens                             |
-| One component's appearance            | Its documented public tokens                               |
-| Layout and spacing between components | A class on the component or its parent layout              |
-
-## Component previews
-
-Use the toolbar's **Customize** control to compare settings across these components. Choose a category; each
-component name links to its full examples and API. Individual examples may set an explicit variant or size.
-
-<CustomizationGallery />
-
-## Icon sizing
-
-Use **Theme → Icon size multiplier** to scale default component icons and **Icon source content ratio** to calibrate source whitespace. Both settings appear in the generated CSS. Explicit sizes remain authoritative. See the [icon sizing playground](./icon-sizing) for side-by-side comparisons and SVG examples.
-
-## Theme selection
-
-Import the shared styles and **one** theme at application startup:
+## Choose a preset
 
 ```ts
+import { M3VuePlugin } from '@chillet/m3-vue';
 import '@chillet/m3-vue/style.css';
-import '@chillet/m3-vue/themes/default.css';
+import { compact } from '@chillet/m3-vue/presets/compact';
+
+app.use(M3VuePlugin, { preset: compact });
 ```
 
-Use `themes/compact.css` instead of `themes/default.css` for smaller typography and density `-2`.
-The default theme uses Material typography and density `0`. Both themes contain their final token values;
-loading the compact theme does not require loading the default theme first.
+The entry imports its theme stylesheet and supplies component defaults. Import one preset per application stylesheet. Use `defaultPreset` from `@chillet/m3-vue/presets/default` for the standard Material presentation.
 
-Nuxt loads the default theme automatically. Use `m3Vue: { theme: 'compact' }` to select compact,
-or `theme: false` if you import theme styles yourself.
+| Setting                        | default  | compact     |
+| ------------------------------ | -------- | ----------- |
+| Typography                     | Material | Compact     |
+| Density                        | 0        | -2          |
+| Switch                         | medium   | small       |
+| Fields                         | medium   | small       |
+| Field labels                   | floating | external    |
+| Button                         | small    | small       |
+| IconButton                     | small    | extra-small |
+| Menu, tree and navigation rows | medium   | small       |
+| ListItem                       | medium   | small       |
 
-## Component defaults
+Compact leaves visible field labels to the parent layout. The `label` prop remains an accessible-name fallback; it does not display a label or placeholder in external mode. See [Field layout](./field-layout#label-behavior) for above, beside-field and visually unlabeled examples.
 
-Set application defaults when registering the plugin:
+Compact uses small fields with body-medium typography, matching small buttons in ordinary toolbar layouts. With the unmodified compact preset, both are 30px high at a 16px root font size. Fields retain at least 4px padding above and below their content, so they may stay taller than buttons at more negative densities. Dialogs and sheets inherit density and reduce their padding and section gaps. Progress indicators scale their geometry with body typography and density; their explicit size and thickness settings remain independent.
+
+Compact keeps Slider and FAB at their existing defaults. It does not change shape, colors or interaction behavior. Typography still governs text-associated geometry, while density adjusts spacing.
+
+The standalone `themes/default.css` and `themes/compact.css` files remain available for CSS-only theme selection; they do not set Vue component sizes. A preset entry already imports its stylesheet, so do not import a second theme alongside it. Nuxt's `m3Vue: { theme: 'compact' }` installs the compact defaults with its generated plugin; `theme: false` disables this selection. `directives: false` disables directive registration while preserving the selected preset.
+
+## Override component defaults
 
 ```ts
 app.use(M3VuePlugin, {
-  shape: 'square',
-  rowSize: 'extra-small',
-  fieldSize: 'small',
-  buttonDefaults: { size: 'small', pressShapeMorph: false },
-  sliderDefaults: { appearance: 'standard', wheel: false },
-  listItemDefaults: { size: 'small' },
+  preset: compact,
+  switchSize: 'medium',
+  buttonDefaults: { pressShapeMorph: false },
 });
 ```
+
+This keeps compact's button size while changing press behavior. Nested defaults merge by property; `undefined` inherits and explicit `false` overrides. Priority is **component prop → subtree default → application override → preset → component default**. Reactive refs remain reactive.
+
+The customization panel preserves explicit component overrides when switching presets. An inherited choice displays the preset value; remove an override to follow the selected preset again. Choosing typography alone does not change the component defaults. Reset returns all settings to the default preset.
 
 | Option                                     | Applies to                                                                             |
 | ------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `shape`                                    | Shared component shapes                                                                |
 | `rowSize`                                  | Menu rows (including Select/Combobox menus), TreeView and navigation drawer/rail items |
+| `fieldLabelBehavior`                       | TextField, Select and Combobox label presentation (`floating` / `external`)            |
 | `fieldSize`                                | Single-line TextField, Select and Combobox                                             |
 | `buttonDefaults`                           | Button size and press shape morph; ButtonGroup inherits press morph                    |
 | `switchSize`                               | Switch (`small` / `medium`)                                                            |
@@ -86,9 +78,7 @@ provideSliderDefaults({ wheel: false });
 </script>
 ```
 
-A component prop wins over subtree defaults, then application defaults, then the library default.
-Explicit `false` overrides an inherited value; `undefined` inherits. Direct `provide(contextKey, value)` replaces
-that context object, so use a defaults helper when you want to retain unspecified fields.
+Direct `provide(contextKey, value)` replaces that context object; use a defaults helper when you want to retain unspecified fields.
 
 ### Row sizes
 
@@ -151,7 +141,7 @@ is no universal minimum height or numeric clamp. Explicit dimension tokens take 
 Density adjusts each component's chosen size; it is not a shared target height. Choose sizes first: a menu row
 and an extra-small button can reach their content floors at different density values.
 
-The compact preset combines compact typography with density -2. Typography, component size and density remain independent settings. Text-associated icons and Checkbox, Radio and Switch geometry derive their default proportions from their typography role, so custom font sizes work without a preset-specific CSS override. Density then adjusts geometry and whitespace. Standalone IconButton and FAB sizes remain size-driven; explicit component dimensions override automatic sizing.
+Typography, component size and density can be overridden independently of the preset. Text-associated icons and Checkbox, Radio and Switch geometry derive their default proportions from their typography role, so custom font sizes work without a preset-specific CSS override. Density then adjusts geometry and whitespace. Standalone IconButton and FAB sizes remain size-driven; explicit component dimensions override automatic sizing.
 
 Density applies to Button, ButtonGroup, IconButton, Chip, Checkbox, Radio, Switch, fields, InputOtp, ListItem, TreeView, Tabs,
 menu rows (including Select/Combobox menus), Breadcrumb, Pagination and navigation drawer/rail items.
@@ -329,3 +319,5 @@ reflects the current values; after a custom edit, a group may have no selected p
 browser and affect the documentation site. The **Code** tab shows the theme imports, plugin options and CSS needed
 to apply the current settings in your app. Copy each file; the CSS contains only overrides of the imported theme.
 **Reset all** resets the panel's settings; dark mode and sticky previews remain separate toolbar preferences.
+
+For icon scaling and source calibration, see [Icon sizing](./icon-sizing).

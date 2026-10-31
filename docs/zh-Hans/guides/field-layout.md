@@ -3,6 +3,7 @@ title: 字段布局
 ---
 
 <script setup lang="ts">
+import FieldLabelLayouts from '../../.vitepress/components/FieldLabelLayouts.vue';
 import FloatingLabelSpacingLab from '../../demos/guides/FloatingLabelSpacingLab.vue';
 import FloatingLabelSpacingLabSrc from '../../demos/guides/FloatingLabelSpacingLab.vue?raw';
 </script>
@@ -12,6 +13,46 @@ import FloatingLabelSpacingLabSrc from '../../demos/guides/FloatingLabelSpacingL
 先根据表单场景选择字段尺寸，并保留周围内容原有的布局密度。父级布局使用 `gap` 控制字段组的间距；不要仅因使用字段组件就统一调整间距。
 
 带描边的 `TextField`、`Select` 和 `Combobox` 标签会浮到字段顶部边缘，并可能超出组件的名义边界。仅当这种浮动标签的视觉溢出确实需要额外净空时，再添加 `labelClearance`。它会叠加在父级 `gap` 之上，不负责设定整体布局密度。
+
+## 字段与操作尺寸
+
+small 和 extra-small 字段使用 body-medium 文字，图标基准尺寸为 20dp。medium 字段使用 body-large 文字，图标基准尺寸为 24dp。密度会调整内容周围的留白；排版角色和图标校准决定内容所需的空间。
+
+compact 预设选择 small 字段和 small 按钮：在根字号为 16px 时，两者的默认控件高度均为 30px。此设置适用于 TextField、Select 和 Combobox。外部标签和辅助文字不计入此高度。在很低的密度下，字段内容上下仍至少保留 4dp 内边距。文本区域由内容决定高度，并使用 medium 排版角色。
+
+请参阅[预设预览](./presets)中的筛选与操作行，比较这些控件的组合效果。
+
+## 标签行为
+
+`TextField`、`Select` 和 `Combobox` 共用 `labelBehavior`：
+
+- `floating` 会显示内置浮动标签和描边缺口。这是组件及默认预设的行为。
+- `external` 不显示内置标签和缺口，也不为浮动标签预留净空。紧凑预设会选择此行为。
+
+使用 `M3VuePlugin` 的 `fieldLabelBehavior` 设置应用默认值，或使用 `provide(fieldContextKey, { labelBehavior })` 设置子树默认值。两者都接受响应式 ref。组件的 `label-behavior` 属性优先。此设置独立于尺寸、排版和密度。`labelClearance` 和 `alwaysFloatLabel` 仅适用于浮动标签。
+
+外部标签由父级布局负责。将标签放在字段上方或旁边，并将原生 `<label>` 的 `for` 与字段的 `id` 关联。自定义标签元素可使用 `aria-labelledby`。没有可见标签时，传入 `label` 或 `aria-label` 提供无障碍名称；占位符不能替代标签。在 external 模式下，仅当未提供 `aria-label` 或 `aria-labelledby` 时，`label` 才作为 `aria-label` 的回退值；它不会渲染为占位符。
+
+```vue
+<template>
+  <div class="property-row">
+    <label for="part-name">名称</label>
+    <TextField id="part-name" v-model="name" label-behavior="external" />
+  </div>
+  <TextField label="搜索零件" placeholder="搜索…" label-behavior="external" />
+</template>
+
+<style scoped>
+.property-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--md-field-column-gap);
+}
+</style>
+```
+
+<FieldLabelLayouts />
 
 ## 布局间距 token
 
@@ -27,10 +68,10 @@ import FloatingLabelSpacingLabSrc from '../../demos/guides/FloatingLabelSpacingL
 ```vue
 <template>
   <div class="profile-fields">
-    <TextField label="Name" />
-    <TextField label="Email" type="email" />
-    <TextField label="City" />
-    <TextField label="Postal code" />
+    <TextField label="Name" label-behavior="floating" />
+    <TextField label="Email" type="email" label-behavior="floating" />
+    <TextField label="City" label-behavior="floating" />
+    <TextField label="Postal code" label-behavior="floating" />
   </div>
 </template>
 

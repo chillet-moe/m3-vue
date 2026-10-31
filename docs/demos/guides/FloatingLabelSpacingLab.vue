@@ -35,13 +35,27 @@ const usageAnalytics = ref(false);
 <template>
   <div class="floating-label-spacing-lab">
     <div class="floating-label-spacing-lab__controls">
-      <TextField v-model="rowGap" label="Row gap" placeholder="Theme default" size="small" />
-      <TextField v-model="columnGap" label="Column gap" placeholder="Theme default" size="small" />
-      <TextField v-model="density" label="Density" type="number" placeholder="Inherited" size="small" />
+      <TextField label-behavior="floating" v-model="rowGap" label="Row gap" placeholder="Theme default" size="small" />
+      <TextField
+        label-behavior="floating"
+        v-model="columnGap"
+        label="Column gap"
+        placeholder="Theme default"
+        size="small"
+      />
+      <TextField
+        label-behavior="floating"
+        v-model="density"
+        label="Density"
+        type="number"
+        placeholder="Inherited"
+        size="small"
+      />
 
       <Switch v-model:checked="showLayoutBoxes">Show nominal component boxes</Switch>
 
       <TextField
+        label-behavior="floating"
         v-model="labelClearanceInput"
         label="Label clearance"
         size="small"
@@ -61,6 +75,7 @@ const usageAnalytics = ref(false);
           :data-show-layout-boxes="showLayoutBoxes ? 'true' : undefined"
         >
           <TextField
+            label-behavior="floating"
             v-model="name"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="TextField · Name"
@@ -69,6 +84,7 @@ const usageAnalytics = ref(false);
           />
 
           <Select
+            label-behavior="floating"
             v-model="coffee"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="Select · Coffee"
@@ -77,6 +93,7 @@ const usageAnalytics = ref(false);
           />
 
           <Combobox
+            label-behavior="floating"
             v-model="secondaryState"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="Combobox · Empty value"
@@ -87,6 +104,7 @@ const usageAnalytics = ref(false);
           />
 
           <TextField
+            label-behavior="floating"
             v-model="email"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="TextField · Email"
@@ -105,6 +123,7 @@ const usageAnalytics = ref(false);
 
         <div class="floating-label-spacing-lab__stack" :data-show-layout-boxes="showLayoutBoxes ? 'true' : undefined">
           <TextField
+            label-behavior="floating"
             v-model="search"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="Workspace name"
@@ -115,6 +134,7 @@ const usageAnalytics = ref(false);
           <Switch v-model:checked="productUpdates" class="floating-label-spacing-lab__item"> Product updates </Switch>
 
           <Select
+            label-behavior="floating"
             v-model="secondaryCoffee"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="Default coffee"
@@ -128,6 +148,7 @@ const usageAnalytics = ref(false);
           </CheckBox>
 
           <Combobox
+            label-behavior="floating"
             v-model="state"
             class="floating-label-spacing-lab__item floating-label-spacing-lab__field"
             label="Billing state"

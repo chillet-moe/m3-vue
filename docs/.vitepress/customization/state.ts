@@ -18,6 +18,7 @@ import {
 import { defaultSettings, tokenNames } from './catalog';
 import { themePresets, typographyPresets, type Preset } from '@/theme/presets';
 
+import { presetDefaultValues } from './defaults';
 import { colorTokens, isSourceColor } from './colors';
 
 const storageKey = 'm3-vue-docs-theme';
@@ -71,14 +72,19 @@ export function provideDocsCustomization() {
   };
   const baseline = ref<Record<string, string>>({});
   const storageError = ref(false);
-  const choice = <T>(name: string) => computed(() => state.defaults[name] as T | undefined);
+  const inheritedDefaults = computed(() => presetDefaultValues(state.theme.preset));
+  const resolvedDefaults = computed(() => ({ ...inheritedDefaults.value, ...state.defaults }));
+  const choice = <T>(name: string) => computed(() => resolvedDefaults.value[name] as T | undefined);
   const boolean = (name: string) =>
-    computed(() => (state.defaults[name] === undefined ? undefined : state.defaults[name] === 'true'));
+    computed(() => (resolvedDefaults.value[name] === undefined ? undefined : resolvedDefaults.value[name] === 'true'));
   provideShape(choice<M3Shape>('shape'));
   provide(switchSizeContextKey, choice<SwitchSize>('switchSize'));
   provide(rowSizeContextKey, choice<RowSize>('rowSize'));
   provide(appearanceContextKey, { appearance: choice<'standard' | 'expressive'>('appearance') });
-  provide(fieldContextKey, { size: choice<'extra-small' | 'small' | 'medium'>('fieldSize') });
+  provide(fieldContextKey, {
+    size: choice<'extra-small' | 'small' | 'medium'>('fieldSize'),
+    labelBehavior: choice<'floating' | 'external'>('fieldLabelBehavior'),
+  });
   provide(buttonContextKey, {
     size: choice<'extra-small' | 'small' | 'medium' | 'large' | 'extra-large'>('buttonSize'),
     pressShapeMorph: boolean('pressShapeMorph'),
@@ -99,9 +105,9 @@ export function provideDocsCustomization() {
   provide(menuDefaultsContextKey, { color: choice<'standard' | 'vibrant'>('menuColor') });
   provide(datePickerContextKey, {
     firstDayOfWeek: computed(() =>
-      state.defaults.firstDayOfWeek === undefined
+      resolvedDefaults.value.firstDayOfWeek === undefined
         ? undefined
-        : (Number(state.defaults.firstDayOfWeek) as 0 | 1 | 2 | 3 | 4 | 5 | 6),
+        : (Number(resolvedDefaults.value.firstDayOfWeek) as 0 | 1 | 2 | 3 | 4 | 5 | 6),
     ),
   });
   provide(timePickerContextKey, {
@@ -200,6 +206,7 @@ export function provideDocsCustomization() {
   const customization = {
     state,
     baseline,
+    inheritedDefaults,
     storageError,
     setToken,
     setSourceColor,

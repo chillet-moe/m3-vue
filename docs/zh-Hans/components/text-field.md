@@ -22,6 +22,7 @@ const props = ref({
   shape: 'square',
   size: 'medium',
   labelClearance: undefined,
+  labelBehavior: undefined,
   disabled: false,
   required: false,
   supportingText: 'Supporting text',
@@ -46,6 +47,8 @@ TextField 涵盖 Material 3 的基础输入场景，包括辅助文本、验证�
     <TextField v-bind="props" v-model="modelValue" />
   </div>
 </DemoContainer>
+
+标签遵循共享的 `fieldLabelBehavior` 默认值（`floating`；compact 中为 `external`）。可用 `label-behavior` 覆盖。External 模式不显示内置标签和描边缺口，不应用 `labelClearance`，且仅将 `label` 用作无障碍名称的回退值。自定义标签布局请参阅[字段布局](../guides/field-layout#标签行为)。
 
 ## 示例
 

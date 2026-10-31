@@ -67,7 +67,7 @@ try {
   assert(await panel.getByRole('radio', { name: 'Compact', exact: true }).isChecked());
   await panel.getByRole('spinbutton', { name: 'Density', exact: true }).fill('3');
   await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-density') === '3');
-  assert.equal(await panel.getByRole('radio', { checked: true }).count(), 0);
+  assert(await panel.getByRole('radio', { name: 'Compact', exact: true }).isChecked());
   await panel.getByRole('textbox', { name: 'Field row gap', exact: true }).fill('24px');
   await panel.getByRole('textbox', { name: 'Field column gap', exact: true }).fill('12px');
   await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-field-row-gap') === '24px');
@@ -130,6 +130,12 @@ try {
   );
   assert.equal(await panel.evaluate((el) => getComputedStyle(el).getPropertyValue('--md-density').trim()), '0');
   await panel.getByRole('tab', { name: 'Components', exact: true }).click();
+  const fieldLabels = panel.getByRole('combobox', { name: 'Field labels', exact: true });
+  assert.equal(await fieldLabels.inputValue(), 'Inherited (external)');
+  await fieldLabels.click();
+  await page.getByRole('option', { name: 'floating', exact: true }).click();
+  await page.getByRole('option', { name: 'floating', exact: true }).waitFor({ state: 'hidden' });
+  assert.equal(await panel.locator('.customization-labeled-field > label').count(), 0);
   await panel.getByRole('combobox', { name: 'Row size', exact: true }).click();
   await page.getByRole('option', { name: 'extra-small', exact: true }).click();
   await page.getByRole('option', { name: 'extra-small', exact: true }).waitFor({ state: 'hidden' });
@@ -152,9 +158,10 @@ try {
   await panel.getByRole('spinbutton', { name: 'Icon source content ratio', exact: true }).fill('0.8');
   await panel.getByRole('tab', { name: 'Code', exact: true }).click();
   const setupCode = panel.locator('.customization-code').first();
-  assert((await setupCode.textContent())?.includes('themes/compact.css'));
+  assert((await setupCode.textContent())?.includes('presets/compact'));
   assert((await setupCode.textContent())?.includes('"size": "extra-small"'));
   assert((await setupCode.textContent())?.includes('"rowSize": "extra-small"'));
+  assert((await setupCode.textContent())?.includes('"fieldLabelBehavior": "floating"'));
   assert((await setupCode.textContent())?.includes('"shape": "minimal"'));
   assert((await panel.locator('.customization-code').last().textContent())?.includes('--md-density: 3;'));
   const cssCode = await panel.locator('.customization-code').last().textContent();
@@ -235,7 +242,7 @@ try {
     '',
   );
   assert.equal(await panel.locator('.customization-code').count(), 1);
-  assert((await panel.locator('.customization-code').textContent())?.includes('themes/default.css'));
+  assert((await panel.locator('.customization-code').textContent())?.includes('presets/default'));
   assert(await page.locator('html').evaluate((el) => el.classList.contains('dark')));
   assert.equal(await page.evaluate(() => localStorage.getItem('m3-vue-docs:sticky-preview-enabled')), 'false');
   await panel.getByRole('button', { name: 'Close customization', exact: true }).click();
@@ -253,7 +260,7 @@ try {
   await page.screenshot({ path: '.tmp/docs-customization/typography-zh.png' });
   await chinesePanel.getByRole('tab', { name: '形状', exact: true }).click();
   assert(await chinesePanel.getByRole('button', { name: '移除覆盖值: 操作', exact: true }).isVisible());
-  await openFixture(page, `${base}/guides/styling`);
+  await openFixture(page, `${base}/guides/presets`);
   const gallery = page.locator('.customization-gallery');
   await gallery.waitFor();
   let previews = 0;

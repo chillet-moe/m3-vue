@@ -16,6 +16,7 @@ pnpm run docs:dev
 pnpm run docs:check
 pnpm run docs:build
 pnpm run test:browser
+pnpm run test:package
 ```
 
 `pnpm run check` combines formatting, lint, type checking, and documentation translation-pair/local-link checks. Use `pnpm exec vitest run <file>` for focused tests. Run `pnpm run check` before publishing or submitting changes.
@@ -27,10 +28,10 @@ Documentation structure and page authoring conventions are described in [Documen
 ## Theme generation
 
 `src/theme/tokens.json` owns default theme tokens and `src/theme/compact.json` owns compact typography values.
-`src/theme/presets.ts` defines the presets shared by the internal build script and the documentation editor. Run `pnpm run themes:generate`
+`src/presets/definitions.ts` owns complete presets, shared by plugin entries, theme generation and the documentation editor. `src/theme/presets.ts` supplies typography token maps. Run `pnpm run themes:generate`
 after editing theme data; `build` runs it automatically. Commit both generated files in `src/styles/themes/` so source
 fixtures and the documentation dev server can load a selected theme immediately. Consumers load shared `style.css`
-and one generated theme. Component density rules are documented in [Density](density.md).
+and one preset entry. Preset entries preserve their public theme CSS imports in the published modules; these imports must remain external to the library build so theme tokens never leak into shared `style.css`. Component density rules are documented in [Density](density.md).
 
 ## Floating surface visual checks
 

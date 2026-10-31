@@ -26,6 +26,7 @@ const props = ref({
   label: 'Coffee',
   size: 'medium',
   labelClearance: undefined,
+  labelBehavior: undefined,
   disabled: false,
   required: false,
   placeholder: 'Choose an option',
@@ -54,6 +55,8 @@ default from `fieldContextKey`; it adds to any parent gap. See the
 <AnatomyTable scope="select" />
 
 <ApiTable component="Select" v-model="props" :exclude="['options', 'multiple']" />
+
+Labels follow the shared `fieldLabelBehavior` default (`floating`, or `external` in compact). Override it with `label-behavior`. External mode omits the visible label and notch, ignores `labelClearance`, and uses `label` only as an accessible-name fallback. See [Field layout](../guides/field-layout#label-behavior) for custom label layouts.
 
 ## Menu Appearance
 

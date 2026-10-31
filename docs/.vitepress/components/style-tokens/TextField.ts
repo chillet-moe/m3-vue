@@ -298,13 +298,13 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-input-text-font',
     description: 'Controls text field input text font.',
-    fallback: 'var(--md-sys-typescale-body-large-font)',
+    fallback: 'body-medium-font (extra-small/small); body-large-font (medium)',
     category: 'Typography',
   },
   {
     name: '--md-outlined-text-field-input-text-line-height',
     description: 'Controls text field input text line height.',
-    fallback: 'var(--md-sys-typescale-body-large-line-height)',
+    fallback: 'body-medium-line-height (extra-small/small); body-large-line-height (medium)',
     category: 'Typography',
   },
   {
@@ -322,7 +322,7 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-input-text-size',
     description: 'Controls text field input text size.',
-    fallback: 'var(--md-sys-typescale-body-large-size)',
+    fallback: 'body-medium-size (extra-small/small); body-large-size (medium)',
     category: 'Layout',
   },
   {
@@ -334,13 +334,13 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-input-text-tracking',
     description: 'Controls text field input text tracking.',
-    fallback: 'var(--md-sys-typescale-body-large-tracking)',
+    fallback: 'body-medium-tracking (extra-small/small); body-large-tracking (medium)',
     category: 'Typography',
   },
   {
     name: '--md-outlined-text-field-input-text-weight',
     description: 'Controls text field input text weight.',
-    fallback: 'var(--md-sys-typescale-body-large-weight)',
+    fallback: 'body-medium-weight (extra-small/small); body-large-weight (medium)',
     category: 'Typography',
   },
   {
@@ -352,13 +352,13 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-label-text-font',
     description: 'Controls text field label text font.',
-    fallback: 'var(--md-sys-typescale-body-large-font)',
+    fallback: 'body-medium-font (extra-small/small); body-large-font (medium)',
     category: 'Typography',
   },
   {
     name: '--md-outlined-text-field-label-text-line-height',
     description: 'Controls text field label text line height.',
-    fallback: 'var(--md-sys-typescale-body-large-line-height)',
+    fallback: 'body-medium-line-height (extra-small/small); body-large-line-height (medium)',
     category: 'Typography',
   },
   {
@@ -376,19 +376,19 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-label-text-size',
     description: 'Controls text field label text size.',
-    fallback: 'var(--md-sys-typescale-body-large-size)',
+    fallback: 'body-medium-size (extra-small/small); body-large-size (medium)',
     category: 'Layout',
   },
   {
     name: '--md-outlined-text-field-label-text-tracking',
     description: 'Controls text field label text tracking.',
-    fallback: 'var(--md-sys-typescale-body-large-tracking)',
+    fallback: 'body-medium-tracking (extra-small/small); body-large-tracking (medium)',
     category: 'Typography',
   },
   {
     name: '--md-outlined-text-field-label-text-weight',
     description: 'Controls text field label text weight.',
-    fallback: 'var(--md-sys-typescale-body-large-weight)',
+    fallback: 'body-medium-weight (extra-small/small); body-large-weight (medium)',
     category: 'Typography',
   },
   {
@@ -400,7 +400,8 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-leading-icon-size',
     description: 'Controls text field leading icon size.',
-    fallback: 'Typography, density and icon scale (default reference: 1.5rem)',
+    fallback:
+      'Typography, density and icon scale (20dp / body-medium for extra-small and small; 24dp / body-large for medium)',
     category: 'Layout',
   },
   {
@@ -460,7 +461,8 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-trailing-icon-size',
     description: 'Controls text field trailing icon size.',
-    fallback: 'Typography, density and icon scale (default reference: 1.5rem)',
+    fallback:
+      'Typography, density and icon scale (20dp / body-medium for extra-small and small; 24dp / body-large for medium)',
     category: 'Layout',
   },
 ] satisfies StyleTokenMeta[];

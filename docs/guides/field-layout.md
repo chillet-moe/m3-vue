@@ -3,6 +3,7 @@ title: Field Layout
 ---
 
 <script setup lang="ts">
+import FieldLabelLayouts from '../.vitepress/components/FieldLabelLayouts.vue';
 import FloatingLabelSpacingLab from '../demos/guides/FloatingLabelSpacingLab.vue';
 import FloatingLabelSpacingLabSrc from '../demos/guides/FloatingLabelSpacingLab.vue?raw';
 </script>
@@ -12,6 +13,46 @@ import FloatingLabelSpacingLabSrc from '../demos/guides/FloatingLabelSpacingLab.
 Choose field dimensions and spacing to fit the surrounding layout density. Let the parent layout's `gap` set spacing
 between fields and other controls. Add `labelClearance` only when you observe a floating label visually crowding the
 content above an outlined `TextField`, `Select`, or `Combobox`.
+
+## Field and action sizes
+
+Small and extra-small fields use body-medium text and a 20dp icon baseline. Medium fields use body-large text and a 24dp icon baseline. Density adjusts whitespace around the content; typography and icon calibration determine how much room the content needs.
+
+The compact preset selects small fields and small buttons: their default control heights are both 30px at a 16px root font size. This applies to TextField, Select and Combobox. External labels and supporting text sit outside this height. At very negative densities, fields retain at least 4dp of padding above and below their content. Textareas remain content-driven and use the medium typography role.
+
+See the filters-and-actions row in [Preset preview](./presets) to compare controls together.
+
+## Label behavior
+
+`TextField`, `Select` and `Combobox` share `labelBehavior`:
+
+- `floating` renders the built-in floating label and outline notch. This is the component and default preset behavior.
+- `external` renders neither, and reserves no floating-label clearance. The compact preset selects this behavior.
+
+Use `fieldLabelBehavior` in `M3VuePlugin` for an application default, or `provide(fieldContextKey, { labelBehavior })` for a subtree. Both accept reactive refs. A component's `label-behavior` prop wins. This setting is independent of size, typography and density. `labelClearance` and `alwaysFloatLabel` only apply to floating labels.
+
+External labels belong to the parent layout. Arrange them above or beside fields, and connect a native `<label>` with the field's `id`. For custom label elements, use `aria-labelledby`. Without a visible label, pass `label` or `aria-label` for an accessible name; a placeholder alone is not a label. In external mode, `label` supplies an `aria-label` fallback only when neither `aria-label` nor `aria-labelledby` is provided. It is not rendered as a placeholder.
+
+```vue
+<template>
+  <div class="property-row">
+    <label for="part-name">Name</label>
+    <TextField id="part-name" v-model="name" label-behavior="external" />
+  </div>
+  <TextField label="Search parts" placeholder="Search…" label-behavior="external" />
+</template>
+
+<style scoped>
+.property-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--md-field-column-gap);
+}
+</style>
+```
+
+<FieldLabelLayouts />
 
 ## Layout gap tokens
 
@@ -28,10 +69,10 @@ or affect layouts that do not reference them. Choose values for your form's cont
 ```vue
 <template>
   <div class="profile-fields">
-    <TextField label="Name" />
-    <TextField label="Email" type="email" />
-    <TextField label="City" />
-    <TextField label="Postal code" />
+    <TextField label="Name" label-behavior="floating" />
+    <TextField label="Email" type="email" label-behavior="floating" />
+    <TextField label="City" label-behavior="floating" />
+    <TextField label="Postal code" label-behavior="floating" />
   </div>
 </template>
 

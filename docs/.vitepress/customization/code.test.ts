@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { typographyPresets } from '@/theme/presets';
+import { themePresets, typographyPresets } from '@/theme/presets';
 import { customizationCode } from './code';
 
 describe('customization code preview', () => {
@@ -9,8 +9,8 @@ describe('customization code preview', () => {
       { ...typographyPresets.compact, '--md-density': '-2' },
       {},
     );
-    expect(result.setup).toContain("import '@chillet/m3-vue/themes/compact.css'");
-    expect(result.setup).toContain('app.use(M3VuePlugin);');
+    expect(result.setup).toContain("from '@chillet/m3-vue/presets/compact'");
+    expect(result.setup).toContain('"preset": compact');
     expect(result.setup).not.toContain("import './customization.css'");
     expect(result.css).toBe('');
   });
@@ -21,9 +21,11 @@ describe('customization code preview', () => {
       { ...typographyPresets.default, '--md-density': '-2', '--md-shape-card': '8px' },
       { '--md-shape-card': '0.75rem' },
     );
-    expect(result.setup).toContain("import '@chillet/m3-vue/themes/default.css'");
+    expect(result.setup).toContain("from '@chillet/m3-vue/presets/compact'");
     expect(result.setup).toContain("import './customization.css'");
-    expect(result.css).toBe(':root {\n  --md-density: -2;\n  --md-shape-card: 8px;\n}\n');
+    expect(result.css).toContain('--md-shape-card: 8px');
+    expect(result.css).toContain('--md-sys-typescale-body-medium-size: 0.875rem');
+    expect(result.css).not.toContain('--md-density:');
   });
 
   it('includes the opt-in parent layout even when gap values match the theme', () => {
@@ -49,6 +51,7 @@ describe('customization code preview', () => {
           appearance: 'expressive',
           shape: 'minimal',
           fieldSize: 'small',
+          fieldLabelBehavior: 'external',
           buttonSize: 'extra-small',
           pressShapeMorph: 'false',
           iconButtonSize: 'large',
@@ -68,12 +71,18 @@ describe('customization code preview', () => {
       { ...typographyPresets.default, '--md-density': '0' },
       {},
     );
-    const options = JSON.parse(result.setup.match(/app.use\(M3VuePlugin, ([\s\S]+?)\);/)![1]!);
+    const options = JSON.parse(
+      result.setup
+        .match(/app.use\(M3VuePlugin, ([\s\S]+?)\);/)![1]!
+        .replace('defaultPreset', JSON.stringify(themePresets.default)),
+    );
     expect(options).toEqual({
+      preset: themePresets.default,
       rowSize: 'extra-small',
       appearance: 'expressive',
       shape: 'minimal',
       fieldSize: 'small',
+      fieldLabelBehavior: 'external',
       buttonDefaults: { size: 'extra-small', pressShapeMorph: false },
       iconButtonSize: 'large',
       switchSize: 'small',

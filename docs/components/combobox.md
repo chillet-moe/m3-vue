@@ -16,6 +16,7 @@ import ComboboxMultiSelectSrc from '../demos/combobox/ComboboxMultiSelect.vue?ra
 const props = ref({
   label: 'State',
   labelClearance: undefined,
+  labelBehavior: undefined,
   disabled: false,
   required: false,
   placeholder: 'Choose a state',
@@ -50,6 +51,8 @@ Combobox wraps Select and shares its `select` scope. See [Select Anatomy](./sele
 :::
 
 `showSelectedIcon` and `selectDefaults` are shared with Select; see [selected checkmarks](./select#selected-checkmarks).
+
+Labels follow the shared `fieldLabelBehavior` default (`floating`, or `external` in compact). Override it with `label-behavior`. External mode omits the visible label and notch, ignores `labelClearance`, and uses `label` only as an accessible-name fallback. See [Field layout](../guides/field-layout#label-behavior) for custom label layouts.
 
 ## Virtual lists and external search
 
