@@ -196,8 +196,7 @@
 }
 
 @layer components {
-  .m3-tooltip,
-  .m3-tooltip[data-vtt-fallback='1'] {
+  .m3-tooltip {
     margin: 0;
     inset: auto;
     border: none;
@@ -205,7 +204,6 @@
     padding-inline: 0.5rem;
     padding-block: 0.25rem;
 
-    display: inline-flex;
     align-items: center;
 
     max-inline-size: min(28rem, calc(100vw - 16px));
@@ -273,8 +271,9 @@
       display var(--md-duration-fast) allow-discrete;
   }
 
-  /* 显示态 */
+  /* Keep closed popovers out of layout using the browser’s default display. */
   .m3-tooltip[popover]:popover-open {
+    display: inline-flex;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -288,8 +287,8 @@
     }
   }
 
-  /* fallback 也复用同样的动画逻辑 */
-  .m3-tooltip[data-vtt-fallback='1'] {
+  /* Without native popovers, the directive keeps the tooltip rendered during exit. */
+  .m3-tooltip[data-vtt-open] {
     opacity: 0;
     transform: translateY(4px);
     pointer-events: none;
@@ -298,7 +297,11 @@
       transform var(--md-duration-fast) ease;
   }
 
-  .m3-tooltip[data-vtt-fallback='1'][data-vtt-open='1'] {
+  .m3-tooltip[data-vtt-open]:not([hidden]) {
+    display: inline-flex;
+  }
+
+  .m3-tooltip[data-vtt-open='1'] {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
