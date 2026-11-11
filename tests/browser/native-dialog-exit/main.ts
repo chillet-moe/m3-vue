@@ -1,5 +1,5 @@
 import '@/styles/themes/default.css';
-import { createApp, h, nextTick, ref } from 'vue';
+import { createApp, h, nextTick, ref, type App } from 'vue';
 import { Dialog } from '@/index';
 
 import './style.css';
@@ -30,9 +30,33 @@ window.__nativeDialogExitFixture = {
   getClosedElapsed() {
     return closedElapsed;
   },
+  async unmountWithPausedExit() {
+    open.value = true;
+    await nextTick();
+    const dialog = document.querySelector<HTMLDialogElement>('.m3-dialog')!;
+    const surface = dialog.querySelector<HTMLElement>('.m3-dialog-surface')!;
+    const motion = surface.animate([{ opacity: 1 }, { opacity: 1 }], { duration: 1_000, iterations: Infinity });
+    motion.pause();
+
+    closedElapsed = null;
+    open.value = false;
+    await nextTick();
+    await new Promise<void>((resolve) => setTimeout(resolve, 750));
+    if (closedElapsed !== null) throw new Error('The dialog completed its exit while owned motion was paused');
+
+    // Retarget the animation so the consumer can keep it without keeping the dialog as its target.
+    const parking = document.createElement('div');
+    document.body.append(parking);
+    (motion.effect as KeyframeEffect).target = parking;
+    const target = new WeakRef(dialog);
+    app?.unmount();
+    // The development reload callback can still hold the mounted vnode.
+    app = undefined;
+    return { target, motion };
+  },
 };
 
-createApp({
+let app: App<Element> | undefined = createApp({
   setup() {
     return () =>
       h(
@@ -53,7 +77,8 @@ createApp({
         },
       );
   },
-}).mount('#app');
+});
+app.mount('#app');
 
 declare global {
   interface Window {
@@ -63,6 +88,7 @@ declare global {
         hasBackdropTransition: boolean;
       }>;
       getClosedElapsed(): number | null;
+      unmountWithPausedExit(): Promise<{ target: WeakRef<HTMLDialogElement>; motion: Animation }>;
     };
   }
 }

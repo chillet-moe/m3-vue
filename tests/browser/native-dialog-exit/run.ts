@@ -29,7 +29,7 @@ try {
   assert(serverUrl, 'Vite did not expose a local development URL');
 
   await openFixture(page, new URL(fixturePath, serverUrl).href, { waitUntil: 'networkidle' });
-  await page.waitForSelector('.m3-dialog[open] .m3-dialog-actions');
+  await page.waitForFunction(() => Boolean(document.querySelector('.m3-dialog[open] .m3-dialog-actions')));
   await page.waitForTimeout(700);
 
   const observedAnimations = await page.evaluate(() => window.__nativeDialogExitFixture.close());
@@ -44,6 +44,19 @@ try {
   assert(closedElapsed !== null);
   assert(closedElapsed >= 550, `closed fired before the 650ms owned exit completed (${closedElapsed}ms)`);
   assert(closedElapsed < 2000, `closed was blocked by the infinite slot animation (${closedElapsed}ms)`);
+
+  const pausedExit = await page.evaluateHandle(() => window.__nativeDialogExitFixture.unmountWithPausedExit());
+  const heap = await page.context().newCDPSession(page);
+  await heap.send('HeapProfiler.collectGarbage');
+  await heap.send('HeapProfiler.collectGarbage');
+  assert.equal(
+    await pausedExit.evaluate(({ target, motion }) => motion.playState === 'paused' && target.deref() === undefined),
+    true,
+    'Unmounting must release the dialog while the retargeted animation is still paused',
+  );
+  await pausedExit.evaluate(({ motion }) => motion.cancel());
+  await pausedExit.dispose();
+  await heap.detach();
 
   console.log('Native dialog exit lifecycle browser regression passed.');
 } finally {

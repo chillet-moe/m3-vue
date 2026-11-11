@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { provideShape, type M3Shape } from '@/styles/shape';
-import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { isNode, useElementEnvironment } from '@/internal/elementEnvironment';
+import { registerSharedViewportChange } from '@/internal/sharedViewportChange';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import { isNode } from '@/internal/elementEnvironment';
 
 import { computed, nextTick, onUnmounted, provide, ref, useId, useTemplateRef, watch } from 'vue';
 
 import { Icon } from '@/components/Icon';
 import type { MenuModelValue } from '@/components/Menu/MenuTypes';
-import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
 import { useMenu } from '@/composables/useMenu';
 import { floatingActionButtonMenuContextKey } from './FloatingActionButtonMenuContext';
 
@@ -71,10 +71,9 @@ const surfaceRef = useTemplateRef<HTMLDivElement>('surface');
 const modelValue = ref<MenuModelValue>();
 const restoreFocusAfterClose = ref(false);
 const effectiveAlignment = ref<FloatingActionButtonMenuProps['alignment']>(props.alignment);
-let hasOpenListeners = false;
 
 const disabled = computed(() => props.disabled);
-const { pressShapeMorphAttrs: triggerPressShapeMorphAttrs } = usePressShapeMorph({ disabled });
+const triggerPressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
 
 provide(floatingActionButtonMenuContextKey, {
   id: menuId,
@@ -296,25 +295,24 @@ function handleDocumentPointerDown(event: PointerEvent) {
   hide();
 }
 
-let listenerDocument: Document | undefined;
+let stopOpenListeners: (() => void) | undefined;
 function syncOpenListeners(nextOpen: boolean) {
-  const document = nextOpen ? rootRef.value?.ownerDocument : listenerDocument;
-  const window = document?.defaultView;
-  if (!document || !window) return;
-  listenerDocument = document;
-  if (typeof window === 'undefined' || nextOpen === hasOpenListeners) return;
-
-  if (nextOpen) {
-    window.addEventListener('resize', updatePopoverPosition);
-    window.addEventListener('scroll', updatePopoverPosition, true);
-    document.addEventListener('pointerdown', handleDocumentPointerDown, true);
-  } else {
-    window.removeEventListener('resize', updatePopoverPosition);
-    window.removeEventListener('scroll', updatePopoverPosition, true);
-    document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
+  if (!nextOpen) {
+    stopOpenListeners?.();
+    stopOpenListeners = undefined;
+    return;
   }
+  if (stopOpenListeners) return;
 
-  hasOpenListeners = nextOpen;
+  const document = rootRef.value?.ownerDocument;
+  if (!document?.defaultView) return;
+
+  const stopViewportUpdates = registerSharedViewportChange(document, updatePopoverPosition);
+  document.addEventListener('pointerdown', handleDocumentPointerDown, true);
+  stopOpenListeners = () => {
+    stopViewportUpdates();
+    document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
+  };
 }
 
 watch(

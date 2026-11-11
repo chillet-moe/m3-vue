@@ -38,4 +38,34 @@ describe('acquireAnchorName', () => {
 
     expect(anchor.style.getPropertyValue('anchor-name')).toBe('--existing-anchor');
   });
+
+  it('keeps a shared name in acquisition order until its last owner releases it', () => {
+    const anchor = document.createElement('button');
+    anchor.style.setProperty('anchor-name', '--existing-anchor');
+
+    const releaseFirst = acquireAnchorName(anchor, '--first-anchor');
+    const releaseSecond = acquireAnchorName(anchor, '--second-anchor');
+    const releaseShared = acquireAnchorName(anchor, '--first-anchor');
+
+    releaseFirst();
+    expect(anchor.style.getPropertyValue('anchor-name')).toBe('--existing-anchor, --first-anchor, --second-anchor');
+
+    releaseShared();
+    expect(anchor.style.getPropertyValue('anchor-name')).toBe('--existing-anchor, --second-anchor');
+
+    releaseSecond();
+    expect(anchor.style.getPropertyValue('anchor-name')).toBe('--existing-anchor');
+  });
+
+  it('keeps a single name when a second owner acquires it', () => {
+    const anchor = document.createElement('button');
+    const releaseFirst = acquireAnchorName(anchor, '--shared-anchor');
+    const releaseSecond = acquireAnchorName(anchor, '--shared-anchor');
+
+    releaseSecond();
+    expect(anchor.style.getPropertyValue('anchor-name')).toBe('--shared-anchor');
+
+    releaseFirst();
+    expect(anchor.style.getPropertyValue('anchor-name')).toBe('');
+  });
 });

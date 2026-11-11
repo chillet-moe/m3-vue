@@ -7,6 +7,29 @@ type AnimationQueryOptions = {
   subtree?: boolean;
 };
 
+type ExitCycle = { finish?: () => void };
+
+// Keep the promise reaction's scope separate from the component and its DOM.
+function waitForExitAnimations(animations: Set<Animation>, exit: ExitCycle) {
+  let remaining = animations.size;
+  const onAnimationSettled = () => {
+    remaining -= 1;
+    if (remaining !== 0) return;
+
+    // Match the completion microtask that followed Promise.allSettled().
+    void Promise.resolve().then(() => {
+      const finish = exit.finish;
+      exit.finish = undefined;
+      finish?.();
+    });
+  };
+
+  // Counting completions avoids retaining fulfilled Animation values.
+  for (const animation of animations) {
+    void Promise.resolve(animation.finished).then(onAnimationSettled, onAnimationSettled);
+  }
+}
+
 export type UseExitMotionCompletionOptions<T, TElement extends HTMLElement> = {
   rootRef: ElementRef<TElement>;
   open: Readonly<Ref<boolean>>;
@@ -18,24 +41,25 @@ export type UseExitMotionCompletionOptions<T, TElement extends HTMLElement> = {
 export function useExitMotionCompletion<T, TElement extends HTMLElement = HTMLElement>(
   options: UseExitMotionCompletionOptions<T, TElement>,
 ) {
-  let sequence = 0;
-  let exitPending = false;
+  let currentExit: ExitCycle | undefined;
   let unmounted = false;
 
   const cancel = () => {
-    sequence += 1;
-    exitPending = false;
+    if (currentExit) currentExit.finish = undefined;
+    currentExit = undefined;
   };
 
   const begin = (payload: T, root = options.rootRef.value) => {
-    if (!root || exitPending) {
+    if (!root || currentExit || unmounted) {
       return;
     }
 
-    exitPending = true;
-    const currentSequence = ++sequence;
+    const exit: ExitCycle = {};
+    currentExit = exit;
 
     queueMicrotask(() => {
+      if (currentExit !== exit) return;
+
       const elements = [root, ...(options.ownedElements?.() ?? [])];
       const animations = new Set(elements.flatMap((element) => element?.getAnimations?.() ?? []));
       const pseudoElements = new Set(options.pseudoElements ?? ['::backdrop']);
@@ -66,10 +90,10 @@ export function useExitMotionCompletion<T, TElement extends HTMLElement = HTMLEl
         }
       }
 
+      if (currentExit !== exit) return;
+
       const finish = () => {
-        if (unmounted || currentSequence !== sequence || options.open.value || options.rootRef.value !== root) {
-          return;
-        }
+        if (currentExit !== exit || options.open.value || options.rootRef.value !== root) return;
 
         // The native toggle event can arrive after a zero-duration exit.
         // Keep this close cycle completed until cancel() starts a new one.
@@ -81,7 +105,8 @@ export function useExitMotionCompletion<T, TElement extends HTMLElement = HTMLEl
         return;
       }
 
-      void Promise.allSettled([...animations].map((animation) => animation.finished)).then(finish);
+      exit.finish = finish;
+      waitForExitAnimations(animations, exit);
     });
   };
 

@@ -285,104 +285,6 @@
       --md-menus-standard-menu-item-selected-hovered-state-layer-color,
       var(--md-sys-color-on-tertiary-container)
     );
-
-    --_menus-vibrant-container-color: var(--md-menus-vibrant-container-color, var(--md-sys-color-tertiary-container));
-    --_menus-vibrant-section-label-text-color: var(
-      --md-menus-vibrant-section-label-text-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-label-text-color: var(
-      --md-menus-vibrant-menu-item-label-text-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-supporting-text-color: var(
-      --md-menus-vibrant-menu-item-supporting-text-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-leading-icon-color: var(
-      --md-menus-vibrant-menu-item-leading-icon-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-trailing-icon-color: var(
-      --md-menus-vibrant-menu-item-trailing-icon-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-trailing-supporting-text-color: var(
-      --md-menus-vibrant-menu-item-trailing-supporting-text-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-disabled-label-text-color: var(
-      --md-menus-vibrant-menu-item-disabled-label-text-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-disabled-label-text-opacity: var(
-      --md-menus-vibrant-menu-item-disabled-label-text-opacity,
-      0.38
-    );
-    --_menus-vibrant-menu-item-disabled-supporting-text-color: var(
-      --md-menus-vibrant-menu-item-disabled-supporting-text-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-disabled-supporting-text-opacity: var(
-      --md-menus-vibrant-menu-item-disabled-supporting-text-opacity,
-      0.38
-    );
-    --_menus-vibrant-menu-item-disabled-leading-icon-color: var(
-      --md-menus-vibrant-menu-item-disabled-leading-icon-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-disabled-leading-icon-opacity: var(
-      --md-menus-vibrant-menu-item-disabled-leading-icon-opacity,
-      0.38
-    );
-    --_menus-vibrant-menu-item-disabled-trailing-icon-color: var(
-      --md-menus-vibrant-menu-item-disabled-trailing-icon-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-disabled-trailing-icon-opacity: var(
-      --md-menus-vibrant-menu-item-disabled-trailing-icon-opacity,
-      0.38
-    );
-    --_menus-vibrant-menu-item-disabled-trailing-supporting-text-color: var(
-      --md-menus-vibrant-menu-item-disabled-trailing-supporting-text-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-disabled-trailing-supporting-text-opacity: var(
-      --md-menus-vibrant-menu-item-disabled-trailing-supporting-text-opacity,
-      0.38
-    );
-    --_menus-vibrant-menu-item-hovered-state-layer-color: var(
-      --md-menus-vibrant-menu-item-hovered-state-layer-color,
-      var(--md-sys-color-on-tertiary-container)
-    );
-    --_menus-vibrant-menu-item-selected-container-color: var(
-      --md-menus-vibrant-menu-item-selected-container-color,
-      var(--md-sys-color-tertiary)
-    );
-    --_menus-vibrant-menu-item-selected-label-text-color: var(
-      --md-menus-vibrant-menu-item-selected-label-text-color,
-      var(--md-sys-color-on-tertiary)
-    );
-    --_menus-vibrant-menu-item-selected-supporting-text-color: var(
-      --md-menus-vibrant-menu-item-selected-supporting-text-color,
-      var(--md-sys-color-on-tertiary)
-    );
-    --_menus-vibrant-menu-item-selected-leading-icon-color: var(
-      --md-menus-vibrant-menu-item-selected-leading-icon-color,
-      var(--md-sys-color-on-tertiary)
-    );
-    --_menus-vibrant-menu-item-selected-trailing-icon-color: var(
-      --md-menus-vibrant-menu-item-selected-trailing-icon-color,
-      var(--md-sys-color-on-tertiary)
-    );
-    --_menus-vibrant-menu-item-selected-trailing-supporting-text-color: var(
-      --md-menus-vibrant-menu-item-selected-trailing-supporting-text-color,
-      var(--md-sys-color-on-tertiary)
-    );
-    --_menus-vibrant-menu-item-selected-hovered-state-layer-color: var(
-      --md-menus-vibrant-menu-item-selected-hovered-state-layer-color,
-      var(--md-sys-color-on-tertiary)
-    );
   }
 }
 
@@ -436,28 +338,88 @@
   }
 
   .m3-menu[data-color='vibrant'] {
-    --_menu-container-color: var(--_menus-vibrant-container-color);
-    --_menu-section-label-color: var(--_menus-vibrant-section-label-text-color);
-    --_menu-item-label-color: var(--_menus-vibrant-menu-item-label-text-color);
-    --_menu-item-supporting-color: var(--_menus-vibrant-menu-item-supporting-text-color);
-    --_menu-item-leading-icon-color: var(--_menus-vibrant-menu-item-leading-icon-color);
-    --_menu-item-trailing-icon-color: var(--_menus-vibrant-menu-item-trailing-icon-color);
-    --_menu-item-trailing-supporting-color: var(--_menus-vibrant-menu-item-trailing-supporting-text-color);
-    --_menu-item-disabled-label-color: var(--_menus-vibrant-menu-item-disabled-label-text-color);
-    --_menu-item-disabled-opacity: var(--_menus-vibrant-menu-item-disabled-label-text-opacity);
-    --_menu-item-disabled-supporting-color: var(--_menus-vibrant-menu-item-disabled-supporting-text-color);
-    --_menu-item-disabled-supporting-opacity: var(--_menus-vibrant-menu-item-disabled-supporting-text-opacity);
-    --_menu-item-disabled-leading-icon-color: var(--_menus-vibrant-menu-item-disabled-leading-icon-color);
-    --_menu-item-disabled-leading-icon-opacity: var(--_menus-vibrant-menu-item-disabled-leading-icon-opacity);
-    --_menu-item-disabled-trailing-icon-color: var(--_menus-vibrant-menu-item-disabled-trailing-icon-color);
-    --_menu-item-disabled-trailing-icon-opacity: var(--_menus-vibrant-menu-item-disabled-trailing-icon-opacity);
+    --_menus-vibrant-menu-item-selected-container-color: var(
+      --md-menus-vibrant-menu-item-selected-container-color,
+      var(--md-sys-color-tertiary)
+    );
+    --_menus-vibrant-menu-item-selected-label-text-color: var(
+      --md-menus-vibrant-menu-item-selected-label-text-color,
+      var(--md-sys-color-on-tertiary)
+    );
+    --_menus-vibrant-menu-item-selected-supporting-text-color: var(
+      --md-menus-vibrant-menu-item-selected-supporting-text-color,
+      var(--md-sys-color-on-tertiary)
+    );
+    --_menus-vibrant-menu-item-selected-leading-icon-color: var(
+      --md-menus-vibrant-menu-item-selected-leading-icon-color,
+      var(--md-sys-color-on-tertiary)
+    );
+    --_menus-vibrant-menu-item-selected-trailing-icon-color: var(
+      --md-menus-vibrant-menu-item-selected-trailing-icon-color,
+      var(--md-sys-color-on-tertiary)
+    );
+    --_menus-vibrant-menu-item-selected-trailing-supporting-text-color: var(
+      --md-menus-vibrant-menu-item-selected-trailing-supporting-text-color,
+      var(--md-sys-color-on-tertiary)
+    );
+
+    --_menu-container-color: var(--md-menus-vibrant-container-color, var(--md-sys-color-tertiary-container));
+    --_menu-section-label-color: var(
+      --md-menus-vibrant-section-label-text-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-label-color: var(
+      --md-menus-vibrant-menu-item-label-text-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-supporting-color: var(
+      --md-menus-vibrant-menu-item-supporting-text-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-leading-icon-color: var(
+      --md-menus-vibrant-menu-item-leading-icon-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-trailing-icon-color: var(
+      --md-menus-vibrant-menu-item-trailing-icon-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-trailing-supporting-color: var(
+      --md-menus-vibrant-menu-item-trailing-supporting-text-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-disabled-label-color: var(
+      --md-menus-vibrant-menu-item-disabled-label-text-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-disabled-opacity: var(--md-menus-vibrant-menu-item-disabled-label-text-opacity, 0.38);
+    --_menu-item-disabled-supporting-color: var(
+      --md-menus-vibrant-menu-item-disabled-supporting-text-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-disabled-supporting-opacity: var(--md-menus-vibrant-menu-item-disabled-supporting-text-opacity, 0.38);
+    --_menu-item-disabled-leading-icon-color: var(
+      --md-menus-vibrant-menu-item-disabled-leading-icon-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-disabled-leading-icon-opacity: var(--md-menus-vibrant-menu-item-disabled-leading-icon-opacity, 0.38);
+    --_menu-item-disabled-trailing-icon-color: var(
+      --md-menus-vibrant-menu-item-disabled-trailing-icon-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
+    --_menu-item-disabled-trailing-icon-opacity: var(--md-menus-vibrant-menu-item-disabled-trailing-icon-opacity, 0.38);
     --_menu-item-disabled-trailing-supporting-color: var(
-      --_menus-vibrant-menu-item-disabled-trailing-supporting-text-color
+      --md-menus-vibrant-menu-item-disabled-trailing-supporting-text-color,
+      var(--md-sys-color-on-tertiary-container)
     );
     --_menu-item-disabled-trailing-supporting-opacity: var(
-      --_menus-vibrant-menu-item-disabled-trailing-supporting-text-opacity
+      --md-menus-vibrant-menu-item-disabled-trailing-supporting-text-opacity,
+      0.38
     );
-    --_menu-item-state-layer-color: var(--_menus-vibrant-menu-item-hovered-state-layer-color);
+    --_menu-item-state-layer-color: var(
+      --md-menus-vibrant-menu-item-hovered-state-layer-color,
+      var(--md-sys-color-on-tertiary-container)
+    );
     --_menu-item-selected-container-color: var(--_menus-vibrant-menu-item-selected-container-color);
     --_menu-item-selected-label-color: var(--_menus-vibrant-menu-item-selected-label-text-color);
     --_menu-item-selected-supporting-color: var(--_menus-vibrant-menu-item-selected-supporting-text-color);
@@ -466,7 +428,10 @@
     --_menu-item-selected-trailing-supporting-color: var(
       --_menus-vibrant-menu-item-selected-trailing-supporting-text-color
     );
-    --_menu-item-selected-state-layer-color: var(--_menus-vibrant-menu-item-selected-hovered-state-layer-color);
+    --_menu-item-selected-state-layer-color: var(
+      --md-menus-vibrant-menu-item-selected-hovered-state-layer-color,
+      var(--md-sys-color-on-tertiary)
+    );
     --_menu-item-selected-disabled-container-color: var(--_menus-vibrant-menu-item-selected-container-color);
     --_menu-item-selected-disabled-container-opacity: 0.38;
     --_menu-item-selected-disabled-label-color: var(--_menus-vibrant-menu-item-selected-label-text-color);

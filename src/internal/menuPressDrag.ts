@@ -25,6 +25,7 @@ export function startMenuPressDrag(
   const openMenu = () => {
     if (!active || opened) return;
     opened = true;
+    stopOpening();
     open();
   };
 
@@ -32,10 +33,14 @@ export function startMenuPressDrag(
   // opens the menu for dragging; holding opens it after the pointerdown event.
   const openTimer = document.defaultView!.setTimeout(openMenu, 150);
 
-  const cleanup = (finishEvent?: PointerEvent) => {
-    active = false;
+  const stopOpening = () => {
     document.defaultView!.clearTimeout(openTimer);
     document.removeEventListener('pointermove', onPointerMove, true);
+  };
+
+  const cleanup = (finishEvent?: PointerEvent) => {
+    active = false;
+    if (!opened) stopOpening();
     document.removeEventListener('pointerup', onPointerUp, true);
     document.removeEventListener('pointercancel', onPointerCancel, true);
     const releasedOnTrigger = finishEvent?.type === 'pointerup' && trigger.contains(finishEvent.target as Node);

@@ -217,9 +217,18 @@ const finishSurfaceDrag = (event: PointerEvent) => {
 };
 
 const finishDrag = () => {
-  const surfaceHeight = surfaceRef.value?.offsetHeight ?? 0;
-  const closeDistance = surfaceHeight > 0 ? Math.min(surfaceHeight * 0.35, 160) : 96;
-  const shouldClose = dragOffset.value > closeDistance || (dragOffset.value > 24 && dragVelocity > 0.45);
+  const offset = dragOffset.value;
+  const surface = surfaceRef.value;
+  let shouldClose = false;
+
+  if (offset < 0 && surface) {
+    // Resolve the last drag style before starting the rebound.
+    surface.ownerDocument.defaultView?.getComputedStyle(surface).getPropertyValue('--md-bottom-sheet-drag-offset');
+  } else {
+    const surfaceHeight = surface?.offsetHeight ?? 0;
+    const closeDistance = surfaceHeight > 0 ? Math.min(surfaceHeight * 0.35, 160) : 96;
+    shouldClose = offset > closeDistance || (offset > 24 && dragVelocity > 0.45);
+  }
 
   dragging.value = false;
   dragPointerId = undefined;

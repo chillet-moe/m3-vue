@@ -25,6 +25,10 @@ try {
 
   const call = (method: string, ...args: unknown[]) =>
     page.evaluate(({ method, args }) => (window as any).fixture[method](...args), { method, args });
+  assert.deepEqual(await call('checkAnchorNameReentrancy'), [
+    { reacquired: '--second-anchor', restored: '' },
+    { reacquired: '--existing-anchor, --second-anchor', restored: '--existing-anchor' },
+  ]);
   async function positioned(id: string, index: number) {
     await page.waitForFunction(
       ({ id, index }) => {

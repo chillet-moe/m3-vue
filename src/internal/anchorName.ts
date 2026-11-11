@@ -1,6 +1,6 @@
 type AnchorNameRecord = {
   initialValue: string;
-  names: Map<string, number>;
+  names: string | Map<string, number>;
 };
 
 const records = new WeakMap<HTMLElement, AnchorNameRecord>();
@@ -11,9 +11,16 @@ function normalizeAnchorNameValue(value: string) {
 }
 
 function syncAnchorNames(anchor: HTMLElement, record: AnchorNameRecord) {
-  const initialValue = normalizeAnchorNameValue(record.initialValue);
-  const names = [...record.names.keys()];
-  const nextValue = [initialValue, ...names].filter(Boolean).join(', ');
+  let nextValue = normalizeAnchorNameValue(record.initialValue);
+  const names = record.names;
+  if (typeof names === 'string') {
+    if (names) nextValue = nextValue ? `${nextValue}, ${names}` : names;
+  } else {
+    for (const name of names.keys()) {
+      if (!name) continue;
+      nextValue = nextValue ? `${nextValue}, ${name}` : name;
+    }
+  }
 
   if (nextValue) {
     anchor.style.setProperty('anchor-name', nextValue);
@@ -29,12 +36,15 @@ export function acquireAnchorName(anchor: HTMLElement, name: string) {
   if (!record) {
     record = {
       initialValue: anchor.style.getPropertyValue('anchor-name'),
-      names: new Map(),
+      names: name,
     };
     records.set(anchor, record);
+  } else {
+    // Only overlapping acquisitions need a map and per-name reference counts.
+    if (typeof record.names === 'string') record.names = new Map<string, number>().set(record.names, 1);
+    record.names.set(name, (record.names.get(name) ?? 0) + 1);
   }
 
-  record.names.set(name, (record.names.get(name) ?? 0) + 1);
   syncAnchorNames(anchor, record);
 
   let released = false;
@@ -50,25 +60,23 @@ export function acquireAnchorName(anchor: HTMLElement, name: string) {
       return;
     }
 
-    const count = currentRecord.names.get(name) ?? 0;
-    if (count > 1) {
-      currentRecord.names.set(name, count - 1);
-      syncAnchorNames(anchor, currentRecord);
-      return;
-    }
-
-    currentRecord.names.delete(name);
-
-    if (currentRecord.names.size === 0) {
-      if (normalizeAnchorNameValue(currentRecord.initialValue)) {
-        anchor.style.setProperty('anchor-name', currentRecord.initialValue);
-      } else {
-        anchor.style.removeProperty('anchor-name');
+    const names = currentRecord.names;
+    if (typeof names !== 'string') {
+      const count = names.get(name) ?? 0;
+      if (count > 1) names.set(name, count - 1);
+      else names.delete(name);
+      if (names.size) {
+        syncAnchorNames(anchor, currentRecord);
+        return;
       }
-      records.delete(anchor);
-      return;
     }
 
-    syncAnchorNames(anchor, currentRecord);
+    // Retire this record before a custom element can acquire again during the style write.
+    records.delete(anchor);
+    if (normalizeAnchorNameValue(currentRecord.initialValue)) {
+      anchor.style.setProperty('anchor-name', currentRecord.initialValue);
+    } else {
+      anchor.style.removeProperty('anchor-name');
+    }
   };
 }

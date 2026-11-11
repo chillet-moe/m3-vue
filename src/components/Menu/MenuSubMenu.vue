@@ -4,7 +4,7 @@ import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { isNode } from '@/internal/elementEnvironment';
 
-import { computed, inject, nextTick, onUnmounted, provide, ref, useTemplateRef, watch } from 'vue';
+import { computed, inject, nextTick, onUnmounted, provide, shallowRef, useTemplateRef, watch } from 'vue';
 import Menu, { type MenuColor } from './Menu.vue';
 import { menuContextKey, menuSubmenuContextKey } from './MenuContext';
 import { createMenuSafeTriangle, isPointInsideTriangle, type Point, type Triangle } from './menuSafeTriangle';
@@ -45,7 +45,7 @@ const triggerRef = useTemplateRef<HTMLDivElement>('trigger');
 const submenuMenuRef = useTemplateRef<MenuExposed>('submenuMenu');
 
 const resolvedColor = computed(() => props.color ?? parentMenu?.getColor() ?? 'standard');
-const safeTriangle = ref<Triangle | null>(null);
+const safeTriangle = shallowRef<Triangle | null>(null);
 
 let restoringTriggerFocus = false;
 let trackingSafeTriangle = false;
@@ -103,6 +103,7 @@ function clearSafeTriangle() {
 
   trackingSafeTriangle = false;
   trackingDocument?.removeEventListener('pointermove', onDocumentPointerMove, true);
+  trackingDocument = undefined;
 }
 
 function closeSubmenu(focusTriggerAfterClose = false) {
@@ -156,7 +157,7 @@ function createSafeTriangle(origin: Point) {
 }
 
 function updatePreviewTriangle(event: PointerEvent) {
-  if (trackingSafeTriangle || !props.debugSafeTriangle || !open.value) {
+  if (trackingSafeTriangle || !open.value) {
     return;
   }
 
@@ -288,23 +289,11 @@ watch(
   open,
   (nextOpen) => {
     if (nextOpen) {
+      parentMenu?.closeSubmenus(closeSubmenuSelf);
       return;
     }
 
     clearSafeTriangle();
-  },
-  {
-    flush: 'post',
-  },
-);
-
-watch(
-  open,
-  (nextOpen) => {
-    if (nextOpen) {
-      parentMenu?.closeSubmenus(closeSubmenuSelf);
-      return;
-    }
   },
   {
     flush: 'post',
@@ -341,7 +330,7 @@ provideShape(() => props.shape);
     data-part="submenu"
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
-    @pointermove="updatePreviewTriangle"
+    :onPointermove="props.debugSafeTriangle ? updatePreviewTriangle : undefined"
     @focusin="onFocusIn"
     @focusout="onFocusOut"
   >

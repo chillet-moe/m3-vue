@@ -263,21 +263,28 @@ function setupDropdown(trigger: HTMLElement, binding: DirectiveBinding<DropdownT
 const environments = new WeakMap<HTMLElement, () => void>();
 const bindings = new WeakMap<HTMLElement, DirectiveBinding<DropdownTargetBinding>>();
 
-const vDropdown: Directive<HTMLElement, DropdownTargetBinding> = {
-  mounted(trigger, binding) {
-    bindings.set(trigger, binding);
-    environments.set(
-      trigger,
-      bindElementEnvironment(trigger, () => {
-        setupDropdown(trigger, bindings.get(trigger)!);
-        return () => teardownDropdown(trigger);
-      }),
-    );
-  },
-  updated(trigger, binding) {
-    bindings.set(trigger, binding);
+function updateDropdownEnvironment(trigger: HTMLElement, binding: DirectiveBinding<DropdownTargetBinding>) {
+  const registered = environments.has(trigger);
+  if (!registered && binding.value == null) return;
+
+  bindings.set(trigger, binding);
+  if (registered) {
     setupDropdown(trigger, binding);
-  },
+    return;
+  }
+
+  environments.set(
+    trigger,
+    bindElementEnvironment(trigger, () => {
+      setupDropdown(trigger, bindings.get(trigger)!);
+      return () => teardownDropdown(trigger);
+    }),
+  );
+}
+
+const vDropdown: Directive<HTMLElement, DropdownTargetBinding> = {
+  mounted: updateDropdownEnvironment,
+  updated: updateDropdownEnvironment,
   unmounted(trigger) {
     environments.get(trigger)?.();
     environments.delete(trigger);

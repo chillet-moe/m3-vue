@@ -31,17 +31,9 @@
       --md-sheet-bottom-docked-modal-container-elevation,
       var(--md-sys-elevation-level1)
     );
-    --_sheet-bottom-docked-standard-container-elevation: var(
-      --md-sheet-bottom-docked-standard-container-elevation,
-      var(--md-sys-elevation-level1)
-    );
     --_sheet-bottom-docked-container-shape: var(
       --md-sheet-bottom-docked-container-shape,
       var(--_shape-radius, var(--md-shape-overlay-top))
-    );
-    --_sheet-bottom-docked-minimized-container-shape: var(
-      --md-sheet-bottom-docked-minimized-container-shape,
-      var(--_shape-radius, var(--md-shape-docked))
     );
     --_sheet-bottom-docked-drag-handle-color: var(
       --md-sheet-bottom-docked-drag-handle-color,
@@ -49,17 +41,7 @@
     );
     --_sheet-bottom-docked-drag-handle-width: var(--md-sheet-bottom-docked-drag-handle-width, 2rem);
     --_sheet-bottom-docked-drag-handle-height: var(--md-sheet-bottom-docked-drag-handle-height, 0.25rem);
-    --_sheet-bottom-focus-indicator-color: var(--md-sheet-bottom-focus-indicator-color, var(--md-sys-color-secondary));
-    --_sheet-bottom-focus-indicator-thickness: var(
-      --md-sheet-bottom-focus-indicator-thickness,
-      var(--md-sys-state-focus-indicator-thickness)
-    );
-    --_sheet-bottom-focus-indicator-outline-offset: var(
-      --md-sheet-bottom-focus-indicator-outline-offset,
-      var(--md-sys-state-focus-indicator-outer-offset)
-    );
     --_bottom-sheet-max-height: var(--md-bottom-sheet-max-height, calc(100vb - 3rem));
-    --_bottom-sheet-drag-offset: var(--md-bottom-sheet-drag-offset, 0px);
     --_bottom-sheet-content-visual-overflow-inset: var(--md-bottom-sheet-content-visual-overflow-inset, 0.5rem);
     --_bottom-sheet-translate-offset: var(--md-bottom-sheet-translate-offset, 0px);
     --_bottom-sheet-background-extension: var(--md-bottom-sheet-background-extension, 0px);

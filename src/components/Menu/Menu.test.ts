@@ -1,10 +1,11 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createApp, h, nextTick, ref, withDirectives } from 'vue';
+import { createApp, h, inject, nextTick, onScopeDispose, ref, withDirectives } from 'vue';
 import Select, { type SelectModelValue, type SelectOption } from '@/components/Select/Select.vue';
 import { vContextMenu, vDropdown } from '@/directives/Menu';
 import Menu, { type MenuContentItem, type MenuModelValue } from './Menu.vue';
 import MenuContainer from './MenuContainer.vue';
+import { menuContextKey } from './MenuContext';
 import MenuGap from './MenuGap.vue';
 import MenuItem from './MenuItem.vue';
 import MenuLabel from './MenuLabel.vue';
@@ -440,6 +441,57 @@ describe('Menu', () => {
     app.unmount();
   });
 
+  it('shares model selection with item slots and preserves independent manual states', async () => {
+    installPopoverPolyfill();
+
+    const model = ref<MenuModelValue>([]);
+    const value = ref<string | undefined>('copy');
+    const selected = ref(true);
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        { open: true, multiple: true, modelValue: model.value },
+        {
+          default: () =>
+            h(MenuContainer, null, {
+              default: () =>
+                h(
+                  MenuItem,
+                  { value: value.value, role: 'menuitemcheckbox', checked: true, selected: selected.value },
+                  {
+                    default: ({ checked, selected }: { checked: boolean; selected: boolean }) =>
+                      `checked=${checked} selected=${selected}`,
+                  },
+                ),
+            }),
+        },
+      ),
+    );
+
+    app.mount(container);
+    try {
+      await nextTick();
+      const item = container.querySelector('button')!;
+      const state = () => [item.getAttribute('aria-checked'), item.dataset.selected, item.textContent?.trim()];
+
+      expect(state()).toEqual(['false', undefined, 'checked=false selected=false']);
+
+      model.value = ['copy'];
+      await nextTick();
+      expect(state()).toEqual(['true', 'true', 'checked=true selected=true']);
+
+      value.value = undefined;
+      selected.value = false;
+      await nextTick();
+      expect(state()).toEqual(['true', undefined, 'checked=true selected=false']);
+    } finally {
+      app.unmount();
+    }
+  });
+
   it('renders declarative object content and keeps selection semantics', async () => {
     installPopoverPolyfill();
 
@@ -854,7 +906,7 @@ describe('Menu', () => {
     app.unmount();
   });
 
-  it('navigates across items rendered in multiple containers', async () => {
+  it.each(['v', 'Custom "menu"'])('navigates across multiple containers with ID prefix %s', async (idPrefix) => {
     installPopoverPolyfill();
 
     const container = document.createElement('div');
@@ -884,6 +936,7 @@ describe('Menu', () => {
       ),
     );
 
+    app.config.idPrefix = idPrefix;
     app.mount(container);
     await nextTick();
 
@@ -898,6 +951,109 @@ describe('Menu', () => {
     menu?.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'End' }));
 
     expect(document.activeElement).toBe(menuItems[2]);
+
+    app.unmount();
+  });
+
+  it('consumes Escape and closes an empty menu', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const app = createApp(() => h(Menu, { open: true }));
+    app.mount(container);
+    await nextTick();
+
+    const menu = container.querySelector<HTMLElement>('[role="menu"]')!;
+    expect(isPopoverOpen(menu)).toBe(true);
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    expect(menu.dispatchEvent(escape)).toBe(false);
+    expect(isPopoverOpen(menu)).toBe(false);
+
+    app.unmount();
+  });
+
+  it('navigates using enabled items after closing submenus', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    let itemToDisable: HTMLButtonElement | undefined;
+
+    const Submenu = {
+      setup() {
+        const unregister = inject(menuContextKey)!.registerSubmenu(() => {
+          if (itemToDisable) itemToDisable.disabled = true;
+        });
+        onScopeDispose(unregister);
+        return () => null;
+      },
+    };
+
+    const app = createApp(() =>
+      h(
+        Menu,
+        { open: true },
+        {
+          default: () =>
+            h(MenuContainer, null, {
+              default: () => [
+                h(MenuItem, null, { default: () => 'First' }),
+                h(MenuItem, null, { default: () => 'Second' }),
+                h(MenuItem, null, { default: () => 'Third' }),
+                h(Submenu),
+              ],
+            }),
+        },
+      ),
+    );
+
+    app.mount(container);
+    await nextTick();
+
+    const [first, second, third] = container.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]');
+    first!.focus();
+    itemToDisable = second;
+    first!.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowDown' }));
+
+    expect(document.activeElement).toBe(third);
+
+    app.unmount();
+  });
+
+  it('closes the previous submenu when a sibling opens through its model', async () => {
+    installPopoverPolyfill();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const models = [ref(false), ref(false)];
+    const app = createApp(() =>
+      h(Menu, { open: true }, () =>
+        models.map((open, index) =>
+          h(
+            MenuSubMenu,
+            { key: index, open: open.value, 'onUpdate:open': (value: boolean) => (open.value = value) },
+            {
+              trigger: () => h(MenuItem, { submenu: true }, () => `Submenu ${index}`),
+              default: () => h(MenuItem, null, () => 'Action'),
+            },
+          ),
+        ),
+      ),
+    );
+    app.mount(container);
+    await nextTick();
+
+    const [first, second] = container.querySelectorAll<HTMLElement>('[data-scope="menu"][data-submenu="true"]');
+    models[0]!.value = true;
+    await nextTick();
+    expect(isPopoverOpen(first!)).toBe(true);
+
+    models[1]!.value = true;
+    await nextTick();
+    expect(models[0]!.value).toBe(false);
+    expect(isPopoverOpen(first!)).toBe(false);
+    expect(isPopoverOpen(second!)).toBe(true);
 
     app.unmount();
   });
@@ -1168,6 +1324,8 @@ describe('Menu', () => {
 
     const container = document.createElement('div');
     document.body.appendChild(container);
+    const debugSafeTriangle = ref(false);
+    const onPointermove = vi.fn();
 
     const app = createApp(() =>
       h(
@@ -1179,26 +1337,30 @@ describe('Menu', () => {
           default: () => [
             h(MenuContainer, null, {
               default: () => [
-                h(MenuSubMenu, null, {
-                  trigger: ({ open }: { open: boolean }) =>
-                    h(
-                      MenuItem,
-                      {
-                        submenu: true,
-                        submenuOpen: open,
-                      },
-                      {
-                        default: () => 'More',
-                      },
-                    ),
-                  default: () =>
-                    h(MenuContainer, null, {
-                      default: () => [
-                        h(MenuItem, null, { default: () => 'Child 1' }),
-                        h(MenuItem, null, { default: () => 'Child 2' }),
-                      ],
-                    }),
-                }),
+                h(
+                  MenuSubMenu,
+                  { debugSafeTriangle: debugSafeTriangle.value, onPointermove },
+                  {
+                    trigger: ({ open }: { open: boolean }) =>
+                      h(
+                        MenuItem,
+                        {
+                          submenu: true,
+                          submenuOpen: open,
+                        },
+                        {
+                          default: () => 'More',
+                        },
+                      ),
+                    default: () =>
+                      h(MenuContainer, null, {
+                        default: () => [
+                          h(MenuItem, null, { default: () => 'Child 1' }),
+                          h(MenuItem, null, { default: () => 'Child 2' }),
+                        ],
+                      }),
+                  },
+                ),
               ],
             }),
           ],
@@ -1232,6 +1394,25 @@ describe('Menu', () => {
         toJSON: () => null,
       }),
     });
+
+    const moveInside = () =>
+      submenuWrapper?.dispatchEvent(createPointerEvent('pointermove', { bubbles: true, clientX: 100, clientY: 112 }));
+    moveInside();
+    await nextTick();
+    expect(container.querySelector('.m3-menu-submenu-safe-triangle')).toBeNull();
+
+    debugSafeTriangle.value = true;
+    await nextTick();
+    moveInside();
+    await nextTick();
+    expect(container.querySelector('.m3-menu-submenu-safe-triangle')).not.toBeNull();
+
+    debugSafeTriangle.value = false;
+    await nextTick();
+    moveInside();
+    await nextTick();
+    expect(container.querySelector('.m3-menu-submenu-safe-triangle')).toBeNull();
+    expect(onPointermove).toHaveBeenCalledTimes(3);
 
     submenuWrapper?.dispatchEvent(
       new pointerEventConstructor('pointerleave', {
@@ -1359,6 +1540,13 @@ describe('Menu', () => {
     document.dispatchEvent(createPointerEvent('pointermove', { bubbles: true, clientX: 20, clientY: 20 }));
     expect(isPopoverOpen(menu)).toBe(true);
     items[0]?.dispatchEvent(createPointerEvent('pointerup', { bubbles: true, clientX: 30, clientY: 30 }));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(isPopoverOpen(menu)).toBe(false);
+
+    trigger?.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true, clientX: 10, clientY: 10 }));
+    document.dispatchEvent(createPointerEvent('pointermove', { bubbles: true, clientX: 20, clientY: 20 }));
+    expect(isPopoverOpen(menu)).toBe(true);
+    document.dispatchEvent(createPointerEvent('pointercancel', { bubbles: true }));
     expect(onSelect).toHaveBeenCalledTimes(1);
     expect(isPopoverOpen(menu)).toBe(false);
 

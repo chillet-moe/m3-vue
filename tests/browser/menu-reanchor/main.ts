@@ -6,6 +6,7 @@ import MenuItem from '@/components/Menu/MenuItem.vue';
 import MenuSubMenu from '@/components/Menu/MenuSubMenu.vue';
 import { showDropdownElement } from '@/directives/Dropdown/helpers';
 import Popover from '@/components/Popover/Popover.vue';
+import { acquireAnchorName } from '@/internal/anchorName';
 
 const menu = ref<InstanceType<typeof Menu>>();
 const popover = ref<InstanceType<typeof Popover>>();
@@ -20,6 +21,32 @@ function show(index: number, focus = false) {
 }
 Object.assign(window, {
   fixture: {
+    checkAnchorNameReentrancy: () => {
+      return ['', '--existing-anchor'].map((initialValue, index) => {
+        let acquireDuringRestore = false;
+        let releaseSecond: (() => void) | undefined;
+        class ReentrantAnchor extends HTMLElement {
+          static observedAttributes = ['style'];
+
+          attributeChangedCallback() {
+            if (!acquireDuringRestore) return;
+            acquireDuringRestore = false;
+            releaseSecond = acquireAnchorName(this, '--second-anchor');
+          }
+        }
+        const tag = `reentrant-anchor-${index}`;
+        customElements.define(tag, ReentrantAnchor);
+        const anchor = document.createElement(tag);
+        if (initialValue) anchor.style.setProperty('anchor-name', initialValue);
+        const releaseFirst = acquireAnchorName(anchor, '--first-anchor');
+
+        acquireDuringRestore = true;
+        releaseFirst();
+        const reacquired = anchor.style.getPropertyValue('anchor-name');
+        releaseSecond!();
+        return { reacquired, restored: anchor.style.getPropertyValue('anchor-name') };
+      });
+    },
     show,
     externalShow: (index: number) =>
       showDropdownElement(document.getElementById('menu')!, { source: document.getElementById(`entry-${index}`)! }),

@@ -3,6 +3,9 @@ import type { MenuItemValue, MenuModelValue } from '@/components/Menu/MenuTypes'
 import { usePopoverSource } from './usePopoverSource';
 import { useExitMotionCompletion } from './useExitMotionCompletion';
 
+const enabledMenuItemSelector =
+  ':is([role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]):not([disabled], [aria-disabled="true"])';
+
 export type UseMenuOptions = {
   /** Unique ID for the menu instance. */
   menuId: string;
@@ -90,6 +93,7 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
 
   const popoverSource = usePopoverSource();
   let focusRequest = 0;
+  let ownedMenuItemSelector: string | undefined;
   const submenuClosers = new Set<() => void>();
   const exitCompletion = useExitMotionCompletion<void>({
     rootRef: menuRef,
@@ -171,15 +175,13 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
     const menu = menuRef.value;
     if (!menu) return [] as HTMLElement[];
 
-    return Array.from(
-      menu.querySelectorAll<HTMLElement>(
-        '[role="menuitem"]:not([disabled]):not([aria-disabled="true"]), [role="menuitemradio"]:not([disabled]):not([aria-disabled="true"]), [role="menuitemcheckbox"]:not([disabled]):not([aria-disabled="true"])',
-      ),
-    ).filter((item) => item.dataset.menuOwner === menuId);
+    // Custom app ID prefixes may contain characters that cannot be interpolated into the selector.
+    ownedMenuItemSelector ??= /^[\w-]+$/.test(menuId) ? `${enabledMenuItemSelector}[data-menu-owner="${menuId}"]` : '';
+    const items = Array.from(menu.querySelectorAll<HTMLElement>(ownedMenuItemSelector || enabledMenuItemSelector));
+    return ownedMenuItemSelector ? items : items.filter((item) => item.dataset.menuOwner === menuId);
   }
 
-  function focusItem(index: number) {
-    const menuItems = getMenuItemElements();
+  function focusItem(index: number, menuItems = getMenuItemElements()) {
     if (!menuItems.length) return;
     const normalized = (index + menuItems.length) % menuItems.length;
     menuItems[normalized]?.focus();
@@ -214,69 +216,42 @@ export function useMenu(options: UseMenuOptions): UseMenuReturn {
 
   function onMenuKeydown(event: KeyboardEvent) {
     if (options.role?.() === 'listbox') return;
+    const key = event.key;
+    if (key === 'Escape') {
+      const focusTrigger = parentSubmenu && getMenuItemElements().length > 0;
+      event.preventDefault();
+      event.stopPropagation();
+      if (focusTrigger) parentSubmenu.closeAndFocusTrigger();
+      else hide();
+      return;
+    }
+
+    const arrow = key === 'ArrowDown' || key === 'ArrowUp';
+    const edge = key === 'Home' || key === 'End';
+    const submenuToClose = key === 'ArrowLeft' ? parentSubmenu : undefined;
+    if (!arrow && !edge && !submenuToClose) return;
+
     const menuItems = getMenuItemElements();
+    if (!menuItems.length) return;
 
-    if (!menuItems.length) {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        event.stopPropagation();
-        hide();
-      }
+    event.preventDefault();
+    event.stopPropagation();
+    if (submenuToClose) {
+      submenuToClose.closeAndFocusTrigger();
       return;
     }
 
-    const currentIndex = menuItems.findIndex((item) => item === menuRef.value?.ownerDocument.activeElement);
-
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      event.stopPropagation();
-      closeSubmenus();
-      focusItem(currentIndex + 1);
-      return;
+    let index = key === 'End' ? menuItems.length - 1 : 0;
+    if (arrow) {
+      const active = menuRef.value?.ownerDocument.activeElement;
+      const current = menuItems.findIndex((item) => item === active);
+      index = current + (key === 'ArrowDown' ? 1 : -1);
     }
 
-    if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      event.stopPropagation();
-      closeSubmenus();
-      focusItem(currentIndex - 1);
-      return;
-    }
-
-    if (event.key === 'Home') {
-      event.preventDefault();
-      event.stopPropagation();
-      closeSubmenus();
-      focusItem(0);
-      return;
-    }
-
-    if (event.key === 'End') {
-      event.preventDefault();
-      event.stopPropagation();
-      closeSubmenus();
-      focusItem(menuItems.length - 1);
-      return;
-    }
-
-    if (event.key === 'ArrowLeft' && parentSubmenu) {
-      event.preventDefault();
-      event.stopPropagation();
-      parentSubmenu.closeAndFocusTrigger();
-      return;
-    }
-
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (parentSubmenu) {
-        parentSubmenu.closeAndFocusTrigger();
-        return;
-      }
-
-      hide();
-    }
+    // Submenu closers can synchronously change the menu DOM.
+    const needsNewSnapshot = submenuClosers.size > 0;
+    closeSubmenus();
+    focusItem(index, needsNewSnapshot ? undefined : menuItems);
   }
 
   function onMenuClick(event: MouseEvent) {
