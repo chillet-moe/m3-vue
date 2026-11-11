@@ -1,10 +1,9 @@
-import { computed, type Ref } from 'vue';
-import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
+import { computed } from 'vue';
+import { useAnimatedNumberState } from '@/composables/useAnimatedNumber';
 
 export type ProgressIndicatorState = 'empty' | 'partial' | 'complete';
 
 export type UseProgressIndicatorStateOptions = {
-  element?: Readonly<Ref<Element | null | undefined>>;
   /** Whether the progress value is unknown. */
   indeterminate: () => boolean;
 
@@ -24,7 +23,6 @@ export type UseProgressIndicatorStateOptions = {
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 export function useProgressIndicatorState({
-  element,
   indeterminate,
   value,
   min,
@@ -59,12 +57,12 @@ export function useProgressIndicatorState({
     return clamp((clampedValue.value - minValue) / range, 0, 1);
   });
 
-  const { displayedValue: progressRatioDisplayed } = useAnimatedNumber(progressRatio, {
-    element,
+  const { animation, bindDocument: bindProgressAnimation } = useAnimatedNumberState(progressRatio, {
     enabled: isDeterminate,
     clamp: (nextValue) => clamp(nextValue, 0, 1),
   });
 
+  const progressRatioDisplayed = animation.displayedValue;
   const progressPercent = computed(() => progressRatio.value * 100);
 
   const progressState = computed<ProgressIndicatorState>(() => {
@@ -92,6 +90,7 @@ export function useProgressIndicatorState({
     clampedValue,
     progressRatio,
     progressRatioDisplayed,
+    bindProgressAnimation,
     progressPercent,
     progressState,
     ariaValueTextResolved,

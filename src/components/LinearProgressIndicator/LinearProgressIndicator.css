@@ -1,7 +1,12 @@
-@property --m3-linear-progress-indicator-segment-start {
-  syntax: '<number>';
+@property --m3-linear-progress-displayed-value {
+  syntax: '*';
   inherits: false;
-  initial-value: 0;
+}
+
+@property --m3-linear-progress-indicator-segment-start {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
 }
 
 @property --m3-linear-progress-indicator-segment-end {
@@ -32,7 +37,6 @@
   .m3-linear-progress-indicator {
     --_progress: 0;
     font-size: --density-graphic(16, body-medium, 14, 12);
-    --_active-track-gap-size: 0px;
     --_progress-indicator-color: var(
       --md-progress-indicator-color,
       var(--md-color-on-container, var(--md-sys-color-primary))
@@ -98,9 +102,22 @@
     border-radius: var(--_shape);
   }
 
+  .m3-linear-progress-indicator-track,
+  .m3-linear-progress-indicator-active-determinate {
+    --_active-track-gap-size: 0px;
+  }
+
+  .m3-linear-progress-indicator[data-indeterminate='false'][data-progress-state='partial']
+    :is(.m3-linear-progress-indicator-track, .m3-linear-progress-indicator-active-determinate) {
+    --_active-track-gap-size: var(--_track-active-indicator-gap);
+  }
+
   .m3-linear-progress-indicator-track {
     inset-inline-end: 0;
-    inset-inline-start: calc((100% - var(--_active-track-gap-size)) * var(--_progress) + var(--_active-track-gap-size));
+    inset-inline-start: calc(
+      (100% - var(--_active-track-gap-size)) * var(--m3-linear-progress-displayed-value, var(--_progress)) +
+        var(--_active-track-gap-size)
+    );
     background: var(--_track-color);
   }
 
@@ -115,29 +132,27 @@
   }
 
   .m3-linear-progress-indicator-active-determinate {
-    inline-size: calc((100% - var(--_active-track-gap-size)) * var(--_progress));
+    inline-size: calc(
+      (100% - var(--_active-track-gap-size)) * var(--m3-linear-progress-displayed-value, var(--_progress))
+    );
   }
 
   .m3-linear-progress-indicator-active-indeterminate {
     inset-inline: 0;
-    --m3-linear-progress-indicator-segment-start: 0;
+    --m3-linear-progress-indicator-segment-start: 0%;
     --m3-linear-progress-indicator-segment-end: 0;
     clip-path: inset(
       0 calc((1 - var(--m3-linear-progress-indicator-segment-end)) * 100%) 0
-        calc(var(--m3-linear-progress-indicator-segment-start) * 100%) round var(--_shape)
+        var(--m3-linear-progress-indicator-segment-start) round var(--_shape)
     );
   }
 
   .m3-linear-progress-indicator-active-indeterminate-one {
-    animation:
-      m3-linear-progress-indicator-segment-one-start 1800ms infinite,
-      m3-linear-progress-indicator-segment-one-end 1800ms infinite;
+    animation: m3-linear-progress-indicator-segment-one 1800ms infinite;
   }
 
   .m3-linear-progress-indicator-active-indeterminate-two {
-    animation:
-      m3-linear-progress-indicator-segment-two-start 1800ms infinite,
-      m3-linear-progress-indicator-segment-two-end 1800ms infinite;
+    animation: m3-linear-progress-indicator-segment-two 1800ms infinite;
   }
 
   .m3-linear-progress-indicator-active-flat {
@@ -187,7 +202,7 @@
   @media (prefers-reduced-motion: reduce) {
     .m3-linear-progress-indicator-active-indeterminate {
       animation: none;
-      --m3-linear-progress-indicator-segment-start: 0.14;
+      --m3-linear-progress-indicator-segment-start: 14%;
       --m3-linear-progress-indicator-segment-end: 0.58;
     }
 
@@ -196,52 +211,55 @@
     }
   }
 
-  @keyframes m3-linear-progress-indicator-segment-one-start {
-    0%,
-    70.3889% {
-      --m3-linear-progress-indicator-segment-start: 0;
-      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+  /* Each edge keeps its own offsets and easing within the segment animation. */
+  @keyframes m3-linear-progress-indicator-segment-one {
+    0% {
+      --m3-linear-progress-indicator-segment-start: 0%;
+      --m3-linear-progress-indicator-segment-end: 0;
     }
 
-    100% {
-      --m3-linear-progress-indicator-segment-start: 1;
-    }
-  }
-
-  @keyframes m3-linear-progress-indicator-segment-one-end {
-    0%,
     55.5556% {
       --m3-linear-progress-indicator-segment-end: 0;
       animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
     }
 
-    87.0556%,
+    70.3889% {
+      --m3-linear-progress-indicator-segment-start: 0%;
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+
+    87.0556% {
+      --m3-linear-progress-indicator-segment-end: 1;
+    }
+
     100% {
+      --m3-linear-progress-indicator-segment-start: 100%;
       --m3-linear-progress-indicator-segment-end: 1;
     }
   }
 
-  @keyframes m3-linear-progress-indicator-segment-two-start {
-    0%,
-    18.5% {
-      --m3-linear-progress-indicator-segment-start: 0;
-      animation-timing-function: cubic-bezier(0, 0, 0.65, 1);
-    }
-
-    65.7222%,
-    100% {
-      --m3-linear-progress-indicator-segment-start: 1;
-    }
-  }
-
-  @keyframes m3-linear-progress-indicator-segment-two-end {
+  @keyframes m3-linear-progress-indicator-segment-two {
     0% {
+      --m3-linear-progress-indicator-segment-start: 0%;
       --m3-linear-progress-indicator-segment-end: 0;
       animation-timing-function: cubic-bezier(0.1, 0, 0.45, 1);
     }
 
-    41.6667%,
+    18.5% {
+      --m3-linear-progress-indicator-segment-start: 0%;
+      animation-timing-function: cubic-bezier(0, 0, 0.65, 1);
+    }
+
+    41.6667% {
+      --m3-linear-progress-indicator-segment-end: 1;
+    }
+
+    65.7222% {
+      --m3-linear-progress-indicator-segment-start: 100%;
+    }
+
     100% {
+      --m3-linear-progress-indicator-segment-start: 100%;
       --m3-linear-progress-indicator-segment-end: 1;
     }
   }

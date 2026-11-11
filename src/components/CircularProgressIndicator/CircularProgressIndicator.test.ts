@@ -31,10 +31,6 @@ async function mountCircularProgressIndicator(props: Record<string, unknown> = {
   };
 }
 
-async function nextAnimationFrame() {
-  await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
-}
-
 function mockAnimationFrame() {
   let requestId = 0;
   const callbacks = new Map<number, FrameRequestCallback>();
@@ -90,7 +86,6 @@ describe('CircularProgressIndicator', () => {
     expect(root?.dataset.indeterminate).toBe('false');
     expect(root?.dataset.shape).toBe('flat');
     expect(root?.dataset.progressState).toBe('partial');
-    expect(root?.style.getPropertyValue('--_progress')).toBe('0.25');
     expect(track).not.toBeNull();
     expect(active?.classList.contains('m3-circular-progress-indicator-active-determinate')).toBe(true);
     expect(track?.tagName.toLowerCase()).toBe('path');
@@ -100,7 +95,14 @@ describe('CircularProgressIndicator', () => {
     app.unmount();
   });
 
-  it('supports custom size, thickness, and counterclockwise direction', async () => {
+  it('supports custom size, thickness, and counterclockwise direction', async ({ onTestFinished }) => {
+    const documentStyle = document.documentElement.style;
+    const previousFontSize = documentStyle.fontSize;
+    documentStyle.fontSize = '17.5px';
+    onTestFinished(() => {
+      documentStyle.fontSize = previousFontSize;
+    });
+
     const { app, root } = await mountCircularProgressIndicator({
       value: 1,
       direction: 'counterclockwise',
@@ -114,35 +116,41 @@ describe('CircularProgressIndicator', () => {
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-size')).toBe('3rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-thickness')).toBe('0.375rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-active-indicator-gap')).toBe('0.25rem');
+    expect(root?.querySelector('svg')?.getAttribute('viewBox')).toBe('0 0 52.5 52.5');
 
     app.unmount();
   });
 
   it('animates the displayed determinate value while exposing the real value', async () => {
+    const raf = mockAnimationFrame();
     const { app, root, updateProps } = await mountCircularProgressIndicator({
       value: 0,
       min: 0,
       max: 1,
     });
+    const activeArc = () => root?.querySelector('[data-part="active-indicator"]');
+    const trackArc = () => root?.querySelector('[data-part="track"]')?.getAttribute('d');
+    const fullTrack = trackArc();
 
     await updateProps({ value: 1 });
 
     expect(root?.getAttribute('aria-valuenow')).toBe('1');
     expect(root?.getAttribute('aria-valuetext')).toBe('100%');
-    expect(root?.style.getPropertyValue('--_progress')).toBe('0');
+    expect(activeArc()).toBeNull();
+    expect(trackArc()).toBe(fullTrack);
 
-    await nextAnimationFrame();
-    await nextAnimationFrame();
+    raf.flush(16);
     await nextTick();
 
-    const displayedProgress = Number(root?.style.getPropertyValue('--_progress'));
-    expect(displayedProgress).toBeGreaterThan(0);
-    expect(displayedProgress).not.toBe(1);
+    expect(root?.dataset.progressState).toBe('partial');
+    expect(activeArc()?.getAttribute('d')).toMatch(/^M .+ A /);
+    expect(trackArc()).toMatch(/^M .+ A /);
+    expect(trackArc()).not.toBe(fullTrack);
 
     app.unmount();
   });
 
-  it('keeps the displayed determinate progress bounded during delayed animation frames', async () => {
+  it('settles on a full active arc during delayed animation frames', async () => {
     const raf = mockAnimationFrame();
     const { app, root, updateProps } = await mountCircularProgressIndicator({
       value: 0,
@@ -152,17 +160,43 @@ describe('CircularProgressIndicator', () => {
 
     await updateProps({ value: 1 });
 
-    for (let index = 1; index <= 80; index += 1) {
+    for (let index = 1; index <= 80 && raf.pendingCount; index += 1) {
       raf.flush(index * 50);
       await nextTick();
-
-      const displayedProgress = Number(root?.style.getPropertyValue('--_progress'));
-      expect(Number.isFinite(displayedProgress)).toBe(true);
-      expect(displayedProgress).toBeGreaterThanOrEqual(0);
-      expect(displayedProgress).toBeLessThanOrEqual(1);
     }
 
-    expect(Number(root?.style.getPropertyValue('--_progress'))).toBeCloseTo(1, 3);
+    expect(root?.dataset.progressState).toBe('complete');
+    expect(root?.querySelector('[data-part="active-indicator"]')?.getAttribute('d')).toMatch(/^M .+ A .+ A /);
+    expect(root?.querySelector('[data-part="track"]')).toBeNull();
+    expect(raf.pendingCount).toBe(0);
+
+    app.unmount();
+  });
+
+  it('restores the track when progress falls from complete to partial', async () => {
+    const raf = mockAnimationFrame();
+    const { app, root, updateProps } = await mountCircularProgressIndicator({ value: 1 });
+    const trackArc = () => root?.querySelector('[data-part="track"]');
+
+    expect(trackArc()).toBeNull();
+
+    await updateProps({ value: 0.35 });
+    raf.flush(16);
+    raf.flush(66);
+    await nextTick();
+
+    const initialPath = trackArc()?.getAttribute('d');
+    expect(initialPath).toMatch(/^M .+ A /);
+
+    raf.flush(116);
+    await nextTick();
+    const updatedPath = trackArc()?.getAttribute('d');
+    expect(updatedPath).toMatch(/^M .+ A /);
+    expect(updatedPath).not.toBe(initialPath);
+
+    await updateProps({ ariaLabel: 'Loading records' });
+    expect(root?.getAttribute('aria-label')).toBe('Loading records');
+    expect(trackArc()?.getAttribute('d')).toBe(updatedPath);
 
     app.unmount();
   });
@@ -243,7 +277,7 @@ describe('CircularProgressIndicator', () => {
 
     expect(root?.getAttribute('aria-valuenow')).toBe('0');
     expect(root?.dataset.progressState).toBe('empty');
-    expect(root?.style.getPropertyValue('--_progress')).toBe('0');
+    expect(root?.querySelector('[data-part="active-indicator"]')).toBeNull();
 
     app.unmount();
   });

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useElementEnvironment } from '@/internal/elementEnvironment';
-import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useProgressIndicatorState } from '@/composables/useProgressIndicatorState';
 import { registerSharedAnimationFrame } from '@/internal/sharedAnimationFrame';
-import { readCssLength } from '@/utils/cssLength';
+import { createCssLengthReader } from '@/utils/cssLength';
 import {
   createCircularArcPath,
+  createCircularIndeterminateFrameReader,
   createCircularWaveArcPath,
   getCircularIndeterminateState,
   getCircularTrackGapDegrees,
@@ -65,19 +66,25 @@ const props = withDefaults(defineProps<CircularProgressIndicatorProps>(), {
 const isWavy = computed(() => props.shape === 'wavy');
 
 const rootRef = useTemplateRef<HTMLDivElement>('root');
-const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, ariaValueTextResolved } =
-  useProgressIndicatorState({
-    element: rootRef,
-    indeterminate: () => props.indeterminate,
-    value: () => props.value,
-    min: () => props.min,
-    max: () => props.max,
-    ariaValueText: () => props.ariaValueText,
-  });
+const {
+  isDeterminate,
+  clampedValue,
+  progressRatioDisplayed,
+  progressState,
+  ariaValueTextResolved,
+  bindProgressAnimation,
+} = useProgressIndicatorState({
+  indeterminate: () => props.indeterminate,
+  value: () => props.value,
+  min: () => props.min,
+  max: () => props.max,
+  ariaValueText: () => props.ariaValueText,
+});
 
+const svgRef = useTemplateRef<SVGSVGElement>('svg');
 const activePathRef = useTemplateRef<SVGPathElement>('activePath');
 const trackPathRef = useTemplateRef<SVGPathElement>('trackPath');
-const layout = ref({
+const layout = shallowRef({
   size: 40,
   thickness: 4,
   trackGap: 4,
@@ -86,7 +93,6 @@ const layout = ref({
 });
 const initialIndeterminateState: CircularIndeterminateState = getCircularIndeterminateState(0);
 
-let resizeObserver: ResizeObserver | null = null;
 let animationController: ReturnType<typeof registerSharedAnimationFrame> | undefined;
 
 const syncLayout = () => {
@@ -95,15 +101,12 @@ const syncLayout = () => {
     return;
   }
 
-  const styles = root.ownerDocument.defaultView!.getComputedStyle(root);
-  const rootFontSize = parseFloat(
-    root.ownerDocument.defaultView!.getComputedStyle(root.ownerDocument.documentElement).fontSize,
-  );
-  const size = readCssLength(styles, '--_current-size', props.size, isWavy.value ? 48 : 40, rootFontSize);
-  const thickness = readCssLength(styles, '--_track-thickness', props.thickness, 4, rootFontSize);
-  const trackGap = readCssLength(styles, '--_track-active-indicator-gap', props.trackGap, 4, rootFontSize);
-  const waveAmplitude = readCssLength(styles, '--_wave-amplitude', props.waveAmplitude, 1.6, rootFontSize);
-  const wavelength = readCssLength(styles, '--_wave-wavelength', props.wavelength, 15, rootFontSize);
+  const readCssLength = createCssLengthReader(root);
+  const size = readCssLength('--_current-size', props.size, isWavy.value ? 48 : 40);
+  const thickness = readCssLength('--_track-thickness', props.thickness, 4);
+  const trackGap = readCssLength('--_track-active-indicator-gap', props.trackGap, 4);
+  const waveAmplitude = readCssLength('--_wave-amplitude', props.waveAmplitude, 1.6);
+  const wavelength = readCssLength('--_wave-wavelength', props.wavelength, 15);
 
   layout.value = {
     size,
@@ -115,9 +118,7 @@ const syncLayout = () => {
 };
 
 const rootStyle = computed(() => {
-  const style: Record<string, string> = {
-    '--_progress': progressRatioDisplayed.value.toString(),
-  };
+  const style: Record<string, string> = {};
 
   if (props.size) {
     style['--md-circular-progress-indicator-size'] = props.size;
@@ -145,73 +146,61 @@ const rootStyle = computed(() => {
 const center = computed(() => layout.value.size / 2);
 const radius = computed(() => Math.max(1, (layout.value.size - layout.value.thickness) / 2));
 const viewBox = computed(() => `0 0 ${layout.value.size} ${layout.value.size}`);
-const activeStartDegrees = computed(() => (isDeterminate.value ? 0 : initialIndeterminateState.startDegrees));
-const activeEndDegrees = computed(() =>
-  isDeterminate.value ? progressRatioDisplayed.value * 360 : initialIndeterminateState.endDegrees,
-);
-const activePath = computed(() => {
-  if (isDeterminate.value && progressRatioDisplayed.value <= 0) {
-    return '';
-  }
+// Vue supplies the initial path when a segment is created. Subsequent changes
+// stay on that SVG element so animation frames do not render the progressbar.
+const initialTrackPath = ref('');
+const initialActivePath = ref('');
+let previousTrack = '';
+let previousActive = '';
 
-  if (isWavy.value) {
-    return createCircularWaveArcPath(
-      center.value,
-      radius.value,
-      activeStartDegrees.value,
-      activeEndDegrees.value,
-      layout.value.waveAmplitude,
-      layout.value.wavelength,
-    );
-  }
-
-  return createCircularArcPath(center.value, radius.value, activeStartDegrees.value, activeEndDegrees.value);
-});
-const trackPath = computed(() => {
-  if (isDeterminate.value) {
-    if (progressRatioDisplayed.value >= 1) {
-      return '';
+watch(
+  [layout, isWavy, () => (isDeterminate.value ? progressRatioDisplayed.value : undefined)],
+  ([{ trackGap, thickness, waveAmplitude, wavelength }, wavy, progress]) => {
+    const startDegrees = progress === undefined ? initialIndeterminateState.startDegrees : 0;
+    const endDegrees = progress === undefined ? initialIndeterminateState.endDegrees : progress * 360;
+    const circleCenter = center.value;
+    const circleRadius = radius.value;
+    let track = '';
+    if (progress === undefined || progress < 1) {
+      const gapDegrees = getCircularTrackGapDegrees(trackGap, thickness, circleRadius, progress);
+      track = createCircularArcPath(
+        circleCenter,
+        circleRadius,
+        endDegrees + gapDegrees,
+        startDegrees + 360 - gapDegrees,
+      );
     }
 
-    const gapDegrees = getCircularTrackGapDegrees(
-      layout.value.trackGap,
-      layout.value.thickness,
-      radius.value,
-      progressRatioDisplayed.value,
-    );
-    const startDegrees = progressRatioDisplayed.value * 360 + gapDegrees;
-    const endDegrees = 360 - gapDegrees;
-    return createCircularArcPath(center.value, radius.value, startDegrees, endDegrees);
-  }
+    let active = '';
+    if (progress === undefined || progress > 0) {
+      active = wavy
+        ? createCircularWaveArcPath(circleCenter, circleRadius, startDegrees, endDegrees, waveAmplitude, wavelength)
+        : createCircularArcPath(circleCenter, circleRadius, startDegrees, endDegrees);
+    }
 
-  const gapDegrees = getCircularTrackGapDegrees(layout.value.trackGap, layout.value.thickness, radius.value);
-  const startDegrees = activeEndDegrees.value + gapDegrees;
-  const endDegrees = activeStartDegrees.value + 360 - gapDegrees;
-  return createCircularArcPath(center.value, radius.value, startDegrees, endDegrees);
+    if (track !== previousTrack) {
+      if (track && previousTrack) trackPathRef.value?.setAttribute('d', track);
+      else initialTrackPath.value = track;
+      previousTrack = track;
+    }
+    if (active !== previousActive) {
+      if (active && previousActive) activePathRef.value?.setAttribute('d', active);
+      else initialActivePath.value = active;
+      previousActive = active;
+    }
+  },
+  { immediate: true },
+);
+
+const readIndeterminateFrame = computed(() => {
+  const { trackGap, thickness, waveAmplitude, wavelength } = layout.value;
+  const gapDegrees = getCircularTrackGapDegrees(trackGap, thickness, radius.value);
+  const wave = isWavy.value ? { amplitude: waveAmplitude, wavelength } : undefined;
+  return createCircularIndeterminateFrameReader(center.value, radius.value, gapDegrees, wave);
 });
 
-const syncIndeterminatePresentation = (elapsed: number) => {
-  const state = getCircularIndeterminateState(elapsed);
-  const currentCenter = center.value;
-  const currentRadius = radius.value;
-  const active = isWavy.value
-    ? createCircularWaveArcPath(
-        currentCenter,
-        currentRadius,
-        state.startDegrees,
-        state.endDegrees,
-        layout.value.waveAmplitude,
-        layout.value.wavelength,
-      )
-    : createCircularArcPath(currentCenter, currentRadius, state.startDegrees, state.endDegrees);
-  const gapDegrees = getCircularTrackGapDegrees(layout.value.trackGap, layout.value.thickness, currentRadius);
-  const track = createCircularArcPath(
-    currentCenter,
-    currentRadius,
-    state.endDegrees + gapDegrees,
-    state.startDegrees + 360 - gapDegrees,
-  );
-
+const syncIndeterminatePresentation = (elapsed: number, hasPeers: boolean) => {
+  const { active, track } = readIndeterminateFrame.value(elapsed, hasPeers);
   if (activePathRef.value?.getAttribute('d') !== active) activePathRef.value?.setAttribute('d', active);
   if (trackPathRef.value?.getAttribute('d') !== track) trackPathRef.value?.setAttribute('d', track);
 };
@@ -242,18 +231,17 @@ watch(
 watch(() => props.indeterminate, syncAnimation);
 
 useElementEnvironment(rootRef, (document, root) => {
+  const releaseAnimation = bindProgressAnimation(document);
   syncLayout();
-  animationController = registerSharedAnimationFrame(document, syncIndeterminatePresentation);
+  animationController = registerSharedAnimationFrame(svgRef.value!, syncIndeterminatePresentation, {
+    element: root,
+    measure: syncLayout,
+  });
   syncAnimation();
-  if (typeof ResizeObserver !== 'undefined') {
-    resizeObserver = new ResizeObserver(syncLayout);
-    resizeObserver.observe(root);
-  }
   return () => {
-    resizeObserver?.disconnect();
+    releaseAnimation();
     animationController?.cleanup();
     animationController = undefined;
-    resizeObserver = null;
   };
 });
 </script>
@@ -277,6 +265,7 @@ useElementEnvironment(rootRef, (document, root) => {
     :style="rootStyle"
   >
     <svg
+      ref="svg"
       class="m3-circular-progress-indicator-svg"
       data-scope="circular-progress-indicator"
       data-part="svg"
@@ -286,15 +275,15 @@ useElementEnvironment(rootRef, (document, root) => {
     >
       <path
         ref="trackPath"
-        v-if="trackPath"
+        v-if="initialTrackPath"
         class="m3-circular-progress-indicator-track"
         data-scope="circular-progress-indicator"
         data-part="track"
-        :d="trackPath"
+        :d="initialTrackPath"
       />
       <path
         ref="activePath"
-        v-if="activePath"
+        v-if="initialActivePath"
         class="m3-circular-progress-indicator-active"
         :class="{
           'm3-circular-progress-indicator-active-determinate': isDeterminate,
@@ -302,7 +291,7 @@ useElementEnvironment(rootRef, (document, root) => {
         }"
         data-scope="circular-progress-indicator"
         data-part="active-indicator"
-        :d="activePath"
+        :d="initialActivePath"
       />
     </svg>
   </div>

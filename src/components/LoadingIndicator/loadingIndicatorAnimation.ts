@@ -1,11 +1,5 @@
-import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import { registerSharedAnimationFrame } from '@/internal/sharedAnimationFrame';
-import { getLoadingIndicatorFrame, getStaticLoadingIndicatorFrame } from './loadingIndicatorPath';
-
-type Target = {
-  path: SVGPathElement;
-  startTime: number | undefined;
-};
+import { getLoadingIndicatorFrame, staticLoadingIndicatorFrame } from './loadingIndicatorPath';
 
 type Runtime = {
   register: (path: SVGPathElement) => {
@@ -16,94 +10,78 @@ type Runtime = {
 
 const runtimes = new WeakMap<Document, Runtime>();
 
-const applyFrame = (target: Target, frame: ReturnType<typeof getLoadingIndicatorFrame>) => {
-  if (target.path.getAttribute('d') !== frame.path) target.path.setAttribute('d', frame.path);
-  target.path.style.transform = `rotate(${frame.rotation}deg)`;
+const applyFrame = (path: SVGPathElement, frame: ReturnType<typeof getLoadingIndicatorFrame>) => {
+  if (path.getAttribute('d') !== frame.path) path.setAttribute('d', frame.path);
+  path.style.transform = `rotate(${frame.rotation}deg)`;
 };
 
 function createRuntime(document: Document, onEmpty: () => void): Runtime {
-  const view = document.defaultView;
-  const targets = new Set<Target>();
-  const activeTargets = new Set<Target>();
-  const motionMediaQuery = view?.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
-  let reducedMotion = motionMediaQuery?.matches ?? false;
-
-  const frameController = registerSharedAnimationFrame(document, (elapsed) => {
-    const frames = new Map<number, ReturnType<typeof getLoadingIndicatorFrame>>();
-
-    for (const target of activeTargets) {
-      target.startTime ??= elapsed;
-      let frame = frames.get(target.startTime);
-      if (!frame) {
-        frame = getLoadingIndicatorFrame(elapsed - target.startTime);
-        frames.set(target.startTime, frame);
-      }
-      applyFrame(target, frame);
-    }
-  });
-
-  const syncAnimation = () => {
-    if (activeTargets.size === 0 || reducedMotion) {
-      frameController.stop();
-      if (reducedMotion) {
-        const frame = getStaticLoadingIndicatorFrame();
-        for (const target of activeTargets) applyFrame(target, frame);
-      }
-      return;
-    }
-
-    frameController.start();
-  };
+  const motionMediaQuery = document.defaultView?.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
+  const activeTargets = new Set<() => void>();
+  const frames = new Map<number, ReturnType<typeof getLoadingIndicatorFrame>>();
+  let registrations = 0;
 
   const onMotionPreferenceChange = () => {
-    reducedMotion = motionMediaQuery?.matches ?? false;
-    for (const target of activeTargets) target.startTime = undefined;
-    syncAnimation();
+    for (const syncAnimation of activeTargets) syncAnimation();
   };
 
   motionMediaQuery?.addEventListener('change', onMotionPreferenceChange);
 
-  const destroy = () => {
-    frameController.cleanup();
-    motionMediaQuery?.removeEventListener('change', onMotionPreferenceChange);
-    onEmpty();
-  };
-
   return {
     register(path) {
-      const target: Target = { path, startTime: undefined };
-      targets.add(target);
-      let active = false;
+      const animation = registerSharedAnimationFrame(path.ownerSVGElement!, (elapsed, hasPeers) => {
+        if (!hasPeers) {
+          applyFrame(path, getLoadingIndicatorFrame(elapsed));
+          return;
+        }
+
+        let frame = frames.get(elapsed);
+        if (!frame) {
+          if (frames.size === 0) queueMicrotask(() => frames.clear());
+          frame = getLoadingIndicatorFrame(elapsed);
+          frames.set(elapsed, frame);
+        }
+        applyFrame(path, frame);
+      });
+      registrations++;
       let cleaned = false;
 
-      return {
-        setActive(nextActive) {
-          if (cleaned || nextActive === active) return;
-          active = nextActive;
+      const syncAnimation = () => {
+        if (motionMediaQuery?.matches) {
+          animation.stop();
+          applyFrame(path, staticLoadingIndicatorFrame);
+        } else {
+          animation.start();
+        }
+      };
 
+      return {
+        setActive(active) {
+          if (cleaned || active === activeTargets.has(syncAnimation)) return;
           if (active) {
-            target.startTime = undefined;
-            activeTargets.add(target);
+            activeTargets.add(syncAnimation);
+            syncAnimation();
           } else {
-            activeTargets.delete(target);
-            target.startTime = undefined;
+            activeTargets.delete(syncAnimation);
+            animation.stop();
           }
-          syncAnimation();
         },
         cleanup() {
           if (cleaned) return;
           cleaned = true;
-          activeTargets.delete(target);
-          targets.delete(target);
-          syncAnimation();
-          if (targets.size === 0) destroy();
+          activeTargets.delete(syncAnimation);
+          animation.cleanup();
+          if (--registrations === 0) {
+            motionMediaQuery?.removeEventListener('change', onMotionPreferenceChange);
+            onEmpty();
+          }
         },
       };
     },
   };
 }
 
-function registerInDocument(path: SVGPathElement) {
+export function registerLoadingIndicatorAnimation(path: SVGPathElement) {
   const document = path.ownerDocument;
   let runtime = runtimes.get(document);
   if (!runtime) {
@@ -111,21 +89,4 @@ function registerInDocument(path: SVGPathElement) {
     runtimes.set(document, runtime);
   }
   return runtime.register(path);
-}
-
-export function registerLoadingIndicatorAnimation(path: SVGPathElement) {
-  let current: ReturnType<typeof registerInDocument>;
-  let active = false;
-  const cleanup = bindElementEnvironment(path, () => {
-    current = registerInDocument(path);
-    current.setActive(active);
-    return () => current.cleanup();
-  });
-  return {
-    cleanup,
-    setActive(value: boolean) {
-      active = value;
-      current.setActive(value);
-    },
-  };
 }

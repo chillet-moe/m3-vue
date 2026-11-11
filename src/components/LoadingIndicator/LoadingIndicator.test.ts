@@ -40,13 +40,10 @@ describe('LoadingIndicator', () => {
       return id;
     });
     vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => callbacks.delete(id));
-    const addMotionListener = vi.fn();
-    const removeMotionListener = vi.fn();
-    const matchMedia = vi.fn(() => ({
-      matches: false,
-      addEventListener: addMotionListener,
-      removeEventListener: removeMotionListener,
-    }));
+    const motionPreference = Object.assign(new EventTarget(), { matches: false });
+    const addMotionListener = vi.spyOn(motionPreference, 'addEventListener');
+    const removeMotionListener = vi.spyOn(motionPreference, 'removeEventListener');
+    const matchMedia = vi.fn(() => motionPreference);
     vi.stubGlobal('matchMedia', matchMedia);
     const visible = reactive({ value: true });
     const container = document.createElement('div');
@@ -67,6 +64,7 @@ describe('LoadingIndicator', () => {
     expect(addMotionListener).toHaveBeenCalledTimes(1);
 
     const paths = Array.from(container.querySelectorAll<SVGPathElement>('[data-part="active-indicator"]'));
+    const restingPath = paths[0]?.getAttribute('d');
     const initialTransform = paths[0]?.style.transform;
     const flush = (timestamp: number) => {
       const current = [...callbacks.values()];
@@ -74,11 +72,30 @@ describe('LoadingIndicator', () => {
       current.forEach((callback) => callback(timestamp));
     };
     flush(100);
-    flush(400);
+    const initialPath = paths[0]?.getAttribute('d');
+    flush(165);
 
-    expect(paths.every((path) => path.getAttribute('d') === paths[0]?.getAttribute('d'))).toBe(true);
+    const morphedPath = paths[0]?.getAttribute('d');
+    expect(morphedPath).toMatch(/^m-?\d+(?:\.\d+)?(?: -?\d+(?:\.\d+)?)+ z$/);
+    expect(morphedPath).not.toBe(initialPath);
+    expect(paths.every((path) => path.getAttribute('d') === morphedPath)).toBe(true);
     expect(paths[0]?.style.transform).not.toBe(initialTransform);
     expect(callbacks.size).toBe(1);
+
+    motionPreference.matches = true;
+    motionPreference.dispatchEvent(new Event('change'));
+    expect(
+      paths.every((path) => path.getAttribute('d') === restingPath && path.style.transform === 'rotate(0deg)'),
+    ).toBe(true);
+    expect(callbacks.size).toBe(0);
+
+    motionPreference.matches = false;
+    motionPreference.dispatchEvent(new Event('change'));
+    expect(callbacks.size).toBe(1);
+    flush(300);
+    expect(paths.every((path) => path.style.transform === 'rotate(0deg)')).toBe(true);
+    flush(365);
+    expect(paths.every((path) => path.getAttribute('d') === morphedPath)).toBe(true);
 
     visible.value = false;
     await nextTick();
@@ -169,5 +186,36 @@ describe('LoadingIndicator', () => {
     expect(root?.dataset.visible).toBe('true');
 
     app.unmount();
+  });
+
+  it('reschedules delayed visibility in the destination document after adoption', async () => {
+    vi.useFakeTimers();
+
+    const frame = document.createElement('iframe');
+    document.body.append(frame);
+    const child = frame.contentDocument!;
+    const childView = child.defaultView!;
+    vi.spyOn(childView, 'setTimeout').mockImplementation(window.setTimeout);
+    vi.spyOn(childView, 'clearTimeout').mockImplementation(window.clearTimeout);
+    const state = reactive({ visible: false, showDelay: 120 });
+    const { app, container, root } = await mountLoadingIndicator(state);
+
+    state.visible = true;
+    await nextTick();
+    await vi.advanceTimersByTimeAsync(80);
+    child.body.append(container);
+    await Promise.resolve();
+    await nextTick();
+
+    await vi.advanceTimersByTimeAsync(119);
+    expect(root?.dataset.visible).toBe('false');
+    expect(root?.getAttribute('aria-hidden')).toBe('true');
+
+    await vi.advanceTimersByTimeAsync(1);
+    expect(root?.dataset.visible).toBe('true');
+    expect(root?.hasAttribute('aria-hidden')).toBe(false);
+
+    app.unmount();
+    frame.remove();
   });
 });

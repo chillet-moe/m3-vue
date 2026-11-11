@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useElementEnvironment } from '@/internal/elementEnvironment';
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
-import { getStaticLoadingIndicatorFrame } from './loadingIndicatorPath';
+import { computed, ref, useTemplateRef, watch } from 'vue';
+import { staticLoadingIndicatorFrame } from './loadingIndicatorPath';
 import { registerLoadingIndicatorAnimation } from './loadingIndicatorAnimation';
 
 export type LoadingIndicatorProps = {
@@ -43,7 +43,6 @@ const props = withDefaults(defineProps<LoadingIndicatorProps>(), {
 const maxHideDelay = 1000;
 const isShown = ref(props.visible);
 const activeIndicatorRef = useTemplateRef<SVGPathElement>('activeIndicator');
-const initialFrame = getStaticLoadingIndicatorFrame();
 
 let view: Window | null = null;
 let showTimer = 0;
@@ -163,30 +162,21 @@ const syncVisibility = () => {
 watch(() => props.visible, syncVisibility);
 watch([normalizedShowDelay, normalizedMinHideDelay], syncVisibility);
 
-useElementEnvironment(activeIndicatorRef, (document) => {
+useElementEnvironment(activeIndicatorRef, (document, path) => {
   view = document.defaultView;
   shownAt = isShown.value ? now() : 0;
+  const registration = registerLoadingIndicatorAnimation(path);
+  animationRegistration = registration;
+  syncAnimation();
   syncVisibility();
+
   return () => {
     clearShowTimer();
     clearHideTimer();
+    registration.cleanup();
+    animationRegistration = undefined;
+    view = null;
   };
-});
-
-onMounted(() => {
-  shownAt = isShown.value ? now() : 0;
-  if (activeIndicatorRef.value) {
-    animationRegistration = registerLoadingIndicatorAnimation(activeIndicatorRef.value);
-  }
-  syncAnimation();
-  syncVisibility();
-});
-
-onBeforeUnmount(() => {
-  clearShowTimer();
-  clearHideTimer();
-  animationRegistration?.cleanup();
-  animationRegistration = undefined;
 });
 </script>
 
@@ -222,7 +212,7 @@ onBeforeUnmount(() => {
           class="m3-loading-indicator-active"
           data-scope="loading-indicator"
           data-part="active-indicator"
-          :d="initialFrame.path"
+          :d="staticLoadingIndicatorFrame.path"
         />
       </svg>
     </span>

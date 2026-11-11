@@ -7,6 +7,7 @@ import {
   pathAnimatableSoftBurst,
   pathAnimatableSunny,
 } from '../../shapes/animatable';
+import { formatBoundedCoordinate } from '../../utils/svgPath';
 
 export type LoadingIndicatorFrame = {
   path: string;
@@ -16,7 +17,6 @@ export type LoadingIndicatorFrame = {
 const DURATION_PER_SHAPE_MS = 650;
 const CONSTANT_ROTATION_PER_SHAPE_DEGREES = 50;
 const EXTRA_ROTATION_PER_SHAPE_DEGREES = 90;
-const NUMBER_PATTERN = /-?\d+(?:\.\d+)?/g;
 
 const positiveModulo = (value: number, divisor: number) => ((value % divisor) + divisor) % divisor;
 
@@ -33,46 +33,30 @@ const shapes = [
 const mix = (from: number, to: number, amount: number) => from + (to - from) * amount;
 
 type ParsedPath = {
-  parts: string[];
-  numbers: number[];
+  coordinates: number[];
+  restingPath?: string;
 };
 
-const formatNumber = (value: number) => {
-  const safeValue = Math.abs(value) < 0.0001 ? 0 : value;
-  return Number(safeValue.toFixed(3)).toString();
-};
-
-const parsePath = (path: string): ParsedPath => {
-  const parts: string[] = [];
-  const numbers: number[] = [];
-  let previousIndex = 0;
-
-  for (const match of path.matchAll(NUMBER_PATTERN)) {
-    parts.push(path.slice(previousIndex, match.index));
-    numbers.push(Number(match[0]));
-    previousIndex = (match.index ?? 0) + match[0].length;
-  }
-
-  parts.push(path.slice(previousIndex));
-
-  return { parts, numbers };
-};
-
-const parsedShapes = shapes.map(parsePath);
+// The morph assets share one relative move, implicit line segments and a close command.
+const parsedShapes: ParsedPath[] = shapes.map((path) => ({
+  coordinates: path.slice(1, -2).split(' ').map(Number),
+}));
 
 const interpolatePath = (from: ParsedPath, to: ParsedPath, amount: number) => {
-  if (from.numbers.length !== to.numbers.length || from.parts.length !== to.parts.length) {
+  if (from.coordinates.length !== to.coordinates.length) {
     return amount < 0.5 ? shapes[0] : shapes[1];
   }
 
-  let path = '';
+  // The clamped spring holds its endpoint while rotation continues.
+  if (amount === 0 && from.restingPath !== undefined) return from.restingPath;
 
-  for (let index = 0; index < from.numbers.length; index++) {
-    path += from.parts[index];
-    path += formatNumber(mix(from.numbers[index], to.numbers[index], amount));
+  let path = 'm' + formatBoundedCoordinate(mix(from.coordinates[0], to.coordinates[0], amount));
+  for (let index = 1; index < from.coordinates.length; index++) {
+    path += ' ' + formatBoundedCoordinate(mix(from.coordinates[index], to.coordinates[index], amount));
   }
-
-  return path + from.parts[from.parts.length - 1];
+  path += ' z';
+  if (amount === 0) from.restingPath = path;
+  return path;
 };
 
 const springEase = (value: number) => {
@@ -96,10 +80,10 @@ const createLoadingIndicatorPath = (morphFraction: number) => {
   return interpolatePath(parsedShapes[shapeIndex], parsedShapes[nextShapeIndex], fractionPerShape);
 };
 
-export const getStaticLoadingIndicatorFrame = (): LoadingIndicatorFrame => ({
+export const staticLoadingIndicatorFrame = {
   path: shapes[0],
   rotation: 0,
-});
+} as const;
 
 export const getLoadingIndicatorFrame = (elapsedMs: number): LoadingIndicatorFrame => {
   const elapsed = Math.max(0, Number.isFinite(elapsedMs) ? elapsedMs : 0);

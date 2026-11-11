@@ -4,80 +4,159 @@ export type SharedAnimationFrameController = {
   cleanup: () => void;
 };
 
+type LayoutObservation = { element: Element; measure: () => void };
+type FrameCallback = (elapsed: number, hasPeers: boolean) => void;
 type Entry = {
-  callback: (elapsed: number) => void;
+  callback: FrameCallback;
   startTime: number | undefined;
+  hasBox: boolean;
 };
 
 type Runtime = {
-  register: (callback: Entry['callback']) => SharedAnimationFrameController;
+  register: (
+    element: SVGSVGElement,
+    callback: FrameCallback,
+    layout?: LayoutObservation,
+  ) => SharedAnimationFrameController;
 };
 
 const runtimes = new WeakMap<Document, Runtime>();
 
 function createRuntime(document: Document, onEmpty: () => void): Runtime {
   const view = document.defaultView;
-  const entries = new Set<Entry>();
-  const activeEntries = new Set<Entry>();
-  let animationFrame = 0;
+  const observed = new Map<Element, Entry>();
+  const scheduled = new Set<Entry>();
+  let layoutUpdates: Map<Element, () => void> | undefined;
+  let registrations = 0;
+  let animationFrame: number | undefined;
+  let observer: ResizeObserver | undefined;
 
-  const stopFrame = () => {
-    if (!animationFrame || !view) return;
-    view.cancelAnimationFrame(animationFrame);
-    animationFrame = 0;
-  };
-
-  const scheduleFrame = () => {
-    if (!view || animationFrame || activeEntries.size === 0) return;
-    animationFrame = view.requestAnimationFrame(runFrame);
+  const syncFrame = () => {
+    if (!view) return;
+    if (scheduled.size === 0) {
+      if (animationFrame !== undefined) view.cancelAnimationFrame(animationFrame);
+      animationFrame = undefined;
+    } else {
+      animationFrame ??= view.requestAnimationFrame(runFrame);
+    }
   };
 
   function runFrame(timestamp: number) {
-    animationFrame = 0;
-    for (const entry of activeEntries) {
+    animationFrame = undefined;
+    const hasPeers = scheduled.size > 1;
+    for (const entry of scheduled) {
+      // Start the clock even if the SVG has already become hidden.
       entry.startTime ??= timestamp;
-      entry.callback(timestamp - entry.startTime);
+      if (entry.hasBox) entry.callback(timestamp - entry.startTime, hasPeers);
+      else scheduled.delete(entry);
     }
-    scheduleFrame();
+    syncFrame();
   }
 
+  const onResize: ResizeObserverCallback = (changes) => {
+    const revealed: Entry[] = [];
+    for (const { target, contentRect } of changes) {
+      const entry = observed.get(target);
+      if (!entry) continue;
+
+      // A zero-sized SVG can still have a layout box and visible overflow.
+      const hasBox = contentRect.width > 0 || contentRect.height > 0 || target.getClientRects().length > 0;
+      if (entry.hasBox === hasBox) continue;
+
+      entry.hasBox = hasBox;
+      if (hasBox) {
+        scheduled.add(entry);
+        revealed.push(entry);
+      } else if (entry.startTime !== undefined) {
+        scheduled.delete(entry);
+      }
+    }
+
+    // Resize delivery follows animation frames in the same render cycle.
+    // Catch up before paint using the same clock as requestAnimationFrame.
+    const timestamp = document.timeline.currentTime;
+    if (typeof timestamp === 'number') {
+      const hasPeers = revealed.length > 1;
+      for (const entry of revealed) {
+        if (entry.startTime !== undefined) entry.callback(timestamp - entry.startTime, hasPeers);
+      }
+    }
+    syncFrame();
+
+    // Preserve the visibility catch-up before publishing the new layout snapshots.
+    if (layoutUpdates) {
+      for (const { target } of changes) layoutUpdates.get(target)?.();
+    }
+  };
+
+  const observe = (element: Element) => {
+    if (!view?.ResizeObserver) return;
+    observer ??= new view.ResizeObserver(onResize);
+    observer.observe(element);
+  };
+
   return {
-    register(callback) {
-      const entry: Entry = { callback, startTime: undefined };
-      entries.add(entry);
+    register(element, callback, layout) {
+      if (layout && view?.ResizeObserver) {
+        (layoutUpdates ??= new Map()).set(layout.element, layout.measure);
+        observe(layout.element);
+      }
+      const entry: Entry = { callback, startTime: undefined, hasBox: true };
+      registrations++;
+      let active = false;
       let cleaned = false;
 
       const stop = () => {
-        if (!activeEntries.delete(entry)) return;
+        if (!active) return;
+        active = false;
+        observer?.unobserve(element);
+        observed.delete(element);
+        scheduled.delete(entry);
         entry.startTime = undefined;
-        if (activeEntries.size === 0) stopFrame();
+        entry.hasBox = true;
+        syncFrame();
       };
 
       return {
         start() {
-          if (cleaned || activeEntries.has(entry)) return;
-          entry.startTime = undefined;
-          activeEntries.add(entry);
-          scheduleFrame();
+          if (cleaned || active) return;
+          active = true;
+          if (view?.ResizeObserver && document.timeline) {
+            observed.set(element, entry);
+            observe(element);
+          }
+          scheduled.add(entry);
+          syncFrame();
         },
         stop,
         cleanup() {
           if (cleaned) return;
           cleaned = true;
           stop();
-          entries.delete(entry);
-          if (entries.size === 0) onEmpty();
+          if (layout && layoutUpdates?.delete(layout.element)) {
+            observer?.unobserve(layout.element);
+            if (!layoutUpdates.size) layoutUpdates = undefined;
+          }
+          if (--registrations === 0) {
+            observer?.disconnect();
+            onEmpty();
+          }
         },
       };
     },
   };
 }
 
-export function registerSharedAnimationFrame(document: Document, callback: (elapsed: number) => void) {
+export function registerSharedAnimationFrame(
+  element: SVGSVGElement,
+  callback: FrameCallback,
+  layout?: LayoutObservation,
+) {
+  const document = element.ownerDocument;
   let runtime = runtimes.get(document);
   if (!runtime) {
     runtime = createRuntime(document, () => runtimes.delete(document));
     runtimes.set(document, runtime);
   }
-  return runtime.register(callback);
+  return runtime.register(element, callback, layout);
 }

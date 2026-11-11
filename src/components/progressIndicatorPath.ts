@@ -1,3 +1,5 @@
+import { formatCoordinate } from '../utils/svgPath';
+
 const WAVE_SMOOTHNESS = 0.48;
 
 const CIRCULAR_TOTAL_DURATION_MS = 5400;
@@ -14,16 +16,15 @@ export type CircularIndeterminateState = {
   endDegrees: number;
 };
 
+type CircularIndeterminateFrame = { elapsed: number; active: string; track: string };
+const circularIndeterminateFrames = new Map<string, CircularIndeterminateFrame>();
+
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-function round(value: number) {
-  return Number(value.toFixed(3));
-}
-
 function pointToString(point: Point) {
-  return `${round(point.x)} ${round(point.y)}`;
+  return `${formatCoordinate(point.x)} ${formatCoordinate(point.y)}`;
 }
 
 type Point = {
@@ -80,38 +81,74 @@ function cubicBezier(controlX1: number, controlY1: number, controlX2: number, co
 }
 
 function fastOutSlowIn(progress: number) {
+  if (progress === 0 || progress === 1) return progress;
   return cubicBezier(0.4, 0, 0.2, 1, progress);
 }
 
-export function createLinearWavePath(width: number, height: number, amplitude: number, wavelength: number) {
+let lastLinearWave: { width: number; height: number; amplitude: number; wavelength: number; path: string } | undefined;
+
+export function createLinearWavePath(
+  width: number,
+  height: number,
+  amplitude: number,
+  wavelength: number,
+  hasPeers = false,
+) {
   const trackLength = Math.max(1, width);
   const centerY = height / 2;
 
   if (amplitude <= 0 || wavelength <= 0) {
-    return `M 0 ${round(centerY)} L ${round(trackLength)} ${round(centerY)}`;
+    const y = formatCoordinate(centerY);
+    return `M 0 ${y} L ${formatCoordinate(trackLength)} ${y}`;
+  }
+
+  const last = hasPeers ? lastLinearWave : undefined;
+  if (
+    last &&
+    last.width === trackLength &&
+    last.height === height &&
+    last.amplitude === amplitude &&
+    last.wavelength === wavelength
+  ) {
+    return last.path;
   }
 
   const cycleCount = Math.max(1, Math.floor(trackLength / wavelength));
   const adjustedWavelength = trackLength / cycleCount;
   const halfWavelength = adjustedWavelength / 2;
   const control = halfWavelength * WAVE_SMOOTHNESS;
-  const startY = centerY + amplitude;
-  const midY = centerY - amplitude;
-  let d = `M 0 ${round(startY)}`;
+  const startY = formatCoordinate(centerY + amplitude);
+  const midY = formatCoordinate(centerY - amplitude);
+  const commands = [`M 0 ${startY}`];
 
   for (let i = 0; i < cycleCount; i++) {
     const cycleStart = i * adjustedWavelength;
     const cycleMid = cycleStart + halfWavelength;
     const cycleEnd = cycleStart + adjustedWavelength;
-    d += ` C ${round(cycleStart + control)} ${round(startY)} ${round(cycleMid - control)} ${round(midY)} ${round(
-      cycleMid,
-    )} ${round(midY)}`;
-    d += ` C ${round(cycleMid + control)} ${round(midY)} ${round(cycleEnd - control)} ${round(startY)} ${round(
-      cycleEnd,
-    )} ${round(startY)}`;
+    commands.push(
+      ` C ${formatCoordinate(cycleStart + control)} ${startY} ${formatCoordinate(cycleMid - control)} ${midY} ${formatCoordinate(cycleMid)} ${midY}`,
+      ` C ${formatCoordinate(cycleMid + control)} ${midY} ${formatCoordinate(cycleEnd - control)} ${startY} ${formatCoordinate(cycleEnd)} ${startY}`,
+    );
   }
 
-  return d;
+  // Release the individual command strings when the computed path is cached.
+  const path = commands.join('');
+  if (!hasPeers) return path;
+
+  if (last) {
+    last.width = trackLength;
+    last.height = height;
+    last.amplitude = amplitude;
+    last.wavelength = wavelength;
+    last.path = path;
+  } else {
+    // Keep the latest path only while the current group of updates is delivered.
+    lastLinearWave = { width: trackLength, height, amplitude, wavelength, path };
+    queueMicrotask(() => {
+      lastLinearWave = undefined;
+    });
+  }
+  return path;
 }
 
 function circularPoint(center: number, radius: number, degrees: number): Point {
@@ -159,22 +196,24 @@ export function createCircularArcPath(center: number, radius: number, startDegre
     return '';
   }
 
+  const arcRadius = formatCoordinate(radius);
+
   if (span >= 359.999) {
     const firstEnd = startDegrees + 180;
     const secondEnd = startDegrees + 359.999;
     const start = circularPoint(center, radius, startDegrees);
     const middle = circularPoint(center, radius, firstEnd);
     const end = circularPoint(center, radius, secondEnd);
-    return `M ${pointToString(start)} A ${round(radius)} ${round(radius)} 0 1 1 ${pointToString(
+    return `M ${pointToString(start)} A ${arcRadius} ${arcRadius} 0 1 1 ${pointToString(
       middle,
-    )} A ${round(radius)} ${round(radius)} 0 1 1 ${pointToString(end)}`;
+    )} A ${arcRadius} ${arcRadius} 0 1 1 ${pointToString(end)}`;
   }
 
   const start = circularPoint(center, radius, startDegrees);
   const end = circularPoint(center, radius, endDegrees);
   const largeArc = span > 180 ? 1 : 0;
 
-  return `M ${pointToString(start)} A ${round(radius)} ${round(radius)} 0 ${largeArc} 1 ${pointToString(end)}`;
+  return `M ${pointToString(start)} A ${arcRadius} ${arcRadius} 0 ${largeArc} 1 ${pointToString(end)}`;
 }
 
 export function createCircularWaveArcPath(
@@ -197,24 +236,16 @@ export function createCircularWaveArcPath(
   const cycleCount = Math.max(3, Math.floor(circumference / wavelength));
   const cycleDegrees = 360 / cycleCount;
   const halfCycleDegrees = cycleDegrees / 2;
-  const degrees: number[] = [startDegrees];
   let nextAnchor = Math.floor(startDegrees / halfCycleDegrees) * halfCycleDegrees + halfCycleDegrees;
+  let previousDegrees = startDegrees;
+  let previous = circularWavePoint(center, radius, previousDegrees, cycleDegrees, amplitude);
+  let previousTangent = circularWaveTangent(center, radius, previousDegrees, cycleDegrees, amplitude);
+  let d = `M ${pointToString(previous)}`;
 
-  while (nextAnchor < endDegrees) {
-    degrees.push(nextAnchor);
-    nextAnchor += halfCycleDegrees;
-  }
-  degrees.push(endDegrees);
-
-  const first = circularWavePoint(center, radius, degrees[0], cycleDegrees, amplitude);
-  let d = `M ${pointToString(first)}`;
-
-  for (let i = 1; i < degrees.length; i++) {
-    const previousDegrees = degrees[i - 1];
-    const currentDegrees = degrees[i];
-    const previous = circularWavePoint(center, radius, previousDegrees, cycleDegrees, amplitude);
+  while (true) {
+    const hasInteriorAnchor = nextAnchor < endDegrees;
+    const currentDegrees = hasInteriorAnchor ? nextAnchor : endDegrees;
     const current = circularWavePoint(center, radius, currentDegrees, cycleDegrees, amplitude);
-    const previousTangent = circularWaveTangent(center, radius, previousDegrees, cycleDegrees, amplitude);
     const currentTangent = circularWaveTangent(center, radius, currentDegrees, cycleDegrees, amplitude);
     const segmentLength = (circumference * (currentDegrees - previousDegrees)) / 360;
     const controlLength = segmentLength * WAVE_SMOOTHNESS;
@@ -228,9 +259,13 @@ export function createCircularWaveArcPath(
     };
 
     d += ` C ${pointToString(control1)} ${pointToString(control2)} ${pointToString(current)}`;
-  }
+    if (!hasInteriorAnchor) return d;
 
-  return d;
+    previousDegrees = currentDegrees;
+    previous = current;
+    previousTangent = currentTangent;
+    nextAnchor += halfCycleDegrees;
+  }
 }
 
 export function getCircularIndeterminateState(elapsedMs: number): CircularIndeterminateState {
@@ -258,6 +293,35 @@ export function getCircularIndeterminateState(elapsedMs: number): CircularIndete
   return {
     startDegrees,
     endDegrees,
+  };
+}
+
+export function createCircularIndeterminateFrameReader(
+  center: number,
+  radius: number,
+  gapDegrees: number,
+  wave?: { amplitude: number; wavelength: number },
+) {
+  const geometry = `${center}:${radius}:${gapDegrees}${wave ? `:${wave.amplitude}:${wave.wavelength}` : ''}`;
+
+  return (elapsed: number, hasPeers: boolean) => {
+    const cached = hasPeers ? circularIndeterminateFrames.get(geometry) : undefined;
+    if (cached?.elapsed === elapsed) return cached;
+
+    const { startDegrees, endDegrees } = getCircularIndeterminateState(elapsed);
+    const active = wave
+      ? createCircularWaveArcPath(center, radius, startDegrees, endDegrees, wave.amplitude, wave.wavelength)
+      : createCircularArcPath(center, radius, startDegrees, endDegrees);
+    const track = createCircularArcPath(center, radius, endDegrees + gapDegrees, startDegrees + 360 - gapDegrees);
+
+    const frame = { elapsed, active, track };
+    if (hasPeers) {
+      // The shared frame and resize callbacks deliver peers synchronously. Keep only
+      // the latest paths for each geometry until that delivery finishes.
+      if (circularIndeterminateFrames.size === 0) queueMicrotask(() => circularIndeterminateFrames.clear());
+      circularIndeterminateFrames.set(geometry, frame);
+    }
+    return frame;
   };
 }
 

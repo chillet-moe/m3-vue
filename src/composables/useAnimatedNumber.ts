@@ -23,10 +23,7 @@ export type UseAnimatedNumberReturn = {
 
 const defaultClamp = (value: number) => value;
 
-export function useAnimatedNumber(
-  target: MaybeRefOrGetter<number>,
-  options: UseAnimatedNumberOptions = {},
-): UseAnimatedNumberReturn {
+export function useAnimatedNumberState(target: MaybeRefOrGetter<number>, options: UseAnimatedNumberOptions = {}) {
   const clampValue = options.clamp ?? defaultClamp;
   const getTargetValue = () => clampValue(toValue(target));
   const isEnabled = () => options.enabled === undefined || Boolean(toValue(options.enabled));
@@ -130,24 +127,34 @@ export function useAnimatedNumber(
     { flush: 'sync' },
   );
 
-  if (options.element)
-    useElementEnvironment(options.element, (document) => {
-      view = document.defaultView;
-      startAnimation();
-      return () => {
-        stopAnimation();
-        view = null;
-      };
-    });
+  const bindDocument = (document: Document) => {
+    view = document.defaultView;
+    startAnimation();
+    return () => {
+      stopAnimation();
+      view = null;
+    };
+  };
 
   onBeforeUnmount(() => {
     stopAnimation();
   });
 
-  return {
+  const animation: UseAnimatedNumberReturn = {
     displayedValue,
     startAnimation,
     stopAnimation,
     syncToTarget,
   };
+
+  return { animation, bindDocument };
+}
+
+export function useAnimatedNumber(
+  target: MaybeRefOrGetter<number>,
+  options: UseAnimatedNumberOptions = {},
+): UseAnimatedNumberReturn {
+  const { animation, bindDocument } = useAnimatedNumberState(target, options);
+  if (options.element) useElementEnvironment(options.element, bindDocument);
+  return animation;
 }

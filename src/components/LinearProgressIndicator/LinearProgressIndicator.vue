@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useElementEnvironment } from '@/internal/elementEnvironment';
-import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, shallowRef, useTemplateRef, watch } from 'vue';
 import { useProgressIndicatorState } from '@/composables/useProgressIndicatorState';
-import { readCssLength } from '@/utils/cssLength';
+import { createCssLengthReader } from '@/utils/cssLength';
 import { createLinearWavePath } from '../progressIndicatorPath';
+import { observeLinearProgressResize } from './observeLinearProgressResize';
 
 export type LinearProgressIndicatorProps = {
   /** Whether the progress value is unknown. */
@@ -65,28 +66,31 @@ const props = withDefaults(defineProps<LinearProgressIndicatorProps>(), {
 const isWavy = computed(() => props.shape === 'wavy');
 
 const rootRef = useTemplateRef<HTMLDivElement>('root');
-const { isDeterminate, clampedValue, progressRatioDisplayed, progressState, ariaValueTextResolved } =
-  useProgressIndicatorState({
-    element: rootRef,
-    indeterminate: () => props.indeterminate,
-    value: () => props.value,
-    min: () => props.min,
-    max: () => props.max,
-    ariaValueText: () => props.ariaValueText,
-  });
+const {
+  isDeterminate,
+  clampedValue,
+  progressRatioDisplayed,
+  progressState,
+  ariaValueTextResolved,
+  bindProgressAnimation,
+} = useProgressIndicatorState({
+  indeterminate: () => props.indeterminate,
+  value: () => props.value,
+  min: () => props.min,
+  max: () => props.max,
+  ariaValueText: () => props.ariaValueText,
+});
 
-const isTrackGapVisible = computed(() => isDeterminate.value && progressState.value === 'partial');
 const isStopIndicatorVisible = computed(() => isDeterminate.value && props.stopIndicator);
-const layout = ref({
+const layout = shallowRef({
   width: 240,
   height: 4,
-  thickness: 4,
   waveAmplitude: 3,
   wavelengthDeterminate: 40,
   wavelengthIndeterminate: 20,
 });
 
-let resizeObserver: ResizeObserver | null = null;
+let resizeObservation: ReturnType<typeof observeLinearProgressResize>;
 
 const syncLayout = () => {
   const root = rootRef.value;
@@ -94,29 +98,30 @@ const syncLayout = () => {
     return;
   }
 
-  const styles = root.ownerDocument.defaultView!.getComputedStyle(root);
-  const rootFontSize = parseFloat(
-    root.ownerDocument.defaultView!.getComputedStyle(root.ownerDocument.documentElement).fontSize,
-  );
-  const thickness = readCssLength(styles, '--_track-thickness', props.thickness, 4, rootFontSize);
-  const waveAmplitude = readCssLength(styles, '--_wave-amplitude', props.waveAmplitude, 3, rootFontSize);
-  const wavelengthDeterminate = readCssLength(styles, '--_wave-wavelength', props.wavelength, 40, rootFontSize);
-  const wavelengthIndeterminate = readCssLength(
-    styles,
-    '--_indeterminate-wave-wavelength',
-    undefined,
-    20,
-    rootFontSize,
-  );
-  const waveHeight = readCssLength(styles, '--_with-wave-height', undefined, 10, rootFontSize);
+  const readCssLength = createCssLengthReader(root);
+  const thickness = readCssLength('--_track-thickness', props.thickness, 4);
+  const waveAmplitude = readCssLength('--_wave-amplitude', props.waveAmplitude, 3);
+  const wavelengthDeterminate = readCssLength('--_wave-wavelength', props.wavelength, 40);
+  const wavelengthIndeterminate = readCssLength('--_indeterminate-wave-wavelength', undefined, 20);
+  const waveHeight = readCssLength('--_with-wave-height', undefined, 10);
+  const previous = layout.value;
   const rect = root.getBoundingClientRect();
-  const width = Math.max(1, rect.width || root.clientWidth || layout.value.width);
+  const width = Math.max(1, rect.width || root.clientWidth || previous.width);
   const height = isWavy.value ? Math.max(thickness + waveAmplitude * 2, waveHeight) : thickness;
+
+  if (
+    width === previous.width &&
+    height === previous.height &&
+    waveAmplitude === previous.waveAmplitude &&
+    wavelengthDeterminate === previous.wavelengthDeterminate &&
+    wavelengthIndeterminate === previous.wavelengthIndeterminate
+  ) {
+    return;
+  }
 
   layout.value = {
     width,
     height,
-    thickness,
     waveAmplitude,
     wavelengthDeterminate,
     wavelengthIndeterminate,
@@ -124,8 +129,8 @@ const syncLayout = () => {
 };
 
 const stopLayoutTracking = () => {
-  resizeObserver?.disconnect();
-  resizeObserver = null;
+  resizeObservation?.stop();
+  resizeObservation = undefined;
 };
 
 const startLayoutTracking = () => {
@@ -133,17 +138,29 @@ const startLayoutTracking = () => {
   if (!isWavy.value) return;
 
   syncLayout();
-  if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
-    resizeObserver = new ResizeObserver(syncLayout);
-    resizeObserver.observe(rootRef.value);
-  }
+  const root = rootRef.value;
+  if (root) resizeObservation = observeLinearProgressResize(root, syncLayout);
 };
 
+// The render snapshot supplies the value for server markup and new segments.
+const progressProperty = '--m3-linear-progress-displayed-value';
+const displayedProgressStyle = { '--_progress': progressRatioDisplayed.value.toString() };
+let trackElement: HTMLElement | undefined;
+watch(progressRatioDisplayed, (value) => {
+  const progress = value.toString();
+  displayedProgressStyle['--_progress'] = progress;
+
+  // The track stays mounted while the adjacent active segment can be replaced.
+  trackElement ??= rootRef.value?.querySelector<HTMLElement>('[data-part="track"]') ?? undefined;
+  trackElement?.style.setProperty(progressProperty, progress);
+  const active = trackElement?.nextElementSibling as HTMLElement | null | undefined;
+  if (active?.classList.contains('m3-linear-progress-indicator-active-determinate')) {
+    active.style.setProperty(progressProperty, progress);
+  }
+});
+
 const rootStyle = computed(() => {
-  const style: Record<string, string> = {
-    '--_progress': progressRatioDisplayed.value.toString(),
-    '--_active-track-gap-size': isTrackGapVisible.value ? 'var(--_track-active-indicator-gap)' : '0px',
-  };
+  const style: Record<string, string> = {};
 
   if (props.thickness) {
     style['--md-linear-progress-indicator-track-thickness'] = props.thickness;
@@ -175,7 +192,13 @@ const rootStyle = computed(() => {
 const wavePath = computed(() => {
   const currentLayout = layout.value;
   const wavelength = isDeterminate.value ? currentLayout.wavelengthDeterminate : currentLayout.wavelengthIndeterminate;
-  return createLinearWavePath(currentLayout.width, currentLayout.height, currentLayout.waveAmplitude, wavelength);
+  return createLinearWavePath(
+    currentLayout.width,
+    currentLayout.height,
+    currentLayout.waveAmplitude,
+    wavelength,
+    resizeObservation?.hasPeers(),
+  );
 });
 
 const waveViewBox = computed(() => {
@@ -205,10 +228,15 @@ watch(
 
 onBeforeUnmount(() => {
   stopLayoutTracking();
+  trackElement = undefined;
 });
-useElementEnvironment(rootRef, () => {
+useElementEnvironment(rootRef, (document) => {
+  const releaseAnimation = bindProgressAnimation(document);
   startLayoutTracking();
-  return stopLayoutTracking;
+  return () => {
+    releaseAnimation();
+    stopLayoutTracking();
+  };
 });
 </script>
 
@@ -228,7 +256,7 @@ useElementEnvironment(rootRef, () => {
     :aria-valuemax="isDeterminate ? max : undefined"
     :aria-valuenow="isDeterminate ? clampedValue : undefined"
     :aria-valuetext="ariaValueTextResolved"
-    :style="rootStyle"
+    :style="[displayedProgressStyle, rootStyle]"
   >
     <div
       class="m3-linear-progress-indicator-viewport"
