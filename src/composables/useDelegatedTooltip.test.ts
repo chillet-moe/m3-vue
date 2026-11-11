@@ -102,6 +102,25 @@ describe('useDelegatedTooltip', () => {
     expect(host.querySelector(`#${state!.tooltipSlots[0]?.id}`)?.textContent).toBe('First');
   });
 
+  it('discards a tooltip dismissed before its opening render', async () => {
+    const host = mountDelegatedTooltip();
+    await nextTick();
+    const first = host.querySelector<HTMLElement>('#first')!;
+    const second = host.querySelector<HTMLElement>('#second')!;
+    const contents = () => [...host.querySelectorAll('.m3-tooltip')].map((tip) => tip.textContent).filter(Boolean);
+
+    first.focus();
+    first.blur();
+    await flushDelegatedUpdate();
+    expect(contents()).toEqual([]);
+    expect(first.hasAttribute('aria-describedby')).toBe(false);
+
+    second.focus();
+    await flushDelegatedUpdate();
+    expect(contents()).toEqual(['Second']);
+    expect(second.getAttribute('aria-describedby')).toBeTruthy();
+  });
+
   it('debounces only a pointer switch while keeping the current tooltip open', async () => {
     const host = mountDelegatedTooltip();
     await nextTick();
@@ -118,7 +137,7 @@ describe('useDelegatedTooltip', () => {
     vi.advanceTimersByTime(20);
     await flushDelegatedUpdate();
 
-    expect(state!.tooltipSlots[0]?.state).toBe('closing');
+    expect(state!.tooltipSlots[0]?.state).toBe('idle');
     expect(state!.tooltipSlots[1]?.state).toBe('open');
   });
 
@@ -139,7 +158,7 @@ describe('useDelegatedTooltip', () => {
     expect(state!.tooltipSlots[1]?.state).toBe('idle');
   });
 
-  it('keeps a bounded slot pool while switching active anchors', async () => {
+  it('retains outgoing content and its anchor until owned exit motion completes', async () => {
     const host = mountDelegatedTooltip();
     await nextTick();
     const first = host.querySelector<HTMLElement>('#first')!;
@@ -154,6 +173,13 @@ describe('useDelegatedTooltip', () => {
     expect(first.getAttribute('aria-describedby')).toBe(state!.tooltipSlots[0]?.id);
     expect(first.style.getPropertyValue('anchor-name')).toContain(state!.tooltipSlots[0]?.anchorName);
 
+    let finish!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    Object.defineProperty(host.querySelector(`#${state!.tooltipSlots[0]!.id}`), 'getAnimations', {
+      value: () => [{ finished }],
+    });
     second.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     await flushDelegatedUpdate();
 
@@ -161,7 +187,8 @@ describe('useDelegatedTooltip', () => {
     expect(host.querySelector(`#${state!.tooltipSlots[1]?.id}`)?.textContent).toBe('Second');
     expect(second.getAttribute('aria-describedby')).toBe(state!.tooltipSlots[1]?.id);
 
-    vi.advanceTimersByTime(120);
+    finish();
+    await flushDelegatedUpdate();
     expect(state!.tooltipSlots[0]?.state).toBe('idle');
     expect(first.hasAttribute('aria-describedby')).toBe(false);
   });

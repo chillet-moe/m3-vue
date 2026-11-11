@@ -83,6 +83,58 @@ try {
   await tip.waitFor({ state: 'hidden' });
   assert.equal(await tip.evaluate((element) => element.getClientRects().length), 0);
 
+  const delegatedPage = await browser.newPage({ reducedMotion: 'no-preference' });
+  await delegatedPage.addInitScript('window.__name = (fn) => fn');
+  for (const duration of [150, 420, 0]) {
+    await openFixture(delegatedPage, `${url}?delegated`);
+    await delegatedPage.evaluate((duration) => {
+      document.documentElement.style.setProperty('--md-duration-fast', `${duration}ms`);
+    }, duration);
+    await delegatedPage.locator('#first').focus();
+    const outgoing = delegatedPage.locator('#delegated-tip-0');
+    await outgoing.evaluate(async (element) => {
+      await Promise.all(element.getAnimations().map((animation) => animation.finished));
+    });
+    await delegatedPage.locator('#second').focus();
+    const exit = await outgoing.evaluateHandle((element) => {
+      const animations = element.getAnimations();
+      for (const animation of animations) animation.pause();
+      return animations;
+    });
+    if (duration === 0) {
+      await delegatedPage.waitForFunction(() => document.getElementById('delegated-tip-0')!.textContent === '');
+    } else {
+      assert(await exit.evaluate((animations) => animations.length > 0), 'Exercise actual owned exit motion');
+      await delegatedPage.waitForTimeout(200);
+      assert.equal(await outgoing.textContent(), 'First', 'Keep content throughout a paused exit');
+      assert(await delegatedPage.locator('#first').getAttribute('aria-describedby'));
+      await exit.evaluate((animations) => animations.forEach((animation) => animation.cancel()));
+      await delegatedPage.waitForFunction(() => document.getElementById('delegated-tip-0')!.textContent === '');
+      assert.equal(await delegatedPage.locator('#first').getAttribute('aria-describedby'), null);
+
+      await delegatedPage.locator('#first').focus();
+      await outgoing.evaluate(async (element) => {
+        await Promise.all(element.getAnimations().map((animation) => animation.finished));
+      });
+      await delegatedPage.locator('#second').focus();
+      const interrupted = await outgoing.evaluateHandle((element) => {
+        const animations = element.getAnimations();
+        for (const animation of animations) animation.pause();
+        return animations;
+      });
+      await delegatedPage.locator('#first').focus();
+      await interrupted.evaluate((animations) => animations.forEach((animation) => animation.cancel()));
+      await delegatedPage.waitForTimeout(200);
+      assert.equal(await outgoing.textContent(), 'First', 'An old exit must not clear a reused slot');
+      assert(await outgoing.evaluate((element) => element.matches(':popover-open')));
+      await interrupted.dispose();
+    }
+    await exit.dispose();
+    await delegatedPage.getByRole('button', { name: 'Unmount tooltips' }).click();
+    assert.equal(await delegatedPage.locator('.m3-tooltip').count(), 0);
+  }
+  await delegatedPage.close();
+
   console.log('Tooltip visibility and native popover motion regression passed.');
 } finally {
   await browser?.close();

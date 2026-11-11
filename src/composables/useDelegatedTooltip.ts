@@ -1,6 +1,7 @@
 import { useElementEnvironment, isHTMLElement } from '@/internal/elementEnvironment';
-import { nextTick, onBeforeUnmount, reactive, watch, type Ref } from 'vue';
+import { nextTick, onBeforeUnmount, reactive, toRef, watch, type Ref } from 'vue';
 import { setupTooltip } from '@/directives/Tooltip/setup';
+import { useExitMotionCompletion } from './useExitMotionCompletion';
 
 export type DelegatedTooltipSlotState = 'idle' | 'opening' | 'open' | 'closing';
 
@@ -11,7 +12,6 @@ export type DelegatedTooltipSlot<T> = {
   anchor: HTMLElement | null;
   state: DelegatedTooltipSlotState;
   generation: number;
-  hideTimeout: number;
   lastActivatedAt: number;
 };
 
@@ -19,7 +19,6 @@ type ResolveTooltip<T> = (anchor: HTMLElement) => T | null;
 type GetAnchorElement = (target: EventTarget | null) => HTMLElement | null;
 type TooltipController = ReturnType<typeof setupTooltip>;
 
-const TOOLTIP_ANIMATION_MS = 120;
 const TOOLTIP_POINTER_SWITCH_DELAY_MS = 20;
 
 /**
@@ -47,7 +46,6 @@ export function useDelegatedTooltip<T>(
         anchor: null as HTMLElement | null,
         state: 'idle' as DelegatedTooltipSlotState,
         generation: 0,
-        hideTimeout: 0,
         lastActivatedAt: 0,
       }) as DelegatedTooltipSlot<T>,
   );
@@ -60,20 +58,6 @@ export function useDelegatedTooltip<T>(
 
   let boundView = container.value?.ownerDocument.defaultView;
   const getView = () => boundView;
-
-  const clearHideTimeout = (slot: DelegatedTooltipSlot<T>) => {
-    if (!slot.hideTimeout) {
-      return;
-    }
-
-    const view = getView();
-    if (view) {
-      view.clearTimeout(slot.hideTimeout);
-    } else {
-      globalThis.clearTimeout(slot.hideTimeout);
-    }
-    slot.hideTimeout = 0;
-  };
 
   const clearPendingHover = () => {
     if (hoverTimeout) {
@@ -101,7 +85,7 @@ export function useDelegatedTooltip<T>(
 
   const cleanupSlot = (slot: DelegatedTooltipSlot<T>) => {
     slot.generation += 1;
-    clearHideTimeout(slot);
+    exits.get(slot)!.cancel();
     const controller = controllers.get(slot);
     controller?.hide();
     controller?.cleanup();
@@ -111,30 +95,31 @@ export function useDelegatedTooltip<T>(
     slot.state = 'idle';
   };
 
+  const exits = new Map(
+    tooltipSlots.map(
+      (slot) =>
+        [
+          slot,
+          useExitMotionCompletion({
+            rootRef: toRef(() => controllers.get(slot)?.tip),
+            open: toRef(() => slot.state !== 'closing'),
+            onComplete: () => cleanupSlot(slot),
+          }),
+        ] as const,
+    ),
+  );
+
   const startHideSlot = (slot: DelegatedTooltipSlot<T>) => {
-    if (slot.state === 'idle') {
+    if (slot.state === 'idle' || slot.state === 'closing') return;
+    if (slot.state === 'opening') {
+      cleanupSlot(slot);
       return;
     }
 
     slot.generation += 1;
-    const currentGeneration = slot.generation;
-    const view = getView();
-    clearHideTimeout(slot);
     slot.state = 'closing';
     controllers.get(slot)?.hide();
-
-    if (!view) {
-      cleanupSlot(slot);
-      return;
-    }
-
-    slot.hideTimeout = view.setTimeout(() => {
-      if (slot.generation !== currentGeneration) {
-        return;
-      }
-
-      cleanupSlot(slot);
-    }, TOOLTIP_ANIMATION_MS);
+    exits.get(slot)!.begin(undefined);
   };
 
   const pickSlot = (anchor: HTMLElement) => {
@@ -173,7 +158,7 @@ export function useDelegatedTooltip<T>(
 
     slot.generation += 1;
     const currentGeneration = slot.generation;
-    clearHideTimeout(slot);
+    exits.get(slot)!.cancel();
     slot.anchor = anchor;
     slot.tooltip = tooltip;
     slot.state = 'opening';
