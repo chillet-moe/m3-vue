@@ -1,3 +1,4 @@
+import { parse } from 'postcss';
 import type { Plugin } from 'vite';
 
 const layerOrderPattern = /@layer\b[^{};]*,[^{};]*;\s*/g;
@@ -21,9 +22,32 @@ function moveLayerOrderToTop(cssSource: string): string {
   return `${layerOrderLine}\n${sourceWithoutLayerOrder}`;
 }
 
-export default function fixCssLayerOrder(): Plugin {
+function compactFormatting(cssSource: string): string {
+  const root = parse(cssSource);
+
+  // Keep selector and value tokens intact, including the precision of custom property calculations.
+  root.walk((node) => {
+    if (node.type === 'comment' && !/^!|@license|@preserve|copyright|SPDX-License-Identifier/i.test(node.text)) {
+      node.remove();
+      return;
+    }
+
+    if (/^\s*$/.test(node.raws.before ?? '')) node.raws.before = '';
+    if ('nodes' in node && /^\s*$/.test(node.raws.after ?? '')) node.raws.after = '';
+
+    if (node.type === 'decl') {
+      if (node.value && /^\s*:\s*$/.test(node.raws.between ?? '')) node.raws.between = ':';
+    } else if (typeof node.raws.between === 'string' && /^\s*$/.test(node.raws.between)) {
+      node.raws.between = '';
+    }
+  });
+  root.raws.after = '';
+  return root.toString();
+}
+
+export default function finalizeLibraryCss(): Plugin {
   return {
-    name: 'fix-css-layer-order',
+    name: 'finalize-library-css',
     apply: 'build',
     enforce: 'post',
     generateBundle(_options, bundle) {
@@ -36,7 +60,7 @@ export default function fixCssLayerOrder(): Plugin {
           continue;
         }
 
-        output.source = moveLayerOrderToTop(output.source);
+        output.source = compactFormatting(moveLayerOrderToTop(output.source));
       }
     },
   };
