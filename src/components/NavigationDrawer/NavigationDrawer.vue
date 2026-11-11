@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
-import { computed, inject, provide, toRef, unref } from 'vue';
+import { computed, inject, provide, toRef, unref, type FunctionalComponent } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerIconSpace = 'none' | 'root' | 'all';
@@ -38,11 +38,21 @@ const modelValue = defineModel<string>();
 const selectedValue = computed(() => modelValue.value);
 const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 const shape = useShape(() => props.shape ?? unref(globalShape?.shape));
-const slotProps = computed(() => ({
-  value: selectedValue.value,
-  disabled: props.disabled,
-  iconOnly: props.iconOnly,
-}));
+
+// Track selection in the slot only when its content reads it.
+const slotProps = {
+  get value() {
+    return selectedValue.value;
+  },
+  get disabled() {
+    return props.disabled;
+  },
+  get iconOnly() {
+    return props.iconOnly;
+  },
+};
+
+const Content: FunctionalComponent = (_, { slots }) => slots.default?.();
 
 defineSlots<{
   /** Optional header content above navigation items. */
@@ -92,7 +102,7 @@ const rowSize = provideRowSize(() => props.size);
     </div>
 
     <div class="m3-navigation-drawer-items" data-scope="navigation-drawer" data-part="items">
-      <slot v-bind="slotProps" />
+      <Content><slot v-bind="slotProps" /></Content>
     </div>
 
     <div v-if="$slots.footer" class="m3-navigation-drawer-footer" data-scope="navigation-drawer" data-part="footer">

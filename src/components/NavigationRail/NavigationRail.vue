@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { provideShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
-import { computed, provide, toRef } from 'vue';
+import { computed, provide, toRef, type FunctionalComponent } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
 
 export type NavigationRailProps = {
@@ -40,6 +40,21 @@ defineSlots<{
 const selectedValue = computed(() => modelValue.value);
 const railState = computed(() => stateModel.value ?? 'collapsed');
 
+// Track selection in the slot only when its content reads it.
+const slotProps = {
+  get value() {
+    return selectedValue.value;
+  },
+  get disabled() {
+    return props.disabled;
+  },
+  get state() {
+    return railState.value;
+  },
+};
+
+const Content: FunctionalComponent = (_, { slots }) => slots.default?.();
+
 const activate = (value: string) => {
   if (props.disabled) {
     return;
@@ -71,13 +86,13 @@ const shape = provideShape(() => props.shape);
     :data-disabled="props.disabled ? 'true' : undefined"
     :aria-label="props.ariaLabel"
   >
-    <slot name="leading" :value="selectedValue" :disabled="props.disabled" :state="railState" />
+    <slot name="leading" v-bind="slotProps" />
 
     <div class="m3-navigation-rail-items" data-scope="navigation-rail" data-part="items">
-      <slot :value="selectedValue" :disabled="props.disabled" :state="railState" />
+      <Content><slot v-bind="slotProps" /></Content>
     </div>
 
-    <slot name="trailing" :value="selectedValue" :disabled="props.disabled" :state="railState" />
+    <slot name="trailing" v-bind="slotProps" />
   </nav>
 </template>
 

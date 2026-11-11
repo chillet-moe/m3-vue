@@ -78,6 +78,38 @@ describe('NavigationDrawer', () => {
     mounted.app.unmount();
   });
 
+  it('updates scoped slots for selection and drawer mode changes', async () => {
+    const container = document.createElement('div');
+    const selected = ref('home');
+    const iconOnly = ref(false);
+    const disabled = ref(false);
+    const slots = {
+      header: ({ value }) => [h('output', value)],
+      default: ({ value, iconOnly }) => [h('output', iconOnly ? `Icon for ${value}` : value)],
+      footer: ({ disabled }) => [h('output', disabled ? 'Unavailable' : 'Available')],
+    } satisfies InstanceType<typeof NavigationDrawer>['$slots'];
+    const app = createApp(() =>
+      h(NavigationDrawer, { modelValue: selected.value, iconOnly: iconOnly.value, disabled: disabled.value }, slots),
+    );
+    app.mount(container);
+
+    try {
+      const readSlots = () => Array.from(container.querySelectorAll('output'), (output) => output.textContent);
+      expect(readSlots()).toEqual(['home', 'home', 'Available']);
+
+      selected.value = 'settings';
+      await nextTick();
+      expect(readSlots()).toEqual(['settings', 'settings', 'Available']);
+
+      iconOnly.value = true;
+      disabled.value = true;
+      await nextTick();
+      expect(readSlots()).toEqual(['settings', 'Icon for settings', 'Unavailable']);
+    } finally {
+      app.unmount();
+    }
+  });
+
   it('toggles expandable sections', async () => {
     const mounted = mountDrawer();
     await nextTick();
@@ -163,6 +195,8 @@ describe('NavigationDrawer', () => {
     document.body.appendChild(container);
 
     const currentValue = ref('home');
+    const iconOnly = ref(false);
+    const homeLabel = ref<string>();
     const defaultSlotIconOnlyValues: boolean[] = [];
     const app = createApp({
       setup() {
@@ -171,7 +205,7 @@ describe('NavigationDrawer', () => {
             NavigationDrawer,
             {
               modelValue: currentValue.value,
-              iconOnly: true,
+              iconOnly: iconOnly.value,
               'onUpdate:modelValue': (value: string | undefined) => {
                 if (value !== undefined) {
                   currentValue.value = value;
@@ -183,7 +217,12 @@ describe('NavigationDrawer', () => {
                 defaultSlotIconOnlyValues.push(iconOnly);
 
                 return [
-                  h(NavigationDrawerItem, { value: 'home', icon: 'home', label: 'Home' }),
+                  h(NavigationDrawerItem, {
+                    value: 'home',
+                    icon: 'home',
+                    label: homeLabel.value,
+                    ariaLabel: 'Home',
+                  }),
                   h(
                     NavigationDrawerSection,
                     { icon: 'folder', label: 'Projects', expanded: true },
@@ -207,6 +246,12 @@ describe('NavigationDrawer', () => {
     const home = container.querySelector<HTMLElement>('[data-item-value="home"]');
     const settings = container.querySelector<HTMLElement>('[data-item-value="settings"]');
     const sectionTrigger = container.querySelector<HTMLButtonElement>('[data-part="trigger"]');
+    home?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
+
+    iconOnly.value = true;
+    await nextTick();
+
     expect(root?.dataset.iconOnly).toBe('true');
     expect(home?.getAttribute('aria-label')).toBe('Home');
     expect(settings?.getAttribute('aria-label')).toBe('Settings');
@@ -224,6 +269,11 @@ describe('NavigationDrawer', () => {
     expect(sectionTrigger?.getAttribute('aria-controls')).toMatch(/^navigation-drawer-section-content-/);
     expect(sectionTrigger?.getAttribute('aria-expanded')).toBe('true');
     expect(defaultSlotIconOnlyValues).toContain(true);
+
+    homeLabel.value = 'Overview';
+    await nextTick();
+    expect(projectsTooltip?.textContent).toBe('Overview');
+    expect(home?.getAttribute('aria-label')).toBe('Home');
 
     settings?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     await nextTick();

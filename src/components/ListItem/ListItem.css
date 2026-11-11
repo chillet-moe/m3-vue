@@ -1,5 +1,4 @@
 @import '../../styles/typography.css';
-@import '../../styles/icon-morph.css';
 
 @layer tokens {
   :where(:root) {
@@ -86,17 +85,26 @@
     inset-block: 0;
     inset-inline-start: 50%;
     translate: -50% 0;
-    inline-size: var(--_item-current-indicator-visual-width);
+    inline-size: 100%;
     block-size: 100%;
     border-radius: var(--_item-indicator-shape);
     background-color: var(--_item-active-indicator-color);
     opacity: var(--_item-current-indicator-opacity);
     pointer-events: none;
+  }
+
+  .m3-item[data-appearance='expressive']::before {
+    /* A solid shadow leaves room for the spatial overshoot without extending scrollable overflow. */
+    color: var(--_item-active-indicator-color);
+    background-color: currentColor;
+    box-shadow: 0 0 0 10vmax currentColor;
+    clip-path: inset(
+      0 calc((100% - var(--_item-current-indicator-visual-width)) / 2) round var(--_item-indicator-shape)
+    );
     transition:
-      inline-size var(--_item-motion),
-      border-radius var(--md-easing-fast-spatial),
+      clip-path var(--_item-motion),
       opacity var(--md-easing-fast) var(--_item-current-indicator-opacity-delay),
-      background-color var(--md-easing-fast);
+      color var(--md-easing-fast);
   }
 
   .m3-item-main {
@@ -292,11 +300,7 @@
   }
 
   .m3-item[data-appearance='standard'] {
-    --_item-current-indicator-visual-width: 100%;
     --_item-container-shape: var(--_shape-radius, var(--md-shape-compact));
-  }
-  .m3-item[data-appearance='standard']::before {
-    transition: none;
   }
   .m3-item[data-appearance='standard'] .m3-text-morph,
   .m3-item[data-appearance='standard'] .m3-item-icon {
@@ -305,7 +309,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .m3-item,
-    .m3-item::before {
+    .m3-item[data-appearance='expressive']::before {
       transition-duration: 0ms;
     }
   }

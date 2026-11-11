@@ -73,6 +73,38 @@ describe('NavigationRail', () => {
     mounted.app.unmount();
   });
 
+  it('updates scoped slots for selection and rail mode changes', async () => {
+    const container = document.createElement('div');
+    const selected = ref('home');
+    const state = ref<'collapsed' | 'expanded'>('collapsed');
+    const disabled = ref(false);
+    const slots = {
+      leading: ({ value }) => [h('output', value)],
+      default: ({ value, state }) => [h('output', `${state}: ${value}`)],
+      trailing: ({ disabled }) => [h('output', disabled ? 'Unavailable' : 'Available')],
+    } satisfies InstanceType<typeof NavigationRail>['$slots'];
+    const app = createApp(() =>
+      h(NavigationRail, { modelValue: selected.value, state: state.value, disabled: disabled.value }, slots),
+    );
+    app.mount(container);
+
+    try {
+      const readSlots = () => Array.from(container.querySelectorAll('output'), (output) => output.textContent);
+      expect(readSlots()).toEqual(['home', 'collapsed: home', 'Available']);
+
+      selected.value = 'search';
+      await nextTick();
+      expect(readSlots()).toEqual(['search', 'collapsed: search', 'Available']);
+
+      state.value = 'expanded';
+      disabled.value = true;
+      await nextTick();
+      expect(readSlots()).toEqual(['search', 'expanded: search', 'Unavailable']);
+    } finally {
+      app.unmount();
+    }
+  });
+
   it('propagates collapsed/expanded state to rail and items', async () => {
     const mounted = mountRail('home', 'collapsed');
     await nextTick();

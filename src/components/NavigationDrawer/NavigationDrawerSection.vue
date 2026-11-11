@@ -7,6 +7,7 @@ import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
 import { computed, inject, provide, unref, useId, useSlots } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
+import '@/styles/icon-morph.css';
 
 export type NavigationDrawerSectionProps = {
   shape?: M3Shape;
@@ -79,14 +80,14 @@ const slotProps = computed(() => ({
   iconOnly: isIconOnly.value,
 }));
 
-const tooltipContent = computed(() => props.label ?? props.ariaLabel);
 const tooltip = computed<VTooltipBinding>(() => {
-  if (!isIconOnly.value || !tooltipContent.value) {
-    return undefined;
-  }
+  if (!isIconOnly.value) return undefined;
+
+  const content = props.label ?? props.ariaLabel;
+  if (!content) return undefined;
 
   return {
-    content: tooltipContent.value,
+    content,
     placement: 'end',
     interactive: false,
     triggerAria: 'describedby',

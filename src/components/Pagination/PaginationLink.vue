@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Button, { type ButtonProps } from '@/components/Button/Button.vue';
-import { computed } from 'vue';
 
 export type PaginationLinkProps = {
   /** Marks the current page and applies active emphasis. */
@@ -35,14 +34,6 @@ defineSlots<{
   /** Link content, usually a page number. */
   default(): any;
 }>();
-
-const resolvedVariant = computed<ButtonProps['variant']>(() => {
-  if (props.variant) {
-    return props.variant;
-  }
-
-  return props.isActive ? 'outlined' : 'text';
-});
 </script>
 
 <template>
@@ -52,7 +43,7 @@ const resolvedVariant = computed<ButtonProps['variant']>(() => {
     data-part="link"
     :data-active="props.isActive ? 'true' : 'false'"
     :aria-current="props.isActive ? 'page' : undefined"
-    :variant="resolvedVariant"
+    :variant="props.variant || (props.isActive ? 'outlined' : 'text')"
     :size="props.size"
     :shape="props.shape"
     :href="props.href"
