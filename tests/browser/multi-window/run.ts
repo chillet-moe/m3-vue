@@ -124,12 +124,47 @@ try {
   await page.locator('.menu-trigger').click();
   await page.getByRole('menuitem', { name: 'First', exact: true }).click();
   assert.equal(await page.locator('.selected').textContent(), 'first');
+  await page.evaluate(() => {
+    (window as any).initialContextLabel = new WeakRef(document.querySelector('[data-testid="initial-context-label"]')!);
+  });
+  const contextTrigger = page.getByTestId('context-trigger');
+  await contextTrigger.click();
+  await contextTrigger.click();
+  assert.equal(await page.getByTestId('initial-context-label').count(), 0);
+  const heap = await page.context().newCDPSession(page);
+  await heap.send('HeapProfiler.collectGarbage');
+  await heap.send('HeapProfiler.collectGarbage');
+  assert.equal(await page.evaluate(() => (window as any).initialContextLabel.deref() === undefined), true);
+  await heap.detach();
+  await contextTrigger.click({ button: 'right' });
+  const openContextMenu = page.locator('#window-context-menu:popover-open');
+  await openContextMenu.getByRole('menuitem', { name: 'Context action' }).waitFor();
+  await page.mouse.click(2, 2);
+  await openContextMenu.waitFor({ state: 'detached' });
   const adoptedLayer = page.getByRole('combobox', { name: 'Window layers', exact: true });
   await adoptedLayer.click();
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Home');
   await page.keyboard.press('Enter');
   assert.equal(await adoptedLayer.inputValue(), 'Layer 1');
+
+  const adoptedSlider = page.locator('[data-scope="slider"][data-part="root"]');
+  const handleBeforeResize = await adoptedSlider.locator('[data-part="handle"]').boundingBox();
+  assert(handleBeforeResize);
+  const resizedWidth = await adoptedSlider.evaluate((root: HTMLElement) => {
+    const width = root.clientWidth - 80;
+    root.style.inlineSize = `${width}px`;
+    return width;
+  });
+  await page.waitForFunction(
+    ({ width, previousX }) => {
+      const root = document.querySelector('[data-scope="slider"][data-part="root"]');
+      const handle = root?.querySelector('[data-part="handle"]');
+      return root?.clientWidth === width && handle && previousX - handle.getBoundingClientRect().x >= 40;
+    },
+    { width: resizedWidth, previousX: handleBeforeResize.x },
+  );
+
   await page.locator('.tooltip-trigger').hover();
   await page.getByRole('tooltip').waitFor({ state: 'visible' });
   assert.equal(await child.locator('.vtt-popover').count(), 0);
@@ -146,6 +181,29 @@ try {
   await child.locator('.tooltip-trigger').focus();
   await child.getByRole('tooltip').waitFor({ state: 'visible' });
   assert.equal(await child.locator('m3-document-adoption-sentinel').count(), 0);
+  assert.deepEqual(await page.evaluate(() => (window as any).multiWindow.updateDropdownAcrossDocuments()), {
+    initiallyOpen: false,
+    opensAfterAdoption: true,
+    opensAfterClear: false,
+    restoredAnchor: '--authored-anchor',
+    opensAfterReset: true,
+  });
+  assert.deepEqual(await page.evaluate(() => (window as any).multiWindow.adoptFromRemovedSubtree()), [
+    'bound to source',
+    'released source',
+    'bound to destination',
+  ]);
+  const detachedBinding = await page.evaluateHandle(() => (window as any).multiWindow.releaseDetachedBinding());
+  const bindingHeap = await page.context().newCDPSession(page);
+  await bindingHeap.send('HeapProfiler.collectGarbage');
+  await bindingHeap.send('HeapProfiler.collectGarbage');
+  assert(
+    await detachedBinding.evaluate(({ reference }) => reference.deref() === undefined),
+    'Released elements must be collectible while the adoption sentinel registry is still alive',
+  );
+  await detachedBinding.evaluate(({ frame }) => frame.remove());
+  await detachedBinding.dispose();
+  await bindingHeap.detach();
   await page.evaluate(() => (window as any).multiWindow.mountExtra());
   await page.locator('.dialog-trigger').click();
   await child.locator('.snackbar-trigger').click();
@@ -185,7 +243,44 @@ try {
   assert.equal(await independent.locator('.m3-snackbar-stack-popover').getAttribute('data-position'), 'bottom');
   assert.equal(await page.locator('.m3-snackbar-stack-popover').getAttribute('data-position'), 'top');
   await independent.close();
-  await page.getByRole('button', { name: 'Finish', exact: true }).click();
+  await page
+    .getByLabel('Window snackbar', { exact: true })
+    .getByRole('button', { name: 'Finish', exact: true })
+    .click();
+
+  const oldOverlayDocument = await page.evaluateHandle(() => (window as any).multiWindow.adoptOverlaysFromIframe());
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+  const overlayHeap = await page.context().newCDPSession(page);
+  await overlayHeap.send('HeapProfiler.collectGarbage');
+  await overlayHeap.send('HeapProfiler.collectGarbage');
+  assert.equal(
+    await oldOverlayDocument.evaluate((document: WeakRef<Document>) => document.deref() === undefined),
+    true,
+    'Adopted overlays must release their original document while the host and pending action are still alive',
+  );
+  await oldOverlayDocument.dispose();
+  await page.evaluate(() => {
+    const api = (window as any).multiWindow;
+    api.finishIframeAction();
+    api.unmount('overlay-adoption');
+  });
+
+  const oldSnackbarPayload = await page.evaluateHandle(() => (window as any).multiWindow.retireFirstSnackbar());
+  await page.waitForFunction(() => {
+    const items = document.querySelectorAll('[data-position="top-end"] [data-stack-item-id]');
+    return items.length === 1 && items[0]?.textContent?.includes('Surviving notification');
+  });
+  await overlayHeap.send('HeapProfiler.collectGarbage');
+  await overlayHeap.send('HeapProfiler.collectGarbage');
+  assert.equal(
+    await oldSnackbarPayload.evaluate((payload: WeakRef<object>) => payload.deref() === undefined),
+    true,
+    'An active stack must release the action payload of its retired first snackbar',
+  );
+  await oldSnackbarPayload.dispose();
+  await overlayHeap.detach();
+  await page.locator('[data-position="top-end"]').getByRole('button', { name: 'Dismiss notification' }).click();
+
   assert.deepEqual(errors, []);
   console.log('Multi-window browser regressions passed.');
 } finally {

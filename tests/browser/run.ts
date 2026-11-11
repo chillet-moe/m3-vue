@@ -38,3 +38,5 @@ await import('./field-labels/run');
 await import('./field-sizing/run');
 
 await import('./slider-icons/run');
+
+await import('./divider/run');

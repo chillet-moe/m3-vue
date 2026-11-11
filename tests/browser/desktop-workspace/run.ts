@@ -49,6 +49,27 @@ try {
   const expressive = page.getByTestId('expressive-item');
   assert.equal(await standard.evaluate((el) => getComputedStyle(el, '::before').transitionDuration), '0s');
   assert.notEqual(await expressive.evaluate((el) => getComputedStyle(el, '::before').transitionDuration), '0s');
+  const indicatorScreenshot = await expressive.screenshot();
+  const indicatorPixels = await page.evaluate(async (base64) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${base64}`;
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const context = canvas.getContext('2d')!;
+    context.drawImage(image, 0, 0);
+    const middle = Math.floor(image.height / 2);
+    return {
+      left: [...context.getImageData(3, middle, 1, 1).data],
+      right: [...context.getImageData(image.width - 4, middle, 1, 1).data],
+      fill: [...context.getImageData(Math.floor(image.width * 0.8), middle, 1, 1).data],
+      corner: [...context.getImageData(0, 0, 1, 1).data],
+    };
+  }, indicatorScreenshot.toString('base64'));
+  assert.notDeepEqual(indicatorPixels.fill, indicatorPixels.corner, 'active indicator is visible');
+  assert.deepEqual(indicatorPixels.left, indicatorPixels.fill, 'active indicator reaches the left edge');
+  assert.deepEqual(indicatorPixels.right, indicatorPixels.fill, 'active indicator reaches the right edge');
   await standard.hover();
   await page.mouse.down();
   assert.equal(await standard.getAttribute('data-pressed'), 'false');

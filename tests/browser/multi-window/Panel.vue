@@ -11,12 +11,13 @@ import {
   createOverlayHost,
   createOverlayService,
 } from '@/index';
-import { vDropdown } from '@/directives/Menu';
+import { vContextMenu, vDropdown } from '@/directives/Menu';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 const host = createOverlayHost();
 const { showDialog, showSnackbar } = createOverlayService(host);
 const value = ref(25);
 const selected = ref('');
+const contextClicks = ref(0);
 const layer = ref<number>(1);
 const layers = Array.from({ length: 40 }, (_, value) => ({
   value,
@@ -65,6 +66,14 @@ defineExpose({ host, results, isUnmounted: () => unmounted });
         ><template #trigger><MenuItem submenu>More</MenuItem></template
         ><MenuItem @click="selected = 'nested'">Nested</MenuItem></MenuSubMenu
       >
+    </Menu>
+    <span v-context-menu="'#window-context-menu'">
+      <Button data-testid="context-trigger" @click="contextClicks++">Context menu</Button>
+      <span v-if="contextClicks === 0" data-testid="initial-context-label">Preview</span>
+      <span v-else>{{ contextClicks }}</span>
+    </span>
+    <Menu id="window-context-menu" popover="manual">
+      <MenuItem>Context action</MenuItem>
     </Menu>
     <Button class="tooltip-trigger" v-tooltip="{ content: 'Window tooltip', interactive: false, openDelay: 0 }"
       >Tooltip</Button

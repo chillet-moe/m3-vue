@@ -52,6 +52,10 @@ documentation customization Popover, nested selectors, live theme/type/shape/def
 persistence, reset and mobile scroll boundaries. Set `DOCS_URL` when the dev server is not on port 5173.
 Screenshots are written to `.tmp/docs-customization/`.
 
+To check that the color mode button has the correct accessible name after a production reload, run
+`pnpm run docs:build` and `pnpm run docs:preview --host 127.0.0.1`, then run the same customization suite with
+`DOCS_URL` set to the preview URL.
+
 With the documentation server running, use `pnpm exec tsx tests/browser/field-layout/run.ts` to verify inherited
 field gap tokens, independent row/column overrides, density and label-clearance separation, and the responsive preview.
 It accepts `DOCS_URL` and writes screenshots to `.tmp/field-layout/`.
