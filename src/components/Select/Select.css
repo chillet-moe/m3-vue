@@ -1,4 +1,9 @@
 @layer components {
+  .m3-select {
+    display: grid;
+    min-inline-size: 0;
+  }
+
   .m3-select-trigger {
     cursor: var(--md-cursor-action);
   }
@@ -51,39 +56,8 @@
     --md-icon-size: var(--_field-clear-icon-size);
   }
 
-  .m3-select[data-open='true'] {
-    --_outline-width: var(--_outlined-text-field-focus-outline-width);
-    --_outline-color: var(--_outlined-text-field-focus-outline-color);
-    --_label-color: var(--_outlined-text-field-focus-label-text-color);
-  }
-
-  .m3-select[data-open='true'] .m3-text-field-label,
-  .m3-select[data-open='true'] .m3-text-field-outline legend {
-    max-inline-size: 100%;
-  }
-
-  .m3-select[data-open='true'] .m3-text-field-label {
-    inset-block-start: 0;
-    translate: 0 calc(-0.5 * var(--_outlined-text-field-label-text-populated-line-height));
-    padding-inline: 0.25rem;
-    font-size: var(--_outlined-text-field-label-text-populated-size);
-    line-height: var(--_outlined-text-field-label-text-populated-line-height);
-  }
-
   .m3-select[data-open='true'] .m3-select-indicator {
     transform: rotate(180deg);
-  }
-
-  .m3-select[data-open='true'] .m3-text-field-prefix-slot,
-  .m3-select[data-open='true'] .m3-text-field-suffix-slot {
-    opacity: 1;
-  }
-
-  .m3-select[data-invalid='true'][data-open='true'] {
-    --_outline-color: var(--_outlined-text-field-error-focus-outline-color);
-    --_label-color: var(--_outlined-text-field-error-focus-label-text-color);
-    --_supporting-color: var(--_outlined-text-field-error-focus-supporting-text-color);
-    --_trailing-icon-color: var(--_outlined-text-field-error-focus-trailing-icon-color);
   }
 
   .m3-select-menu .m3-menu-container {

@@ -19,6 +19,8 @@ await import('./density/run');
 
 await import('./picker-density/run');
 
+await import('./style-order/run');
+
 await import('./shapes/run');
 
 await import('./select-virtual/run');

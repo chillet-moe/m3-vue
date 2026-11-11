@@ -382,7 +382,7 @@ provideShape(() => props.shape);
 
 <template>
   <div
-    class="m3-text-field m3-select"
+    class="m3-select"
     data-scope="select"
     data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"

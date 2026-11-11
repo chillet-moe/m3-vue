@@ -35,16 +35,17 @@
 }
 
 @layer components {
+  .m3-date-range-picker {
+    --_date-range-picker-preferred-width: var(--_date-picker-docked-container-width);
+    --_date-picker-range-width: min(var(--_date-range-picker-preferred-width), var(--_date-picker-available-width));
+  }
+
   .m3-date-range-picker .m3-date-picker-surface {
     grid-template-rows: auto auto minmax(0, 1fr) auto;
   }
 
   .m3-date-range-picker:is([data-calendars='auto'], [data-calendars='2']) {
-    inline-size: min(var(--_date-range-picker-docked-container-width), calc(100vw - 2rem));
-  }
-
-  .m3-date-range-picker[data-calendars='1'] {
-    inline-size: min(var(--_date-picker-docked-container-width), calc(100vw - 2rem));
+    --_date-range-picker-preferred-width: var(--_date-range-picker-docked-container-width);
   }
 
   .m3-date-range-picker-summary {
@@ -237,7 +238,7 @@
 
   @media (width < 40rem), (pointer: coarse) {
     .m3-date-range-picker[data-calendars='auto'] {
-      inline-size: min(var(--_date-picker-docked-container-width), calc(100vw - 2rem));
+      --_date-range-picker-preferred-width: var(--_date-picker-docked-container-width);
     }
 
     .m3-date-range-picker[data-calendars='auto'] .m3-date-range-picker-calendars {
