@@ -140,6 +140,14 @@ try {
   assert.equal(await lastFile.getAttribute('aria-posinset'), '10000');
   assert.equal(await lastFile.getAttribute('aria-setsize'), '10000');
   assert.ok((await largeTree.getByRole('treeitem').count()) < 40);
+  await page.keyboard.press('f');
+  const firstFile = largeTree.getByRole('treeitem', { name: 'File 00001', exact: true });
+  assert.equal(await firstFile.evaluate((element) => element === document.activeElement), true);
+  await page.keyboard.press('f');
+  const secondFile = largeTree.getByRole('treeitem', { name: 'File 00002', exact: true });
+  assert.equal(await secondFile.evaluate((element) => element === document.activeElement), true);
+  await page.keyboard.press('End');
+  assert.equal(await lastFile.evaluate((element) => element === document.activeElement), true);
   await largeTree.evaluate((element) => {
     element.parentElement!.scrollTop = 0;
   });

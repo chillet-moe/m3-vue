@@ -19,13 +19,13 @@ if (!tree) throw new Error('TreeItem must be used inside TreeView.');
 const actions = tree;
 const trailing = useTemplateRef<HTMLElement>('trailing');
 const row = useTemplateRef<HTMLElement>('row');
+const { attrs, activity } = actions.useItemAttrs(() => props.item.value);
+const entry = computed(() => actions.entries.value.get(props.item.value));
 const state = computed<TreeItemSlotProps>(() => ({
   item: props.item,
-  selected: actions.value.value === props.item.value,
-  expanded: actions.expanded.value.includes(props.item.value),
-  focused: actions.focusedValue.value === props.item.value,
-  disabled: !!actions.entries.value.get(props.item.value)?.disabled,
-  branch: !!actions.entries.value.get(props.item.value)?.branch,
+  ...activity.value,
+  disabled: !!entry.value?.disabled,
+  branch: !!entry.value?.branch,
   busy: !!props.item.busy,
 }));
 defineSlots<{
@@ -70,7 +70,7 @@ const shape = useShape(() => props.shape);
 
 <template>
   <div
-    v-bind="actions.getItemAttrs(item.value)"
+    v-bind="attrs()"
     class="m3-tree-item m3-row-size"
     :data-size="rowSize"
     data-scope="tree-item"
@@ -78,7 +78,7 @@ const shape = useShape(() => props.shape);
     data-m3-shape
     :data-shape="shape"
     :data-selected="state.selected"
-    :style="{ '--_tree-level': actions.entries.value.get(item.value)?.level ?? 1 }"
+    :style="{ '--_tree-level': entry?.level ?? 1 }"
     @keydown="handleActionKey"
   >
     <div

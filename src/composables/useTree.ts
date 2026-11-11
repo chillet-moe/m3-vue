@@ -23,6 +23,12 @@ export type TreeEntry = {
   branch: boolean;
 };
 
+type TreeItemActivity = {
+  focused: boolean;
+  selected: boolean;
+  expanded: boolean;
+};
+
 export type UseTreeOptions = {
   items: MaybeRefOrGetter<readonly TreeNode[]>;
   value?: MaybeRefOrGetter<string | undefined>;
@@ -51,32 +57,39 @@ export function useTree(options: UseTreeOptions) {
   let lastTyped = 0;
 
   const entries = computed(() => {
+    const items = toValue(options.items);
     const result = new Map<string, TreeEntry>();
-    const visit = (nodes: readonly TreeNode[], parent: string | undefined, level: number) => {
+    const visit = (nodes: readonly TreeNode[], parent: string | undefined, level: number, parentDisabled: boolean) => {
+      const size = nodes.length;
       nodes.forEach((node, index) => {
-        if (result.has(node.value)) throw new Error(`Duplicate tree value: ${node.value}`);
-        const disabled = !!node.disabled || (parent !== undefined && !!result.get(parent)?.disabled);
-        const branch = node.hasChildren === true || !!node.children?.length;
-        result.set(node.value, { node, parent, level, position: index + 1, size: nodes.length, disabled, branch });
-        visit(node.children ?? [], node.value, level + 1);
+        const key = node.value;
+        if (result.has(key)) throw new Error(`Duplicate tree value: ${key}`);
+
+        const children = node.children;
+        const hasChildren = !!children?.length;
+        const disabled = !!node.disabled || parentDisabled;
+        const branch = node.hasChildren === true || hasChildren;
+        result.set(key, { node, parent, level, position: index + 1, size, disabled, branch });
+        if (hasChildren) visit(children, key, level + 1, disabled);
       });
     };
-    visit(toValue(options.items), undefined, 1);
+    visit(items, undefined, 1, false);
     return result;
   });
 
-  const visibleItems = computed(() => {
-    const visible: TreeEntry[] = [];
-    const visibleValues = new Set<string>();
-    for (const entry of entries.value.values()) {
-      if (entry.parent !== undefined && (!visibleValues.has(entry.parent) || !expandedSet.value.has(entry.parent)))
-        continue;
-      visible.push(entry);
-      visibleValues.add(entry.node.value);
-    }
-    return visible;
+  const visibleTree = computed(() => {
+    const items: TreeEntry[] = [];
+    const indexes = new Map<string, number>();
+    const allEntries = entries.value;
+    allEntries.forEach((entry, key) => {
+      if (entry.parent !== undefined && (!indexes.has(entry.parent) || !expandedSet.value.has(entry.parent))) return;
+      indexes.set(key, items.length);
+      items.push(entry);
+    });
+    return { items, indexes, allEntries };
   });
-  const visibleIndexes = computed(() => new Map(visibleItems.value.map((entry, index) => [entry.node.value, index])));
+  const visibleItems = computed(() => visibleTree.value.items);
+  const visibleIndexes = computed(() => visibleTree.value.indexes);
   const focusedValue = computed(() => {
     const visible = visibleItems.value;
     let candidate = focused.value ?? value.value;
@@ -158,20 +171,26 @@ export function useTree(options: UseTreeOptions) {
     options.onActivate?.(node);
   }
 
-  watch(visibleItems, (current, previous) => {
-    if (!previous.length && current.length && rootElement && rootElement === rootElement.ownerDocument.activeElement) {
+  watch(visibleTree, (current, previous) => {
+    if (
+      !previous.items.length &&
+      current.items.length &&
+      rootElement &&
+      rootElement === rootElement.ownerDocument.activeElement
+    ) {
       restoreFocus();
     }
     const oldKey = focused.value;
-    if (oldKey === undefined || current.some((entry) => entry.node.value === oldKey)) return;
+    if (oldKey === undefined || current.indexes.has(oldKey)) return;
     const element = elements.get(oldKey);
     const hadFocus = element?.contains(element.ownerDocument.activeElement);
-    let ancestor = previous.find((entry) => entry.node.value === oldKey)?.parent;
-    while (ancestor !== undefined && !current.some((entry) => entry.node.value === ancestor)) {
-      ancestor = previous.find((entry) => entry.node.value === ancestor)?.parent;
+    // Use the previous index snapshot; its nodes may already have new reactive keys.
+    const oldIndex = previous.indexes.get(oldKey) ?? 0;
+    let ancestor = previous.allEntries.get(oldKey)?.parent;
+    while (ancestor !== undefined && !current.indexes.has(ancestor)) {
+      ancestor = previous.allEntries.get(ancestor)?.parent;
     }
-    const oldIndex = previous.findIndex((entry) => entry.node.value === oldKey);
-    focused.value = ancestor ?? current[Math.min(oldIndex, current.length - 1)]?.node.value;
+    focused.value = ancestor ?? current.items[Math.min(oldIndex, current.items.length - 1)]?.node.value;
     if (hadFocus) restoreFocus();
   });
 
@@ -189,12 +208,6 @@ export function useTree(options: UseTreeOptions) {
     if (!entry) return;
     const visible = visibleItems.value;
     const index = visibleIndexes.value.get(key) ?? -1;
-    const element = elements.get(key);
-    const direction =
-      toValue(options.dir) ??
-      (element ? element.ownerDocument.defaultView?.getComputedStyle(element).direction : 'ltr');
-    const openKey = direction === 'rtl' ? 'ArrowLeft' : 'ArrowRight';
-    const closeKey = direction === 'rtl' ? 'ArrowRight' : 'ArrowLeft';
     let next: string | undefined;
     switch (event.key) {
       case 'ArrowDown':
@@ -209,15 +222,24 @@ export function useTree(options: UseTreeOptions) {
       case 'End':
         next = visible.at(-1)?.node.value;
         break;
-      case openKey:
-        if (entry.disabled) break;
-        if (!expandedSet.value.has(key)) toggle(key);
-        else next = entry.node.children?.[0]?.value;
+      case 'ArrowLeft':
+      case 'ArrowRight': {
+        const element = elements.get(key);
+        const direction =
+          toValue(options.dir) ??
+          (element ? element.ownerDocument.defaultView?.getComputedStyle(element).direction : 'ltr');
+        const opens = event.key === (direction === 'rtl' ? 'ArrowLeft' : 'ArrowRight');
+        if (opens) {
+          if (entry.disabled) break;
+          if (!expandedSet.value.has(key)) toggle(key);
+          else next = entry.node.children?.[0]?.value;
+        } else if (expandedSet.value.has(key) && entry.branch) {
+          toggle(key);
+        } else {
+          next = entry.parent;
+        }
         break;
-      case closeKey:
-        if (expandedSet.value.has(key) && entry.branch) toggle(key);
-        else next = entry.parent;
-        break;
+      }
       case '*':
         setExpanded([
           ...expanded.value,
@@ -238,27 +260,32 @@ export function useTree(options: UseTreeOptions) {
         search = now - lastTyped > 500 ? event.key : search + event.key;
         lastTyped = now;
         const query = [...search].every((character) => character === search[0]) ? search[0]! : search;
-        const ordered = [...visible.slice(index + 1), ...visible.slice(0, index + 1)];
-        next = ordered.find((item) => item.node.label.trim().toLocaleLowerCase().startsWith(query.toLocaleLowerCase()))
-          ?.node.value;
+        const normalizedQuery = query.toLocaleLowerCase();
+        for (let offset = 1; offset <= visible.length; offset++) {
+          const item = visible[(index + offset) % visible.length]!;
+          if (item.node.label.trim().toLocaleLowerCase().startsWith(normalizedQuery)) {
+            next = item.node.value;
+            break;
+          }
+        }
       }
     }
     event.preventDefault();
     if (next !== undefined) focus(next);
   }
 
-  function getItemAttrs(key: string) {
+  function buildItemAttrs(key: string, activity?: TreeItemActivity) {
     const entry = entries.value.get(key);
     return {
       role: 'treeitem',
-      tabindex: focusedValue.value === key ? 0 : -1,
+      tabindex: (activity?.focused ?? focusedValue.value === key) ? 0 : -1,
       'aria-label': entry?.node.label,
       'aria-level': entry?.level,
       'aria-posinset': entry?.position,
       'aria-setsize': entry?.size,
-      'aria-expanded': entry?.branch ? expandedSet.value.has(key) : undefined,
+      'aria-expanded': entry?.branch ? (activity?.expanded ?? expandedSet.value.has(key)) : undefined,
       'aria-busy': entry?.node.busy || undefined,
-      'aria-selected': entry?.node.selectable === false ? undefined : value.value === key,
+      'aria-selected': entry?.node.selectable === false ? undefined : (activity?.selected ?? value.value === key),
       'aria-disabled': entry?.disabled || undefined,
       ref: (element: unknown) => {
         if (isHTMLElement(element)) elements.set(key, element);
@@ -274,6 +301,29 @@ export function useTree(options: UseTreeOptions) {
     };
   }
 
+  function getItemAttrs(key: string) {
+    return buildItemAttrs(key);
+  }
+
+  function useItemAttrs(key: () => string) {
+    const activity = computed<TreeItemActivity>((previous) => {
+      const itemKey = key();
+      const focused = focusedValue.value === itemKey;
+      const selected = value.value === itemKey;
+      const expanded = expandedSet.value.has(itemKey);
+      if (
+        previous &&
+        previous.focused === focused &&
+        previous.selected === selected &&
+        previous.expanded === expanded
+      ) {
+        return previous;
+      }
+      return { focused, selected, expanded };
+    });
+    return { activity, attrs: () => buildItemAttrs(key(), activity.value) };
+  }
+
   return {
     value,
     expanded,
@@ -287,6 +337,7 @@ export function useTree(options: UseTreeOptions) {
     focus,
     activate,
     getItemAttrs,
+    useItemAttrs,
     rootAttrs: computed(() => ({
       role: 'tree',
       tabindex: visibleItems.value.length ? -1 : 0,

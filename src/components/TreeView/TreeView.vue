@@ -59,7 +59,12 @@ const shape = provideShape(() => props.shape);
     :dir="dir"
   >
     <slot :tree="tree">
-      <TreeItem v-for="entry in tree.visibleItems.value" :key="entry.node.value" :item="entry.node">
+      <TreeItem
+        v-for="entry in tree.visibleItems.value"
+        :key="entry.node.value"
+        :item="entry.node"
+        v-memo="[entry.node, $slots.label, $slots.leading, $slots.trailing]"
+      >
         <template v-if="$slots.label" #label="state"><slot name="label" v-bind="state" /></template>
         <template v-if="$slots.leading" #leading="state"><slot name="leading" v-bind="state" /></template>
         <template v-if="$slots.trailing" #trailing="state"><slot name="trailing" v-bind="state" /></template>

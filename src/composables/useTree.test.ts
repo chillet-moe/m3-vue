@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { effectScope, ref } from 'vue';
+import { effectScope, nextTick, ref, shallowRef } from 'vue';
 import { useTree, type TreeNode } from './useTree';
 
 const items: TreeNode[] = [
@@ -69,6 +69,53 @@ describe('useTree', () => {
     const scope = effectScope();
     expect(() => scope.run(() => useTree({ items: [...items, items[0]!] }))).toThrow('Duplicate tree value: root');
     scope.stop();
+  });
+
+  it('restores focus to the parent when a reactive node key changes', async () => {
+    const child = ref<TreeNode>({ value: 'child', label: 'Child' });
+    const items: TreeNode[] = [
+      { value: 'first', label: 'First' },
+      { value: 'parent', label: 'Parent', children: [child.value] },
+    ];
+    const scope = effectScope();
+    try {
+      const tree = scope.run(() => useTree({ items, expanded: ['parent'] }))!;
+      tree.focus('child');
+      expect(tree.focusedValue.value).toBe('child');
+
+      child.value.value = 'renamed';
+      await nextTick();
+      expect(tree.focusedValue.value).toBe('parent');
+      expect(tree.visibleIndexes.value.get('renamed')).toBe(2);
+      expect(tree.entries.value.has('child')).toBe(false);
+      tree.select('renamed');
+      expect(tree.value.value).toBe('renamed');
+      expect(tree.getItemAttrs('renamed').tabindex).toBe(-1);
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it('rebuilds node keys when a shallow items ref is replaced', async () => {
+    const nodes = shallowRef<TreeNode[]>([
+      { value: 'root', label: 'Root', children: [{ value: 'child', label: 'Child' }] },
+    ]);
+    const scope = effectScope();
+    try {
+      const tree = scope.run(() => useTree({ items: () => nodes.value, expanded: ['root'] }))!;
+      tree.focus('child');
+      nodes.value = [{ value: 'root', label: 'Root', children: [{ value: 'replacement', label: 'Replacement' }] }];
+      await nextTick();
+
+      expect(tree.focusedValue.value).toBe('root');
+      expect([...tree.visibleIndexes.value.keys()]).toEqual(['root', 'replacement']);
+      tree.select('replacement');
+      expect(tree.value.value).toBe('replacement');
+      tree.focus('replacement');
+      expect(tree.getItemAttrs('replacement')).toMatchObject({ tabindex: 0, 'aria-selected': true, 'aria-level': 2 });
+    } finally {
+      scope.stop();
+    }
   });
 
   it('represents unloaded branches without taking ownership of loading or cached data', async () => {
