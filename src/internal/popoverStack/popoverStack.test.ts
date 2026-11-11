@@ -8,35 +8,12 @@ import { showPopoverStackItem } from './popoverStack';
 const overlayHost = createOverlayHost();
 let app: App<Element> | null = null;
 
-function installPopoverPolyfill() {
-  const prototype = HTMLElement.prototype as HTMLElement & {
-    showPopover?: () => void;
-    hidePopover?: () => void;
-  };
-
-  if (typeof prototype.showPopover !== 'function') {
-    Object.defineProperty(prototype, 'showPopover', {
-      configurable: true,
-      value: function (this: HTMLElement) {
-        this.hidden = false;
-        this.dataset.popoverOpen = 'true';
-      },
-    });
-  }
-
-  if (typeof prototype.hidePopover !== 'function') {
-    Object.defineProperty(prototype, 'hidePopover', {
-      configurable: true,
-      value: function (this: HTMLElement) {
-        delete this.dataset.popoverOpen;
-        this.hidden = true;
-      },
-    });
-  }
-}
-
 beforeAll(() => {
-  installPopoverPolyfill();
+  // JSDOM has no top layer; native visibility is covered by browser tests.
+  Object.defineProperties(HTMLElement.prototype, {
+    showPopover: { configurable: true, value() {} },
+    hidePopover: { configurable: true, value() {} },
+  });
 });
 
 beforeEach(() => {

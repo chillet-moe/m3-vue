@@ -8,8 +8,7 @@
   pointer-events: none;
 }
 
-.m3-popover-stack-popover:popover-open,
-.m3-popover-stack-popover[data-popover-open='true'] {
+.m3-popover-stack-popover:popover-open {
   display: block;
 }
 

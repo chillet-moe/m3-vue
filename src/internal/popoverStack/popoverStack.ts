@@ -109,39 +109,6 @@ function getExitDuration(element: HTMLElement | null): number {
   return Math.max(transitionDuration + transitionDelay, animationDuration + animationDelay);
 }
 
-function updatePopoverState(element: HTMLElement, open: boolean) {
-  if (open) {
-    element.hidden = false;
-    element.dataset.popoverOpen = 'true';
-    return;
-  }
-
-  delete element.dataset.popoverOpen;
-  element.hidden = true;
-}
-
-function showPopoverElement(element: HTMLElement) {
-  updatePopoverState(element, true);
-
-  if (typeof (element as HTMLElement & { showPopover?: () => void }).showPopover !== 'function') {
-    return;
-  }
-
-  try {
-    (element as HTMLElement & { showPopover: () => void }).showPopover();
-  } catch {}
-}
-
-function hidePopoverElement(element: HTMLElement) {
-  if (typeof (element as HTMLElement & { hidePopover?: () => void }).hidePopover === 'function') {
-    try {
-      (element as HTMLElement & { hidePopover: () => void }).hidePopover();
-    } catch {}
-  }
-
-  updatePopoverState(element, false);
-}
-
 // Isolate each item's render so a staggered timeout only updates the affected item.
 const PopoverStackItem: FunctionalComponent<{ item: PopoverStackItemRecord; itemClass?: string }> = ({
   item,
@@ -171,34 +138,22 @@ const PopoverStackHost = defineComponent({
     const popoverRef = useTemplateRef<HTMLDivElement>('popover');
     const hasVisibleContent = computed(() => props.state.items.value.length > 0);
 
-    useElementEnvironment(popoverRef, () => {
-      if (hasVisibleContent.value) showPopoverElement(popoverRef.value!);
-    });
+    const syncVisibility = (popover: HTMLElement) => {
+      if (hasVisibleContent.value) popover.showPopover();
+      else popover.hidePopover();
+    };
+    useElementEnvironment(popoverRef, (_, popover) => syncVisibility(popover));
 
     expose({
       popoverRef,
     });
 
     watch(
-      [popoverRef, hasVisibleContent],
-      async ([popover, nextVisible]) => {
-        if (!popover) {
-          return;
-        }
-
-        await nextTick();
-
-        if (nextVisible) {
-          showPopoverElement(popover);
-          return;
-        }
-
-        hidePopoverElement(popover);
+      hasVisibleContent,
+      () => {
+        if (popoverRef.value) syncVisibility(popoverRef.value);
       },
-      {
-        immediate: true,
-        flush: 'post',
-      },
+      { flush: 'post' },
     );
 
     return () =>
@@ -207,7 +162,6 @@ const PopoverStackHost = defineComponent({
         {
           ref: 'popover',
           popover: 'manual',
-          hidden: hasVisibleContent.value ? undefined : true,
           class: ['m3-popover-stack-popover', props.state.config.popoverClass],
           role: props.state.config.role,
           'aria-live': props.state.config.ariaLive,
