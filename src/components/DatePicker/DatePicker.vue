@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import { computed, inject, nextTick, ref, unref, useId, watch } from 'vue';
+import { computed, inject, nextTick, ref, unref, useId } from 'vue';
 import { datePickerContextKey } from './DatePickerContext';
 import Button from '@/components/Button/Button.vue';
 import Icon from '@/components/Icon/Icon.vue';
@@ -13,6 +13,7 @@ import {
 } from '@/components/DatePicker/useDatePicker';
 import { usePickerPopover } from '@/composables/usePickerPopover';
 import { useM3Locale } from '@/locales/context';
+import './DatePicker.css';
 
 export type { DatePickerModelValue, DatePickerVariant };
 
@@ -180,17 +181,7 @@ function handleConfirm() {
   popover.hide();
 }
 
-watch(
-  () => modelValue.value,
-  () => {
-    if (!open.value) {
-      picker.resetDraftFromModel();
-    }
-  },
-);
-
 defineExpose({
-  popoverEl: popoverRef,
   show: popover.show,
   hide: popover.hide,
   toggle: popover.toggle,
@@ -228,7 +219,6 @@ const shape = useShape(() => props.shape);
         />
 
         <Button
-          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -265,7 +255,6 @@ const shape = useShape(() => props.shape);
         />
 
         <Button
-          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -317,7 +306,7 @@ const shape = useShape(() => props.shape);
         >
           <button
             v-state-layer
-            v-for="day in picker.calendarDays.value"
+            v-for="(day, index) in picker.calendarDays.value"
             :key="day.date"
             type="button"
             role="gridcell"
@@ -331,7 +320,7 @@ const shape = useShape(() => props.shape);
             :disabled="day.disabled"
             :aria-selected="day.selected ? 'true' : 'false'"
             :aria-current="day.today ? 'date' : undefined"
-            :aria-label="picker.fullDateFormatter.value.format(picker.dateFromIso(day.date))"
+            :aria-label="picker.calendarDayLabels.value[index]"
             @click="picker.selectDate(day.date)"
             @keydown="handleCalendarKeydown($event, day.date)"
           >
@@ -398,5 +387,3 @@ const shape = useShape(() => props.shape);
     </div>
   </div>
 </template>
-
-<style src="./DatePicker.css"></style>

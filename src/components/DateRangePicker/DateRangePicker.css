@@ -1,5 +1,4 @@
 @import '../../styles/scrollbar.css';
-@import '../DatePicker/DatePicker.css';
 
 @layer tokens {
   :where(:root) {
@@ -182,30 +181,36 @@
     isolation: isolate;
   }
 
-  .m3-date-range-picker-day-cell::before {
+  /* Keep separate full and half backgrounds so a range change does not resize either box. */
+  .m3-date-range-picker-day-cell::before,
+  .m3-date-range-picker-day-cell::after {
     content: '';
     position: absolute;
     z-index: -1;
     inset-block: 0;
-    inset-inline: 0;
-    background: transparent;
+    inset-inline-start: 0;
   }
 
-  .m3-date-range-picker-day-cell[data-in-range='true']::before {
-    background: var(--_date-range-picker-range-container-color);
+  .m3-date-range-picker-day-cell::before {
+    inset-inline-end: 0;
   }
 
-  .m3-date-range-picker-day-cell[data-range-start='true']::before {
-    inset-inline-start: 50%;
-  }
-
-  .m3-date-range-picker-day-cell[data-range-end='true']::before {
+  .m3-date-range-picker-day-cell::after {
     inset-inline-end: 50%;
   }
 
-  .m3-date-range-picker-day-cell[data-range-start='true'][data-range-end='true']::before,
-  .m3-date-range-picker-day-cell[data-disabled='true']::before {
-    background: transparent;
+  .m3-date-range-picker-day-cell[data-range-start='true']::after {
+    inset-inline: 50% 0;
+  }
+
+  .m3-date-range-picker-day-cell[data-in-range='true']:not([data-disabled='true']) {
+    &:not([data-range-start='true'], [data-range-end='true'])::before,
+    &:is(
+        [data-range-start='true']:not([data-range-end='true']),
+        [data-range-end='true']:not([data-range-start='true'])
+      )::after {
+      background: var(--_date-range-picker-range-container-color);
+    }
   }
 
   .m3-date-range-picker .m3-date-picker-day {

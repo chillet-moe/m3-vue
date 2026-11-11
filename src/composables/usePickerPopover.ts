@@ -81,11 +81,6 @@ export function usePickerPopover<T extends HTMLElement = HTMLElement>({
     const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
     const target = event.currentTarget as T | null;
 
-    if (nextState === 'open') {
-      exitCompletion.cancel();
-      return;
-    }
-
     if (nextState === 'closed' && open.value) {
       open.value = false;
     }

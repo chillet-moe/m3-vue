@@ -1,19 +1,23 @@
 import { type MaybeRefOrGetter, type Ref, computed, ref, toValue } from 'vue';
+import type {
+  DatePickerMonthOption,
+  DatePickerVariant,
+  DatePickerYearOption,
+} from '@/components/DatePicker/useDatePicker';
 import {
-  type DateParts,
-  type DatePickerMonthOption,
-  type DatePickerVariant,
-  type DatePickerYearOption,
   addDays,
   addMonths,
   compareIsoDates,
+  createCalendarMonthDays,
   createLocalDate,
   dateFromIso,
+  formatCalendarDayLabels,
+  getFirstDayOfResolvedLocale,
   getLocalIsoDate,
-  getLocaleFirstDayOfWeek,
   normalizeIsoDate,
   parseIsoDate,
-} from '@/components/DatePicker/useDatePicker';
+  type DateParts,
+} from '../calendarDate';
 import { en } from '@/locales/en';
 import type { M3Messages } from '@/locales/types';
 
@@ -78,11 +82,11 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
   const displayedMonth = ref(0);
 
   const minDate = computed(() => {
-    return parseIsoDate(toValue(options.min));
+    return normalizeIsoDate(toValue(options.min));
   });
 
   const maxDate = computed(() => {
-    return parseIsoDate(toValue(options.max));
+    return normalizeIsoDate(toValue(options.max));
   });
 
   const todayDate = computed(() => {
@@ -105,10 +109,6 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return toValue(options.locale);
   });
 
-  const firstDayOfWeek = computed(() => {
-    return toValue(options.firstDayOfWeek) ?? getLocaleFirstDayOfWeek(locale.value);
-  });
-
   const shortMonthFormatter = computed(() => {
     return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', month: 'short' });
   });
@@ -123,6 +123,12 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
 
   const weekdayFormatter = computed(() => {
     return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', weekday: 'narrow' });
+  });
+
+  const firstDayOfWeek = computed(() => {
+    return (
+      toValue(options.firstDayOfWeek) ?? getFirstDayOfResolvedLocale(weekdayFormatter.value.resolvedOptions().locale)
+    );
   });
 
   const fullDateFormatter = computed(() => {
@@ -169,60 +175,90 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return createLocalDate(displayedYear.value, displayedMonth.value + monthOffset, 1);
   }
 
+  function createMonthDays(monthDate: Date) {
+    const min = minDate.value;
+    const max = maxDate.value;
+    return createCalendarMonthDays({
+      year: monthDate.getFullYear(),
+      month: monthDate.getMonth(),
+      firstDayOfWeek: firstDayOfWeek.value,
+      today: todayDate.value,
+      numberFormatter: numberFormatter.value,
+      isDateDisabled: (date) => isDateOutsideBounds(date, min, max),
+    });
+  }
+
+  function createMonthHeading(monthDate: Date) {
+    return {
+      key: getLocalIsoDate(monthDate),
+      label: monthYearFormatter.value.format(monthDate),
+    };
+  }
+
+  function trackMonth(monthOffset: number) {
+    const date = computed(() => getDisplayedMonthDate(monthOffset));
+    const days = computed(() => createMonthDays(date.value));
+    const heading = computed(() => createMonthHeading(date.value));
+    const labels = computed(() => formatCalendarDayLabels(days.value, fullDateFormatter.value));
+    return { days, heading, labels };
+  }
+
+  const calendarMonths = [trackMonth(0), trackMonth(1)];
+
+  function getMonthDays(monthOffset: number) {
+    return calendarMonths[monthOffset]?.days.value ?? createMonthDays(getDisplayedMonthDate(monthOffset));
+  }
+
+  function getCalendarDayLabels(monthOffset: number): readonly string[] {
+    return (
+      calendarMonths[monthOffset]?.labels.value ??
+      formatCalendarDayLabels(getMonthDays(monthOffset), fullDateFormatter.value)
+    );
+  }
+
   const calendarDays = computed<DateRangePickerCalendarDay[]>(() => {
     return getCalendarDays(0);
   });
 
   function getCalendarPage(monthOffset: number): DateRangePickerCalendarPage {
-    const monthDate = getDisplayedMonthDate(monthOffset);
+    const heading =
+      calendarMonths[monthOffset]?.heading.value ?? createMonthHeading(getDisplayedMonthDate(monthOffset));
 
     return {
-      key: getLocalIsoDate(monthDate),
-      label: monthYearFormatter.value.format(monthDate),
+      ...heading,
       days: getCalendarDays(monthOffset),
     };
   }
 
   function getCalendarDays(monthOffset: number): DateRangePickerCalendarDay[] {
-    const monthDate = getDisplayedMonthDate(monthOffset);
-    return getCalendarDaysForMonth(monthDate.getFullYear(), monthDate.getMonth());
-  }
-
-  function getCalendarDaysForMonth(visibleYear: number, visibleMonth: number): DateRangePickerCalendarDay[] {
-    const start = createLocalDate(visibleYear, visibleMonth, 1);
-    const startOffset = (start.getDay() - firstDayOfWeek.value + 7) % 7;
-    const firstVisibleDay = addDays(start, -startOffset);
     const selectedStart = selectedStartDate.value;
     const selectedEnd = selectedEndDate.value;
-    const today = todayDate.value;
-    const hasCompleteRange = Boolean(selectedStart && selectedEnd);
 
-    return Array.from({ length: 42 }, (_, index) => {
-      const date = addDays(firstVisibleDay, index);
-      const isoDate = getLocalIsoDate(date);
-      const isSelectedStart = isoDate === selectedStart;
-      const isSelectedEnd = isoDate === selectedEnd;
-      const selected = isSelectedStart || isSelectedEnd;
-      const inRange =
-        Boolean(hasCompleteRange && selectedStart && selectedEnd) &&
-        compareIsoDates(isoDate, selectedStart!) >= 0 &&
-        compareIsoDates(isoDate, selectedEnd!) <= 0;
+    return getMonthDays(monthOffset).map(({ year, month, day, date, label, outsideMonth, today, disabled }) => {
+      const isSelectedStart = date === selectedStart;
+      const isSelectedEnd = date === selectedEnd;
+      const inRange = Boolean(
+        selectedStart &&
+        selectedEnd &&
+        compareIsoDates(date, selectedStart) >= 0 &&
+        compareIsoDates(date, selectedEnd) <= 0,
+      );
 
       return {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        day: date.getDate(),
-        date: isoDate,
-        label: numberFormatter.value.format(date.getDate()),
-        outsideMonth: date.getMonth() !== visibleMonth,
-        today: isoDate === today,
-        selected,
+        year,
+        month,
+        day,
+        date,
+        label,
+        outsideMonth,
+        today,
+        selected: isSelectedStart || isSelectedEnd,
         selectedStart: isSelectedStart,
         selectedEnd: isSelectedEnd,
         inRange,
         rangeStart: isSelectedStart && Boolean(selectedEnd),
         rangeEnd: isSelectedEnd && Boolean(selectedStart),
-        disabled: isDateDisabled(isoDate),
+        disabled,
       };
     });
   }
@@ -241,8 +277,8 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
   });
 
   const yearRange = computed(() => {
-    const lower = minDate.value?.year ?? displayedYear.value - 100;
-    const upper = maxDate.value?.year ?? displayedYear.value + 100;
+    const lower = minDate.value ? Number(minDate.value.slice(0, 4)) : displayedYear.value - 100;
+    const upper = maxDate.value ? Number(maxDate.value.slice(0, 4)) : displayedYear.value + 100;
 
     return {
       start: Math.min(lower, upper),
@@ -266,42 +302,43 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
   });
 
   const canGoPreviousMonth = computed(() => {
-    const min = toValue(options.min);
+    const min = minDate.value;
     const previousMonthLastDate = getLocalIsoDate(createLocalDate(displayedYear.value, displayedMonth.value, 0));
 
-    return !minDate.value || compareIsoDates(previousMonthLastDate, min!) >= 0;
+    return !min || compareIsoDates(previousMonthLastDate, min) >= 0;
   });
 
   const canGoNextMonth = computed(() => {
-    const max = toValue(options.max);
+    const max = maxDate.value;
     const nextMonthFirstDate = getLocalIsoDate(createLocalDate(displayedYear.value, displayedMonth.value + 1, 1));
 
-    return !maxDate.value || compareIsoDates(nextMonthFirstDate, max!) <= 0;
+    return !max || compareIsoDates(nextMonthFirstDate, max) <= 0;
   });
 
   const canGoPreviousYear = computed(() => {
-    const min = toValue(options.min);
+    const min = minDate.value;
     const previousYearLastDate = getLocalIsoDate(createLocalDate(displayedYear.value, 0, 0));
 
-    return !minDate.value || compareIsoDates(previousYearLastDate, min!) >= 0;
+    return !min || compareIsoDates(previousYearLastDate, min) >= 0;
   });
 
   const canGoNextYear = computed(() => {
-    const max = toValue(options.max);
+    const max = maxDate.value;
     const nextYearFirstDate = getLocalIsoDate(createLocalDate(displayedYear.value + 1, 0, 1));
 
-    return !maxDate.value || compareIsoDates(nextYearFirstDate, max!) <= 0;
+    return !max || compareIsoDates(nextYearFirstDate, max) <= 0;
   });
 
   function isDateDisabled(date: string) {
-    const min = toValue(options.min);
-    const max = toValue(options.max);
+    return isDateOutsideBounds(date, minDate.value, maxDate.value);
+  }
 
-    if (min && minDate.value && compareIsoDates(date, min) < 0) {
+  function isDateOutsideBounds(date: string, min: string | undefined, max: string | undefined) {
+    if (min && compareIsoDates(date, min) < 0) {
       return true;
     }
 
-    if (max && maxDate.value && compareIsoDates(date, max) > 0) {
+    if (max && compareIsoDates(date, max) > 0) {
       return true;
     }
 
@@ -309,16 +346,16 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
   }
 
   function isMonthDisabled(year: number, month: number) {
-    const min = toValue(options.min);
-    const max = toValue(options.max);
+    const min = minDate.value;
+    const max = maxDate.value;
     const monthFirstDate = getLocalIsoDate(createLocalDate(year, month, 1));
     const monthLastDate = getLocalIsoDate(createLocalDate(year, month + 1, 0));
 
-    if (min && minDate.value && compareIsoDates(monthLastDate, min) < 0) {
+    if (min && compareIsoDates(monthLastDate, min) < 0) {
       return true;
     }
 
-    if (max && maxDate.value && compareIsoDates(monthFirstDate, max) > 0) {
+    if (max && compareIsoDates(monthFirstDate, max) > 0) {
       return true;
     }
 
@@ -326,16 +363,16 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
   }
 
   function isYearDisabled(year: number) {
-    const min = toValue(options.min);
-    const max = toValue(options.max);
+    const min = minDate.value;
+    const max = maxDate.value;
     const yearFirstDate = getLocalIsoDate(createLocalDate(year, 0, 1));
     const yearLastDate = getLocalIsoDate(createLocalDate(year, 11, 31));
 
-    if (min && minDate.value && compareIsoDates(yearLastDate, min) < 0) {
+    if (min && compareIsoDates(yearLastDate, min) < 0) {
       return true;
     }
 
-    if (max && maxDate.value && compareIsoDates(yearFirstDate, max) > 0) {
+    if (max && compareIsoDates(yearFirstDate, max) > 0) {
       return true;
     }
 
@@ -521,13 +558,12 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
       case 'ArrowUp':
         return getLocalIsoDate(addDays(current, -7));
       case 'End':
-        return getCalendarDaysForMonth(current.getFullYear(), current.getMonth()).findLast(
-          (day) => !day.outsideMonth && !day.disabled,
-        )?.date;
-      case 'Home':
-        return getCalendarDaysForMonth(current.getFullYear(), current.getMonth()).find(
-          (day) => !day.outsideMonth && !day.disabled,
-        )?.date;
+      case 'Home': {
+        const offset = (current.getFullYear() - displayedYear.value) * 12 + current.getMonth() - displayedMonth.value;
+        const days = getMonthDays(offset);
+        const isEnabledDateInMonth = (day: (typeof days)[number]) => !day.outsideMonth && !day.disabled;
+        return (key === 'Home' ? days.find(isEnabledDateInMonth) : days.findLast(isEnabledDateInMonth))?.date;
+      }
       case 'PageDown': {
         const next = addMonths(current.getFullYear(), current.getMonth(), 1);
         return getLocalIsoDate(createLocalDate(next.year, next.month, Math.min(current.getDate(), 28)));
@@ -552,23 +588,15 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return nextDate;
   }
 
-  function getDateAriaLabel(date: string) {
-    const formattedDate = fullDateFormatter.value.format(dateFromIso(date));
+  function getDateAriaLabel(date: string, dateLabel?: string) {
+    const formattedDate = dateLabel ?? fullDateFormatter.value.format(dateFromIso(date));
+    const isStart = selectedStartDate.value === date;
+    const isEnd = selectedEndDate.value === date;
+    if (!isStart && !isEnd) return formattedDate;
+
     const messages = toValue(options.messages) ?? en.messages.dateRangePicker;
-
-    if (selectedStartDate.value === date && selectedEndDate.value === date) {
-      return messages.startAndEndDate(formattedDate);
-    }
-
-    if (selectedStartDate.value === date) {
-      return messages.selectedStartDate(formattedDate);
-    }
-
-    if (selectedEndDate.value === date) {
-      return messages.selectedEndDate(formattedDate);
-    }
-
-    return formattedDate;
+    if (isStart && isEnd) return messages.startAndEndDate(formattedDate);
+    return isStart ? messages.selectedStartDate(formattedDate) : messages.selectedEndDate(formattedDate);
   }
 
   const initialDate = getInitialDisplayDate();
@@ -593,6 +621,7 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     calendarLabel,
     weekdayLabels,
     calendarDays,
+    getCalendarDayLabels,
     getCalendarPage,
     getCalendarDays,
     monthOptions,

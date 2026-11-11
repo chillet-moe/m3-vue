@@ -4,7 +4,7 @@ import type { StyleValue } from 'vue';
 defineOptions({ inheritAttrs: false });
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
-import { computed, inject, onBeforeUnmount, ref, unref, useAttrs, useId, useSlots, watch } from 'vue';
+import { computed, inject, ref, unref, useAttrs, useId, useSlots, watch } from 'vue';
 import {
   DatePicker,
   type DatePickerModelValue,
@@ -222,7 +222,6 @@ const datePickerOpen = ref(false);
 const timePickerOpen = ref(false);
 const datePickerAnchorName = `--m3-text-field-date-picker-anchor-${generatedId}`;
 const timePickerAnchorName = `--m3-text-field-time-picker-anchor-${generatedId}`;
-let releasePickerAnchorName: (() => void) | undefined;
 
 const normalizedInputType = computed(() => {
   return props.type.toLowerCase();
@@ -318,21 +317,12 @@ const pickerAnchorName = computed(() => {
 });
 
 watch(
-  [containerRef, pickerAnchorName],
-  ([nextContainer, nextAnchorName]) => {
-    releasePickerAnchorName?.();
-    releasePickerAnchorName =
-      nextContainer && nextAnchorName ? acquireAnchorName(nextContainer, nextAnchorName) : undefined;
+  [() => (pickerAnchorName.value ? containerRef.value : undefined), pickerAnchorName],
+  ([container, anchorName], _, onCleanup) => {
+    if (container && anchorName) onCleanup(acquireAnchorName(container, anchorName));
   },
-  {
-    immediate: true,
-    flush: 'post',
-  },
+  { flush: 'post' },
 );
-
-onBeforeUnmount(() => {
-  releasePickerAnchorName?.();
-});
 
 function normalizeDateLikeValue(value: string | undefined) {
   if (!value) {

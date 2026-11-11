@@ -158,15 +158,20 @@ export function useTimePicker(options: UseTimePickerOptions) {
     return messages.minuteRange;
   });
 
+  // The selected dial mark can stay unchanged while the hand moves between marks.
+  const selectedClockMinute = computed(() => roundMinuteForDial(draftMinute.value));
+
   const clockOptions = computed<ClockOption[]>(() => {
     if (activeSelection.value === 'minute') {
+      const selectedMinute = selectedClockMinute.value;
+
       return Array.from({ length: 12 }, (_, index) => {
         const value = index * 5;
 
         return {
           value,
           label: padTimePart(value),
-          selected: value === roundMinuteForDial(draftMinute.value),
+          selected: value === selectedMinute,
           angle: value * 6,
           ring: 'outer',
         };

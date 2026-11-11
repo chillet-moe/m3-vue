@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import { computed, nextTick, ref, useId, watch } from 'vue';
+import { computed, nextTick, ref, useId } from 'vue';
 import Button from '@/components/Button/Button.vue';
 import Icon from '@/components/Icon/Icon.vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
@@ -14,6 +14,7 @@ import {
 } from '@/components/DateRangePicker/useDateRangePicker';
 import { usePickerPopover } from '@/composables/usePickerPopover';
 import { useM3Locale } from '@/locales/context';
+import '../DatePicker/DatePicker.css';
 
 export type { DateRangePickerCalendars, DateRangePickerModelValue, DateRangePickerRangeValue, DateRangePickerVariant };
 
@@ -162,6 +163,10 @@ const calendarPages = computed(() => {
   }));
 });
 
+const calendarDayLabels = computed(() =>
+  Array.from({ length: renderedCalendarCount.value }, (_, offset) => picker.getCalendarDayLabels(offset)),
+);
+
 function getDateButton(date: string) {
   return (
     surfaceRef.value?.querySelector<HTMLButtonElement>(
@@ -230,17 +235,7 @@ function handleConfirm() {
   popover.hide();
 }
 
-watch(
-  () => modelValue.value,
-  () => {
-    if (!open.value) {
-      picker.resetDraftFromModel();
-    }
-  },
-);
-
 defineExpose({
-  popoverEl: popoverRef,
   show: popover.show,
   hide: popover.hide,
   toggle: popover.toggle,
@@ -315,7 +310,6 @@ const shape = useShape(() => props.shape);
         />
 
         <Button
-          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -352,7 +346,6 @@ const shape = useShape(() => props.shape);
         />
 
         <Button
-          v-state-layer
           class="m3-date-picker-switch m3-state-layer"
           variant="text"
           size="small"
@@ -415,7 +408,7 @@ const shape = useShape(() => props.shape);
             :aria-label="page.label"
           >
             <span
-              v-for="day in page.days"
+              v-for="(day, index) in page.days"
               :key="`${page.key}-${day.date}`"
               class="m3-date-range-picker-day-cell"
               data-scope="date-range-picker"
@@ -450,7 +443,11 @@ const shape = useShape(() => props.shape);
                 :disabled="day.disabled"
                 :aria-selected="day.selected ? 'true' : 'false'"
                 :aria-current="day.today ? 'date' : undefined"
-                :aria-label="picker.getDateAriaLabel(day.date)"
+                :aria-label="
+                  day.selected
+                    ? picker.getDateAriaLabel(day.date, calendarDayLabels[page.offset]?.[index])
+                    : calendarDayLabels[page.offset]?.[index]
+                "
                 @click="picker.selectDate(day.date)"
                 @keydown="handleCalendarKeydown($event, day.date)"
               >

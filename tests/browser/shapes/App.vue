@@ -101,7 +101,7 @@ const items = [{ value: 'node', label: 'Node' }];
       ><Snackbar data-testid="snackbar">Snackbar</Snackbar><BottomSheet data-testid="bottom">Bottom</BottomSheet
       ><SideSheet data-testid="side">Side</SideSheet> <DatePicker data-testid="date" /><DateRangePicker
         data-testid="range"
-      /><TimePicker data-testid="time" />
+      /><TimePicker data-testid="time" input-mode="keyboard" />
     </div>
   </main>
 </template>

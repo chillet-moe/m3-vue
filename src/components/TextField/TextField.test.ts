@@ -736,6 +736,38 @@ describe('TextField', () => {
     app.unmount();
   });
 
+  it('restores authored anchors when the picker type changes or the field unmounts', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const type = ref('text');
+    const app = createApp(() => h(TextField, { modelValue: '', type: type.value }));
+    app.mount(container);
+    const field = container.querySelector<HTMLElement>('[data-scope="text-field"][data-part="container"]')!;
+    field.style.setProperty('anchor-name', '--authored-field-anchor');
+
+    try {
+      type.value = 'date';
+      await nextTick();
+      const date = container.querySelector<HTMLElement>('[data-scope="date-picker"][data-part="root"]')!;
+      const dateAnchor = date.style.getPropertyValue('position-anchor');
+      expect(field.style.getPropertyValue('anchor-name')).toBe(`--authored-field-anchor, ${dateAnchor}`);
+
+      type.value = 'text';
+      await nextTick();
+      expect(field.style.getPropertyValue('anchor-name')).toBe('--authored-field-anchor');
+
+      type.value = 'time';
+      await nextTick();
+      const time = container.querySelector<HTMLElement>('[data-scope="time-picker"][data-part="root"]')!;
+      const timeAnchor = time.style.getPropertyValue('position-anchor');
+      expect(field.style.getPropertyValue('anchor-name')).toBe(`--authored-field-anchor, ${timeAnchor}`);
+    } finally {
+      app.unmount();
+    }
+
+    expect(field.style.getPropertyValue('anchor-name')).toBe('--authored-field-anchor');
+  });
+
   it('preserves the time segment when datetime-local inputs pick a new date', async () => {
     installPopoverPolyfill();
 

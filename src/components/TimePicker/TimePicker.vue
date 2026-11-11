@@ -3,7 +3,7 @@ import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
 
-import { computed, inject, nextTick, ref, unref, useId, watch } from 'vue';
+import { computed, inject, nextTick, ref, unref, useId } from 'vue';
 import { timePickerContextKey } from './TimePickerContext';
 import Button from '@/components/Button/Button.vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
@@ -136,6 +136,8 @@ const clockHandStyle = computed(() => ({
   '--_time-picker-hand-angle': `${picker.clockHandAngle.value}deg`,
   '--_time-picker-hand-radius': picker.clockHandRing.value === 'inner' ? '30%' : '42%',
 }));
+
+const clockOptionStyles = computed(() => picker.clockOptions.value.map(getClockOptionStyle));
 
 function getClockOptionStyle(option: ClockOption) {
   const radians = (option.angle * Math.PI) / 180;
@@ -387,17 +389,7 @@ function handleClockKeydown(event: KeyboardEvent) {
   picker.selectHour(nextHour % 12 || 12);
 }
 
-watch(
-  () => modelValue.value,
-  () => {
-    if (!open.value) {
-      picker.resetDraftFromModel();
-    }
-  },
-);
-
 defineExpose({
-  popoverEl: popoverRef,
   show: popover.show,
   hide: popover.hide,
   toggle: popover.toggle,
@@ -529,7 +521,7 @@ const shape = useShape(() => props.shape);
 
           <button
             v-state-layer
-            v-for="option in picker.clockOptions.value"
+            v-for="(option, index) in picker.clockOptions.value"
             :key="`${picker.activeSelection.value}-${option.value}`"
             type="button"
             class="m3-time-picker-clock-option m3-state-layer"
@@ -537,7 +529,7 @@ const shape = useShape(() => props.shape);
             data-part="clock-option"
             :data-selected="option.selected ? 'true' : undefined"
             :data-ring="option.ring"
-            :style="getClockOptionStyle(option)"
+            :style="clockOptionStyles[index]"
             :aria-pressed="option.selected ? 'true' : 'false'"
             @click.stop="handleClockOptionClick($event, option)"
             @keydown="handleClockKeydown"

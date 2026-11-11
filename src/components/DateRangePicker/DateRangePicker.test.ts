@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
+import { provideM3Locale } from '@/locales/context';
 import DateRangePicker, { type DateRangePickerModelValue } from './DateRangePicker.vue';
 
 const popoverOpenElements = new WeakSet<HTMLElement>();
@@ -80,6 +81,42 @@ afterEach(() => {
 });
 
 describe('DateRangePicker', () => {
+  it('opens the latest closed model through the component API and closes through hide', async () => {
+    const value = ref({ start: '2026-04-15', end: '2026-04-20' });
+    const open = ref(false);
+    const picker = ref<InstanceType<typeof DateRangePicker>>();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const app = createApp(() =>
+      h(DateRangePicker, {
+        ref: picker,
+        modelValue: value.value,
+        open: open.value,
+        'onUpdate:open': (next) => {
+          open.value = next;
+        },
+        locale: 'en-US',
+      }),
+    );
+    app.mount(host);
+    await nextTick();
+    value.value = { start: '2026-05-14', end: '2026-05-19' };
+    await nextTick();
+    picker.value!.show();
+    await nextTick();
+    await nextTick();
+    const root = document.querySelector<HTMLElement>('[data-scope="date-range-picker"][data-part="root"]')!;
+    expect(open.value).toBe(true);
+    expect(root.matches(':popover-open')).toBe(true);
+    expect(root.querySelector('[data-date="2026-05-14"]')?.getAttribute('data-selected-start')).toBe('true');
+    expect(root.querySelector('[data-date="2026-05-19"]')?.getAttribute('data-selected-end')).toBe('true');
+    picker.value!.hide();
+    await nextTick();
+    expect(open.value).toBe(false);
+    expect(root.matches(':popover-open')).toBe(false);
+    app.unmount();
+  });
+
   it('emits closed after its popover exit completes', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -169,6 +206,39 @@ describe('DateRangePicker', () => {
     app.unmount();
   });
 
+  it('moves to enabled month edges from either calendar pane', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const app = createApp(() =>
+      h(DateRangePicker, {
+        open: true,
+        modelValue: { start: '2026-04-10' },
+        min: '2026-04-08',
+        max: '2026-05-20',
+        locale: 'en-US',
+      }),
+    );
+    app.mount(container);
+    await nextTick();
+    await nextTick();
+
+    const navigate = async (date: string, key: string) => {
+      getDay(date)?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      await nextTick();
+      await nextTick();
+    };
+
+    await navigate('2026-04-10', 'Home');
+    expect(document.activeElement).toBe(getDay('2026-04-08'));
+
+    await navigate('2026-05-10', 'Home');
+    expect(document.activeElement).toBe(getDay('2026-05-01'));
+
+    await navigate('2026-05-01', 'End');
+    expect(document.activeElement).toBe(getDay('2026-05-20'));
+    app.unmount();
+  });
+
   it('uses the locale week start by default', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -235,6 +305,7 @@ describe('DateRangePicker', () => {
           end: '2026-04-14',
         },
         today: '2026-04-12',
+        locale: 'en-US',
       }),
     );
 
@@ -248,8 +319,44 @@ describe('DateRangePicker', () => {
     expect(popover?.parentElement).toBe(container);
     expect(getDay('2026-04-10')?.dataset.selectedStart).toBe('true');
     expect(getDay('2026-04-14')?.dataset.selectedEnd).toBe('true');
+    expect(getDay('2026-04-10')?.getAttribute('aria-label')).toBe('Start date, Friday, April 10, 2026');
+    expect(getDay('2026-04-14')?.getAttribute('aria-label')).toBe('End date, Tuesday, April 14, 2026');
     expect(getDay('2026-04-12')?.dataset.inRange).toBe('true');
     expect(getDay('2026-04-12')?.getAttribute('aria-current')).toBe('date');
+
+    app.unmount();
+  });
+
+  it('updates the combined endpoint label when the localized message changes', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const endpointLabel = ref('Whole range');
+    const app = createApp({
+      setup() {
+        provideM3Locale({
+          messages: () => {
+            const label = endpointLabel.value;
+            return { dateRangePicker: { startAndEndDate: (date) => `${label}: ${date}` } };
+          },
+        });
+
+        return () =>
+          h(DateRangePicker, {
+            open: true,
+            modelValue: { start: '2026-04-10', end: '2026-04-10' },
+            today: '2026-04-12',
+            locale: 'en-US',
+          });
+      },
+    });
+    app.mount(container);
+    await nextTick();
+
+    expect(getDay('2026-04-10')?.getAttribute('aria-label')).toBe('Whole range: Friday, April 10, 2026');
+    endpointLabel.value = 'Selected day';
+    await nextTick();
+    expect(getDay('2026-04-10')?.getAttribute('aria-label')).toBe('Selected day: Friday, April 10, 2026');
+    expect(getDay('2026-04-12')?.getAttribute('aria-label')).toBe('Sunday, April 12, 2026');
 
     app.unmount();
   });

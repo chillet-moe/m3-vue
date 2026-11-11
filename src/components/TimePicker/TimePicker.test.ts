@@ -121,6 +121,44 @@ afterEach(() => {
 });
 
 describe('TimePicker', () => {
+  it('opens the latest closed model through the component API and closes through hide', async () => {
+    const value = ref('12:30');
+    const open = ref(false);
+    const picker = ref<InstanceType<typeof TimePicker>>();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const app = createApp(() =>
+      h(TimePicker, {
+        ref: picker,
+        modelValue: value.value,
+        open: open.value,
+        'onUpdate:open': (next) => {
+          open.value = next;
+        },
+        locale: 'en-US',
+        format: '24h',
+        inputMode: 'clock',
+      }),
+    );
+    app.mount(host);
+    await nextTick();
+    value.value = '09:45';
+    await nextTick();
+    picker.value!.show();
+    await nextTick();
+    await nextTick();
+    const root = document.querySelector<HTMLElement>('[data-scope="time-picker"][data-part="root"]')!;
+    expect(open.value).toBe(true);
+    expect(root.matches(':popover-open')).toBe(true);
+    expect(root.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('09');
+    expect(root.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('45');
+    picker.value!.hide();
+    await nextTick();
+    expect(open.value).toBe(false);
+    expect(root.matches(':popover-open')).toBe(false);
+    app.unmount();
+  });
+
   it('emits closed after its popover exit completes', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -190,6 +228,7 @@ describe('TimePicker', () => {
     const app = createApp(() =>
       h(TimePicker, {
         open: true,
+        locale: 'en-US',
         modelValue: '21:30',
       }),
     );
@@ -221,6 +260,7 @@ describe('TimePicker', () => {
         return () =>
           h(TimePicker, {
             open: true,
+            format: '12h',
             modelValue: value.value,
             'onUpdate:modelValue': (nextValue) => {
               value.value = nextValue as TimePickerModelValue;
@@ -259,6 +299,7 @@ describe('TimePicker', () => {
     const app = createApp(() =>
       h(TimePicker, {
         open: true,
+        format: '12h',
         modelValue: '09:30',
       }),
     );
@@ -281,14 +322,17 @@ describe('TimePicker', () => {
     app.unmount();
   });
 
-  it('updates the clock selection from pointer drag and commits on release', async () => {
+  it('preserves exact minutes when dragging between clock marks', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
+    const updates: TimePickerModelValue[] = [];
     const app = createApp(() =>
       h(TimePicker, {
         open: true,
+        format: '12h',
         modelValue: '09:30',
+        'onUpdate:modelValue': (value) => updates.push(value),
       }),
     );
 
@@ -320,12 +364,29 @@ describe('TimePicker', () => {
     expect(document.body.querySelector('[data-part="hour-display"]')?.textContent?.trim()).toBe('03');
     expect(document.body.querySelector<HTMLElement>('[data-part="minute-display"]')?.dataset.selected).toBe('true');
 
-    dispatchPointerEvent(clockFace, 'pointerdown', { button: 0, clientX: 100, clientY: 0 });
-    dispatchPointerEvent(clockFace, 'pointermove', { button: 0, clientX: 200, clientY: 100 });
-    dispatchPointerEvent(clockFace, 'pointerup', { button: 0, clientX: 200, clientY: 100 });
+    const minutePosition = (minute: number) => {
+      const angle = (minute * Math.PI) / 30;
+      return { button: 0, clientX: 100 + 100 * Math.sin(angle), clientY: 100 - 100 * Math.cos(angle) };
+    };
+    const minuteDisplay = document.body.querySelector('[data-part="minute-display"]');
+    const selectedClockOption = () => clockFace.querySelector('[aria-pressed="true"]')?.textContent?.trim();
+
+    dispatchPointerEvent(clockFace, 'pointerdown', minutePosition(0));
+    dispatchPointerEvent(clockFace, 'pointermove', minutePosition(13));
     await nextTick();
 
-    expect(document.body.querySelector('[data-part="minute-display"]')?.textContent?.trim()).toBe('15');
+    expect(minuteDisplay?.textContent?.trim()).toBe('13');
+    expect(selectedClockOption()).toBe('15');
+
+    dispatchPointerEvent(clockFace, 'pointermove', minutePosition(14));
+    dispatchPointerEvent(clockFace, 'pointerup', minutePosition(14));
+    await nextTick();
+
+    expect(minuteDisplay?.textContent?.trim()).toBe('14');
+    expect(selectedClockOption()).toBe('15');
+
+    getButton(container, 'OK')?.click();
+    expect(updates).toEqual(['03:14']);
 
     app.unmount();
   });
@@ -376,6 +437,7 @@ describe('TimePicker', () => {
     const app = createApp(() =>
       h(TimePicker, {
         open: true,
+        format: '12h',
         inputMode: 'keyboard',
         modelValue: '07:00',
       }),
@@ -508,6 +570,7 @@ describe('TimePicker', () => {
         return () =>
           h(TimePicker, {
             open: true,
+            format: '12h',
             inputMode: 'keyboard',
             modelValue: value.value,
             'onUpdate:modelValue': (nextValue) => {

@@ -75,6 +75,41 @@ afterEach(() => {
 });
 
 describe('DatePicker', () => {
+  it('opens the latest closed model through the component API and closes through hide', async () => {
+    const value = ref('2026-04-15');
+    const open = ref(false);
+    const picker = ref<InstanceType<typeof DatePicker>>();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const app = createApp(() =>
+      h(DatePicker, {
+        ref: picker,
+        modelValue: value.value,
+        open: open.value,
+        'onUpdate:open': (next) => {
+          open.value = next;
+        },
+        locale: 'en-US',
+      }),
+    );
+    app.mount(host);
+    await nextTick();
+    value.value = '2026-05-14';
+    await nextTick();
+    picker.value!.show();
+    await nextTick();
+    await nextTick();
+    const root = document.querySelector<HTMLElement>('[data-scope="date-picker"][data-part="root"]')!;
+    expect(open.value).toBe(true);
+    expect(root.matches(':popover-open')).toBe(true);
+    expect(root.querySelector('[data-date="2026-05-14"]')?.getAttribute('data-selected')).toBe('true');
+    picker.value!.hide();
+    await nextTick();
+    expect(open.value).toBe(false);
+    expect(root.matches(':popover-open')).toBe(false);
+    app.unmount();
+  });
+
   it('renders a standalone popover and honors initial open state', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -310,6 +345,10 @@ describe('DatePicker', () => {
     await nextTick();
 
     expect(getWeekdays()).toEqual(['S', 'M', 'T', 'W', 'T', 'F', 'S']);
+
+    locale.value = 'fr-FR';
+    await nextTick();
+    expect(getDay(container, '2026-08-17')?.getAttribute('aria-label')).toBe('lundi 17 août 2026');
 
     app.unmount();
   });
