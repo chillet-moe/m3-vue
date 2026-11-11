@@ -94,7 +94,7 @@ const slots = defineSlots<{
   <component
     v-state-layer
     :is="link.tag"
-    class="m3-state-layer m3-button m3-button-surface"
+    class="m3-state-layer m3-button"
     data-scope="button"
     data-part="root"
     :data-variant="variant"

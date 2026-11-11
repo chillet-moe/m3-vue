@@ -30,6 +30,28 @@ try {
     }
   }
 
+  const item = page.getByTestId('item');
+  await item.evaluate((el) => {
+    el.style.setProperty('--md-sys-color-on-surface', '#14283c');
+    el.style.setProperty('--md-button-hovered-label-text-color', '#cc0000');
+    el.style.setProperty('--md-button-focused-label-text-color', '#cc0000');
+  });
+  const itemColors = () =>
+    item.evaluate((el) => ({
+      title: getComputedStyle(el.querySelector('[data-part="title"]')!).color,
+      layer: getComputedStyle(el, '::after').backgroundColor,
+    }));
+  const expectedItemColors = { title: 'rgb(20, 40, 60)', layer: 'rgb(20, 40, 60)' };
+  await checkBothOrders('Button', 'ListItem', async () => {
+    await item.hover();
+    assert.deepEqual(await itemColors(), expectedItemColors, 'ListItem hover colors');
+    await page.mouse.move(0, 0);
+    await page.keyboard.press('Tab');
+    await item.focus();
+    assert.deepEqual(await itemColors(), expectedItemColors, 'ListItem keyboard focus colors');
+    assert.equal(await item.evaluate((el) => getComputedStyle(el).outlineStyle), 'solid');
+  });
+
   const range = page.locator('[data-scope="date-range-picker"][data-part="root"]');
   await range.evaluate((el) => {
     el.style.setProperty('--md-date-picker-docked-container-width', '320px');
@@ -107,7 +129,21 @@ try {
     await page.keyboard.press('Escape');
     await field.waitFor({ state: 'hidden' });
   }
-  console.log('Picker width, calendar switch typography and floating labels are independent of stylesheet order.');
+
+  await openFixture(page, new URL('/tests/browser/button-disabled-link/', server.resolvedUrls!.local[0]).href);
+  await checkBothOrders('Button', 'ListItem', async () => {
+    for (const kind of ['native', 'link']) {
+      const style = await page.locator(`.list-item-${kind}-disabled`).evaluate(async (el) => {
+        await Promise.all(el.getAnimations().map((animation) => animation.finished.catch(() => {})));
+        const { backgroundColor, transitionDuration } = getComputedStyle(el);
+        return { backgroundColor, transitionDuration };
+      });
+      assert.deepEqual(style, { backgroundColor: 'rgba(0, 0, 0, 0)', transitionDuration: '0s' });
+    }
+  });
+  console.log(
+    'Picker width, calendar typography, floating labels and ListItem states are independent of stylesheet order.',
+  );
 } finally {
   await browser.close();
   await server.close();

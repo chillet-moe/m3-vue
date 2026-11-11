@@ -22,8 +22,8 @@ function hasAllLayers(source: string, layers: readonly string[]): boolean {
 }
 
 function getPreludeInsertIndex(source: string): number {
-  const leadingAtRules = source.match(/^(?:\s*@charset[^;]*;\s*)?(?:\s*@import[^;]*;\s*)*/);
-  return leadingAtRules?.[0].length ?? 0;
+  const charset = source.match(/^\s*@charset[^;]*;\s*/i);
+  return charset?.[0].length ?? 0;
 }
 
 function injectPrelude(source: string, layers: readonly string[]): string {
@@ -39,7 +39,10 @@ export function layerPreludePlugin(options: LayerPreludePluginOptions): Plugin {
   return {
     name: 'vitepress:layer-prelude',
     enforce: 'post',
-    apply: 'build',
+    transformIndexHtml() {
+      // Vite injects CSS modules after this declaration in development.
+      return [{ tag: 'style', children: buildLayerPrelude(layers), injectTo: 'head-prepend' }];
+    },
     generateBundle(_, bundle) {
       if (!layers.length) {
         return;

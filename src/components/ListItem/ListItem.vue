@@ -109,19 +109,11 @@ const slotProps = computed(() => ({
   <component
     v-state-layer
     :is="link.tag"
-    :class="[
-      'm3-item',
-      appearance === 'expressive' && 'm3-morph-host',
-      {
-        'm3-state-layer': interactive,
-        'm3-button-surface': interactive,
-      },
-    ]"
+    :class="['m3-item', appearance === 'expressive' && 'm3-morph-host', interactive && 'm3-state-layer']"
     data-scope="item"
     data-part="root"
     :data-appearance="appearance"
     data-list-group-item
-    data-variant="text"
     :data-size="size"
     :data-shape="shape"
     data-m3-shape

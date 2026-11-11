@@ -26,6 +26,58 @@ async function assertHomeLinksLeftAligned(page: Page) {
   }
 }
 
+async function assertDocsThemeOrder(page: Page) {
+  const result = await page.evaluate(() => {
+    const heading = document.querySelector('.vp-doc h1')!;
+    const subheading = document.querySelector('.vp-doc h2')!;
+    const code = document.querySelector('.vp-doc div[class*="language-"]')!;
+    const readStyles = () => ({
+      background: getComputedStyle(document.body).backgroundColor,
+      font: getComputedStyle(document.body).fontFamily,
+      headingSize: getComputedStyle(heading).fontSize,
+      subheadingPadding: getComputedStyle(subheading).paddingTop,
+      codeMargin: getComputedStyle(code).marginTop,
+    });
+    const original = readStyles();
+    const layers = new Map<string, string[]>([
+      ['vitepress-defaults', []],
+      ['docs-theme', []],
+    ]);
+    // The production build combines these blocks into one CSS asset. Split the actual rules into separate sheets.
+    for (const sheet of document.styleSheets) {
+      if (sheet.href && new URL(sheet.href).origin !== location.origin) continue;
+      const indexes: number[] = [];
+      for (const [index, rule] of [...sheet.cssRules].entries()) {
+        if (!(rule instanceof CSSLayerBlockRule)) continue;
+        const blocks = layers.get(rule.name);
+        if (!blocks) continue;
+        blocks.push(rule.cssText);
+        indexes.push(index);
+      }
+      for (const index of indexes.reverse()) sheet.deleteRule(index);
+    }
+    const sheets = [...layers].map(([name, blocks]) => {
+      if (blocks.length === 0) throw new Error(`Missing stylesheet rules for ${name}`);
+      const style = document.createElement('style');
+      style.textContent = blocks.join('\n');
+      return style;
+    });
+    document.head.append(...sheets);
+    const siteLast = readStyles();
+    document.head.append(...sheets.reverse());
+    return { original, siteLast, defaultsLast: readStyles() };
+  });
+  assert.deepEqual(result.siteLast, result.original);
+  assert.deepEqual(result.defaultsLast, result.original);
+  assert.deepEqual(result.original, {
+    background: 'rgb(253, 247, 254)',
+    font: '"Google Sans Flex", sans-serif',
+    headingSize: '36px',
+    subheadingPadding: '18px',
+    codeMargin: '20px',
+  });
+}
+
 // Use the production preview to check the bundled stylesheet order.
 const base = process.env.DOCS_URL ?? 'http://127.0.0.1:5173';
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH ?? '/usr/bin/google-chrome-stable' });
@@ -200,8 +252,13 @@ try {
       await codeBlock.locator('button.copy.copied').waitFor({ state: 'hidden' });
     }
   }
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await openFixture(page, `${base}/getting-started`);
+  await page.locator('.vp-doc h1').waitFor();
+  await assertDocsThemeOrder(page);
   assert.deepEqual(errors, []);
-  console.log('Home components, theme inheritance, responsive search and shortcuts passed.');
+  console.log('Home components, theme inheritance, responsive search and stylesheet order passed.');
 } finally {
   await browser.close();
 }

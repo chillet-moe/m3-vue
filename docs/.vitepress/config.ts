@@ -5,6 +5,7 @@ import { componentMetaPlugin } from './plugins/component-meta.ts';
 import { componentAnatomyPlugin } from './plugins/component-anatomy.ts';
 import { sourceApiMetaPlugin } from './plugins/source-api-meta.ts';
 import { layerPreludePlugin } from './plugins/layer-prelude.ts';
+import { docsThemeLayers, themeLayersPlugin } from './plugins/theme-layers.ts';
 
 // Sync with theme.css
 const m3LayerOrder = ['reset', 'base', 'tokens', 'components'];
@@ -232,7 +233,8 @@ export default () =>
         ],
       },
       plugins: [
-        layerPreludePlugin({ layers: m3LayerOrder }),
+        layerPreludePlugin({ layers: [...m3LayerOrder, ...docsThemeLayers] }),
+        themeLayersPlugin(),
         componentMetaPlugin({
           tsconfigPath: 'tsconfig.docs.json',
           components: ['src/components/**/*.vue'],
