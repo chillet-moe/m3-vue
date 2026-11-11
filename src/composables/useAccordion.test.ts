@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { nextTick, ref, shallowRef } from 'vue';
+import { createApp, h, nextTick, ref, shallowRef } from 'vue';
 import { useAccordion } from './useAccordion';
 
 describe('useAccordion', () => {
@@ -136,14 +136,40 @@ describe('useAccordion', () => {
     const trigger = accordion.getTriggerAttrs('account');
     const panel = accordion.getPanelAttrs('account');
 
-    expect(trigger.id).toBe('settings-trigger-account');
     expect(trigger.type).toBe('button');
     expect(trigger['aria-expanded']).toBe(true);
-    expect(trigger['aria-controls']).toBe('settings-panel-account');
-    expect(panel.id).toBe('settings-panel-account');
+    expect(trigger['aria-controls']).toBe(panel.id);
     expect(panel.role).toBe('region');
-    expect(panel['aria-labelledby']).toBe('settings-trigger-account');
+    expect(panel['aria-labelledby']).toBe(trigger.id);
     expect(panel.hidden).toBeUndefined();
+  });
+
+  it('links each distinct value to its own trigger and panel', () => {
+    const values = ['a b', 'a_b', 'a%20b', '设置'];
+    const container = document.createElement('div');
+    document.body.append(container);
+    const app = createApp({
+      setup() {
+        const accordion = useAccordion({ value: values, multiple: true });
+        return () =>
+          values.flatMap((value) => [
+            h('button', accordion.getTriggerAttrs(value), value),
+            h('section', accordion.getPanelAttrs(value), value),
+          ]);
+      },
+    });
+    app.mount(container);
+    try {
+      const triggers = container.querySelectorAll('button');
+      const panels = container.querySelectorAll('section');
+      for (let index = 0; index < values.length; index++) {
+        expect(document.getElementById(triggers[index]!.getAttribute('aria-controls')!)).toBe(panels[index]);
+        expect(document.getElementById(panels[index]!.getAttribute('aria-labelledby')!)).toBe(triggers[index]);
+      }
+    } finally {
+      app.unmount();
+      container.remove();
+    }
   });
 
   it('trigger click toggles the item', () => {

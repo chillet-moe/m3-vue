@@ -77,10 +77,6 @@ function normalizeValue<T extends AccordionItemValue>(value: T | T[] | undefined
   return typeof value === 'string' ? [value] : [];
 }
 
-function normalizeIdPart(value: string) {
-  return value.replace(/\s/g, '_');
-}
-
 function isTriggerEnabled(trigger: HTMLElement) {
   return (
     !trigger.hasAttribute('disabled') &&
@@ -171,11 +167,11 @@ export function useAccordion<T extends AccordionItemValue = AccordionItemValue>(
   }
 
   function getTriggerId(value: T) {
-    return `${id}-trigger-${normalizeIdPart(value)}`;
+    return `${id}-trigger-${encodeURIComponent(value)}`;
   }
 
   function getPanelId(value: T) {
-    return `${id}-panel-${normalizeIdPart(value)}`;
+    return `${id}-panel-${encodeURIComponent(value)}`;
   }
 
   function handleKeydown(event: KeyboardEvent) {

@@ -88,11 +88,11 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
   }
 
   function getTriggerId(value: T) {
-    return `${id}-trigger-${value.replace(/\s/g, '_')}`;
+    return `${id}-trigger-${encodeURIComponent(value)}`;
   }
 
   function getPanelId(value: T) {
-    return `${id}-panel-${value.replace(/\s/g, '_')}`;
+    return `${id}-panel-${encodeURIComponent(value)}`;
   }
 
   const triggerListAttrs = computed(() => ({

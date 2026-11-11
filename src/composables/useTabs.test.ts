@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { ref } from 'vue';
+import { createApp, h, ref } from 'vue';
 import { useTabs } from './useTabs';
 
 describe('useTabs', () => {
@@ -93,30 +93,33 @@ describe('useTabs', () => {
     expect(inactivePanel['data-active']).toBeUndefined();
   });
 
-  it('trigger aria-controls matches panel id', () => {
-    const tabs = useTabs({ value: 'tab1' });
-    const trigger = tabs.getTriggerAttrs('tab1');
-    const panel = tabs.getPanelAttrs('tab1');
-
-    expect(trigger['aria-controls']).toBe(panel.id);
-  });
-
-  it('uses explicit id when provided', () => {
-    const tabs = useTabs({ value: 'tab1', id: 'main-nav-tabs' });
-    const trigger = tabs.getTriggerAttrs('tab1');
-    const panel = tabs.getPanelAttrs('tab1');
-
-    expect(tabs.id).toBe('main-nav-tabs');
-    expect(trigger.id).toBe('main-nav-tabs-trigger-tab1');
-    expect(panel.id).toBe('main-nav-tabs-panel-tab1');
-  });
-
-  it('panel aria-labelledby matches trigger id', () => {
-    const tabs = useTabs({ value: 'tab1' });
-    const trigger = tabs.getTriggerAttrs('tab1');
-    const panel = tabs.getPanelAttrs('tab1');
-
-    expect(panel['aria-labelledby']).toBe(trigger.id);
+  it('links each distinct value to its own trigger and panel', () => {
+    const values = ['a b', 'a_b', 'a%20b', '设置'];
+    const container = document.createElement('div');
+    document.body.append(container);
+    const app = createApp({
+      setup() {
+        const tabs = useTabs<string>({ value: 'a_b', id: 'main-nav-tabs' });
+        expect(tabs.id).toBe('main-nav-tabs');
+        return () =>
+          values.flatMap((value) => [
+            h('button', tabs.getTriggerAttrs(value), value),
+            h('section', tabs.getPanelAttrs(value), value),
+          ]);
+      },
+    });
+    app.mount(container);
+    try {
+      const triggers = container.querySelectorAll('button');
+      const panels = container.querySelectorAll('section');
+      for (let index = 0; index < values.length; index++) {
+        expect(document.getElementById(triggers[index]!.getAttribute('aria-controls')!)).toBe(panels[index]);
+        expect(document.getElementById(panels[index]!.getAttribute('aria-labelledby')!)).toBe(triggers[index]);
+      }
+    } finally {
+      app.unmount();
+      container.remove();
+    }
   });
 
   it('trigger onClick calls setValue', () => {
