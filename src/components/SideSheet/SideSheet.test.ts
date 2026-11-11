@@ -83,7 +83,7 @@ describe('SideSheet', () => {
     expect(dialog?.dataset.scope).toBe('side-sheet');
     expect(dialog?.dataset.side).toBe('end');
     expect(dialog?.dataset.variant).toBe('docked');
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).not.toBe('');
 
@@ -91,7 +91,7 @@ describe('SideSheet', () => {
     await nextTick();
 
     expect(dialog?.open).toBe(false);
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
@@ -130,7 +130,7 @@ describe('SideSheet', () => {
     expect(open.value).toBe(false);
     expect(onClose).toHaveBeenCalledWith('done');
     expect(onClosed).toHaveBeenCalledWith('done');
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
     app.unmount();
@@ -198,20 +198,20 @@ describe('SideSheet', () => {
     const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
 
     expect(dialog?.open).toBe(true);
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
     lockScroll.value = true;
     await nextTick();
 
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
 
     lockScroll.value = false;
     await nextTick();
 
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
 
     app.unmount();

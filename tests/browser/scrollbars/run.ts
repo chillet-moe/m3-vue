@@ -69,6 +69,58 @@ try {
       await verify(root.locator('[data-part="content"]'), root.locator('[data-part="surface"]'), `${scheme}-${kind}`);
     }
   }
+  for (const overflowProperty of ['overflow', 'overflow-x']) {
+    await openFixture(page, new URL('/tests/browser/dialog-spacing/', server.resolvedUrls!.local[0]).href);
+    await page.evaluate((property) => {
+      document.body.style.setProperty(property, 'scroll', 'important');
+      document.body.style.setProperty('padding-right', '4px', 'important');
+      document.body.style.color = 'blue';
+      document.documentElement.style.setProperty('--scrollbar-width', '7px', 'important');
+      return window.__dialogSpacing({ kind: 'dialog', headline: true, icon: false, actions: false, long: false });
+    }, overflowProperty);
+    assert.deepEqual(
+      await page.evaluate(() => {
+        const style = getComputedStyle(document.body);
+        return [style.overflowX, style.overflowY];
+      }),
+      ['hidden', 'hidden'],
+    );
+    await page.evaluate(() => {
+      document.body.style.color = 'red';
+      document.body.style.setProperty('--consumer-theme', 'dark');
+      document.querySelector<HTMLDialogElement>('dialog[open]')!.close();
+    });
+    await page.waitForFunction(() => !document.body.hasAttribute('data-m3-scroll-lock'));
+    assert.deepEqual(
+      await page.evaluate(() => {
+        const style = document.body.style;
+        return {
+          overflowX: style.overflowX,
+          overflowY: style.overflowY,
+          priorityX: style.getPropertyPriority('overflow-x'),
+          priorityY: style.getPropertyPriority('overflow-y'),
+          padding: style.paddingRight,
+          paddingPriority: style.getPropertyPriority('padding-right'),
+          color: style.color,
+          theme: style.getPropertyValue('--consumer-theme'),
+          scrollbar: document.documentElement.style.getPropertyValue('--scrollbar-width'),
+          scrollbarPriority: document.documentElement.style.getPropertyPriority('--scrollbar-width'),
+        };
+      }),
+      {
+        overflowX: 'scroll',
+        overflowY: overflowProperty === 'overflow' ? 'scroll' : '',
+        priorityX: 'important',
+        priorityY: overflowProperty === 'overflow' ? 'important' : '',
+        padding: '4px',
+        paddingPriority: 'important',
+        color: 'red',
+        theme: 'dark',
+        scrollbar: '7px',
+        scrollbarPriority: 'important',
+      },
+    );
+  }
   console.log('Native scrollbars: pickers, dialog and sheets match their surfaces in light and dark themes.');
 } finally {
   await browser.close();

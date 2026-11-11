@@ -1,42 +1,26 @@
 type Restore = () => void;
-type PaddingProperty = 'paddingLeft' | 'paddingRight';
+type PaddingProperty = 'padding-left' | 'padding-right';
 
 const LOCK_ATTRIBUTE = 'data-m3-scroll-lock';
 const noop = () => {};
 
 const locks = new WeakMap<Document, { count: number; restore: Restore }>();
 
-function assignStyle(
-  element: HTMLElement | null | undefined,
-  style: Partial<CSSStyleDeclaration>,
-): Restore | undefined {
-  if (!element) {
-    return undefined;
-  }
-
-  const previousStyle = element.style.cssText;
-  Object.assign(element.style, style);
-
-  return () => {
-    element.style.cssText = previousStyle;
-  };
-}
-
-function setCSSProperty(element: HTMLElement | null | undefined, property: string, value: string): Restore | undefined {
-  if (!element) {
-    return undefined;
-  }
-
-  const previousValue = element.style.getPropertyValue(property);
-  element.style.setProperty(property, value);
+function setStyles(element: HTMLElement, styles: Record<string, string>): Restore {
+  const previousStyles = Object.entries(styles).map(([property, value]) => {
+    const previous = {
+      property,
+      value: element.style.getPropertyValue(property),
+      priority: element.style.getPropertyPriority(property),
+    };
+    element.style.setProperty(property, value);
+    return previous;
+  });
 
   return () => {
-    if (previousValue) {
-      element.style.setProperty(property, previousValue);
-      return;
+    for (const { property, value, priority } of previousStyles) {
+      element.style.setProperty(property, value, priority);
     }
-
-    element.style.removeProperty(property);
   };
 }
 
@@ -44,7 +28,7 @@ function getPaddingProperty(documentElement: HTMLElement): PaddingProperty {
   const documentLeft = documentElement.getBoundingClientRect().left;
   const scrollbarX = Math.round(documentLeft) + documentElement.scrollLeft;
 
-  return scrollbarX ? 'paddingLeft' : 'paddingRight';
+  return scrollbarX ? 'padding-left' : 'padding-right';
 }
 
 function isIOS(window: Window) {
@@ -71,17 +55,17 @@ function createScrollLock(document: Document, window: Window): Restore | undefin
   body.setAttribute(LOCK_ATTRIBUTE, '');
 
   const scrollbarWidth = Math.max(0, window.innerWidth - documentElement.clientWidth);
-  const restoreScrollbarWidth = setCSSProperty(documentElement, '--scrollbar-width', `${scrollbarWidth}px`);
+  const restoreScrollbarWidth = setStyles(documentElement, { '--scrollbar-width': `${scrollbarWidth}px` });
   const paddingProperty = getPaddingProperty(documentElement);
-  const scrollbarSidePadding = window.getComputedStyle(body)[paddingProperty] || '0px';
+  const scrollbarSidePadding = window.getComputedStyle(body).getPropertyValue(paddingProperty) || '0px';
 
   const restoreBodyStyle = isIOS(window)
     ? lockIOSScroll(body, window, paddingProperty, scrollbarSidePadding, scrollbarWidth)
     : lockStandardScroll(body, paddingProperty, scrollbarSidePadding, scrollbarWidth);
 
   return () => {
-    restoreScrollbarWidth?.();
-    restoreBodyStyle?.();
+    restoreScrollbarWidth();
+    restoreBodyStyle();
     body.removeAttribute(LOCK_ATTRIBUTE);
   };
 }
@@ -92,8 +76,9 @@ function lockStandardScroll(
   scrollbarSidePadding: string,
   scrollbarWidth: number,
 ) {
-  return assignStyle(body, {
-    overflow: 'hidden',
+  return setStyles(body, {
+    'overflow-x': 'hidden',
+    'overflow-y': 'hidden',
     [paddingProperty]: `calc(${scrollbarSidePadding} + ${scrollbarWidth}px)`,
   });
 }
@@ -108,9 +93,10 @@ function lockIOSScroll(
   const { scrollX, scrollY, visualViewport } = window;
   const offsetLeft = visualViewport?.offsetLeft ?? 0;
   const offsetTop = visualViewport?.offsetTop ?? 0;
-  const restoreStyle = assignStyle(body, {
+  const restoreStyle = setStyles(body, {
     position: 'fixed',
-    overflow: 'hidden',
+    'overflow-x': 'hidden',
+    'overflow-y': 'hidden',
     top: `${-(scrollY - Math.floor(offsetTop))}px`,
     left: `${-(scrollX - Math.floor(offsetLeft))}px`,
     right: '0',
@@ -118,7 +104,7 @@ function lockIOSScroll(
   });
 
   return () => {
-    restoreStyle?.();
+    restoreStyle();
     window.scrollTo(scrollX, scrollY);
   };
 }

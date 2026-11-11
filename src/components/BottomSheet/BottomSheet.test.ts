@@ -116,7 +116,7 @@ describe('BottomSheet', () => {
     expect(dialog?.open).toBe(true);
     expect(dialog?.dataset.scope).toBe('bottom-sheet');
     expect(dragHandle).not.toBeNull();
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).not.toBe('');
 
@@ -124,7 +124,7 @@ describe('BottomSheet', () => {
     await nextTick();
 
     expect(dialog?.open).toBe(false);
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
@@ -163,7 +163,7 @@ describe('BottomSheet', () => {
     expect(open.value).toBe(false);
     expect(onClose).toHaveBeenCalledWith('applied');
     expect(onClosed).toHaveBeenCalledWith('applied');
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
     app.unmount();

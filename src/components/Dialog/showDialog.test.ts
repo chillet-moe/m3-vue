@@ -108,7 +108,7 @@ describe('showDialog', () => {
     app = null;
 
     await expect(result).rejects.toThrow('OverlayHost was disposed before the overlay completed.');
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
   });
 
@@ -128,7 +128,7 @@ describe('showDialog', () => {
     const deleteButton = buttons.find((button) => button.textContent?.includes('Delete'));
 
     expect(deleteButton).toBeDefined();
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
 
     deleteButton?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
@@ -137,7 +137,7 @@ describe('showDialog', () => {
     await Promise.resolve();
 
     expect(document.querySelector('dialog')).toBeNull();
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
   });
 
@@ -182,7 +182,7 @@ describe('showDialog', () => {
     const dialog = document.querySelector('dialog') as HTMLDialogElement | null;
 
     expect(dialog).not.toBeNull();
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
 
     dialog?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
@@ -191,7 +191,7 @@ describe('showDialog', () => {
     await Promise.resolve();
 
     expect(document.querySelector('dialog')).toBeNull();
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
   });
 });

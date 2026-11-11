@@ -19,7 +19,8 @@ describe('lockPageScroll', () => {
     const unlock = lockPageScroll();
 
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowX).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.style.paddingRight).toBe('calc(28px)');
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('24px');
 
@@ -29,6 +30,29 @@ describe('lockPageScroll', () => {
     expect(document.body.style.overflow).toBe('auto');
     expect(document.body.style.paddingRight).toBe('4px');
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
+  });
+
+  it.each(['Linux', 'iPhone'])('preserves unrelated edits and restores property priorities on %s', (platform) => {
+    vi.spyOn(window.navigator, 'platform', 'get').mockReturnValue(platform);
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+    document.body.style.overflowX = 'scroll';
+    document.body.style.setProperty('padding-right', '4px', 'important');
+    document.body.style.color = 'blue';
+    document.documentElement.style.setProperty('--scrollbar-width', '7px', 'important');
+
+    const unlock = lockPageScroll();
+    document.body.style.color = 'red';
+    document.body.style.setProperty('--consumer-theme', 'dark');
+    unlock();
+
+    expect(document.body.style.color).toBe('red');
+    expect(document.body.style.getPropertyValue('--consumer-theme')).toBe('dark');
+    expect(document.body.style.overflowX).toBe('scroll');
+    expect(document.body.style.overflowY).toBe('');
+    expect(document.body.style.paddingRight).toBe('4px');
+    expect(document.body.style.getPropertyPriority('padding-right')).toBe('important');
+    expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('7px');
+    expect(document.documentElement.style.getPropertyPriority('--scrollbar-width')).toBe('important');
   });
 
   it('compensates a left-side scrollbar in RTL layouts', () => {
@@ -63,7 +87,8 @@ describe('lockPageScroll', () => {
 
     unlockFirst();
 
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowX).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
 
     unlockSecond();

@@ -83,7 +83,7 @@ describe('Dialog', () => {
     expect(dialog).not.toBeNull();
     expect(dialog?.open).toBe(true);
     expect(dialog?.style.getPropertyValue('--md-dialog-container-width')).toBe('28rem');
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflowY).toBe('hidden');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(true);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).not.toBe('');
 
@@ -91,7 +91,7 @@ describe('Dialog', () => {
     await nextTick();
 
     expect(dialog?.open).toBe(false);
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
     expect(document.documentElement.style.getPropertyValue('--scrollbar-width')).toBe('');
 
@@ -139,7 +139,7 @@ describe('Dialog', () => {
     expect(open.value).toBe(false);
     expect(onClose).toHaveBeenCalledWith('confirmed');
     expect(onClosed).toHaveBeenCalledWith('confirmed');
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
 
     app.unmount();
@@ -218,7 +218,7 @@ describe('Dialog', () => {
 
     expect(open.value).toBe(false);
     expect(dialog?.open).toBe(false);
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.overflowY).toBe('');
     expect(document.body.hasAttribute('data-m3-scroll-lock')).toBe(false);
 
     app.unmount();
