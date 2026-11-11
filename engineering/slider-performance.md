@@ -34,6 +34,12 @@ Animated slider position is published through `--percent`, but animated frame up
 
 This avoids Vue `patchStyle` or `patchAttr` work during every animation frame.
 
+Editing an existing list of stop markers does not replace either of its two animated clipping layers.
+The structural watcher recollects percent targets when those layers, an inset icon, or the value
+indicator are added or removed. It still measures geometry on stop updates. For example, an authored
+padding change in the same update can change the padding-box width without triggering a content-box
+ResizeObserver notification.
+
 The value indicator uses a manual popover without CSS anchor positioning:
 
 - The element keeps `popover="manual"` and `vtt-popover`.
@@ -73,3 +79,29 @@ pnpm exec vite build --no-minify
 ```
 
 For this specific issue, a small Chromium trace was also used to verify that a warmed manual popover value indicator produced `Layout 0.000ms` and `layout count 0` across 45 animated `--percent` frames.
+
+## Stop Updates
+
+For 60 Sliders alternating between three and nine stops 12 times, target queries fall from 720 to zero,
+and inline percent writes fall from 13,680 to 8,640. The remaining writes position the markers themselves.
+In five fixed-frame pairs with 24 updates, renderer instructions fall from 4.143 to 4.082 billion.
+The same-build reference uses 4.133 billion. Both versions perform 24 layouts and the same style,
+paint, and raster task counts.
+
+At 60 instances, a heap snapshot comparison gives equal JavaScript object and closure sizes. The
+aggregate difference is in compiled code and native storage, and both builds release all 120 sampled
+roots and inputs on unmount.
+
+Suppressing the measurements moves those layouts out of script without reducing the layout count.
+With a 48 px authored padding change and fixed content-box width, that control leaves the handle
+21.6 px behind its correct position after three frames. The implementation keeps the measurement.
+
+The published-package benchmark records mount, update, and unmount traces for one and 60 Sliders:
+
+```sh
+pnpm run build
+pnpm exec tsx benchmarks/slider-stops/run.ts .tmp/slider-stops/lifecycle/current
+```
+
+For the baseline, copy `benchmarks/slider-stops/` into a checkout of `8a986d9` and use a separate output
+directory. Set `CHROME_PATH` to keep the Chromium binary fixed between runs.

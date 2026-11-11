@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createApp, h, nextTick, ref } from 'vue';
+import { createApp, h, nextTick, onMounted, ref } from 'vue';
 import Slider from './Slider.vue';
 
 function createRect(rect: Partial<DOMRect> = {}): DOMRect {
@@ -60,17 +60,17 @@ async function pressSliderKey(input: HTMLInputElement, key: string) {
   return event;
 }
 
-function mockAnimationFrame() {
+function mockAnimationFrame(view: Window = window) {
   let requestId = 0;
   const callbacks = new Map<number, FrameRequestCallback>();
 
-  vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+  vi.spyOn(view, 'requestAnimationFrame').mockImplementation((callback) => {
     requestId += 1;
     callbacks.set(requestId, callback);
     return requestId;
   });
 
-  vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+  vi.spyOn(view, 'cancelAnimationFrame').mockImplementation((id) => {
     callbacks.delete(id);
   });
 
@@ -90,6 +90,119 @@ describe('Slider', () => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     document.body.innerHTML = '';
+  });
+
+  it('continues a value animation on the destination window after adoption', async () => {
+    const sourceRaf = mockAnimationFrame();
+    const frame = document.createElement('iframe');
+    const container = document.createElement('div');
+    document.body.append(frame, container);
+    const destination = frame.contentDocument!;
+    const destinationRaf = mockAnimationFrame(destination.defaultView!);
+    const value = ref(0);
+    const app = createApp(() => h(Slider, { value: value.value, min: 0, max: 10, step: 1 }));
+    app.mount(container);
+
+    try {
+      value.value = 10;
+      await nextTick();
+      sourceRaf.flush(16);
+      const beforeMove = Number(getDisplayedPercent(container));
+      expect(beforeMove).toBeGreaterThan(0);
+      expect(beforeMove).toBeLessThan(1);
+
+      destination.body.append(container);
+      await Promise.resolve();
+      sourceRaf.flush(32);
+      expect(Number(getDisplayedPercent(container))).toBe(beforeMove);
+
+      destinationRaf.flush(16);
+      const afterMove = Number(getDisplayedPercent(container));
+      expect(afterMove).toBeGreaterThan(beforeMove);
+      expect(afterMove).toBeLessThan(1);
+    } finally {
+      app.unmount();
+      frame.remove();
+    }
+  });
+
+  it('keeps both stop layers aligned when the stops and range change', async () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    const stops = ref([-1, 0, 3, 3, 10, 15]);
+    const maximum = ref(10);
+    const app = createApp(() =>
+      h(Slider, { value: 5, min: 0, max: maximum.value, step: 1, stopIndicators: stops.value }),
+    );
+    app.mount(container);
+
+    const positions = () =>
+      Array.from(container.querySelectorAll('.m3-slider-stop-indicator-container'), (layer) =>
+        Array.from(layer.querySelectorAll<HTMLElement>('.m3-slider-stop-indicator'), (stop) =>
+          stop.style.getPropertyValue('--percent'),
+        ),
+      );
+
+    try {
+      expect(positions()).toEqual([
+        ['0', '0.3', '0.3', '1'],
+        ['0', '0.3', '0.3', '1'],
+      ]);
+
+      stops.value[2] = 4;
+      maximum.value = 8;
+      await nextTick();
+      expect(positions()).toEqual([
+        ['0', '0.5', '0.375'],
+        ['0', '0.5', '0.375'],
+      ]);
+
+      stops.value = [];
+      await nextTick();
+      expect(positions()).toEqual([]);
+    } finally {
+      app.unmount();
+    }
+  });
+
+  it('starts restored stop layers at the current animated position', async () => {
+    const raf = mockAnimationFrame();
+    const container = document.createElement('div');
+    document.body.append(container);
+    const value = ref(0);
+    const stops = ref([2, 8]);
+    const app = createApp(() =>
+      h(Slider, { value: value.value, min: 0, max: 10, step: 1, stopIndicators: stops.value }),
+    );
+    app.mount(container);
+
+    const layerPositions = () =>
+      Array.from(container.querySelectorAll<HTMLElement>('.m3-slider-stop-indicator-container'), (layer) =>
+        layer.style.getPropertyValue('--percent'),
+      );
+
+    try {
+      stops.value = [];
+      value.value = 8;
+      await nextTick();
+      raf.flush(16);
+      const position = getDisplayedPercent(container);
+      expect(Number(position)).toBeGreaterThan(0);
+      expect(Number(position)).toBeLessThan(0.8);
+      expect(layerPositions()).toEqual([]);
+
+      stops.value = [1, 4, 7];
+      await nextTick();
+      await nextTick();
+      expect(layerPositions()).toEqual([position, position]);
+
+      raf.flush(32);
+      const nextPosition = getDisplayedPercent(container);
+      expect(Number(nextPosition)).toBeGreaterThan(Number(position));
+      expect(layerPositions()).toEqual([nextPosition, nextPosition]);
+    } finally {
+      app.unmount();
+    }
   });
 
   it('keeps the displayed percent bounded during delayed animation frames', async () => {
@@ -572,6 +685,8 @@ describe('Slider', () => {
 
   it('publishes the slider padding-box inline size for transform-based animation', async () => {
     let resizeCallback: ResizeObserverCallback | null = null;
+    const observe = vi.fn();
+    const disconnect = vi.fn();
 
     vi.stubGlobal(
       'ResizeObserver',
@@ -580,24 +695,33 @@ describe('Slider', () => {
           resizeCallback = callback;
         }
 
-        observe = vi.fn();
-        disconnect = vi.fn();
+        observe = observe;
+        disconnect = disconnect;
       },
     );
 
     const container = document.createElement('div');
     document.body.appendChild(container);
 
+    vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(256);
     const vertical = ref(false);
+    let mountMeasurements: { size: string; percent: string } | undefined;
     const app = createApp({
       setup() {
+        onMounted(() => {
+          const slider = container.firstElementChild as HTMLDivElement;
+          mountMeasurements = {
+            size: slider.style.getPropertyValue('--slider-inline-size'),
+            percent: getDisplayedPercent(slider),
+          };
+        });
         return () =>
           h(Slider, {
             vertical: vertical.value,
             min: 0,
             max: 10,
             step: 1,
-            value: 0,
+            value: 3,
           });
       },
     });
@@ -608,6 +732,7 @@ describe('Slider', () => {
     const slider = container.firstElementChild as HTMLDivElement | null;
     expect(slider).not.toBeNull();
     expect(resizeCallback).not.toBeNull();
+    expect(mountMeasurements).toEqual({ size: '256px', percent: '0.3' });
 
     setSliderClientSize(slider!, { width: 256, height: 96 });
     resizeCallback!(
@@ -625,8 +750,10 @@ describe('Slider', () => {
       {} as ResizeObserver,
     );
     expect(slider!.style.getPropertyValue('--slider-inline-size')).toBe('96px');
+    expect(observe.mock.calls).toEqual([[slider]]);
 
     app.unmount();
+    expect(disconnect).toHaveBeenCalledTimes(1);
   });
 
   it('removes an open value indicator when the prop is disabled', async () => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { appearanceContextKey } from '@/styles/appearance';
-import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import {
   computed,
   inject,
@@ -15,7 +15,7 @@ import {
   watch,
 } from 'vue';
 import { sliderContextKey } from './SliderContext';
-import { useAnimatedNumber } from '@/composables/useAnimatedNumber';
+import { useAnimatedNumberState } from '@/composables/useAnimatedNumber';
 import { Icon } from '@/components/Icon';
 
 export type SliderProps = {
@@ -239,11 +239,14 @@ const onWheel = (event: WheelEvent) => {
   setValueFromInteraction(nextValue, event.currentTarget as HTMLInputElement);
 };
 
-const stopIndicatorsFiltered = computed(() => {
-  if (!stopIndicators) {
-    return undefined;
-  }
-  return stopIndicators.filter((stop) => stop >= min && stop <= max);
+const stopIndicatorStyles = computed(() => {
+  if (!stopIndicators) return undefined;
+
+  const styles: { '--percent': number }[] = [];
+  stopIndicators.forEach((stop) => {
+    if (stop >= min && stop <= max) styles.push({ '--percent': getValuePercent(stop) });
+  });
+  return styles;
 });
 
 const sliderRef = useTemplateRef<HTMLDivElement>('slider');
@@ -266,7 +269,6 @@ const isValueIndicatorVisible = computed(
 let syncValueIndicatorFocusFrame = 0;
 let activePointerId: number | null = null;
 let pointerDownPosition: { x: number; y: number } | null = null;
-let sliderResizeObserver: ResizeObserver | null = null;
 let isWindowPointerMoveListenerActive = false;
 let isWindowPointerEndListenerActive = false;
 let isWindowViewportListenerActive = false;
@@ -398,11 +400,13 @@ const syncValuePresentation = () => {
 };
 
 const {
-  displayedValue: valueDisplayed,
-  stopAnimation: stopSyncValueDisplayed,
-  syncToTarget: syncValueDisplayedToTarget,
-} = useAnimatedNumber(valuePercent, {
-  element: sliderRef,
+  animation: {
+    displayedValue: valueDisplayed,
+    stopAnimation: stopSyncValueDisplayed,
+    syncToTarget: syncValueDisplayedToTarget,
+  },
+  bindDocument: bindValueAnimation,
+} = useAnimatedNumberState(valuePercent, {
   clamp: clampPercent,
   onUpdate: syncAnimatedValuePresentation,
 });
@@ -664,20 +668,6 @@ const syncSliderMeasurements = () => {
   }
 };
 
-const syncSliderResizeObserver = () => {
-  sliderResizeObserver?.disconnect();
-  sliderResizeObserver = null;
-
-  if (typeof ResizeObserver === 'undefined' || !sliderRef.value) {
-    return;
-  }
-
-  sliderResizeObserver = new ResizeObserver(() => {
-    syncSliderMeasurements();
-  });
-  sliderResizeObserver.observe(sliderRef.value);
-};
-
 watch(value, (newValue) => {
   valueCurrent.value = newValue;
 });
@@ -691,17 +681,19 @@ watch(
 );
 
 watch(
-  [sliderRef, hasStartInsetIcon, hasEndInsetIcon, stopIndicatorsFiltered, () => vertical, valueIndicator],
-  async () => {
-    syncSliderResizeObserver();
+  [hasStartInsetIcon, hasEndInsetIcon, valueIndicator, stopIndicatorStyles, () => vertical],
+  async ([startIcon, endIcon, indicator, stops], [oldStartIcon, oldEndIcon, oldIndicator, oldStops]) => {
+    // Stop edits reuse both layers while there is at least one in-range marker.
+    const targetsChanged =
+      startIcon !== oldStartIcon ||
+      endIcon !== oldEndIcon ||
+      indicator !== oldIndicator ||
+      Boolean(stops?.length) !== Boolean(oldStops?.length);
     await nextTick();
-    refreshValueDisplayedStyleElements();
+    if (targetsChanged) refreshValueDisplayedStyleElements();
     syncSliderMeasurements();
   },
-  {
-    immediate: true,
-    flush: 'post',
-  },
+  { flush: 'post' },
 );
 
 watch(
@@ -732,54 +724,48 @@ watch(
   { flush: 'post' },
 );
 
-useElementEnvironment(sliderRef, (document) => {
-  sliderWindow = document.defaultView;
-  syncSliderResizeObserver();
-  syncSliderMeasurements();
-  syncWindowViewportListeners();
-  return () => {
-    sliderResizeObserver?.disconnect();
-    sliderWindow?.cancelAnimationFrame(syncValueIndicatorFocusFrame);
-    sliderWindow?.removeEventListener('pointermove', onWindowPointerMove);
-    sliderWindow?.removeEventListener('pointerup', stopValueIndicatorDragging);
-    sliderWindow?.removeEventListener('pointercancel', stopValueIndicatorDragging);
-    sliderWindow?.removeEventListener('scroll', onWindowScrollOrResize, true);
-    sliderWindow?.removeEventListener('resize', onWindowScrollOrResize);
-    isWindowPointerMoveListenerActive = false;
-    isWindowPointerEndListenerActive = false;
-    isWindowViewportListenerActive = false;
-    activePointerId = null;
-    pointerDownPosition = null;
-    isValueIndicatorDragging.value = false;
-    isValueDragging.value = false;
-    syncValueIndicatorFocusFrame = 0;
-    sliderWindow = null;
-  };
-});
-
+let releaseSliderEnvironment: (() => void) | undefined;
 onMounted(() => {
-  refreshValueDisplayedStyleElements();
-  syncSliderMeasurements();
+  const slider = sliderRef.value;
+  if (!slider) return;
+
+  // Publish the initial handle geometry before the parent mounted hook.
+  releaseSliderEnvironment = bindElementEnvironment(slider, (document) => {
+    sliderWindow = document.defaultView;
+    // Bind the animation before collecting targets so the first position is written once.
+    const releaseAnimation = bindValueAnimation(document);
+    const ResizeObserver = document.defaultView?.ResizeObserver;
+    const observer = ResizeObserver ? new ResizeObserver(syncSliderMeasurements) : undefined;
+    observer?.observe(slider);
+    refreshValueDisplayedStyleElements();
+    syncSliderMeasurements();
+    syncWindowViewportListeners();
+    return () => {
+      releaseAnimation();
+      observer?.disconnect();
+      sliderWindow?.cancelAnimationFrame(syncValueIndicatorFocusFrame);
+      sliderWindow?.removeEventListener('pointermove', onWindowPointerMove);
+      sliderWindow?.removeEventListener('pointerup', stopValueIndicatorDragging);
+      sliderWindow?.removeEventListener('pointercancel', stopValueIndicatorDragging);
+      sliderWindow?.removeEventListener('scroll', onWindowScrollOrResize, true);
+      sliderWindow?.removeEventListener('resize', onWindowScrollOrResize);
+      isWindowPointerMoveListenerActive = false;
+      isWindowPointerEndListenerActive = false;
+      isWindowViewportListenerActive = false;
+      activePointerId = null;
+      pointerDownPosition = null;
+      isValueIndicatorDragging.value = false;
+      isValueDragging.value = false;
+      syncValueIndicatorFocusFrame = 0;
+      sliderWindow = null;
+    };
+  });
 });
 
 onBeforeUnmount(() => {
   hideValueIndicatorPopover();
-  if (syncValueIndicatorFocusFrame) {
-    sliderWindow!.cancelAnimationFrame(syncValueIndicatorFocusFrame);
-  }
   stopSyncValueDisplayed();
-  sliderResizeObserver?.disconnect();
-  if (isWindowPointerMoveListenerActive) {
-    sliderWindow!.removeEventListener('pointermove', onWindowPointerMove);
-  }
-  if (isWindowPointerEndListenerActive) {
-    sliderWindow!.removeEventListener('pointerup', stopValueIndicatorDragging);
-    sliderWindow!.removeEventListener('pointercancel', stopValueIndicatorDragging);
-  }
-  if (isWindowViewportListenerActive) {
-    sliderWindow!.removeEventListener('scroll', onWindowScrollOrResize, true);
-    sliderWindow!.removeEventListener('resize', onWindowScrollOrResize);
-  }
+  releaseSliderEnvironment?.();
 });
 </script>
 
@@ -840,20 +826,18 @@ onBeforeUnmount(() => {
       data-part="track-inactive"
       data-slider-percent-target="true"
     />
-    <template v-if="stopIndicatorsFiltered && stopIndicatorsFiltered.length > 0">
+    <template v-if="stopIndicatorStyles && stopIndicatorStyles.length > 0">
       <div
         aria-hidden="true"
         class="m3-slider-stop-indicator-container m3-slider-stop-indicator-active-container"
         data-slider-percent-target="true"
       >
         <div
-          v-for="(stop, index) in stopIndicatorsFiltered"
+          v-for="(style, index) in stopIndicatorStyles"
           :key="index"
           aria-hidden="true"
           class="m3-slider-stop-indicator m3-slider-stop-indicator-active"
-          :style="{
-            '--percent': getValuePercent(stop),
-          }"
+          :style="style"
         />
       </div>
       <div
@@ -862,13 +846,11 @@ onBeforeUnmount(() => {
         data-slider-percent-target="true"
       >
         <div
-          v-for="(stop, index) in stopIndicatorsFiltered"
+          v-for="(style, index) in stopIndicatorStyles"
           :key="index"
           aria-hidden="true"
           class="m3-slider-stop-indicator m3-slider-stop-indicator-inactive"
-          :style="{
-            '--percent': getValuePercent(stop),
-          }"
+          :style="style"
         />
       </div>
     </template>
