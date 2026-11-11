@@ -1,12 +1,12 @@
 import { isHTMLElement } from '@/internal/elementEnvironment';
-import { type ComputedRef, type Ref, computed, getCurrentInstance, isRef, ref, toValue, useId, watch } from 'vue';
+import { type ComputedRef, type Ref, computed, getCurrentInstance, isRef, ref, toValue, useId } from 'vue';
 import type { MaybeRefOrGetter } from 'vue';
 
 export type AccordionItemValue = string;
 export type AccordionModelValue = AccordionItemValue | AccordionItemValue[] | undefined;
 
 export type UseAccordionOptions<T extends AccordionItemValue = AccordionItemValue> = {
-  /** The currently open item value or values. */
+  /** The currently open item value or values. Update reactive arrays or replace the source to change membership. */
   value?: MaybeRefOrGetter<T | T[] | undefined>;
 
   /** Called when the open item value changes. */
@@ -69,10 +69,6 @@ const TRIGGER_KEYS = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
 
 let idCounter = 0;
 
-function isReactiveValue(value: unknown) {
-  return typeof value === 'function' || isRef(value);
-}
-
 function normalizeValue<T extends AccordionItemValue>(value: T | T[] | undefined, multiple: boolean): T[] {
   if (multiple) {
     return Array.isArray(value) ? value : value ? [value] : [];
@@ -85,11 +81,11 @@ function normalizeIdPart(value: string) {
   return value.replace(/\s/g, '_');
 }
 
-function isTriggerDisabled(trigger: HTMLElement) {
+function isTriggerEnabled(trigger: HTMLElement) {
   return (
-    trigger.hasAttribute('disabled') ||
-    trigger.getAttribute('aria-disabled') === 'true' ||
-    trigger.hasAttribute('data-disabled')
+    !trigger.hasAttribute('disabled') &&
+    trigger.getAttribute('aria-disabled') !== 'true' &&
+    !trigger.hasAttribute('data-disabled')
   );
 }
 
@@ -116,28 +112,22 @@ export function useAccordion<T extends AccordionItemValue = AccordionItemValue>(
   const collapsible = computed(() => toValue(options.collapsible) ?? true);
   const disabled = computed(() => toValue(options.disabled) ?? false);
   const loop = computed(() => toValue(options.loop) ?? true);
-  const isReactive = isReactiveValue(options.value);
-  const internalValue = ref<T | T[] | undefined>(toValue(options.value)) as Ref<T | T[] | undefined>;
-
-  if (isReactive) {
-    watch(
-      () => toValue(options.value),
-      (value) => {
-        internalValue.value = value;
-      },
-    );
-  }
-
-  const currentValue = computed(() => (isReactive ? toValue(options.value) : internalValue.value));
+  const isControlled = typeof options.value === 'function' || isRef(options.value);
+  const internalValue = isControlled ? undefined : (ref(toValue(options.value)) as Ref<T | T[] | undefined>);
+  const currentValue = computed(() => (internalValue ? internalValue.value : toValue(options.value)));
   const openValues = computed(() => normalizeValue(currentValue.value, multiple.value));
+  const openValueIndex = computed(() => {
+    const values = openValues.value;
+    return values.length >= 32 ? new Set(values) : undefined;
+  });
 
   function setValue(value: T | T[] | undefined) {
-    internalValue.value = value;
+    if (internalValue) internalValue.value = value;
     options.onValueChange?.(value);
   }
 
   function isOpen(value: T) {
-    return openValues.value.includes(value);
+    return openValueIndex.value?.has(value) ?? openValues.value.includes(value);
   }
 
   function isItemDisabled(itemOptions: AccordionItemOptions = {}) {
@@ -204,10 +194,9 @@ export function useAccordion<T extends AccordionItemValue = AccordionItemValue>(
     }
 
     const triggers = Array.from(root.querySelectorAll<HTMLElement>('[data-accordion-trigger]'));
-    const enabledTriggers = triggers.filter((candidate) => !isTriggerDisabled(candidate));
     const currentIndex = triggers.indexOf(trigger);
 
-    if (currentIndex < 0 || !enabledTriggers.length) {
+    if (currentIndex < 0 || !triggers.some(isTriggerEnabled)) {
       return;
     }
 
@@ -234,7 +223,7 @@ export function useAccordion<T extends AccordionItemValue = AccordionItemValue>(
           return undefined;
         }
 
-        if (!isTriggerDisabled(candidate)) {
+        if (isTriggerEnabled(candidate)) {
           return candidate;
         }
       }
@@ -243,9 +232,9 @@ export function useAccordion<T extends AccordionItemValue = AccordionItemValue>(
     };
 
     if (event.key === 'Home') {
-      next = enabledTriggers[0];
+      next = triggers.find(isTriggerEnabled);
     } else if (event.key === 'End') {
-      next = enabledTriggers.at(-1);
+      next = triggers.findLast(isTriggerEnabled);
     } else {
       next = findAdjacentTrigger(event.key === 'ArrowDown' ? 1 : -1);
     }

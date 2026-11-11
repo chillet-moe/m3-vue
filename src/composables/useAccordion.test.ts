@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { ref } from 'vue';
+import { nextTick, ref, shallowRef } from 'vue';
 import { useAccordion } from './useAccordion';
 
 describe('useAccordion', () => {
@@ -79,6 +79,54 @@ describe('useAccordion', () => {
     expect(accordion.value.value).toBe('billing');
   });
 
+  it('keeps the external value until a controlled request is accepted', async () => {
+    const value = ref<string>();
+    const requests: Array<string | string[] | undefined> = [];
+    const accordion = useAccordion({
+      value: () => value.value,
+      onValueChange: (requested) => requests.push(requested),
+    });
+
+    expect(accordion.toggle('billing')).toBe(true);
+    await nextTick();
+    expect(accordion.getTriggerAttrs('billing')['aria-expanded']).toBe(false);
+    expect(accordion.getPanelAttrs('billing').hidden).toBe(true);
+
+    expect(accordion.toggle('security')).toBe(true);
+    await nextTick();
+    expect(requests).toEqual(['billing', 'security']);
+    expect(accordion.value.value).toBeUndefined();
+
+    value.value = 'security';
+    expect(accordion.getTriggerAttrs('security')['aria-expanded']).toBe(true);
+    expect(accordion.getPanelAttrs('security').hidden).toBeUndefined();
+    expect(accordion.getPanelAttrs('billing').hidden).toBe(true);
+  });
+
+  it('updates trigger and panel state after an in-place change to many open values', () => {
+    const value = ref(Array.from({ length: 64 }, (_, index) => `item-${index}`));
+    const accordion = useAccordion({ value, multiple: true });
+
+    expect(accordion.getTriggerAttrs('item-0')['aria-expanded']).toBe(true);
+    expect(accordion.getPanelAttrs('billing').hidden).toBe(true);
+
+    value.value.splice(0, 1, 'billing');
+
+    expect(accordion.getTriggerAttrs('item-0')['aria-expanded']).toBe(false);
+    expect(accordion.getPanelAttrs('billing').hidden).toBeUndefined();
+    expect(accordion.openValues.value).toBe(value.value);
+  });
+
+  it('updates indexed membership when a shallow ref is replaced', () => {
+    const value = shallowRef(Array.from({ length: 64 }, (_, index) => `item-${index}`));
+    const accordion = useAccordion({ value, multiple: true });
+
+    expect(accordion.isOpen('item-0')).toBe(true);
+    value.value = ['billing', ...value.value.slice(1)];
+    expect(accordion.isOpen('item-0')).toBe(false);
+    expect(accordion.isOpen('billing')).toBe(true);
+  });
+
   it('generates trigger and panel attributes', () => {
     const accordion = useAccordion({
       value: 'account',
@@ -140,5 +188,39 @@ describe('useAccordion', () => {
     expect(document.activeElement).toBe(triggers[0]);
 
     root.remove();
+  });
+
+  it('preserves the native key action when all triggers are disabled', () => {
+    const accordion = useAccordion();
+    const root = document.createElement('div');
+    root.setAttribute('data-accordion-root', '');
+
+    for (const value of ['account', 'billing']) {
+      const trigger = document.createElement('button');
+      trigger.setAttribute('data-accordion-trigger', '');
+      trigger.setAttribute('aria-disabled', 'true');
+      trigger.addEventListener('keydown', accordion.getTriggerAttrs(value).onKeydown as (event: KeyboardEvent) => void);
+      root.append(trigger);
+    }
+    document.body.append(root);
+    const [first, second] = root.querySelectorAll('button');
+
+    try {
+      first!.focus();
+      const navigate = () => {
+        const event = new KeyboardEvent('keydown', { key: 'End', cancelable: true });
+        first!.dispatchEvent(event);
+        return event.defaultPrevented;
+      };
+
+      expect(navigate()).toBe(false);
+      expect(document.activeElement).toBe(first);
+
+      second!.removeAttribute('aria-disabled');
+      expect(navigate()).toBe(true);
+      expect(document.activeElement).toBe(second);
+    } finally {
+      root.remove();
+    }
   });
 });
