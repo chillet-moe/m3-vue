@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue';
-import { codeToHtml } from 'shiki';
+import { codeToHtml } from 'shiki/bundle/web';
 import { useData } from 'vitepress';
 import { Button, Card } from '@/index';
 import { useStickyPreviewPreference } from '../theme/composables/preferences';
@@ -27,31 +27,34 @@ const isStuck = ref(false);
 const stickyPreviewEnabled = useStickyPreviewPreference();
 let stickyUpdateFrame = 0;
 
-watchEffect((onCleanup) => {
-  if (!props.src) {
-    highlightedSource.value = '';
-    return;
-  }
-
-  let active = true;
-  onCleanup(() => {
-    active = false;
-  });
-
-  void codeToHtml(props.src, {
-    lang: 'vue',
-    themes: {
-      light: 'github-light',
-      dark: 'github-dark',
-    },
-  }).then((html: string) => {
-    if (!active) {
+// The source panel starts closed during server rendering.
+if (!import.meta.env.SSR) {
+  watchEffect((onCleanup) => {
+    if (!props.src) {
+      highlightedSource.value = '';
       return;
     }
 
-    highlightedSource.value = html;
+    let active = true;
+    onCleanup(() => {
+      active = false;
+    });
+
+    void codeToHtml(props.src, {
+      lang: 'vue',
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+    }).then((html: string) => {
+      if (!active) {
+        return;
+      }
+
+      highlightedSource.value = html;
+    });
   });
-});
+}
 
 const hasToolbar = computed(() => {
   return !!props.src;

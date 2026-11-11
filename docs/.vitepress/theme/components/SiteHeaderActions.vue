@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
+import { computed, onMounted, ref } from 'vue';
 import { Button, IconButton } from '@/index';
 import CustomizationControls from '../../components/CustomizationControls.vue';
 import LanguageMenu from './LanguageMenu.vue';
@@ -9,6 +10,13 @@ import { resolveSocialLabel } from '../utils';
 const { isDark } = useData();
 const { isChinese } = useLocaleNavigation();
 const { socialLinks } = useNav();
+
+// Match the server's light fallback during hydration, then render the restored appearance.
+const mounted = ref(false);
+const isDarkForButton = computed(() => mounted.value && isDark.value);
+onMounted(() => {
+  mounted.value = true;
+});
 
 function toggleAppearance() {
   isDark.value = !isDark.value;
@@ -22,9 +30,9 @@ function toggleAppearance() {
       variant="standard"
       size="small"
       width="default"
-      :icon="isDark ? 'light_mode' : 'dark_mode'"
+      :icon="isDarkForButton ? 'light_mode' : 'dark_mode'"
       :aria-label="
-        isDark
+        isDarkForButton
           ? isChinese
             ? '切换到浅色模式'
             : 'Switch to light mode'

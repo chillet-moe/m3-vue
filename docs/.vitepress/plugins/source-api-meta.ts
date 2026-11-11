@@ -2,6 +2,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { createChecker as createVueMetaChecker } from 'vue-component-meta';
 import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr.ts';
+import { createMetadataBuildStart } from './metadata-build.ts';
 
 export interface SourceApiFieldMeta {
   name: string;
@@ -362,11 +363,11 @@ function getFunctionSignature(checker: ts.TypeChecker, sourceFile: ts.SourceFile
   return `function ${functionName}${checker.signatureToString(signature, declaration, ts.TypeFormatFlags.NoTruncation)}`;
 }
 
-function collectComponentProps(tsconfigPath: string, componentFile: string, propNames: string[]): SourceApiFieldMeta[] {
-  const checker = createVueMetaChecker(tsconfigPath, {
-    forceUseTs: true,
-    printer: { newLine: 1 },
-  });
+function collectComponentProps(
+  checker: ReturnType<typeof createVueMetaChecker>,
+  componentFile: string,
+  propNames: string[],
+): SourceApiFieldMeta[] {
   const meta = checker.getComponentMeta(componentFile);
 
   return propNames
@@ -404,6 +405,10 @@ export function sourceApiMetaPlugin(options?: { tsconfigPath?: string }) {
       options: parsed.options,
     });
     const checker = program.getTypeChecker();
+    const componentChecker = createVueMetaChecker(tsconfigAbsPath, {
+      forceUseTs: true,
+      printer: { newLine: 1 },
+    });
 
     const nextMap: Record<string, SourceApiMeta> = {};
 
@@ -418,7 +423,7 @@ export function sourceApiMetaPlugin(options?: { tsconfigPath?: string }) {
         let fields = collectFields(checker, sourceFile, typeSpec.name);
         if (typeSpec.componentProps) {
           const componentFields = collectComponentProps(
-            tsconfigAbsPath,
+            componentChecker,
             path.join(root, typeSpec.componentProps.file),
             typeSpec.componentProps.names,
           );
@@ -445,9 +450,7 @@ export function sourceApiMetaPlugin(options?: { tsconfigPath?: string }) {
   return {
     name: 'vitepress:source-api-meta',
 
-    async buildStart() {
-      await generateMeta();
-    },
+    buildStart: createMetadataBuildStart(generateMeta),
 
     resolveId(id: string) {
       if (id === virtualModuleId || id.startsWith(virtualModuleId + '/')) {

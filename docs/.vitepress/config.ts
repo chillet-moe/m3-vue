@@ -194,81 +194,83 @@ const sidebar: DefaultTheme.SidebarItem[] = [
   },
 ];
 
-export default defineConfig({
-  lang: 'en-US',
-  title: 'M3 Vue',
-  description: 'Material Design 3 components for Vue',
-  locales: {
-    root: { label: 'English', lang: 'en-US' },
-    'zh-Hans': {
-      label: '简体中文',
-      lang: 'zh-Hans',
-      description: '适用于 Vue 的 Material Design 3 组件',
-      themeConfig: {
-        langMenuLabel: '切换语言',
-        nav: [{ text: '文档', link: '/zh-Hans/components/button' }],
-        sidebar: { '/zh-Hans/': translateSidebar(sidebar) },
-        outline: { label: '本页目录' },
+// Resolve fresh plugin instances for each VitePress invocation.
+export default () =>
+  defineConfig({
+    lang: 'en-US',
+    title: 'M3 Vue',
+    description: 'Material Design 3 components for Vue',
+    locales: {
+      root: { label: 'English', lang: 'en-US' },
+      'zh-Hans': {
+        label: '简体中文',
+        lang: 'zh-Hans',
+        description: '适用于 Vue 的 Material Design 3 组件',
+        themeConfig: {
+          langMenuLabel: '切换语言',
+          nav: [{ text: '文档', link: '/zh-Hans/components/button' }],
+          sidebar: { '/zh-Hans/': translateSidebar(sidebar) },
+          outline: { label: '本页目录' },
+        },
       },
     },
-  },
-  appearance: true,
-  vue: createScopeBoundaryVueOptions(),
+    appearance: true,
+    vue: createScopeBoundaryVueOptions(),
 
-  // 构建输出目录（默认就是 .vitepress/dist）
-  // 保持默认即可
+    // 构建输出目录（默认就是 .vitepress/dist）
+    // 保持默认即可
 
-  vite: {
-    resolve: {
-      alias: [
-        { find: '@', replacement: fileURLToPath(new URL('../../src', import.meta.url)) },
-        // Keep VitePress search behavior while using the library's themed trigger.
-        {
-          find: /^.*\/VPNavBarSearchButton\.vue$/,
-          replacement: fileURLToPath(new URL('./theme/components/SearchButton.vue', import.meta.url)),
-        },
+    vite: {
+      resolve: {
+        alias: [
+          { find: '@', replacement: fileURLToPath(new URL('../../src', import.meta.url)) },
+          // Keep VitePress search behavior while using the library's themed trigger.
+          {
+            find: /^.*\/VPNavBarSearchButton\.vue$/,
+            replacement: fileURLToPath(new URL('./theme/components/SearchButton.vue', import.meta.url)),
+          },
+        ],
+      },
+      plugins: [
+        layerPreludePlugin({ layers: m3LayerOrder }),
+        componentMetaPlugin({
+          tsconfigPath: 'tsconfig.docs.json',
+          components: ['src/components/**/*.vue'],
+        }),
+        componentAnatomyPlugin({
+          components: 'src/components/**/*.vue',
+        }),
+        sourceApiMetaPlugin({
+          tsconfigPath: 'tsconfig.docs.json',
+        }),
       ],
+      css: {
+        // 复用主项目的 PostCSS 配置
+        // VitePress 会自动读取项目根目录的 postcss.config.mts
+      },
     },
-    plugins: [
-      layerPreludePlugin({ layers: m3LayerOrder }),
-      componentMetaPlugin({
-        tsconfigPath: 'tsconfig.docs.json',
-        components: ['src/components/**/*.vue'],
-      }),
-      componentAnatomyPlugin({
-        components: 'src/components/**/*.vue',
-      }),
-      sourceApiMetaPlugin({
-        tsconfigPath: 'tsconfig.docs.json',
-      }),
-    ],
-    css: {
-      // 复用主项目的 PostCSS 配置
-      // VitePress 会自动读取项目根目录的 postcss.config.mts
-    },
-  },
 
-  themeConfig: {
-    logo: '/logo.svg',
-    search: {
-      provider: 'local',
-      options: {
-        locales: {
-          'zh-Hans': {
-            translations: {
-              button: { buttonText: '搜索', buttonAriaLabel: '搜索' },
-              modal: {
-                noResultsText: '没有找到结果',
-                resetButtonTitle: '清除搜索',
-                footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' },
+    themeConfig: {
+      logo: '/logo.svg',
+      search: {
+        provider: 'local',
+        options: {
+          locales: {
+            'zh-Hans': {
+              translations: {
+                button: { buttonText: '搜索', buttonAriaLabel: '搜索' },
+                modal: {
+                  noResultsText: '没有找到结果',
+                  resetButtonTitle: '清除搜索',
+                  footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' },
+                },
               },
             },
           },
         },
       },
+      nav: [{ text: 'Docs', link: '/components/button' }],
+      sidebar: { '/': sidebar },
+      socialLinks: [{ icon: 'github', link: 'https://github.com/chillet-moe/m3-vue' }],
     },
-    nav: [{ text: 'Docs', link: '/components/button' }],
-    sidebar: { '/': sidebar },
-    socialLinks: [{ icon: 'github', link: 'https://github.com/chillet-moe/m3-vue' }],
-  },
-});
+  });

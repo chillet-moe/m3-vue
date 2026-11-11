@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { chromium, type Locator } from 'playwright';
 import { existsSync, mkdirSync } from 'node:fs';
-import { openFixture } from '../fonts';
+import { loadTestFonts, openFixture } from '../fonts';
 
-// Start the documentation site with pnpm run docs:dev before running this check.
+// Use a production preview to exercise SSR hydration; the suite also runs against docs:dev.
 const base = process.env.DOCS_URL ?? 'http://127.0.0.1:5173';
 const chrome = process.env.CHROME_PATH ?? '/usr/bin/google-chrome-stable';
 const browser = await chromium.launch({ ...(existsSync(chrome) ? { executablePath: chrome } : {}), headless: true });
@@ -188,6 +188,8 @@ try {
     await page.getByRole('button', { name: 'Customize', exact: true }).evaluate((el) => el === document.activeElement),
   );
   await page.reload();
+  await page.getByRole('button', { name: 'Switch to light mode', exact: true }).waitFor({ timeout: 5000 });
+  await loadTestFonts(page);
   await page.getByRole('button', { name: 'Customize', exact: true }).waitFor();
   await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-density') === '3');
   assert.equal(
@@ -250,6 +252,11 @@ try {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.getByRole('button', { name: 'Switch to light mode', exact: true }).click();
   await openFixture(page, `${base}/zh-Hans/components/button`);
+  await page.getByRole('button', { name: '切换到深色模式', exact: true }).click();
+  await page.reload();
+  await page.getByRole('button', { name: '切换到浅色模式', exact: true }).click({ timeout: 5000 });
+  await page.getByRole('button', { name: '切换到深色模式', exact: true }).waitFor();
+  await loadTestFonts(page);
   await page.getByRole('button', { name: '自定义', exact: true }).click();
   const chinesePanel = page.getByRole('dialog', { name: '自定义', exact: true });
   await chinesePanel.getByRole('tab', { name: '排版', exact: true }).click();
