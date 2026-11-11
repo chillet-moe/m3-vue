@@ -5,7 +5,7 @@ import {
   useOverlayHost,
   type OverlayHostController,
 } from '@/internal/overlayHost/overlayHost';
-import { h, inject, shallowRef } from 'vue';
+import { h, inject } from 'vue';
 import Snackbar from './Snackbar.vue';
 import { snackbarDefaultsContextKey, type ShowSnackbarDefaults, type SnackbarPosition } from './config';
 import { showPopoverStackItem } from '@/internal/popoverStack/popoverStack';
@@ -65,17 +65,20 @@ function showSnackbarWithDefaults(
     const resolvedOptions = { ...BUILT_IN_DEFAULTS, ...contextualDefaults, ...options };
     const action = resolvedOptions.action;
     const position = resolvedOptions.position;
-    const remainingDuration = shallowRef(resolvedOptions.duration ?? BUILT_IN_DEFAULTS.duration);
+    let remainingDuration = resolvedOptions.duration ?? BUILT_IN_DEFAULTS.duration;
 
     let settled = false;
     let timerId = 0;
     let startedAt = 0;
     let view: Window | undefined;
+    let snackbarElement: HTMLElement | undefined;
+    let pointerInside = false;
     let releaseEnvironment: (() => void) | undefined;
 
     const releaseTimerEnvironment = () => {
       releaseEnvironment?.();
       releaseEnvironment = undefined;
+      snackbarElement = undefined;
     };
 
     const finalizeResolve = (value: string) => {
@@ -103,7 +106,7 @@ function showSnackbarWithDefaults(
 
       view.clearTimeout(timerId);
       timerId = 0;
-      remainingDuration.value = Math.max(0, remainingDuration.value - (view.performance.now() - startedAt));
+      remainingDuration = Math.max(0, remainingDuration - (view.performance.now() - startedAt));
     };
 
     const handle = showPopoverStackItem(host, {
@@ -134,25 +137,15 @@ function showSnackbarWithDefaults(
             onDismiss: () => {
               closeWithValue(resolvedOptions.dismissValue);
             },
-            onPointerenter: () => {
-              clearTimer();
+            onVnodeMounted: (vnode) => {
+              if (settled) return;
+              snackbarElement = vnode.el as HTMLElement;
+              syncTimer();
             },
-            onPointerleave: () => {
-              startTimer();
-            },
-            onFocusin: () => {
-              clearTimer();
-            },
-            onFocusout: (event: FocusEvent) => {
-              const currentTarget = event.currentTarget as HTMLElement | null;
-              const nextTarget = event.relatedTarget as Node | null;
-
-              if (currentTarget && nextTarget && currentTarget.contains(nextTarget)) {
-                return;
-              }
-
-              startTimer();
-            },
+            onPointerenter: syncTimer,
+            onPointerleave: syncTimer,
+            onFocusin: syncTimer,
+            onFocusout: syncTimer,
           },
           {
             default: () => resolvedOptions.message ?? '',
@@ -172,7 +165,7 @@ function showSnackbarWithDefaults(
         return;
       }
 
-      if (remainingDuration.value <= 0) {
+      if (remainingDuration <= 0) {
         closeWithValue(resolvedOptions.timeoutValue);
         return;
       }
@@ -180,10 +173,24 @@ function showSnackbarWithDefaults(
       startedAt = view.performance.now();
       timerId = view.setTimeout(() => {
         timerId = 0;
-        remainingDuration.value = 0;
+        remainingDuration = 0;
         closeWithValue(resolvedOptions.timeoutValue);
-      }, remainingDuration.value);
+      }, remainingDuration);
     };
+
+    function syncTimer(event?: Event) {
+      if (event?.type === 'pointerenter') pointerInside = true;
+      if (event?.type === 'pointerleave') pointerInside = false;
+
+      // During focusout the active element is still changing; relatedTarget is the destination.
+      const hasFocus =
+        event?.type === 'focusout'
+          ? snackbarElement?.contains((event as FocusEvent).relatedTarget as Node | null)
+          : snackbarElement?.matches(':focus-within');
+
+      if (pointerInside || hasFocus) clearTimer();
+      else startTimer();
+    }
 
     const handleActionClick = async () => {
       try {
@@ -206,10 +213,11 @@ function showSnackbarWithDefaults(
 
     releaseEnvironment = bindElementEnvironment(getOverlayHostElement(host)!, (document) => {
       view = document.defaultView!;
-      startTimer();
+      syncTimer();
       return () => {
         clearTimer();
         view = undefined;
+        pointerInside = false;
       };
     });
     if (settled) releaseTimerEnvironment();

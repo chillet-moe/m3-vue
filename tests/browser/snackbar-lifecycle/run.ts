@@ -28,7 +28,33 @@ try {
   await page.getByRole('button', { name: 'Dismiss notification' }).click();
   await stack.waitFor({ state: 'detached' });
   assert.equal(await page.getByTestId('result').textContent(), 'dismiss');
-  console.log('Snackbar native visibility and dismissal passed.');
+  const launcher = page.getByRole('button', { name: 'Show timed' });
+  const action = page.getByRole('button', { name: 'Undo', exact: true });
+  const result = page.getByTestId('result');
+  for (const interaction of ['leave-while-focused', 'blur-while-hovered', 'focus-between-actions']) {
+    await launcher.click();
+    await action.waitFor({ state: 'visible' });
+    await action.hover();
+    await action.focus();
+
+    if (interaction === 'blur-while-hovered') {
+      await launcher.focus();
+    } else {
+      await page.mouse.move(0, 0);
+      if (interaction === 'focus-between-actions') {
+        await page.getByRole('button', { name: 'Dismiss notification' }).focus();
+      }
+    }
+    await page.waitForTimeout(650);
+    assert.equal(await result.textContent(), '', `${interaction} must keep the timeout paused`);
+    assert(await stack.evaluate((element) => element.matches(':popover-open')));
+
+    await launcher.focus();
+    await page.mouse.move(0, 0);
+    await page.waitForFunction(() => document.querySelector('output')?.textContent === 'timeout');
+    await stack.waitFor({ state: 'detached' });
+  }
+  console.log('Snackbar native visibility, dismissal and overlapping pause reasons passed.');
 } finally {
   await browser.close();
   await server.close();

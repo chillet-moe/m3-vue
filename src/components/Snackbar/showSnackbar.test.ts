@@ -367,6 +367,26 @@ describe('showSnackbar', () => {
     await expect(next).resolves.toBe('dismiss');
   });
 
+  it('resumes the remaining timeout budget after pointer interaction', async () => {
+    vi.useFakeTimers();
+    const result = showSnackbar(overlayHost, { message: 'Saved', duration: 1_000 });
+    const resolved = vi.fn();
+    void result.then(resolved);
+    await nextTick();
+    const snackbar = document.querySelector<HTMLElement>('.m3-snackbar')!;
+
+    await vi.advanceTimersByTimeAsync(200);
+    snackbar.dispatchEvent(new Event('pointerenter'));
+    await vi.advanceTimersByTimeAsync(1_500);
+    expect(resolved).not.toHaveBeenCalled();
+
+    snackbar.dispatchEvent(new Event('pointerleave'));
+    await vi.advanceTimersByTimeAsync(799);
+    expect(resolved).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1);
+    await expect(result).resolves.toBe('timeout');
+  });
+
   it.each([0, 2_000])('resolves with the timeout value after %i ms', async (duration) => {
     vi.useFakeTimers();
 
