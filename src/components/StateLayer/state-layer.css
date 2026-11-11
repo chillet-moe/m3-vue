@@ -3,13 +3,6 @@
     position: relative;
     -webkit-tap-highlight-color: transparent;
 
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
     &::after {
       content: '';
       position: absolute;

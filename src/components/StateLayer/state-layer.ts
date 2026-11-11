@@ -2,7 +2,9 @@ import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import type { Directive } from 'vue';
 import './state-layer.css';
 
-const rippleCleanups = new WeakMap<Element, Set<() => void>>();
+const stateLayerSelector = '.m3-state-layer';
+type RippleCleanup = () => void;
+const rippleCleanups = new WeakMap<Element, RippleCleanup | Set<RippleCleanup>>();
 const registrations = new WeakMap<Document, { count: number; destroy: () => void }>();
 
 const isEnabled = (node: Element): boolean => {
@@ -33,26 +35,49 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
 
   // Remove the helper node after both the spread and fade-out finish.
   const view = node.ownerDocument.defaultView!;
-  let cleanups = rippleCleanups.get(node);
-  if (!cleanups) {
-    cleanups = new Set();
-    rippleCleanups.set(node, cleanups);
-  }
   const cleanup = () => {
     view.clearTimeout(timer);
     ripple.remove();
-    cleanups.delete(cleanup);
+
+    const current = rippleCleanups.get(node);
+    if (typeof current === 'function') {
+      if (current === cleanup) rippleCleanups.delete(node);
+    } else if (current) {
+      current.delete(cleanup);
+      if (!current.size) rippleCleanups.delete(node);
+    }
   };
   const timer = view.setTimeout(cleanup, duration + 650);
-  cleanups.add(cleanup);
+
+  const previous = rippleCleanups.get(node);
+  if (typeof previous === 'function') {
+    rippleCleanups.set(node, new Set([previous, cleanup]));
+  } else if (previous) {
+    previous.add(cleanup);
+  } else {
+    rippleCleanups.set(node, cleanup);
+  }
 };
 
-export function triggerKeyboardRipple(event: KeyboardEvent, layer: HTMLElement) {
-  if (event.repeat || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
-  if (event.key !== 'Enter' && event.key !== ' ') return;
+function isKeyboardRippleEvent(event: KeyboardEvent) {
+  return (
+    (event.key === 'Enter' || event.key === ' ') &&
+    !event.repeat &&
+    !event.isComposing &&
+    !event.altKey &&
+    !event.ctrlKey &&
+    !event.metaKey
+  );
+}
+
+function createKeyboardRipple(layer: HTMLElement) {
   if (!isEnabled(layer)) return;
   const rect = layer.getBoundingClientRect();
   createRipple(layer, rect.width / 2, rect.height / 2, rect.width, rect.height);
+}
+
+export function triggerKeyboardRipple(event: KeyboardEvent, layer: HTMLElement) {
+  if (isKeyboardRippleEvent(event)) createKeyboardRipple(layer);
 }
 
 function initStateLayer(document: Document = globalThis.document): () => void {
@@ -63,16 +88,16 @@ function initStateLayer(document: Document = globalThis.document): () => void {
     document.documentElement.classList.add('js');
     const pointerdown = (event: PointerEvent) => {
       if (event.button !== 0) return;
-      const layer = (event.target as Element | null)?.closest?.('.m3-state-layer');
+      const layer = (event.target as Element | null)?.closest?.(stateLayerSelector);
       if (!layer || !isEnabled(layer)) return;
       const rect = layer.getBoundingClientRect();
       createRipple(layer, event.clientX - rect.left, event.clientY - rect.top, rect.width, rect.height);
     };
     const keydown = (event: KeyboardEvent) => {
-      const layer = (event.target as Element | null)?.closest?.<HTMLElement>('.m3-state-layer');
-      if (!layer) return;
-      if (event.key !== 'Enter' && !(event.key === ' ' && layer.tagName === 'BUTTON')) return;
-      triggerKeyboardRipple(event, layer);
+      if (!isKeyboardRippleEvent(event)) return;
+      const layer = (event.target as Element | null)?.closest?.<HTMLElement>(stateLayerSelector);
+      if (!layer || (event.key === ' ' && layer.tagName !== 'BUTTON')) return;
+      createKeyboardRipple(layer);
     };
     document.addEventListener('pointerdown', pointerdown);
     document.addEventListener('keydown', keydown);
@@ -99,13 +124,20 @@ function initStateLayer(document: Document = globalThis.document): () => void {
 const releases = new WeakMap<Element, () => void>();
 export const vStateLayer: Directive<HTMLElement> = {
   mounted(element) {
+    // Controls that switch between presentation and interaction remount their state-layer element.
+    if (!element.matches(stateLayerSelector) || releases.has(element)) return;
+
     releases.set(
       element,
       bindElementEnvironment(element, (document) => {
         const release = initStateLayer(document);
         return () => {
-          for (const cleanup of rippleCleanups.get(element) ?? []) cleanup();
-          rippleCleanups.delete(element);
+          const cleanups = rippleCleanups.get(element);
+          if (typeof cleanups === 'function') {
+            cleanups();
+          } else if (cleanups) {
+            for (const cleanup of cleanups) cleanup();
+          }
           release();
         };
       }),
