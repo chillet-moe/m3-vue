@@ -123,36 +123,49 @@ describe('InputOtp', () => {
     app.unmount();
   });
 
-  it('distributes Unicode code points into the remaining text cells', async () => {
+  it('counts displayed Unicode code points when deciding completion', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
     const value = ref('A');
+    const complete = vi.fn();
     const app = createApp(() =>
       h(InputOtp, {
         type: 'text',
-        length: 4,
+        length: 3,
         modelValue: value.value,
         'onUpdate:modelValue': (nextValue) => {
           value.value = nextValue;
         },
+        onComplete: complete,
       }),
     );
 
     app.mount(container);
     const inputs = Array.from(container.querySelectorAll<HTMLInputElement>('.m3-input-otp-input'));
-    inputs[1]?.dispatchEvent(
-      Object.assign(new Event('paste', { bubbles: true, cancelable: true }), {
-        clipboardData: {
-          getData: () => '\u00a0😺\nB\tCD',
-        },
-      }),
-    );
-    await nextTick();
-    await nextTick();
+    const group = container.querySelector<HTMLElement>('[role="group"]')!;
+    const paste = async (index: number, text: string) => {
+      inputs[index]!.dispatchEvent(
+        Object.assign(new Event('paste', { bubbles: true, cancelable: true }), {
+          clipboardData: { getData: () => text },
+        }),
+      );
+      await nextTick();
+      await nextTick();
+    };
 
-    expect(value.value).toBe('A😺BC');
-    expect(inputs.map((input) => input.value)).toEqual(['A', '😺', 'B', 'C']);
-    expect(document.activeElement).toBe(inputs[3]);
+    await paste(1, '\u00a0😺');
+    expect(value.value).toBe('A😺');
+    expect(inputs.map((input) => input.value)).toEqual(['A', '😺', '']);
+    expect(group.dataset.complete).toBe('false');
+    expect(complete).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(inputs[2]);
+
+    await paste(2, '\nB\tCD');
+    expect(value.value).toBe('A😺B');
+    expect(inputs.map((input) => input.value)).toEqual(['A', '😺', 'B']);
+    expect(group.dataset.complete).toBe('true');
+    expect(complete.mock.calls).toEqual([['A😺B']]);
+    expect(document.activeElement).toBe(inputs[2]);
 
     app.unmount();
   });
@@ -160,7 +173,7 @@ describe('InputOtp', () => {
   it('truncates the model on shrink and renders empty cells when the length grows again', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
-    const value = ref('A 😺 BC');
+    const value = ref('A😺BC');
     const length = ref(4);
     const app = createApp(() =>
       h(InputOtp, {
@@ -182,10 +195,12 @@ describe('InputOtp', () => {
     await nextTick();
     expect(value.value).toBe('A😺');
     expect(cells().map((input) => input.value)).toEqual(['A', '😺']);
+    expect(container.querySelector<HTMLElement>('[role="group"]')?.dataset.complete).toBe('true');
 
     length.value = 4;
     await nextTick();
     expect(cells().map((input) => input.value)).toEqual(['A', '😺', '', '']);
+    expect(container.querySelector<HTMLElement>('[role="group"]')?.dataset.complete).toBe('false');
     expect(cells()[3]?.getAttribute('aria-label')).toBe('One-time code character 4 of 4');
     expect(container.querySelector<HTMLInputElement>('input[name="code"]')?.value).toBe('A😺');
 

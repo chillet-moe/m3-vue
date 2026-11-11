@@ -42,3 +42,5 @@ await import('./slider-icons/run');
 await import('./divider/run');
 
 await import('./snackbar-lifecycle/run');
+
+await import('./input-otp/run');

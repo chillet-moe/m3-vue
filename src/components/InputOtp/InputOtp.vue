@@ -93,26 +93,11 @@ const inputIdPrefix = computed(() => {
   return props.id ?? `m3-input-otp-${generatedId}`;
 });
 
-const hasValue = computed(() => {
-  return modelValue.value.length > 0;
-});
-
-const isComplete = computed(() => {
-  return modelValue.value.length >= normalizedLength.value;
-});
-
 const resolvedInputMode = computed(() => {
   return props.inputMode ?? (props.type === 'number' ? 'numeric' : 'text');
 });
 
-const digitValues = computed(() => {
-  const length = normalizedLength.value;
-  const cells = readCharacters(modelValue.value, length);
-  const populated = cells.length;
-  cells.length = length;
-  cells.fill('', populated);
-  return cells;
-});
+const characters = computed(() => readCharacters(modelValue.value, normalizedLength.value));
 
 const groupLabel = computed(() => {
   const ariaLabel = attrs['aria-label'];
@@ -132,9 +117,7 @@ const rootAriaDescribedby = computed(() => {
 watch(normalizedLength, () => {
   inputRefs.value.length = normalizedLength.value;
 
-  if (modelValue.value.length > normalizedLength.value) {
-    modelValue.value = digitValues.value.join('');
-  }
+  modelValue.value = characters.value.join('');
 });
 
 function readCharacters(value: string, limit: number): string[] {
@@ -164,12 +147,13 @@ function readCharacters(value: string, limit: number): string[] {
 }
 
 function commitCharacters(nextCharacters: string[]) {
-  const nextValue = nextCharacters.slice(0, normalizedLength.value).join('');
+  const populated = nextCharacters.filter(Boolean);
+  const nextValue = populated.join('');
   const previousValue = modelValue.value;
 
   modelValue.value = nextValue;
 
-  if (nextValue.length === normalizedLength.value && nextValue !== previousValue) {
+  if (populated.length === normalizedLength.value && nextValue !== previousValue) {
     emit('complete', nextValue);
   }
 }
@@ -191,7 +175,7 @@ function moveFocus(index: number) {
 }
 
 function applyText(value: string, startIndex: number) {
-  const nextCharacters = digitValues.value.slice();
+  const nextCharacters = characters.value.slice();
   const chars = readCharacters(value, normalizedLength.value - startIndex);
 
   if (chars.length === 0) {
@@ -258,11 +242,10 @@ function handleKeydown(event: KeyboardEvent, index: number) {
 
   if (event.key === 'Backspace') {
     event.preventDefault();
-    const characters = digitValues.value;
-    const cellToClear = characters[index] ? index : index - 1;
+    const cellToClear = characters.value[index] ? index : index - 1;
     if (cellToClear < 0) return;
 
-    const nextCharacters = characters.slice();
+    const nextCharacters = characters.value.slice();
     nextCharacters[cellToClear] = '';
     commitCharacters(nextCharacters);
     moveFocus(cellToClear);
@@ -271,7 +254,7 @@ function handleKeydown(event: KeyboardEvent, index: number) {
 
   if (event.key === 'Delete') {
     event.preventDefault();
-    const nextCharacters = digitValues.value.slice();
+    const nextCharacters = characters.value.slice();
     nextCharacters[index] = '';
     commitCharacters(nextCharacters);
     moveFocus(index);
@@ -350,8 +333,8 @@ const shape = useShape(() => props.shape);
     :data-invalid="props.invalid ? 'true' : 'false'"
     :data-disabled="props.disabled ? 'true' : 'false'"
     :data-readonly="props.readonly ? 'true' : 'false'"
-    :data-populated="hasValue ? 'true' : 'false'"
-    :data-complete="isComplete ? 'true' : 'false'"
+    :data-populated="characters.length > 0 ? 'true' : 'false'"
+    :data-complete="characters.length === normalizedLength ? 'true' : 'false'"
     role="group"
     :aria-invalid="props.invalid ? 'true' : undefined"
   >
@@ -367,16 +350,16 @@ const shape = useShape(() => props.shape);
       />
 
       <input
-        v-for="(digit, index) in digitValues"
+        v-for="(_, index) in normalizedLength"
         :id="`${inputIdPrefix}-${index}`"
         :key="index"
         :ref="(el) => setInputRef(el, index)"
         class="m3-input-otp-input"
         data-scope="input-otp"
         data-part="input"
-        :data-filled="digit ? 'true' : 'false'"
+        :data-filled="characters[index] ? 'true' : 'false'"
         :type="props.mask ? 'password' : 'text'"
-        :value="digit"
+        :value="characters[index] ?? ''"
         :placeholder="props.placeholder"
         :disabled="props.disabled"
         :readonly="props.readonly"
@@ -386,7 +369,6 @@ const shape = useShape(() => props.shape);
         :aria-label="getInputAriaLabel(index)"
         :aria-invalid="props.invalid ? 'true' : undefined"
         :aria-describedby="rootAriaDescribedby"
-        maxlength="1"
         @input="handleInput($event, index)"
         @paste="handlePaste($event, index)"
         @keydown="handleKeydown($event, index)"
