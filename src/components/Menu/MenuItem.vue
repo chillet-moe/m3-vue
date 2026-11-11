@@ -88,20 +88,9 @@ const usesMenuSelection = computed(() => {
   return value !== undefined && !submenu;
 });
 
-const resolvedSelected = computed(() => {
-  if (!usesMenuSelection.value || !menuSelection || value === undefined) {
-    return selected;
-  }
-
-  return menuSelection.isSelected(value);
-});
-
-const resolvedChecked = computed(() => {
-  if (!usesMenuSelection.value || !menuSelection || value === undefined) {
-    return checked;
-  }
-
-  return menuSelection.isSelected(value);
+const menuSelected = computed(() => {
+  if (!usesMenuSelection.value || value === undefined) return undefined;
+  return menuSelection?.isSelected(value);
 });
 
 const resolvedRole = computed(() => {
@@ -116,27 +105,22 @@ const resolvedRole = computed(() => {
   return menuSelection.multiple() ? 'menuitemcheckbox' : 'menuitemradio';
 });
 
-const {
-  tag,
-  isButtonTag,
-  nativeDisabled,
-  ariaDisabled,
-  href: resolvedHref,
-  tabIndex,
-  type,
-} = useLinkTag({
+const link = useLinkTag({
   defaultTag: 'button',
   href: () => href,
   disabled: () => disabled,
   ariaDisabledMode: 'non-button',
 });
 
-const slotProps = computed(() => ({
-  checked: resolvedChecked.value,
-  disabled,
-  selected: resolvedSelected.value,
-  submenu,
-}));
+const slotProps = computed(() => {
+  const selection = menuSelected.value;
+  return {
+    checked: selection ?? checked,
+    disabled,
+    selected: selection ?? selected,
+    submenu,
+  };
+});
 
 function guardDisabledInteraction(event: Event) {
   if (!disabled) {
@@ -209,14 +193,14 @@ const shape = useShape(() => shapeProp);
 <template>
   <component
     v-state-layer
-    :is="tag"
+    :is="link.tag"
     :role="resolvedRole"
-    :href="resolvedHref"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
-    :tabindex="tabIndex"
-    :type="type"
-    :data-selected="resolvedSelected ? 'true' : undefined"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
+    :tabindex="link.tabIndex"
+    :type="link.type"
+    :data-selected="slotProps.selected ? 'true' : undefined"
     :data-menu-owner="menuItemOwner?.id"
     :data-has-supporting="hasSupporting() ? 'true' : undefined"
     :data-close-on-select="closeOnSelect ? undefined : 'false'"
@@ -224,9 +208,9 @@ const shape = useShape(() => shapeProp);
     :aria-haspopup="submenu ? 'menu' : undefined"
     :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
     :aria-checked="
-      resolvedRole === 'menuitemradio' || resolvedRole === 'menuitemcheckbox' ? resolvedChecked : undefined
+      resolvedRole === 'menuitemradio' || resolvedRole === 'menuitemcheckbox' ? slotProps.checked : undefined
     "
-    :aria-selected="resolvedRole === 'option' ? resolvedSelected : undefined"
+    :aria-selected="resolvedRole === 'option' ? slotProps.selected : undefined"
     :aria-describedby="hasSupporting() ? supportingId : undefined"
     :class="['m3-state-layer', 'm3-menu-item', 'm3-row-size']"
     :data-size="rowSize"

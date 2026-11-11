@@ -6,6 +6,7 @@ import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
 import { computed, inject, useSlots } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
+import '@/styles/icon-morph.css';
 
 export type NavigationRailItemProps = {
   /** Corner style; inherits the shared shape default. */
@@ -57,18 +58,7 @@ const rail = inject(navigationRailContextKey, null);
 
 const railState = computed<'collapsed' | 'expanded'>(() => rail?.state.value ?? 'collapsed');
 const isExpanded = computed(() => railState.value === 'expanded');
-const {
-  mergedDisabled,
-  isSelected,
-  tag,
-  nativeDisabled,
-  ariaDisabled,
-  href,
-  tabIndex,
-  type,
-  handleClick,
-  handleKeydown,
-} = useNavigationItem({
+const { mergedDisabled, isSelected, link, handleClick, handleKeydown } = useNavigationItem({
   context: rail,
   value: () => props.value,
   href: () => props.href,
@@ -101,14 +91,14 @@ const shape = useShape(() => props.shape);
 
 <template>
   <component
-    :is="tag"
-    :href="href"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
+    :is="link.tag"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
     :aria-current="isSelected ? 'page' : undefined"
     :aria-label="resolvedAriaLabel"
-    :tabindex="tabIndex"
-    :type="type"
+    :tabindex="link.tabIndex"
+    :type="link.type"
     :data-size="rowSize"
     class="m3-row-size m3-navigation-rail-item m3-morph-host"
     data-scope="navigation-rail-item"

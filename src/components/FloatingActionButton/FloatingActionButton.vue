@@ -5,7 +5,7 @@ import { computed, mergeProps } from 'vue';
 
 import { useActionTitleTooltip } from '@/composables/useActionTitleTooltip';
 import { useLinkTag } from '@/composables/useLinkTag';
-import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
 import { Icon } from '@/components/Icon';
 
 defineOptions({
@@ -40,9 +40,9 @@ const props = withDefaults(defineProps<FloatingActionButtonProps>(), {
 });
 
 const disabled = computed(() => props.disabled);
-const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
+const link = useLinkTag({
   defaultTag: 'button',
-  href: computed(() => props.href),
+  href: () => props.href,
   disabled,
 });
 
@@ -57,16 +57,15 @@ const slots = defineSlots<{
 const hasIcon = computed(() => Boolean(props.icon || slots.icon));
 const extended = computed(() => Boolean(slots.default));
 
-const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
-const { rootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
-const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttrs.value));
+const pressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
+const { getRootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
 const shape = useShape(() => props.shape);
 </script>
 
 <template>
   <component
     v-state-layer
-    :is="tag"
+    :is="link.tag"
     :class="['m3-state-layer', 'm3-fab']"
     data-scope="floating-action-button"
     data-part="root"
@@ -76,13 +75,13 @@ const shape = useShape(() => props.shape);
     :data-size="size"
     :data-extended="extended ? 'true' : 'false'"
     :data-disabled="disabled ? 'true' : 'false'"
-    :href="href"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
-    :tabindex="tabIndex"
-    :type="type"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
+    :tabindex="link.tabIndex"
+    :type="link.type"
     ref="rootRef"
-    v-bind="rootProps"
+    v-bind="mergeProps(pressShapeMorphAttrs, getRootAttrs())"
   >
     <span
       v-if="hasIcon"

@@ -42,17 +42,28 @@ describe('useNavigationItem', () => {
     expect(item.isSelected.value).toBe(true);
   });
 
-  it('keeps explicit selection independent from context selection', () => {
-    const { context } = createContext('home');
+  it('switches between explicit selection and the current context value', () => {
+    const { context, currentValue } = createContext('home');
+    const selected = ref<boolean | undefined>(true);
     const item = useNavigationItem({
       context,
       value: () => 'search',
       href: () => undefined,
       disabled: () => false,
-      selected: () => true,
+      selected: () => selected.value,
     });
 
     expect(item.isSelected.value).toBe(true);
+
+    currentValue.value = 'search';
+    selected.value = false;
+    expect(item.isSelected.value).toBe(false);
+
+    selected.value = undefined;
+    expect(item.isSelected.value).toBe(true);
+
+    currentValue.value = 'home';
+    expect(item.isSelected.value).toBe(false);
   });
 
   it('merges disabled state and prevents activation', () => {
@@ -71,9 +82,9 @@ describe('useNavigationItem', () => {
 
     expect(event.defaultPrevented).toBe(true);
     expect(activate).not.toHaveBeenCalled();
-    expect(item.href.value).toBeUndefined();
-    expect(item.ariaDisabled.value).toBe('true');
-    expect(item.tabIndex.value).toBe(-1);
+    expect(item.link.value.href).toBeUndefined();
+    expect(item.link.value.ariaDisabled).toBe('true');
+    expect(item.link.value.tabIndex).toBe(-1);
   });
 
   it('turns Space on an enabled anchor into a click', () => {

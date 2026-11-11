@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useElementEnvironment } from '@/internal/elementEnvironment';
-import { inject, nextTick, ref, watch, type CSSProperties } from 'vue';
+import { isElement, useElementEnvironment } from '@/internal/elementEnvironment';
+import { computed, h, inject, ref, shallowRef, watch, type CSSProperties } from 'vue';
 import { tabsContextKey } from './TabsContext';
 
 export type TabListProps = {
@@ -17,154 +17,164 @@ defineSlots<{
 const tabs = inject(tabsContextKey);
 
 const listElement = ref<HTMLElement | null>(null);
-const indicatorStyle = ref<CSSProperties>({ '--_tabs-indicator-opacity': '0' });
+const indicatorGeometry = shallowRef<{ vertical: boolean; start: number; size: number } | null>(null);
 
-let resizeObserver: ResizeObserver | undefined;
-let mutationObserver: MutationObserver | undefined;
-let observedTabs = new Set<HTMLElement>();
-let animationFrame = 0;
-let view: Window | null = null;
-let usesWindowResizeFallback = false;
-
-const hideIndicator = () => {
-  indicatorStyle.value = { '--_tabs-indicator-opacity': '0' };
-};
-
-const getActiveTab = () => {
-  const list = listElement.value;
-  const value = tabs?.value.value;
-
-  if (!list || value === undefined) {
-    return undefined;
+// Track geometry in the indicator render so it cannot invalidate the trigger slot.
+const Indicator = () => {
+  const geometry = indicatorGeometry.value;
+  const style: CSSProperties = {};
+  if (geometry) {
+    const axis = geometry.vertical ? 'block' : 'inline';
+    style[`--_tabs-indicator-${axis}-start`] = `${geometry.start}px`;
+    style[`--_tabs-indicator-${axis}-size`] = `${geometry.size}px`;
   }
+  style['--_tabs-indicator-opacity'] = geometry ? '1' : '0';
 
-  return Array.from(list.querySelectorAll<HTMLElement>('[role="tab"][data-tab-value]')).find(
-    (tab) => tab.dataset.tabValue === value,
-  );
-};
-
-const updateIndicator = () => {
-  const list = listElement.value;
-  const activeTab = getActiveTab();
-
-  if (!list || !activeTab) {
-    hideIndicator();
-    return;
-  }
-
-  if (tabs?.orientation.value === 'vertical') {
-    indicatorStyle.value = {
-      '--_tabs-indicator-block-start': `${activeTab.offsetTop}px`,
-      '--_tabs-indicator-block-size': `${activeTab.offsetHeight}px`,
-      '--_tabs-indicator-opacity': '1',
-    };
-    return;
-  }
-
-  const content = activeTab.querySelector<HTMLElement>('.m3-tab-content') ?? activeTab;
-  const width = Math.min(activeTab.offsetWidth, content.offsetWidth);
-  const start = activeTab.offsetLeft + content.offsetLeft + (content.offsetWidth - width) / 2;
-
-  indicatorStyle.value = {
-    '--_tabs-indicator-inline-start': `${start}px`,
-    '--_tabs-indicator-inline-size': `${width}px`,
-    '--_tabs-indicator-opacity': '1',
-  };
-};
-
-const queueIndicatorUpdate = () => {
-  if (!view) {
-    return;
-  }
-
-  if (animationFrame) return;
-
-  if (typeof view!.requestAnimationFrame === 'function') {
-    animationFrame = view!.requestAnimationFrame(() => {
-      animationFrame = 0;
-      updateIndicator();
-    });
-    return;
-  }
-
-  updateIndicator();
-};
-
-const syncObservedTabGeometry = () => {
-  const list = listElement.value;
-  if (!list || !resizeObserver) return;
-
-  const nextTabs = new Set(list.querySelectorAll<HTMLElement>('[role="tab"]'));
-
-  for (const tab of observedTabs) {
-    if (!nextTabs.has(tab)) resizeObserver.unobserve(tab);
-  }
-
-  for (const tab of nextTabs) {
-    if (!observedTabs.has(tab)) resizeObserver.observe(tab);
-  }
-
-  observedTabs = nextTabs;
-};
-
-const startTabGeometryObservation = () => {
-  const list = listElement.value;
-  if (!list) return;
-
-  if (typeof ResizeObserver === 'undefined') {
-    view!.addEventListener('resize', queueIndicatorUpdate);
-    usesWindowResizeFallback = true;
-    return;
-  }
-
-  resizeObserver = new ResizeObserver(queueIndicatorUpdate);
-  resizeObserver.observe(list);
-  syncObservedTabGeometry();
-};
-
-useElementEnvironment(listElement, (document) => {
-  view = document.defaultView;
-  let disposed = false;
-  void nextTick(() => {
-    if (disposed) return;
-    const list = listElement.value;
-
-    startTabGeometryObservation();
-    updateIndicator();
-
-    if (list && typeof MutationObserver !== 'undefined') {
-      mutationObserver = new MutationObserver((records) => {
-        if (records.some((record) => record.type === 'childList')) syncObservedTabGeometry();
-        queueIndicatorUpdate();
-      });
-      mutationObserver.observe(list, {
-        childList: true,
-        characterData: true,
-        subtree: true,
-      });
-    }
+  return h('span', {
+    class: 'm3-tab-indicator',
+    'data-scope': 'tabs',
+    'data-part': 'indicator',
+    style,
   });
-  return () => {
-    disposed = true;
-    view?.cancelAnimationFrame(animationFrame);
-    animationFrame = 0;
-    if (usesWindowResizeFallback) view?.removeEventListener('resize', queueIndicatorUpdate);
-    usesWindowResizeFallback = false;
-    resizeObserver?.disconnect();
-    mutationObserver?.disconnect();
-    observedTabs.clear();
-  };
-});
+};
+
+const indicatorList = computed(() => (tabs?.hasLineIndicator.value ? listElement.value : null));
+
+let hasStartingGeometry = false;
+
+const updateIndicator = (activeTab: HTMLElement | null, vertical: boolean) => {
+  if (!activeTab) {
+    indicatorGeometry.value = null;
+    return;
+  }
+
+  let start: number;
+  let size: number;
+  if (vertical) {
+    start = activeTab.offsetTop;
+    size = activeTab.offsetHeight;
+  } else {
+    const content = activeTab.querySelector<HTMLElement>('.m3-tab-content') ?? activeTab;
+    const contentWidth = content.offsetWidth;
+    size = Math.min(activeTab.offsetWidth, contentWidth);
+    start = activeTab.offsetLeft + content.offsetLeft + (contentWidth - size) / 2;
+  }
+
+  const previous = indicatorGeometry.value;
+  if (previous?.vertical === vertical && previous.start === start && previous.size === size) return;
+  indicatorGeometry.value = { vertical, start, size };
+};
 
 watch(
-  () => [tabs?.value.value, tabs?.orientation.value],
-  () => {
-    void nextTick(() => {
-      queueIndicatorUpdate();
-    });
+  () => tabs?.hasLineIndicator.value,
+  (visible) => {
+    const list = listElement.value;
+    if (!visible || !list) return;
+
+    // Capture the outgoing navigation geometry before the parent patches its variant.
+    // The resize observer will then measure the line geometry for the transition.
+    const activeTab = list.querySelector<HTMLElement>('[role="tab"][data-active]');
+    updateIndicator(activeTab, list.dataset.orientation === 'vertical');
+    hasStartingGeometry = true;
   },
-  { flush: 'post' },
+  { flush: 'sync' },
 );
+
+useElementEnvironment(indicatorList, (document, list) => {
+  const view = document.defaultView;
+  if (!tabs || !view) return;
+
+  const { value, orientation } = tabs;
+  const tabSelector = '[role="tab"]';
+  const observedTabs = new Set<Element>();
+  let animationFrame = 0;
+
+  const measureLineIndicator = () => {
+    updateIndicator(list.querySelector<HTMLElement>('[role="tab"][data-active]'), orientation.value === 'vertical');
+  };
+
+  const queueIndicatorUpdate = () => {
+    if (animationFrame) return;
+
+    if (typeof view.requestAnimationFrame === 'function') {
+      animationFrame = view.requestAnimationFrame(() => {
+        animationFrame = 0;
+        measureLineIndicator();
+      });
+      return;
+    }
+
+    measureLineIndicator();
+  };
+
+  const resizeObserver =
+    typeof view.ResizeObserver === 'function' ? new view.ResizeObserver(queueIndicatorUpdate) : undefined;
+  const syncObservedTab = (tab: Element) => {
+    // Resolve moves and role changes against the DOM at the end of the mutation batch.
+    if (tab !== list && list.contains(tab) && tab.matches(tabSelector)) {
+      if (observedTabs.has(tab)) return;
+      observedTabs.add(tab);
+      resizeObserver?.observe(tab);
+    } else if (observedTabs.delete(tab)) {
+      resizeObserver?.unobserve(tab);
+    }
+  };
+
+  if (resizeObserver) {
+    resizeObserver.observe(list);
+    for (const tab of list.querySelectorAll(tabSelector)) {
+      observedTabs.add(tab);
+      resizeObserver.observe(tab);
+    }
+  } else {
+    view.addEventListener('resize', queueIndicatorUpdate);
+  }
+
+  const syncTabsInSubtrees = (nodes: NodeList) => {
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if (!isElement(node)) continue;
+      if (node.hasAttribute('role') || observedTabs.has(node)) syncObservedTab(node);
+      if (node.firstElementChild) {
+        for (const tab of node.querySelectorAll(tabSelector)) syncObservedTab(tab);
+      }
+    }
+  };
+
+  const mutationObserver =
+    typeof view.MutationObserver === 'function'
+      ? new view.MutationObserver((records) => {
+          if (resizeObserver) {
+            for (const record of records) {
+              if (record.type === 'attributes' && isElement(record.target)) {
+                syncObservedTab(record.target);
+              } else if (record.type === 'childList') {
+                syncTabsInSubtrees(record.removedNodes);
+                syncTabsInSubtrees(record.addedNodes);
+              }
+            }
+          }
+          queueIndicatorUpdate();
+        })
+      : undefined;
+  mutationObserver?.observe(list, { childList: true, characterData: true, subtree: true, attributeFilter: ['role'] });
+
+  const stopWatching = watch([value, orientation], queueIndicatorUpdate, { flush: 'post' });
+  if (hasStartingGeometry) {
+    hasStartingGeometry = false;
+    if (!resizeObserver) queueIndicatorUpdate();
+  } else {
+    measureLineIndicator();
+  }
+
+  return () => {
+    stopWatching();
+    if (animationFrame) view.cancelAnimationFrame(animationFrame);
+    if (resizeObserver) resizeObserver.disconnect();
+    else view.removeEventListener('resize', queueIndicatorUpdate);
+    mutationObserver?.disconnect();
+  };
+});
 </script>
 
 <template>
@@ -177,6 +187,6 @@ watch(
     :aria-label="ariaLabel"
   >
     <slot />
-    <span class="m3-tab-indicator" data-scope="tabs" data-part="indicator" :style="indicatorStyle" />
+    <Indicator />
   </div>
 </template>

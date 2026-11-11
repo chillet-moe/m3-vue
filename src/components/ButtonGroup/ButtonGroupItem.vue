@@ -16,7 +16,7 @@ const selectionItem = useSelectionGroupItem({
   disabled: () => disabled,
   fallbackInputType: 'radio',
 });
-const { isSelected: isChecked, inputType, inputName, inputValue, mergedDisabled, selectFromInput } = selectionItem;
+const { isSelected: isChecked, mergedDisabled, selectFromInput } = selectionItem;
 
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -31,9 +31,9 @@ defineSlots<{
 <template>
   <Button :disabled="mergedDisabled">
     <input
-      :type="inputType"
-      :name="inputName"
-      :value="inputValue"
+      :type="selectionItem.inputType()"
+      :name="selectionItem.inputName()"
+      :value="selectionItem.inputValue()"
       :checked="isChecked"
       :disabled="mergedDisabled"
       :aria-label="ariaLabel"

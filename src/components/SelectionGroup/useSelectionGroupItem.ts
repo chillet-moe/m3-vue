@@ -23,11 +23,11 @@ export type UseSelectionGroupItemOptions = {
 };
 
 export type UseSelectionGroupItemReturn = {
-  participatesInGroup: ComputedRef<boolean>;
+  participatesInGroup(): boolean;
   isSelected: ComputedRef<boolean>;
-  inputType: ComputedRef<SelectionGroupInputType>;
-  inputName: ComputedRef<string | undefined>;
-  inputValue: ComputedRef<string>;
+  inputType(): SelectionGroupInputType;
+  inputName(): string | undefined;
+  inputValue(): string;
   mergedDisabled: ComputedRef<boolean>;
   selectFromInput: (checked: boolean) => void;
 };
@@ -40,9 +40,8 @@ export function useSelectionGroupItem({
   fallbackInputType = 'checkbox',
 }: UseSelectionGroupItemOptions): UseSelectionGroupItemReturn {
   const context = inject(selectionGroupContextKey, undefined);
-  const itemValue = computed(() => value());
 
-  const participatesInGroup = computed(() => context !== undefined && itemValue.value !== undefined);
+  const itemValue = computed(() => value());
 
   const isSelected = computed(() => {
     const currentItemValue = itemValue.value;
@@ -54,28 +53,13 @@ export function useSelectionGroupItem({
     return selected?.value ?? false;
   });
 
-  const inputType = computed<SelectionGroupInputType>(() => {
-    if (context && itemValue.value !== undefined) {
-      return unref(context.inputType);
-    }
-
-    return fallbackInputType;
-  });
-
-  const inputName = computed(() => unref(context?.name) ?? name?.());
-
-  const inputValue = computed(() => {
-    const currentItemValue = itemValue.value;
-    return currentItemValue === undefined ? 'on' : String(currentItemValue);
-  });
-
   const mergedDisabled = computed(() => Boolean(disabled?.() || unref(context?.disabled)));
 
   function selectFromInput(checked: boolean) {
     const currentItemValue = itemValue.value;
 
-    if (participatesInGroup.value && currentItemValue !== undefined) {
-      context?.select(currentItemValue, checked);
+    if (context && currentItemValue !== undefined) {
+      context.select(currentItemValue, checked);
       return;
     }
 
@@ -85,11 +69,20 @@ export function useSelectionGroupItem({
   }
 
   return {
-    participatesInGroup,
+    participatesInGroup() {
+      return context !== undefined && itemValue.value !== undefined;
+    },
     isSelected,
-    inputType,
-    inputName,
-    inputValue,
+    inputType() {
+      return context && itemValue.value !== undefined ? unref(context.inputType) : fallbackInputType;
+    },
+    inputName() {
+      return unref(context?.name) ?? name?.();
+    },
+    inputValue() {
+      const currentItemValue = itemValue.value;
+      return currentItemValue === undefined ? 'on' : String(currentItemValue);
+    },
     mergedDisabled,
     selectFromInput,
   };

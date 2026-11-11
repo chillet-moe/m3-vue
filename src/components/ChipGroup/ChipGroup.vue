@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { SelectionGroupModelValue } from '@/components/SelectionGroup/SelectionGroupContext';
-import SelectionGroup, { type SelectionGroupProps } from '@/components/SelectionGroup/SelectionGroup.vue';
+import type { SelectionGroupModelValue, SelectionGroupProps } from '@/components/SelectionGroup/SelectionGroupContext';
+import SelectionGroupFieldset from '@/components/SelectionGroup/SelectionGroupFieldset.vue';
 
 export type ChipGroupProps = SelectionGroupProps;
 
@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<ChipGroupProps>(), {
 });
 
 const modelValue = defineModel<SelectionGroupModelValue>('modelValue');
+const selection = { modelValue };
 
 defineSlots<{
   /** Chip content. */
@@ -18,8 +19,8 @@ defineSlots<{
 </script>
 
 <template>
-  <SelectionGroup
-    v-model="modelValue"
+  <SelectionGroupFieldset
+    :selection-model="selection.modelValue"
     :class="'m3-chip-group'"
     data-scope="chip-group"
     data-part="root"
@@ -29,7 +30,7 @@ defineSlots<{
     :aria-label="props.ariaLabel"
   >
     <slot />
-  </SelectionGroup>
+  </SelectionGroupFieldset>
 </template>
 
 <style src="./ChipGroup.css"></style>

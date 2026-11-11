@@ -15,11 +15,17 @@ defineSlots<{
 
 const tabs = inject(tabsContextKey);
 
-const panelAttrs = computed(() => tabs?.getPanelAttrs(value) ?? {});
+const panel = computed<{ value: string; active: boolean; attrs: Record<string, unknown> } | undefined>((previous) => {
+  if (!tabs) return undefined;
+
+  const active = tabs.value.value === value;
+  if (previous?.value === value && previous.active === active) return previous;
+  return { value, active, attrs: tabs.getPanelAttrs(value) };
+});
 </script>
 
 <template>
-  <div class="m3-tab-panel" data-scope="tabs" data-part="panel" v-bind="panelAttrs">
+  <div class="m3-tab-panel" data-scope="tabs" data-part="panel" v-bind="panel?.attrs">
     <slot />
   </div>
 </template>

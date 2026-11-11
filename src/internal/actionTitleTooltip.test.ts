@@ -1,10 +1,9 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { actionTitleTooltipAttribute, registerActionTitleTooltip } from './actionTitleTooltip';
+import { registerActionTitleTooltip } from './actionTitleTooltip';
 
-function createTrigger(content: string) {
+function createTrigger() {
   const trigger = document.createElement('button');
-  trigger.setAttribute(actionTitleTooltipAttribute, content);
   document.body.appendChild(trigger);
   return trigger;
 }
@@ -26,8 +25,8 @@ describe('shared action title tooltip runtime', () => {
   });
 
   it('does not create tooltip DOM or anchors until a registered trigger opens', () => {
-    const trigger = createTrigger('Settings');
-    const cleanup = registerActionTitleTooltip(trigger);
+    const trigger = createTrigger();
+    const cleanup = registerActionTitleTooltip(trigger, 'Settings');
 
     expect(document.body.querySelector('.m3-tooltip')).toBeNull();
     expect(trigger.style.getPropertyValue('anchor-name')).toBe('');
@@ -48,10 +47,10 @@ describe('shared action title tooltip runtime', () => {
   });
 
   it('reuses one tooltip while moving the active anchor between triggers', () => {
-    const first = createTrigger('First');
-    const second = createTrigger('Second');
-    const cleanupFirst = registerActionTitleTooltip(first);
-    const cleanupSecond = registerActionTitleTooltip(second);
+    const first = createTrigger();
+    const second = createTrigger();
+    const cleanupFirst = registerActionTitleTooltip(first, 'First');
+    const cleanupSecond = registerActionTitleTooltip(second, 'Second');
 
     first.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     vi.runOnlyPendingTimers();
@@ -70,9 +69,48 @@ describe('shared action title tooltip runtime', () => {
     cleanupSecond();
   });
 
+  it('uses the newest nonempty title when registrations share a trigger', () => {
+    const trigger = createTrigger();
+    const first = registerActionTitleTooltip(trigger, 'First');
+    const middle = registerActionTitleTooltip(trigger, 'Middle');
+    const latest = registerActionTitleTooltip(trigger, 'Latest');
+    const empty = registerActionTitleTooltip(trigger, '');
+
+    const open = () => {
+      trigger.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      vi.runOnlyPendingTimers();
+      return document.body.querySelector<HTMLElement>('.m3-tooltip');
+    };
+
+    try {
+      const tip = open();
+      expect(tip?.textContent).toBe('Latest');
+      expect(trigger.getAttribute('aria-describedby')).toBe(tip?.id);
+
+      middle();
+      expect(tip?.textContent).toBe('Latest');
+      expect(trigger.getAttribute('aria-describedby')).toBe(tip?.id);
+
+      latest();
+      expect(trigger.hasAttribute('aria-describedby')).toBe(false);
+      expect(open()?.textContent).toBe('First');
+
+      empty();
+      expect(open()?.textContent).toBe('First');
+      first();
+      expect(document.body.querySelector('.m3-tooltip')).toBeNull();
+      expect(trigger.hasAttribute('aria-describedby')).toBe(false);
+    } finally {
+      empty();
+      latest();
+      middle();
+      first();
+    }
+  });
+
   it('delegates pointer hover with the plain tooltip delays', () => {
-    const trigger = createTrigger('Hovered');
-    const cleanup = registerActionTitleTooltip(trigger);
+    const trigger = createTrigger();
+    const cleanup = registerActionTitleTooltip(trigger, 'Hovered');
 
     trigger.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
     vi.advanceTimersByTime(59);
@@ -88,9 +126,33 @@ describe('shared action title tooltip runtime', () => {
     cleanup();
   });
 
+  it('opens a shadow trigger from its composed path and closes on an outside mouse press', () => {
+    const host = document.createElement('div');
+    document.body.append(host);
+    const shadow = host.attachShadow({ mode: 'open' });
+    const trigger = createTrigger();
+    const label = document.createElement('span');
+    trigger.append(label);
+    shadow.append(trigger);
+    const cleanup = registerActionTitleTooltip(trigger, 'Shadow action');
+
+    label.dispatchEvent(new MouseEvent('pointerover', { bubbles: true, composed: true }));
+    vi.advanceTimersByTime(60);
+
+    const tip = document.body.querySelector<HTMLElement>('.m3-tooltip');
+    expect(tip?.textContent).toBe('Shadow action');
+    expect(trigger.getAttribute('aria-describedby')).toBe(tip?.id);
+
+    document.body.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
+    vi.advanceTimersByTime(120);
+    expect(tip?.hidden).toBe(true);
+
+    cleanup();
+  });
+
   it('opens on touch long press and suppresses the resulting click', () => {
-    const trigger = createTrigger('Touched');
-    const cleanup = registerActionTitleTooltip(trigger);
+    const trigger = createTrigger();
+    const cleanup = registerActionTitleTooltip(trigger, 'Touched');
     const pointerDown = new MouseEvent('pointerdown', { bubbles: true, clientX: 10, clientY: 20 });
     Object.defineProperty(pointerDown, 'pointerType', { value: 'touch' });
 
@@ -106,8 +168,8 @@ describe('shared action title tooltip runtime', () => {
   });
 
   it('does not schedule hover work for an empty title registration', () => {
-    const trigger = createTrigger('');
-    const cleanup = registerActionTitleTooltip(trigger);
+    const trigger = createTrigger();
+    const cleanup = registerActionTitleTooltip(trigger, '');
     const setTimeoutSpy = vi.spyOn(window, 'setTimeout');
 
     trigger.dispatchEvent(new MouseEvent('pointerover', { bubbles: true }));
@@ -118,14 +180,13 @@ describe('shared action title tooltip runtime', () => {
   });
 
   it('updates only the active tooltip and releases it when a recycled trigger unregisters', () => {
-    const trigger = createTrigger('Before');
-    const cleanup = registerActionTitleTooltip(trigger);
+    const trigger = createTrigger();
+    const cleanup = registerActionTitleTooltip(trigger, 'Before');
 
     trigger.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     vi.runOnlyPendingTimers();
     const tip = document.body.querySelector<HTMLElement>('.m3-tooltip');
 
-    trigger.setAttribute(actionTitleTooltipAttribute, 'After');
     cleanup.update('After');
     expect(tip?.textContent).toBe('After');
 

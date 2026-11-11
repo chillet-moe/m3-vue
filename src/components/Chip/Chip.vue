@@ -3,7 +3,7 @@ import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed } from 'vue';
 
-import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
 import { Icon } from '@/components/Icon';
 import type { SelectionGroupValue } from '@/components/SelectionGroup/SelectionGroupContext';
 import { useSelectionGroupItem } from '@/components/SelectionGroup/useSelectionGroupItem';
@@ -67,10 +67,10 @@ const selectionItem = useSelectionGroupItem({
   name: () => props.name,
   disabled: () => props.disabled,
 });
-const { participatesInGroup, inputType, inputName, inputValue, mergedDisabled, selectFromInput } = selectionItem;
+const { mergedDisabled, selectFromInput } = selectionItem;
 
 const selectable = computed(() => {
-  return selectableVariant.value || participatesInGroup.value;
+  return selectableVariant.value || selectionItem.participatesInGroup();
 });
 
 const isSelected = computed(() => {
@@ -153,7 +153,7 @@ const type = computed(() => {
   return undefined;
 });
 
-const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled: mergedDisabled });
+const pressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled: mergedDisabled });
 
 const handleChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -192,9 +192,9 @@ const shape = useShape(() => props.shape);
       :class="'m3-chip-input'"
       data-scope="chip"
       data-part="input"
-      :type="inputType"
-      :name="inputName"
-      :value="inputValue"
+      :type="selectionItem.inputType()"
+      :name="selectionItem.inputName()"
+      :value="selectionItem.inputValue()"
       :checked="isSelected"
       :disabled="mergedDisabled"
       :aria-label="ariaLabel"

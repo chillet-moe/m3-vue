@@ -2,7 +2,9 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, h, nextTick, ref } from 'vue';
 
+import { ChipGroup } from '@/components/ChipGroup';
 import { SelectionGroup } from '@/components/SelectionGroup';
+import type { SelectionGroupModelValue } from '@/components/SelectionGroup/SelectionGroupContext';
 import Chip from './Chip.vue';
 
 afterEach(() => {
@@ -192,6 +194,121 @@ describe('Chip', () => {
     expect(selectedValues).toEqual(['alerts']);
 
     app.unmount();
+  });
+
+  it('updates ChipGroup selection as its slot and model change independently', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const model = ref(['updates']);
+    const showAlerts = ref(false);
+    const app = createApp(() =>
+      h(
+        ChipGroup,
+        {
+          modelValue: model.value,
+          selectionMode: 'multiple',
+          name: 'notifications',
+          'onUpdate:modelValue': (value) => {
+            model.value = value as string[];
+          },
+        },
+        {
+          default: () => [
+            h(Chip, { key: 'updates', value: 'updates' }, () => 'Updates'),
+            showAlerts.value ? h(Chip, { key: 'alerts', value: 'alerts' }, () => 'Alerts') : null,
+          ],
+        },
+      ),
+    );
+
+    app.mount(container);
+    try {
+      const checked = () =>
+        Array.from(
+          container.querySelectorAll<HTMLInputElement>('input[name="notifications"]:checked'),
+          (input) => input.value,
+        );
+      expect(checked()).toEqual(['updates']);
+
+      showAlerts.value = true;
+      model.value.push('alerts');
+      await nextTick();
+      expect(checked()).toEqual(['updates', 'alerts']);
+
+      container.querySelector<HTMLInputElement>('input[value="updates"]')!.click();
+      await nextTick();
+      expect(model.value).toEqual(['alerts']);
+      expect(checked()).toEqual(['alerts']);
+    } finally {
+      app.unmount();
+    }
+  });
+
+  it('updates native form fields when a chip changes group membership', async () => {
+    const form = document.createElement('form');
+    document.body.appendChild(form);
+    const value = ref<number>();
+    const name = ref<string>();
+    const mode = ref<'single' | 'multiple'>('single');
+    const localSelected = ref(false);
+    const groupSelected = ref<SelectionGroupModelValue>();
+    const app = createApp(() =>
+      h(
+        SelectionGroup,
+        {
+          name: name.value,
+          selectionMode: mode.value,
+          modelValue: groupSelected.value,
+          'onUpdate:modelValue': (next) => {
+            groupSelected.value = next;
+          },
+        },
+        {
+          default: () =>
+            h(Chip, {
+              value: value.value,
+              name: 'local',
+              modelValue: localSelected.value,
+              'onUpdate:modelValue': (next) => {
+                localSelected.value = next;
+              },
+            }),
+        },
+      ),
+    );
+
+    app.mount(form);
+    try {
+      const input = form.querySelector('input')!;
+      expect(input.type).toBe('checkbox');
+      input.click();
+      await nextTick();
+      expect(new window.FormData(form).get('local')).toBe('on');
+
+      value.value = 0;
+      name.value = 'group';
+      await nextTick();
+      expect(input.type).toBe('radio');
+      input.click();
+      await nextTick();
+      expect(groupSelected.value).toBe(0);
+      expect(new window.FormData(form).get('group')).toBe('0');
+      expect(new window.FormData(form).has('local')).toBe(false);
+
+      mode.value = 'multiple';
+      value.value = 2;
+      groupSelected.value = [2];
+      name.value = 'updated';
+      await nextTick();
+      expect(input.type).toBe('checkbox');
+      expect(new window.FormData(form).get('updated')).toBe('2');
+      input.click();
+      await nextTick();
+      expect(groupSelected.value).toEqual([]);
+      expect(new window.FormData(form).has('updated')).toBe(false);
+    } finally {
+      app.unmount();
+    }
   });
 
   it('renders an avatar for input chips', async () => {

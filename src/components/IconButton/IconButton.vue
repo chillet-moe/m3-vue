@@ -2,7 +2,7 @@
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { useLinkTag } from '@/composables/useLinkTag';
-import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
 import { useActionTitleTooltip } from '@/composables/useActionTitleTooltip';
 import { computed, inject, mergeProps, unref } from 'vue';
 import { Icon } from '@/components/Icon';
@@ -56,16 +56,15 @@ const shape = useShape(() => props.shape ?? unref(context?.shape), 'rounded');
 const width = computed(() => props.width ?? unref(context?.width) ?? 'default');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
-const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
-  defaultTag: computed(() => (toggleable.value ? 'label' : 'button')),
-  href: computed(() => props.href),
+const link = useLinkTag({
+  defaultTag: () => (toggleable.value ? 'label' : 'button'),
+  href: () => props.href,
   disabled,
 });
 
-const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
+const pressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
 
-const { rootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
-const rootProps = computed(() => mergeProps(pressShapeMorphAttrs.value, rootAttrs.value));
+const { getRootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
 
 const slots = defineSlots<{
   /** Default slot for the main content of the icon button. Receives `disabled` as a prop. */
@@ -76,7 +75,7 @@ const slots = defineSlots<{
 <template>
   <component
     v-state-layer
-    :is="tag"
+    :is="link.tag"
     :class="['m3-state-layer', 'm3-icon-button']"
     data-scope="icon-button"
     data-part="root"
@@ -86,13 +85,13 @@ const slots = defineSlots<{
     data-m3-shape
     :data-width="width"
     :data-toggleable="toggleable ? 'true' : 'false'"
-    :href="href"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
-    :tabindex="tabIndex"
-    :type="type"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
+    :tabindex="link.tabIndex"
+    :type="link.type"
     ref="rootRef"
-    v-bind="rootProps"
+    v-bind="mergeProps(pressShapeMorphAttrs, getRootAttrs())"
   >
     <Icon v-if="props.icon" :name="props.icon" data-scope="icon-button" data-part="icon" :disabled="disabled" />
     <slot name="default" :disabled="disabled" />

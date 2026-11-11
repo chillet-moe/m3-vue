@@ -3,8 +3,8 @@ import { ref } from 'vue';
 import { useLinkTag } from './useLinkTag';
 
 describe('useLinkTag', () => {
-  it('switches to anchor mode when href is provided', () => {
-    const href = ref('/account');
+  it('updates link attributes together as the href and disabled state change', () => {
+    const href = ref('');
     const disabled = ref(true);
     const link = useLinkTag({
       defaultTag: 'button',
@@ -12,11 +12,30 @@ describe('useLinkTag', () => {
       disabled,
     });
 
-    expect(link.tag.value).toBe('a');
-    expect(link.href.value).toBeUndefined();
-    expect(link.ariaDisabled.value).toBe('true');
-    expect(link.tabIndex.value).toBe(-1);
-    expect(link.type.value).toBeUndefined();
+    expect(link.value.tag).toBe('button');
+    expect(link.value.nativeDisabled).toBe(true);
+
+    href.value = '/account';
+    expect(link.value).toMatchObject({
+      tag: 'a',
+      href: undefined,
+      nativeDisabled: undefined,
+      ariaDisabled: 'true',
+      tabIndex: -1,
+      type: undefined,
+    });
+
+    href.value = '/profile';
+    disabled.value = false;
+    expect(link.value).toMatchObject({
+      tag: 'a',
+      href: '/profile',
+      ariaDisabled: undefined,
+      tabIndex: undefined,
+    });
+
+    href.value = '';
+    expect(link.value).toMatchObject({ tag: 'button', href: undefined, nativeDisabled: false, type: 'button' });
   });
 
   it('keeps button semantics when href is absent', () => {
@@ -25,11 +44,11 @@ describe('useLinkTag', () => {
       disabled: true,
     });
 
-    expect(link.tag.value).toBe('button');
-    expect(link.nativeDisabled.value).toBe(true);
-    expect(link.ariaDisabled.value).toBeUndefined();
-    expect(link.tabIndex.value).toBeUndefined();
-    expect(link.type.value).toBe('button');
+    expect(link.value.tag).toBe('button');
+    expect(link.value.nativeDisabled).toBe(true);
+    expect(link.value.ariaDisabled).toBeUndefined();
+    expect(link.value.tabIndex).toBeUndefined();
+    expect(link.value.type).toBe('button');
   });
 
   it('supports separate aria and tabindex modes for non-button fallbacks', () => {
@@ -40,8 +59,8 @@ describe('useLinkTag', () => {
       disabledTabIndexMode: 'anchor',
     });
 
-    expect(link.tag.value).toBe('div');
-    expect(link.ariaDisabled.value).toBe('true');
-    expect(link.tabIndex.value).toBeUndefined();
+    expect(link.value.tag).toBe('div');
+    expect(link.value.ariaDisabled).toBe('true');
+    expect(link.value.tabIndex).toBeUndefined();
   });
 });

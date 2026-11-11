@@ -201,10 +201,11 @@ describe('Button', () => {
     app.unmount();
   });
 
-  it('updates the component tooltip when title changes', async () => {
+  it('retains an open tooltip during label updates and changes it with the title', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
     const title = ref('Save changes');
+    const label = ref('Save');
 
     const app = createApp({
       setup() {
@@ -215,7 +216,7 @@ describe('Button', () => {
               title: title.value,
             },
             {
-              default: () => 'Save',
+              default: () => label.value,
             },
           );
       },
@@ -224,46 +225,71 @@ describe('Button', () => {
     app.mount(container);
     await nextTick();
 
-    const button = container.querySelector('button');
-    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Save changes');
+    const button = container.querySelector('button')!;
+    expect(button.getAttribute('data-m3-action-title-tooltip')).toBe('Save changes');
     expect(document.body.querySelector('.m3-tooltip')).toBeNull();
+
+    button.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    const tip = document.body.querySelector('.m3-tooltip')!;
+    expect(tip.textContent).toBe('Save changes');
+    expect(button.getAttribute('aria-describedby')).toBe(tip.id);
+    label.value = 'Save draft';
+    await nextTick();
+
+    expect(button.textContent).toBe('Save draft');
+    expect(document.body.querySelector('.m3-tooltip')).toBe(tip);
+    expect(tip.textContent).toBe('Save changes');
+    expect(button.getAttribute('aria-describedby')).toBe(tip.id);
 
     title.value = 'Discard changes';
     await nextTick();
 
-    expect(button?.getAttribute('data-m3-action-title-tooltip')).toBe('Discard changes');
-    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
+    expect(button.getAttribute('data-m3-action-title-tooltip')).toBe('Discard changes');
+    expect(tip.textContent).toBe('Discard changes');
+    expect(button.getAttribute('aria-describedby')).toBe(tip.id);
 
     title.value = '';
     await nextTick();
 
-    expect(button?.hasAttribute('data-m3-action-title-tooltip')).toBe(false);
+    expect(button.hasAttribute('data-m3-action-title-tooltip')).toBe(false);
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
     expect(document.body.querySelector('.m3-tooltip')).toBeNull();
 
     app.unmount();
   });
 
-  it('does not install a title tooltip when title is absent', async () => {
+  it('forwards updated attrs and click listeners without installing a title tooltip', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
-
-    const app = createApp({
-      render() {
-        return h(Button, undefined, {
-          default: () => 'Button',
-        });
-      },
+    const label = ref('Save');
+    const clicks: string[] = [];
+    const app = createApp(() => {
+      const current = label.value;
+      return h(Button, {
+        class: current.toLowerCase(),
+        style: { '--action-label': current },
+        'aria-label': current,
+        onClick: () => clicks.push(current),
+      });
     });
 
     app.mount(container);
-    await nextTick();
+    try {
+      const button = container.querySelector('button')!;
+      button.click();
+      label.value = 'Discard';
+      await nextTick();
+      button.click();
 
-    const button = container.querySelector('button') as HTMLButtonElement | null;
-
-    expect(button?.hasAttribute('aria-controls')).toBe(false);
-    expect(button?.hasAttribute('aria-haspopup')).toBe(false);
-    expect(document.body.querySelector('.m3-tooltip')).toBeNull();
-
-    app.unmount();
+      expect(button.classList.contains('save')).toBe(false);
+      expect(button.classList.contains('discard')).toBe(true);
+      expect(button.style.getPropertyValue('--action-label')).toBe('Discard');
+      expect(button.getAttribute('aria-label')).toBe('Discard');
+      expect(clicks).toEqual(['Save', 'Discard']);
+      button.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      expect(document.body.querySelector('.m3-tooltip')).toBeNull();
+    } finally {
+      app.unmount();
+    }
   });
 });

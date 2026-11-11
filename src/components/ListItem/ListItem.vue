@@ -6,9 +6,10 @@ import { listItemContextKey } from './ListItemContext';
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
-import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
 import { computed, inject, unref, useSlots } from 'vue';
 import type { ButtonProps } from '@/components/Button';
+import '@/styles/icon-morph.css';
 
 export type ListItemSize = NonNullable<ButtonProps['size']>;
 
@@ -59,13 +60,13 @@ const interactive = computed(() => props.interactive);
 const shape = useShape(() => props.shape ?? unref(context?.shape), 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
-const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
-  defaultTag: computed(() => (interactive.value ? 'button' : 'div')),
-  href: computed(() => (interactive.value ? props.href : undefined)),
+const link = useLinkTag({
+  defaultTag: () => (interactive.value ? 'button' : 'div'),
+  href: () => (interactive.value ? props.href : undefined),
   disabled,
 });
 
-const { pressShapeMorphAttrs } = usePressShapeMorph({
+const pressShapeMorphAttrs = usePressShapeMorphAttrs({
   enabled: computed(() => interactive.value && appearance.value === 'expressive'),
   disabled,
 });
@@ -107,7 +108,7 @@ const slotProps = computed(() => ({
 <template>
   <component
     v-state-layer
-    :is="tag"
+    :is="link.tag"
     :class="[
       'm3-item',
       appearance === 'expressive' && 'm3-morph-host',
@@ -127,12 +128,12 @@ const slotProps = computed(() => ({
     :data-interactive="interactive ? 'true' : 'false'"
     :data-active="isSelected ? 'true' : undefined"
     :data-selected="isSelected ? 'true' : undefined"
-    :href="href"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
     :aria-current="interactive && isSelected ? 'page' : undefined"
-    :tabindex="tabIndex"
-    :type="type"
+    :tabindex="link.tabIndex"
+    :type="link.type"
     v-bind="interactive ? pressShapeMorphAttrs : undefined"
   >
     <Icon

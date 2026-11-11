@@ -34,6 +34,25 @@ describe('useTabs', () => {
     expect(tabs.value.value).toBe('tab2');
   });
 
+  it('keeps a getter-controlled selection unset until the consumer accepts it', () => {
+    const value = ref<string>();
+    const changes: string[] = [];
+    const tabs = useTabs({
+      value: () => value.value,
+      onValueChange: (nextValue) => changes.push(nextValue),
+    });
+
+    tabs.setValue('settings');
+
+    expect(changes).toEqual(['settings']);
+    expect(tabs.value.value).toBeUndefined();
+    expect(tabs.getPanelAttrs('settings').hidden).toBe(true);
+
+    value.value = 'settings';
+    expect(tabs.getTriggerAttrs('settings')['aria-selected']).toBe(true);
+    expect(tabs.getPanelAttrs('settings').hidden).toBeUndefined();
+  });
+
   it('exposes tablist semantics for the resolved orientation', () => {
     const horizontalAttrs = useTabs().triggerListAttrs.value;
     const verticalAttrs = useTabs({ orientation: 'vertical' }).triggerListAttrs.value;
@@ -147,5 +166,37 @@ describe('useTabs', () => {
     overviewTrigger?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
 
     expect(changes).toEqual(['settings']);
+  });
+
+  it('focuses the enabled edges without selecting in manual mode', () => {
+    const tabs = useTabs<string>({ value: 'first', selectWhenFocused: false });
+    const list = document.createElement('div');
+    list.setAttribute('role', 'tablist');
+
+    for (const value of ['start-disabled', 'first', 'middle', 'last', 'end-disabled']) {
+      const trigger = document.createElement('button');
+      trigger.setAttribute('role', 'tab');
+      trigger.dataset.tabValue = value;
+      trigger.addEventListener('keydown', tabs.getTriggerAttrs(value).onKeydown as (event: KeyboardEvent) => void);
+      if (value === 'start-disabled') trigger.setAttribute('aria-disabled', 'true');
+      if (value === 'end-disabled') trigger.setAttribute('data-disabled', 'true');
+      list.append(trigger);
+    }
+    document.body.append(list);
+
+    try {
+      list.querySelector<HTMLElement>('[data-tab-value="middle"]')!.focus();
+      const navigate = (key: string) =>
+        document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key, cancelable: true }));
+
+      navigate('End');
+      expect(document.activeElement?.getAttribute('data-tab-value')).toBe('last');
+      expect(tabs.value.value).toBe('first');
+
+      navigate('Home');
+      expect(document.activeElement?.getAttribute('data-tab-value')).toBe('first');
+    } finally {
+      list.remove();
+    }
   });
 });

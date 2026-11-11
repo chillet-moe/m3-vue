@@ -40,9 +40,8 @@ try {
     await switchRoot.locator('input').focus();
     await page.keyboard.press('Space');
     assert(await switchRoot.locator('input').isChecked());
-    // Read layout sizes, independent of the handle's in-flight spatial transition.
-    await page.waitForTimeout(350);
-    const handle = await switchRoot.locator('[data-part="handle"]').evaluate((el) => {
+    const handle = await switchRoot.locator('[data-part="handle"]').evaluate(async (el) => {
+      await Promise.all(el.getAnimations().map((animation) => animation.finished));
       const control = el.parentElement!.getBoundingClientRect();
       const box = el.getBoundingClientRect();
       return {
@@ -97,6 +96,29 @@ try {
     }
   }
   await page.locator('main').evaluate((el) => el.style.removeProperty('--md-sys-typescale-body-medium-size'));
+
+  const switchOverflow = await page.getByTestId('switch-small').evaluate((control) => {
+    const scroller = document.createElement('div');
+    scroller.dir = 'rtl';
+    Object.assign(scroller.style, { display: 'inline-flex', inlineSize: 'min-content', overflow: 'auto' });
+    control.before(scroller);
+    scroller.append(control);
+
+    const readOverflow = () => {
+      scroller.scrollLeft = -scroller.scrollWidth;
+      return { width: scroller.scrollWidth, height: scroller.scrollHeight, scrollLeft: scroller.scrollLeft };
+    };
+
+    const enabled = readOverflow();
+    scroller.setAttribute('aria-disabled', 'true');
+    const disabled = readOverflow();
+
+    scroller.replaceWith(control);
+    return { enabled, disabled };
+  });
+  assert(switchOverflow.enabled.scrollLeft < 0);
+  assert.deepEqual(switchOverflow.disabled, switchOverflow.enabled);
+
   // At the content floor, the whole label still activates the native input, including by keyboard.
   await page.locator('main').evaluate((el) => {
     el.style.setProperty('--md-density', '-99');

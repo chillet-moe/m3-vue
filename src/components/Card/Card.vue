@@ -3,7 +3,7 @@ import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, inject, unref } from 'vue';
 import { cardContextKey } from '@/components/Card/CardContext.ts';
-import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
 
 export type CardProps = {
   /** Corner style; inherits the shared shape default. */
@@ -21,7 +21,7 @@ const context = inject(cardContextKey, undefined);
 
 const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
 
-const { pressShapeMorphAttrs } = usePressShapeMorph();
+const pressShapeMorphAttrs = usePressShapeMorphAttrs();
 
 const slots = defineSlots<{
   /** Default slot for the main content of the card. */

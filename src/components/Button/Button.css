@@ -193,332 +193,6 @@
       --md-button-unselected-pressed-label-text-color,
       var(--md-sys-color-on-surface-variant)
     );
-
-    --_button-filled-container-color: var(--md-button-filled-container-color, var(--md-sys-color-primary));
-    --_button-filled-selected-container-color: var(
-      --md-button-filled-selected-container-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-filled-unselected-container-color: var(
-      --md-button-filled-unselected-container-color,
-      var(--md-sys-color-surface-container)
-    );
-    --_button-filled-container-elevation: var(--md-button-filled-container-elevation, var(--md-sys-elevation-level0));
-    --_button-filled-label-text-color: var(--md-button-filled-label-text-color, var(--md-sys-color-on-primary));
-    --_button-filled-unselected-label-text-color: var(
-      --md-button-filled-unselected-label-text-color,
-      var(--md-sys-color-on-surface-variant)
-    );
-    --_button-filled-selected-label-text-color: var(
-      --md-button-filled-selected-label-text-color,
-      var(--md-sys-color-on-primary)
-    );
-    --_button-filled-disabled-container-color: var(
-      --md-button-filled-disabled-container-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-filled-disabled-container-elevation: var(
-      --md-button-filled-disabled-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_button-filled-disabled-label-text-color: var(
-      --md-button-filled-disabled-label-text-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-filled-hovered-container-elevation: var(
-      --md-button-filled-hovered-container-elevation,
-      var(--md-sys-elevation-level1)
-    );
-    --_button-filled-hovered-label-text-color: var(
-      --md-button-filled-hovered-label-text-color,
-      var(--md-sys-color-on-primary)
-    );
-    --_button-filled-focused-container-elevation: var(
-      --md-button-filled-focused-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_button-filled-focused-label-text-color: var(
-      --md-button-filled-focused-label-text-color,
-      var(--md-sys-color-on-primary)
-    );
-    --_button-filled-pressed-container-elevation: var(
-      --md-button-filled-pressed-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_button-filled-pressed-label-text-color: var(
-      --md-button-filled-pressed-label-text-color,
-      var(--md-sys-color-on-primary)
-    );
-
-    --_button-elevated-container-color: var(
-      --md-button-elevated-container-color,
-      var(--md-sys-color-surface-container-low)
-    );
-    --_button-elevated-unselected-container-color: var(
-      --md-button-elevated-unselected-container-color,
-      var(--md-sys-color-surface-container-low)
-    );
-    --_button-elevated-selected-container-color: var(
-      --md-button-elevated-selected-container-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-elevated-container-elevation: var(
-      --md-button-elevated-container-elevation,
-      var(--md-sys-elevation-level1)
-    );
-    --_button-elevated-label-text-color: var(--md-button-elevated-label-text-color, var(--md-sys-color-primary));
-    --_button-elevated-unselected-label-text-color: var(
-      --md-button-elevated-unselected-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-elevated-selected-label-text-color: var(
-      --md-button-elevated-selected-label-text-color,
-      var(--md-sys-color-on-primary)
-    );
-    --_button-elevated-disabled-container-color: var(
-      --md-button-elevated-disabled-container-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-elevated-disabled-container-elevation: var(
-      --md-button-elevated-disabled-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_button-elevated-disabled-label-text-color: var(
-      --md-button-elevated-disabled-label-text-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-elevated-hovered-container-elevation: var(
-      --md-button-elevated-hovered-container-elevation,
-      var(--md-sys-elevation-level2)
-    );
-    --_button-elevated-hovered-label-text-color: var(
-      --md-button-elevated-hovered-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-elevated-focused-container-elevation: var(
-      --md-button-elevated-focused-container-elevation,
-      var(--md-sys-elevation-level1)
-    );
-    --_button-elevated-focused-label-text-color: var(
-      --md-button-elevated-focused-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-elevated-pressed-container-elevation: var(
-      --md-button-elevated-pressed-container-elevation,
-      var(--md-sys-elevation-level1)
-    );
-    --_button-elevated-pressed-label-text-color: var(
-      --md-button-elevated-pressed-label-text-color,
-      var(--md-sys-color-primary)
-    );
-
-    --_button-tonal-container-color: var(--md-button-tonal-container-color, var(--md-sys-color-secondary-container));
-    --_button-tonal-unselected-container-color: var(
-      --md-button-tonal-unselected-container-color,
-      var(--md-sys-color-secondary-container)
-    );
-    --_button-tonal-selected-container-color: var(
-      --md-button-tonal-selected-container-color,
-      var(--md-sys-color-secondary)
-    );
-    --_button-tonal-container-elevation: var(--md-button-tonal-container-elevation, var(--md-sys-elevation-level0));
-    --_button-tonal-label-text-color: var(
-      --md-button-tonal-label-text-color,
-      var(--md-sys-color-on-secondary-container)
-    );
-    --_button-tonal-unselected-label-text-color: var(
-      --md-button-tonal-unselected-label-text-color,
-      var(--md-sys-color-on-secondary-container)
-    );
-    --_button-tonal-selected-label-text-color: var(
-      --md-button-tonal-selected-label-text-color,
-      var(--md-sys-color-on-secondary)
-    );
-    --_button-tonal-disabled-container-color: var(
-      --md-button-tonal-disabled-container-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-tonal-disabled-container-elevation: var(
-      --md-button-tonal-disabled-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_button-tonal-disabled-label-text-color: var(
-      --md-button-tonal-disabled-label-text-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-tonal-hovered-container-elevation: var(
-      --md-button-tonal-hovered-container-elevation,
-      var(--md-sys-elevation-level1)
-    );
-    --_button-tonal-hovered-label-text-color: var(
-      --md-button-tonal-hovered-label-text-color,
-      var(--md-sys-color-on-secondary-container)
-    );
-    --_button-tonal-focused-container-elevation: var(
-      --md-button-tonal-focused-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_button-tonal-focused-label-text-color: var(
-      --md-button-tonal-focused-label-text-color,
-      var(--md-sys-color-on-secondary-container)
-    );
-    --_button-tonal-pressed-container-elevation: var(
-      --md-button-tonal-pressed-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_button-tonal-pressed-label-text-color: var(
-      --md-button-tonal-pressed-label-text-color,
-      var(--md-sys-color-on-secondary-container)
-    );
-
-    --_button-outlined-outline-color: var(--md-button-outlined-outline-color, var(--md-control-outline-color));
-    --_button-outlined-selected-container-color: var(
-      --md-button-outlined-selected-container-color,
-      var(--md-sys-color-inverse-surface)
-    );
-    --_button-outlined-label-text-color: var(
-      --md-button-outlined-label-text-color,
-      var(--md-sys-color-on-surface-variant)
-    );
-    --_button-outlined-unselected-label-text-color: var(
-      --md-button-outlined-unselected-label-text-color,
-      var(--md-sys-color-on-surface-variant)
-    );
-    --_button-outlined-selected-label-text-color: var(
-      --md-button-outlined-selected-label-text-color,
-      var(--md-sys-color-inverse-on-surface)
-    );
-    --_button-outlined-disabled-label-text-color: var(
-      --md-button-outlined-disabled-label-text-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-outlined-hovered-label-text-color: var(
-      --md-button-outlined-hovered-label-text-color,
-      var(--md-sys-color-on-surface-variant)
-    );
-    --_button-outlined-focused-label-text-color: var(
-      --md-button-outlined-focused-label-text-color,
-      var(--md-sys-color-on-surface-variant)
-    );
-    --_button-outlined-pressed-label-text-color: var(
-      --md-button-outlined-pressed-label-text-color,
-      var(--md-sys-color-on-surface-variant)
-    );
-
-    --_button-text-label-text-color: var(--md-button-text-label-text-color, var(--md-sys-color-primary));
-    --_button-text-disabled-label-text-color: var(
-      --md-button-text-disabled-label-text-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_button-text-hovered-label-text-color: var(
-      --md-button-text-hovered-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-text-focused-label-text-color: var(
-      --md-button-text-focused-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-text-pressed-label-text-color: var(
-      --md-button-text-pressed-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_button-text-selected-container-color: var(
-      --md-button-text-selected-container-color,
-      var(--md-sys-color-primary-container)
-    );
-    --_button-text-selected-label-text-color: var(
-      --md-button-text-selected-label-text-color,
-      var(--md-sys-color-on-primary-container)
-    );
-
-    --_button-xsmall-outlined-outline-width: var(
-      --md-button-xsmall-outlined-outline-width,
-      var(--md-control-outline-width-extra-small)
-    );
-    --_button-xsmall-icon-size: var(--md-button-xsmall-icon-size, --density-icon(20, label-large, 14));
-    --_button-xsmall-container-shape-square: var(
-      --md-button-xsmall-container-shape-square,
-      var(--_shape-radius, var(--md-shape-action-square-small))
-    );
-    --_button-xsmall-icon-label-space: var(--md-button-xsmall-icon-label-space, 0.5rem);
-    --_button-xsmall-pressed-container-shape: var(
-      --md-button-xsmall-pressed-container-shape,
-      var(--_shape-radius, var(--md-shape-action-pressed-small))
-    );
-    --_button-xsmall-selected-container-shape-round: var(
-      --md-button-xsmall-selected-container-shape-round,
-      var(--_shape-radius, var(--md-shape-action-selected-small))
-    );
-
-    --_button-small-outlined-outline-width: var(
-      --md-button-small-outlined-outline-width,
-      var(--md-control-outline-width-small)
-    );
-    --_button-small-icon-size: var(--md-button-small-icon-size, --density-icon(20, label-large, 14));
-    --_button-small-container-shape-square: var(
-      --md-button-small-container-shape-square,
-      var(--_shape-radius, var(--md-shape-action-square-small))
-    );
-    --_button-small-icon-label-space: var(--md-button-small-icon-label-space, 0.5rem);
-    --_button-small-pressed-container-shape: var(
-      --md-button-small-pressed-container-shape,
-      var(--_shape-radius, var(--md-shape-action-pressed-small))
-    );
-    --_button-small-selected-container-shape-round: var(
-      --md-button-small-selected-container-shape-round,
-      var(--_shape-radius, var(--md-shape-action-selected-small))
-    );
-
-    --_button-medium-outlined-outline-width: var(
-      --md-button-medium-outlined-outline-width,
-      var(--md-control-outline-width-medium)
-    );
-    --_button-medium-icon-size: var(--md-button-medium-icon-size, --density-icon(24, title-medium, 16));
-    --_button-medium-container-shape-square: var(
-      --md-button-medium-container-shape-square,
-      var(--_shape-radius, var(--md-shape-action-square-medium))
-    );
-    --_button-medium-icon-label-space: var(--md-button-medium-icon-label-space, 0.5rem);
-    --_button-medium-pressed-container-shape: var(
-      --md-button-medium-pressed-container-shape,
-      var(--_shape-radius, var(--md-shape-action-pressed-medium))
-    );
-    --_button-medium-selected-container-shape-round: var(
-      --md-button-medium-selected-container-shape-round,
-      var(--_shape-radius, var(--md-shape-action-selected-medium))
-    );
-
-    --_button-large-outlined-outline-width: var(--md-button-large-outlined-outline-width, 0.125rem);
-    --_button-large-icon-size: var(--md-button-large-icon-size, --density-icon(32, headline-small, 24));
-    --_button-large-container-shape-square: var(
-      --md-button-large-container-shape-square,
-      var(--_shape-radius, var(--md-shape-action-square-large))
-    );
-    --_button-large-icon-label-space: var(--md-button-large-icon-label-space, 0.75rem);
-    --_button-large-pressed-container-shape: var(
-      --md-button-large-pressed-container-shape,
-      var(--_shape-radius, var(--md-shape-action-pressed-large))
-    );
-    --_button-large-selected-container-shape-round: var(
-      --md-button-large-selected-container-shape-round,
-      var(--_shape-radius, var(--md-shape-action-selected-large))
-    );
-
-    --_button-xlarge-outlined-outline-width: var(--md-button-xlarge-outlined-outline-width, 0.1875rem);
-    --_button-xlarge-icon-size: var(--md-button-xlarge-icon-size, --density-icon(40, headline-large, 32));
-    --_button-xlarge-container-shape-square: var(
-      --md-button-xlarge-container-shape-square,
-      var(--_shape-radius, var(--md-shape-action-square-large))
-    );
-    --_button-xlarge-icon-label-space: var(--md-button-xlarge-icon-label-space, 1rem);
-    --_button-xlarge-pressed-container-shape: var(
-      --md-button-xlarge-pressed-container-shape,
-      var(--_shape-radius, var(--md-shape-action-pressed-large))
-    );
-    --_button-xlarge-selected-container-shape-round: var(
-      --md-button-xlarge-selected-container-shape-round,
-      var(--_shape-radius, var(--md-shape-action-selected-large))
-    );
   }
 }
 
@@ -598,257 +272,250 @@
 
   /* elevated */
   .m3-button[data-variant='elevated'] {
-    --_button-container-color: var(--md-button-container-color, var(--_button-elevated-container-color));
-    --_button-container-elevation: var(--md-button-container-elevation, var(--_button-elevated-container-elevation));
-    --_button-label-text-color: var(--md-button-label-text-color, var(--_button-elevated-label-text-color));
+    --_button-container-color: var(
+      --md-button-container-color,
+      var(--md-button-elevated-container-color, var(--md-sys-color-surface-container-low))
+    );
+    --_button-container-elevation: var(
+      --md-button-container-elevation,
+      var(--md-button-elevated-container-elevation, var(--md-sys-elevation-level1))
+    );
+    --_button-label-text-color: var(
+      --md-button-label-text-color,
+      var(--md-button-elevated-label-text-color, var(--md-sys-color-primary))
+    );
     --_button-hovered-container-elevation: var(
       --md-button-hovered-container-elevation,
-      var(--_button-elevated-hovered-container-elevation)
+      var(--md-button-elevated-hovered-container-elevation, var(--md-sys-elevation-level2))
     );
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
-      var(--_button-elevated-hovered-label-text-color)
+      var(--md-button-elevated-hovered-label-text-color, var(--md-sys-color-primary))
     );
     --_button-focused-container-elevation: var(
       --md-button-focused-container-elevation,
-      var(--_button-elevated-focused-container-elevation)
+      var(--md-button-elevated-focused-container-elevation, var(--md-sys-elevation-level1))
     );
     --_button-focused-label-text-color: var(
       --md-button-focused-label-text-color,
-      var(--_button-elevated-focused-label-text-color)
+      var(--md-button-elevated-focused-label-text-color, var(--md-sys-color-primary))
     );
     --_button-pressed-container-elevation: var(
       --md-button-pressed-container-elevation,
-      var(--_button-elevated-pressed-container-elevation)
+      var(--md-button-elevated-pressed-container-elevation, var(--md-sys-elevation-level1))
     );
     --_button-pressed-label-text-color: var(
       --md-button-pressed-label-text-color,
-      var(--_button-elevated-pressed-label-text-color)
+      var(--md-button-elevated-pressed-label-text-color, var(--md-sys-color-primary))
     );
     --_button-disabled-container-color: var(
       --md-button-disabled-container-color,
-      var(--_button-elevated-disabled-container-color)
+      var(--md-button-elevated-disabled-container-color, var(--md-sys-color-on-surface))
     );
     --_button-disabled-container-elevation: var(
       --md-button-disabled-container-elevation,
-      var(--_button-elevated-disabled-container-elevation)
+      var(--md-button-elevated-disabled-container-elevation, var(--md-sys-elevation-level0))
     );
     --_button-disabled-label-text-color: var(
       --md-button-disabled-label-text-color,
-      var(--_button-elevated-disabled-label-text-color)
+      var(--md-button-elevated-disabled-label-text-color, var(--md-sys-color-on-surface))
     );
     --_button-unselected-container-color: var(
       --md-button-unselected-container-color,
-      var(--_button-elevated-unselected-container-color)
+      var(--md-button-elevated-unselected-container-color, var(--md-sys-color-surface-container-low))
     );
     --_button-selected-container-color: var(
       --md-button-selected-container-color,
-      var(--_button-elevated-selected-container-color)
-    );
-    --_button-unselected-label-text-color: var(
-      --md-button-unselected-label-text-color,
-      var(--_button-elevated-unselected-label-text-color)
-    );
-    --_button-selected-label-text-color: var(
-      --md-button-selected-label-text-color,
-      var(--_button-elevated-selected-label-text-color)
+      var(--md-button-elevated-selected-container-color, var(--md-sys-color-primary))
     );
   }
 
   /* filled */
   .m3-button[data-variant='filled'] {
-    --_button-container-color: var(--md-button-container-color, var(--_button-filled-container-color));
-    --_button-container-elevation: var(--md-button-container-elevation, var(--_button-filled-container-elevation));
-    --_button-label-text-color: var(--md-button-label-text-color, var(--_button-filled-label-text-color));
+    --_button-container-color: var(
+      --md-button-container-color,
+      var(--md-button-filled-container-color, var(--md-sys-color-primary))
+    );
+    --_button-container-elevation: var(
+      --md-button-container-elevation,
+      var(--md-button-filled-container-elevation, var(--md-sys-elevation-level0))
+    );
+    --_button-label-text-color: var(
+      --md-button-label-text-color,
+      var(--md-button-filled-label-text-color, var(--md-sys-color-on-primary))
+    );
     --_button-hovered-container-elevation: var(
       --md-button-hovered-container-elevation,
-      var(--_button-filled-hovered-container-elevation)
+      var(--md-button-filled-hovered-container-elevation, var(--md-sys-elevation-level1))
     );
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
-      var(--_button-filled-hovered-label-text-color)
+      var(--md-button-filled-hovered-label-text-color, var(--md-sys-color-on-primary))
     );
     --_button-focused-container-elevation: var(
       --md-button-focused-container-elevation,
-      var(--_button-filled-focused-container-elevation)
+      var(--md-button-filled-focused-container-elevation, var(--md-sys-elevation-level0))
     );
     --_button-focused-label-text-color: var(
       --md-button-focused-label-text-color,
-      var(--_button-filled-focused-label-text-color)
+      var(--md-button-filled-focused-label-text-color, var(--md-sys-color-on-primary))
     );
     --_button-pressed-container-elevation: var(
       --md-button-pressed-container-elevation,
-      var(--_button-filled-pressed-container-elevation)
+      var(--md-button-filled-pressed-container-elevation, var(--md-sys-elevation-level0))
     );
     --_button-pressed-label-text-color: var(
       --md-button-pressed-label-text-color,
-      var(--_button-filled-pressed-label-text-color)
+      var(--md-button-filled-pressed-label-text-color, var(--md-sys-color-on-primary))
     );
     --_button-disabled-container-color: var(
       --md-button-disabled-container-color,
-      var(--_button-filled-disabled-container-color)
+      var(--md-button-filled-disabled-container-color, var(--md-sys-color-on-surface))
     );
     --_button-disabled-container-elevation: var(
       --md-button-disabled-container-elevation,
-      var(--_button-filled-disabled-container-elevation)
+      var(--md-button-filled-disabled-container-elevation, var(--md-sys-elevation-level0))
     );
     --_button-disabled-label-text-color: var(
       --md-button-disabled-label-text-color,
-      var(--_button-filled-disabled-label-text-color)
+      var(--md-button-filled-disabled-label-text-color, var(--md-sys-color-on-surface))
     );
     --_button-unselected-container-color: var(
       --md-button-unselected-container-color,
-      var(--_button-filled-unselected-container-color)
+      var(--md-button-filled-unselected-container-color, var(--md-sys-color-surface-container))
     );
     --_button-selected-container-color: var(
       --md-button-selected-container-color,
-      var(--_button-filled-selected-container-color)
-    );
-    --_button-unselected-label-text-color: var(
-      --md-button-unselected-label-text-color,
-      var(--_button-filled-unselected-label-text-color)
-    );
-    --_button-selected-label-text-color: var(
-      --md-button-selected-label-text-color,
-      var(--_button-filled-selected-label-text-color)
+      var(--md-button-filled-selected-container-color, var(--md-sys-color-primary))
     );
   }
 
   /* tonal */
   .m3-button[data-variant='tonal'] {
-    --_button-container-color: var(--md-button-container-color, var(--_button-tonal-container-color));
-    --_button-container-elevation: var(--md-button-container-elevation, var(--_button-tonal-container-elevation));
-    --_button-label-text-color: var(--md-button-label-text-color, var(--_button-tonal-label-text-color));
+    --_button-container-color: var(
+      --md-button-container-color,
+      var(--md-button-tonal-container-color, var(--md-sys-color-secondary-container))
+    );
+    --_button-container-elevation: var(
+      --md-button-container-elevation,
+      var(--md-button-tonal-container-elevation, var(--md-sys-elevation-level0))
+    );
+    --_button-label-text-color: var(
+      --md-button-label-text-color,
+      var(--md-button-tonal-label-text-color, var(--md-sys-color-on-secondary-container))
+    );
     --_button-hovered-container-elevation: var(
       --md-button-hovered-container-elevation,
-      var(--_button-tonal-hovered-container-elevation)
+      var(--md-button-tonal-hovered-container-elevation, var(--md-sys-elevation-level1))
     );
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
-      var(--_button-tonal-hovered-label-text-color)
+      var(--md-button-tonal-hovered-label-text-color, var(--md-sys-color-on-secondary-container))
     );
     --_button-focused-container-elevation: var(
       --md-button-focused-container-elevation,
-      var(--_button-tonal-focused-container-elevation)
+      var(--md-button-tonal-focused-container-elevation, var(--md-sys-elevation-level0))
     );
     --_button-focused-label-text-color: var(
       --md-button-focused-label-text-color,
-      var(--_button-tonal-focused-label-text-color)
+      var(--md-button-tonal-focused-label-text-color, var(--md-sys-color-on-secondary-container))
     );
     --_button-pressed-container-elevation: var(
       --md-button-pressed-container-elevation,
-      var(--_button-tonal-pressed-container-elevation)
+      var(--md-button-tonal-pressed-container-elevation, var(--md-sys-elevation-level0))
     );
     --_button-pressed-label-text-color: var(
       --md-button-pressed-label-text-color,
-      var(--_button-tonal-pressed-label-text-color)
+      var(--md-button-tonal-pressed-label-text-color, var(--md-sys-color-on-secondary-container))
     );
     --_button-disabled-container-color: var(
       --md-button-disabled-container-color,
-      var(--_button-tonal-disabled-container-color)
+      var(--md-button-tonal-disabled-container-color, var(--md-sys-color-on-surface))
     );
     --_button-disabled-container-elevation: var(
       --md-button-disabled-container-elevation,
-      var(--_button-tonal-disabled-container-elevation)
+      var(--md-button-tonal-disabled-container-elevation, var(--md-sys-elevation-level0))
     );
     --_button-disabled-label-text-color: var(
       --md-button-disabled-label-text-color,
-      var(--_button-tonal-disabled-label-text-color)
+      var(--md-button-tonal-disabled-label-text-color, var(--md-sys-color-on-surface))
     );
     --_button-unselected-container-color: var(
       --md-button-unselected-container-color,
-      var(--_button-tonal-unselected-container-color)
+      var(--md-button-tonal-unselected-container-color, var(--md-sys-color-secondary-container))
     );
     --_button-selected-container-color: var(
       --md-button-selected-container-color,
-      var(--_button-tonal-selected-container-color)
-    );
-    --_button-unselected-label-text-color: var(
-      --md-button-unselected-label-text-color,
-      var(--_button-tonal-unselected-label-text-color)
-    );
-    --_button-selected-label-text-color: var(
-      --md-button-selected-label-text-color,
-      var(--_button-tonal-selected-label-text-color)
+      var(--md-button-tonal-selected-container-color, var(--md-sys-color-secondary))
     );
   }
 
   /* outlined */
   .m3-button[data-variant='outlined'] {
     --_button-container-color: var(--md-button-container-color, transparent);
-    --_button-label-text-color: var(--md-button-label-text-color, var(--_button-outlined-label-text-color));
+    --_button-label-text-color: var(
+      --md-button-label-text-color,
+      var(--md-button-outlined-label-text-color, var(--md-sys-color-on-surface-variant))
+    );
     --_button-outline-inset: var(--button-outline-width, var(--_button-reserved-outline-width));
 
-    border-color: var(--_button-outlined-outline-color);
+    border-color: var(--md-button-outlined-outline-color, var(--md-control-outline-color));
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
-      var(--_button-outlined-hovered-label-text-color)
+      var(--md-button-outlined-hovered-label-text-color, var(--md-sys-color-on-surface-variant))
     );
     --_button-focused-label-text-color: var(
       --md-button-focused-label-text-color,
-      var(--_button-outlined-focused-label-text-color)
+      var(--md-button-outlined-focused-label-text-color, var(--md-sys-color-on-surface-variant))
     );
     --_button-pressed-label-text-color: var(
       --md-button-pressed-label-text-color,
-      var(--_button-outlined-pressed-label-text-color)
+      var(--md-button-outlined-pressed-label-text-color, var(--md-sys-color-on-surface-variant))
     );
     --_button-disabled-container-color: var(--md-button-disabled-container-color, transparent);
     --_button-disabled-label-text-color: var(
       --md-button-disabled-label-text-color,
-      var(--_button-outlined-disabled-label-text-color)
+      var(--md-button-outlined-disabled-label-text-color, var(--md-sys-color-on-surface))
     );
     --_button-unselected-container-color: var(--md-button-unselected-container-color, transparent);
     --_button-selected-container-color: var(
       --md-button-selected-container-color,
-      var(--_button-outlined-selected-container-color)
-    );
-    --_button-unselected-label-text-color: var(
-      --md-button-unselected-label-text-color,
-      var(--_button-outlined-unselected-label-text-color)
-    );
-    --_button-selected-label-text-color: var(
-      --md-button-selected-label-text-color,
-      var(--_button-outlined-selected-label-text-color)
+      var(--md-button-outlined-selected-container-color, var(--md-sys-color-inverse-surface))
     );
   }
 
   /* text */
   .m3-button[data-variant='text'] {
     --_button-container-color: var(--md-button-container-color, transparent);
-    --_button-label-text-color: var(--md-button-label-text-color, var(--_button-text-label-text-color));
+    --_button-label-text-color: var(
+      --md-button-label-text-color,
+      var(--md-button-text-label-text-color, var(--md-sys-color-primary))
+    );
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
-      var(--_button-text-hovered-label-text-color)
+      var(--md-button-text-hovered-label-text-color, var(--md-sys-color-primary))
     );
     --_button-focused-label-text-color: var(
       --md-button-focused-label-text-color,
-      var(--_button-text-focused-label-text-color)
+      var(--md-button-text-focused-label-text-color, var(--md-sys-color-primary))
     );
     --_button-pressed-label-text-color: var(
       --md-button-pressed-label-text-color,
-      var(--_button-text-pressed-label-text-color)
+      var(--md-button-text-pressed-label-text-color, var(--md-sys-color-primary))
     );
     --_button-disabled-container-color: var(--md-button-disabled-container-color, transparent);
     --_button-disabled-label-text-color: var(
       --md-button-disabled-label-text-color,
-      var(--_button-text-disabled-label-text-color)
+      var(--md-button-text-disabled-label-text-color, var(--md-sys-color-on-surface))
     );
     --_button-unselected-container-color: var(--md-button-unselected-container-color, transparent);
     --_button-selected-container-color: var(
       --md-button-selected-container-color,
-      var(--_button-text-selected-container-color)
+      var(--md-button-text-selected-container-color, var(--md-sys-color-primary-container))
     );
     --_button-label-text-selected-color: var(
       --md-button-label-text-selected-color,
-      var(--_button-text-selected-label-text-color)
-    );
-    --_button-unselected-label-text-color: var(
-      --md-button-unselected-label-text-color,
-      var(--_button-text-label-text-color)
-    );
-    --_button-selected-label-text-color: var(
-      --md-button-selected-label-text-color,
-      var(--_button-text-label-text-color)
+      var(--md-button-text-selected-label-text-color, var(--md-sys-color-on-primary-container))
     );
   }
 
@@ -859,7 +526,10 @@
     height: --action-height(32);
     padding-inline: calc(--dp(12) - var(--_button-outline-inset, 0px));
 
-    --_button-reserved-outline-width: var(--_button-xsmall-outlined-outline-width);
+    --_button-reserved-outline-width: var(
+      --md-button-xsmall-outlined-outline-width,
+      var(--md-control-outline-width-extra-small)
+    );
 
     --_button-container-shape-round: var(
       --md-button-container-shape-round,
@@ -867,19 +537,25 @@
     );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
-      var(--_button-xsmall-container-shape-square)
+      var(--md-button-xsmall-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-small)))
     );
     --_button-pressed-container-shape: var(
       --md-button-pressed-container-shape,
-      var(--_button-xsmall-pressed-container-shape)
+      var(--md-button-xsmall-pressed-container-shape, var(--_shape-radius, var(--md-shape-action-pressed-small)))
     );
     --_button-selected-container-shape: var(
       --md-button-selected-container-shape,
-      var(--_button-xsmall-selected-container-shape-round)
+      var(
+        --md-button-xsmall-selected-container-shape-round,
+        var(--_shape-radius, var(--md-shape-action-selected-small))
+      )
     );
 
-    --_button-icon-size: var(--md-button-icon-size, var(--_button-xsmall-icon-size));
-    --_button-icon-label-space: var(--md-button-icon-label-space, var(--_button-xsmall-icon-label-space));
+    --_button-icon-size: var(
+      --md-button-icon-size,
+      var(--md-button-xsmall-icon-size, --density-icon(20, label-large, 14))
+    );
+    --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-xsmall-icon-label-space, 0.5rem));
   }
 
   .m3-button[data-size='small'] {
@@ -888,7 +564,10 @@
     height: --action-height(40);
     padding-inline: calc(--dp(16) - var(--_button-outline-inset, 0px));
 
-    --_button-reserved-outline-width: var(--_button-small-outlined-outline-width);
+    --_button-reserved-outline-width: var(
+      --md-button-small-outlined-outline-width,
+      var(--md-control-outline-width-small)
+    );
 
     --_button-container-shape-round: var(
       --md-button-container-shape-round,
@@ -896,19 +575,22 @@
     );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
-      var(--_button-small-container-shape-square)
+      var(--md-button-small-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-small)))
     );
     --_button-pressed-container-shape: var(
       --md-button-pressed-container-shape,
-      var(--_button-small-pressed-container-shape)
+      var(--md-button-small-pressed-container-shape, var(--_shape-radius, var(--md-shape-action-pressed-small)))
     );
     --_button-selected-container-shape: var(
       --md-button-selected-container-shape,
-      var(--_button-small-selected-container-shape-round)
+      var(--md-button-small-selected-container-shape-round, var(--_shape-radius, var(--md-shape-action-selected-small)))
     );
 
-    --_button-icon-size: var(--md-button-icon-size, var(--_button-small-icon-size));
-    --_button-icon-label-space: var(--md-button-icon-label-space, var(--_button-small-icon-label-space));
+    --_button-icon-size: var(
+      --md-button-icon-size,
+      var(--md-button-small-icon-size, --density-icon(20, label-large, 14))
+    );
+    --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-small-icon-label-space, 0.5rem));
   }
 
   .m3-button[data-size='medium'] {
@@ -917,7 +599,10 @@
     height: --action-height(56);
     padding-inline: calc(--dp(24) - var(--_button-outline-inset, 0px));
 
-    --_button-reserved-outline-width: var(--_button-medium-outlined-outline-width);
+    --_button-reserved-outline-width: var(
+      --md-button-medium-outlined-outline-width,
+      var(--md-control-outline-width-medium)
+    );
 
     --_button-container-shape-round: var(
       --md-button-container-shape-round,
@@ -925,19 +610,25 @@
     );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
-      var(--_button-medium-container-shape-square)
+      var(--md-button-medium-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-medium)))
     );
     --_button-pressed-container-shape: var(
       --md-button-pressed-container-shape,
-      var(--_button-medium-pressed-container-shape)
+      var(--md-button-medium-pressed-container-shape, var(--_shape-radius, var(--md-shape-action-pressed-medium)))
     );
     --_button-selected-container-shape: var(
       --md-button-selected-container-shape,
-      var(--_button-medium-selected-container-shape-round)
+      var(
+        --md-button-medium-selected-container-shape-round,
+        var(--_shape-radius, var(--md-shape-action-selected-medium))
+      )
     );
 
-    --_button-icon-size: var(--md-button-icon-size, var(--_button-medium-icon-size));
-    --_button-icon-label-space: var(--md-button-icon-label-space, var(--_button-medium-icon-label-space));
+    --_button-icon-size: var(
+      --md-button-icon-size,
+      var(--md-button-medium-icon-size, --density-icon(24, title-medium, 16))
+    );
+    --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-medium-icon-label-space, 0.5rem));
   }
 
   .m3-button[data-size='large'] {
@@ -946,7 +637,7 @@
     height: --action-height(96);
     padding-inline: calc(--dp(48) - var(--_button-outline-inset, 0px));
 
-    --_button-reserved-outline-width: var(--_button-large-outlined-outline-width);
+    --_button-reserved-outline-width: var(--md-button-large-outlined-outline-width, 0.125rem);
 
     --_button-container-shape-round: var(
       --md-button-container-shape-round,
@@ -954,19 +645,22 @@
     );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
-      var(--_button-large-container-shape-square)
+      var(--md-button-large-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-large)))
     );
     --_button-pressed-container-shape: var(
       --md-button-pressed-container-shape,
-      var(--_button-large-pressed-container-shape)
+      var(--md-button-large-pressed-container-shape, var(--_shape-radius, var(--md-shape-action-pressed-large)))
     );
     --_button-selected-container-shape: var(
       --md-button-selected-container-shape,
-      var(--_button-large-selected-container-shape-round)
+      var(--md-button-large-selected-container-shape-round, var(--_shape-radius, var(--md-shape-action-selected-large)))
     );
 
-    --_button-icon-size: var(--md-button-icon-size, var(--_button-large-icon-size));
-    --_button-icon-label-space: var(--md-button-icon-label-space, var(--_button-large-icon-label-space));
+    --_button-icon-size: var(
+      --md-button-icon-size,
+      var(--md-button-large-icon-size, --density-icon(32, headline-small, 24))
+    );
+    --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-large-icon-label-space, 0.75rem));
   }
 
   .m3-button[data-size='extra-large'] {
@@ -975,7 +669,7 @@
     height: --action-height(136);
     padding-inline: calc(--dp(64) - var(--_button-outline-inset, 0px));
 
-    --_button-reserved-outline-width: var(--_button-xlarge-outlined-outline-width);
+    --_button-reserved-outline-width: var(--md-button-xlarge-outlined-outline-width, 0.1875rem);
 
     --_button-container-shape-round: var(
       --md-button-container-shape-round,
@@ -983,19 +677,25 @@
     );
     --_button-container-shape-square: var(
       --md-button-container-shape-square,
-      var(--_button-xlarge-container-shape-square)
+      var(--md-button-xlarge-container-shape-square, var(--_shape-radius, var(--md-shape-action-square-large)))
     );
     --_button-pressed-container-shape: var(
       --md-button-pressed-container-shape,
-      var(--_button-xlarge-pressed-container-shape)
+      var(--md-button-xlarge-pressed-container-shape, var(--_shape-radius, var(--md-shape-action-pressed-large)))
     );
     --_button-selected-container-shape: var(
       --md-button-selected-container-shape,
-      var(--_button-xlarge-selected-container-shape-round)
+      var(
+        --md-button-xlarge-selected-container-shape-round,
+        var(--_shape-radius, var(--md-shape-action-selected-large))
+      )
     );
 
-    --_button-icon-size: var(--md-button-icon-size, var(--_button-xlarge-icon-size));
-    --_button-icon-label-space: var(--md-button-icon-label-space, var(--_button-xlarge-icon-label-space));
+    --_button-icon-size: var(
+      --md-button-icon-size,
+      var(--md-button-xlarge-icon-size, --density-icon(40, headline-large, 32))
+    );
+    --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-xlarge-icon-label-space, 1rem));
   }
 
   /* Shape Variants */

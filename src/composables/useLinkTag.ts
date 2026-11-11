@@ -30,62 +30,22 @@ function matchesDisabledMode(tag: string, mode: DisabledStateMode) {
 }
 
 export function useLinkTag<TTag extends string = LinkTag>(options: UseLinkTagOptions<TTag>) {
-  const disabled = computed(() => toValue(options.disabled) ?? false);
-  const sourceHref = computed(() => toValue(options.href));
   const ariaDisabledMode = options.ariaDisabledMode ?? 'anchor';
   const disabledTabIndexMode = options.disabledTabIndexMode ?? ariaDisabledMode;
 
-  const tag = computed(() => {
-    if (sourceHref.value) {
-      return 'a' as const;
-    }
+  return computed(() => {
+    const disabled = toValue(options.disabled) ?? false;
+    const sourceHref = toValue(options.href) || undefined;
+    const tag = sourceHref ? 'a' : toValue(options.defaultTag);
+    const isButton = tag === 'button';
 
-    return toValue(options.defaultTag);
+    return {
+      tag,
+      nativeDisabled: isButton ? disabled : undefined,
+      ariaDisabled: disabled && matchesDisabledMode(tag, ariaDisabledMode) ? 'true' : undefined,
+      href: disabled && tag === 'a' ? undefined : sourceHref,
+      tabIndex: disabled && matchesDisabledMode(tag, disabledTabIndexMode) ? -1 : undefined,
+      type: isButton ? 'button' : undefined,
+    } as const;
   });
-
-  const isAnchorTag = computed(() => tag.value === 'a');
-  const isButtonTag = computed(() => tag.value === 'button');
-
-  const nativeDisabled = computed(() => {
-    return isButtonTag.value ? disabled.value : undefined;
-  });
-
-  const ariaDisabled = computed(() => {
-    if (!disabled.value || !matchesDisabledMode(tag.value, ariaDisabledMode)) {
-      return undefined;
-    }
-
-    return 'true';
-  });
-
-  const href = computed(() => {
-    if (!sourceHref.value) {
-      return undefined;
-    }
-
-    return disabled.value && isAnchorTag.value ? undefined : sourceHref.value;
-  });
-
-  const tabIndex = computed(() => {
-    if (!disabled.value || !matchesDisabledMode(tag.value, disabledTabIndexMode)) {
-      return undefined;
-    }
-
-    return -1;
-  });
-
-  const type = computed(() => {
-    return isButtonTag.value ? 'button' : undefined;
-  });
-
-  return {
-    tag,
-    isAnchorTag,
-    isButtonTag,
-    nativeDisabled,
-    ariaDisabled,
-    href,
-    tabIndex,
-    type,
-  };
 }

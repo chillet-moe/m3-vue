@@ -9,7 +9,7 @@ import { computed, inject, useSlots } from 'vue';
 
 import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
-import { usePressShapeMorph } from '@/composables/usePressShapeMorph';
+import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
 import { floatingActionButtonMenuContextKey } from './FloatingActionButtonMenuContext';
 
 export type FloatingActionButtonMenuItemProps = {
@@ -39,14 +39,14 @@ const slots = useSlots();
 const menuContext = inject(floatingActionButtonMenuContextKey, null);
 const disabled = computed(() => props.disabled);
 
-const { tag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
+const link = useLinkTag({
   defaultTag: 'button',
-  href: computed(() => props.href),
+  href: () => props.href,
   disabled,
   ariaDisabledMode: 'non-button',
 });
 
-const { pressShapeMorphAttrs } = usePressShapeMorph({ disabled });
+const pressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
 
 defineSlots<{
   /** Optional leading content, such as an icon. Will not be used if `icon` prop is set. */
@@ -99,13 +99,13 @@ const shape = useShape(() => props.shape);
 <template>
   <component
     v-state-layer
-    :is="tag"
+    :is="link.tag"
     role="menuitem"
-    :href="href"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
-    :tabindex="tabIndex"
-    :type="type"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
+    :tabindex="link.tabIndex"
+    :type="link.type"
     :data-menu-owner="menuContext?.id"
     :data-close-on-select="closeOnSelect ? undefined : 'false'"
     :class="['m3-state-layer', 'm3-fab-menu-item']"

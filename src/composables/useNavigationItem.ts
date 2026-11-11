@@ -19,32 +19,17 @@ export type UseNavigationItemOptions = {
 export function useNavigationItem({ context, value, href, disabled, selected }: UseNavigationItemOptions) {
   const mergedDisabled = computed(() => disabled() || context?.disabled.value || false);
 
-  const selectedFromContext = computed(() => {
-    const itemValue = value();
-
-    if (!context || itemValue === undefined) {
-      return false;
-    }
-
-    return context.value.value === itemValue;
-  });
-
   const isSelected = computed(() => {
     const explicitSelected = selected();
-    return explicitSelected === undefined ? selectedFromContext.value : explicitSelected;
+    if (explicitSelected !== undefined) return explicitSelected;
+
+    const itemValue = value();
+    return context !== null && itemValue !== undefined && context.value.value === itemValue;
   });
 
-  const {
-    tag,
-    isAnchorTag,
-    nativeDisabled,
-    ariaDisabled,
-    href: resolvedHref,
-    tabIndex,
-    type,
-  } = useLinkTag({
+  const link = useLinkTag({
     defaultTag: 'button',
-    href: computed(href),
+    href,
     disabled: mergedDisabled,
     ariaDisabledMode: 'non-button',
   });
@@ -84,7 +69,7 @@ export function useNavigationItem({ context, value, href, disabled, selected }: 
 
     const currentTarget = event.currentTarget;
 
-    if (!isHTMLElement(currentTarget) || !isAnchorTag.value) {
+    if (!isHTMLElement(currentTarget) || link.value.tag !== 'a') {
       return;
     }
 
@@ -95,12 +80,7 @@ export function useNavigationItem({ context, value, href, disabled, selected }: 
   return {
     mergedDisabled,
     isSelected,
-    tag,
-    nativeDisabled,
-    ariaDisabled,
-    href: resolvedHref,
-    tabIndex,
-    type,
+    link,
     handleClick,
     handleKeydown,
   };

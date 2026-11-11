@@ -271,53 +271,6 @@
     --_tabs-indicator-animation-duration: var(--md-tabs-indicator-animation-duration, 250ms);
     --_tabs-indicator-animation-easing: var(--md-tabs-indicator-animation-easing, cubic-bezier(0.2, 0, 0, 1));
     --_tabs-indicator-fade-duration: var(--md-tabs-indicator-fade-duration, 150ms);
-
-    --_tabs-navigation-container-color: var(
-      --md-tabs-navigation-container-color,
-      var(--md-sys-color-surface-container-low)
-    );
-    --_tabs-navigation-container-height: var(
-      --md-tabs-navigation-container-height,
-      var(--_tabs-navigation-size-container-height)
-    );
-    --_tabs-navigation-container-padding: var(--md-tabs-navigation-container-padding, 0rem);
-    --_tabs-navigation-container-gap: var(--md-tabs-navigation-container-gap, 0.125rem);
-    --_tabs-navigation-container-shape: var(--md-tabs-navigation-container-shape, var(--md-sys-shape-corner-medium));
-    --_tabs-navigation-active-container-color: var(
-      --md-tabs-navigation-active-container-color,
-      var(--md-sys-color-primary-container)
-    );
-    --_tabs-navigation-active-container-elevation: var(
-      --md-tabs-navigation-active-container-elevation,
-      var(--md-sys-elevation-level0)
-    );
-    --_tabs-navigation-active-container-outline-color: var(
-      --md-tabs-navigation-active-container-outline-color,
-      transparent
-    );
-    --_tabs-navigation-active-container-outline-width: var(--md-tabs-navigation-active-container-outline-width, 0rem);
-    --_tabs-navigation-active-container-shape: var(
-      --md-tabs-navigation-active-container-shape,
-      var(--md-sys-shape-corner-medium)
-    );
-    --_tabs-navigation-active-label-color: var(
-      --md-tabs-navigation-active-label-color,
-      var(--md-sys-color-on-primary-container)
-    );
-    --_tabs-navigation-inactive-label-color: var(
-      --md-tabs-navigation-inactive-label-color,
-      var(--md-sys-color-on-surface)
-    );
-    --_tabs-navigation-hover-label-color: var(--md-tabs-navigation-hover-label-color, var(--md-sys-color-on-surface));
-    --_tabs-navigation-state-layer-color: var(--md-tabs-navigation-state-layer-color, var(--md-sys-color-on-surface));
-    --_tabs-navigation-active-state-layer-color: var(
-      --md-tabs-navigation-active-state-layer-color,
-      var(--md-sys-color-on-primary-container)
-    );
-    --_tabs-navigation-tab-padding-inline: var(
-      --md-tabs-navigation-tab-padding-inline,
-      var(--_tabs-navigation-size-tab-padding-inline)
-    );
   }
 
   .m3-tabs:has(.m3-tab-icon) {
@@ -518,39 +471,63 @@
   }
 
   .m3-tabs[data-variant='navigation'] {
-    --_tabs-container-color: var(--md-tabs-container-color, var(--_tabs-navigation-container-color));
+    --_tabs-navigation-container-height: var(
+      --md-tabs-navigation-container-height,
+      var(--_tabs-navigation-size-container-height)
+    );
+    --_tabs-navigation-active-label-color: var(
+      --md-tabs-navigation-active-label-color,
+      var(--md-sys-color-on-primary-container)
+    );
+    --_tabs-navigation-hover-label-color: var(--md-tabs-navigation-hover-label-color, var(--md-sys-color-on-surface));
+    --_tabs-navigation-state-layer-color: var(--md-tabs-navigation-state-layer-color, var(--md-sys-color-on-surface));
+    --_tabs-navigation-active-state-layer-color: var(
+      --md-tabs-navigation-active-state-layer-color,
+      var(--md-sys-color-on-primary-container)
+    );
+
+    --_tabs-container-color: var(
+      --md-tabs-container-color,
+      var(--md-tabs-navigation-container-color, var(--md-sys-color-surface-container-low))
+    );
     --_tabs-container-height: var(--md-tabs-container-height, var(--_tabs-navigation-container-height));
     --_tabs-with-icon-and-label-container-height: var(
       --md-tabs-with-icon-and-label-container-height,
       var(--_tabs-navigation-container-height)
     );
-    --_tabs-container-padding: var(--md-tabs-container-padding, var(--_tabs-navigation-container-padding));
-    --_tabs-container-gap: var(--md-tabs-container-gap, var(--_tabs-navigation-container-gap));
-    --_tabs-container-shape: var(--md-tabs-container-shape, var(--_tabs-navigation-container-shape));
+    --_tabs-container-padding: var(--md-tabs-container-padding, var(--md-tabs-navigation-container-padding, 0rem));
+    --_tabs-container-gap: var(--md-tabs-container-gap, var(--md-tabs-navigation-container-gap, 0.125rem));
+    --_tabs-container-shape: var(
+      --md-tabs-container-shape,
+      var(--md-tabs-navigation-container-shape, var(--md-sys-shape-corner-medium))
+    );
 
     --_tabs-active-container-color: var(
       --md-tabs-active-container-color,
-      var(--_tabs-navigation-active-container-color)
+      var(--md-tabs-navigation-active-container-color, var(--md-sys-color-primary-container))
     );
     --_tabs-active-container-elevation: var(
       --md-tabs-active-container-elevation,
-      var(--_tabs-navigation-active-container-elevation)
+      var(--md-tabs-navigation-active-container-elevation, var(--md-sys-elevation-level0))
     );
     --_tabs-active-container-outline-color: var(
       --md-tabs-active-container-outline-color,
-      var(--_tabs-navigation-active-container-outline-color)
+      var(--md-tabs-navigation-active-container-outline-color, transparent)
     );
     --_tabs-active-container-outline-width: var(
       --md-tabs-active-container-outline-width,
-      var(--_tabs-navigation-active-container-outline-width)
+      var(--md-tabs-navigation-active-container-outline-width, 0rem)
     );
     --_tabs-active-container-shape: var(
       --md-tabs-active-container-shape,
-      var(--_tabs-navigation-active-container-shape)
+      var(--md-tabs-navigation-active-container-shape, var(--md-sys-shape-corner-medium))
     );
 
     --_tabs-active-label-color: var(--md-tabs-active-label-color, var(--_tabs-navigation-active-label-color));
-    --_tabs-inactive-label-color: var(--md-tabs-inactive-label-color, var(--_tabs-navigation-inactive-label-color));
+    --_tabs-inactive-label-color: var(
+      --md-tabs-inactive-label-color,
+      var(--md-tabs-navigation-inactive-label-color, var(--md-sys-color-on-surface))
+    );
     --_tabs-active-hover-label-color: var(
       --md-tabs-active-hover-label-color,
       var(--_tabs-navigation-active-label-color)
@@ -609,7 +586,10 @@
       var(--_tabs-navigation-state-layer-color)
     );
 
-    --_tabs-tab-padding-inline: var(--md-tabs-tab-padding-inline, var(--_tabs-navigation-tab-padding-inline));
+    --_tabs-tab-padding-inline: var(
+      --md-tabs-tab-padding-inline,
+      var(--md-tabs-navigation-tab-padding-inline, var(--_tabs-navigation-size-tab-padding-inline))
+    );
   }
 }
 
@@ -728,7 +708,7 @@
     flex: 1 1 0;
   }
 
-  .m3-tab:has(.m3-tab-icon) {
+  .m3-tab[data-with-icon='true'] {
     min-block-size: var(--_tabs-with-icon-and-label-container-height);
   }
 
@@ -757,7 +737,7 @@
     pointer-events: none;
   }
 
-  .m3-tab:has(.m3-tab-icon) .m3-tab-content {
+  .m3-tab[data-with-icon='true'] .m3-tab-content {
     gap: var(--_tabs-icon-label-space);
   }
 
@@ -892,17 +872,17 @@
     );
   }
 
-  .m3-tabs[data-variant='navigation'] .m3-tab:has(.m3-tab-icon) {
+  .m3-tabs[data-variant='navigation'] .m3-tab[data-with-icon='true'] {
     min-block-size: 100%;
   }
 
-  .m3-tabs[data-variant='navigation'][data-orientation='vertical'] .m3-tab:has(.m3-tab-icon) {
+  .m3-tabs[data-variant='navigation'][data-orientation='vertical'] .m3-tab[data-with-icon='true'] {
     min-block-size: calc(
       var(--_tabs-container-height) - var(--_tabs-container-padding) - var(--_tabs-container-padding)
     );
   }
 
-  .m3-tabs[data-variant='navigation'] .m3-tab:has(.m3-tab-icon) .m3-tab-content {
+  .m3-tabs[data-variant='navigation'] .m3-tab[data-with-icon='true'] .m3-tab-content {
     flex-direction: row;
   }
 

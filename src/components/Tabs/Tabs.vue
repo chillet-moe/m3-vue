@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide } from 'vue';
+import { computed, provide, type FunctionalComponent } from 'vue';
 import { useTabs } from '@/composables/useTabs';
 import { tabsContextKey } from './TabsContext';
 
@@ -61,7 +61,17 @@ const tabs = useTabs({
   selectWhenFocused: () => props.selectWhenFocused,
 });
 
+// Keep selection updates out of the slot render unless it reads the selected value.
+const slotProps = {
+  get value() {
+    return tabs.value.value;
+  },
+};
+
+const Content: FunctionalComponent = (_, { slots }) => slots.default?.();
+
 provide(tabsContextKey, {
+  hasLineIndicator: computed(() => props.variant === 'line'),
   value: tabs.value,
   orientation: tabs.orientation,
   triggerListAttrs: tabs.triggerListAttrs,
@@ -82,7 +92,7 @@ provide(tabsContextKey, {
     :data-mode="props.mode"
     :data-orientation="tabs.orientation.value"
   >
-    <slot :value="tabs.value.value" />
+    <Content><slot v-bind="slotProps" /></Content>
   </div>
 </template>
 

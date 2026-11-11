@@ -49,11 +49,11 @@ const TRIGGER_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home',
 
 let idCounter = 0;
 
-function isTriggerDisabled(trigger: HTMLElement) {
+function isTriggerEnabled(trigger: HTMLElement) {
   return (
-    trigger.hasAttribute('disabled') ||
-    trigger.getAttribute('aria-disabled') === 'true' ||
-    trigger.hasAttribute('data-disabled')
+    !trigger.hasAttribute('disabled') &&
+    trigger.getAttribute('aria-disabled') !== 'true' &&
+    !trigger.hasAttribute('data-disabled')
   );
 }
 
@@ -79,15 +79,11 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
   const selectWhenFocused = computed(() => toValue(options.selectWhenFocused) ?? true);
 
   const isControlled = isRef(options.value) || typeof options.value === 'function';
-  const internalValue = ref<T | undefined>(toValue(options.value)) as Ref<T | undefined>;
-
-  // Reactive inputs remain the canonical controlled source; static values initialize local state.
-  const currentValue = computed(() => (isControlled ? toValue(options.value) : internalValue.value));
+  const internalValue = isControlled ? undefined : (ref(toValue(options.value)) as Ref<T | undefined>);
+  const currentValue = computed(() => (internalValue ? internalValue.value : toValue(options.value)));
 
   function setValue(value: T) {
-    if (!isControlled) {
-      internalValue.value = value;
-    }
+    if (internalValue) internalValue.value = value;
     options.onValueChange?.(value);
   }
 
@@ -119,7 +115,6 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
     if (!triggerList) return;
 
     const triggers = Array.from(triggerList.querySelectorAll<HTMLElement>('[role="tab"]'));
-    const enabledTriggers = triggers.filter((trigger) => !isTriggerDisabled(trigger));
     const currIndex = triggers.indexOf(el);
     if (currIndex === -1) return;
 
@@ -147,7 +142,7 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
           return undefined;
         }
 
-        if (!isTriggerDisabled(candidate)) {
+        if (isTriggerEnabled(candidate)) {
           return candidate;
         }
       }
@@ -165,10 +160,10 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
         break;
       }
       case 'Home':
-        next = enabledTriggers[0];
+        next = triggers.find(isTriggerEnabled);
         break;
       case 'End':
-        next = enabledTriggers.at(-1);
+        next = triggers.findLast(isTriggerEnabled);
         break;
     }
 

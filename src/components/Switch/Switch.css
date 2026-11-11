@@ -246,6 +246,14 @@
     transition: all var(--md-easing-fast-spatial);
   }
 
+  .m3-switch-handle.m3-state-layer::before {
+    /* Preserve the state layer's scrollable extent when the disabled overlay is hidden. */
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
   .m3-switch-handle.m3-state-layer::before,
   .m3-switch-handle.m3-state-layer::after,
   .m3-switch-handle.m3-state-layer > .ripple {

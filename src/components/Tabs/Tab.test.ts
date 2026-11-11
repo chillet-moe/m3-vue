@@ -149,6 +149,51 @@ describe('Tab', () => {
     mounted.app.unmount();
   });
 
+  it('updates the scoped slot and keeps a changed tab value linked to its panel', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const selected = ref('overview');
+    const otherValue = ref('details');
+    const app = createApp(() =>
+      h(
+        Tabs,
+        {
+          modelValue: selected.value,
+          'onUpdate:modelValue': (value: string | undefined) => {
+            if (value !== undefined) selected.value = value;
+          },
+        },
+        {
+          default: ({ value }: { value?: string }) => [
+            h(TabList, null, {
+              default: () => [h(Tab, { value: 'overview' }), h(Tab, { value: otherValue.value })],
+            }),
+            h(TabPanel, { value: otherValue.value }),
+            h('output', value),
+          ],
+        },
+      ),
+    );
+    app.mount(container);
+
+    const trigger = container.querySelector<HTMLButtonElement>('[data-tab-value="details"]')!;
+    const panel = container.querySelector<HTMLElement>('[role="tabpanel"]')!;
+    expect(panel.hidden).toBe(true);
+
+    otherValue.value = 'new details';
+    await nextTick();
+    expect(trigger.dataset.tabValue).toBe('new details');
+    expect(trigger.getAttribute('aria-controls')).toBe(panel.id);
+    expect(panel.getAttribute('aria-labelledby')).toBe(trigger.id);
+
+    trigger.click();
+    await nextTick();
+    expect(container.querySelector('output')?.textContent).toBe('new details');
+    expect(trigger.getAttribute('aria-selected')).toBe('true');
+    expect(panel.hidden).toBe(false);
+    app.unmount();
+  });
+
   it('skips disabled tabs during keyboard navigation', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -230,9 +275,8 @@ describe('Tab', () => {
     mounted.app.unmount();
   });
 
-  it('keeps one ResizeObserver while tabs update and observes child changes incrementally', async () => {
+  it('observes line indicator geometry only while the line variant is active', async () => {
     const resizeCallbacks: ResizeObserverCallback[] = [];
-    const mutationCallbacks: MutationCallback[] = [];
     const observe = vi.fn();
     const unobserve = vi.fn();
     const disconnect = vi.fn();
@@ -247,19 +291,10 @@ describe('Tab', () => {
       },
     );
     vi.stubGlobal('ResizeObserver', ResizeObserver);
-    vi.stubGlobal(
-      'MutationObserver',
-      class {
-        constructor(callback: MutationCallback) {
-          mutationCallbacks.push(callback);
-        }
-        observe = vi.fn();
-        disconnect = vi.fn();
-      },
-    );
     const addWindowEventListener = vi.spyOn(window, 'addEventListener');
     const currentValue = ref('tab-0');
     const orientation = ref<'horizontal' | 'vertical'>('horizontal');
+    const variant = ref<'navigation' | 'line'>('navigation');
     const tabCount = ref(3);
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -270,6 +305,7 @@ describe('Tab', () => {
           {
             modelValue: currentValue.value,
             orientation: orientation.value,
+            variant: variant.value,
             'onUpdate:modelValue': (value: string | undefined) => {
               if (value !== undefined) currentValue.value = value;
             },
@@ -278,9 +314,10 @@ describe('Tab', () => {
             default: () =>
               h(TabList, null, {
                 default: () =>
-                  Array.from({ length: tabCount.value }, (_, index) =>
-                    h(Tab, { value: `tab-${index}` }, { default: () => `Tab ${index}` }),
-                  ),
+                  Array.from({ length: tabCount.value }, (_, index) => {
+                    const tab = h(Tab, { value: `tab-${index}` }, { default: () => `Tab ${index}` });
+                    return index === 3 ? h('div', [tab]) : tab;
+                  }),
               }),
           },
         ),
@@ -288,8 +325,12 @@ describe('Tab', () => {
 
     app.mount(container);
     await nextTick();
-    await nextTick();
 
+    expect(ResizeObserver).not.toHaveBeenCalled();
+    expect(addWindowEventListener.mock.calls.filter(([type]) => type === 'resize')).toHaveLength(0);
+
+    variant.value = 'line';
+    await nextTick();
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
     expect(observe).toHaveBeenCalledTimes(4);
     expect(addWindowEventListener.mock.calls.filter(([type]) => type === 'resize')).toHaveLength(0);
@@ -301,7 +342,6 @@ describe('Tab', () => {
     orientation.value = 'vertical';
     await nextTick();
     await nextTick();
-    mutationCallbacks.at(-1)?.([{ type: 'characterData' } as MutationRecord], {} as MutationObserver);
 
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
     expect(observe).toHaveBeenCalledTimes(4);
@@ -309,27 +349,64 @@ describe('Tab', () => {
 
     tabCount.value = 4;
     await nextTick();
-    mutationCallbacks.at(-1)?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
+    const addedTab = container.querySelector('[data-tab-value="tab-3"]')!;
 
     expect(ResizeObserver).toHaveBeenCalledTimes(1);
     expect(observe).toHaveBeenCalledTimes(5);
+    expect(observe).toHaveBeenLastCalledWith(addedTab);
     expect(unobserve).not.toHaveBeenCalled();
 
+    const removedTabs = [container.querySelector('[data-tab-value="tab-2"]')!, addedTab];
     tabCount.value = 2;
     await nextTick();
-    mutationCallbacks.at(-1)?.([{ type: 'childList' } as MutationRecord], {} as MutationObserver);
 
     expect(unobserve).toHaveBeenCalledTimes(2);
+    expect(unobserve.mock.calls).toEqual(removedTabs.map((tab) => [tab]));
+
+    const changedRole = container.querySelector('[data-tab-value="tab-1"]')!;
+    changedRole.removeAttribute('role');
+    await nextTick();
+    expect(unobserve).toHaveBeenLastCalledWith(changedRole);
+
+    changedRole.setAttribute('role', 'tab');
+    await nextTick();
+    expect(observe).toHaveBeenLastCalledWith(changedRole);
+
+    variant.value = 'navigation';
+    await nextTick();
+    expect(disconnect).toHaveBeenCalledTimes(1);
+
+    currentValue.value = 'tab-1';
+    await nextTick();
+    const active = container.querySelector<HTMLElement>('[data-tab-value="tab-1"]')!;
+    let top = 48;
+    let height = 40;
+    Object.defineProperties(active, { offsetTop: { get: () => top }, offsetHeight: { get: () => height } });
+
+    variant.value = 'line';
+    await nextTick();
+    const indicator = container.querySelector<HTMLElement>('[data-part="indicator"]')!;
+    expect(indicator.style.getPropertyValue('--_tabs-indicator-block-start')).toBe('48px');
+    expect(indicator.style.getPropertyValue('--_tabs-indicator-block-size')).toBe('40px');
+    expect(ResizeObserver).toHaveBeenCalledTimes(2);
+
+    top = 60;
+    height = 48;
+    resizeCallbacks.at(-1)?.([], {} as ResizeObserver);
+    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+    await nextTick();
+    expect(indicator.style.getPropertyValue('--_tabs-indicator-block-start')).toBe('60px');
+    expect(indicator.style.getPropertyValue('--_tabs-indicator-block-size')).toBe('48px');
 
     app.unmount();
-    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(disconnect).toHaveBeenCalledTimes(2);
   });
 
   it('uses window resize only when ResizeObserver is unavailable', async () => {
     vi.stubGlobal('ResizeObserver', undefined);
     const addWindowEventListener = vi.spyOn(window, 'addEventListener');
     const removeWindowEventListener = vi.spyOn(window, 'removeEventListener');
-    const mounted = mountTabs({});
+    const mounted = mountTabs({}, 'overview', { variant: 'line' });
     await nextTick();
     await nextTick();
 
@@ -337,5 +414,28 @@ describe('Tab', () => {
 
     mounted.app.unmount();
     expect(removeWindowEventListener.mock.calls.filter(([type]) => type === 'resize')).toHaveLength(1);
+  });
+
+  it('measures the selected Tab and clears the indicator when no Tab is selected', async () => {
+    const mounted = mountTabs({}, 'overview', { variant: 'line', orientation: 'vertical' });
+    await nextTick();
+    mounted.container.querySelectorAll('[role="tab"]').forEach((trigger, index) => {
+      Object.defineProperties(trigger, { offsetTop: { value: index * 48 }, offsetHeight: { value: 48 } });
+    });
+    mounted.currentValue.value = 'details';
+    await nextTick();
+    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+    await nextTick();
+
+    const indicator = mounted.container.querySelector<HTMLElement>('[data-part="indicator"]')!;
+    expect(indicator.style.getPropertyValue('--_tabs-indicator-block-start')).toBe('48px');
+    expect(indicator.style.getPropertyValue('--_tabs-indicator-block-size')).toBe('48px');
+
+    mounted.currentValue.value = 'missing';
+    await nextTick();
+    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+    await nextTick();
+    expect(indicator.style.getPropertyValue('--_tabs-indicator-block-size')).toBe('');
+    mounted.app.unmount();
   });
 });

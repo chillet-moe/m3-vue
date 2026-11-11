@@ -8,6 +8,7 @@ import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
 import { computed, inject, unref, useSlots } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
+import '@/styles/icon-morph.css';
 
 export type NavigationDrawerItemShape = M3Shape;
 
@@ -67,18 +68,7 @@ const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
 const resolvedShape = useShape(() => props.shape ?? drawer?.shape.value ?? unref(globalShape?.shape));
-const {
-  mergedDisabled,
-  isSelected,
-  tag,
-  nativeDisabled,
-  ariaDisabled,
-  href,
-  tabIndex,
-  type,
-  handleClick,
-  handleKeydown,
-} = useNavigationItem({
+const { mergedDisabled, isSelected, link, handleClick, handleKeydown } = useNavigationItem({
   context: drawer,
   value: () => props.value,
   href: () => props.href,
@@ -111,14 +101,14 @@ const slotProps = computed(() => ({
   iconOnly: isIconOnly.value,
 }));
 
-const tooltipContent = computed(() => props.label ?? props.ariaLabel);
 const tooltip = computed<VTooltipBinding>(() => {
-  if (!isIconOnly.value || !tooltipContent.value) {
-    return undefined;
-  }
+  if (!isIconOnly.value) return undefined;
+
+  const content = props.label ?? props.ariaLabel;
+  if (!content) return undefined;
 
   return {
-    content: tooltipContent.value,
+    content,
     placement: 'end',
     interactive: false,
   };
@@ -129,14 +119,14 @@ const rowSize = provideRowSize(() => props.size);
 <template>
   <component
     v-state-layer
-    :is="tag"
-    :href="href"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
+    :is="link.tag"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
     :aria-current="isSelected ? 'page' : undefined"
     :aria-label="resolvedAriaLabel"
-    :tabindex="tabIndex"
-    :type="type"
+    :tabindex="link.tabIndex"
+    :type="link.type"
     v-tooltip="tooltip"
     :data-size="rowSize"
     class="m3-row-size m3-navigation-drawer-item m3-state-layer m3-morph-host"

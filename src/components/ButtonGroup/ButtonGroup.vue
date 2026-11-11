@@ -4,8 +4,8 @@ import { inject, provide, toRef, unref } from 'vue';
 import type { ButtonProps } from '@/components/Button/Button.vue';
 
 import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
-import type { SelectionGroupModelValue } from '@/components/SelectionGroup/SelectionGroupContext';
-import SelectionGroup, { type SelectionGroupProps } from '@/components/SelectionGroup/SelectionGroup.vue';
+import type { SelectionGroupModelValue, SelectionGroupProps } from '@/components/SelectionGroup/SelectionGroupContext';
+import SelectionGroupFieldset from '@/components/SelectionGroup/SelectionGroupFieldset.vue';
 
 export type ButtonGroupProps = SelectionGroupProps & {
   shape?: M3Shape;
@@ -25,6 +25,7 @@ const props = withDefaults(defineProps<ButtonGroupProps>(), {
 });
 
 const modelValue = defineModel<SelectionGroupModelValue>('modelValue');
+const selection = { modelValue };
 const parentButtonContext = inject(buttonContextKey, undefined);
 
 const shape = useShape(() => props.shape ?? unref(parentButtonContext?.shape));
@@ -39,8 +40,8 @@ provide(buttonContextKey, {
 </script>
 
 <template>
-  <SelectionGroup
-    v-model="modelValue"
+  <SelectionGroupFieldset
+    :selection-model="selection.modelValue"
     class="m3-button-group"
     data-scope="button-group"
     data-part="root"
@@ -54,7 +55,7 @@ provide(buttonContextKey, {
     :data-size="size"
   >
     <slot />
-  </SelectionGroup>
+  </SelectionGroupFieldset>
 </template>
 
 <style src="./ButtonGroup.css"></style>

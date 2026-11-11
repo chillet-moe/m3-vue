@@ -32,23 +32,27 @@ defineSlots<{
 
 const tabs = inject(tabsContextKey);
 
-const triggerAttrs = computed(() => tabs?.getTriggerAttrs(props.value) ?? {});
+const active = computed(() => tabs?.value.value === props.value);
+const triggerAttrs = computed<Record<string, unknown>>((previous) => {
+  const value = props.value;
+  const selected = active.value;
+  if (previous?.['data-tab-value'] === value && previous['aria-selected'] === selected) return previous;
+  return tabs?.getTriggerAttrs(value) ?? {};
+});
 const triggerDomAttrs = computed(() => {
   const { onClick, onKeydown, tabindex, ...domAttrs } = triggerAttrs.value;
   return domAttrs;
 });
 
-const active = computed(() => tabs?.value.value === props.value);
-
-const { tag, isAnchorTag, nativeDisabled, ariaDisabled, href, tabIndex, type } = useLinkTag({
+const link = useLinkTag({
   defaultTag: 'button',
-  href: computed(() => props.href),
-  disabled: computed(() => props.disabled),
+  href: () => props.href,
+  disabled: () => props.disabled,
 });
 
 const resolvedTabIndex = computed(() => {
   if (props.disabled) {
-    return tabIndex.value;
+    return link.value.tabIndex;
   }
 
   return triggerAttrs.value.tabindex as number | undefined;
@@ -81,7 +85,7 @@ const handleKeydown = (event: KeyboardEvent) => {
   const onKeydown = triggerAttrs.value.onKeydown as ((event: KeyboardEvent) => void) | undefined;
   onKeydown?.(event);
 
-  if (event.defaultPrevented || !isAnchorTag.value || event.key !== ' ') {
+  if (event.defaultPrevented || link.value.tag !== 'a' || event.key !== ' ') {
     return;
   }
 
@@ -97,16 +101,17 @@ const handleKeydown = (event: KeyboardEvent) => {
 <template>
   <component
     v-state-layer
-    :is="tag"
+    :is="link.tag"
     class="m3-state-layer m3-tab"
     data-scope="tabs"
     data-part="trigger"
+    :data-with-icon="$slots.icon ? 'true' : undefined"
     :data-disabled="props.disabled ? 'true' : undefined"
-    :href="href"
-    :disabled="nativeDisabled"
-    :aria-disabled="ariaDisabled"
+    :href="link.href"
+    :disabled="link.nativeDisabled"
+    :aria-disabled="link.ariaDisabled"
     :tabindex="resolvedTabIndex"
-    :type="type"
+    :type="link.type"
     v-bind="triggerDomAttrs"
     @click="handleClick"
     @keydown="handleKeydown"
