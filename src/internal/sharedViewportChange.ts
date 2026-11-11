@@ -1,7 +1,12 @@
-type ViewportCallback = () => void;
+type BatchedUpdate = {
+  prepare: () => void;
+  measure: () => (() => void) | undefined;
+};
+
+type ViewportUpdate = (() => void) | BatchedUpdate;
 
 type ViewportRuntime = {
-  callbacks: Set<ViewportCallback>;
+  updates: Set<ViewportUpdate>;
   destroy: () => void;
 };
 
@@ -13,14 +18,39 @@ function createRuntime(document: Document): ViewportRuntime | undefined {
     return undefined;
   }
 
-  const callbacks = new Set<ViewportCallback>();
+  const updates = new Set<ViewportUpdate>();
   let frame: number | null = null;
 
   const flush = () => {
     frame = null;
-    for (const callback of Array.from(callbacks)) {
-      callback();
+    if (updates.size === 1) {
+      const update = updates.values().next().value!;
+      if (typeof update === 'function') {
+        update();
+      } else {
+        update.prepare();
+        update.measure()?.();
+      }
+      return;
     }
+
+    const batch: BatchedUpdate[] = [];
+    const flushBatch = () => {
+      for (const update of batch) update.prepare();
+      const writes = batch.map((update) => update.measure());
+      for (const write of writes) write?.();
+      batch.length = 0;
+    };
+
+    for (const update of Array.from(updates)) {
+      if (typeof update === 'function') {
+        if (batch.length) flushBatch();
+        update();
+      } else {
+        batch.push(update);
+      }
+    }
+    if (batch.length) flushBatch();
   };
 
   const schedule = () => {
@@ -39,16 +69,16 @@ function createRuntime(document: Document): ViewportRuntime | undefined {
 
     view.removeEventListener('scroll', schedule, true);
     view.removeEventListener('resize', schedule);
-    callbacks.clear();
+    updates.clear();
   };
 
   view.addEventListener('scroll', schedule, { capture: true, passive: true });
   view.addEventListener('resize', schedule);
 
-  return { callbacks, destroy };
+  return { updates, destroy };
 }
 
-export function registerSharedViewportChange(document: Document, callback: ViewportCallback) {
+export function registerSharedViewportChange(document: Document, update: ViewportUpdate) {
   let runtime = runtimes.get(document);
   if (!runtime) {
     runtime = createRuntime(document);
@@ -58,7 +88,7 @@ export function registerSharedViewportChange(document: Document, callback: Viewp
     runtimes.set(document, runtime);
   }
 
-  runtime.callbacks.add(callback);
+  runtime.updates.add(update);
   let registered = true;
 
   return () => {
@@ -67,8 +97,8 @@ export function registerSharedViewportChange(document: Document, callback: Viewp
     }
 
     registered = false;
-    runtime!.callbacks.delete(callback);
-    if (runtime!.callbacks.size === 0) {
+    runtime!.updates.delete(update);
+    if (runtime!.updates.size === 0) {
       runtime!.destroy();
       if (runtimes.get(document) === runtime) {
         runtimes.delete(document);

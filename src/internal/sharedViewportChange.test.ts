@@ -53,4 +53,82 @@ describe('shared viewport change runtime', () => {
 
     expect(cancelAnimationFrame).toHaveBeenCalledWith(7);
   });
+
+  it('finishes a single batched update even if it unregisters during preparation', () => {
+    let flush!: FrameRequestCallback;
+    const requestFrame = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      flush = callback;
+      return 1;
+    });
+    const stages: string[] = [];
+    const remove = registerSharedViewportChange(document, {
+      prepare: () => {
+        stages.push('prepare');
+        remove();
+      },
+      measure: () => {
+        stages.push('measure');
+        return () => stages.push('write');
+      },
+    });
+
+    try {
+      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event('scroll'));
+      expect(requestFrame).toHaveBeenCalledTimes(1);
+      expect(stages).toEqual([]);
+
+      flush(0);
+      expect(stages).toEqual(['prepare', 'measure', 'write']);
+      window.dispatchEvent(new Event('resize'));
+      expect(requestFrame).toHaveBeenCalledTimes(1);
+    } finally {
+      remove();
+    }
+  });
+
+  it('prepares and measures independent updates before writing, in order around sequential updates', () => {
+    let flush!: FrameRequestCallback;
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      flush = callback;
+      return 1;
+    });
+
+    const stages: string[] = [];
+    const registerBatchable = (name: string) =>
+      registerSharedViewportChange(document, {
+        prepare: () => stages.push(`prepare ${name}`),
+        measure: () => {
+          stages.push(`measure ${name}`);
+          return () => stages.push(`write ${name}`);
+        },
+      });
+    const removeFirst = registerBatchable('first');
+    const removeSecond = registerBatchable('second');
+    const removeParent = registerSharedViewportChange(document, () => stages.push('position parent'));
+    const removeChild = registerBatchable('child');
+
+    try {
+      window.dispatchEvent(new Event('resize'));
+      flush(0);
+
+      expect(stages).toEqual([
+        'prepare first',
+        'prepare second',
+        'measure first',
+        'measure second',
+        'write first',
+        'write second',
+        'position parent',
+        'prepare child',
+        'measure child',
+        'write child',
+      ]);
+    } finally {
+      removeFirst();
+      removeSecond();
+      removeParent();
+      removeChild();
+    }
+  });
 });

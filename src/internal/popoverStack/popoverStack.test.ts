@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { createOverlayHost } from '@/internal/overlayHost/overlayHost';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createApp, defineComponent, h, nextTick, type App } from 'vue';
+import { createApp, defineComponent, h, nextTick, ref, type App } from 'vue';
 import { OverlayHost } from '@/components/OverlayHost';
 import { showPopoverStackItem } from './popoverStack';
 
@@ -94,5 +94,62 @@ describe('showPopoverStackItem', () => {
 
     expect(document.querySelector('[data-testid="custom-surface"]')).toBeNull();
     expect(document.querySelector('[popover="manual"]')).toBeNull();
+  });
+
+  it('preserves a focused entry and updates its content as other entries leave and enter', async () => {
+    vi.useFakeTimers();
+    const label = ref('Original label');
+    const first = showPopoverStackItem(overlayHost, {
+      stackId: 'test-stack',
+      render: () => h('span', 'First item'),
+    });
+    showPopoverStackItem(overlayHost, {
+      stackId: 'test-stack',
+      render: () => h('input', { 'aria-label': label.value }),
+    });
+    await nextTick();
+
+    const input = document.querySelector('input')!;
+    input.focus();
+    input.value = 'Unsubmitted text';
+
+    first.close();
+    showPopoverStackItem(overlayHost, {
+      stackId: 'test-stack',
+      render: () => h('span', 'Last item'),
+    });
+    label.value = 'Updated label';
+    await vi.advanceTimersByTimeAsync(300);
+
+    expect(document.activeElement).toBe(input);
+    expect(input.getAttribute('aria-label')).toBe('Updated label');
+    expect(input.value).toBe('Unsubmitted text');
+    expect(document.querySelector('[popover="manual"]')?.textContent).toBe('Last item');
+  });
+
+  it('keeps a new entry queued between the final removal and stack teardown', async () => {
+    const first = showPopoverStackItem(overlayHost, {
+      stackId: 'test-stack',
+      render: () => h('span', 'First item'),
+    });
+    await nextTick();
+    const popover = document.querySelector('[popover="manual"]')!;
+
+    first.close();
+    await nextTick();
+    // The close callback queues removal. Enqueue after that removal but before its teardown check.
+    const successor = await Promise.resolve().then(() =>
+      showPopoverStackItem(overlayHost, {
+        stackId: 'test-stack',
+        render: () => h('span', 'Successor'),
+      }),
+    );
+    await nextTick();
+
+    expect(document.querySelector('[popover="manual"]')).toBe(popover);
+    expect(popover.textContent).toBe('Successor');
+
+    successor.close();
+    await vi.waitFor(() => expect(document.querySelector('[popover="manual"]')).toBeNull());
   });
 });

@@ -6,8 +6,10 @@ import {
   nextTick,
   shallowReactive,
   shallowRef,
+  triggerRef,
   useTemplateRef,
   watch,
+  type FunctionalComponent,
   type PropType,
   type ShallowRef,
   type VNodeChild,
@@ -21,7 +23,7 @@ import './PopoverStackHost.css';
 
 type PopoverStackItemRecord = {
   id: number;
-  closing: boolean;
+  closing: ShallowRef<boolean>;
   render: () => VNodeChild;
   onHostUnmounted?: (error: Error) => void;
 };
@@ -140,6 +142,23 @@ function hidePopoverElement(element: HTMLElement) {
   updatePopoverState(element, false);
 }
 
+// Isolate each item's render so a staggered timeout only updates the affected item.
+const PopoverStackItem: FunctionalComponent<{ item: PopoverStackItemRecord; itemClass?: string }> = ({
+  item,
+  itemClass,
+}) =>
+  h(
+    'div',
+    {
+      'data-stack-item-id': item.id,
+      'data-state': item.closing.value ? 'closing' : 'open',
+      class: ['m3-popover-stack-item', itemClass],
+    },
+    [item.render()],
+  );
+
+PopoverStackItem.props = ['item', 'itemClass'];
+
 const PopoverStackHost = defineComponent({
   name: 'PopoverStackHost',
   props: {
@@ -202,16 +221,7 @@ const PopoverStackHost = defineComponent({
               class: ['m3-popover-stack', props.state.config.stackClass],
             },
             props.state.items.value.map((item) =>
-              h(
-                'div',
-                {
-                  key: item.id,
-                  'data-stack-item-id': item.id,
-                  'data-state': item.closing ? 'closing' : 'open',
-                  class: ['m3-popover-stack-item', props.state.config.itemClass],
-                },
-                [item.render()],
-              ),
+              h(PopoverStackItem, { key: item.id, item, itemClass: props.state.config.itemClass }),
             ),
           ),
         ],
@@ -232,8 +242,9 @@ function teardownPopoverStack(host: OverlayHostController, stackId: string) {
 }
 
 function ensurePopoverStack(owner: OverlayHostController, options: ShowPopoverStackItemOptions) {
+  const { stackId } = options;
   const stackControllers = controllers(owner);
-  const existing = stackControllers.get(options.stackId);
+  const existing = stackControllers.get(stackId);
 
   if (existing) {
     existing.state.config.popoverClass = options.popoverClass;
@@ -263,7 +274,7 @@ function ensurePopoverStack(owner: OverlayHostController, options: ShowPopoverSt
 
   const overlayHandle = showOverlayEntry(owner, {
     onHostUnmounted: (error) => {
-      stackControllers.delete(options.stackId);
+      stackControllers.delete(stackId);
 
       const pending = state.items.value;
       state.items.value = [];
@@ -284,7 +295,7 @@ function ensurePopoverStack(owner: OverlayHostController, options: ShowPopoverSt
     state,
   };
 
-  stackControllers.set(options.stackId, controller);
+  stackControllers.set(stackId, controller);
   return controller;
 }
 
@@ -298,29 +309,30 @@ export function showPopoverStackItem(
 
   const controller = ensurePopoverStack(owner, options);
   const itemId = ++nextItemId;
-  let closed = false;
   let disposed = false;
   let releaseExit: (() => void) | undefined;
 
-  controller.state.items.value = [
-    ...controller.state.items.value,
-    {
-      id: itemId,
-      closing: false,
-      render: options.render,
-      onHostUnmounted: (error) => {
-        disposed = true;
-        releaseExit?.();
-        options.onHostUnmounted?.(error);
-      },
+  const item: PopoverStackItemRecord = {
+    id: itemId,
+    closing: shallowRef(false),
+    render: options.render,
+    onHostUnmounted: (error) => {
+      disposed = true;
+      releaseExit?.();
+      options.onHostUnmounted?.(error);
     },
-  ];
+  };
+  controller.state.items.value.push(item);
+  triggerRef(controller.state.items);
 
   const removeItem = () => {
     if (disposed) return;
     disposed = true;
     releaseExit?.();
-    controller.state.items.value = controller.state.items.value.filter((item) => item.id !== itemId);
+    const items = controller.state.items.value;
+    const index = items.indexOf(item);
+    if (index !== -1) items.splice(index, 1);
+    triggerRef(controller.state.items);
 
     if (controller.state.items.value.length > 0) {
       return;
@@ -336,19 +348,11 @@ export function showPopoverStackItem(
   };
 
   const close = () => {
-    if (closed) {
+    if (item.closing.value) {
       return;
     }
 
-    closed = true;
-    controller.state.items.value = controller.state.items.value.map((item) =>
-      item.id === itemId
-        ? {
-            ...item,
-            closing: true,
-          }
-        : item,
-    );
+    item.closing.value = true;
 
     void nextTick(() => {
       if (disposed) return;
