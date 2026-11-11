@@ -132,7 +132,7 @@
     --md-button-xsmall-selected-container-shape-round: initial;
   }
 
-  .m3-button {
+  .m3-button-surface {
     --_button-container-color: var(--md-button-container-color, var(--md-sys-color-primary));
     --_button-unselected-container-color: var(
       --md-button-unselected-container-color,
@@ -199,12 +199,16 @@
 @layer components {
   .m3-button {
     min-block-size: calc(max(1lh, var(--_button-icon-size)) + 0.25rem + 2 * var(--_button-outline-inset, 0px));
-    border: var(--_button-outline-inset, 0) solid transparent;
-    user-select: none;
-
+    height: var(--_button-height);
+    padding-inline: calc(var(--_button-padding-inline) - var(--_button-outline-inset, 0px));
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .m3-button-surface {
+    border: var(--_button-outline-inset, 0) solid transparent;
+    user-select: none;
     flex-shrink: 0;
     overflow: hidden;
 
@@ -234,21 +238,21 @@
     }
   }
 
-  .m3-button:not(:any-link):not(:disabled):not([aria-disabled='true']):not(:has(input:disabled)) {
+  .m3-button-surface:not(:any-link):not(:disabled):not([aria-disabled='true']):not(:has(input:disabled)) {
     cursor: var(--md-cursor-action);
   }
 
-  .m3-button:any-link {
+  .m3-button-surface:any-link {
     cursor: var(--md-cursor-link);
   }
 
-  .m3-button:hover {
+  .m3-button-surface:hover {
     --md-color-on-container: var(--_button-hovered-label-text-color);
     box-shadow: var(--_button-hovered-container-elevation, var(--_button-container-elevation));
   }
 
-  .m3-button:focus-visible,
-  .m3-button:has(input:focus-visible) {
+  .m3-button-surface:focus-visible,
+  .m3-button-surface:has(input:focus-visible) {
     --md-color-on-container: var(--_button-focused-label-text-color);
     box-shadow: var(--_button-focused-container-elevation);
 
@@ -256,14 +260,14 @@
     outline: var(--_button-focus-indicator-color) solid var(--_button-focus-indicator-thickness);
   }
 
-  .m3-button[data-pressed='true'] {
+  .m3-button-surface[data-pressed='true'] {
     --md-color-on-container: var(--_button-pressed-label-text-color);
     box-shadow: var(--_button-pressed-container-elevation);
   }
 
-  .m3-button:disabled,
-  .m3-button[aria-disabled='true'],
-  label.m3-button:has(input:disabled) {
+  .m3-button-surface:disabled,
+  .m3-button-surface[aria-disabled='true'],
+  label.m3-button-surface:has(input:disabled) {
     cursor: default;
     background-color: rgb(from var(--_button-disabled-container-color) r g b / 0.1);
     color: rgb(from var(--_button-disabled-label-text-color) r g b / 0.38);
@@ -271,7 +275,7 @@
   }
 
   /* elevated */
-  .m3-button[data-variant='elevated'] {
+  .m3-button-surface[data-variant='elevated'] {
     --_button-container-color: var(
       --md-button-container-color,
       var(--md-button-elevated-container-color, var(--md-sys-color-surface-container-low))
@@ -331,7 +335,7 @@
   }
 
   /* filled */
-  .m3-button[data-variant='filled'] {
+  .m3-button-surface[data-variant='filled'] {
     --_button-container-color: var(
       --md-button-container-color,
       var(--md-button-filled-container-color, var(--md-sys-color-primary))
@@ -391,7 +395,7 @@
   }
 
   /* tonal */
-  .m3-button[data-variant='tonal'] {
+  .m3-button-surface[data-variant='tonal'] {
     --_button-container-color: var(
       --md-button-container-color,
       var(--md-button-tonal-container-color, var(--md-sys-color-secondary-container))
@@ -451,7 +455,7 @@
   }
 
   /* outlined */
-  .m3-button[data-variant='outlined'] {
+  .m3-button-surface[data-variant='outlined'] {
     --_button-container-color: var(--md-button-container-color, transparent);
     --_button-label-text-color: var(
       --md-button-label-text-color,
@@ -485,7 +489,7 @@
   }
 
   /* text */
-  .m3-button[data-variant='text'] {
+  .m3-button-surface[data-variant='text'] {
     --_button-container-color: var(--md-button-container-color, transparent);
     --_button-label-text-color: var(
       --md-button-label-text-color,
@@ -520,11 +524,11 @@
   }
 
   /* Size Variants */
-  .m3-button[data-size='extra-small'] {
+  .m3-button-surface[data-size='extra-small'] {
     @apply label-large;
 
-    height: --action-height(32);
-    padding-inline: calc(--dp(12) - var(--_button-outline-inset, 0px));
+    --_button-height: --action-height(32);
+    --_button-padding-inline: --dp(12);
 
     --_button-reserved-outline-width: var(
       --md-button-xsmall-outlined-outline-width,
@@ -558,11 +562,11 @@
     --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-xsmall-icon-label-space, 0.5rem));
   }
 
-  .m3-button[data-size='small'] {
+  .m3-button-surface[data-size='small'] {
     @apply label-large;
 
-    height: --action-height(40);
-    padding-inline: calc(--dp(16) - var(--_button-outline-inset, 0px));
+    --_button-height: --action-height(40);
+    --_button-padding-inline: --dp(16);
 
     --_button-reserved-outline-width: var(
       --md-button-small-outlined-outline-width,
@@ -593,11 +597,11 @@
     --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-small-icon-label-space, 0.5rem));
   }
 
-  .m3-button[data-size='medium'] {
+  .m3-button-surface[data-size='medium'] {
     @apply title-medium;
 
-    height: --action-height(56);
-    padding-inline: calc(--dp(24) - var(--_button-outline-inset, 0px));
+    --_button-height: --action-height(56);
+    --_button-padding-inline: --dp(24);
 
     --_button-reserved-outline-width: var(
       --md-button-medium-outlined-outline-width,
@@ -631,11 +635,11 @@
     --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-medium-icon-label-space, 0.5rem));
   }
 
-  .m3-button[data-size='large'] {
+  .m3-button-surface[data-size='large'] {
     @apply headline-small;
 
-    height: --action-height(96);
-    padding-inline: calc(--dp(48) - var(--_button-outline-inset, 0px));
+    --_button-height: --action-height(96);
+    --_button-padding-inline: --dp(48);
 
     --_button-reserved-outline-width: var(--md-button-large-outlined-outline-width, 0.125rem);
 
@@ -663,11 +667,11 @@
     --_button-icon-label-space: var(--md-button-icon-label-space, var(--md-button-large-icon-label-space, 0.75rem));
   }
 
-  .m3-button[data-size='extra-large'] {
+  .m3-button-surface[data-size='extra-large'] {
     @apply headline-large;
 
-    height: --action-height(136);
-    padding-inline: calc(--dp(64) - var(--_button-outline-inset, 0px));
+    --_button-height: --action-height(136);
+    --_button-padding-inline: --dp(64);
 
     --_button-reserved-outline-width: var(--md-button-xlarge-outlined-outline-width, 0.1875rem);
 
@@ -699,7 +703,7 @@
   }
 
   /* Shape Variants */
-  .m3-button[data-shape='rounded'] {
+  .m3-button-surface[data-shape='rounded'] {
     --_button-container-shape: var(--md-button-container-shape, var(--_button-container-shape-round));
 
     &[data-press-shape-morph='true'][data-pressed='true'] {
@@ -707,7 +711,7 @@
     }
   }
 
-  .m3-button:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']) {
+  .m3-button-surface:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']) {
     --_button-container-shape: var(--md-button-container-shape, var(--_button-container-shape-square));
 
     &[data-press-shape-morph='true'][data-pressed='true'] {

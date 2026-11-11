@@ -71,15 +71,7 @@
     --_shape-radius: var(--_shape-compact-radius);
 
     /* Component identity stays stable when consumers override public anatomy attributes. */
-    &:is(
-      .m3-button:where(:not(.m3-item)),
-      .m3-icon-button,
-      .m3-button-group,
-      .m3-text-field,
-      .m3-input-otp,
-      .m3-chip,
-      .m3-fab-menu-item
-    ) {
+    &:is(.m3-button, .m3-icon-button, .m3-button-group, .m3-text-field, .m3-input-otp, .m3-chip, .m3-fab-menu-item) {
       --_shape-radius: var(--_shape-control-radius);
     }
     &:is(.m3-card, .m3-menu, .m3-popover, .m3-fab, .m3-fab-menu, .m3-navigation-drawer, .m3-navigation-rail) {

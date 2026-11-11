@@ -1,8 +1,32 @@
 import assert from 'node:assert/strict';
-import { chromium } from 'playwright';
+import { chromium, type Page } from 'playwright';
 import { openFixture } from '../fonts';
 
-// Start the documentation site before running this check.
+async function assertHomeLinksLeftAligned(page: Page) {
+  const links = page.locator('.home-guide-grid a, .home-component-grid a');
+  const positions = await links.evaluateAll((elements) =>
+    elements.map((link) => {
+      const style = getComputedStyle(link);
+      const contentStart =
+        link.getBoundingClientRect().left + parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft);
+      const icon = link.querySelector('[data-part="leading"]')!;
+      const title = link.querySelector('[data-part="title"]')!;
+      const text = document.createRange();
+      text.selectNodeContents(title);
+      return {
+        label: title.textContent,
+        iconOffset: icon.getBoundingClientRect().left - contentStart,
+        textOffset: text.getBoundingClientRect().left - title.getBoundingClientRect().left,
+      };
+    }),
+  );
+  for (const { label, iconOffset, textOffset } of positions) {
+    assert(Math.abs(iconOffset) < 1, `${label}: leading icon offset ${iconOffset}px`);
+    assert(Math.abs(textOffset) < 1, `${label}: title text offset ${textOffset}px`);
+  }
+}
+
+// Use the production preview to check the bundled stylesheet order.
 const base = process.env.DOCS_URL ?? 'http://127.0.0.1:5173';
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH ?? '/usr/bin/google-chrome-stable' });
 try {
@@ -16,6 +40,7 @@ try {
   assert.equal(await page.locator('.home-nav a').first().getAttribute('data-size'), 'small');
   assert.equal(await page.locator('.home-guide-grid a').count(), 4);
   assert.equal(await page.locator('.home-component-grid a').count(), 6);
+  await assertHomeLinksLeftAligned(page);
   const searchInput = page.getByRole('searchbox');
   await search.click();
   await searchInput.waitFor();
@@ -55,6 +80,7 @@ try {
     assert((await search.evaluate((el) => el.getBoundingClientRect().height)) < defaultHeight);
   }
   await page.setViewportSize({ width: 390, height: 844 });
+  await assertHomeLinksLeftAligned(page);
   assert.equal(await search.getAttribute('data-scope'), 'icon-button');
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
   await search.click();

@@ -92,7 +92,7 @@ describe('ListItem', () => {
 
     expect(root?.tagName).toBe('DIV');
     expect(root?.dataset.interactive).toBe('false');
-    expect(root?.classList.contains('m3-button')).toBe(false);
+    expect(root?.classList.contains('m3-button-surface')).toBe(false);
     expect(root?.classList.contains('m3-state-layer')).toBe(false);
     expect(root?.getAttribute('data-pressed')).toBeNull();
     expect(root?.getAttribute('href')).toBeNull();

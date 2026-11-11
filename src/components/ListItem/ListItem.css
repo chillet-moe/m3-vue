@@ -75,10 +75,6 @@
     background-color: transparent;
   }
 
-  .m3-item:any-link {
-    cursor: var(--md-cursor-link);
-  }
-
   .m3-item::before {
     content: '';
     position: absolute;
@@ -287,16 +283,6 @@
     --_item-gap: var(--md-item-gap, --dp(24));
     --_item-content-gap: var(--md-item-content-gap, --dp(3));
     --_item-icon-size: var(--md-item-icon-size, --density-icon(28, body-large, 16));
-  }
-
-  .m3-item[data-size='extra-small'],
-  .m3-item[data-size='small'],
-  .m3-item[data-size='medium'],
-  .m3-item[data-size='large'],
-  .m3-item[data-size='extra-large'] {
-    block-size: auto;
-    padding-block: var(--_item-padding-block);
-    padding-inline: var(--_item-padding-inline);
   }
 
   .m3-item[data-appearance='standard'] {

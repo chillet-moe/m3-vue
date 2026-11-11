@@ -114,7 +114,7 @@ const slotProps = computed(() => ({
       appearance === 'expressive' && 'm3-morph-host',
       {
         'm3-state-layer': interactive,
-        'm3-button': interactive,
+        'm3-button-surface': interactive,
       },
     ]"
     data-scope="item"

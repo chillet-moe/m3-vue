@@ -39,11 +39,10 @@ describe('semantic cursor tokens', () => {
   it('routes real component links through the link cursor token', () => {
     const linkSelectors = [
       '.m3-breadcrumb-link:any-link',
-      '.m3-button:any-link',
+      '.m3-button-surface:any-link',
       '.m3-fab-menu-item:any-link',
       '.m3-fab:any-link',
       '.m3-icon-button:any-link',
-      '.m3-item:any-link',
       '.m3-menu-item:any-link',
       '.m3-navigation-drawer-item:any-link',
       '.m3-navigation-rail-item:any-link',
