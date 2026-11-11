@@ -1,9 +1,11 @@
 import { isElement, isHTMLElement } from '@/internal/elementEnvironment';
+import type { Ref } from 'vue';
+
 export type PressShapeMorphRegistration = {
-  disabled: () => boolean;
-  enabled: () => boolean;
-  minDuration: number;
-  setPressed: (pressed: boolean) => void;
+  disabled: Readonly<Ref<boolean>>;
+  enabled: Readonly<Ref<boolean>>;
+  minDuration?: number;
+  pressed: Ref<boolean>;
 };
 
 type ActivePress = {
@@ -59,7 +61,7 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
   };
 
   const setPressed = (press: ActivePress, pressed: boolean) => {
-    press.registration.setPressed(pressed);
+    press.registration.pressed.value = pressed;
     press.element.dataset.pressed = pressed ? 'true' : 'false';
   };
 
@@ -70,7 +72,7 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
     activePress = null;
     activeAbortController?.abort();
     activeAbortController = null;
-    const remaining = press.registration.minDuration - (now() - press.startedAt);
+    const remaining = (press.registration.minDuration ?? 200) - (now() - press.startedAt);
     if (remaining <= 0) {
       setPressed(press, false);
       return;
@@ -101,11 +103,11 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
     if (!element) return;
 
     const registration = registrations.get(element)!;
-    if (registration.disabled()) {
+    if (registration.disabled.value) {
       blockEvent(event);
       return;
     }
-    if (!registration.enabled()) return;
+    if (!registration.enabled.value) return;
     if (activePress && activePress.pointerId !== event.pointerId) return;
 
     cancelActivePress();
@@ -127,14 +129,14 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
   const handlePointerEnd = (event: PointerEvent) => {
     const element = findRegisteredElement(registrations, event.target);
     const registration = element ? registrations.get(element) : undefined;
-    if (registration?.disabled()) blockEvent(event);
+    if (registration?.disabled.value) blockEvent(event);
 
     if (activePress?.pointerId === event.pointerId) finishActivePress();
   };
 
   const handleClick = (event: MouseEvent) => {
     const element = findRegisteredElement(registrations, event.target);
-    if (element && registrations.get(element)?.disabled()) blockEvent(event);
+    if (element && registrations.get(element)?.disabled.value) blockEvent(event);
   };
 
   const ensureListeners = () => {
@@ -180,7 +182,7 @@ const createRuntime = (document: Document): PressShapeMorphRuntime => {
 
       if (activePress?.element === element) {
         activePress.registration = registration;
-        if (!registration.enabled() || registration.disabled()) cancelActivePress();
+        if (!registration.enabled.value || registration.disabled.value) cancelActivePress();
       }
     },
   };

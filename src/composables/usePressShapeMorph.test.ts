@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createApp, h, nextTick, ref } from 'vue';
+import { createApp, h, nextTick, reactive, ref } from 'vue';
 import { usePressShapeMorph } from './usePressShapeMorph';
 
 function createPointerEvent(type: string, init: EventInit & { pointerId?: number } = {}): Event {
@@ -18,6 +18,30 @@ afterEach(() => {
 });
 
 describe('usePressShapeMorph', () => {
+  it('supports direct press handlers without delegated attributes', async () => {
+    vi.useFakeTimers();
+    const container = document.createElement('div');
+    document.body.append(container);
+
+    const app = createApp({
+      setup() {
+        const { pressed, onPointerDown } = usePressShapeMorph({ minDuration: 50 });
+        return () => h('button', { 'data-pressed': String(pressed.value), onPointerdown: onPointerDown });
+      },
+    });
+    app.mount(container);
+    const button = container.querySelector('button')!;
+
+    button.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true }));
+    await nextTick();
+    expect(button.dataset.pressed).toBe('true');
+    window.dispatchEvent(createPointerEvent('pointerup'));
+    await vi.advanceTimersByTimeAsync(50);
+    expect(button.dataset.pressed).toBe('false');
+
+    app.unmount();
+  });
+
   it('provides reusable press morph attrs for arbitrary elements', async () => {
     vi.useFakeTimers();
 
@@ -95,6 +119,41 @@ describe('usePressShapeMorph', () => {
     expect(clickCount).toBe(0);
 
     app.unmount();
+  });
+
+  it('uses duration changes before release and preserves the scheduled release afterward', async () => {
+    vi.useFakeTimers();
+    const clock = vi.spyOn(window.performance, 'now').mockReturnValue(0);
+    const container = document.createElement('div');
+    document.body.append(container);
+    const options = reactive({ minDuration: 100 });
+    const app = createApp({
+      setup() {
+        const { pressShapeMorphAttrs } = usePressShapeMorph(options);
+        return () => h('button', pressShapeMorphAttrs.value, String(options.minDuration));
+      },
+    });
+    app.mount(container);
+    const button = container.querySelector('button')!;
+
+    try {
+      button.dispatchEvent(createPointerEvent('pointerdown', { bubbles: true }));
+      expect(button.dataset.pressed).toBe('true');
+
+      options.minDuration = 150;
+      await nextTick();
+      window.dispatchEvent(createPointerEvent('pointerup'));
+
+      options.minDuration = 300;
+      await nextTick();
+      await vi.advanceTimersByTimeAsync(149);
+      expect(button.dataset.pressed).toBe('true');
+      await vi.advanceTimersByTimeAsync(1);
+      expect(button.dataset.pressed).toBe('false');
+    } finally {
+      app.unmount();
+      clock.mockRestore();
+    }
   });
 
   it('finishes an active press even if the element becomes disabled before pointerup', async () => {

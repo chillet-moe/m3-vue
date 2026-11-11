@@ -1,7 +1,7 @@
 import { bindElementEnvironment, isHTMLElement } from '@/internal/elementEnvironment';
-import { getPressShapeMorphRuntime } from '@/internal/pressShapeMorph';
+import { getPressShapeMorphRuntime, type PressShapeMorphRegistration } from '@/internal/pressShapeMorph';
 import { computed, ref, toValue } from 'vue';
-import type { MaybeRefOrGetter, VNode } from 'vue';
+import type { MaybeRefOrGetter, Ref, VNode } from 'vue';
 import { usePressedState } from './pressedState';
 
 export type UsePressShapeMorphOptions = {
@@ -22,24 +22,20 @@ export type PressShapeMorphAttrs = {
   onVnodeBeforeUnmount: () => void;
 };
 
-export function usePressShapeMorph(options: UsePressShapeMorphOptions = {}) {
+function usePressShapeMorphBinding(options: UsePressShapeMorphOptions, rawPressed?: Readonly<Ref<boolean>>) {
   const enabled = computed(() => toValue(options.enabled) ?? true);
   const disabled = computed(() => toValue(options.disabled) ?? false);
-  const { pressed: rawPressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState(options.minDuration);
   const delegatedPressed = ref(false);
   let registeredElement: HTMLElement | null = null;
   let unregister: (() => void) | null = null;
 
-  const pressed = computed(() => enabled.value && !disabled.value && (rawPressed.value || delegatedPressed.value));
+  const pressed = computed(() => enabled.value && !disabled.value && (rawPressed?.value || delegatedPressed.value));
 
-  const registration = () => ({
-    disabled: () => disabled.value,
-    enabled: () => enabled.value,
-    minDuration: options.minDuration ?? 200,
-    setPressed: (value: boolean) => {
-      delegatedPressed.value = value;
-    },
-  });
+  const registration: PressShapeMorphRegistration = { disabled, enabled, pressed: delegatedPressed };
+  const updateRegistration = () => {
+    registration.minDuration = options.minDuration;
+    return registration;
+  };
 
   const handleVnodeMounted = (vnode: VNode) => {
     const element = vnode.el;
@@ -47,7 +43,7 @@ export function usePressShapeMorph(options: UsePressShapeMorphOptions = {}) {
 
     registeredElement = element;
     unregister = bindElementEnvironment(element, (document) =>
-      getPressShapeMorphRuntime(document).register(element, registration()),
+      getPressShapeMorphRuntime(document).register(element, updateRegistration()),
     );
   };
 
@@ -55,7 +51,7 @@ export function usePressShapeMorph(options: UsePressShapeMorphOptions = {}) {
     const element = vnode.el;
     if (!isHTMLElement(element) || registeredElement !== element) return;
 
-    getPressShapeMorphRuntime(element.ownerDocument).update(element, registration());
+    getPressShapeMorphRuntime(element.ownerDocument).update(element, updateRegistration());
   };
 
   const handleVnodeBeforeUnmount = () => {
@@ -63,6 +59,24 @@ export function usePressShapeMorph(options: UsePressShapeMorphOptions = {}) {
     unregister = null;
     registeredElement = null;
   };
+
+  const pressShapeMorphAttrs = computed<PressShapeMorphAttrs>(() => ({
+    'data-pressed': pressed.value ? 'true' : 'false',
+    onVnodeMounted: handleVnodeMounted,
+    onVnodeUpdated: handleVnodeUpdated,
+    onVnodeBeforeUnmount: handleVnodeBeforeUnmount,
+  }));
+
+  return { pressed, pressShapeMorphAttrs, enabled, disabled };
+}
+
+export function usePressShapeMorphAttrs(options: UsePressShapeMorphOptions = {}) {
+  return usePressShapeMorphBinding(options).pressShapeMorphAttrs;
+}
+
+export function usePressShapeMorph(options: UsePressShapeMorphOptions = {}) {
+  const { pressed: rawPressed, onPointerDown, onPointerUp, onPointerCancel } = usePressedState(options.minDuration);
+  const { pressed, pressShapeMorphAttrs, enabled, disabled } = usePressShapeMorphBinding(options, rawPressed);
 
   const guardDisabledInteraction = (event: Event) => {
     if (!disabled.value) {
@@ -95,13 +109,6 @@ export function usePressShapeMorph(options: UsePressShapeMorphOptions = {}) {
   const handleClick = (event: MouseEvent) => {
     guardDisabledInteraction(event);
   };
-
-  const pressShapeMorphAttrs = computed<PressShapeMorphAttrs>(() => ({
-    'data-pressed': pressed.value ? 'true' : 'false',
-    onVnodeMounted: handleVnodeMounted,
-    onVnodeUpdated: handleVnodeUpdated,
-    onVnodeBeforeUnmount: handleVnodeBeforeUnmount,
-  }));
 
   return {
     pressed,

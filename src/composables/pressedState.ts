@@ -11,130 +11,105 @@ import { ref, onUnmounted } from 'vue';
 export function usePressedState(minDuration = 200) {
   const pressed = ref(false);
   let timeoutId: number | null = null;
-  let minTimeElapsed = false;
-  let isActive = false;
   let activePointerId: number | null = null;
-  let hasWindowListeners = false;
   let view: Window | null = null;
   let releaseEnvironment: (() => void) | undefined;
 
   const clearTimer = () => {
-    if (timeoutId) {
+    if (timeoutId !== null) {
       view?.clearTimeout(timeoutId);
       timeoutId = null;
     }
   };
 
-  const shouldHandle = (event: PointerEvent) => {
-    return activePointerId !== null && event.pointerId === activePointerId;
+  const releasePointer = () => {
+    if (activePointerId === null) return;
+
+    activePointerId = null;
+    view?.removeEventListener('pointerup', onPointerEnd);
+    view?.removeEventListener('pointercancel', onPointerEnd);
+    view?.removeEventListener('blur', onWindowBlur);
   };
 
-  const removeWindowListeners = () => {
-    if (!hasWindowListeners || !view) {
-      return;
-    }
+  const resetPress = () => {
+    clearTimer();
+    releasePointer();
+    view = null;
+    pressed.value = false;
+  };
 
-    view!.removeEventListener('pointerup', onWindowPointerUp);
-    view!.removeEventListener('pointercancel', onWindowPointerCancel);
-    view!.removeEventListener('blur', onWindowBlur);
-    hasWindowListeners = false;
+  const releasePress = () => {
+    if (releaseEnvironment) releaseEnvironment();
+    else resetPress();
   };
 
   const finishInteraction = () => {
-    isActive = false;
-    activePointerId = null;
-    removeWindowListeners();
-
-    if (minTimeElapsed) {
-      pressed.value = false;
-      clearTimer();
-    }
+    releasePointer();
+    if (timeoutId === null) releasePress();
   };
 
-  function onWindowPointerUp(event: PointerEvent) {
-    onPointerUp(event);
-  }
-
-  function onWindowPointerCancel(event: PointerEvent) {
-    onPointerCancel(event);
+  function onPointerEnd(event: PointerEvent) {
+    if (activePointerId !== null && event.pointerId === activePointerId) finishInteraction();
   }
 
   function onWindowBlur() {
-    if (!isActive) return;
+    if (activePointerId === null) return;
     finishInteraction();
   }
 
-  const addWindowListeners = () => {
-    if (hasWindowListeners || !view) {
-      return;
-    }
-
-    view!.addEventListener('pointerup', onWindowPointerUp);
-    view!.addEventListener('pointercancel', onWindowPointerCancel);
-    view!.addEventListener('blur', onWindowBlur);
-    hasWindowListeners = true;
-  };
-
   const onPointerDown = (event: PointerEvent) => {
-    if (isActive && activePointerId !== null && event.pointerId !== activePointerId) {
+    if (activePointerId !== null && event.pointerId !== activePointerId) {
       return;
     }
 
-    releaseEnvironment?.();
-    view =
+    if (releaseEnvironment) releaseEnvironment();
+    else {
+      clearTimer();
+      releasePointer();
+    }
+
+    const eventView =
       (event.currentTarget as Node | null)?.ownerDocument?.defaultView ??
       (event.target as Node | null)?.ownerDocument?.defaultView ??
       window;
+    view = eventView;
+
     const element = event.currentTarget ?? event.target;
-    if (isElement(element))
-      releaseEnvironment = bindElementEnvironment(element, () => () => {
-        clearTimer();
-        removeWindowListeners();
-        pressed.value = false;
-        isActive = false;
-        activePointerId = null;
+    if (isElement(element)) {
+      const document = element.ownerDocument;
+      const unbind = bindElementEnvironment(element, (owner) => {
+        if (owner !== document) {
+          // Adoption cancels the press. Release once the environment has finished rebinding.
+          queueMicrotask(unbind);
+          return;
+        }
+
+        return () => {
+          if (releaseEnvironment !== unbind) return;
+          releaseEnvironment = undefined;
+          resetPress();
+        };
       });
-    pressed.value = true;
-    isActive = true;
-    minTimeElapsed = false;
+      releaseEnvironment = unbind;
+    }
+
     activePointerId = event.pointerId;
-
-    clearTimer();
-    addWindowListeners();
-
-    timeoutId = view!.setTimeout(() => {
-      minTimeElapsed = true;
-      if (!isActive) {
-        pressed.value = false;
-        activePointerId = null;
-      }
+    eventView.addEventListener('pointerup', onPointerEnd);
+    eventView.addEventListener('pointercancel', onPointerEnd);
+    eventView.addEventListener('blur', onWindowBlur);
+    timeoutId = eventView.setTimeout(() => {
       timeoutId = null;
+      if (activePointerId === null) releasePress();
     }, minDuration);
+    pressed.value = true;
   };
 
-  const onPointerUp = (event: PointerEvent) => {
-    if (!shouldHandle(event)) return;
-
-    finishInteraction();
-  };
-
-  const onPointerCancel = (event: PointerEvent) => {
-    if (!shouldHandle(event)) return;
-
-    finishInteraction();
-  };
-
-  // Cleanup on unmount
-  onUnmounted(() => {
-    clearTimer();
-    removeWindowListeners();
-    releaseEnvironment?.();
-  });
+  onUnmounted(releasePress);
 
   return {
     pressed,
     onPointerDown,
-    onPointerUp,
-    onPointerCancel,
+    onPointerUp: onPointerEnd,
+    onPointerCancel: onPointerEnd,
   };
 }
