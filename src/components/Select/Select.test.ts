@@ -342,29 +342,35 @@ describe('Select', () => {
     app.unmount();
   });
 
-  it('renders hidden inputs for form submission', async () => {
+  it('submits selected values in order while the Select has a form name', async () => {
     installPopoverPolyfill();
 
-    const container = document.createElement('div');
-    document.body.appendChild(container);
+    const form = document.createElement('form');
+    document.body.appendChild(form);
+    const name = ref<string>();
 
     const app = createApp(() =>
       h(Select, {
         label: 'Coffee',
-        name: 'coffee',
+        name: name.value,
         options,
         multiple: true,
         modelValue: ['espresso', 'cold-brew'],
       }),
     );
 
-    app.mount(container);
+    app.mount(form);
     await nextTick();
+    expect(form.querySelectorAll('input[type="hidden"]')).toHaveLength(0);
 
-    const hiddenInputs = Array.from(container.querySelectorAll<HTMLInputElement>('input[type="hidden"]'));
+    name.value = 'coffee';
+    await nextTick();
+    expect(new FormData(form).getAll('coffee')).toEqual(['espresso', 'cold-brew']);
 
-    expect(hiddenInputs.map((input) => input.name)).toEqual(['coffee', 'coffee']);
-    expect(hiddenInputs.map((input) => input.value)).toEqual(['espresso', 'cold-brew']);
+    name.value = '';
+    await nextTick();
+    expect([...new FormData(form)]).toEqual([]);
+    expect(form.querySelectorAll('input[type="hidden"]')).toHaveLength(0);
 
     app.unmount();
   });

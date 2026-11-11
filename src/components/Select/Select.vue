@@ -22,7 +22,7 @@ import MenuContainer from '@/components/Menu/MenuContainer.vue';
 import SelectItem from './SelectItem.vue';
 import { selectContextKey } from './SelectContext';
 import { selectItemContextKey } from './SelectItemContext';
-import type { SelectListSlot } from '@/composables/selectTypes';
+import type { SelectListSlot, UseSelectOptionValue } from '@/composables/selectTypes';
 import {
   useFieldLabelClearanceStyle,
   useFieldSize,
@@ -35,13 +35,13 @@ import { acquireAnchorName } from '@/internal/anchorName';
 import { startMenuPressDrag } from '@/internal/menuPressDrag';
 import { useM3Locale } from '@/locales/context';
 
-export type SelectOptionValue = string | number;
+export type SelectOptionValue = UseSelectOptionValue;
 
 export type SelectOption = {
   /** User-facing label rendered in the trigger and menu item. */
   label: string;
 
-  /** Submitted value for the option. */
+  /** Unique, stable string or finite numeric identifier submitted for this option. */
   value: SelectOptionValue;
 
   /** Disables selecting the option. */
@@ -259,7 +259,7 @@ const select = useSelect({
 
 provide(selectItemContextKey, {
   showSelectedIcon,
-  optionProps: select.optionProps,
+  useOptionProps: select.useOptionProps,
   isOptionSelected: select.isOptionSelected,
   customList: Boolean(slots.list),
 });
@@ -466,7 +466,7 @@ provideShape(() => props.shape);
     </div>
 
     <input
-      v-for="(submittedValue, index) in select.submittedValues.value"
+      v-for="(submittedValue, index) in props.name ? select.submittedValues.value : []"
       :key="`${props.name}-${submittedValue}-${index}`"
       type="hidden"
       :name="props.name"
@@ -490,7 +490,17 @@ provideShape(() => props.shape);
     >
       <MenuContainer ref="containerRef">
         <slot name="list" v-bind="select.list.value">
+          <!-- Local edits still update the transition group when the results are equivalent. -->
           <TransitionGroup
+            v-memo="[
+              select.filteredOptionEntries.value,
+              props.filterable && props.filterMode !== 'external' ? query : undefined,
+              select.selectedOptions.value,
+              props.filterable,
+              filterNoResultsText,
+              slots.optionLeading,
+              slots.optionTrailing,
+            ]"
             tag="div"
             name="m3-select-options"
             class="m3-select-options"

@@ -1,5 +1,3 @@
-@import '../TextField/TextField.css';
-
 @layer components {
   .m3-select-trigger {
     cursor: var(--md-cursor-action);

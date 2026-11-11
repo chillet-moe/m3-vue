@@ -3,7 +3,7 @@ import type { UseSelectReturn } from '@/composables/selectTypes';
 
 /** Internal presentation bridge; Select remains the only selection/navigation owner. */
 export const selectItemContextKey: InjectionKey<
-  Pick<UseSelectReturn, 'optionProps' | 'isOptionSelected'> & {
+  Pick<UseSelectReturn, 'useOptionProps' | 'isOptionSelected'> & {
     customList: boolean;
     showSelectedIcon: ComputedRef<boolean>;
   }

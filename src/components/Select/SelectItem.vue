@@ -17,6 +17,10 @@ if (!context) throw new Error('SelectItem must be rendered inside Select or Comb
 const slots = useSlots();
 const showSelectedIcon = context.showSelectedIcon;
 const selected = computed(() => context.isOptionSelected(option));
+const optionProps = context.useOptionProps(
+  () => index,
+  () => option,
+);
 // A recycled/just-mounted virtual row is already selected; only a subsequent
 // selection change should run MenuItem's selection keyframes.
 const animateSelection = ref(!context.customList);
@@ -34,7 +38,7 @@ defineSlots<{
 
 <template>
   <MenuItem
-    v-bind="context.optionProps(index, option)"
+    v-bind="optionProps()"
     role="option"
     :tabindex="-1"
     :aria-disabled="Boolean(option.disabled)"

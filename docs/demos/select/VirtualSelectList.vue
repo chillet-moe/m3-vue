@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, onUpdated, watch, type ComponentPublicInstance } from 'vue';
 import { useVirtualizer } from '@tanstack/vue-virtual';
 import { SelectItem, type SelectListSlot } from '@/components/Select';
 
 const props = defineProps<{ list: SelectListSlot }>();
+const entries = computed(() => props.list.entries);
+const open = computed(() => props.list.open);
 const virtualizer = useVirtualizer(
-  computed(() => ({
-    count: props.list.entries.length,
-    getScrollElement: () => props.list.scrollElement ?? null,
-    estimateSize: () => 48,
-    getItemKey: (index: number) => props.list.entries[index]!.option.value,
-    overscan: 5,
-    enabled: props.list.open,
-  })),
+  computed(() => {
+    const options = entries.value;
+    return {
+      count: options.length,
+      getScrollElement: () => props.list.scrollElement ?? null,
+      estimateSize: () => 48,
+      getItemKey: (index: number) => options[index]!.option.value,
+      overscan: 5,
+      enabled: open.value,
+    };
+  }),
 );
 watch(
   () => props.list.setScrollToIndex,
@@ -22,6 +27,27 @@ watch(
   { immediate: true },
 );
 onBeforeUnmount(() => props.list.setScrollToIndex(undefined));
+
+const pendingMeasurements = new Set<Element>();
+function measureRow(instance: Element | ComponentPublicInstance | null) {
+  if (!instance) return;
+
+  const row = '$el' in instance ? (instance.$el as Element) : instance;
+  pendingMeasurements.add(row);
+}
+
+function measureRows() {
+  if (open.value) {
+    for (const row of pendingMeasurements) {
+      if (row.isConnected) virtualizer.value.measureElement(row);
+    }
+  }
+  pendingMeasurements.clear();
+}
+
+// Measure after the range is inserted and before Select scrolls to the active option on nextTick.
+onMounted(measureRows);
+onUpdated(measureRows);
 </script>
 
 <template>
@@ -29,11 +55,7 @@ onBeforeUnmount(() => props.list.setScrollToIndex(undefined));
     <SelectItem
       v-for="row in virtualizer.getVirtualItems()"
       :key="list.entries[row.index]!.option.value"
-      :ref="
-        (instance) => {
-          if (instance) virtualizer.measureElement((instance as any).$el);
-        }
-      "
+      :ref="measureRow"
       :data-index="row.index"
       :index="row.index"
       :option="list.entries[row.index]!.option"

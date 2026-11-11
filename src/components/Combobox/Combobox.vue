@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useAttrs } from 'vue';
+import { computed, ref } from 'vue';
 import type { SelectListSlot } from '@/composables/selectTypes';
 import Select from '@/components/Select/Select.vue';
 import type { SelectModelValue, SelectOption, SelectProps } from '@/components/Select/Select.vue';
@@ -16,11 +16,8 @@ type SelectInstance = InstanceType<typeof Select> & {
 };
 
 const props = withDefaults(defineProps<ComboboxProps>(), { showSelectedIcon: undefined });
-const attrs = useAttrs();
-const forwardedProps = computed(() => ({
-  ...attrs,
-  ...props,
-}));
+// Vue forwards attrs to Select. Cache the declared props across attribute-only updates.
+const forwardedProps = computed(() => ({ ...props }));
 
 const emit = defineEmits<{
   change: [value: SelectModelValue];

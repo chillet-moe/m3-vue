@@ -174,32 +174,43 @@ try {
     await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'no-preference' });
     for (const name of ['Long list', 'Layer']) {
       const input = page.getByRole('combobox', { name, exact: true });
+      const opening = await input.evaluateHandle((trigger) => {
+        const menu = document.getElementById(trigger.getAttribute('aria-controls')!)!;
+        async function sampleOpening() {
+          const element = menu.querySelector<HTMLElement>('[data-part="container"]')!;
+          const surface = element.parentElement!;
+          const samples = [];
+          for (let i = 0; i < 24; i++) {
+            await new Promise(requestAnimationFrame);
+            const style = getComputedStyle(element);
+            samples.push({
+              transform: getComputedStyle(surface).transform,
+              radius: style.borderTopRightRadius,
+              overflowX: element.scrollWidth - element.clientWidth,
+              gutter:
+                element.offsetWidth -
+                element.clientWidth -
+                parseFloat(style.borderLeftWidth) -
+                parseFloat(style.borderRightWidth),
+              scrollbar: style.scrollbarColor,
+              background: style.backgroundColor,
+              width: style.scrollbarWidth,
+            });
+          }
+          return samples;
+        }
+        return {
+          samples: new Promise<Awaited<ReturnType<typeof sampleOpening>>>((resolve) => {
+            menu.addEventListener('beforetoggle', () => resolve(sampleOpening()), { once: true });
+          }),
+        };
+      });
       await input.click();
       await page.mouse.move(1050, 950);
+      const samples = await opening.evaluate(({ samples }) => samples);
+      await opening.dispose();
       const popup = page.getByRole('listbox', { name, exact: true });
       const scroller = popup.locator('[data-part="container"]');
-      const samples = await scroller.evaluate(async (element) => {
-        const samples = [];
-        const surface = element.parentElement!;
-        for (let i = 0; i < 24; i++) {
-          const style = getComputedStyle(element);
-          samples.push({
-            transform: getComputedStyle(surface).transform,
-            radius: style.borderTopRightRadius,
-            overflowX: element.scrollWidth - element.clientWidth,
-            gutter:
-              (element as HTMLElement).offsetWidth -
-              element.clientWidth -
-              parseFloat(style.borderLeftWidth) -
-              parseFloat(style.borderRightWidth),
-            scrollbar: style.scrollbarColor,
-            background: style.backgroundColor,
-            width: style.scrollbarWidth,
-          });
-          await new Promise(requestAnimationFrame);
-        }
-        return samples;
-      });
       assert(
         samples.every((sample) => sample.gutter > 0),
         'test must exercise classic scrollbars',

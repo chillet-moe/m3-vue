@@ -1,5 +1,5 @@
 import { triggerKeyboardRipple } from '@/components/StateLayer/state-layer';
-import { computed, nextTick, ref, shallowReactive, watch, type ComponentPublicInstance } from 'vue';
+import { computed, nextTick, ref, shallowReactive, toRaw, watch, type ComponentPublicInstance } from 'vue';
 import {
   getSelectedOptions,
   formatSelectedOptions,
@@ -21,6 +21,8 @@ export type {
 export function useSelect(opts: UseSelectOptions) {
   const filterQuery = opts.query ?? ref('');
   const activeValue = ref<UseSelectOptionValue>();
+  // Navigation already knows the position. Revalidate it by value when the results change.
+  let activeIndexHint = -1;
   // Text inputs match :focus-visible even after pointer focus. Track navigation
   // modality so moving focus into the field does not add a mouse-only row outline.
   const keyboardActive = ref(false);
@@ -32,18 +34,24 @@ export function useSelect(opts: UseSelectOptions) {
   const hasValue = computed(() => selectedOptions.value.length > 0);
   const displayText = computed(() => formatSelectedOptions(selectedOptions.value, opts.displaySeparator()));
   const submittedValues = computed(() => getSubmittedValues(opts.modelValue.value, opts.multiple(), opts.disabled()));
-  const filteredOptionEntries = computed(() =>
-    getFilteredOptionEntries(
-      opts.options(),
-      filterQuery.value,
-      opts.filterable() && opts.filterMode?.() !== 'external',
+  const normalizedFilterQuery = computed(() => filterQuery.value.trim().toLocaleLowerCase(opts.locale?.()));
+  const filteredOptionEntries = computed(() => {
+    const options = opts.options();
+    const locallyFiltered = opts.filterable() && opts.filterMode?.() !== 'external';
+    return getFilteredOptionEntries(
+      options,
+      locallyFiltered ? normalizedFilterQuery.value : undefined,
       opts.locale?.(),
-    ),
-  );
+    );
+  });
   const hasFilteredOptions = computed(() => filteredOptionEntries.value.length > 0);
-  const activeIndex = computed(() =>
-    filteredOptionEntries.value.findIndex(({ option }) => option.value === activeValue.value),
-  );
+  const activeIndex = computed(() => {
+    const value = activeValue.value;
+    if (value === undefined) return -1;
+    const entries = filteredOptionEntries.value;
+    if (entries[activeIndexHint]?.option.value === value) return activeIndexHint;
+    return entries.findIndex(({ option }) => option.value === value);
+  });
   const optionId = (value: UseSelectOptionValue) =>
     `${opts.id()}-option-${typeof value}-${encodeURIComponent(String(value))}`;
   // Only publish a descendant once its row exists. Function refs clear it synchronously on unmount.
@@ -60,20 +68,40 @@ export function useSelect(opts: UseSelectOptions) {
     if (scrollToIndex) scrollToIndex(activeIndex.value);
     else mounted.get(activeValue.value!)?.scrollIntoView?.({ block: 'nearest' });
   }
-  function setActiveIndex(index: number) {
-    const option = filteredOptionEntries.value[index]?.option;
-    if (option && !option.disabled) activeValue.value = option.value;
+  function setActive(index: number, value: UseSelectOptionValue | undefined) {
+    activeIndexHint = index;
+    activeValue.value = value;
   }
   function resetActive() {
     const entries = filteredOptionEntries.value;
-    const selected = entries.findIndex(({ option }) => !option.disabled && isOptionSelected(option));
-    activeValue.value =
-      entries[selected >= 0 ? selected : entries.findIndex(({ option }) => !option.disabled)]?.option.value;
+    const model = opts.modelValue.value;
+    const multiple = opts.multiple();
+    const hasSelection = Array.isArray(model) ? multiple && model.length > 0 : !multiple && model !== undefined;
+    const valuesToIndex = multiple && Array.isArray(model) && model.length > 1 ? model : undefined;
+    let selectedValues: Set<UseSelectOptionValue> | undefined;
+    const selected = hasSelection
+      ? entries.findIndex(({ option }, index) => {
+          if (option.disabled) return false;
+          if (selectedValues) return selectedValues.has(option.value);
+          if (isModelOptionSelected(model, multiple, option)) return true;
+
+          // Index only after a miss when enough rows remain to amortize the build.
+          if (valuesToIndex && entries.length - index > 128) {
+            // This synchronous watch callback only needs a snapshot of the primitive values.
+            selectedValues = new Set(toRaw(valuesToIndex));
+          }
+          return false;
+        })
+      : -1;
+    const index = selected >= 0 ? selected : entries.findIndex(({ option }) => !option.disabled);
+    setActive(index, entries[index]?.option.value);
   }
+  // A pending external query keeps its result entries and still rechecks the active option.
   watch(
-    filteredOptionEntries,
-    (entries) => {
-      if (!entries.some(({ option }) => option.value === activeValue.value && !option.disabled)) resetActive();
+    [filteredOptionEntries, filterQuery],
+    ([entries]) => {
+      const active = entries[activeIndex.value]?.option;
+      if (!active || active.disabled) resetActive();
     },
     { immediate: true },
   );
@@ -88,7 +116,7 @@ export function useSelect(opts: UseSelectOptions) {
     },
     { flush: 'sync' },
   );
-  watch([opts.open, filteredOptionEntries], () => {
+  watch([opts.open, filteredOptionEntries, filterQuery], () => {
     void nextTick(revealActive);
   });
   watch(
@@ -135,8 +163,9 @@ export function useSelect(opts: UseSelectOptions) {
     const start = edge || activeIndex.value < 0 ? (direction === 1 ? -1 : entries.length) : activeIndex.value;
     for (let offset = 1; offset <= entries.length; offset++) {
       const index = (start + direction * offset + entries.length) % entries.length;
-      if (!entries[index]!.option.disabled) {
-        setActiveIndex(index);
+      const option = entries[index]!.option;
+      if (!option.disabled) {
+        setActive(index, option.value);
         break;
       }
     }
@@ -174,13 +203,17 @@ export function useSelect(opts: UseSelectOptions) {
       }
     }
   }
-  function optionProps(index: number, option: UseSelectOption) {
+  function getActivity(value: UseSelectOptionValue) {
+    if (activeValue.value !== value) return undefined;
+    return keyboardActive.value ? 'keyboard' : 'active';
+  }
+  function buildOptionProps(index: number, option: UseSelectOption, activity: ReturnType<typeof getActivity>) {
     return {
       id: optionId(option.value),
       'aria-posinset': index + 1,
       'aria-setsize': filteredOptionEntries.value.length,
-      'data-active': activeValue.value === option.value ? 'true' : undefined,
-      'data-keyboard-active': keyboardActive.value && activeValue.value === option.value ? 'true' : undefined,
+      'data-active': activity ? 'true' : undefined,
+      'data-keyboard-active': activity === 'keyboard' ? 'true' : undefined,
       'data-first': index === 0 ? 'true' : undefined,
       'data-last': index === filteredOptionEntries.value.length - 1 ? 'true' : undefined,
       ref: (instance: Element | ComponentPublicInstance | null) => {
@@ -194,10 +227,17 @@ export function useSelect(opts: UseSelectOptions) {
       },
       onPointermove: () => {
         keyboardActive.value = false;
-        if (!option.disabled) activeValue.value = option.value;
+        if (!option.disabled) setActive(index, option.value);
       },
       onClick: () => toggleOption(option),
     };
+  }
+  function optionProps(index: number, option: UseSelectOption) {
+    return buildOptionProps(index, option, getActivity(option.value));
+  }
+  function useOptionProps(index: () => number, option: () => UseSelectOption) {
+    const activity = computed(() => getActivity(option().value));
+    return () => buildOptionProps(index(), option(), activity.value);
   }
   function setScrollToIndex(callback: ((index: number) => void) | undefined) {
     scrollToIndex = callback;
@@ -222,6 +262,7 @@ export function useSelect(opts: UseSelectOptions) {
     activeDescendant,
     list,
     optionProps,
+    useOptionProps,
     isOptionSelected,
     toggleOption,
     clearValue,

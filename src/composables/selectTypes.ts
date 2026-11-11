@@ -1,5 +1,6 @@
 import type { Ref } from 'vue';
 
+/** Stable string or finite numeric identifier. NaN and infinities are not supported. */
 export type UseSelectOptionValue = string | number;
 export type UseSelectOption = {
   label: string;
