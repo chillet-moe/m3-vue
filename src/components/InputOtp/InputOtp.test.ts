@@ -86,7 +86,7 @@ describe('InputOtp', () => {
 
     const app = createApp({
       setup() {
-        const value = ref('');
+        const value = ref('1');
 
         return () =>
           h(InputOtp, {
@@ -103,22 +103,91 @@ describe('InputOtp', () => {
     app.mount(container);
     await nextTick();
 
-    const firstInput = container.querySelector<HTMLInputElement>('.m3-input-otp-input');
+    const inputs = Array.from(container.querySelectorAll<HTMLInputElement>('.m3-input-otp-input'));
 
-    firstInput?.dispatchEvent(
+    inputs[1]?.dispatchEvent(
       Object.assign(new Event('paste', { bubbles: true, cancelable: true }), {
         clipboardData: {
-          getData: () => '12a34',
+          getData: () => '2a3😺4 567',
         },
       }),
     );
 
     await nextTick();
-
-    const inputs = Array.from(container.querySelectorAll<HTMLInputElement>('.m3-input-otp-input'));
+    await nextTick();
 
     expect(inputs.map((input) => input.value).join('')).toBe('1234');
     expect(complete).toHaveBeenCalledWith('1234');
+    expect(document.activeElement).toBe(inputs[3]);
+
+    app.unmount();
+  });
+
+  it('distributes Unicode code points into the remaining text cells', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const value = ref('A');
+    const app = createApp(() =>
+      h(InputOtp, {
+        type: 'text',
+        length: 4,
+        modelValue: value.value,
+        'onUpdate:modelValue': (nextValue) => {
+          value.value = nextValue;
+        },
+      }),
+    );
+
+    app.mount(container);
+    const inputs = Array.from(container.querySelectorAll<HTMLInputElement>('.m3-input-otp-input'));
+    inputs[1]?.dispatchEvent(
+      Object.assign(new Event('paste', { bubbles: true, cancelable: true }), {
+        clipboardData: {
+          getData: () => '\u00a0😺\nB\tCD',
+        },
+      }),
+    );
+    await nextTick();
+    await nextTick();
+
+    expect(value.value).toBe('A😺BC');
+    expect(inputs.map((input) => input.value)).toEqual(['A', '😺', 'B', 'C']);
+    expect(document.activeElement).toBe(inputs[3]);
+
+    app.unmount();
+  });
+
+  it('truncates the model on shrink and renders empty cells when the length grows again', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const value = ref('A 😺 BC');
+    const length = ref(4);
+    const app = createApp(() =>
+      h(InputOtp, {
+        type: 'text',
+        length: length.value,
+        modelValue: value.value,
+        name: 'code',
+        'onUpdate:modelValue': (nextValue) => {
+          value.value = nextValue;
+        },
+      }),
+    );
+
+    app.mount(container);
+    const cells = () => Array.from(container.querySelectorAll<HTMLInputElement>('.m3-input-otp-input'));
+    expect(cells().map((input) => input.value)).toEqual(['A', '😺', 'B', 'C']);
+
+    length.value = 2;
+    await nextTick();
+    expect(value.value).toBe('A😺');
+    expect(cells().map((input) => input.value)).toEqual(['A', '😺']);
+
+    length.value = 4;
+    await nextTick();
+    expect(cells().map((input) => input.value)).toEqual(['A', '😺', '', '']);
+    expect(cells()[3]?.getAttribute('aria-label')).toBe('One-time code character 4 of 4');
+    expect(container.querySelector<HTMLInputElement>('input[name="code"]')?.value).toBe('A😺');
 
     app.unmount();
   });

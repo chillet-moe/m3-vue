@@ -89,10 +89,6 @@ const normalizedLength = computed(() => {
   return Math.max(1, Math.trunc(props.length));
 });
 
-const cellIndexes = computed(() => {
-  return Array.from({ length: normalizedLength.value }, (_, index) => index);
-});
-
 const inputIdPrefix = computed(() => {
   return props.id ?? `m3-input-otp-${generatedId}`;
 });
@@ -109,12 +105,13 @@ const resolvedInputMode = computed(() => {
   return props.inputMode ?? (props.type === 'number' ? 'numeric' : 'text');
 });
 
-const characters = computed(() => {
-  return sanitize(modelValue.value).slice(0, normalizedLength.value);
-});
-
 const digitValues = computed(() => {
-  return cellIndexes.value.map((index) => characters.value[index] ?? '');
+  const length = normalizedLength.value;
+  const cells = readCharacters(modelValue.value, length);
+  const populated = cells.length;
+  cells.length = length;
+  cells.fill('', populated);
+  return cells;
 });
 
 const groupLabel = computed(() => {
@@ -136,18 +133,34 @@ watch(normalizedLength, () => {
   inputRefs.value.length = normalizedLength.value;
 
   if (modelValue.value.length > normalizedLength.value) {
-    modelValue.value = characters.value.join('');
+    modelValue.value = digitValues.value.join('');
   }
 });
 
-function sanitize(value: string): string[] {
-  const chars = Array.from(value);
+function readCharacters(value: string, limit: number): string[] {
+  const characters: string[] = [];
 
   if (props.type === 'number') {
-    return chars.filter((char) => /\d/u.test(char));
+    // Only ASCII digits can fill numeric cells.
+    const firstDigit = '0'.charCodeAt(0);
+    const lastDigit = '9'.charCodeAt(0);
+    for (let index = 0; index < value.length; index++) {
+      const code = value.charCodeAt(index);
+      if (code < firstDigit || code > lastDigit) continue;
+      characters.push(value[index]);
+      if (characters.length >= limit) break;
+    }
+    return characters;
   }
 
-  return chars.filter((char) => !/\s/u.test(char));
+  const nonWhitespace = /\S/u;
+  for (const character of value) {
+    if (!nonWhitespace.test(character)) continue;
+    characters.push(character);
+    if (characters.length >= limit) break;
+  }
+
+  return characters;
 }
 
 function commitCharacters(nextCharacters: string[]) {
@@ -179,7 +192,7 @@ function moveFocus(index: number) {
 
 function applyText(value: string, startIndex: number) {
   const nextCharacters = digitValues.value.slice();
-  const chars = sanitize(value);
+  const chars = readCharacters(value, normalizedLength.value - startIndex);
 
   if (chars.length === 0) {
     nextCharacters[startIndex] = '';
@@ -188,13 +201,7 @@ function applyText(value: string, startIndex: number) {
   }
 
   for (const [offset, char] of chars.entries()) {
-    const index = startIndex + offset;
-
-    if (index >= normalizedLength.value) {
-      break;
-    }
-
-    nextCharacters[index] = char;
+    nextCharacters[startIndex + offset] = char;
   }
 
   commitCharacters(nextCharacters);
@@ -249,29 +256,22 @@ function handleKeydown(event: KeyboardEvent, index: number) {
     return;
   }
 
-  const nextCharacters = digitValues.value.slice();
-
   if (event.key === 'Backspace') {
     event.preventDefault();
+    const characters = digitValues.value;
+    const cellToClear = characters[index] ? index : index - 1;
+    if (cellToClear < 0) return;
 
-    if (nextCharacters[index]) {
-      nextCharacters[index] = '';
-      commitCharacters(nextCharacters);
-      moveFocus(index);
-      return;
-    }
-
-    if (index > 0) {
-      nextCharacters[index - 1] = '';
-      commitCharacters(nextCharacters);
-      moveFocus(index - 1);
-    }
-
+    const nextCharacters = characters.slice();
+    nextCharacters[cellToClear] = '';
+    commitCharacters(nextCharacters);
+    moveFocus(cellToClear);
     return;
   }
 
   if (event.key === 'Delete') {
     event.preventDefault();
+    const nextCharacters = digitValues.value.slice();
     nextCharacters[index] = '';
     commitCharacters(nextCharacters);
     moveFocus(index);
@@ -367,16 +367,16 @@ const shape = useShape(() => props.shape);
       />
 
       <input
-        v-for="index in cellIndexes"
+        v-for="(digit, index) in digitValues"
         :id="`${inputIdPrefix}-${index}`"
         :key="index"
         :ref="(el) => setInputRef(el, index)"
         class="m3-input-otp-input"
         data-scope="input-otp"
         data-part="input"
-        :data-filled="digitValues[index] ? 'true' : 'false'"
+        :data-filled="digit ? 'true' : 'false'"
         :type="props.mask ? 'password' : 'text'"
-        :value="digitValues[index]"
+        :value="digit"
         :placeholder="props.placeholder"
         :disabled="props.disabled"
         :readonly="props.readonly"
