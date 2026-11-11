@@ -30,7 +30,7 @@ describe('localization', () => {
     expect(context.messages.value).toBe(en.messages);
   });
 
-  it('reactively switches a provided locale definition', async () => {
+  it('reactively switches a provided locale without changing the fallback in a separate app', async () => {
     const locale = shallowRef<M3LocaleDefinition>(en);
     const Consumer = defineComponent({
       setup() {
@@ -44,14 +44,23 @@ describe('localization', () => {
     mountedApps.push(app);
     app.mount(container);
 
+    const fallbackContainer = document.createElement('div');
+    const fallbackApp = createApp(Consumer);
+    mountedApps.push(fallbackApp);
+    fallbackApp.mount(fallbackContainer);
+
     expect(container.firstElementChild?.getAttribute('data-locale')).toBe('en');
     expect(container.textContent).toBe('No matching options');
+    expect(fallbackContainer.firstElementChild?.hasAttribute('data-locale')).toBe(false);
+    expect(fallbackContainer.textContent).toBe('No matching options');
 
     locale.value = zhHans;
     await nextTick();
 
     expect(container.firstElementChild?.getAttribute('data-locale')).toBe('zh-Hans');
     expect(container.textContent).toBe('没有匹配的选项');
+    expect(fallbackContainer.firstElementChild?.hasAttribute('data-locale')).toBe(false);
+    expect(fallbackContainer.textContent).toBe('No matching options');
   });
 
   it('localizes picker, text field, and select accessibility text and keeps explicit props', async () => {

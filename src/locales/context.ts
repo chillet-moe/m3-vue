@@ -54,7 +54,12 @@ export function provideM3Locale(options: M3LocaleOptions = {}): M3LocaleContext 
 
 /** Returns the nearest locale context, falling back to the built-in English locale. */
 export function useM3Locale(): M3LocaleContext {
-  return inject(m3LocaleContextKey, undefined) ?? createM3LocaleContext();
+  return (
+    inject(m3LocaleContextKey, undefined) ?? {
+      locale: computed(() => undefined),
+      messages: computed(() => en.messages),
+    }
+  );
 }
 
 export function installM3Locale(app: App, options: M3LocaleOptions = {}): M3LocaleContext {
