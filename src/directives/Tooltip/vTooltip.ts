@@ -1,17 +1,16 @@
 import { bindElementEnvironment } from '@/internal/elementEnvironment';
-import type { TooltipDirective } from './types';
+import type { State, TooltipDirective } from './types';
 import '../../components/Tooltip/Tooltip.css';
 import './vTooltip.css';
 import { setupTooltip } from './setup';
 import { normalizeBinding as normalizeTooltipBinding } from './helpers';
 import { registerSharedPlainTooltip } from '@/internal/sharedPlainTooltip';
-import type { SharedPlainTooltipState } from '@/internal/sharedPlainTooltip';
 
 const STATE = Symbol('vtt_state');
 type TooltipStateEntry = {
   owner: unknown;
   shared: boolean;
-  state: SharedPlainTooltipState;
+  state: Pick<State, 'cleanup' | 'update'>;
 };
 
 const usesSharedPlainTooltip = (value: Exclude<Parameters<typeof setupTooltip>[1], undefined>) => {

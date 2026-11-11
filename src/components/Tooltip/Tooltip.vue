@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import './Tooltip.css';
+
 export type TooltipProps = {
   /** The variant of the tooltip. */
   variant?: 'plain' | 'rich';
@@ -21,5 +23,3 @@ const slots = defineSlots<{
     <slot name="default"></slot>
   </div>
 </template>
-
-<style src="./Tooltip.css"></style>

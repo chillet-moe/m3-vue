@@ -3,7 +3,7 @@ import {
   ensureTipElement,
   normalizeBinding,
   placementToTranslate,
-  positionFallback,
+  readFallbackPosition,
   resolveFallbackPlacement,
   resolveRenderedPlacement,
   supportsAnchorPositioning,
@@ -21,15 +21,26 @@ function placementToArea(p: Placement) {
   return 'block-start';
 }
 
+type TooltipSetupOptions = {
+  anchor?: HTMLElement;
+  anchorName?: string;
+  manual?: boolean;
+  triggerAria?: TooltipTriggerAriaMode;
+};
+
 export function setupTooltip(
   trigger: HTMLElement,
   binding: TooltipBindingValue,
-  options: {
-    anchor?: HTMLElement;
-    anchorName?: string;
-    manual?: boolean;
-    triggerAria?: TooltipTriggerAriaMode;
-  } = {},
+  options: TooltipSetupOptions = {},
+): State {
+  return bindTooltip(trigger, binding, options);
+}
+
+function bindTooltip(
+  trigger: HTMLElement,
+  binding: TooltipBindingValue,
+  options: TooltipSetupOptions,
+  existingState?: State,
 ): State {
   const document = trigger.ownerDocument;
   const window = document.defaultView!;
@@ -47,20 +58,8 @@ export function setupTooltip(
   const releaseAnchorName = acquireAnchorName(anchor, anchorName);
   const animMs = opts.animDuration;
   type DeferredOffsetHandle = { kind: 'idle'; id: number } | { kind: 'timeout'; id: number } | null;
-  const fallbackPlacements = new Map<Placement, ReturnType<typeof resolveFallbackPlacement>>();
-  const getFallbackPlacement = (placement = opts.placement) => {
-    const cached = fallbackPlacements.get(placement);
-    if (cached) {
-      return cached;
-    }
-
-    const resolvedPlacement = resolveFallbackPlacement(anchor, placement);
-    fallbackPlacements.set(placement, resolvedPlacement);
-    return resolvedPlacement;
-  };
-  const invalidateFallbackPlacements = () => {
-    fallbackPlacements.clear();
-  };
+  let fallbackPlacement: ReturnType<typeof resolveFallbackPlacement> | undefined;
+  const getFallbackPlacement = () => (fallbackPlacement ??= resolveFallbackPlacement(anchor, opts.placement));
   const applyOffsetCSS = (placement: Placement | ReturnType<typeof resolveFallbackPlacement> = opts.placement) => {
     const translate = placementToTranslate(placement, opts.offset);
 
@@ -167,7 +166,12 @@ export function setupTooltip(
   const addFallbackPositionListeners = () => {
     if (canAnchor || removeFallbackPositionListener) return;
 
-    removeFallbackPositionListener = registerSharedViewportChange(trigger.ownerDocument, onScrollOrResize);
+    // Generated native popovers contain only text. Authored or non-native surfaces
+    // can affect the geometry of other triggers, so keep their position in the update order.
+    removeFallbackPositionListener = registerSharedViewportChange(
+      trigger.ownerDocument,
+      created && canPopover ? { prepare: clearFallbackOffset, measure: measureFallbackPosition } : repositionFallback,
+    );
   };
 
   const syncClosedPopoverState = () => {
@@ -220,17 +224,36 @@ export function setupTooltip(
     return trigger.matches(':hover') || tip.matches(':hover') || hasKeyboardFocus() || tipHasFocus();
   };
 
-  const updatePositionIfNeeded = () => {
+  const clearFallbackOffset = () => {
+    if (isOpen) tip.style.removeProperty('translate');
+  };
+
+  const measureFallbackPosition = () => {
     if (!isOpen) return;
 
+    const { x, y, placement } = readFallbackPosition(tip, anchor, getFallbackPlacement());
+    return () => {
+      tip.style.position = 'fixed';
+      tip.style.left = `${x}px`;
+      tip.style.top = `${y}px`;
+      applyOffsetCSS(placement);
+    };
+  };
+
+  const repositionFallback = () => {
+    clearFallbackOffset();
+    measureFallbackPosition()?.();
+  };
+
+  const updatePositionIfNeeded = () => {
+    if (!isOpen) return;
+    if (!canAnchor) {
+      repositionFallback();
+      return;
+    }
+
     tip.style.removeProperty('translate');
-
-    const fallbackPlacement = getFallbackPlacement(opts.placement);
-    const effectivePlacement = canAnchor
-      ? resolveRenderedPlacement(tip, anchor, opts.placement, fallbackPlacement)
-      : positionFallback(tip, anchor, opts.placement, fallbackPlacement);
-
-    applyOffsetCSS(effectivePlacement);
+    applyOffsetCSS(resolveRenderedPlacement(tip, anchor, opts.placement, getFallbackPlacement()));
   };
 
   const syncOpenPosition = () => {
@@ -239,7 +262,7 @@ export function setupTooltip(
       return;
     }
 
-    updatePositionIfNeeded();
+    repositionFallback();
   };
 
   const openNow = () => {
@@ -318,6 +341,7 @@ export function setupTooltip(
   };
 
   const onDocPointerDown = (ev: Event) => {
+    if (!isOpen && !openTimer && !closeTimer && !longPressTimer) return;
     const target = ev.target as Node | null;
     if (!target) return;
     if (trigger.contains(target) || tip.contains(target)) return;
@@ -411,12 +435,6 @@ export function setupTooltip(
     }
   };
 
-  const onScrollOrResize = () => {
-    if (!canAnchor) {
-      updatePositionIfNeeded();
-    }
-  };
-
   const ac = new AbortController();
   const on = <T extends Event>(
     target: EventTarget,
@@ -482,8 +500,6 @@ export function setupTooltip(
     }
   };
 
-  let state!: State;
-
   const update = (next: TooltipBindingValue) => {
     const nextOpts = normalizeBinding(next);
     const nextTriggerAria = options.triggerAria ?? nextOpts.triggerAria;
@@ -494,18 +510,12 @@ export function setupTooltip(
     const targetChanged = opts.target !== nextOpts.target;
     const triggerAriaChanged = triggerAria !== nextTriggerAria;
     opts = nextOpts;
-    invalidateFallbackPlacements();
+    fallbackPlacement = undefined;
 
     if (targetChanged || triggerAriaChanged) {
       cleanup();
-      const rebuilt = setupTooltip(trigger, next, options);
-      state.tip = rebuilt.tip;
-      state.cleanup = rebuilt.cleanup;
-      state.update = rebuilt.update;
-      state.show = rebuilt.show;
-      state.hide = rebuilt.hide;
-      state.reposition = rebuilt.reposition;
-      state.usesAnchorPositioning = rebuilt.usesAnchorPositioning;
+      // The caller keeps the same handle for subsequent updates and teardown.
+      bindTooltip(trigger, next, options, state);
       return;
     }
 
@@ -541,7 +551,7 @@ export function setupTooltip(
     scheduleDeferredOffset();
   };
 
-  state = {
+  const bindingState: State = {
     tip,
     usesAnchorPositioning: canAnchor,
     cleanup,
@@ -550,6 +560,6 @@ export function setupTooltip(
     hide: closeNow,
     reposition: updatePositionIfNeeded,
   };
-
+  const state = existingState ? Object.assign(existingState, bindingState) : bindingState;
   return state;
 }

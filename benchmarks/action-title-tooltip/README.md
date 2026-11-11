@@ -25,10 +25,22 @@ The runner uses `/usr/bin/google-chrome-stable` by default. Set `CHROME_PATH` wh
 pass a URL and iteration count as the first and second arguments to override the defaults.
 
 `memory.html` isolates the shared runtime from Vue's development-mode component bookkeeping. It repeatedly registers
-2,000 triggers, opens one shared tooltip per batch, unregisters and removes every trigger, forces garbage collection,
-and records the heap after each of ten batches:
+2,000 titled triggers, verifies that the first trigger opens the shared tooltip with its expected text, unregisters
+and removes every trigger, forces garbage collection, and records the heap after each of ten batches:
 
 ```sh
 pnpm exec tsx benchmarks/action-title-tooltip/run.ts \
   'http://127.0.0.1:4173/benchmarks/action-title-tooltip/memory.html?count=2000&batches=10' 1
+```
+
+The published-package lifecycle benchmark compares 1, 240 and 1,200 Buttons, with and without titles.
+It warms each page, records Chromium traces of mounting, changing the button content and unmounting, and
+reports the JavaScript heap, DOM nodes and listeners after garbage collection. Compare `mounted.usedSize -
+before.usedSize` in the two revisions' `summary.json` files for the heap cost of keeping the Buttons mounted.
+Use the same lifecycle fixture on both revisions; copy the `lifecycle` directory into older checkouts.
+
+```sh
+pnpm run build
+CHROME_PATH=/usr/bin/google-chrome pnpm exec tsx benchmarks/action-title-tooltip/lifecycle/run.ts titled
+CHROME_PATH=/usr/bin/google-chrome pnpm exec tsx benchmarks/action-title-tooltip/lifecycle/run.ts untitled
 ```

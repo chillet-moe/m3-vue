@@ -1,7 +1,12 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import vTooltip, { normalizeBinding } from './vTooltip';
-import { inferPlacementFromRects, placementToTranslate, positionFallback, resolveFallbackPlacement } from './helpers';
+import {
+  inferPlacementFromRects,
+  placementToTranslate,
+  readFallbackPosition,
+  resolveFallbackPlacement,
+} from './helpers';
 import { setupTooltip } from './setup';
 
 const popoverOpenElements = new WeakSet<HTMLElement>();
@@ -342,6 +347,29 @@ describe('vTooltip directive', () => {
     state.cleanup();
   });
 
+  it('cleans up the current tooltip after repeated ARIA mode changes', () => {
+    const el = createTrigger();
+    const instance = {};
+    const first = { content: 'First', triggerAria: 'controls' } as const;
+    const second = { content: 'Second', triggerAria: 'describedby' } as const;
+    const third = { content: 'Third', triggerAria: 'controls' } as const;
+
+    vTooltip.mounted?.(el, { value: first, instance } as never);
+    vTooltip.updated?.(el, { value: second, oldValue: first, instance } as never);
+    vTooltip.updated?.(el, { value: third, oldValue: second, instance } as never);
+
+    const tip = document.getElementById(el.getAttribute('aria-controls')!);
+    expect(tip?.textContent).toBe('Third');
+    el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    vi.runOnlyPendingTimers();
+    expect(tip?.matches(':popover-open')).toBe(true);
+
+    vTooltip.unmounted?.(el);
+    expect(tip?.isConnected).toBe(false);
+    expect(el.hasAttribute('aria-controls')).toBe(false);
+    expect(el.hasAttribute('aria-expanded')).toBe(false);
+  });
+
   it('applies placement-based offset as translate during idle time while closed', () => {
     const el = createTrigger();
 
@@ -421,6 +449,39 @@ describe('vTooltip directive', () => {
     expect(setAttributeSpy).not.toHaveBeenCalled();
 
     setAttributeSpy.mockRestore();
+    state.cleanup();
+  });
+
+  it.each([
+    { eventType: 'pointerenter', pointerType: 'mouse' },
+    { eventType: 'pointerdown', pointerType: 'touch' },
+  ])('cancels a pending $pointerType open only on an outside press', ({ eventType, pointerType }) => {
+    const trigger = createTrigger();
+    const state = setupTooltip(trigger, {
+      content: 'Tooltip content',
+      popoverType: 'manual',
+      openDelay: 40,
+      longpressDelay: 40,
+    });
+    const start = () => trigger.dispatchEvent(new PointerEvent(eventType, { bubbles: true, pointerType }));
+    const press = (target: Element) =>
+      target.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'mouse' }));
+
+    start();
+    press(document.body);
+    vi.advanceTimersByTime(40);
+    expect(state.tip.matches(':popover-open')).toBe(false);
+
+    start();
+    press(trigger);
+    vi.advanceTimersByTime(40);
+    expect(state.tip.matches(':popover-open')).toBe(true);
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+    press(document.body);
+    expect(state.tip.matches(':popover-open')).toBe(false);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+
     state.cleanup();
   });
 
@@ -511,9 +572,32 @@ describe('vTooltip directive', () => {
 
     state.cleanup();
   });
+
+  it('re-resolves the fallback placement when updating an open tooltip', () => {
+    const el = createTrigger();
+    el.style.direction = 'ltr';
+    const state = setupTooltip(el, { content: 'Tooltip content', placement: 'start' }, { manual: true });
+    Object.defineProperty(el, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => createRect({ top: 96, bottom: 128, left: 120, right: 152, width: 32, height: 32 }),
+    });
+    Object.defineProperty(state.tip, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => createRect({ width: 48, height: 24 }),
+    });
+
+    state.show();
+    expect(state.tip.style.left).toBe('62px');
+
+    el.style.direction = 'rtl';
+    state.update({ content: 'Updated tooltip', placement: 'start' });
+    expect(state.tip.style.left).toBe('162px');
+
+    state.cleanup();
+  });
 });
 
-describe('positionFallback', () => {
+describe('fallback position', () => {
   afterEach(() => {
     document.body.innerHTML = '';
   });
@@ -546,10 +630,11 @@ describe('positionFallback', () => {
     expect(resolveFallbackPlacement(anchor, 'start')).toBe('top');
     expect(resolveFallbackPlacement(anchor, 'end')).toBe('bottom');
 
-    positionFallback(tip, anchor, 'end');
-
-    expect(tip.style.left).toBe('152px');
-    expect(tip.style.top).toBe('82px');
+    expect(readFallbackPosition(tip, anchor, resolveFallbackPlacement(anchor, 'end'))).toEqual({
+      x: 152,
+      y: 82,
+      placement: 'bottom',
+    });
   });
 
   it('returns the flipped placement when space is insufficient', () => {
@@ -565,9 +650,7 @@ describe('positionFallback', () => {
       value: () => createRect({ width: 48, height: 24 }),
     });
 
-    expect(positionFallback(tip, anchor, 'top')).toBe('bottom');
-    expect(tip.style.left).toBe('112px');
-    expect(tip.style.top).toBe('46px');
+    expect(readFallbackPosition(tip, anchor, 'top')).toEqual({ x: 112, y: 46, placement: 'bottom' });
   });
 });
 

@@ -180,12 +180,7 @@ export function resolveRenderedPlacement(
   return inferPlacementFromRects(tip.getBoundingClientRect(), anchor.getBoundingClientRect(), fallbackPlacement);
 }
 
-export function positionFallback(
-  tip: HTMLElement,
-  anchor: HTMLElement,
-  placement: Placement,
-  resolvedPlacement = resolveFallbackPlacement(anchor, placement),
-): PhysicalPlacement {
+export function readFallbackPosition(tip: HTMLElement, anchor: HTMLElement, resolvedPlacement: PhysicalPlacement) {
   const gap = 10;
   const pad = 8;
 
@@ -227,11 +222,7 @@ export function positionFallback(
 
   const { x, y } = tryPlace(nextPlacement);
 
-  tip.style.position = 'fixed';
-  tip.style.left = `${x}px`;
-  tip.style.top = `${y}px`;
-
-  return nextPlacement;
+  return { x, y, placement: nextPlacement };
 }
 
 function addTokenAttr(el: HTMLElement, name: string, token: string) {

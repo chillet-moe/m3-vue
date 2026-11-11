@@ -4,9 +4,10 @@ import { normalizeBinding } from '@/directives/Tooltip/helpers';
 import { setupTooltip } from '@/directives/Tooltip/setup';
 import type { NormalizedTooltipOptions, TooltipBindingValue } from '@/directives/Tooltip/types';
 
-export type SharedPlainTooltipState = {
+type SharedPlainTooltipState = {
   cleanup: () => void;
-  update: (binding: TooltipBindingValue) => void;
+  /** With no new binding, refresh only the active tooltip's text. */
+  update: (binding?: TooltipBindingValue) => void;
 };
 
 type Registration = {
@@ -28,8 +29,13 @@ const normalizePlainBinding = (binding: TooltipBindingValue): NormalizedTooltipO
 
 function createRuntime(document: Document, onEmpty: () => void): Runtime {
   const view = document.defaultView;
-  const registrations = new Map<HTMLElement, Registration[]>();
-  const getRegistration = (trigger: HTMLElement) => registrations.get(trigger)?.findLast((entry) => entry.opts.content);
+  // Only overlapping registrations need an ordered stack.
+  const registrations = new Map<EventTarget, Registration | Registration[]>();
+  const getRegistration = (trigger: EventTarget) => {
+    const entries = registrations.get(trigger);
+    if (Array.isArray(entries)) return entries.findLast((entry) => entry.opts.content);
+    return entries?.opts.content ? entries : undefined;
+  };
   const abortController = new (view?.AbortController ?? AbortController)();
   let sharedTip: HTMLElement | undefined;
   let activeTrigger: HTMLElement | undefined;
@@ -165,7 +171,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
 
   const findTrigger = (event: Event) => {
     for (const item of event.composedPath()) {
-      if (isHTMLElement(item) && getRegistration(item)?.opts.content) return item;
+      if (getRegistration(item) && isHTMLElement(item)) return item;
     }
     return undefined;
   };
@@ -197,9 +203,9 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   };
 
   const onPointerDown = (event: PointerEvent) => {
-    const trigger = findTrigger(event);
+    const trigger = event.pointerType === 'touch' ? findTrigger(event) : undefined;
     if (activeTrigger && (!event.target || !activeTrigger.contains(event.target as Node))) hide();
-    if (!trigger || event.pointerType !== 'touch' || !view) return;
+    if (!trigger || !view) return;
 
     startX = event.clientX;
     startY = event.clientY;
@@ -264,18 +270,23 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
   return {
     register(trigger, binding) {
       const registration = { opts: normalizePlainBinding(binding) };
-      const entries = registrations.get(trigger) ?? [];
-      entries.push(registration);
-      registrations.set(trigger, entries);
+      const entries = registrations.get(trigger);
+      if (Array.isArray(entries)) entries.push(registration);
+      else registrations.set(trigger, entries ? [entries, registration] : registration);
       let registered = true;
 
       return {
         cleanup() {
           if (!registered) return;
           registered = false;
-          const index = entries.indexOf(registration);
-          if (index >= 0) entries.splice(index, 1);
-          if (!entries.length) registrations.delete(trigger);
+          const current = registrations.get(trigger);
+          if (Array.isArray(current)) {
+            const index = current.indexOf(registration);
+            if (index >= 0) current.splice(index, 1);
+            if (current.length === 1) registrations.set(trigger, current[0]!);
+          } else {
+            registrations.delete(trigger);
+          }
           if (pendingTrigger === trigger) clearOpenTimer();
           if (activeRegistration === registration) releaseActiveTrigger();
           if (registrations.size === 0) destroy();
@@ -283,7 +294,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
         update(nextBinding) {
           if (!registered) return;
           const previousTriggerAria = registration.opts.triggerAria;
-          registration.opts = normalizePlainBinding(nextBinding);
+          if (nextBinding !== undefined) registration.opts = normalizePlainBinding(nextBinding);
 
           if (activeTrigger !== trigger || activeRegistration !== registration) return;
           if (!registration.opts.content || registration.opts.triggerAria !== previousTriggerAria) {
@@ -294,8 +305,9 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
           }
 
           const tip = ensureSharedTip();
+          // Replacing the active text keeps glyph rasterization in step with the popover transition.
           tip.textContent = registration.opts.content;
-          activeState?.update({ ...registration.opts, target: tip });
+          if (nextBinding !== undefined) activeState?.update({ ...registration.opts, target: tip });
         },
       };
     },
@@ -327,7 +339,7 @@ export function registerSharedPlainTooltip(
   return {
     cleanup,
     update(value) {
-      latest = value;
+      if (value !== undefined) latest = value;
       current.update(value);
     },
   };

@@ -2,7 +2,7 @@
 
 @layer tokens {
   :where(:root) {
-    /* Low-specificity public token placeholders; private tokens own defaults. */
+    /* Low-specificity placeholders for public tokens. */
     --md-plain-tooltip-container-color: initial;
     --md-plain-tooltip-container-shape: initial;
     --md-plain-tooltip-supporting-text-color: initial;
@@ -47,152 +47,6 @@
     --md-rich-tooltip-supporting-text-type: initial;
     --md-rich-tooltip-supporting-text-weight: initial;
   }
-
-  .m3-tooltip {
-    --_plain-tooltip-container-color: var(--md-plain-tooltip-container-color, var(--md-sys-color-inverse-surface));
-    --_plain-tooltip-container-shape: var(--md-plain-tooltip-container-shape, var(--md-shape-compact));
-    --_plain-tooltip-supporting-text-font: var(
-      --md-plain-tooltip-supporting-text-font,
-      var(--md-sys-typescale-body-small-font)
-    );
-    --_plain-tooltip-supporting-text-line-height: var(
-      --md-plain-tooltip-supporting-text-line-height,
-      var(--md-sys-typescale-body-small-line-height)
-    );
-    --_plain-tooltip-supporting-text-size: var(
-      --md-plain-tooltip-supporting-text-size,
-      var(--md-sys-typescale-body-small-size)
-    );
-    --_plain-tooltip-supporting-text-weight: var(
-      --md-plain-tooltip-supporting-text-weight,
-      var(--md-sys-typescale-body-small-weight)
-    );
-    --_plain-tooltip-supporting-text-tracking: var(
-      --md-plain-tooltip-supporting-text-tracking,
-      var(--md-sys-typescale-body-small-tracking)
-    );
-    --_plain-tooltip-supporting-text-type: var(
-      --md-plain-tooltip-supporting-text-type,
-      var(--md-sys-typescale-body-small)
-    );
-    --_plain-tooltip-supporting-text-color: var(
-      --md-plain-tooltip-supporting-text-color,
-      var(--md-sys-color-inverse-on-surface)
-    );
-
-    --_rich-tooltip-container-color: var(--md-rich-tooltip-container-color, var(--md-overlay-container-color));
-    --_rich-tooltip-container-elevation: var(--md-rich-tooltip-container-elevation, var(--md-overlay-elevation));
-    --_rich-tooltip-container-border-color: var(
-      --md-rich-tooltip-container-border-color,
-      var(--md-overlay-border-color)
-    );
-    --_rich-tooltip-container-shape: var(--md-rich-tooltip-container-shape, var(--md-shape-card));
-    --_rich-tooltip-action-label-text-font: var(
-      --md-rich-tooltip-action-label-text-font,
-      var(--md-sys-typescale-label-large-font)
-    );
-    --_rich-tooltip-action-label-text-line-height: var(
-      --md-rich-tooltip-action-label-text-line-height,
-      var(--md-sys-typescale-label-large-line-height)
-    );
-    --_rich-tooltip-action-label-text-size: var(
-      --md-rich-tooltip-action-label-text-size,
-      var(--md-sys-typescale-label-large-size)
-    );
-    --_rich-tooltip-action-label-text-weight: var(
-      --md-rich-tooltip-action-label-text-weight,
-      var(--md-sys-typescale-label-large-weight)
-    );
-    --_rich-tooltip-action-label-text-tracking: var(
-      --md-rich-tooltip-action-label-text-tracking,
-      var(--md-sys-typescale-label-large-tracking)
-    );
-    --_rich-tooltip-action-label-text-type: var(
-      --md-rich-tooltip-action-label-text-type,
-      var(--md-sys-typescale-label-large)
-    );
-    --_rich-tooltip-action-label-text-color: var(
-      --md-rich-tooltip-action-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_rich-tooltip-subhead-font: var(--md-rich-tooltip-subhead-font, var(--md-sys-typescale-title-small-font));
-    --_rich-tooltip-subhead-line-height: var(
-      --md-rich-tooltip-subhead-line-height,
-      var(--md-sys-typescale-title-small-line-height)
-    );
-    --_rich-tooltip-subhead-size: var(--md-rich-tooltip-subhead-size, var(--md-sys-typescale-title-small-size));
-    --_rich-tooltip-subhead-weight: var(--md-rich-tooltip-subhead-weight, var(--md-sys-typescale-title-small-weight));
-    --_rich-tooltip-subhead-tracking: var(
-      --md-rich-tooltip-subhead-tracking,
-      var(--md-sys-typescale-title-small-tracking)
-    );
-    --_rich-tooltip-subhead-type: var(--md-rich-tooltip-subhead-type, var(--md-sys-typescale-title-small));
-    --_rich-tooltip-subhead-color: var(--md-rich-tooltip-subhead-color, var(--md-sys-color-on-surface-variant));
-    --_rich-tooltip-supporting-text-font: var(
-      --md-rich-tooltip-supporting-text-font,
-      var(--md-sys-typescale-body-medium-font)
-    );
-    --_rich-tooltip-supporting-text-line-height: var(
-      --md-rich-tooltip-supporting-text-line-height,
-      var(--md-sys-typescale-body-medium-line-height)
-    );
-    --_rich-tooltip-supporting-text-size: var(
-      --md-rich-tooltip-supporting-text-size,
-      var(--md-sys-typescale-body-medium-size)
-    );
-    --_rich-tooltip-supporting-text-weight: var(
-      --md-rich-tooltip-supporting-text-weight,
-      var(--md-sys-typescale-body-medium-weight)
-    );
-    --_rich-tooltip-supporting-text-tracking: var(
-      --md-rich-tooltip-supporting-text-tracking,
-      var(--md-sys-typescale-body-medium-tracking)
-    );
-    --_rich-tooltip-supporting-text-type: var(
-      --md-rich-tooltip-supporting-text-type,
-      var(--md-sys-typescale-body-medium)
-    );
-    --_rich-tooltip-supporting-text-color: var(
-      --md-rich-tooltip-supporting-text-color,
-      var(--md-sys-color-on-surface-variant)
-    );
-    --_rich-tooltip-action-hover-label-text-color: var(
-      --md-rich-tooltip-action-hover-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_rich-tooltip-action-hover-state-layer-color: var(
-      --md-rich-tooltip-action-hover-state-layer-color,
-      var(--md-sys-color-primary)
-    );
-    --_rich-tooltip-action-hover-state-layer-opacity: var(
-      --md-rich-tooltip-action-hover-state-layer-opacity,
-      var(--md-sys-state-hover-state-layer-opacity)
-    );
-    --_rich-tooltip-action-focus-label-text-color: var(
-      --md-rich-tooltip-action-focus-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_rich-tooltip-action-focus-state-layer-color: var(
-      --md-rich-tooltip-action-focus-state-layer-color,
-      var(--md-sys-color-primary)
-    );
-    --_rich-tooltip-action-focus-state-layer-opacity: var(
-      --md-rich-tooltip-action-focus-state-layer-opacity,
-      var(--md-sys-state-focus-state-layer-opacity)
-    );
-    --_rich-tooltip-action-pressed-label-text-color: var(
-      --md-rich-tooltip-action-pressed-label-text-color,
-      var(--md-sys-color-primary)
-    );
-    --_rich-tooltip-action-pressed-state-layer-color: var(
-      --md-rich-tooltip-action-pressed-state-layer-color,
-      var(--md-sys-color-primary)
-    );
-    --_rich-tooltip-action-pressed-state-layer-opacity: var(
-      --md-rich-tooltip-action-pressed-state-layer-opacity,
-      var(--md-sys-state-pressed-state-layer-opacity)
-    );
-  }
 }
 
 @layer components {
@@ -210,42 +64,43 @@
   }
 
   .m3-tooltip[data-variant='plain'] {
-    background-color: var(--_plain-tooltip-container-color);
-    color: var(--_plain-tooltip-supporting-text-color);
-    border-radius: var(--_plain-tooltip-container-shape);
+    background-color: var(--md-plain-tooltip-container-color, var(--md-sys-color-inverse-surface));
+    color: var(--md-plain-tooltip-supporting-text-color, var(--md-sys-color-inverse-on-surface));
+    border-radius: var(--md-plain-tooltip-container-shape, var(--md-shape-compact));
 
     font-family:
-      var(--_plain-tooltip-supporting-text-font),
+      var(--md-plain-tooltip-supporting-text-font, var(--md-sys-typescale-body-small-font)),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--_plain-tooltip-supporting-text-size);
-    line-height: var(--_plain-tooltip-supporting-text-line-height);
-    font-weight: var(--_plain-tooltip-supporting-text-weight);
-    letter-spacing: var(--_plain-tooltip-supporting-text-tracking);
+    font-size: var(--md-plain-tooltip-supporting-text-size, var(--md-sys-typescale-body-small-size));
+    line-height: var(--md-plain-tooltip-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height));
+    font-weight: var(--md-plain-tooltip-supporting-text-weight, var(--md-sys-typescale-body-small-weight));
+    letter-spacing: var(--md-plain-tooltip-supporting-text-tracking, var(--md-sys-typescale-body-small-tracking));
   }
 
   .m3-tooltip[data-variant='rich'] {
-    background-color: var(--_rich-tooltip-container-color);
+    background-color: var(--md-rich-tooltip-container-color, var(--md-overlay-container-color));
     background-clip: padding-box;
-    border: var(--md-overlay-border-width) solid var(--_rich-tooltip-container-border-color);
-    box-shadow: var(--_rich-tooltip-container-elevation);
-    color: var(--_rich-tooltip-supporting-text-color);
-    border-radius: var(--_rich-tooltip-container-shape);
+    border: var(--md-overlay-border-width) solid
+      var(--md-rich-tooltip-container-border-color, var(--md-overlay-border-color));
+    box-shadow: var(--md-rich-tooltip-container-elevation, var(--md-overlay-elevation));
+    color: var(--md-rich-tooltip-supporting-text-color, var(--md-sys-color-on-surface-variant));
+    border-radius: var(--md-rich-tooltip-container-shape, var(--md-shape-card));
 
     font-family:
-      var(--_rich-tooltip-supporting-text-font),
+      var(--md-rich-tooltip-supporting-text-font, var(--md-sys-typescale-body-medium-font)),
       system-ui,
       -apple-system,
       Segoe UI,
       Roboto,
       sans-serif;
-    font-size: var(--_rich-tooltip-supporting-text-size);
-    line-height: var(--_rich-tooltip-supporting-text-line-height);
-    font-weight: var(--_rich-tooltip-supporting-text-weight);
-    letter-spacing: var(--_rich-tooltip-supporting-text-tracking);
+    font-size: var(--md-rich-tooltip-supporting-text-size, var(--md-sys-typescale-body-medium-size));
+    line-height: var(--md-rich-tooltip-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height));
+    font-weight: var(--md-rich-tooltip-supporting-text-weight, var(--md-sys-typescale-body-medium-weight));
+    letter-spacing: var(--md-rich-tooltip-supporting-text-tracking, var(--md-sys-typescale-body-medium-tracking));
   }
 
   /* 有 Anchor Positioning 就走 CSS 锚定 */

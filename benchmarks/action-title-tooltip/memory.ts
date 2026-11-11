@@ -50,14 +50,24 @@ async function run() {
 
     for (let index = 0; index < COUNT; index += 1) {
       const trigger = document.createElement('button');
-      trigger.setAttribute(actionTitleTooltipAttribute, `Action ${batch}-${index}`);
+      const title = `Action ${batch}-${index}`;
+      trigger.setAttribute(actionTitleTooltipAttribute, title);
       fragment.appendChild(trigger);
-      cleanups.push(registerActionTitleTooltip(trigger));
+      cleanups.push(registerActionTitleTooltip(trigger, title));
       firstTrigger ??= trigger;
     }
 
     container.appendChild(fragment);
-    firstTrigger?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    if (firstTrigger) {
+      firstTrigger.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      const tooltip = document.getElementById(firstTrigger.getAttribute('aria-describedby') ?? '');
+      if (
+        !tooltip?.matches(':popover-open') ||
+        tooltip.textContent !== firstTrigger.getAttribute(actionTitleTooltipAttribute)
+      ) {
+        throw new Error('Expected the first trigger to open its title tooltip');
+      }
+    }
     await new Promise<void>((resolve) => window.setTimeout(resolve, 0));
 
     for (const cleanup of cleanups) cleanup();
