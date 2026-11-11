@@ -5,11 +5,18 @@ import { Dialog } from '@/index';
 import './style.css';
 
 const open = ref(true);
+const nestedDialog = ref<HTMLDialogElement>();
+let nestedBackdrop: Animation | undefined;
 let closeStartedAt = 0;
 let closedElapsed: number | null = null;
 
 window.__nativeDialogExitFixture = {
   async close() {
+    nestedDialog.value!.showModal();
+    nestedBackdrop = nestedDialog.value!.animate(
+      { opacity: [0.5, 1] },
+      { duration: 1000, iterations: Infinity, pseudoElement: '::backdrop' },
+    );
     closeStartedAt = performance.now();
     open.value = false;
     await nextTick();
@@ -18,14 +25,23 @@ window.__nativeDialogExitFixture = {
     const animations = dialog.getAnimations({ subtree: true });
 
     return {
+      hasNestedBackdrop: animations.includes(nestedBackdrop),
       hasActionsTransition: animations.some(
         (animation) =>
           (animation.effect as KeyframeEffect | null)?.target === dialog.querySelector('.m3-dialog-actions'),
       ),
-      hasBackdropTransition: animations.some(
-        (animation) => (animation.effect as KeyframeEffect | null)?.pseudoElement === '::backdrop',
-      ),
+      hasBackdropTransition: animations.some((animation) => {
+        const effect = animation.effect as KeyframeEffect | null;
+        return effect?.target === dialog && effect.pseudoElement === '::backdrop';
+      }),
     };
+  },
+  finishNestedDialog() {
+    const state = nestedBackdrop!.playState;
+    nestedBackdrop!.cancel();
+    nestedBackdrop = undefined;
+    nestedDialog.value!.close();
+    return state;
   },
   getClosedElapsed() {
     return closedElapsed;
@@ -72,7 +88,10 @@ let app: App<Element> | undefined = createApp({
         },
         {
           headline: () => 'Exit lifecycle',
-          default: () => h('span', { class: 'infinite-slot-animation' }, 'Animated slot content'),
+          default: () => [
+            h('span', { class: 'infinite-slot-animation' }, 'Animated slot content'),
+            h('dialog', { ref: nestedDialog }, 'Nested dialog'),
+          ],
           actions: () => h('span', 'Action'),
         },
       );
@@ -84,9 +103,11 @@ declare global {
   interface Window {
     __nativeDialogExitFixture: {
       close(): Promise<{
+        hasNestedBackdrop: boolean;
         hasActionsTransition: boolean;
         hasBackdropTransition: boolean;
       }>;
+      finishNestedDialog(): AnimationPlayState;
       getClosedElapsed(): number | null;
       unmountWithPausedExit(): Promise<{ target: WeakRef<HTMLDialogElement>; motion: Animation }>;
     };

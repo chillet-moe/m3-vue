@@ -33,6 +33,7 @@ try {
   await page.waitForTimeout(700);
 
   const observedAnimations = await page.evaluate(() => window.__nativeDialogExitFixture.close());
+  assert(observedAnimations.hasNestedBackdrop, 'The fixture should exercise a descendant backdrop animation');
   assert(observedAnimations.hasActionsTransition, 'The fixture should exercise the owned actions transition');
   assert(observedAnimations.hasBackdropTransition, 'The fixture should exercise the ::backdrop transition');
 
@@ -44,6 +45,12 @@ try {
   assert(closedElapsed !== null);
   assert(closedElapsed >= 550, `closed fired before the 650ms owned exit completed (${closedElapsed}ms)`);
   assert(closedElapsed < 2000, `closed was blocked by the infinite slot animation (${closedElapsed}ms)`);
+
+  assert.equal(
+    await page.evaluate(() => window.__nativeDialogExitFixture.finishNestedDialog()),
+    'running',
+    'The parent must finish exiting while its descendant backdrop is still animating',
+  );
 
   const pausedExit = await page.evaluateHandle(() => window.__nativeDialogExitFixture.unmountWithPausedExit());
   const heap = await page.context().newCDPSession(page);

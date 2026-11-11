@@ -115,14 +115,13 @@ describe('useNativeDialog', () => {
     const ownedChildExit = createControlledAnimation();
     const backdropExit = createControlledAnimation();
     const slotAnimation = createControlledAnimation();
+    const slotBackdrop = createControlledAnimation();
+    Object.assign(backdropExit.animation, { effect: { target: mounted.dialog, pseudoElement: '::backdrop' } });
+    Object.assign(slotBackdrop.animation, { effect: { target: mounted.slotChild, pseudoElement: '::backdrop' } });
 
     Object.defineProperty(mounted.dialog, 'getAnimations', {
       configurable: true,
-      value: (options?: { pseudoElement?: string; subtree?: boolean }) => {
-        if (options?.pseudoElement === '::backdrop') {
-          return [backdropExit.animation];
-        }
-
+      value: (options?: { subtree?: boolean }) => {
         if (options?.subtree) {
           return [
             rootExit.animation,
@@ -130,6 +129,7 @@ describe('useNativeDialog', () => {
             ownedChildExit.animation,
             backdropExit.animation,
             slotAnimation.animation,
+            slotBackdrop.animation,
           ];
         }
 
@@ -168,37 +168,6 @@ describe('useNativeDialog', () => {
     expect(mounted.onClosed).toHaveBeenCalledOnce();
     expect(mounted.onClosed).toHaveBeenCalledWith('saved');
 
-    mounted.app.unmount();
-  });
-
-  it('finds backdrop animations through the subtree fallback', async () => {
-    const mounted = await mountNativeDialog();
-    const backdropExit = createControlledAnimation();
-    Object.defineProperty(backdropExit.animation, 'effect', {
-      configurable: true,
-      value: { pseudoElement: '::backdrop' },
-    });
-
-    Object.defineProperty(mounted.dialog, 'getAnimations', {
-      configurable: true,
-      value: (options?: { pseudoElement?: string; subtree?: boolean }) => {
-        if (options?.pseudoElement) {
-          throw new TypeError('pseudoElement is unsupported');
-        }
-
-        return options?.subtree ? [backdropExit.animation] : [];
-      },
-    });
-
-    mounted.dialog.close('fallback');
-    await Promise.resolve();
-    expect(mounted.onClosed).not.toHaveBeenCalled();
-
-    backdropExit.finish();
-    await backdropExit.animation.finished;
-    await Promise.resolve();
-
-    expect(mounted.onClosed).toHaveBeenCalledWith('fallback');
     mounted.app.unmount();
   });
 
