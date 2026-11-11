@@ -70,8 +70,13 @@ function showSnackbarWithDefaults(
     let settled = false;
     let timerId = 0;
     let startedAt = 0;
-    let view: Window;
+    let view: Window | undefined;
     let releaseEnvironment: (() => void) | undefined;
+
+    const releaseTimerEnvironment = () => {
+      releaseEnvironment?.();
+      releaseEnvironment = undefined;
+    };
 
     const finalizeResolve = (value: string) => {
       if (settled) {
@@ -92,7 +97,7 @@ function showSnackbarWithDefaults(
     };
 
     const clearTimer = () => {
-      if (!timerId) {
+      if (!view || !timerId) {
         return;
       }
 
@@ -110,7 +115,7 @@ function showSnackbarWithDefaults(
       },
       onHostUnmounted: (error) => {
         clearTimer();
-        releaseEnvironment?.();
+        releaseTimerEnvironment();
         finalizeReject(error);
       },
       render: () =>
@@ -158,12 +163,12 @@ function showSnackbarWithDefaults(
     const closeWithValue = (value: string) => {
       clearTimer();
       handle.close();
-      releaseEnvironment?.();
+      releaseTimerEnvironment();
       finalizeResolve(value);
     };
 
     const startTimer = () => {
-      if (settled || resolvedOptions.duration === null || timerId) {
+      if (!view || settled || resolvedOptions.duration === null || timerId) {
         return;
       }
 
@@ -192,17 +197,22 @@ function showSnackbarWithDefaults(
       } catch (error) {
         clearTimer();
         handle.close();
-        releaseEnvironment?.();
+        releaseTimerEnvironment();
         finalizeReject(error);
       }
     };
 
+    if (resolvedOptions.duration === null) return;
+
     releaseEnvironment = bindElementEnvironment(getOverlayHostElement(host)!, (document) => {
       view = document.defaultView!;
       startTimer();
-      return clearTimer;
+      return () => {
+        clearTimer();
+        view = undefined;
+      };
     });
-    if (settled) releaseEnvironment();
+    if (settled) releaseTimerEnvironment();
   });
 }
 

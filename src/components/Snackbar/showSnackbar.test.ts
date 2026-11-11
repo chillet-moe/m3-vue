@@ -390,17 +390,17 @@ describe('showSnackbar', () => {
     await expect(next).resolves.toBe('dismiss');
   });
 
-  it('resolves with the timeout value after the duration elapses', async () => {
+  it.each([0, 2_000])('resolves with the timeout value after %i ms', async (duration) => {
     vi.useFakeTimers();
 
     const result = showSnackbar(overlayHost, {
       message: 'Saved',
-      duration: 2_000,
+      duration,
       timeoutValue: 'expired',
     });
 
     await nextTick();
-    await vi.advanceTimersByTimeAsync(2_000);
+    await vi.advanceTimersByTimeAsync(duration);
 
     await expect(result).resolves.toBe('expired');
     await Promise.resolve();

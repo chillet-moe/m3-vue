@@ -29,40 +29,17 @@
 
   .m3-snackbar {
     --_snackbar-container-color: var(--md-snackbar-container-color, var(--md-sys-color-inverse-surface));
-    --_snackbar-container-shadow-color: var(--md-snackbar-container-shadow-color, var(--md-sys-color-shadow));
     --_snackbar-container-elevation: var(--md-snackbar-container-elevation, var(--md-sys-elevation-level3));
     --_snackbar-container-shape: var(--md-snackbar-container-shape, var(--_shape-radius, var(--md-shape-compact)));
     --_snackbar-container-padding-inline-start: var(--md-snackbar-container-padding-inline-start, 1rem);
     --_snackbar-container-padding-inline-end: var(--md-snackbar-container-padding-inline-end, 0.5rem);
     --_snackbar-container-padding-block: var(--md-snackbar-container-padding-block, 1rem);
     --_snackbar-with-single-line-container-height: var(--md-snackbar-with-single-line-container-height, 3rem);
-    --_snackbar-action-label-text-font: var(
-      --md-snackbar-action-label-text-font,
-      var(--md-sys-typescale-label-large-font)
-    );
-    --_snackbar-action-label-text-line-height: var(
-      --md-snackbar-action-label-text-line-height,
-      var(--md-sys-typescale-label-large-line-height)
-    );
-    --_snackbar-action-label-text-size: var(
-      --md-snackbar-action-label-text-size,
-      var(--md-sys-typescale-label-large-size)
-    );
-    --_snackbar-action-label-text-weight: var(
-      --md-snackbar-action-label-text-weight,
-      var(--md-sys-typescale-label-large-weight)
-    );
-    --_snackbar-action-label-text-tracking: var(
-      --md-snackbar-action-label-text-tracking,
-      var(--md-sys-typescale-label-large-tracking)
-    );
     --_snackbar-action-label-text-color: var(
       --md-snackbar-action-label-text-color,
       var(--md-sys-color-inverse-primary)
     );
     --_snackbar-icon-color: var(--md-snackbar-icon-color, var(--md-sys-color-inverse-on-surface));
-    --_snackbar-icon-size: var(--md-snackbar-icon-size, 1.25rem);
-    --_snackbar-supporting-text-font: var(--md-snackbar-supporting-text-font, var(--md-sys-typescale-body-medium-font));
     --_snackbar-supporting-text-line-height: var(
       --md-snackbar-supporting-text-line-height,
       var(--md-sys-typescale-body-medium-line-height)
