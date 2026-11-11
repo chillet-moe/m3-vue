@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 
 export type DividerProps = {
   /** Direction of the divider line. */
@@ -22,19 +22,15 @@ const props = withDefaults(defineProps<DividerProps>(), {
   spacing: undefined,
 });
 
-const rootStyle = computed<CSSProperties>(() => {
-  const style: Record<string, string> = {};
+function getRootStyle(): CSSProperties | undefined {
+  const { thickness, spacing } = props;
+  if (!thickness && !spacing) return;
 
-  if (props.thickness) {
-    style['--md-divider-thickness'] = props.thickness;
-  }
-
-  if (props.spacing) {
-    style['--md-divider-spacing'] = props.spacing;
-  }
-
-  return style as CSSProperties;
-});
+  return {
+    '--md-divider-thickness': thickness,
+    '--md-divider-spacing': spacing,
+  };
+}
 </script>
 
 <template>
@@ -44,7 +40,7 @@ const rootStyle = computed<CSSProperties>(() => {
     data-part="root"
     :data-orientation="props.orientation"
     :data-inset="props.inset"
-    :style="rootStyle"
+    :style="getRootStyle()"
     role="separator"
     :aria-orientation="props.orientation"
   />

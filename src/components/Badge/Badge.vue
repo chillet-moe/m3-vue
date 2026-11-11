@@ -64,18 +64,6 @@ const accessibleLabel = computed(() => {
   return undefined;
 });
 
-const ariaHidden = computed(() => {
-  if (props.hidden) {
-    return 'true';
-  }
-
-  if (accessibleLabel.value) {
-    return undefined;
-  }
-
-  return 'true';
-});
-
 defineSlots<{
   /** Optional label content for large badges. */
   default(): any;
@@ -89,7 +77,7 @@ defineSlots<{
     data-part="root"
     :data-variant="variant"
     :data-hidden="hidden ? 'true' : 'false'"
-    :aria-hidden="ariaHidden"
+    :aria-hidden="hidden || !accessibleLabel ? 'true' : undefined"
     :aria-label="accessibleLabel"
   >
     <span v-if="variant === 'large'" class="m3-badge-label" data-scope="badge" data-part="label">

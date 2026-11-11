@@ -107,6 +107,20 @@ try {
     .locator('[data-test="svg"]')
     .evaluate((root) => root.firstElementChild!.getBoundingClientRect().width / root.getBoundingClientRect().width);
   assert(Math.abs(svg - 5 / 6) < 0.001, 'Local source calibration overrides inherited ratio');
+  const tabContent = page.locator('[data-test="tabs"] [data-part="trigger-content"]');
+  const tabLayout = () =>
+    tabContent.evaluate((content) => {
+      const { flexDirection, gap } = getComputedStyle(content);
+      return { flexDirection, gap };
+    });
+  const withIcon = await tabLayout();
+  assert.equal(withIcon.flexDirection, 'row');
+  assert(parseFloat(withIcon.gap) > 0);
+  const toggleTabIcon = page.getByRole('button', { name: 'Toggle tab icon' });
+  await toggleTabIcon.click();
+  assert.deepEqual(await tabLayout(), { flexDirection: 'column', gap: '0px' });
+  await toggleTabIcon.click();
+  assert.deepEqual(await tabLayout(), withIcon);
   console.log('Icon density, scale, overrides, source calibration and content bounds passed.');
 } finally {
   await browser.close();

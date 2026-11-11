@@ -1,5 +1,12 @@
+<script lang="ts">
+import type { CSSProperties } from 'vue';
+
+const standaloneStyle: CSSProperties = Object.freeze({ '--m3-icon-weight': '400' });
+const inlineStyle: CSSProperties = Object.freeze({ fontWeight: 'inherit' });
+</script>
+
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue';
+import { computed } from 'vue';
 
 type IconWeight = number | string | 'inherit';
 
@@ -26,12 +33,12 @@ const slots = defineSlots<{
   default?(): any;
 }>();
 
-const resolvedWeight = computed<IconWeight>(() => {
-  const defaultWeight = variant === 'standalone' ? 400 : 'inherit';
-  return weight ?? defaultWeight;
-});
-
 const iconStyle = computed<CSSProperties>(() => {
+  if (!size && contentRatio === undefined && weight == null) {
+    return variant === 'standalone' ? standaloneStyle : inlineStyle;
+  }
+
+  const resolvedWeight = weight ?? (variant === 'standalone' ? 400 : 'inherit');
   const style: CSSProperties = {};
 
   if (size) {
@@ -41,10 +48,10 @@ const iconStyle = computed<CSSProperties>(() => {
     style['--md-icon-content-ratio'] = String(contentRatio);
   }
 
-  if (resolvedWeight.value === 'inherit') {
+  if (resolvedWeight === 'inherit') {
     style.fontWeight = 'inherit';
   } else {
-    style['--m3-icon-weight'] = String(resolvedWeight.value);
+    style['--m3-icon-weight'] = String(resolvedWeight);
   }
 
   return style;

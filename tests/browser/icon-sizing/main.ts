@@ -1,5 +1,5 @@
 import '@/styles/themes/default.css';
-import { createApp, h } from 'vue';
+import { createApp, h, ref } from 'vue';
 import {
   Button,
   IconButton,
@@ -17,6 +17,7 @@ import {
   Select,
 } from '@/index';
 const sizes = ['extra-small', 'small', 'medium', 'large', 'extra-large'] as const;
+const showTabIcon = ref(true);
 createApp({
   render: () =>
     h('main', [
@@ -26,9 +27,14 @@ createApp({
       ]),
       h(Tabs, { modelValue: 'one', 'data-test': 'tabs' }, () =>
         h(TabList, {}, () =>
-          h(Tab, { value: 'one' }, { default: () => 'Tab', icon: () => h(Icon, { name: 'settings' }) }),
+          h(
+            Tab,
+            { value: 'one' },
+            { default: () => 'Tab', icon: showTabIcon.value ? () => h(Icon, { name: 'settings' }) : undefined },
+          ),
         ),
       ),
+      h('button', { type: 'button', onClick: () => (showTabIcon.value = !showTabIcon.value) }, 'Toggle tab icon'),
       h(Select, {
         modelValue: 'one',
         options: [{ value: 'one', label: 'One' }],
