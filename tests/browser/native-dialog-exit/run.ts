@@ -65,6 +65,86 @@ try {
   await pausedExit.dispose();
   await heap.detach();
 
+  const focusedId = () => page.evaluate(() => document.activeElement?.id);
+  const trigger = page.locator('#surface-trigger');
+  const action = page.locator('#surface-action');
+  for (const kind of ['dialog', 'bottom-sheet', 'side-sheet'] as const) {
+    await page.evaluate((name) => window.__nativeDialogExitFixture.mountFocusSurface(name), kind);
+    const modal = page.locator(`dialog[data-scope="${kind}"]`);
+
+    await trigger.focus();
+    await page.keyboard.press('Tab');
+    assert.equal(await focusedId(), 'after-surface', kind);
+
+    await trigger.press('Enter');
+    const openedWithSlide = await modal.evaluate(async (element) => {
+      const slides = element
+        .getAnimations()
+        .some((animation) => (animation as CSSTransition).transitionProperty === 'transform');
+      await Promise.all(element.getAnimations({ subtree: true }).map((animation) => animation.finished));
+      return slides;
+    });
+    if (kind === 'side-sheet') {
+      assert(openedWithSlide, 'The side sheet must slide in from its closed position');
+    }
+    await action.focus();
+    assert.equal(await focusedId(), 'surface-action', kind);
+
+    const exit = await modal.evaluate((element: HTMLDialogElement) => {
+      element.close();
+      const animations = element.getAnimations({ subtree: true });
+      for (const animation of animations) animation.pause();
+      return {
+        hasMotion: animations.length > 0,
+        hasSlide: element
+          .getAnimations()
+          .some((animation) => (animation as CSSTransition).transitionProperty === 'transform'),
+      };
+    });
+    assert(exit.hasMotion, `${kind} must animate after native close`);
+    if (kind === 'side-sheet') {
+      assert(exit.hasSlide, 'The side sheet must slide out after native close');
+    }
+    await page.locator('#surface-trigger[data-close-count="1"]').waitFor();
+    assert.equal(await focusedId(), 'surface-trigger', kind);
+    assert.equal(await action.evaluate((element) => getComputedStyle(element).visibility), 'visible', kind);
+    await action.focus();
+    assert.equal(await focusedId(), 'surface-trigger', kind);
+    await page.keyboard.press('Tab');
+    assert.equal(await focusedId(), 'after-surface', kind);
+
+    await trigger.press('Enter');
+    const reopened = await modal.evaluate(async (element: HTMLDialogElement) => {
+      if (!element.open) return false;
+      const animations = element.getAnimations({ subtree: true });
+      for (const animation of animations) {
+        if (animation.playState === 'paused') animation.play();
+      }
+      await Promise.allSettled(animations.map((animation) => animation.finished));
+      return element.open;
+    });
+    assert(reopened, `${kind} must reopen during its exit`);
+    await action.focus();
+    assert.equal(await focusedId(), 'surface-action', kind);
+    assert.equal(await trigger.getAttribute('data-closed-count'), '0', `${kind} reopening must cancel the visual exit`);
+
+    await page.keyboard.press('Escape');
+    await page.locator('#surface-trigger[data-closed-count="1"]').waitFor();
+    assert.equal(await focusedId(), 'surface-trigger', kind);
+    if (kind === 'side-sheet') {
+      assert.equal(await modal.evaluate((element) => getComputedStyle(element).display), 'none');
+    }
+  }
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await trigger.press('Enter');
+  assert.equal(await focusedId(), 'surface-action');
+  await page.keyboard.press('Escape');
+  await page.locator('#surface-trigger[data-closed-count="2"]').waitFor();
+  assert.equal(await focusedId(), 'surface-trigger');
+  await page.keyboard.press('Tab');
+  assert.equal(await focusedId(), 'after-surface');
+
   console.log('Native dialog exit lifecycle browser regression passed.');
 } finally {
   await browser?.close();

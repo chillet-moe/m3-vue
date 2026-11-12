@@ -1,6 +1,6 @@
 import '@/styles/themes/default.css';
 import { createApp, h, nextTick, ref, type App } from 'vue';
-import { Dialog } from '@/index';
+import { BottomSheet, Dialog, SideSheet } from '@/index';
 
 import './style.css';
 
@@ -9,6 +9,9 @@ const nestedDialog = ref<HTMLDialogElement>();
 let nestedBackdrop: Animation | undefined;
 let closeStartedAt = 0;
 let closedElapsed: number | null = null;
+
+const focusSurfaces = { 'bottom-sheet': BottomSheet, dialog: Dialog, 'side-sheet': SideSheet };
+let focusApp: App<Element> | undefined;
 
 window.__nativeDialogExitFixture = {
   async close() {
@@ -45,6 +48,41 @@ window.__nativeDialogExitFixture = {
   },
   getClosedElapsed() {
     return closedElapsed;
+  },
+  mountFocusSurface(kind) {
+    focusApp?.unmount();
+    focusApp = createApp({
+      setup() {
+        const open = ref(false);
+        const closeCount = ref(0);
+        const closedCount = ref(0);
+
+        return () => [
+          h(
+            'button',
+            {
+              id: 'surface-trigger',
+              onClick: () => (open.value = true),
+              'data-close-count': closeCount.value,
+              'data-closed-count': closedCount.value,
+            },
+            'Open surface',
+          ),
+          h(
+            focusSurfaces[kind],
+            {
+              open: open.value,
+              'onUpdate:open': (nextOpen: boolean) => (open.value = nextOpen),
+              onClose: () => closeCount.value++,
+              onClosed: () => closedCount.value++,
+            },
+            { default: () => h('button', { id: 'surface-action', autofocus: true }, 'Surface action') },
+          ),
+          h('button', { id: 'after-surface' }, 'After surface'),
+        ];
+      },
+    });
+    focusApp.mount('#app');
   },
   async unmountWithPausedExit() {
     open.value = true;
@@ -109,6 +147,7 @@ declare global {
       }>;
       finishNestedDialog(): AnimationPlayState;
       getClosedElapsed(): number | null;
+      mountFocusSurface(kind: keyof typeof focusSurfaces): void;
       unmountWithPausedExit(): Promise<{ target: WeakRef<HTMLDialogElement>; motion: Animation }>;
     };
   }

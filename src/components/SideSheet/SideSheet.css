@@ -84,6 +84,9 @@
 
 @layer components {
   .m3-side-sheet {
+    --_side-sheet-slide-duration: 320ms;
+    --_side-sheet-exit-duration: max(var(--_side-sheet-slide-duration), var(--md-duration-spatial));
+
     position: fixed;
     inset-block: 0;
     inset-inline: auto 0;
@@ -93,7 +96,7 @@
     padding: 0;
 
     box-sizing: border-box;
-    display: block;
+    display: none;
 
     inline-size: min(var(--_side-sheet-width), 100vi);
     block-size: var(--_sheet-side-docked-container-height);
@@ -108,9 +111,9 @@
     pointer-events: none;
     transform: translateX(var(--_side-sheet-closed-translate));
     transition:
-      transform 320ms var(--md-timing-function-emphasized-decel),
-      overlay var(--md-duration-spatial) allow-discrete,
-      display var(--md-duration-spatial) allow-discrete;
+      transform var(--_side-sheet-slide-duration) var(--md-timing-function-emphasized-decel),
+      overlay var(--_side-sheet-exit-duration) allow-discrete,
+      display var(--_side-sheet-exit-duration) allow-discrete;
   }
 
   .m3-side-sheet[data-side='start'] {
@@ -147,6 +150,7 @@
   }
 
   .m3-side-sheet[open] {
+    display: block;
     pointer-events: auto;
     transform: translateX(0);
   }

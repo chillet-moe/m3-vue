@@ -7,6 +7,7 @@ type DialogRef = Readonly<Ref<HTMLDialogElement | null | undefined>>;
 
 export type UseNativeDialogOptions = {
   dialogRef: DialogRef;
+  surfaceRef: Readonly<Ref<HTMLElement | null | undefined>>;
   open: Ref<boolean>;
   exitElements?: () => readonly (HTMLElement | null | undefined)[];
   closeOnBackdrop?: MaybeRefOrGetter<boolean | undefined>;
@@ -25,7 +26,7 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
   const exitCompletion = useExitMotionCompletion<string, HTMLDialogElement>({
     rootRef: options.dialogRef,
     open: options.open,
-    ownedElements: options.exitElements,
+    ownedElements: () => [options.surfaceRef.value, ...(options.exitElements?.() ?? [])],
     onComplete: options.onClosed,
   });
 
@@ -107,6 +108,14 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
     return releaseScrollLockIfNeeded;
   });
 
+  const onBeforeToggle = (event: ToggleEvent) => {
+    const surface = options.surfaceRef.value;
+    if (surface) {
+      // Native focus restoration runs while the surface can still be painted for its exit.
+      surface.inert = event.newState === 'closed';
+    }
+  };
+
   const onCancel = (event: Event) => {
     options.onCancel?.(event);
   };
@@ -152,6 +161,7 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
     closeDialogElement,
     showModal,
     close,
+    onBeforeToggle,
     onCancel,
     onClose,
     onBackdropClick,

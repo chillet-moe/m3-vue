@@ -71,11 +71,12 @@ const rootStyle = computed<CSSProperties>(() => {
   return style as CSSProperties;
 });
 
-const { showModal, close, onCancel, onClose, onBackdropClick } = useNativeDialog({
+const { showModal, close, onBeforeToggle, onCancel, onClose, onBackdropClick } = useNativeDialog({
   dialogRef,
+  surfaceRef,
   open,
   closeOnBackdrop: () => props.closeOnBackdrop,
-  exitElements: () => [surfaceRef.value, iconRef.value, headlineRef.value, contentRef.value, actionsRef.value],
+  exitElements: () => [iconRef.value, headlineRef.value, contentRef.value, actionsRef.value],
   onCancel: (event) => emit('cancel', event),
   onClose: (returnValue) => emit('close', returnValue),
   onClosed: (returnValue) => emit('closed', returnValue),
@@ -103,6 +104,7 @@ const shape = useShape(() => props.shape);
     :style="rootStyle"
     :aria-labelledby="hasHeadline ? headlineId : undefined"
     :aria-describedby="hasContent ? contentId : undefined"
+    @beforetoggle="onBeforeToggle"
     @cancel="onCancel"
     @close="onClose"
     @click="onBackdropClick"

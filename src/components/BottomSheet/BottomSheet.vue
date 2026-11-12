@@ -111,11 +111,12 @@ const resetDrag = () => {
   touchDragActive = false;
 };
 
-const { showModal, close, onCancel, onClose, onBackdropClick } = useNativeDialog({
+const { showModal, close, onBeforeToggle, onCancel, onClose, onBackdropClick } = useNativeDialog({
   dialogRef,
+  surfaceRef,
   open,
   closeOnBackdrop: () => props.closeOnBackdrop,
-  exitElements: () => [surfaceRef.value, dragHandleRef.value, headlineRef.value, contentRef.value, actionsRef.value],
+  exitElements: () => [dragHandleRef.value, headlineRef.value, contentRef.value, actionsRef.value],
   onBeforeOpen: resetDrag,
   onCancel: (event) => emit('cancel', event),
   onClose: (returnValue) => {
@@ -347,6 +348,7 @@ const shape = useShape(() => props.shape);
     :style="rootStyle"
     :aria-labelledby="hasHeadline ? headlineId : undefined"
     :aria-describedby="hasContent ? contentId : undefined"
+    @beforetoggle="onBeforeToggle"
     @cancel="onCancel"
     @close="onClose"
     @click="onBackdropClick"

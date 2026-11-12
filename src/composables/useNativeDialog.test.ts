@@ -68,8 +68,9 @@ async function mountNativeDialog() {
         slotChildRef = ref<HTMLElement | null>(null);
         const { onClose: handleClose } = useNativeDialog({
           dialogRef,
+          surfaceRef,
           open,
-          exitElements: () => [surfaceRef.value, ownedChildRef.value],
+          exitElements: () => [ownedChildRef.value],
           onClose,
           onClosed,
         });
