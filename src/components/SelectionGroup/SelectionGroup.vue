@@ -17,7 +17,9 @@ provideSelectionGroup(modelValue, props);
 </script>
 
 <template>
-  <fieldset :aria-label="ariaLabel" data-scope="selection-group" data-part="root">
+  <fieldset class="m3-selection-group" :aria-label="ariaLabel" data-scope="selection-group" data-part="root">
     <slot />
   </fieldset>
 </template>
+
+<style src="./SelectionGroup.css"></style>

@@ -67,7 +67,6 @@
 
 @layer components {
   .m3-button-group {
-    all: unset;
     display: inline-flex;
     flex-shrink: 0;
 
