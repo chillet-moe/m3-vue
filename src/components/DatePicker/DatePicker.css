@@ -396,6 +396,7 @@
 
   .m3-date-picker-day {
     border: none;
+    padding: 0;
     display: grid;
     place-items: center;
     inline-size: var(--md-date-picker-docked-date-container-width, min(var(--_date-picker-day-size), calc(100cqi / 7)));

@@ -25,11 +25,13 @@
     inline-size: 100%;
     block-size: 1em;
     min-block-size: 1em;
+    margin: 0;
+    padding: 0;
+    border: 0;
     border-radius: inherit;
+    appearance: none;
     background: var(--_skeleton-container-color);
     color: transparent;
-    pointer-events: none;
-    user-select: none;
     overflow: hidden;
     flex: none;
   }

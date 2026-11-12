@@ -303,6 +303,7 @@
   .m3-time-picker-clock-option {
     position: absolute;
     border: none;
+    padding: 0;
     display: grid;
     place-items: center;
     inline-size: 2.5rem;

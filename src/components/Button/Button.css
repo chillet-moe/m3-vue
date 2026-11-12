@@ -200,10 +200,12 @@
   .m3-button {
     min-block-size: calc(max(1lh, var(--_button-icon-size)) + 0.25rem + 2 * var(--_button-outline-inset, 0px));
     height: var(--_button-height);
+    padding-block: 0;
     padding-inline: calc(var(--_button-padding-inline) - var(--_button-outline-inset, 0px));
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     border: var(--_button-outline-inset, 0) solid transparent;
     user-select: none;
     flex-shrink: 0;

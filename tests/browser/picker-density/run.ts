@@ -93,8 +93,49 @@ try {
       }
     }
   }
+
+  await page.getByTestId('picker-variant').selectOption('modal');
+  for (const [kind, scope, part, tokens] of [
+    [
+      'date',
+      'date-picker',
+      'day',
+      {
+        '--md-date-picker-docked-date-container-width': '24px',
+        '--md-date-picker-docked-date-label-text-size': '20px',
+      },
+    ],
+    [
+      'range',
+      'date-range-picker',
+      'day',
+      {
+        '--md-date-picker-docked-date-container-width': '24px',
+        '--md-date-picker-docked-date-label-text-size': '20px',
+      },
+    ],
+    ['time', 'time-picker', 'clock-option', { '--md-sys-typescale-body-large-size': '30px' }],
+  ] as const) {
+    await page.getByTestId(`open-${kind}`).click();
+    const picker = page.locator(`[data-scope="${scope}"][data-part="root"]`).last();
+    const option = picker.locator(`[data-part="${part}"]`).filter({ hasText: /^12$/ }).first();
+    await option.waitFor();
+    await picker.evaluate((el, tokens) => {
+      for (const [token, value] of Object.entries(tokens)) (el as HTMLElement).style.setProperty(token, value);
+    }, tokens);
+    const offset = await option.evaluate((el) => {
+      const range = el.ownerDocument.createRange();
+      range.selectNodeContents(el);
+      const label = range.getBoundingClientRect();
+      const cell = el.getBoundingClientRect();
+      return label.left + label.width / 2 - (cell.left + cell.width / 2);
+    });
+    assert(Math.abs(offset) < 0.5, `${kind} label is centered (offset: ${offset}px)`);
+    await page.keyboard.press('Escape');
+    await picker.waitFor({ state: 'hidden' });
+  }
   console.log(
-    'Picker density: inherited actions, square dates, lists, time inputs, stable clock and viewport bounds passed.',
+    'Picker density: inherited actions, square dates, lists, time inputs, centered numbers and viewport bounds passed.',
   );
 } finally {
   await browser.close();

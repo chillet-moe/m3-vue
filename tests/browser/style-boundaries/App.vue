@@ -16,11 +16,13 @@ import {
   PaginationLink,
   Select,
   SelectionGroup,
+  Skeleton,
   TextField,
 } from '@/index';
 
 const options = [{ label: 'Option', value: 'one' }];
 const cardSubmissions = ref(0);
+const skeletonSubmissions = ref(0);
 </script>
 
 <template>
@@ -75,6 +77,29 @@ const cardSubmissions = ref(0);
     <Card clickable data-testid="clickable-card"><span class="card-content">Card</span></Card>
     <Card clickable type="submit" data-testid="submit-card"><span class="card-content">Submit</span></Card>
     <output data-testid="card-submissions">{{ cardSubmissions }}</output>
+  </form>
+
+  <div>
+    <Button data-testid="multiline-button">
+      <span><span data-first-line>Short</span><br />Longer second line</span>
+    </Button>
+    <Button href="#multiline" data-testid="multiline-link">
+      <span><span data-first-line>Short</span><br />Longer second line</span>
+    </Button>
+  </div>
+
+  <form data-testid="skeleton-form" @submit.prevent="skeletonSubmissions++">
+    <Button data-testid="before-skeleton">Before</Button>
+    <Skeleton data-testid="skeleton-div" />
+    <Skeleton as="p" data-testid="skeleton-paragraph" />
+    <Skeleton as="fieldset" data-testid="skeleton-fieldset" />
+    <Skeleton as="button" type="submit" data-testid="skeleton-button" />
+    <Skeleton as="input" name="placeholder" value="ignored" />
+    <Skeleton as="input" type="image" />
+    <Skeleton as="a" href="#placeholder" />
+    <input data-testid="after-skeleton" name="actual" value="kept" />
+    <button type="submit">Submit</button>
+    <output>{{ skeletonSubmissions }}</output>
   </form>
 
   <div data-testid="list">

@@ -77,6 +77,30 @@ try {
   await page.getByTestId('submit-card').click();
   assert.equal(await cardSubmissions.textContent(), '1', 'An explicit submit type must still submit the form');
 
+  for (const name of ['multiline-button', 'multiline-link']) {
+    const offset = await page.getByTestId(name).evaluate((el) => {
+      const label = el.querySelector('[data-first-line]')!.getBoundingClientRect();
+      const button = el.getBoundingClientRect();
+      return label.left + label.width / 2 - (button.left + button.width / 2);
+    });
+    assert(Math.abs(offset) < 0.5, `${name} first line is centered`);
+  }
+
+  const skeletonBox = ['margin', 'padding', 'border-width', 'height'];
+  const defaultSkeletonBox = await readStyle(page.getByTestId('skeleton-div'), skeletonBox);
+  for (const name of ['skeleton-paragraph', 'skeleton-fieldset', 'skeleton-button']) {
+    assert.deepEqual(await readStyle(page.getByTestId(name), skeletonBox), defaultSkeletonBox, name);
+  }
+
+  await page.getByTestId('before-skeleton').focus();
+  await page.keyboard.press('Tab');
+  assert(await page.getByTestId('after-skeleton').evaluate((el) => el.matches(':focus')));
+  const skeletonForm = page.getByTestId('skeleton-form');
+  const skeletonFormData = await skeletonForm.evaluate((el) => [...new FormData(el as HTMLFormElement)]);
+  assert.deepEqual(skeletonFormData, [['actual', 'kept']]);
+  await page.keyboard.press('Enter');
+  assert.equal(await skeletonForm.locator('output').textContent(), '1', 'The real submit button receives Enter');
+
   for (const [name, display] of [
     ['selection-group', 'block'],
     ['button-group', 'inline-flex'],
@@ -116,7 +140,7 @@ try {
     }
   }
   assert.deepEqual(await readStyle(page.getByTestId('square-middle'), ['border-radius']), ['5px']);
-  console.log('Prose boundaries, native Card and selection group defaults, and independent list group corners passed.');
+  console.log('Prose boundaries, native control defaults, and independent list group corners passed.');
 } finally {
   await browser?.close();
   await server.close();
