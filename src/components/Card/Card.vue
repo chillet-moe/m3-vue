@@ -45,6 +45,7 @@ const shape = useShape(() => props.shape);
   <button
     v-state-layer
     v-else
+    type="button"
     :class="['m3-card', 'm3-state-layer']"
     data-scope="card"
     data-part="root"

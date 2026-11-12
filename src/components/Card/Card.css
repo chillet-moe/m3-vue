@@ -100,6 +100,10 @@
     background-color: var(--md-color-container);
   }
 
+  button.m3-card {
+    padding: 0;
+  }
+
   .m3-card[data-pressed] {
     cursor: var(--md-cursor-action);
   }

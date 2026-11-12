@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import {
   Breadcrumb,
   Button,
@@ -19,6 +20,7 @@ import {
 } from '@/index';
 
 const options = [{ label: 'Option', value: 'one' }];
+const cardSubmissions = ref(0);
 </script>
 
 <template>
@@ -67,6 +69,13 @@ const options = [{ label: 'Option', value: 'one' }];
   </SelectionGroup>
   <ButtonGroup data-testid="button-group"><Button>Action</Button></ButtonGroup>
   <ChipGroup data-testid="chip-group"><Chip>Filter</Chip></ChipGroup>
+
+  <form @submit.prevent="cardSubmissions++">
+    <Card data-testid="passive-card"><span class="card-content">Card</span></Card>
+    <Card clickable data-testid="clickable-card"><span class="card-content">Card</span></Card>
+    <Card clickable type="submit" data-testid="submit-card"><span class="card-content">Submit</span></Card>
+    <output data-testid="card-submissions">{{ cardSubmissions }}</output>
+  </form>
 
   <div data-testid="list">
     <ListItem title="Standalone item" active data-testid="custom" style="--md-item-container-shape: 12px" />
@@ -123,5 +132,11 @@ const options = [{ label: 'Option', value: 'one' }];
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2rem;
+}
+
+.card-content {
+  display: block;
+  inline-size: 4rem;
+  block-size: 1.5rem;
 }
 </style>

@@ -65,6 +65,18 @@ try {
     '14px',
   ]);
 
+  const passiveCard = page.getByTestId('passive-card');
+  const clickableCard = page.getByTestId('clickable-card');
+  const cardGeometry = ['padding', 'width', 'height'];
+  assert.deepEqual(await readStyle(clickableCard, cardGeometry), await readStyle(passiveCard, cardGeometry));
+
+  const cardSubmissions = page.getByTestId('card-submissions');
+  await clickableCard.click();
+  await clickableCard.press('Enter');
+  assert.equal(await cardSubmissions.textContent(), '0', 'Clickable Card must not submit its form by default');
+  await page.getByTestId('submit-card').click();
+  assert.equal(await cardSubmissions.textContent(), '1', 'An explicit submit type must still submit the form');
+
   for (const [name, display] of [
     ['selection-group', 'block'],
     ['button-group', 'inline-flex'],
@@ -104,7 +116,7 @@ try {
     }
   }
   assert.deepEqual(await readStyle(page.getByTestId('square-middle'), ['border-radius']), ['5px']);
-  console.log('Prose boundaries, neutral selection groups and independent list group corners passed.');
+  console.log('Prose boundaries, native Card and selection group defaults, and independent list group corners passed.');
 } finally {
   await browser?.close();
   await server.close();
