@@ -27,6 +27,8 @@ await import('./shapes/run');
 
 await import('./select-virtual/run');
 
+await import('./select-validation/run');
+
 await import('./icon-sizing/run');
 
 await import('./scrollbars/run');

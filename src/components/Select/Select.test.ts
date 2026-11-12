@@ -361,7 +361,7 @@ describe('Select', () => {
 
     app.mount(form);
     await nextTick();
-    expect(form.querySelectorAll('input[type="hidden"]')).toHaveLength(0);
+    expect([...new FormData(form)]).toEqual([]);
 
     name.value = 'coffee';
     await nextTick();
@@ -370,7 +370,6 @@ describe('Select', () => {
     name.value = '';
     await nextTick();
     expect([...new FormData(form)]).toEqual([]);
-    expect(form.querySelectorAll('input[type="hidden"]')).toHaveLength(0);
 
     app.unmount();
   });
@@ -429,7 +428,7 @@ describe('Select', () => {
   it('clears a multiple selection to an empty array from the trailing clear button', async () => {
     installPopoverPolyfill();
 
-    const container = document.createElement('div');
+    const container = document.createElement('form');
     document.body.appendChild(container);
 
     let selectedValues: SelectOption['value'][] = ['espresso', 'cold-brew'];
@@ -469,7 +468,7 @@ describe('Select', () => {
     expect(selectedValues).toEqual([]);
     expect(changedValue).toEqual([]);
     expect(getSelectInput(container)?.value).toBe('');
-    expect(container.querySelectorAll('input[type="hidden"]')).toHaveLength(0);
+    expect([...new FormData(container)]).toEqual([]);
 
     app.unmount();
   });

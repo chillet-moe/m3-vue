@@ -7,6 +7,7 @@ import {
   TransitionGroup,
   computed,
   inject,
+  nextTick,
   provide,
   unref,
   onBeforeUnmount,
@@ -91,7 +92,7 @@ export type SelectProps = {
   /** Whether the control is required. */
   required?: boolean;
 
-  /** Name used for hidden inputs during form submission. */
+  /** Name used for the selected values during form submission. */
   name?: string;
 
   /** Placeholder shown when nothing is selected. */
@@ -225,10 +226,6 @@ const menuId = computed(() => {
   return `${triggerId.value}-menu`;
 });
 
-const invalid = computed(() => {
-  return Boolean(props.error);
-});
-
 const hasLeading = computed(() => {
   return Boolean(slots.leading);
 });
@@ -255,6 +252,14 @@ const select = useSelect({
     void menuRef.value?.show(false, triggerRef.value);
   },
   hideMenu: () => menuRef.value?.hide(),
+});
+
+const validationMessage = ref('');
+const missingSelection = computed(() => props.required && !props.disabled && !select.hasValue.value);
+const fieldError = computed(() => props.error || validationMessage.value);
+const invalid = computed(() => Boolean(fieldError.value));
+watch(missingSelection, (missing) => {
+  if (!missing) validationMessage.value = '';
 });
 
 provide(selectItemContextKey, {
@@ -299,6 +304,15 @@ const controlAttrs = computed(() => {
   delete forwarded.style;
   return forwarded;
 });
+
+function handleNativeSelectFocus(event: FocusEvent) {
+  const nativeSelect = event.currentTarget as HTMLSelectElement;
+  validationMessage.value = nativeSelect.validationMessage;
+  // Focus the visible control after its error description has been rendered.
+  void nextTick(() => {
+    if (nativeSelect.matches(':focus')) select.focus();
+  });
+}
 
 function handleFocus(event: FocusEvent) {
   emit('focus', event);
@@ -412,10 +426,9 @@ provideShape(() => props.shape);
         :label="props.label"
         :label-behavior="labelBehavior"
         :supporting-text="props.supportingText"
-        :error="props.error"
+        :error="fieldError"
         :disabled="props.disabled"
         :visually-focused="open"
-        :required="props.required"
         :readonly="!props.filterable"
         :placeholder="textFieldPlaceholder"
         :size="effectiveSize"
@@ -465,13 +478,27 @@ provideShape(() => props.shape);
       </TextField>
     </div>
 
-    <input
-      v-for="(submittedValue, index) in props.name ? select.submittedValues.value : []"
-      :key="`${props.name}-${submittedValue}-${index}`"
-      type="hidden"
+    <select
+      v-if="props.required || props.name"
+      class="m3-select-native"
       :name="props.name"
-      :value="submittedValue"
-    />
+      :form="typeof controlAttrs.form === 'string' ? controlAttrs.form : undefined"
+      :multiple="props.multiple"
+      :required="props.required"
+      :disabled="props.disabled"
+      tabindex="-1"
+      aria-hidden="true"
+      @focus="handleNativeSelectFocus"
+    >
+      <!-- A separate placeholder keeps an authored empty-string option valid. -->
+      <option v-if="!props.multiple" value="" disabled />
+      <option
+        v-for="(submittedValue, index) in select.submittedValues.value"
+        :key="index"
+        :value="submittedValue"
+        :selected.attr="true"
+      />
+    </select>
 
     <Menu
       :id="menuId"

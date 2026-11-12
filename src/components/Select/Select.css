@@ -8,6 +8,14 @@
     cursor: var(--md-cursor-action);
   }
 
+  .m3-select-native {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .m3-select-field .m3-text-field-input[readonly] {
     cursor: var(--md-cursor-action);
     caret-color: transparent;
