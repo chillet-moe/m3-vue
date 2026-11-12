@@ -33,10 +33,20 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
 
   node.appendChild(ripple);
 
-  // Remove the helper node after both the spread and fade-out finish.
-  const view = node.ownerDocument.defaultView!;
+  // Capture this press's animations before an activation handler can hide the ripple.
+  const animations = ripple
+    .getAnimations?.()
+    .filter(
+      (animation) =>
+        'animationName' in animation &&
+        (animation.animationName === 'ripple-expand' || animation.animationName === 'ripple-fade-out'),
+    );
+  if (!animations?.length) {
+    ripple.remove();
+    return;
+  }
+
   const cleanup = () => {
-    view.clearTimeout(timer);
     ripple.remove();
 
     const current = rippleCleanups.get(node);
@@ -47,7 +57,6 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
       if (!current.size) rippleCleanups.delete(node);
     }
   };
-  const timer = view.setTimeout(cleanup, duration + 650);
 
   const previous = rippleCleanups.get(node);
   if (typeof previous === 'function') {
@@ -57,6 +66,8 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
   } else {
     rippleCleanups.set(node, cleanup);
   }
+
+  void Promise.all(animations.map((animation) => animation.finished)).then(cleanup, cleanup);
 };
 
 function isKeyboardRippleEvent(event: KeyboardEvent) {

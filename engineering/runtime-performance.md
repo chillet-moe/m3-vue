@@ -151,11 +151,11 @@ The public composable methods remain available for callers that invoke press han
 ### Active ripple cleanup
 
 StateLayer stores a cleanup callback directly for the first ripple on a control. It creates a Set only when a
-second ripple overlaps. The callbacks still remove their helper nodes and cancel their timers when the control
-is moved to another document or unmounted.
+second ripple overlaps. The callbacks remove their helper nodes when the CSS animations finish or are canceled,
+and when the control moves to another document or unmounts.
 
-Five paired Chromium production runs against `db38d2c` paused cleanup timers while taking heap samples after
-garbage collection. Values are median JavaScript heap growth over the mounted controls. The 80-control case
+Five paired Chromium production runs of the former timer-based implementation against `db38d2c` paused cleanup
+timers while taking heap samples after garbage collection. Values are median JavaScript heap growth over the mounted controls. The 80-control case
 used normal motion; the 400-control stress case used reduced motion.
 
 | Buttons with one ripple each | While active, before → after (KiB) | After cleanup, before → after (KiB) |
@@ -175,10 +175,13 @@ pnpm run build
 pnpm exec tsx benchmarks/state-layer/memory.ts .tmp/state-layer/memory/current
 ```
 
-The output records the mounted, active and settled heap samples for every run. The published builds reduced
-active heap growth from 198.5 to 192.3 KiB at 80 Buttons and from 469.5 to 438.2 KiB at 400. For the baseline,
-copy `benchmarks/state-layer/` into a checkout of `db38d2c` and use a separate output directory. Set `CHROME_PATH`
-to keep the Chromium binary fixed between revisions.
+The output records the mounted, active and settled heap samples for every run. It pauses the active CSS animations
+while sampling and checks that reduced motion retains zero ripple nodes. Set `CHROME_PATH` to keep the Chromium
+binary fixed between revisions.
+
+The timer-based published builds reduced active heap growth from 198.5 to 192.3 KiB at 80 Buttons and from
+469.5 to 438.2 KiB at 400. To reproduce those measurements, use the benchmark from `b2dcf0d` for both the timer-based
+revision and the `db38d2c` baseline, with separate output directories.
 
 A distance probe reduces four identical corner calculations to one for ripples centered exactly on the control.
 It matches 40 fixed frames, including keyboard and pointer overlap. In five rotated Chromium rounds the single

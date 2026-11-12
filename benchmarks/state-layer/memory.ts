@@ -19,12 +19,13 @@ try {
   try {
     browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
     const results = [];
-    for (const count of [80, 400]) {
+    for (const [count, reducedMotion] of [
+      [80, 'no-preference'],
+      [400, 'reduce'],
+    ] as const) {
+      const expectedRipples = reducedMotion === 'reduce' ? 0 : count;
       for (let round = 0; round < 5; round++) {
-        const page = await browser.newPage({
-          viewport: { width: 1000, height: 780 },
-          reducedMotion: count === 400 ? 'reduce' : 'no-preference',
-        });
+        const page = await browser.newPage({ viewport: { width: 1000, height: 780 }, reducedMotion });
         try {
           await openFixture(page, server.resolvedUrls!.local[0]!);
           const cdp = await page.context().newCDPSession(page);
@@ -34,10 +35,6 @@ try {
             return { ...(await cdp.send('Runtime.getHeapUsage')), ...(await cdp.send('Memory.getDOMCounters')) };
           };
 
-          // Keep cleanup timers paused until every active ripple has been sampled.
-          const epoch = Date.UTC(2026, 0, 1);
-          await page.clock.install({ time: epoch });
-          await page.clock.pauseAt(epoch + 1000);
           await page.evaluate((count) => window.mountStateLayerBenchmark(count), count);
           const buttons = page.getByRole('button');
           await buttons.first().evaluate((button) => button.getBoundingClientRect());
@@ -49,17 +46,27 @@ try {
           await buttons.evaluateAll((nodes) => {
             for (const button of nodes) {
               button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+              // Hold the active ripples until the heap sample has been collected.
+              for (const animation of button.querySelector('.ripple')?.getAnimations() ?? []) {
+                animation.pause();
+              }
             }
           });
-          assert.equal(await ripples.count(), count);
+          assert.equal(await ripples.count(), expectedRipples);
           const active = await readHeap();
-          assert.equal(await ripples.count(), count);
-          await page.clock.runFor(1300);
-          assert.equal(await ripples.count(), 0);
+          assert.equal(await ripples.count(), expectedRipples);
+
+          await ripples.evaluateAll(async (nodes) => {
+            const animations = nodes.flatMap((ripple) => ripple.getAnimations());
+            for (const animation of animations) animation.play();
+            await Promise.all(animations.map((animation) => animation.finished));
+          });
+          await ripples.first().waitFor({ state: 'detached' });
           const settled = await readHeap();
 
           const result = {
             count,
+            reducedMotion,
             round,
             mounted,
             active,

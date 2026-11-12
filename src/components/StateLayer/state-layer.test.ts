@@ -1,11 +1,27 @@
 // @vitest-environment jsdom
-import { expect, it, vi } from 'vitest';
+import { beforeEach, expect, it, onTestFinished, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick, ref, withDirectives } from 'vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
 import ListItem from '@/components/ListItem/ListItem.vue';
 import Radio from '@/components/Radio/Radio.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import { triggerKeyboardRipple, vStateLayer } from './state-layer';
+
+// jsdom has no CSS animations. Give the directive a motion lifecycle for its DOM ownership tests.
+function mockRippleAnimations(document: Document) {
+  const prototype = document.defaultView!.Element.prototype;
+  const getAnimations = vi.fn(() => [{ animationName: 'ripple-expand', finished: new Promise<void>(() => {}) }]);
+  Object.defineProperty(prototype, 'getAnimations', { configurable: true, value: getAnimations });
+  onTestFinished(() => {
+    Reflect.deleteProperty(prototype, 'getAnimations');
+  });
+  return getAnimations;
+}
+
+let getAnimations: ReturnType<typeof mockRippleAnimations>;
+beforeEach(() => {
+  getAnimations = mockRippleAnimations(document);
+});
 
 it('releases the document state layer when a component root has the directive twice', () => {
   const container = document.createElement('div');
@@ -67,10 +83,12 @@ it('creates keyboard ripples for activation keys and ignores navigation and shor
 });
 
 it('clears a pending overlapping ripple on adoption after the first ripple settles', async () => {
-  vi.useFakeTimers();
+  const firstMotion = Promise.withResolvers<void>();
+  getAnimations.mockReturnValueOnce([{ animationName: 'ripple-expand', finished: firstMotion.promise }]);
   const container = document.createElement('div');
   const frame = document.createElement('iframe');
   document.body.append(container, frame);
+  mockRippleAnimations(frame.contentDocument!);
   const app = createApp(() => withDirectives(h('button', { class: 'm3-state-layer' }), [[vStateLayer]]));
   app.mount(container);
 
@@ -78,11 +96,12 @@ it('clears a pending overlapping ripple on adoption after the first ripple settl
     const button = container.querySelector('button')!;
     const activate = () => button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     activate();
-    vi.advanceTimersByTime(200);
     activate();
     expect(button.querySelectorAll('.ripple')).toHaveLength(2);
 
-    vi.advanceTimersByTime(650);
+    firstMotion.resolve();
+    await firstMotion.promise;
+    await nextTick();
     expect(button.querySelectorAll('.ripple')).toHaveLength(1);
 
     frame.contentDocument!.body.append(container);
@@ -98,7 +117,6 @@ it('clears a pending overlapping ripple on adoption after the first ripple settl
     if (container.firstChild) app.unmount();
     container.remove();
     frame.remove();
-    vi.useRealTimers();
   }
 });
 
@@ -113,6 +131,7 @@ it.each([
   const frame = document.createElement('iframe');
   document.body.append(container, frame);
   const destination = frame.contentDocument!;
+  mockRippleAnimations(destination);
   const app = createApp(() => render(interactive.value));
   app.mount(container);
 
