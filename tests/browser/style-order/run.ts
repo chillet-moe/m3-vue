@@ -43,6 +43,7 @@ try {
     }));
   const expectedItemColors = { title: 'rgb(20, 40, 60)', layer: 'rgb(20, 40, 60)' };
   await checkBothOrders('Button', 'ListItem', async () => {
+    assert.equal(await item.evaluate((el) => getComputedStyle(el).borderWidth), '0px', 'ListItem border width');
     await item.hover();
     assert.deepEqual(await itemColors(), expectedItemColors, 'ListItem hover colors');
     await page.mouse.move(0, 0);

@@ -66,6 +66,7 @@
     padding-inline: var(--_item-padding-inline);
     block-size: auto;
     text-align: start;
+    border: none;
     border-radius: var(--_item-container-shape);
 
     --md-color-container: transparent;
