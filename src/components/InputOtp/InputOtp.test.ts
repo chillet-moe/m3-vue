@@ -9,8 +9,11 @@ describe('InputOtp', () => {
   });
 
   it('distributes the model across accessible inputs and a form value', async () => {
+    const form = document.createElement('form');
     const container = document.createElement('div');
-    document.body.appendChild(container);
+    form.appendChild(container);
+    document.body.appendChild(form);
+    const disabled = ref(false);
 
     const app = createApp(() =>
       h(InputOtp, {
@@ -18,6 +21,7 @@ describe('InputOtp', () => {
         length: 4,
         modelValue: '12',
         name: 'verification-code',
+        disabled: disabled.value,
       }),
     );
 
@@ -31,7 +35,15 @@ describe('InputOtp', () => {
     expect(inputs[1]?.value).toBe('2');
     expect(inputs[2]?.value).toBe('');
     expect(inputs[0]?.getAttribute('aria-label')).toBe('Verification code character 1 of 4');
-    expect(container.querySelector<HTMLInputElement>('input[type="hidden"]')?.value).toBe('12');
+    expect(new FormData(form).getAll('verification-code')).toEqual(['12']);
+
+    disabled.value = true;
+    await nextTick();
+    expect(new FormData(form).has('verification-code')).toBe(false);
+
+    disabled.value = false;
+    await nextTick();
+    expect(new FormData(form).getAll('verification-code')).toEqual(['12']);
 
     app.unmount();
   });

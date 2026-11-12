@@ -13,7 +13,13 @@ provideSelectionGroup(props.selectionModel, props);
 </script>
 
 <template>
-  <fieldset class="m3-selection-group" :aria-label="ariaLabel" data-scope="selection-group" data-part="root">
+  <fieldset
+    class="m3-selection-group"
+    :aria-label="ariaLabel"
+    :disabled="props.disabled"
+    data-scope="selection-group"
+    data-part="root"
+  >
     <slot />
   </fieldset>
 </template>

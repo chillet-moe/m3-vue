@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import {
-  provideSelectionGroup,
-  type SelectionGroupModelValue,
-  type SelectionGroupProps,
-} from './SelectionGroupContext';
+import type { SelectionGroupModelValue, SelectionGroupProps } from './SelectionGroupContext';
+import SelectionGroupFieldset from './SelectionGroupFieldset.vue';
 
 export type { SelectionGroupProps } from './SelectionGroupContext';
 
@@ -13,13 +10,11 @@ const props = withDefaults(defineProps<SelectionGroupProps>(), {
 });
 
 const modelValue = defineModel<SelectionGroupModelValue>('modelValue');
-provideSelectionGroup(modelValue, props);
+const selection = { modelValue };
 </script>
 
 <template>
-  <fieldset class="m3-selection-group" :aria-label="ariaLabel" data-scope="selection-group" data-part="root">
+  <SelectionGroupFieldset v-bind="props" :selection-model="selection.modelValue">
     <slot />
-  </fieldset>
+  </SelectionGroupFieldset>
 </template>
-
-<style src="./SelectionGroup.css"></style>

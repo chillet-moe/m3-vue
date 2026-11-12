@@ -347,6 +347,7 @@ const shape = useShape(() => props.shape);
         type="hidden"
         :name="props.name"
         :value="modelValue"
+        :disabled="props.disabled"
       />
 
       <input
