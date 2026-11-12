@@ -1,12 +1,7 @@
 // @vitest-environment jsdom
-import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createApp, defineComponent, h, nextTick } from 'vue';
 import ListItem from '../components/ListItem/ListItem.vue';
-
-const groupingStyles = readFileSync('src/styles/list-grouping.css', 'utf8');
-const listItemStyles = readFileSync('src/components/ListItem/ListItem.css', 'utf8');
-const themeStyles = readFileSync('src/styles/theme.css', 'utf8');
 
 const UserOwnedList = defineComponent({
   name: 'UserOwnedList',
@@ -96,32 +91,5 @@ describe('List grouping utility', () => {
     expect(container.querySelectorAll('[data-scope="list"][data-part="container"]')).toHaveLength(2);
 
     app.unmount();
-  });
-
-  it('owns the public tokens and participant root shape contract globally', () => {
-    expect(themeStyles).toContain("@import './list-grouping.css';");
-    expect(groupingStyles).toContain('--md-list-group-item-shape: initial');
-    expect(groupingStyles).toContain(
-      '--_list-group-item-rounded-shape: var(--md-list-group-item-shape, var(--md-sys-shape-corner-small));',
-    );
-    expect(groupingStyles).toContain(
-      '--_list-group-item-square-shape: var(--md-list-group-item-shape, var(--md-shape-compact));',
-    );
-    expect(groupingStyles).toContain("> [data-list-group-item][data-shape='rounded'] {");
-    expect(groupingStyles).toContain("[data-shape='square']:nth-child(1 of [data-list-group-item])");
-    expect(groupingStyles).toContain("[data-shape='square']:nth-last-child(1 of [data-list-group-item])");
-    expect(groupingStyles).toContain('border-start-start-radius: var(--_list-group-item-rounded-shape)');
-    expect(groupingStyles).not.toContain("[data-scope='item']");
-    expect(groupingStyles).not.toContain('m3-item');
-  });
-
-  it('leaves only the active indicator adapter with ListItem', () => {
-    expect(listItemStyles).not.toContain('--md-list-group-item-shape: initial');
-    expect(listItemStyles).not.toContain('border-start-start-radius: var(--_list-group-item-rounded-shape)');
-    expect(listItemStyles).toContain(
-      "> [data-list-group-item][data-scope='item'][data-part='root'][data-shape='rounded']",
-    );
-    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-rounded-shape)');
-    expect(listItemStyles).toContain('--md-item-indicator-shape: var(--_list-group-item-first-child-shape)');
   });
 });

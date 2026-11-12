@@ -7,6 +7,7 @@
     --md-item-active-indicator-color: initial;
     --md-item-active-label-color: initial;
     --md-item-active-state-layer-color: initial;
+    --md-item-container-shape: initial;
     --md-item-content-gap: initial;
     --md-item-footer-color: initial;
     --md-item-gap: initial;
@@ -38,7 +39,6 @@
     );
     --_item-inactive-state-layer-color: var(--md-item-inactive-state-layer-color, var(--md-sys-color-on-surface));
     --_item-motion: var(--md-item-motion, var(--md-easing-spatial));
-    --_item-indicator-shape: var(--md-item-indicator-shape, var(--_item-container-shape));
     --_item-indicator-collapsed-visual-width: var(--md-item-indicator-collapsed-visual-width, --dp(12));
   }
 }
@@ -52,6 +52,17 @@
     --_item-current-indicator-opacity: 0;
     --_item-current-indicator-opacity-delay: 50ms;
     --_item-square-shape: var(--md-shape-action-square-small);
+    --_item-container-shape: var(--md-item-container-shape, var(--_item-default-shape));
+
+    /* Group corners belong to this row, including when rows are nested. */
+    --_list-group-item-start-shape: initial;
+    --_list-group-item-end-shape: initial;
+    --_item-start-shape: var(--_list-group-item-start-shape, var(--_item-container-shape));
+    --_item-end-shape: var(--_list-group-item-end-shape, var(--_item-container-shape));
+    --_item-indicator-clip-shape: var(
+      --md-item-indicator-shape,
+      var(--_item-start-shape) var(--_item-start-shape) var(--_item-end-shape) var(--_item-end-shape)
+    );
 
     position: relative;
     inline-size: 100%;
@@ -101,7 +112,7 @@
     translate: -50% 0;
     inline-size: 100%;
     block-size: 100%;
-    border-radius: var(--_item-indicator-shape);
+    border-radius: var(--md-item-indicator-shape, inherit);
     background-color: var(--_item-active-indicator-color);
     opacity: var(--_item-current-indicator-opacity);
     pointer-events: none;
@@ -113,7 +124,7 @@
     background-color: currentColor;
     box-shadow: 0 0 0 10vmax currentColor;
     clip-path: inset(
-      0 calc((100% - var(--_item-current-indicator-visual-width)) / 2) round var(--_item-indicator-shape)
+      0 calc((100% - var(--_item-current-indicator-visual-width)) / 2) round var(--_item-indicator-clip-shape)
     );
     transition:
       clip-path var(--_item-motion),
@@ -240,11 +251,11 @@
   }
 
   .m3-item[data-shape='rounded'] {
-    --_item-container-shape: var(--_shape-radius, var(--md-shape-action));
+    --_item-default-shape: var(--_shape-radius, var(--md-shape-action));
   }
 
   .m3-item:is([data-shape='square'], [data-shape='minimal'], [data-shape='sharp']) {
-    --_item-container-shape: var(--_shape-radius, var(--_item-square-shape));
+    --_item-default-shape: var(--_shape-radius, var(--_item-square-shape));
   }
 
   .m3-item[data-size='extra-small'] {
@@ -296,7 +307,7 @@
   }
 
   .m3-item[data-appearance='standard'] {
-    --_item-container-shape: var(--_shape-radius, var(--md-shape-compact));
+    --_item-default-shape: var(--_shape-radius, var(--md-shape-compact));
   }
   .m3-item[data-appearance='standard'] .m3-text-morph,
   .m3-item[data-appearance='standard'] .m3-item-icon {
@@ -308,58 +319,5 @@
     .m3-item[data-appearance='expressive']::before {
       transition-duration: 0ms;
     }
-  }
-
-  /* Keep the active indicator aligned with the public List grouping shape contract. */
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-scope='item'][data-part='root'][data-shape='rounded'] {
-    --md-item-indicator-shape: var(--_list-group-item-rounded-shape);
-  }
-
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-scope='item'][data-part='root'][data-shape='square']:not(
-      :nth-child(1 of [data-list-group-item])
-    ):not(:nth-last-child(1 of [data-list-group-item])) {
-    --md-item-indicator-shape: var(--_list-group-item-square-shape);
-  }
-
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-scope='item'][data-part='root'][data-shape='square']:nth-child(
-      1 of [data-list-group-item]
-    ):not(:nth-last-child(1 of [data-list-group-item])) {
-    --md-item-indicator-shape: var(--_item-container-shape) var(--_item-container-shape)
-      var(--_list-group-item-square-shape) var(--_list-group-item-square-shape);
-  }
-
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-scope='item'][data-part='root'][data-shape='square']:nth-last-child(
-      1 of [data-list-group-item]
-    ):not(:nth-child(1 of [data-list-group-item])) {
-    --md-item-indicator-shape: var(--_list-group-item-square-shape) var(--_list-group-item-square-shape)
-      var(--_item-container-shape) var(--_item-container-shape);
-  }
-
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-scope='item'][data-part='root'][data-shape='rounded']:nth-child(
-      1 of [data-list-group-item][data-shape='rounded']
-    ) {
-    --md-item-indicator-shape: var(--_list-group-item-first-child-shape) var(--_list-group-item-first-child-shape)
-      var(--_list-group-item-rounded-shape) var(--_list-group-item-rounded-shape);
-  }
-
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-scope='item'][data-part='root'][data-shape='rounded']:nth-last-child(
-      1 of [data-list-group-item][data-shape='rounded']
-    ) {
-    --md-item-indicator-shape: var(--_list-group-item-rounded-shape) var(--_list-group-item-rounded-shape)
-      var(--_list-group-item-last-child-shape) var(--_list-group-item-last-child-shape);
-  }
-
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-scope='item'][data-part='root'][data-shape='rounded']:nth-child(
-      1 of [data-list-group-item][data-shape='rounded']
-    ):nth-last-child(1 of [data-list-group-item][data-shape='rounded']) {
-    --md-item-indicator-shape: var(--_list-group-item-first-child-shape) var(--_list-group-item-first-child-shape)
-      var(--_list-group-item-last-child-shape) var(--_list-group-item-last-child-shape);
   }
 }

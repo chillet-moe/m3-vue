@@ -14,49 +14,34 @@
 }
 
 @layer components {
-  /* Direct children opt in so headings, dividers, and nested groups remain outside the shape contract. */
-  [data-scope='list'][data-part='container'] > [data-list-group-item][data-shape='rounded'] {
-    border-start-start-radius: var(--_list-group-item-rounded-shape);
-    border-start-end-radius: var(--_list-group-item-rounded-shape);
-    border-end-end-radius: var(--_list-group-item-rounded-shape);
-    border-end-start-radius: var(--_list-group-item-rounded-shape);
-  }
+  /* Each container resolves the corners of its own direct participants. */
+  [data-scope='list'][data-part='container'] > [data-list-group-item] {
+    &[data-shape='rounded'] {
+      --_list-group-item-shape: var(--_list-group-item-rounded-shape);
+    }
 
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-shape='square']:not(:nth-child(1 of [data-list-group-item])):not(
-      :nth-last-child(1 of [data-list-group-item])
-    ) {
-    border-start-start-radius: var(--_list-group-item-square-shape);
-    border-start-end-radius: var(--_list-group-item-square-shape);
-    border-end-end-radius: var(--_list-group-item-square-shape);
-    border-end-start-radius: var(--_list-group-item-square-shape);
-  }
+    &[data-shape='square'] {
+      --_list-group-item-shape: var(--_list-group-item-square-shape);
+    }
 
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-shape='square']:nth-child(1 of [data-list-group-item]):not(
-      :nth-last-child(1 of [data-list-group-item])
-    ) {
-    border-end-end-radius: var(--_list-group-item-square-shape);
-    border-end-start-radius: var(--_list-group-item-square-shape);
-  }
+    &:where([data-shape='rounded'], [data-shape='square']:not(:nth-child(1 of [data-list-group-item]))) {
+      --_list-group-item-start-shape: var(--_list-group-item-shape);
+      border-start-start-radius: var(--_list-group-item-start-shape);
+      border-start-end-radius: var(--_list-group-item-start-shape);
+    }
 
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-shape='square']:nth-last-child(1 of [data-list-group-item]):not(
-      :nth-child(1 of [data-list-group-item])
-    ) {
-    border-start-start-radius: var(--_list-group-item-square-shape);
-    border-start-end-radius: var(--_list-group-item-square-shape);
-  }
+    &:where([data-shape='rounded'], [data-shape='square']:not(:nth-last-child(1 of [data-list-group-item]))) {
+      --_list-group-item-end-shape: var(--_list-group-item-shape);
+      border-end-end-radius: var(--_list-group-item-end-shape);
+      border-end-start-radius: var(--_list-group-item-end-shape);
+    }
 
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-shape='rounded']:nth-child(1 of [data-list-group-item][data-shape='rounded']) {
-    border-start-start-radius: var(--_list-group-item-first-child-shape);
-    border-start-end-radius: var(--_list-group-item-first-child-shape);
-  }
+    &[data-shape='rounded']:nth-child(1 of [data-list-group-item][data-shape='rounded']) {
+      --_list-group-item-start-shape: var(--_list-group-item-first-child-shape);
+    }
 
-  [data-scope='list'][data-part='container']
-    > [data-list-group-item][data-shape='rounded']:nth-last-child(1 of [data-list-group-item][data-shape='rounded']) {
-    border-end-end-radius: var(--_list-group-item-last-child-shape);
-    border-end-start-radius: var(--_list-group-item-last-child-shape);
+    &[data-shape='rounded']:nth-last-child(1 of [data-list-group-item][data-shape='rounded']) {
+      --_list-group-item-end-shape: var(--_list-group-item-last-child-shape);
+    }
   }
 }

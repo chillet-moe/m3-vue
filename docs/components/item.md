@@ -88,7 +88,9 @@ When `ListItem` is acting as navigation, use `RouterLink custom` and feed its `h
 
 <DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
 
-Set `appearance="expressive"` on existing items to retain the previous appearance. The `shape` prop controls the expressive shape; standard uses `--md-shape-compact`. `--md-item-indicator-shape` can customize the indicator in either appearance.
+Set `appearance="expressive"` on existing items to retain the previous appearance. The `shape` prop controls the expressive shape. Standard uses `--md-shape-compact` by default.
+
+Set `--md-item-container-shape` to a single CSS corner radius, such as `12px`, to customize the row, state layer, and default active indicator together. List grouping supplies the corners it controls. Set `--md-item-indicator-shape` to customize the active indicator independently.
 
 Use [MenuItem](./menu) for menu commands. ListItem remains a general list entry. See [Styling](../guides/styling) for appearance and density choices.
 

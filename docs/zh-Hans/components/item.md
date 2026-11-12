@@ -77,7 +77,9 @@ ListItem 提供丰富的列表项布局。默认情况下它可交互，并渲�
 
 <DemoContainer :src="ItemAppearancesSrc"><ItemAppearances /></DemoContainer>
 
-现有条目如需保留之前的外观，可设置 `appearance="expressive"`。`shape` 属性控制 expressive 外观的形状；standard 使用 `--md-shape-compact`。`--md-item-indicator-shape` 可定制两种外观中的指示器。
+现有条目如需保留之前的外观，可设置 `appearance="expressive"`。`shape` 属性控制 expressive 外观的形状。standard 默认使用 `--md-shape-compact`。
+
+将 `--md-item-container-shape` 设置为单个 CSS 圆角值（如 `12px`），即可同时定制行、状态层和默认活动指示器。列表分组会提供其控制的圆角。设置 `--md-item-indicator-shape` 可单独定制活动指示器。
 
 菜单命令请使用 [MenuItem](./menu)。ListItem 仍用于一般列表项。外观与密度建议请参阅[样式指南](../guides/styling#选择外观与密度)。
 

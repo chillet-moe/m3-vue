@@ -26,6 +26,13 @@ export const listItemStyleTokens = [
     category: 'State',
   },
   {
+    name: '--md-item-container-shape',
+    description: 'Sets the corner radius shared by the row, state layer, and default active indicator.',
+    fallback: 'Appearance and shape, with group corners applied where applicable',
+    category: 'Shape',
+    targets: [{ scope: 'item', part: 'root' }],
+  },
+  {
     name: '--md-item-content-gap',
     description: 'Controls content gap.',
     fallback: '--dp(2)',
@@ -81,8 +88,8 @@ export const listItemStyleTokens = [
   },
   {
     name: '--md-item-indicator-shape',
-    description: 'Controls indicator shape.',
-    fallback: 'var(--md-shape-indicator)',
+    description: 'Overrides only the active indicator shape.',
+    fallback: 'Resolved row corners',
     category: 'Shape',
   },
   {

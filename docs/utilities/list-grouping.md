@@ -39,8 +39,9 @@ use `24px` outer corners. Square middle participants use `4px`; square first and
 inner corners and retain their own outer shape.
 
 Only marked direct children participate. Headings, dividers, and other unmarked children do not affect first or last
-matching. Nested grouping containers form independent groups. The utility styles only participant roots, so custom
-components remain responsible for their internal surfaces and clipping.
+matching. To show several groups in one list, give each group its own container and set any corner tokens on that
+container. Sibling and nested grouping containers resolve their first and last participants independently. The
+utility styles participant roots. Custom components own their internal surfaces and clipping.
 
 When a container or participant marker is placed on a Vue component, its root must receive fallthrough attributes. A
 single-root component does this by default; components using `inheritAttrs: false` should forward `$attrs` to the
