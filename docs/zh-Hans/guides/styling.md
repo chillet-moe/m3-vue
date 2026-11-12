@@ -251,6 +251,10 @@ provideShape('sharp');
 
 根布局使用普通 class。避免依赖私有 `.m3-*` class 或组件根 HTML 标签。选择器行为详见 [Vue Scope Boundaries](./vue-scope-isolation)。
 
+## 正文排版
+
+对于渲染后的 Markdown 或其他文章内容，请使用 `.m3-prose`。元素样式规则会在同时带有 `data-scope` 和 `data-part` 的嵌入式组件部件处停止。为自定义组件根节点添加 `data-m3-prose-exclude`，即可设置相同的边界。字体和颜色等继承属性遵循正常的 CSS 层叠规则。组件内部的 `.m3-prose` 容器可以让其中的文章重新应用正文排版样式。
+
 ## 字段间距
 
 字段之间的间距由父级布局负责。可在该布局中使用共享间距 token：

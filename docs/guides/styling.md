@@ -294,6 +294,13 @@ component and `data-part` identifies a stable part. In scoped CSS, anchor deep s
 Use a plain class for root layout. Avoid private `.m3-*` classes or assumptions about a component's root HTML tag.
 See [Vue Scope Boundaries](./vue-scope-isolation) for selector behavior.
 
+## Prose
+
+Use `.m3-prose` for rendered Markdown or other article content. Its element rules stop at embedded component parts
+marked with both `data-scope` and `data-part`. Add `data-m3-prose-exclude` to the root of a custom widget to give it the
+same boundary. Inherited properties such as font and color follow the normal CSS cascade. An inner `.m3-prose`
+container can opt an article inside a widget back into prose styling.
+
 ## Field spacing
 
 The parent layout owns spacing between fields. Opt in to the shared gap tokens on that layout:

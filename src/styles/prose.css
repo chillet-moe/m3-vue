@@ -1,12 +1,73 @@
-@layer components {
-  .m3-prose {
-    color: var(--md-sys-color-on-surface);
-    font-family: var(--md-sys-typescale-body-large-font), sans-serif;
-    font-weight: var(--md-sys-typescale-body-large-weight);
-    font-size: var(--md-sys-typescale-body-large-size);
-    letter-spacing: var(--md-sys-typescale-body-large-tracking);
-    line-height: 1.75;
-    overflow-wrap: break-word;
+@mixin prose-table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: left;
+
+  th,
+  td {
+    border-top: 1px solid var(--md-sys-color-surface-variant);
+
+    &:not(:first-child) {
+      border-left: 1px solid var(--md-sys-color-surface-variant);
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--md-sys-color-surface-variant);
+    }
+  }
+
+  thead,
+  tfoot {
+    th,
+    td {
+      position: relative;
+      vertical-align: middle;
+      box-shadow: var(--md-sys-elevation-level1);
+      color: var(--md-sys-color-on-surface-variant);
+      padding: 1.125rem 1rem;
+      font-family: var(--md-sys-typescale-title-medium-font), sans-serif;
+      font-weight: var(--md-sys-typescale-title-medium-weight);
+      font-size: var(--md-sys-typescale-title-medium-size);
+      letter-spacing: var(--md-sys-typescale-title-medium-tracking);
+      line-height: var(--md-sys-typescale-title-medium-line-height);
+    }
+  }
+
+  tbody th,
+  tbody td {
+    padding: 0.875rem 1rem;
+  }
+
+  tbody th {
+    vertical-align: middle;
+    font-weight: inherit;
+  }
+
+  tbody td {
+    vertical-align: baseline;
+  }
+
+  thead:first-child tr:first-child th,
+  thead:first-child tr:first-child td,
+  tbody:first-child tr:first-child th,
+  tbody:first-child tr:first-child td {
+    border-top: 0;
+  }
+}
+
+@layer base {
+  /* Embedded components own their root and descendant styling. */
+  @scope (.m3-prose) to (:scope :is([data-scope][data-part], [data-m3-prose-exclude])) {
+    :scope {
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--md-sys-typescale-body-large-font), sans-serif;
+      font-weight: var(--md-sys-typescale-body-large-weight);
+      font-size: var(--md-sys-typescale-body-large-size);
+      letter-spacing: var(--md-sys-typescale-body-large-tracking);
+      line-height: 1.75;
+      overflow-wrap: break-word;
+    }
 
     :first-child {
       margin-top: 0;
@@ -291,11 +352,18 @@
     }
 
     table {
+      @apply prose-table;
+
       margin-top: 2em;
       margin-bottom: 2em;
       border: 1px solid var(--md-sys-color-surface-variant);
       border-radius: var(--md-sys-shape-corner-large);
     }
+  }
+
+  table.m3-table,
+  .m3-table table {
+    @apply prose-table;
   }
 
   .m3-table {
@@ -311,66 +379,6 @@
       margin-bottom: 0;
       border: none;
       border-radius: 0;
-    }
-  }
-
-  .m3-prose table,
-  table.m3-table,
-  .m3-table table {
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-    text-align: left;
-
-    th,
-    td {
-      border-top: 1px solid var(--md-sys-color-surface-variant);
-
-      &:not(:first-child) {
-        border-left: 1px solid var(--md-sys-color-surface-variant);
-      }
-
-      &:not(:last-child) {
-        border-right: 1px solid var(--md-sys-color-surface-variant);
-      }
-    }
-
-    thead,
-    tfoot {
-      th,
-      td {
-        position: relative;
-        vertical-align: middle;
-        box-shadow: var(--md-sys-elevation-level1);
-        color: var(--md-sys-color-on-surface-variant);
-        padding: 1.125rem 1rem;
-        font-family: var(--md-sys-typescale-title-medium-font), sans-serif;
-        font-weight: var(--md-sys-typescale-title-medium-weight);
-        font-size: var(--md-sys-typescale-title-medium-size);
-        letter-spacing: var(--md-sys-typescale-title-medium-tracking);
-        line-height: var(--md-sys-typescale-title-medium-line-height);
-      }
-    }
-
-    tbody th,
-    tbody td {
-      padding: 0.875rem 1rem;
-    }
-
-    tbody th {
-      vertical-align: middle;
-      font-weight: inherit;
-    }
-
-    tbody td {
-      vertical-align: baseline;
-    }
-
-    thead:first-child tr:first-child th,
-    thead:first-child tr:first-child td,
-    tbody:first-child tr:first-child th,
-    tbody:first-child tr:first-child td {
-      border-top: 0;
     }
   }
 }
