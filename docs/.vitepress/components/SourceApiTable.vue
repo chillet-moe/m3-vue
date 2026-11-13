@@ -75,9 +75,7 @@ function getSectionContentId(name: string) {
       <details v-if="showSignature" class="source-api-signature">
         <summary>{{ isZhHans ? '完整类型签名' : 'Full type signature' }}</summary>
         <code>{{ meta.signature }}</code>
-        <p class="source-api-source">
-          {{ isZhHans ? '来源：' : 'Source: ' }}<code>{{ meta.source }}</code>
-        </p>
+        <p class="source-api-source">{{ isZhHans ? '来源：' : 'Source: ' }}<code>{{ meta.source }}</code></p>
       </details>
 
       <template v-if="sections.length > 0">

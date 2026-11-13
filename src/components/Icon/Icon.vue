@@ -67,9 +67,7 @@ const iconStyle = computed<CSSProperties>(() => {
     :data-source="slots.default ? 'svg' : 'symbol'"
     :style="iconStyle"
   >
-    <span class="m3-icon-glyph" data-part="glyph"
-      ><slot>{{ name }}</slot></span
-    >
+    <span class="m3-icon-glyph" data-part="glyph"><slot>{{ name }}</slot></span>
   </span>
 </template>
 

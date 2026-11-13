@@ -202,9 +202,7 @@ const progress = ref(64);
         </div>
         <Switch v-model:checked="enabled">{{ isChinese ? '吸附到网格' : 'Snap to grid' }}</Switch>
       </div>
-      <template #actions
-        ><Button @click="sideOpen = false">{{ isChinese ? '关闭' : 'Close' }}</Button></template
-      >
+      <template #actions><Button @click="sideOpen = false">{{ isChinese ? '关闭' : 'Close' }}</Button></template>
     </SideSheet>
     <BottomSheet v-model:open="bottomOpen">
       <template #headline>{{ isChinese ? '显示选项' : 'Display options' }}</template>
@@ -212,9 +210,7 @@ const progress = ref(64);
         <Switch v-model:checked="enabled">{{ isChinese ? '吸附到网格' : 'Snap to grid' }}</Switch>
         <CheckBox v-model:checked="dimensions">{{ isChinese ? '显示尺寸' : 'Show dimensions' }}</CheckBox>
       </div>
-      <template #actions
-        ><Button @click="bottomOpen = false">{{ isChinese ? '完成' : 'Done' }}</Button></template
-      >
+      <template #actions><Button @click="bottomOpen = false">{{ isChinese ? '完成' : 'Done' }}</Button></template>
     </BottomSheet>
     <FieldLabelLayouts />
     <h2 class="preset-preview-title">{{ isChinese ? '组件图库' : 'Component gallery' }}</h2>

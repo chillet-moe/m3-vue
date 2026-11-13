@@ -117,7 +117,7 @@
     "lightningcss": "^1.33.0",
     "material-symbols": "0.48.3",
     "oxc-minify": "^0.158.0",
-    "oxfmt": "^0.70.0",
+    "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "playwright": "^1.65.0",
     "postcss": "^8.5.32",

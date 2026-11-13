@@ -80,8 +80,7 @@ defineExpose({ host, results, isUnmounted: () => unmounted });
     >
     <Slider v-model:value="value" :step="1" :min="0" :max="100" value-indicator />
     <Combobox v-model="layer" label="Window layers" :options="layers" size="extra-small" />
-    <output class="value">{{ value }}</output
-    ><output class="selected">{{ selected }}</output
+    <output class="value">{{ value }}</output><output class="selected">{{ selected }}</output
     ><output class="results">{{ results.join('|') }}</output>
   </section>
 </template>
