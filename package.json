@@ -131,7 +131,7 @@
     "vitest": "catalog:",
     "vue-component-meta": "^3.3.14",
     "vue-tsc": "^3.3.14",
-    "wrangler": "^4.86.0"
+    "wrangler": "^4.160.0"
   },
   "peerDependencies": {
     "@nuxt/kit": "^4.4.2",
