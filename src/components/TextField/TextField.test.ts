@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { installPopoverPolyfill, isPopoverOpen } from '../../../tests/unit/popover';
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, expectTypeOf, it } from 'vitest';
 import { createApp, h, nextTick, provide, ref } from 'vue';
@@ -7,59 +8,6 @@ import { fieldContextKey } from './FieldContext';
 import TextField from './TextField.vue';
 
 const textFieldStyles = readFileSync('src/components/TextField/TextField.css', 'utf8');
-
-const popoverOpenElements = new WeakSet<HTMLElement>();
-
-function installPopoverPolyfill() {
-  const prototype = HTMLElement.prototype as HTMLElement & {
-    showPopover?: (options?: { source?: HTMLElement }) => void;
-    hidePopover?: () => void;
-  };
-
-  const originalMatches = Element.prototype.matches;
-
-  Element.prototype.matches = function (this: Element, selector: string) {
-    if (selector === ':popover-open') {
-      return popoverOpenElements.has(this as HTMLElement);
-    }
-
-    return originalMatches.call(this, selector);
-  } as typeof Element.prototype.matches;
-
-  if (typeof prototype.showPopover !== 'function') {
-    Object.defineProperty(prototype, 'showPopover', {
-      configurable: true,
-      value(this: HTMLElement) {
-        popoverOpenElements.add(this);
-        const toggleEvent = new Event('toggle');
-        Object.defineProperty(toggleEvent, 'newState', {
-          configurable: true,
-          value: 'open',
-        });
-        this.dispatchEvent(toggleEvent);
-      },
-    });
-  }
-
-  if (typeof prototype.hidePopover !== 'function') {
-    Object.defineProperty(prototype, 'hidePopover', {
-      configurable: true,
-      value(this: HTMLElement) {
-        popoverOpenElements.delete(this);
-        const toggleEvent = new Event('toggle');
-        Object.defineProperty(toggleEvent, 'newState', {
-          configurable: true,
-          value: 'closed',
-        });
-        this.dispatchEvent(toggleEvent);
-      },
-    });
-  }
-}
-
-function isPopoverOpen(element: HTMLElement | null) {
-  return element ? popoverOpenElements.has(element) : false;
-}
 
 function getDatePickerButton(_container: HTMLElement, date: string) {
   return document.body.querySelector<HTMLButtonElement>(`.m3-date-picker-day[data-date="${date}"]`);

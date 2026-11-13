@@ -113,7 +113,7 @@
     "browserslist": "^4.29.5",
     "fast-glob": "^3.3.3",
     "glob": "^14.0.5",
-    "jsdom": "27.4.0",
+    "jsdom": "31.0.0",
     "lightningcss": "^1.33.0",
     "material-symbols": "0.48.3",
     "oxc-minify": "^0.158.0",

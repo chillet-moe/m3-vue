@@ -1,75 +1,9 @@
 // @vitest-environment jsdom
+import { installPopoverPolyfill, isPopoverOpen } from '../../../tests/unit/popover';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { computed, createApp, h, nextTick, ref, withDirectives } from 'vue';
 import { vDropdown } from '@/directives/Menu';
 import Popover from './Popover.vue';
-
-let popoverOpenElements = new WeakSet<HTMLElement>();
-let popoverTestSupportInstalled = false;
-
-function installPopoverPolyfill() {
-  if (popoverTestSupportInstalled) {
-    return;
-  }
-
-  popoverTestSupportInstalled = true;
-
-  const prototype = HTMLElement.prototype as HTMLElement & {
-    showPopover?: (options?: { source?: HTMLElement }) => void;
-    hidePopover?: () => void;
-  };
-
-  const originalMatches = Element.prototype.matches;
-
-  Element.prototype.matches = function (this: Element, selector: string) {
-    if (selector === ':popover-open') {
-      return popoverOpenElements.has(this as HTMLElement);
-    }
-
-    return originalMatches.call(this, selector);
-  } as typeof Element.prototype.matches;
-
-  Object.defineProperty(prototype, 'showPopover', {
-    configurable: true,
-    value(this: HTMLElement, options?: { source?: HTMLElement }) {
-      if (options?.source) {
-        this.dataset.popoverSourceId =
-          options.source.id ||
-          options.source.textContent?.trim() ||
-          options.source.getAttribute('aria-label') ||
-          'source';
-      }
-
-      popoverOpenElements.add(this);
-
-      const toggleEvent = new Event('toggle');
-      Object.defineProperty(toggleEvent, 'newState', {
-        configurable: true,
-        value: 'open',
-      });
-      this.dispatchEvent(toggleEvent);
-    },
-  });
-
-  Object.defineProperty(prototype, 'hidePopover', {
-    configurable: true,
-    value(this: HTMLElement) {
-      popoverOpenElements.delete(this);
-      delete this.dataset.popoverSourceId;
-
-      const toggleEvent = new Event('toggle');
-      Object.defineProperty(toggleEvent, 'newState', {
-        configurable: true,
-        value: 'closed',
-      });
-      this.dispatchEvent(toggleEvent);
-    },
-  });
-}
-
-function isPopoverOpen(element: HTMLElement | null) {
-  return element ? popoverOpenElements.has(element) : false;
-}
 
 async function flushPopover() {
   await nextTick();
@@ -90,7 +24,6 @@ function createControlledAnimation() {
 
 describe('Popover', () => {
   afterEach(() => {
-    popoverOpenElements = new WeakSet();
     document.body.innerHTML = '';
   });
 

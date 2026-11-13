@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { installPopoverPolyfill } from '../../../tests/unit/popover';
 import { createOverlayHost } from '@/internal/overlayHost/overlayHost';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick, ref, type App } from 'vue';
@@ -8,13 +9,7 @@ import { showPopoverStackItem } from './popoverStack';
 const overlayHost = createOverlayHost();
 let app: App<Element> | null = null;
 
-beforeAll(() => {
-  // JSDOM has no top layer; native visibility is covered by browser tests.
-  Object.defineProperties(HTMLElement.prototype, {
-    showPopover: { configurable: true, value() {} },
-    hidePopover: { configurable: true, value() {} },
-  });
-});
+beforeAll(installPopoverPolyfill);
 
 beforeEach(() => {
   const container = document.createElement('div');

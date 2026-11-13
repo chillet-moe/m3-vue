@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { installPopoverPolyfill, isPopoverOpen } from '../../../tests/unit/popover';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, h, inject, nextTick, onScopeDispose, ref, withDirectives } from 'vue';
 import Select, { type SelectModelValue, type SelectOption } from '@/components/Select/Select.vue';
@@ -43,68 +44,6 @@ function createPointerEvent(
   }
 
   return event;
-}
-
-const popoverOpenElements = new WeakSet<HTMLElement>();
-
-function installPopoverPolyfill() {
-  const prototype = HTMLElement.prototype as HTMLElement & {
-    showPopover?: (options?: { source?: HTMLElement }) => void;
-    hidePopover?: () => void;
-  };
-
-  const originalMatches = Element.prototype.matches;
-
-  Element.prototype.matches = function (this: Element, selector: string) {
-    if (selector === ':popover-open') {
-      return popoverOpenElements.has(this as HTMLElement);
-    }
-
-    return originalMatches.call(this, selector);
-  } as typeof Element.prototype.matches;
-
-  if (typeof prototype.showPopover !== 'function') {
-    Object.defineProperty(prototype, 'showPopover', {
-      configurable: true,
-      value(this: HTMLElement, options?: { source?: HTMLElement }) {
-        if (options?.source) {
-          this.dataset.popoverSourceId =
-            options.source.id ||
-            options.source.textContent?.trim() ||
-            options.source.getAttribute('aria-label') ||
-            'source';
-        }
-
-        popoverOpenElements.add(this);
-        const toggleEvent = new Event('toggle');
-        Object.defineProperty(toggleEvent, 'newState', {
-          configurable: true,
-          value: 'open',
-        });
-        this.dispatchEvent(toggleEvent);
-      },
-    });
-  }
-
-  if (typeof prototype.hidePopover !== 'function') {
-    Object.defineProperty(prototype, 'hidePopover', {
-      configurable: true,
-      value(this: HTMLElement) {
-        popoverOpenElements.delete(this);
-        delete this.dataset.popoverSourceId;
-        const toggleEvent = new Event('toggle');
-        Object.defineProperty(toggleEvent, 'newState', {
-          configurable: true,
-          value: 'closed',
-        });
-        this.dispatchEvent(toggleEvent);
-      },
-    });
-  }
-}
-
-function isPopoverOpen(element: HTMLElement | null) {
-  return element ? popoverOpenElements.has(element) : false;
 }
 
 async function flushMicrotasks() {

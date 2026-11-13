@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { installPopoverPolyfill } from '../../../tests/unit/popover';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import vTooltip, { normalizeBinding } from './vTooltip';
 import {
@@ -9,48 +10,18 @@ import {
 } from './helpers';
 import { setupTooltip } from './setup';
 
-const popoverOpenElements = new WeakSet<HTMLElement>();
 const hoveredElements = new WeakSet<HTMLElement>();
 const focusVisibleElements = new WeakSet<HTMLElement>();
 let popoverTestSupportInstalled = false;
-
-function createToggleEvent(oldState: 'open' | 'closed', newState: 'open' | 'closed') {
-  const event = new Event('toggle');
-
-  Object.defineProperties(event, {
-    oldState: { value: oldState },
-    newState: { value: newState },
-  });
-
-  return event;
-}
-
-function createBeforeToggleEvent(oldState: 'open' | 'closed', newState: 'open' | 'closed') {
-  const event = new Event('beforetoggle', { cancelable: true });
-
-  Object.defineProperties(event, {
-    oldState: { value: oldState },
-    newState: { value: newState },
-  });
-
-  return event;
-}
 
 function installPopoverTestSupport() {
   if (popoverTestSupportInstalled) return;
   popoverTestSupportInstalled = true;
 
-  const prototype = HTMLElement.prototype as HTMLElement & {
-    showPopover?: () => void;
-    hidePopover?: () => void;
-  };
+  installPopoverPolyfill();
   const originalMatches = HTMLElement.prototype.matches;
 
   HTMLElement.prototype.matches = function matches(this: HTMLElement, selector: string) {
-    if (selector === ':popover-open') {
-      return popoverOpenElements.has(this);
-    }
-
     if (selector === ':hover') {
       return hoveredElements.has(this);
     }
@@ -61,30 +32,6 @@ function installPopoverTestSupport() {
 
     return originalMatches.call(this, selector);
   } as typeof HTMLElement.prototype.matches;
-
-  if (typeof prototype.showPopover !== 'function') {
-    Object.defineProperty(prototype, 'showPopover', {
-      configurable: true,
-      value(this: HTMLElement) {
-        if (popoverOpenElements.has(this)) return;
-        if (!this.dispatchEvent(createBeforeToggleEvent('closed', 'open'))) return;
-        popoverOpenElements.add(this);
-        this.dispatchEvent(createToggleEvent('closed', 'open'));
-      },
-    });
-  }
-
-  if (typeof prototype.hidePopover !== 'function') {
-    Object.defineProperty(prototype, 'hidePopover', {
-      configurable: true,
-      value(this: HTMLElement) {
-        if (!popoverOpenElements.has(this)) return;
-        if (!this.dispatchEvent(createBeforeToggleEvent('open', 'closed'))) return;
-        popoverOpenElements.delete(this);
-        this.dispatchEvent(createToggleEvent('open', 'closed'));
-      },
-    });
-  }
 }
 
 function createTrigger() {
@@ -151,10 +98,16 @@ describe('normalizeBinding', () => {
 });
 
 describe('vTooltip directive', () => {
+  let cssSupportsSpy: ReturnType<typeof vi.spyOn>;
   let requestAnimationFrameSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     installPopoverTestSupport();
+    // jsdom parses anchor positioning syntax without performing layout.
+    const supports = CSS.supports.bind(CSS);
+    cssSupportsSpy = vi.spyOn(CSS, 'supports').mockImplementation((condition) => {
+      return condition === 'position-anchor: --a' ? false : supports(condition);
+    });
     vi.useFakeTimers();
     requestAnimationFrameSpy = vi
       .spyOn(window, 'requestAnimationFrame')
@@ -168,6 +121,7 @@ describe('vTooltip directive', () => {
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
     requestAnimationFrameSpy.mockRestore();
+    cssSupportsSpy.mockRestore();
     document.body.innerHTML = '';
   });
 
@@ -605,6 +559,7 @@ describe('fallback position', () => {
   it('resolves start and end against horizontal direction', () => {
     const anchor = document.createElement('div');
     anchor.style.direction = 'rtl';
+    document.body.append(anchor);
 
     expect(resolveFallbackPlacement(anchor, 'start')).toBe('right');
     expect(resolveFallbackPlacement(anchor, 'end')).toBe('left');
@@ -615,6 +570,7 @@ describe('fallback position', () => {
     const tip = document.createElement('div');
 
     anchor.style.writingMode = 'vertical-rl';
+    document.body.append(anchor, tip);
 
     Object.defineProperty(anchor, 'getBoundingClientRect', {
       configurable: true,

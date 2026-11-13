@@ -2,6 +2,8 @@
 
 This repository uses pnpm for dependencies and scripts. Vite builds the library, Vitest runs unit tests, Oxfmt formats files, and Oxlint checks code. Their settings live in `vite.config.ts`, `.oxfmtrc.json`, and `.oxlintrc.json` respectively.
 
+Run the toolchain on Node.js 24.15 or newer in the 24.x line, Node.js 22.22.2 or newer in the 22.x line, or Node.js 26 or newer. These versions satisfy the jsdom test environment's Node.js requirement.
+
 Run these commands from the repository root:
 
 ```sh

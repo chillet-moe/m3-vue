@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { installPopoverPolyfill } from '../../../tests/unit/popover';
 import { createOverlayService, useOverlays } from '@/overlays';
 import { createOverlayHost } from '@/internal/overlayHost/overlayHost';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -31,13 +32,7 @@ function mountOverlayHost(actionShape?: 'rounded' | 'square', snackbarDefaults?:
   app.mount(container);
 }
 
-beforeAll(() => {
-  // JSDOM has no top layer; native visibility is covered by browser tests.
-  Object.defineProperties(HTMLElement.prototype, {
-    showPopover: { configurable: true, value() {} },
-    hidePopover: { configurable: true, value() {} },
-  });
-});
+beforeAll(installPopoverPolyfill);
 
 beforeEach(() => {
   mountOverlayHost();
