@@ -36,7 +36,8 @@ try {
       element.showPopover();
       const hasEntryBox = element.getClientRects().length > 0;
       const entry = element.getAnimations().filter((animation) => animation instanceof CSSTransition);
-      await Promise.all(entry.map((animation) => animation.finished));
+      await Promise.allSettled(entry.map((animation) => animation.finished));
+      const enteredOpacity = getComputedStyle(element).opacity;
 
       const tipRect = element.getBoundingClientRect();
       const triggerRect = document.getElementById('trigger')!.getBoundingClientRect();
@@ -45,11 +46,12 @@ try {
       element.hidePopover();
       const hasExitBox = element.getClientRects().length > 0;
       const exit = element.getAnimations().filter((animation) => animation instanceof CSSTransition);
-      await Promise.all(exit.map((animation) => animation.finished));
+      await Promise.allSettled(exit.map((animation) => animation.finished));
 
       return {
         hasEntryBox,
         hasExitBox,
+        enteredOpacity,
         entryProperties: entry.map((animation) => animation.transitionProperty),
         exitProperties: exit.map((animation) => animation.transitionProperty),
         boxCount: element.getClientRects().length,
@@ -60,6 +62,7 @@ try {
     });
 
     assert(observed.hasEntryBox && observed.entryProperties.includes('opacity'), 'Expected a visible entry fade.');
+    assert.equal(observed.enteredOpacity, '1', 'The open tooltip should reach full opacity.');
     assert(observed.hasExitBox && observed.exitProperties.includes('opacity'), 'Expected a visible exit fade.');
     assert.equal(observed.boxCount, 0, 'Tooltip should leave layout after exit.');
     assert.equal(observed.unopenedHasBox, false, 'An unopened tooltip should have no layout box.');
