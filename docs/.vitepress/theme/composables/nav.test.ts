@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useLocaleNavigation } from './nav';
 
 const data = {
@@ -14,10 +14,10 @@ const data = {
   }),
   localeIndex: ref('zh-Hans'),
   page: ref({ relativePath: 'zh-Hans/components/button.md' }),
-  hash: ref('#usage'),
   theme: ref({ i18nRouting: true }),
 };
-vi.mock('vitepress', () => ({ useData: () => data, withBase: (path: string) => path }));
+const route = reactive({ hash: '#usage' });
+vi.mock('vitepress', () => ({ useData: () => data, useRoute: () => route, withBase: (path: string) => path }));
 
 describe('locale navigation', () => {
   it('lists configured languages and preserves the corresponding page and hash', () => {
@@ -27,9 +27,12 @@ describe('locale navigation', () => {
       { link: '/zh-Hans/components/button#usage', current: true },
       { link: '/ja/components/button#usage', current: false },
     ]);
+    route.hash = '#用法';
+    expect(nav.languages.value[0]?.link).toBe('/components/button#%E7%94%A8%E6%B3%95');
+
     data.localeIndex.value = 'ja';
     data.page.value.relativePath = 'ja/index.md';
-    data.hash.value = '';
+    route.hash = '';
     expect(nav.homeLink.value).toBe('/ja/');
     expect(nav.localizePath('/getting-started')).toBe('/ja/getting-started');
     expect(nav.languages.value.map(({ link }) => link)).toEqual(['/', '/zh-Hans/', '/ja/']);

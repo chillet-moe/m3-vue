@@ -127,7 +127,7 @@
     "typescript": "~6.0.3",
     "unplugin-vue-components": "^32.1.0",
     "vite": "catalog:",
-    "vitepress": "2.0.0-alpha.17",
+    "vitepress": "2.0.0-alpha.21",
     "vitest": "catalog:",
     "vue-component-meta": "^3.3.14",
     "vue-tsc": "^3.3.14",
