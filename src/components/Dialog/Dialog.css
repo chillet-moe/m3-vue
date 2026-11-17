@@ -253,11 +253,8 @@
       dialogOpacity var(--md-easing-fast) backwards;
   }
 
-  .m3-dialog[data-has-icon='true'] {
-    .m3-dialog-headline,
-    .m3-dialog-content {
-      text-align: center;
-    }
+  .m3-dialog-surface:has(> .m3-dialog-icon) > :is(.m3-dialog-headline, .m3-dialog-content) {
+    text-align: center;
   }
 
   @media (width < 40rem) {

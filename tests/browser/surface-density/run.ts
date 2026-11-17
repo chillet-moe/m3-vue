@@ -53,7 +53,7 @@ try {
           await page.waitForFunction(
             ({ id, expected }) =>
               Math.abs(
-                Number(document.querySelector(`[data-testid="${id}"] svg`)!.getAttribute('viewBox')!.split(' ')[2]) -
+                Number(document.querySelector(`[data-testid="${id}"]`)!.getAttribute('viewBox')!.split(' ')[2]) -
                   expected,
               ) < 0.1,
             { id, expected: base * unit },
@@ -81,6 +81,20 @@ try {
       }
     }
   }
+  const modeToggle = page.getByRole('button', { name: 'Toggle circular progress' });
+  const circle = page.getByTestId('circle-flat');
+  await modeToggle.click();
+  assert.equal(await circle.getAttribute('aria-valuenow'), null);
+  await modeToggle.click();
+  assert.equal(await circle.getAttribute('aria-valuenow'), '0.5');
+  await circle.evaluate((el: SVGSVGElement) => el.style.setProperty('--md-circular-progress-indicator-size', '53.5px'));
+  await page.waitForFunction(() => {
+    const circle = document.querySelector('[data-testid="circle-flat"]');
+    return circle?.getAttribute('viewBox') === '0 0 53.5 53.5' && circle.getBoundingClientRect().width === 53.5;
+  });
+  await modeToggle.click();
+  assert.equal(await circle.getAttribute('aria-valuenow'), null);
+  assert.equal(await circle.evaluate((el) => el.getBoundingClientRect().width), 53.5);
   console.log('Surface and progress density checks passed');
 } finally {
   await browser.close();

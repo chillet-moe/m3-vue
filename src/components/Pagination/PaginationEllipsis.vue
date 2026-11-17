@@ -10,7 +10,7 @@ const { label = 'More pages' } = defineProps<PaginationEllipsisProps>();
 </script>
 
 <template>
-  <span class="m3-pagination-ellipsis" data-scope="pagination" data-part="ellipsis">
+  <span class="m3-pagination-ellipsis" data-scope="pagination" data-part="ellipsis" role="img" :aria-label="label">
     <Icon
       name="more_horiz"
       class="m3-pagination-ellipsis-icon"
@@ -18,7 +18,6 @@ const { label = 'More pages' } = defineProps<PaginationEllipsisProps>();
       data-part="ellipsis-icon"
       aria-hidden="true"
     />
-    <span class="m3-pagination-visually-hidden" data-scope="pagination" data-part="ellipsis-label">{{ label }}</span>
   </span>
 </template>
 

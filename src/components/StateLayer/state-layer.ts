@@ -50,9 +50,9 @@ const createRipple = (node: Element, x: number, y: number, width: number, height
     ripple.remove();
 
     const current = rippleCleanups.get(node);
-    if (typeof current === 'function') {
-      if (current === cleanup) rippleCleanups.delete(node);
-    } else if (current) {
+    if (current === cleanup) {
+      rippleCleanups.delete(node);
+    } else if (current instanceof Set) {
       current.delete(cleanup);
       if (!current.size) rippleCleanups.delete(node);
     }

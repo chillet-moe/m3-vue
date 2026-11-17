@@ -13,6 +13,7 @@ import {
 createApp({
   setup() {
     const open = ref(false);
+    const indeterminate = ref(false);
     const kind = ref('Dialog');
     const surfaces = { Dialog, BottomSheet, SideSheet };
     return () =>
@@ -38,8 +39,14 @@ createApp({
             actions: () => h(Button, { onClick: () => (open.value = false) }, () => 'Close'),
           },
         ),
+        h(Button, { onClick: () => (indeterminate.value = !indeterminate.value) }, () => 'Toggle circular progress'),
         ...(['flat', 'wavy'] as const).flatMap((shape) => [
-          h(CircularProgressIndicator, { shape, value: 0.5, 'data-testid': `circle-${shape}` }),
+          h(CircularProgressIndicator, {
+            shape,
+            value: 0.5,
+            indeterminate: indeterminate.value,
+            'data-testid': `circle-${shape}`,
+          }),
           h(LinearProgressIndicator, { shape, value: 0.5, 'data-testid': `line-${shape}` }),
         ]),
         h(CircularProgressIndicator, { size: '3rem', thickness: '2px', 'data-testid': 'override' }),

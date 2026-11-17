@@ -4,7 +4,7 @@ import type { StyleValue } from 'vue';
 defineOptions({ inheritAttrs: false });
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
-import { computed, inject, ref, unref, useAttrs, useId, useSlots, watch } from 'vue';
+import { computed, inject, mergeProps, ref, unref, useAttrs, useId, useSlots, watch } from 'vue';
 import {
   DatePicker,
   type DatePickerModelValue,
@@ -200,50 +200,38 @@ const supportingMessage = computed(() => {
   return props.error || props.supportingText;
 });
 
-const hasSupporting = computed(() => {
-  return Boolean(supportingMessage.value || slots.supporting);
-});
-
-const supportingId = computed(() => {
-  return hasSupporting.value ? `${inputId.value}-supporting` : undefined;
-});
-
-const invalid = computed(() => {
-  return Boolean(props.error);
-});
-
-const hasLeading = computed(() => {
-  return Boolean(slots.leading);
-});
+const supportingId = computed(() => `${inputId.value}-supporting`);
+const invalid = computed(() => Boolean(props.error));
 
 const rootRef = ref<HTMLDivElement>();
 const containerRef = ref<HTMLDivElement>();
-const datePickerOpen = ref(false);
-const timePickerOpen = ref(false);
-const datePickerAnchorName = `--m3-text-field-date-picker-anchor-${generatedId}`;
-const timePickerAnchorName = `--m3-text-field-time-picker-anchor-${generatedId}`;
-
-const normalizedInputType = computed(() => {
-  return props.type.toLowerCase();
+const pickerOpen = ref(false);
+const normalizedInputType = computed(() => props.type.toLowerCase());
+const pickerKind = computed(() => {
+  if (props.as !== 'input') return undefined;
+  switch (normalizedInputType.value) {
+    case 'date':
+    case 'datetime-local':
+      return 'date';
+    case 'time':
+      return 'time';
+    default:
+      return undefined;
+  }
 });
 
-const hasDatePicker = computed(() => {
-  return (
-    props.as === 'input' && (normalizedInputType.value === 'date' || normalizedInputType.value === 'datetime-local')
-  );
-});
+const pickerId = computed(() => (pickerKind.value ? `${inputId.value}-${pickerKind.value}-picker` : undefined));
+const pickerAnchorName = computed(() =>
+  pickerKind.value ? `--m3-text-field-${pickerKind.value}-picker-anchor-${generatedId}` : undefined,
+);
 
-const hasTimePicker = computed(() => {
-  return props.as === 'input' && normalizedInputType.value === 'time';
-});
-
-const hasPicker = computed(() => {
-  return hasDatePicker.value || hasTimePicker.value;
-});
-
-const nativeInputType = computed(() => {
-  return hasPicker.value ? 'text' : props.type;
-});
+watch(
+  pickerKind,
+  () => {
+    pickerOpen.value = false;
+  },
+  { flush: 'sync' },
+);
 
 const datePickerMin = computed(() => {
   return normalizeDateLikeValue(props.min);
@@ -282,40 +270,6 @@ const timePickerValue = computed<TimePickerModelValue>({
   },
 });
 
-const pickerId = computed(() => {
-  if (hasDatePicker.value) {
-    return `${inputId.value}-date-picker`;
-  }
-
-  if (hasTimePicker.value) {
-    return `${inputId.value}-time-picker`;
-  }
-
-  return undefined;
-});
-
-const controlAttrs = computed(() => {
-  const forwarded = { ...attrs };
-  delete forwarded.class;
-  delete forwarded.style;
-  if (labelBehavior.value === 'external' && !forwarded['aria-label'] && !forwarded['aria-labelledby']) {
-    forwarded['aria-label'] = props.label;
-  }
-  return forwarded;
-});
-
-const pickerAnchorName = computed(() => {
-  if (hasDatePicker.value) {
-    return datePickerAnchorName;
-  }
-
-  if (hasTimePicker.value) {
-    return timePickerAnchorName;
-  }
-
-  return undefined;
-});
-
 watch(
   [() => (pickerAnchorName.value ? containerRef.value : undefined), pickerAnchorName],
   ([container, anchorName], _, onCleanup) => {
@@ -332,66 +286,75 @@ function normalizeDateLikeValue(value: string | undefined) {
   return normalizeIsoDate(value.slice(0, 10));
 }
 
-const handleInput = (event: Event) => {
-  emit('input', event);
-};
-
-const handleChange = (event: Event) => {
-  emit('change', event);
-};
-
-const handleFocus = (event: FocusEvent) => {
-  emit('focus', event);
-};
-
-const handleBlur = (event: FocusEvent) => {
-  emit('blur', event);
-};
-
-const handleKeydown = (event: KeyboardEvent) => {
-  if (hasPicker.value && !props.disabled && !props.readonly) {
+function handleKeydown(event: KeyboardEvent) {
+  if (pickerKind.value && !props.disabled && !props.readonly) {
     if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      openPicker();
+      pickerOpen.value = true;
       return;
     }
 
-    if (event.key === 'Escape') {
-      closePicker();
-    }
+    if (event.key === 'Escape') pickerOpen.value = false;
   }
 
   emit('keydown', event);
-};
-
-const handleControlClick = () => {
-  if (!hasPicker.value || props.disabled || props.readonly) {
-    return;
-  }
-
-  openPicker();
-};
-
-function openPicker() {
-  if (hasDatePicker.value) {
-    datePickerOpen.value = true;
-    return;
-  }
-
-  if (hasTimePicker.value) {
-    timePickerOpen.value = true;
-  }
 }
 
-function closePicker() {
-  datePickerOpen.value = false;
-  timePickerOpen.value = false;
+function handleControlClick() {
+  if (pickerKind.value && !props.disabled && !props.readonly) pickerOpen.value = true;
 }
 
-const handlePickerButtonClick = () => {
+const controlListeners = {
+  onInput: (event: Event) => emit('input', event),
+  onChange: (event: Event) => emit('change', event),
+  onFocus: (event: FocusEvent) => emit('focus', event),
+  onBlur: (event: FocusEvent) => emit('blur', event),
+  onKeydown: handleKeydown,
+};
+
+function controlBindings() {
+  const forwarded = { ...attrs };
+  delete forwarded.class;
+  delete forwarded.style;
+  if (labelBehavior.value === 'external' && !forwarded['aria-label'] && !forwarded['aria-labelledby']) {
+    forwarded['aria-label'] = props.label;
+  }
+
+  const shared = {
+    id: inputId.value,
+    name: props.name,
+    placeholder: props.placeholder,
+    disabled: props.disabled,
+    required: props.required,
+    readonly: props.readonly,
+    'aria-invalid': invalid.value ? 'true' : undefined,
+    'aria-describedby': supportingMessage.value || slots.supporting ? supportingId.value : undefined,
+  };
+  if (props.as === 'textarea') {
+    return mergeProps(shared, { rows: props.rows }, forwarded, controlListeners);
+  }
+
+  const picker = pickerKind.value;
+  return mergeProps(
+    shared,
+    {
+      type: picker ? 'text' : props.type,
+      min: props.min,
+      max: props.max,
+      'aria-controls': pickerId.value,
+      'aria-expanded': picker ? String(pickerOpen.value) : undefined,
+      'aria-haspopup': picker ? 'dialog' : undefined,
+    },
+    forwarded,
+    controlListeners,
+    { onClick: handleControlClick },
+  );
+}
+
+function handlePickerButtonClick() {
   controlRef.value?.focus();
   handleControlClick();
-};
+}
 
 const focus = () => {
   controlRef.value?.focus();
@@ -434,9 +397,8 @@ defineExpose({
     :data-visually-focused="props.visuallyFocused ? 'true' : 'false'"
     :data-has-placeholder="props.placeholder ? 'true' : 'false'"
     :data-always-float-label="props.alwaysFloatLabel ? 'true' : 'false'"
-    :data-has-leading="hasLeading ? 'true' : 'false'"
-    :data-has-date-picker="hasDatePicker ? 'true' : 'false'"
-    :data-has-time-picker="hasTimePicker ? 'true' : 'false'"
+    :data-has-leading="slots.leading ? 'true' : 'false'"
+    :data-picker="pickerKind"
     :style="[labelClearanceStyle, attrs.style as StyleValue]"
   >
     <div ref="containerRef" :class="'m3-text-field-container'" data-scope="text-field" data-part="container">
@@ -449,98 +411,52 @@ defineExpose({
         >{{ props.label }}</label
       >
 
-      <span :class="'m3-text-field-content'" data-scope="text-field" data-part="content">
-        <span v-if="slots.leading" :class="'m3-text-field-leading-slot'" data-scope="text-field" data-part="leading">
-          <slot name="leading" />
-        </span>
-        <span v-if="slots.prefix" :class="'m3-text-field-prefix-slot'" data-scope="text-field" data-part="prefix">
-          <slot name="prefix" />
-        </span>
+      <span v-if="slots.leading" :class="'m3-text-field-leading-slot'" data-scope="text-field" data-part="leading">
+        <slot name="leading" />
+      </span>
+      <span v-if="slots.prefix" :class="'m3-text-field-prefix-slot'" data-scope="text-field" data-part="prefix">
+        <slot name="prefix" />
+      </span>
 
-        <textarea
-          v-if="props.as === 'textarea'"
-          :id="inputId"
-          ref="controlRef"
-          v-model="nativeControlValue"
-          :class="['m3-text-field-input', 'm3-text-field-textarea']"
-          data-scope="text-field"
-          data-part="input"
-          :name="props.name"
-          :rows="props.rows"
-          :placeholder="props.placeholder"
-          :disabled="props.disabled"
-          :required="props.required"
-          :readonly="props.readonly"
-          :aria-invalid="invalid ? 'true' : undefined"
-          :aria-describedby="supportingId"
-          v-bind="controlAttrs"
-          @input="handleInput"
-          @change="handleChange"
-          @focus="handleFocus"
-          @blur="handleBlur"
-          @keydown="handleKeydown"
-        />
-        <input
-          v-else
-          :id="inputId"
-          ref="controlRef"
-          v-model="nativeControlValue"
-          :class="'m3-text-field-input'"
-          data-scope="text-field"
-          data-part="input"
-          :name="props.name"
-          :type="nativeInputType"
-          :min="props.min"
-          :max="props.max"
-          :placeholder="props.placeholder"
-          :disabled="props.disabled"
-          :required="props.required"
-          :readonly="props.readonly"
-          :aria-invalid="invalid ? 'true' : undefined"
-          :aria-describedby="supportingId"
-          :aria-controls="pickerId"
-          :aria-expanded="
-            hasDatePicker
-              ? datePickerOpen
-                ? 'true'
-                : 'false'
-              : hasTimePicker
-                ? timePickerOpen
-                  ? 'true'
-                  : 'false'
-                : undefined
-          "
-          :aria-haspopup="hasPicker ? 'dialog' : undefined"
-          v-bind="controlAttrs"
-          @click="handleControlClick"
-          @input="handleInput"
-          @change="handleChange"
-          @focus="handleFocus"
-          @blur="handleBlur"
-          @keydown="handleKeydown"
-        />
+      <textarea
+        v-if="props.as === 'textarea'"
+        ref="controlRef"
+        v-model="nativeControlValue"
+        class="m3-text-field-input m3-text-field-textarea"
+        data-scope="text-field"
+        data-part="input"
+        v-bind="controlBindings()"
+      />
+      <input
+        v-else
+        ref="controlRef"
+        v-model="nativeControlValue"
+        class="m3-text-field-input"
+        data-scope="text-field"
+        data-part="input"
+        v-bind="controlBindings()"
+      />
 
-        <span v-if="slots.suffix" :class="'m3-text-field-suffix-slot'" data-scope="text-field" data-part="suffix">
-          <slot name="suffix" />
-        </span>
-        <span
-          v-if="slots.trailing || hasPicker"
-          :class="'m3-text-field-trailing-slot'"
-          data-scope="text-field"
-          data-part="trailing"
-        >
-          <slot name="trailing" />
-          <IconButton
-            v-if="hasPicker"
-            class="m3-text-field-date-picker-button"
-            :icon="hasTimePicker ? 'schedule' : 'calendar_today'"
-            variant="standard"
-            size="small"
-            :disabled="props.disabled || props.readonly"
-            :aria-label="hasTimePicker ? messages.timePicker.chooseTime : messages.datePicker.chooseDate"
-            @click.stop="handlePickerButtonClick"
-          />
-        </span>
+      <span v-if="slots.suffix" :class="'m3-text-field-suffix-slot'" data-scope="text-field" data-part="suffix">
+        <slot name="suffix" />
+      </span>
+      <span
+        v-if="slots.trailing || pickerKind"
+        :class="'m3-text-field-trailing-slot'"
+        data-scope="text-field"
+        data-part="trailing"
+      >
+        <slot name="trailing" />
+        <IconButton
+          v-if="pickerKind"
+          class="m3-text-field-date-picker-button"
+          :icon="pickerKind === 'time' ? 'schedule' : 'calendar_today'"
+          variant="standard"
+          size="small"
+          :disabled="props.disabled || props.readonly"
+          :aria-label="pickerKind === 'time' ? messages.timePicker.chooseTime : messages.datePicker.chooseDate"
+          @click.stop="handlePickerButtonClick"
+        />
       </span>
 
       <fieldset :class="'m3-text-field-outline'" data-scope="text-field" data-part="outline" aria-hidden="true">
@@ -549,7 +465,7 @@ defineExpose({
     </div>
 
     <div
-      v-if="hasSupporting"
+      v-if="supportingMessage || slots.supporting"
       :id="supportingId"
       :class="'m3-text-field-supporting'"
       data-scope="text-field"
@@ -560,12 +476,12 @@ defineExpose({
     </div>
 
     <DatePicker
-      v-if="hasDatePicker"
-      :id="`${inputId}-date-picker`"
+      v-if="pickerKind === 'date'"
+      :id="pickerId"
       v-model="datePickerValue"
-      v-model:open="datePickerOpen"
+      v-model:open="pickerOpen"
       :variant="props.datePickerVariant"
-      :anchor-name="datePickerAnchorName"
+      :anchor-name="pickerAnchorName"
       :anchor-element="containerRef"
       :min="datePickerMin"
       :max="datePickerMax"
@@ -573,14 +489,14 @@ defineExpose({
     />
 
     <TimePicker
-      v-if="hasTimePicker"
-      :id="`${inputId}-time-picker`"
+      v-else-if="pickerKind === 'time'"
+      :id="pickerId"
       v-model="timePickerValue"
-      v-model:open="timePickerOpen"
+      v-model:open="pickerOpen"
       :variant="props.timePickerVariant"
       :format="timePickerFormat"
       :input-mode="props.timePickerInputMode"
-      :anchor-name="timePickerAnchorName"
+      :anchor-name="pickerAnchorName"
       :anchor-element="containerRef"
       :aria-label="messages.textField.openTimePicker(props.label)"
     />

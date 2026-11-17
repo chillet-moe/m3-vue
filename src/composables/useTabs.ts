@@ -1,5 +1,5 @@
 import { isHTMLElement } from '@/internal/elementEnvironment';
-import { type ComputedRef, type Ref, computed, getCurrentInstance, isRef, ref, toValue, useId } from 'vue';
+import { type Ref, computed, getCurrentInstance, isRef, ref, toValue, useId } from 'vue';
 import type { MaybeRefOrGetter } from 'vue';
 
 export type UseTabsOptions<T extends string = string> = {
@@ -22,28 +22,7 @@ export type UseTabsOptions<T extends string = string> = {
   id?: MaybeRefOrGetter<string>;
 };
 
-export type UseTabsReturn<T extends string = string> = {
-  /** The currently selected tab value. */
-  value: ComputedRef<T | undefined>;
-
-  /** Set the active tab value. */
-  setValue: (value: T) => void;
-
-  /** Resolved orientation. */
-  orientation: ComputedRef<'horizontal' | 'vertical'>;
-
-  /** Attributes to spread on the tab-list container. */
-  triggerListAttrs: ComputedRef<Record<string, unknown>>;
-
-  /** Get attributes for a single tab trigger. */
-  getTriggerAttrs: (value: T) => Record<string, unknown>;
-
-  /** Get attributes for a single tab panel. */
-  getPanelAttrs: (value: T) => Record<string, unknown>;
-
-  /** Unique instance id (for aria id generation). */
-  id: string;
-};
+export type UseTabsReturn<T extends string = string> = ReturnType<typeof useTabs<T>>;
 
 const TRIGGER_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
 
@@ -69,7 +48,7 @@ function getEventTrigger(event: KeyboardEvent) {
   return undefined;
 }
 
-export function useTabs<T extends string = string>(options: UseTabsOptions<T> = {}): UseTabsReturn<T> {
+export function useTabs<T extends string = string>(options: UseTabsOptions<T> = {}) {
   const instance = getCurrentInstance();
   const generatedId = instance ? `tabs-${useId()}` : `tabs-${++idCounter}`;
   const id = toValue(options.id) ?? generatedId;
@@ -178,37 +157,46 @@ export function useTabs<T extends string = string>(options: UseTabsOptions<T> = 
     }
   }
 
-  function getTriggerAttrs(value: T): Record<string, unknown> {
+  function getTriggerAttrs(value: T) {
+    const active = currentValue.value === value;
     return {
       role: 'tab' as const,
       id: getTriggerId(value),
-      tabindex: currentValue.value === value ? 0 : -1,
-      'aria-selected': currentValue.value === value,
+      tabindex: active ? 0 : -1,
+      'aria-selected': active,
       'aria-controls': getPanelId(value),
-      'data-active': currentValue.value === value ? '' : undefined,
+      'data-active': active ? '' : undefined,
       'data-tab-value': value,
       onClick: () => setValue(value),
       onKeydown: handleTriggerKeydown,
     };
   }
 
-  function getPanelAttrs(value: T): Record<string, unknown> {
+  function getPanelAttrs(value: T) {
+    const active = currentValue.value === value;
     return {
       role: 'tabpanel' as const,
       id: getPanelId(value),
       'aria-labelledby': getTriggerId(value),
-      hidden: currentValue.value !== value ? true : undefined,
-      'data-active': currentValue.value === value ? '' : undefined,
+      hidden: active ? undefined : true,
+      'data-active': active ? '' : undefined,
     };
   }
 
   return {
+    /** The currently selected tab value. */
     value: currentValue,
+    /** Set the active tab value. */
     setValue,
+    /** Resolved orientation. */
     orientation,
+    /** Attributes to spread on the tab-list container. */
     triggerListAttrs,
+    /** Get attributes for a single tab trigger. */
     getTriggerAttrs,
+    /** Get attributes for a single tab panel. */
     getPanelAttrs,
+    /** Unique instance id used to generate ARIA ids. */
     id,
   };
 }

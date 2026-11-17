@@ -46,16 +46,13 @@ const link = useLinkTag({
   disabled,
 });
 
-const slots = defineSlots<{
+defineSlots<{
   /** Slot for icon content. Will not be used if `icon` prop is set. */
   icon(props: { disabled: boolean }): any;
 
   /** Label content. When present, the FAB uses the extended layout. */
   default(props: { disabled: boolean }): any;
 }>();
-
-const hasIcon = computed(() => Boolean(props.icon || slots.icon));
-const extended = computed(() => Boolean(slots.default));
 
 const pressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
 const { getRootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
@@ -73,7 +70,7 @@ const shape = useShape(() => props.shape);
     :data-shape="shape"
     :data-color="color"
     :data-size="size"
-    :data-extended="extended ? 'true' : 'false'"
+    :data-extended="$slots.default ? 'true' : 'false'"
     :data-disabled="disabled ? 'true' : 'false'"
     :href="link.href"
     :disabled="link.nativeDisabled"
@@ -84,17 +81,17 @@ const shape = useShape(() => props.shape);
     v-bind="mergeProps(pressShapeMorphAttrs, getRootAttrs())"
   >
     <span
-      v-if="hasIcon"
+      v-if="icon || $slots.icon"
       class="m3-fab-icon"
       data-scope="floating-action-button"
       data-part="icon"
-      :aria-hidden="extended ? 'true' : undefined"
+      :aria-hidden="$slots.default ? 'true' : undefined"
     >
-      <Icon v-if="props.icon" :name="props.icon" />
+      <Icon v-if="icon" :name="icon" />
       <slot v-else name="icon" :disabled="disabled" />
     </span>
 
-    <span v-if="extended" class="m3-fab-label" data-scope="floating-action-button" data-part="label">
+    <span v-if="$slots.default" class="m3-fab-label" data-scope="floating-action-button" data-part="label">
       <slot name="default" :disabled="disabled" />
     </span>
   </component>

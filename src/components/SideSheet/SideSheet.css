@@ -93,8 +93,6 @@
 
     margin: 0;
     border: none;
-    padding: 0;
-
     box-sizing: border-box;
     display: none;
 
@@ -102,11 +100,17 @@
     block-size: var(--_sheet-side-docked-container-height);
     max-inline-size: none;
     max-block-size: 100vb;
-    overflow: visible;
+    overflow: hidden;
 
+    /* The content scrolls independently of the headline and actions. */
+    flex-direction: column;
+    gap: --density-space(16, 8, 2);
+    padding-block: var(--_side-sheet-container-padding-block);
+    padding-inline: 0;
     color: inherit;
-    background: transparent;
-    box-shadow: none;
+    background: var(--_sheet-side-docked-modal-container-color);
+    box-shadow: var(--_sheet-side-docked-modal-container-elevation);
+    border-radius: var(--_sheet-side-docked-modal-container-shape);
 
     pointer-events: none;
     transform: translateX(var(--_side-sheet-closed-translate));
@@ -120,10 +124,7 @@
     --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, -100%);
 
     inset-inline: 0 auto;
-  }
-
-  .m3-side-sheet[data-side='end'] {
-    --_side-sheet-closed-translate: var(--md-side-sheet-closed-translate, 100%);
+    border-radius: var(--_shape-radius, var(--md-shape-docked-modal-end));
   }
 
   .m3-side-sheet[data-side='start'][data-variant='detached'] {
@@ -147,10 +148,11 @@
       calc(100vb - var(--_side-sheet-detached-gap) - var(--_side-sheet-detached-gap))
     );
     max-block-size: calc(100vb - var(--_side-sheet-detached-gap) - var(--_side-sheet-detached-gap));
+    border-radius: var(--_sheet-side-detached-container-shape);
   }
 
   .m3-side-sheet[open] {
-    display: block;
+    display: flex;
     pointer-events: auto;
     transform: translateX(0);
   }
@@ -166,36 +168,6 @@
   .m3-side-sheet[open]::backdrop {
     background-color: --translucent(var(--md-sys-color-scrim), 0.3);
     animation: sideSheetBackdropOpacity var(--md-timing-function-spatial) var(--md-duration-spatial);
-  }
-
-  .m3-side-sheet-surface {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: --density-space(16, 8, 2);
-
-    inline-size: 100%;
-    block-size: 100%;
-    max-block-size: none;
-    overflow: hidden;
-
-    /* Surface owns edge spacing; content owns the cancelling overflow inset. */
-    padding-block: var(--_side-sheet-container-padding-block);
-    padding-inline: 0;
-    background-color: var(--_sheet-side-docked-modal-container-color);
-    box-shadow: var(--_sheet-side-docked-modal-container-elevation);
-  }
-
-  .m3-side-sheet[data-side='start'] .m3-side-sheet-surface {
-    border-radius: var(--_shape-radius, var(--md-shape-docked-modal-end));
-  }
-
-  .m3-side-sheet[data-side='end'] .m3-side-sheet-surface {
-    border-radius: var(--_sheet-side-docked-modal-container-shape);
-  }
-
-  .m3-side-sheet[data-variant='detached'] .m3-side-sheet-surface {
-    border-radius: var(--_sheet-side-detached-container-shape);
   }
 
   .m3-side-sheet-headline {
@@ -256,8 +228,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .m3-side-sheet,
-    .m3-side-sheet::backdrop,
-    .m3-side-sheet-surface {
+    .m3-side-sheet::backdrop {
       transition-duration: 0ms;
       animation-duration: 0ms;
     }

@@ -10,7 +10,7 @@ export type TooltipProps = {
 
 const { variant = 'plain', popover = 'hint' } = defineProps<TooltipProps>();
 
-const slots = defineSlots<{
+defineSlots<{
   /**
    * The default slot for the tooltip content.
    */

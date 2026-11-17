@@ -37,13 +37,12 @@ defineSlots<{
   trailing(props: { value: string | undefined; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
 }>();
 
-const selectedValue = computed(() => modelValue.value);
 const railState = computed(() => stateModel.value ?? 'collapsed');
 
 // Track selection in the slot only when its content reads it.
 const slotProps = {
   get value() {
-    return selectedValue.value;
+    return modelValue.value;
   },
   get disabled() {
     return props.disabled;
@@ -64,7 +63,7 @@ const activate = (value: string) => {
 };
 
 provide(navigationRailContextKey, {
-  value: selectedValue,
+  value: modelValue,
   state: railState,
   disabled: toRef(() => props.disabled),
   activate,
@@ -77,7 +76,6 @@ const shape = provideShape(() => props.shape);
   <nav
     class="m3-navigation-rail"
     :data-size="rowSize"
-    role="navigation"
     data-scope="navigation-rail"
     data-part="root"
     data-m3-shape

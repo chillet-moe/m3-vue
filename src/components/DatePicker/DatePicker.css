@@ -514,6 +514,10 @@
     --md-icon-size: 1.5rem;
   }
 
+  .m3-date-picker-list-label {
+    grid-column: 2;
+  }
+
   .m3-date-picker-actions {
     display: flex;
     justify-content: end;

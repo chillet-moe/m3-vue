@@ -86,7 +86,6 @@ const shape = useShape(() => shapeProp);
       :data-state-layer-hover-from="presentation ? undefined : 'target'"
       aria-hidden="true"
     >
-      <span :class="'m3-checkbox-box'" data-scope="checkbox" data-part="box" />
       <span :class="'m3-checkbox-icon'" data-scope="checkbox" data-part="icon" />
     </span>
 

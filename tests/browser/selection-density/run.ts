@@ -78,20 +78,16 @@ try {
       el.style.setProperty('--md-sys-typescale-body-medium-size', `${size}px`);
       el.style.setProperty('--md-density', '-2');
     }, fontSize);
-    for (const [kind, part, base] of [
-      ['checkbox', 'box', 18],
-      ['radio', 'outer', 20],
-      ['switch', 'control', 32],
+    for (const [kind, base] of [
+      ['checkbox', 18],
+      ['radio', 20],
+      ['switch', 32],
     ] as const) {
       const expected = (base * fontSize) / 14 - 2;
       const actual = await page
         .getByTestId(kind)
-        .locator(`[data-part="${part}"]`)
-        .evaluate(
-          (el, kind) =>
-            kind === 'switch' ? parseFloat(getComputedStyle(el, '::before').height) : el.getBoundingClientRect().height,
-          kind,
-        );
+        .locator('[data-part="control"]')
+        .evaluate((el) => parseFloat(getComputedStyle(el, '::before').height));
       assert(Math.abs(actual - expected) < 0.05, `${kind} follows custom typography`);
     }
   }
@@ -136,13 +132,13 @@ try {
   await radio.focus();
   await page.keyboard.press('Space');
   assert(await radio.isChecked());
-  for (const [kind, shapeToken, shapePart, shapeSize] of [
-    ['checkbox', '--md-checkbox-container-size', 'box', 14],
-    ['radio', '--md-radio-icon-size', 'outer', 16],
+  for (const [kind, shapeToken, shapeSize] of [
+    ['checkbox', '--md-checkbox-container-size', 14],
+    ['radio', '--md-radio-icon-size', 16],
   ] as const) {
     const root = page.getByTestId(kind);
     assert.equal(
-      await root.locator(`[data-part="${shapePart}"]`).evaluate((el) => el.getBoundingClientRect().width),
+      await root.locator('[data-part="control"]').evaluate((el) => parseFloat(getComputedStyle(el, '::before').width)),
       shapeSize,
     );
     await root.evaluate((el, token) => (el as HTMLElement).style.setProperty(token, '30px'), shapeToken);

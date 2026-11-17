@@ -125,19 +125,12 @@
     pointer-events: none;
   }
 
-  .m3-breadcrumb-separator-icon {
-    inline-size: var(--_breadcrumb-separator-icon-size);
-    block-size: var(--_breadcrumb-separator-icon-size);
-    font-size: var(--_breadcrumb-separator-icon-size);
-
-    --md-icon-size: var(--_breadcrumb-separator-icon-size);
-  }
-
   .m3-breadcrumb-ellipsis {
     color: var(--_breadcrumb-ellipsis-color);
     padding-inline: var(--_breadcrumb-link-padding-inline);
   }
 
+  .m3-breadcrumb-separator-icon,
   .m3-breadcrumb-ellipsis-icon {
     inline-size: var(--_breadcrumb-separator-icon-size);
     block-size: var(--_breadcrumb-separator-icon-size);

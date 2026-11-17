@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
-import { isHTMLTag } from '@/internal/elementEnvironment';
-
+import { isHTMLElement, isHTMLTag } from '@/internal/elementEnvironment';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import { isHTMLElement } from '@/internal/elementEnvironment';
 
 import { useLinkTag } from '@/composables/useLinkTag';
-import { computed, inject, useId, useSlots } from 'vue';
+import { computed, inject, useId } from 'vue';
 import { menuItemOwnerContextKey, menuSelectionContextKey } from './MenuContext';
 import type { MenuItemValue } from './MenuTypes';
 
@@ -21,6 +19,9 @@ export type MenuItemProps = {
 
   /** Optional href. When provided, the item renders as an anchor. */
   href?: string;
+
+  /** Plain text shown when the default slot is omitted. */
+  label?: string;
 
   /** Disables item interaction. */
   disabled?: boolean;
@@ -49,6 +50,7 @@ const {
   size = undefined,
   value = undefined,
   href = undefined,
+  label,
   disabled = false,
   closeOnSelect = true,
   selected = false,
@@ -58,39 +60,37 @@ const {
   submenuOpen = false,
 } = defineProps<MenuItemProps>();
 
-const slots = useSlots();
 const menuItemOwner = inject(menuItemOwnerContextKey, null);
 const menuSelection = inject(menuSelectionContextKey, null);
 
+type MenuItemSlotProps = { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean };
+
 defineSlots<{
   /** Optional leading content, such as an icon. */
-  leading(props: { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean }): any;
+  leading(props: MenuItemSlotProps): any;
 
   /** Main menu item text. */
-  default(props: { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean }): any;
+  default(props: MenuItemSlotProps): any;
 
   /** Optional trailing icon content. */
-  trailing(props: { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean }): any;
+  trailing(props: MenuItemSlotProps): any;
 
   /** Optional badge content. */
-  badge(props: { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean }): any;
+  badge(props: MenuItemSlotProps): any;
 
   /** Optional trailing supporting text. */
-  trailingText(props: { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean }): any;
+  trailingText(props: MenuItemSlotProps): any;
 
   /** Optional supporting text shown below the main label. */
-  supporting(props: { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean }): any;
+  supporting(props: MenuItemSlotProps): any;
 }>();
 
 const supportingId = `menu-item-supporting-${useId()}`;
 
-const usesMenuSelection = computed(() => {
-  return value !== undefined && !submenu;
-});
-
+const selectionValue = computed(() => (submenu ? undefined : value));
 const menuSelected = computed(() => {
-  if (!usesMenuSelection.value || value === undefined) return undefined;
-  return menuSelection?.isSelected(value);
+  const itemValue = selectionValue.value;
+  return itemValue === undefined ? undefined : menuSelection?.isSelected(itemValue);
 });
 
 const resolvedRole = computed(() => {
@@ -98,7 +98,7 @@ const resolvedRole = computed(() => {
     return role;
   }
 
-  if (!usesMenuSelection.value || !menuSelection) {
+  if (selectionValue.value === undefined || !menuSelection) {
     return 'menuitem';
   }
 
@@ -137,11 +137,8 @@ function handleClick(event: MouseEvent) {
     return;
   }
 
-  if (!usesMenuSelection.value || !menuSelection || value === undefined) {
-    return;
-  }
-
-  menuSelection.toggle(value);
+  const itemValue = selectionValue.value;
+  if (itemValue !== undefined) menuSelection?.toggle(itemValue);
 }
 
 function handleKeydown(event: KeyboardEvent) {
@@ -163,29 +160,6 @@ function handleKeydown(event: KeyboardEvent) {
   currentTarget.click();
 }
 
-function hasLeading() {
-  return Boolean(slots.leading);
-}
-
-function hasSupporting() {
-  return Boolean(slots.supporting);
-}
-
-function hasTrailing() {
-  return Boolean(slots.trailing);
-}
-
-function hasBadge() {
-  return Boolean(slots.badge);
-}
-
-function hasTrailingText() {
-  return Boolean(slots.trailingText);
-}
-
-function hasSuffix() {
-  return hasTrailing() || hasBadge() || hasTrailingText();
-}
 const rowSize = provideRowSize(() => size);
 const shape = useShape(() => shapeProp);
 </script>
@@ -202,7 +176,6 @@ const shape = useShape(() => shapeProp);
     :type="link.type"
     :data-selected="slotProps.selected ? 'true' : undefined"
     :data-menu-owner="menuItemOwner?.id"
-    :data-has-supporting="hasSupporting() ? 'true' : undefined"
     :data-close-on-select="closeOnSelect ? undefined : 'false'"
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"
@@ -211,8 +184,8 @@ const shape = useShape(() => shapeProp);
       resolvedRole === 'menuitemradio' || resolvedRole === 'menuitemcheckbox' ? slotProps.checked : undefined
     "
     :aria-selected="resolvedRole === 'option' ? slotProps.selected : undefined"
-    :aria-describedby="hasSupporting() ? supportingId : undefined"
-    :class="['m3-state-layer', 'm3-menu-item', 'm3-row-size']"
+    :aria-describedby="$slots.supporting ? supportingId : undefined"
+    class="m3-state-layer m3-menu-item m3-row-size"
     :data-size="rowSize"
     data-scope="menu-item"
     data-part="root"
@@ -221,37 +194,49 @@ const shape = useShape(() => shapeProp);
     @click="handleClick"
     @keydown="handleKeydown"
   >
-    <span v-if="hasLeading()" class="m3-menu-item-leading" data-scope="menu-item" data-part="leading">
+    <span v-if="$slots.leading" class="m3-menu-item-leading" data-scope="menu-item" data-part="leading">
       <slot name="leading" v-bind="slotProps" />
     </span>
 
-    <span class="m3-menu-item-content" data-scope="menu-item" data-part="content">
-      <span class="m3-menu-item-label" data-scope="menu-item" data-part="label">
-        <slot v-bind="slotProps" />
-      </span>
-
-      <span
-        v-if="hasSupporting()"
-        :id="supportingId"
-        class="m3-menu-item-supporting"
-        data-scope="menu-item"
-        data-part="supporting"
-      >
-        <slot name="supporting" v-bind="slotProps" />
-      </span>
+    <span
+      class="m3-menu-item-content"
+      :class="{ 'm3-menu-item-label': !$slots.default && !$slots.supporting }"
+      data-scope="menu-item"
+      data-part="content"
+    >
+      <template v-if="$slots.default || $slots.supporting">
+        <span class="m3-menu-item-label" data-scope="menu-item" data-part="label">
+          <slot v-bind="slotProps">{{ label }}</slot>
+        </span>
+        <span
+          v-if="$slots.supporting"
+          :id="supportingId"
+          class="m3-menu-item-supporting"
+          data-scope="menu-item"
+          data-part="supporting"
+        >
+          <slot name="supporting" v-bind="slotProps" />
+        </span>
+      </template>
+      <template v-else>{{ label }}</template>
     </span>
 
-    <span v-if="hasSuffix()" class="m3-menu-item-suffix" data-scope="menu-item" data-part="suffix">
-      <span v-if="hasTrailing()" class="m3-menu-item-trailing" data-scope="menu-item" data-part="trailing">
+    <span
+      v-if="$slots.trailing || $slots.badge || $slots.trailingText"
+      class="m3-menu-item-suffix"
+      data-scope="menu-item"
+      data-part="suffix"
+    >
+      <span v-if="$slots.trailing" class="m3-menu-item-trailing" data-scope="menu-item" data-part="trailing">
         <slot name="trailing" v-bind="slotProps" />
       </span>
 
-      <span v-if="hasBadge()" class="m3-menu-item-badge" data-scope="menu-item" data-part="badge">
+      <span v-if="$slots.badge" class="m3-menu-item-badge" data-scope="menu-item" data-part="badge">
         <slot name="badge" v-bind="slotProps" />
       </span>
 
       <span
-        v-if="hasTrailingText()"
+        v-if="$slots.trailingText"
         class="m3-menu-item-trailing-text"
         data-scope="menu-item"
         data-part="trailing-text"

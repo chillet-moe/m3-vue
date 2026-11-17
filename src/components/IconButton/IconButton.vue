@@ -66,7 +66,7 @@ const pressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
 
 const { getRootAttrs, rootRef } = useActionTitleTooltip({ ariaLabelFallback: true });
 
-const slots = defineSlots<{
+defineSlots<{
   /** Default slot for the main content of the icon button. Receives `disabled` as a prop. */
   default(props: { disabled: boolean }): any;
 }>();
@@ -76,7 +76,7 @@ const slots = defineSlots<{
   <component
     v-state-layer
     :is="link.tag"
-    :class="['m3-state-layer', 'm3-icon-button']"
+    class="m3-state-layer m3-icon-button"
     data-scope="icon-button"
     data-part="root"
     :data-variant="variant"

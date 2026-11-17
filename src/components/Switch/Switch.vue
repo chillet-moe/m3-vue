@@ -44,10 +44,6 @@ const size = computed(() => sizeProp ?? unref(inheritedSize) ?? 'medium');
 
 const checked = defineModel<boolean>('checked', { required: true });
 
-const withIcon = computed(() => {
-  return uncheckedIcon || checkedIcon;
-});
-
 defineSlots<{
   /** Optional label content rendered next to switch. */
   default(): any;
@@ -95,7 +91,7 @@ defineSlots<{
         data-part="handle"
         :data-state-layer-hover-from="presentation ? undefined : 'target'"
       >
-        <span v-if="withIcon" :class="'m3-switch-icon'" data-scope="switch" data-part="icon">{{
+        <span v-if="uncheckedIcon || checkedIcon" class="m3-switch-icon" data-scope="switch" data-part="icon">{{
           checked ? checkedIcon : uncheckedIcon
         }}</span>
       </span>

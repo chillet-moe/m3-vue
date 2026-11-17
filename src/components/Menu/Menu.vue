@@ -4,7 +4,7 @@ import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, provide, unref, useId, useTemplateRef } from 'vue';
 import { menuDefaultsContextKey } from './MenuDefaultsContext';
 import { useMenu } from '@/composables/useMenu';
-import MenuContentRenderer from './MenuContentRenderer.vue';
+import MenuContentRenderer from './MenuContentRenderer';
 import { menuContextKey, menuItemOwnerContextKey, menuSelectionContextKey, menuSubmenuContextKey } from './MenuContext';
 import type { MenuColor, MenuContentItem, MenuItemValue, MenuModelValue } from './MenuTypes';
 

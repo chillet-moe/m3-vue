@@ -32,12 +32,13 @@
 
 @layer components {
   .m3-loading-indicator {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-grid;
+    place-items: center;
     flex-shrink: 0;
     inline-size: var(--_loading-indicator-container-width);
     block-size: var(--_loading-indicator-container-height);
+    overflow: hidden;
+    border-radius: var(--_loading-indicator-container-shape);
     color: var(--_loading-indicator-active-indicator-color);
     vertical-align: middle;
     print-color-adjust: exact;
@@ -49,20 +50,6 @@
 
   .m3-loading-indicator[data-variant='contained'] {
     color: var(--_loading-indicator-contained-active-indicator-color);
-  }
-
-  .m3-loading-indicator-container {
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    inline-size: 100%;
-    block-size: 100%;
-    border-radius: var(--_loading-indicator-container-shape);
-    background: transparent;
-    color: inherit;
-  }
-
-  .m3-loading-indicator[data-variant='contained'] .m3-loading-indicator-container {
     background: var(--_loading-indicator-contained-container-color);
   }
 

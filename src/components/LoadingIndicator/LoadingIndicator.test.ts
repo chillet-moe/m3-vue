@@ -121,7 +121,6 @@ describe('LoadingIndicator', () => {
     expect(root?.dataset.indeterminate).toBe('true');
     expect(root?.dataset.variant).toBe('uncontained');
     expect(root?.dataset.visible).toBe('true');
-    expect(container.querySelector('[data-part="container"]')).not.toBeNull();
     expect(active?.getAttribute('d')).toMatch(/^m/);
     expect(active?.getAttribute('d')).toContain(' z');
 

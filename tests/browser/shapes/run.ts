@@ -15,7 +15,6 @@ try {
   await openFixture(page, new URL('/tests/browser/shapes/', server.resolvedUrls!.local[0]).href);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const targets = [
-    ['[data-testid="checkbox"] [data-part="box"]', '2px'],
     ['[data-testid="button"]', '3px'],
     ['[data-testid="icon"]', '3px'],
     ['[data-testid="toggle"]', '3px'],
@@ -42,7 +41,7 @@ try {
     ['[data-testid="dialog"] [data-part="surface"]', '6px'],
     ['[data-testid="snackbar"]', '2px'],
     ['[data-testid="bottom"] [data-part="surface"]', '6px'],
-    ['[data-testid="side"] [data-part="surface"]', '6px'],
+    ['[data-testid="side"]', '6px'],
     ['[data-testid="date"] [data-part="surface"]', '6px'],
     ['[data-testid="date"] [data-part="month-switch"]', '3px'],
     ['[data-testid="date"] [data-part="day"]', '2px'],
@@ -75,6 +74,9 @@ try {
       for (const corners of await radii(target))
         assert.deepEqual(corners, Array(4).fill(shape === 'minimal' ? minimalRadius : radius), `${shape}: ${target}`);
     }
+    const checkbox = '[data-testid="checkbox"] [data-part="control"]';
+    for (const corners of await radii(checkbox, '::before'))
+      assert.deepEqual(corners, Array(4).fill(radius), `${shape}: checkbox`);
     for (const id of ['list', 'expressive']) {
       for (const corners of await radii(`[data-testid="${id}"]`, '::before'))
         assert.deepEqual(corners, Array(4).fill(radius), `${shape}: ${id} indicator`);
@@ -129,6 +131,22 @@ try {
       }
     }
   }
+
+  const middle = '[data-testid="group"] [data-scope="button"]:nth-child(2)';
+  await page.locator(middle).evaluate((el) => {
+    const style = (el as HTMLElement).style;
+    style.setProperty('--md-button-group-connected-inner-corner-corner-size', '5px 6px');
+    style.setProperty('--md-button-group-connected-pressed-inner-corner-corner-size', '11px');
+  });
+  await page.locator(middle).hover();
+  await page.mouse.down();
+  assert.deepEqual(
+    await radii(middle),
+    [Array(4).fill('11px')],
+    'Native press uses the middle button’s pressed radius token',
+  );
+  await page.mouse.up();
+
   console.log(
     'Shape modes: surfaces, rows, local overrides, tokens, selected states, press morph and connected groups passed.',
   );

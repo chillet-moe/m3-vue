@@ -45,18 +45,11 @@ const isShown = ref(props.visible);
 const activeIndicatorRef = useTemplateRef<SVGPathElement>('activeIndicator');
 
 let view: Window | null = null;
-let showTimer = 0;
-let hideTimer = 0;
+let visibilityTimer = 0;
 let shownAt = 0;
 let animationRegistration: ReturnType<typeof registerLoadingIndicatorAnimation> | undefined;
 
-const now = () => {
-  if (view?.performance) {
-    return view!.performance.now();
-  }
-
-  return Date.now();
-};
+const now = () => view?.performance.now() ?? Date.now();
 
 const normalizedShowDelay = computed(() => {
   return Number.isFinite(props.showDelay) ? Math.max(0, props.showDelay) : 0;
@@ -68,111 +61,53 @@ const normalizedMinHideDelay = computed(() => {
 });
 
 const rootStyle = computed(() => {
+  const width = props.containerWidth || props.containerSize;
+  const height = props.containerHeight || props.containerSize;
   const style: Record<string, string> = {};
-
-  if (props.indicatorSize) {
-    style['--md-loading-indicator-active-indicator-size'] = props.indicatorSize;
-  }
-
-  if (props.containerSize) {
-    style['--md-loading-indicator-container-width'] = props.containerSize;
-    style['--md-loading-indicator-container-height'] = props.containerSize;
-  }
-
-  if (props.containerWidth) {
-    style['--md-loading-indicator-container-width'] = props.containerWidth;
-  }
-
-  if (props.containerHeight) {
-    style['--md-loading-indicator-container-height'] = props.containerHeight;
-  }
-
+  if (props.indicatorSize) style['--md-loading-indicator-active-indicator-size'] = props.indicatorSize;
+  if (width) style['--md-loading-indicator-container-width'] = width;
+  if (height) style['--md-loading-indicator-container-height'] = height;
   return style;
 });
 
-const clearShowTimer = () => {
-  if (showTimer) {
-    view!.clearTimeout(showTimer);
-    showTimer = 0;
-  }
+const clearVisibilityTimer = () => {
+  view?.clearTimeout(visibilityTimer);
+  visibilityTimer = 0;
 };
 
-const clearHideTimer = () => {
-  if (hideTimer) {
-    view!.clearTimeout(hideTimer);
-    hideTimer = 0;
-  }
-};
-
-const syncAnimation = () => {
-  animationRegistration?.setActive(isShown.value);
-};
-
-const showNow = () => {
-  clearShowTimer();
-  clearHideTimer();
-  if (!isShown.value) {
-    isShown.value = true;
-  }
-  shownAt = now();
-  syncAnimation();
-};
-
-const hideNow = () => {
-  clearShowTimer();
-  clearHideTimer();
-  isShown.value = false;
-  syncAnimation();
+const setShown = (visible: boolean) => {
+  visibilityTimer = 0;
+  if (visible) shownAt = now();
+  isShown.value = visible;
+  animationRegistration?.setActive(visible);
 };
 
 const syncVisibility = () => {
-  if (!view) {
-    return;
-  }
+  if (!view) return;
+  clearVisibilityTimer();
 
-  clearShowTimer();
-  clearHideTimer();
-
-  if (props.visible) {
-    if (isShown.value) {
-      return;
-    }
-
-    if (normalizedShowDelay.value > 0) {
-      showTimer = view!.setTimeout(showNow, normalizedShowDelay.value);
-    } else {
-      showNow();
-    }
-    return;
-  }
-
-  if (!isShown.value) {
-    return;
-  }
-
-  const visibleDuration = now() - shownAt;
-  const hideDelay = Math.max(0, normalizedMinHideDelay.value - visibleDuration);
-  if (hideDelay > 0) {
-    hideTimer = view!.setTimeout(hideNow, hideDelay);
+  const visible = props.visible;
+  if (visible === isShown.value) return;
+  const delay = visible ? normalizedShowDelay.value : normalizedMinHideDelay.value - (now() - shownAt);
+  if (delay > 0) {
+    visibilityTimer = view.setTimeout(() => setShown(visible), delay);
   } else {
-    hideNow();
+    setShown(visible);
   }
 };
 
-watch(() => props.visible, syncVisibility);
-watch([normalizedShowDelay, normalizedMinHideDelay], syncVisibility);
+watch([() => props.visible, normalizedShowDelay, normalizedMinHideDelay], syncVisibility);
 
 useElementEnvironment(activeIndicatorRef, (document, path) => {
   view = document.defaultView;
   shownAt = isShown.value ? now() : 0;
   const registration = registerLoadingIndicatorAnimation(path);
   animationRegistration = registration;
-  syncAnimation();
+  registration.setActive(isShown.value);
   syncVisibility();
 
   return () => {
-    clearShowTimer();
-    clearHideTimer();
+    clearVisibilityTimer();
     registration.cleanup();
     animationRegistration = undefined;
     view = null;
@@ -193,29 +128,22 @@ useElementEnvironment(activeIndicatorRef, (document, path) => {
     :aria-hidden="isShown ? undefined : 'true'"
     :style="rootStyle"
   >
-    <span
-      class="m3-loading-indicator-container"
+    <svg
+      class="m3-loading-indicator-active-svg"
       data-scope="loading-indicator"
-      data-part="container"
+      data-part="active-indicator-svg"
+      viewBox="0 0 380 380"
+      focusable="false"
       aria-hidden="true"
     >
-      <svg
-        class="m3-loading-indicator-active-svg"
+      <path
+        ref="activeIndicator"
+        class="m3-loading-indicator-active"
         data-scope="loading-indicator"
-        data-part="active-indicator-svg"
-        viewBox="0 0 380 380"
-        focusable="false"
-        aria-hidden="true"
-      >
-        <path
-          ref="activeIndicator"
-          class="m3-loading-indicator-active"
-          data-scope="loading-indicator"
-          data-part="active-indicator"
-          :d="staticLoadingIndicatorFrame.path"
-        />
-      </svg>
-    </span>
+        data-part="active-indicator"
+        :d="staticLoadingIndicatorFrame.path"
+      />
+    </svg>
   </span>
 </template>
 

@@ -323,7 +323,7 @@ describe('LinearProgressIndicator', () => {
     expect(root?.getAttribute('aria-valuemax')).toBeNull();
     expect(root?.getAttribute('aria-valuenow')).toBeNull();
     expect(root?.getAttribute('aria-valuetext')).toBe('Loading');
-    expect(container.querySelectorAll('.m3-linear-progress-indicator-active-indeterminate')).toHaveLength(2);
+    expect(container.querySelectorAll('[data-part="active-indicator"]')).toHaveLength(2);
     expect(container.querySelector('[data-part="stop-indicator"]')).toBeNull();
 
     app.unmount();

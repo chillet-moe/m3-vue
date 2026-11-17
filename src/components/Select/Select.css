@@ -125,7 +125,6 @@
     pointer-events: none;
   }
 
-  .m3-select-option:not([data-has-option-leading='true']) .m3-menu-item-content,
   .m3-select-option:not([data-has-option-leading='true']) .m3-menu-item-suffix {
     transition: transform 220ms var(--md-timing-function-fast-spatial);
   }
@@ -154,13 +153,13 @@
   }
 
   .m3-select-option[data-first='true'] {
-    border-start-start-radius: var(--_menu-item-first-start-radius);
-    border-start-end-radius: var(--_menu-item-first-end-radius);
+    border-start-start-radius: var(--_menu-item-first-radius);
+    border-start-end-radius: var(--_menu-item-first-radius);
   }
 
   .m3-select-option[data-last='true'] {
-    border-end-start-radius: var(--_menu-item-last-start-radius);
-    border-end-end-radius: var(--_menu-item-last-end-radius);
+    border-end-start-radius: var(--_menu-item-last-radius);
+    border-end-end-radius: var(--_menu-item-last-radius);
   }
 
   .m3-select-options-move,
@@ -212,7 +211,6 @@
     .m3-select-options-leave-active,
     .m3-select-option .m3-select-option-check,
     .m3-select-option .m3-select-option-icon,
-    .m3-select-option:not([data-has-option-leading='true']) .m3-menu-item-content,
     .m3-select-option:not([data-has-option-leading='true']) .m3-menu-item-suffix {
       transition-duration: 0ms;
     }

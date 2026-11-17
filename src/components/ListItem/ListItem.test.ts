@@ -128,7 +128,6 @@ describe('ListItem', () => {
     const leading = container.querySelector<HTMLElement>('[data-scope="item"][data-part="leading"]');
     const trailing = container.querySelector<HTMLElement>('[data-scope="item"][data-part="trailing"]');
 
-    expect(root?.dataset.active).toBe('true');
     expect(root?.dataset.selected).toBe('true');
     expect(root?.getAttribute('aria-current')).toBe('page');
     expect(leading?.textContent).toContain('L');

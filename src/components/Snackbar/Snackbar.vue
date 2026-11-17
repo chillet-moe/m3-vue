@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
-import { computed, useId, useSlots } from 'vue';
+import { useId } from 'vue';
 import { Button } from '@/components/Button';
 import { IconButton } from '@/components/IconButton';
 
@@ -55,11 +55,7 @@ defineSlots<{
   dismiss(): any;
 }>();
 
-const slots = useSlots();
 const contentId = `snackbar-content-${useId()}`;
-const hasAction = computed(() => Boolean(actionLabel || slots.action));
-const hasDismiss = computed(() => dismissible || Boolean(slots.dismiss));
-const actionLayout = computed(() => (actionOnNewLine && hasAction.value ? 'new-line' : 'inline'));
 const shape = useShape(() => shapeProp);
 </script>
 
@@ -70,7 +66,7 @@ const shape = useShape(() => shapeProp);
     data-part="root"
     data-m3-shape
     :data-shape="shape"
-    :data-action-layout="actionLayout"
+    :data-action-layout="actionOnNewLine && (actionLabel || $slots.action) ? 'new-line' : 'inline'"
     role="status"
     aria-live="polite"
     aria-atomic="true"
@@ -80,37 +76,35 @@ const shape = useShape(() => shapeProp);
       <slot />
     </div>
 
-    <div v-if="hasAction || hasDismiss" :class="'m3-snackbar-actions'" data-scope="snackbar" data-part="actions">
-      <Button
-        v-if="hasAction"
-        :class="'m3-snackbar-action-button'"
-        data-scope="snackbar"
-        data-part="action-button"
-        variant="text"
-        size="small"
-        :disabled="actionDisabled"
-        :autofocus="actionAutofocus"
-        @click="emit('action')"
-      >
-        <slot name="action">
-          {{ actionLabel }}
-        </slot>
-      </Button>
+    <Button
+      v-if="actionLabel || $slots.action"
+      :class="'m3-snackbar-action-button'"
+      data-scope="snackbar"
+      data-part="action-button"
+      variant="text"
+      size="small"
+      :disabled="actionDisabled"
+      :autofocus="actionAutofocus"
+      @click="emit('action')"
+    >
+      <slot name="action">
+        {{ actionLabel }}
+      </slot>
+    </Button>
 
-      <IconButton
-        v-if="hasDismiss"
-        :class="'m3-snackbar-dismiss-button'"
-        data-scope="snackbar"
-        data-part="dismiss-button"
-        variant="standard"
-        size="small"
-        :aria-label="dismissButtonLabel"
-        :icon="slots.dismiss ? undefined : 'close'"
-        @click="emit('dismiss')"
-      >
-        <slot name="dismiss" />
-      </IconButton>
-    </div>
+    <IconButton
+      v-if="dismissible || $slots.dismiss"
+      :class="'m3-snackbar-dismiss-button'"
+      data-scope="snackbar"
+      data-part="dismiss-button"
+      variant="standard"
+      size="small"
+      :aria-label="dismissButtonLabel"
+      :icon="$slots.dismiss ? undefined : 'close'"
+      @click="emit('dismiss')"
+    >
+      <slot name="dismiss" />
+    </IconButton>
   </section>
 </template>
 

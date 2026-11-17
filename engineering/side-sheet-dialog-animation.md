@@ -2,9 +2,9 @@
 
 ## Status
 
-The SideSheet entry animation is implemented on the native `<dialog>` root. The
-root owns the sheet's viewport placement, size, and translation; its surface is
-a stationary, fully painted child that fills the root.
+The native `<dialog>` owns the SideSheet's viewport placement, size, paint,
+content layout, and translation. The content scrolls independently of the
+headline and action row.
 
 Page scroll locking remains independent from the animation. It uses the shared
 scroll lock, which hides body overflow and compensates for the removed scrollbar
@@ -92,8 +92,7 @@ The implementation now follows one ownership chain:
    the dialog from non-rendered to rendered.
 5. `display` and `overlay` remain discrete transitions so the browser keeps the
    dialog rendered and in the top layer for the visual transition.
-6. The surface fills the root and owns only paint, shape, elevation, and content
-   layout. It has no competing translation or opacity animation.
+6. The root paints and clips the sheet. The content provides the scrollport.
 
 This makes the positioned modal box, animated box, hit-test area, and painted
 sheet share the same geometry. Detached variants express their gap through the

@@ -109,8 +109,8 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
       const stop = () => {
         if (!active) return;
         active = false;
-        observer?.unobserve(element);
         observed.delete(element);
+        if (!layoutUpdates?.has(element)) observer?.unobserve(element);
         scheduled.delete(entry);
         entry.startTime = undefined;
         entry.hasBox = true;
@@ -123,7 +123,7 @@ function createRuntime(document: Document, onEmpty: () => void): Runtime {
           active = true;
           if (view?.ResizeObserver && document.timeline) {
             observed.set(element, entry);
-            observe(element);
+            if (!layoutUpdates?.has(element)) observe(element);
           }
           scheduled.add(entry);
           syncFrame();

@@ -60,9 +60,9 @@
 @layer components {
   .m3-snackbar {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'content actions';
-    gap: 0.5rem;
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
+    grid-template-areas: 'content action dismiss';
+    row-gap: 0.5rem;
     align-items: center;
 
     min-block-size: var(--_snackbar-with-single-line-container-height);
@@ -79,6 +79,7 @@
     grid-area: content;
     min-inline-size: 0;
     overflow-wrap: anywhere;
+    margin-inline-end: 0.5rem;
     padding-block-start: var(--_snackbar-container-padding-block);
     padding-block-end: var(--_snackbar-container-padding-block);
 
@@ -90,31 +91,22 @@
 
   .m3-snackbar[data-action-layout='new-line'] .m3-snackbar-content {
     padding-block-end: 0;
-  }
-
-  .m3-snackbar-actions {
-    grid-area: actions;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    min-inline-size: max-content;
-    justify-self: end;
+    margin-inline-end: 0;
   }
 
   .m3-snackbar[data-action-layout='new-line'] {
-    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      'content'
-      'actions';
-    row-gap: 0.5rem;
+      'content content content'
+      '. action dismiss';
     padding-block-end: var(--_snackbar-container-padding-inline-end);
   }
 
-  .m3-snackbar[data-action-layout='new-line'] .m3-snackbar-actions {
-    justify-self: end;
+  .m3-snackbar-action-button + .m3-snackbar-dismiss-button {
+    margin-inline-start: 0.25rem;
   }
 
   .m3-snackbar-action-button {
+    grid-area: action;
     --md-button-text-label-text-color: var(--_snackbar-action-label-text-color);
     --md-button-text-hovered-label-text-color: var(--_snackbar-action-label-text-color);
     --md-button-text-focused-label-text-color: var(--_snackbar-action-label-text-color);
@@ -127,6 +119,7 @@
   }
 
   .m3-snackbar-dismiss-button {
+    grid-area: dismiss;
     --md-icon-button-standard-icon-color: var(--_snackbar-icon-color);
     --md-icon-button-standard-hovered-icon-color: var(--_snackbar-icon-color);
     --md-icon-button-standard-focused-icon-color: var(--_snackbar-icon-color);

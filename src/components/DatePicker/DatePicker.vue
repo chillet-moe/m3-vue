@@ -4,8 +4,7 @@ import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, inject, nextTick, ref, unref, useId } from 'vue';
 import { datePickerContextKey } from './DatePickerContext';
 import Button from '@/components/Button/Button.vue';
-import Icon from '@/components/Icon/Icon.vue';
-import IconButton from '@/components/IconButton/IconButton.vue';
+import CalendarNavigation from './CalendarNavigation.vue';
 import {
   type DatePickerModelValue,
   type DatePickerVariant,
@@ -206,179 +205,51 @@ const shape = useShape(() => props.shape);
     @toggle="popover.handlePopoverToggle"
   >
     <div ref="surfaceRef" class="m3-date-picker-surface" data-scope="date-picker" data-part="surface">
-      <div class="m3-date-picker-header" data-scope="date-picker" data-part="header">
-        <IconButton
-          icon="chevron_left"
-          variant="standard"
-          size="small"
-          :disabled="!picker.canGoPreviousMonth.value"
-          :aria-label="messages.datePicker.previousMonth"
-          data-scope="date-picker"
-          data-part="previous-month"
-          @click="picker.goToPreviousMonth"
-        />
+      <CalendarNavigation :picker="picker" scope="date-picker" :messages="messages.datePicker">
+        <div class="m3-date-picker-calendar" data-scope="date-picker" data-part="calendar">
+          <div class="m3-date-picker-weekdays" data-scope="date-picker" data-part="weekdays" aria-hidden="true">
+            <span
+              v-for="weekday in picker.weekdayLabels.value"
+              :key="weekday.key"
+              class="m3-date-picker-weekday"
+              data-scope="date-picker"
+              data-part="weekday"
+              >{{ weekday.label }}</span
+            >
+          </div>
 
-        <Button
-          class="m3-date-picker-switch m3-state-layer"
-          variant="text"
-          size="small"
-          :press-shape-morph="false"
-          :trailing-icon="picker.calendarView.value === 'months' ? 'arrow_drop_up' : 'arrow_drop_down'"
-          data-scope="date-picker"
-          data-part="month-switch"
-          :aria-expanded="picker.calendarView.value === 'months' ? 'true' : 'false'"
-          @click="picker.toggleMonthView"
-        >
-          {{ picker.monthButtonLabel.value }}
-        </Button>
-
-        <IconButton
-          icon="chevron_right"
-          variant="standard"
-          size="small"
-          :disabled="!picker.canGoNextMonth.value"
-          :aria-label="messages.datePicker.nextMonth"
-          data-scope="date-picker"
-          data-part="next-month"
-          @click="picker.goToNextMonth"
-        />
-
-        <IconButton
-          icon="chevron_left"
-          variant="standard"
-          size="small"
-          :disabled="!picker.canGoPreviousYear.value"
-          :aria-label="messages.datePicker.previousYear"
-          data-scope="date-picker"
-          data-part="previous-year"
-          @click="picker.goToPreviousYear"
-        />
-
-        <Button
-          class="m3-date-picker-switch m3-state-layer"
-          variant="text"
-          size="small"
-          :press-shape-morph="false"
-          :trailing-icon="picker.calendarView.value === 'years' ? 'arrow_drop_up' : 'arrow_drop_down'"
-          data-scope="date-picker"
-          data-part="year-switch"
-          :aria-expanded="picker.calendarView.value === 'years' ? 'true' : 'false'"
-          @click="picker.toggleYearView"
-        >
-          {{ picker.displayedYearLabel.value }}
-        </Button>
-
-        <IconButton
-          icon="chevron_right"
-          variant="standard"
-          size="small"
-          :disabled="!picker.canGoNextYear.value"
-          :aria-label="messages.datePicker.nextYear"
-          data-scope="date-picker"
-          data-part="next-year"
-          @click="picker.goToNextYear"
-        />
-      </div>
-
-      <div
-        v-if="picker.calendarView.value === 'days'"
-        class="m3-date-picker-calendar"
-        data-scope="date-picker"
-        data-part="calendar"
-      >
-        <div class="m3-date-picker-weekdays" data-scope="date-picker" data-part="weekdays" aria-hidden="true">
-          <span
-            v-for="weekday in picker.weekdayLabels.value"
-            :key="weekday.key"
-            class="m3-date-picker-weekday"
+          <div
+            role="grid"
+            class="m3-date-picker-grid"
             data-scope="date-picker"
-            data-part="weekday"
-            >{{ weekday.label }}</span
+            data-part="grid"
+            :aria-label="picker.calendarLabel.value"
           >
+            <button
+              v-state-layer
+              v-for="(day, index) in picker.calendarDays.value"
+              :key="day.date"
+              type="button"
+              role="gridcell"
+              class="m3-date-picker-day m3-state-layer"
+              data-scope="date-picker"
+              data-part="day"
+              :data-date="day.date"
+              :data-selected="day.selected ? 'true' : undefined"
+              :data-today="day.today ? 'true' : undefined"
+              :data-outside-month="day.outsideMonth ? 'true' : undefined"
+              :disabled="day.disabled"
+              :aria-selected="day.selected ? 'true' : 'false'"
+              :aria-current="day.today ? 'date' : undefined"
+              :aria-label="picker.calendarDayLabels.value[index]"
+              @click="picker.selectDate(day.date)"
+              @keydown="handleCalendarKeydown($event, day.date)"
+            >
+              {{ day.label }}
+            </button>
+          </div>
         </div>
-
-        <div
-          role="grid"
-          class="m3-date-picker-grid"
-          data-scope="date-picker"
-          data-part="grid"
-          :aria-label="picker.calendarLabel.value"
-        >
-          <button
-            v-state-layer
-            v-for="(day, index) in picker.calendarDays.value"
-            :key="day.date"
-            type="button"
-            role="gridcell"
-            class="m3-date-picker-day m3-state-layer"
-            data-scope="date-picker"
-            data-part="day"
-            :data-date="day.date"
-            :data-selected="day.selected ? 'true' : undefined"
-            :data-today="day.today ? 'true' : undefined"
-            :data-outside-month="day.outsideMonth ? 'true' : undefined"
-            :disabled="day.disabled"
-            :aria-selected="day.selected ? 'true' : 'false'"
-            :aria-current="day.today ? 'date' : undefined"
-            :aria-label="picker.calendarDayLabels.value[index]"
-            @click="picker.selectDate(day.date)"
-            @keydown="handleCalendarKeydown($event, day.date)"
-          >
-            {{ day.label }}
-          </button>
-        </div>
-      </div>
-
-      <div
-        v-else-if="picker.calendarView.value === 'months'"
-        class="m3-date-picker-list"
-        data-scope="date-picker"
-        data-part="months"
-      >
-        <button
-          v-state-layer
-          v-for="monthOption in picker.monthOptions.value"
-          :key="monthOption.month"
-          type="button"
-          class="m3-date-picker-list-item m3-state-layer"
-          data-scope="date-picker"
-          data-part="month"
-          :data-selected="monthOption.selected ? 'true' : undefined"
-          :disabled="monthOption.disabled"
-          :aria-pressed="monthOption.selected ? 'true' : 'false'"
-          @click="picker.selectMonth(monthOption.month)"
-        >
-          <span class="m3-date-picker-list-icon" data-scope="date-picker" data-part="list-icon" aria-hidden="true">
-            <Icon v-if="monthOption.selected" name="check" />
-          </span>
-          <span class="m3-date-picker-list-label" data-scope="date-picker" data-part="list-label">
-            {{ monthOption.label }}
-          </span>
-        </button>
-      </div>
-
-      <div v-else class="m3-date-picker-list" data-scope="date-picker" data-part="years">
-        <button
-          v-state-layer
-          v-for="yearOption in picker.yearOptions.value"
-          :key="yearOption.year"
-          type="button"
-          class="m3-date-picker-list-item m3-state-layer"
-          data-scope="date-picker"
-          data-part="year"
-          :data-selected="yearOption.selected ? 'true' : undefined"
-          :disabled="yearOption.disabled"
-          :aria-pressed="yearOption.selected ? 'true' : 'false'"
-          @click="picker.selectYear(yearOption.year)"
-        >
-          <span class="m3-date-picker-list-icon" data-scope="date-picker" data-part="list-icon" aria-hidden="true">
-            <Icon v-if="yearOption.selected" name="check" />
-          </span>
-          <span class="m3-date-picker-list-label" data-scope="date-picker" data-part="list-label">
-            {{ yearOption.label }}
-          </span>
-        </button>
-      </div>
+      </CalendarNavigation>
 
       <div class="m3-date-picker-actions" data-scope="date-picker" data-part="actions">
         <Button variant="text" @click="handleCancel">{{ cancelText }}</Button>

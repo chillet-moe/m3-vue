@@ -13,7 +13,7 @@ defineSlots<{
 </script>
 
 <template>
-  <nav class="m3-pagination" role="navigation" data-scope="pagination" data-part="root" :aria-label="ariaLabel">
+  <nav class="m3-pagination" data-scope="pagination" data-part="root" :aria-label="ariaLabel">
     <slot />
   </nav>
 </template>

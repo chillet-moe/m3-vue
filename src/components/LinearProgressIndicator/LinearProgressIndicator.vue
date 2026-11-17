@@ -1,3 +1,8 @@
+<script lang="ts">
+const determinateSegments = ['determinate'];
+const indeterminateSegments = ['first', 'second'];
+</script>
+
 <script setup lang="ts">
 import { useElementEnvironment } from '@/internal/elementEnvironment';
 import { computed, nextTick, onBeforeUnmount, shallowRef, useTemplateRef, watch } from 'vue';
@@ -154,7 +159,7 @@ watch(progressRatioDisplayed, (value) => {
   trackElement ??= rootRef.value?.querySelector<HTMLElement>('[data-part="track"]') ?? undefined;
   trackElement?.style.setProperty(progressProperty, progress);
   const active = trackElement?.nextElementSibling as HTMLElement | null | undefined;
-  if (active?.classList.contains('m3-linear-progress-indicator-active-determinate')) {
+  if (active?.dataset.segment === 'determinate') {
     active.style.setProperty(progressProperty, progress);
   }
 });
@@ -266,89 +271,30 @@ useElementEnvironment(rootRef, (document) => {
     >
       <div class="m3-linear-progress-indicator-track" data-scope="linear-progress-indicator" data-part="track" />
 
-      <template v-if="isDeterminate">
-        <div
-          class="m3-linear-progress-indicator-active m3-linear-progress-indicator-active-determinate"
+      <div
+        v-for="segment in isDeterminate ? determinateSegments : indeterminateSegments"
+        :key="segment"
+        class="m3-linear-progress-indicator-active"
+        data-scope="linear-progress-indicator"
+        data-part="active-indicator"
+        :data-segment="segment"
+      >
+        <svg
+          v-if="isWavy"
+          class="m3-linear-progress-indicator-active-wavy"
           data-scope="linear-progress-indicator"
-          data-part="active-indicator"
+          data-part="active-indicator-wavy"
+          :viewBox="waveViewBox"
+          :width="layout.width"
+          :height="layout.height"
+          :style="waveSvgStyle"
+          preserveAspectRatio="none"
+          focusable="false"
+          aria-hidden="true"
         >
-          <span
-            class="m3-linear-progress-indicator-active-flat"
-            data-scope="linear-progress-indicator"
-            data-part="active-indicator-flat"
-          />
-          <svg
-            v-if="isWavy"
-            class="m3-linear-progress-indicator-active-wavy"
-            data-scope="linear-progress-indicator"
-            data-part="active-indicator-wavy"
-            :viewBox="waveViewBox"
-            :width="layout.width"
-            :height="layout.height"
-            :style="waveSvgStyle"
-            preserveAspectRatio="none"
-            focusable="false"
-            aria-hidden="true"
-          >
-            <path :d="wavePath" />
-          </svg>
-        </div>
-      </template>
-
-      <template v-else>
-        <div
-          class="m3-linear-progress-indicator-active m3-linear-progress-indicator-active-indeterminate m3-linear-progress-indicator-active-indeterminate-one"
-          data-scope="linear-progress-indicator"
-          data-part="active-indicator"
-        >
-          <span
-            class="m3-linear-progress-indicator-active-flat"
-            data-scope="linear-progress-indicator"
-            data-part="active-indicator-flat"
-          />
-          <svg
-            v-if="isWavy"
-            class="m3-linear-progress-indicator-active-wavy"
-            data-scope="linear-progress-indicator"
-            data-part="active-indicator-wavy"
-            :viewBox="waveViewBox"
-            :width="layout.width"
-            :height="layout.height"
-            :style="waveSvgStyle"
-            preserveAspectRatio="none"
-            focusable="false"
-            aria-hidden="true"
-          >
-            <path :d="wavePath" />
-          </svg>
-        </div>
-        <div
-          class="m3-linear-progress-indicator-active m3-linear-progress-indicator-active-indeterminate m3-linear-progress-indicator-active-indeterminate-two"
-          data-scope="linear-progress-indicator"
-          data-part="active-indicator"
-        >
-          <span
-            class="m3-linear-progress-indicator-active-flat"
-            data-scope="linear-progress-indicator"
-            data-part="active-indicator-flat"
-          />
-          <svg
-            v-if="isWavy"
-            class="m3-linear-progress-indicator-active-wavy"
-            data-scope="linear-progress-indicator"
-            data-part="active-indicator-wavy"
-            :viewBox="waveViewBox"
-            :width="layout.width"
-            :height="layout.height"
-            :style="waveSvgStyle"
-            preserveAspectRatio="none"
-            focusable="false"
-            aria-hidden="true"
-          >
-            <path :d="wavePath" />
-          </svg>
-        </div>
-      </template>
+          <path :d="wavePath" />
+        </svg>
+      </div>
 
       <div
         v-if="isStopIndicatorVisible"

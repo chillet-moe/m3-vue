@@ -61,9 +61,9 @@ Keep content or payload state intact in `close` and while setting `open` to `fal
 
 ## Layout
 
-The dialog root owns viewport placement and motion. The sheet surface owns the background, shape, and elevation.
-Default spacing is applied to the `headline`, `content`, and `actions` parts instead of the surface, so custom
-full-bleed content can opt out by overriding the relevant part padding.
+The native dialog root owns viewport placement, motion, background, shape, and elevation. The root provides vertical
+edge spacing. The `headline`, `content`, and `actions` parts have their own inline padding. For full-bleed content,
+override the `content` part’s inline padding.
 
 Scrollable content also preserves common descendant visual overflow at its block edges. See
 [Scrollable Content Visual Overflow](/guides/scrollable-content-visual-overflow) for the shared surface contract and

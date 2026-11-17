@@ -193,7 +193,7 @@ describe('BottomSheet', () => {
 
     const dialog = container.querySelector('dialog') as HTMLDialogElement | null;
 
-    expect(dialog?.dataset.hasDragHandle).toBe('false');
+    expect(dialog?.querySelector('[data-part="drag-handle"]')).toBeNull();
     expect(dialog?.style.getPropertyValue('--md-bottom-sheet-max-height')).toBe('70vh');
 
     dialog?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
@@ -303,16 +303,12 @@ describe('BottomSheet', () => {
     await nextTick();
 
     expect(dialog?.style.getPropertyValue('--md-bottom-sheet-drag-offset')).toBe('-13.2px');
-    expect(dialog?.style.getPropertyValue('--md-bottom-sheet-translate-offset')).toBe('0px');
-    expect(dialog?.style.getPropertyValue('--md-bottom-sheet-background-extension')).toBe('13.2px');
 
     surface?.dispatchEvent(createPointerEvent('pointerup', { clientY: 240 }));
     await nextTick();
 
     expect(dialog?.open).toBe(true);
     expect(dialog?.style.getPropertyValue('--md-bottom-sheet-drag-offset')).toBe('0px');
-    expect(dialog?.style.getPropertyValue('--md-bottom-sheet-translate-offset')).toBe('0px');
-    expect(dialog?.style.getPropertyValue('--md-bottom-sheet-background-extension')).toBe('0px');
 
     app.unmount();
   });

@@ -4,7 +4,7 @@ import { isNode, useElementEnvironment } from '@/internal/elementEnvironment';
 import { registerSharedViewportChange } from '@/internal/sharedViewportChange';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 
-import { computed, nextTick, onUnmounted, provide, ref, useId, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, provide, ref, useId, useTemplateRef, watch } from 'vue';
 
 import { Icon } from '@/components/Icon';
 import type { MenuModelValue } from '@/components/Menu/MenuTypes';
@@ -66,11 +66,11 @@ const menuId = `fab-menu-${useId()}`;
 const triggerId = `${menuId}-trigger`;
 const rootRef = useTemplateRef<HTMLDivElement>('root');
 const triggerRef = useTemplateRef<HTMLButtonElement>('trigger');
-const menuRef = useTemplateRef<HTMLDivElement>('menu');
+const menuRef = ref<HTMLDivElement>();
 const surfaceRef = useTemplateRef<HTMLDivElement>('surface');
 const modelValue = ref<MenuModelValue>();
-const restoreFocusAfterClose = ref(false);
 const effectiveAlignment = ref<FloatingActionButtonMenuProps['alignment']>(props.alignment);
+let restoreFocusAfterClose = false;
 
 const disabled = computed(() => props.disabled);
 const triggerPressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
@@ -78,10 +78,6 @@ const triggerPressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled });
 provide(floatingActionButtonMenuContextKey, {
   id: menuId,
 });
-
-function isPopoverOpen(menu: HTMLElement) {
-  return menu.matches(':popover-open');
-}
 
 function toPixelValue(value: string | undefined, relativeTo?: Element | null) {
   if (!value || !relativeTo) return 0;
@@ -105,15 +101,14 @@ function toPixelValue(value: string | undefined, relativeTo?: Element | null) {
 }
 
 function updatePopoverPosition() {
-  const window = rootRef.value?.ownerDocument.defaultView;
-  if (!window) return;
-
   const root = rootRef.value;
+  const window = root?.ownerDocument.defaultView;
   const trigger = triggerRef.value;
   const menu = menuRef.value;
-  if (!trigger || !menu) return;
+  const surface = surfaceRef.value;
+  if (!window || !root || !trigger || !menu || !surface) return;
 
-  const rootRect = root?.getBoundingClientRect();
+  const rootRect = root.getBoundingClientRect();
   const triggerRect = trigger.getBoundingClientRect();
   const triggerStyle = window.getComputedStyle(trigger);
   const closeButtonWidth =
@@ -122,28 +117,16 @@ function updatePopoverPosition() {
   const closeButtonHeight =
     toPixelValue(triggerStyle.getPropertyValue('--_fab-menu-close-button-container-height'), trigger) ||
     triggerRect.height;
-  const hasRootRect = Boolean(rootRect && (rootRect.width || rootRect.height));
-  const anchorLeft =
-    hasRootRect && rootRect
-      ? props.alignment === 'start'
-        ? rootRect.left
-        : rootRect.right - closeButtonWidth
-      : triggerRect.left;
-  const anchorRight =
-    hasRootRect && rootRect
-      ? props.alignment === 'start'
-        ? rootRect.left + closeButtonWidth
-        : rootRect.right
-      : triggerRect.right;
-  const anchorTop = hasRootRect && rootRect ? rootRect.bottom - closeButtonHeight : triggerRect.top;
+  const hasRootRect = rootRect.width || rootRect.height;
+  const closeButtonLeft = props.alignment === 'start' ? rootRect.left : rootRect.right - closeButtonWidth;
+  const anchorLeft = hasRootRect ? closeButtonLeft : triggerRect.left;
+  const anchorRight = hasRootRect ? closeButtonLeft + closeButtonWidth : triggerRect.right;
+  const anchorTop = hasRootRect ? rootRect.bottom - closeButtonHeight : triggerRect.top;
 
-  const surface = menu.querySelector<HTMLElement>('.m3-fab-menu-surface');
-  const surfaceStyle = surface ? window.getComputedStyle(surface) : undefined;
-  const surfacePaddingInlineStart = toPixelValue(surfaceStyle?.paddingInlineStart, surface);
-  const surfacePaddingInlineEnd = toPixelValue(surfaceStyle?.paddingInlineEnd, surface);
-  const itemButtonGap = toPixelValue(surfaceStyle?.rowGap, surface);
-  const surfaceRect = surface?.getBoundingClientRect();
-  const surfaceInlineSize = surfaceRect?.width ?? 0;
+  const surfaceStyle = window.getComputedStyle(surface);
+  const surfacePaddingInlineStart = toPixelValue(surfaceStyle.paddingInlineStart, surface);
+  const surfacePaddingInlineEnd = toPixelValue(surfaceStyle.paddingInlineEnd, surface);
+  const surfaceInlineSize = surface.getBoundingClientRect().width;
   const maxInlineOffset = Math.max(0, window.innerWidth - surfaceInlineSize);
 
   const getPreferredInlineStart = (alignment: 'start' | 'end') =>
@@ -161,16 +144,14 @@ function updatePopoverPosition() {
   const nextEffectiveAlignment = alternateOverflow < requestedOverflow ? alternateAlignment : props.alignment;
   const preferredInlineStart = nextEffectiveAlignment === props.alignment ? requestedInlineStart : alternateInlineStart;
   const inlineStart = Math.min(Math.max(0, preferredInlineStart), maxInlineOffset);
-  const blockEnd = window.innerHeight - anchorTop + itemButtonGap;
-
   effectiveAlignment.value = nextEffectiveAlignment;
   menu.style.setProperty('--_fab-menu-popover-inline-start', `${inlineStart}px`);
-  menu.style.setProperty('--_fab-menu-popover-block-end', `${Math.max(0, blockEnd)}px`);
+  menu.style.setProperty('--_fab-menu-anchor-block-end', `${window.innerHeight - anchorTop}px`);
 }
 
 const menuActions = useMenu({
   menuId,
-  menuRef: menuRef as any,
+  menuRef,
   open,
   modelValue,
   multiple: () => false,
@@ -184,13 +165,10 @@ function showPopover() {
   if (!menu) return;
 
   updatePopoverPosition();
-  if (isPopoverOpen(menu)) {
-    updatePopoverPosition();
-    return;
-  }
+  if (menu.matches(':popover-open')) return;
 
   try {
-    menu.showPopover({ source: triggerRef.value } as any);
+    menu.showPopover(triggerRef.value ? { source: triggerRef.value } : undefined);
   } catch {
     menu.showPopover();
   }
@@ -200,7 +178,7 @@ function showPopover() {
 
 function hidePopover() {
   const menu = menuRef.value;
-  if (!menu || !isPopoverOpen(menu)) return;
+  if (!menu?.matches(':popover-open')) return;
 
   menu.hidePopover();
 }
@@ -220,7 +198,7 @@ async function show(focusFirst = false) {
 }
 
 function hide(options: { restoreFocus?: boolean } = {}) {
-  restoreFocusAfterClose.value = options.restoreFocus ?? false;
+  restoreFocusAfterClose = options.restoreFocus ?? false;
   open.value = false;
   hidePopover();
 }
@@ -255,8 +233,8 @@ function handleMenuToggle(event: Event) {
   const menu = event.currentTarget as HTMLElement | null;
   if (!menu) return;
 
-  const nextState = (event as Event & { newState?: 'open' | 'closed' }).newState;
-  const nextOpen = nextState === 'open' ? true : nextState === 'closed' ? false : isPopoverOpen(menu);
+  const nextState = (event as ToggleEvent).newState;
+  const nextOpen = nextState ? nextState === 'open' : menu.matches(':popover-open');
 
   menuActions.onMenuToggle(event);
 
@@ -265,15 +243,15 @@ function handleMenuToggle(event: Event) {
     return;
   }
 
-  if (restoreFocusAfterClose.value) {
-    restoreFocusAfterClose.value = false;
+  if (restoreFocusAfterClose) {
+    restoreFocusAfterClose = false;
     void nextTick(() => triggerRef.value?.focus());
   }
 }
 
 function handleMenuKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') {
-    restoreFocusAfterClose.value = true;
+    restoreFocusAfterClose = true;
   }
 
   menuActions.onMenuKeydown(event);
@@ -295,50 +273,27 @@ function handleDocumentPointerDown(event: PointerEvent) {
   hide();
 }
 
-let stopOpenListeners: (() => void) | undefined;
-function syncOpenListeners(nextOpen: boolean) {
-  if (!nextOpen) {
-    stopOpenListeners?.();
-    stopOpenListeners = undefined;
-    return;
-  }
-  if (stopOpenListeners) return;
-
-  const document = rootRef.value?.ownerDocument;
-  if (!document?.defaultView) return;
-
-  const stopViewportUpdates = registerSharedViewportChange(document, updatePopoverPosition);
-  document.addEventListener('pointerdown', handleDocumentPointerDown, true);
-  stopOpenListeners = () => {
-    stopViewportUpdates();
-    document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
-  };
-}
-
-watch(
-  [menuRef, open],
-  ([menu, nextOpen]) => {
-    if (!menu) return;
-    syncOpenListeners(nextOpen);
-
-    if (nextOpen) {
-      showPopover();
-      return;
-    }
-
-    hidePopover();
-  },
-  { immediate: true, flush: 'post' },
-);
-
-useElementEnvironment(rootRef, () => {
-  syncOpenListeners(open.value);
-  if (open.value) updatePopoverPosition();
-  return () => syncOpenListeners(false);
+watch([menuRef, open], ([, nextOpen]) => (nextOpen ? showPopover() : hidePopover()), {
+  immediate: true,
+  flush: 'post',
 });
 
-onUnmounted(() => {
-  syncOpenListeners(false);
+useElementEnvironment(rootRef, (document) => {
+  if (!document.defaultView) return;
+  if (open.value) updatePopoverPosition();
+  return watch(
+    open,
+    (nextOpen, _, onCleanup) => {
+      if (!nextOpen) return;
+      const stopViewportUpdates = registerSharedViewportChange(document, updatePopoverPosition);
+      document.addEventListener('pointerdown', handleDocumentPointerDown, true);
+      onCleanup(() => {
+        stopViewportUpdates();
+        document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
+      });
+    },
+    { immediate: true, flush: 'post' },
+  );
 });
 
 defineExpose({
@@ -370,7 +325,7 @@ const shape = provideShape(() => props.shape);
       :id="triggerId"
       ref="trigger"
       type="button"
-      :class="['m3-state-layer', 'm3-fab-menu-trigger']"
+      class="m3-state-layer m3-fab-menu-trigger"
       data-scope="floating-action-button-menu"
       data-part="trigger"
       :data-open="open ? 'true' : 'false'"
@@ -403,7 +358,7 @@ const shape = provideShape(() => props.shape);
 
     <div
       :id="menuId"
-      ref="menu"
+      ref="menuRef"
       popover="manual"
       role="menu"
       aria-orientation="vertical"
@@ -420,9 +375,7 @@ const shape = provideShape(() => props.shape);
       @focusin="menuActions.onMenuFocusIn"
     >
       <div ref="surface" class="m3-fab-menu-surface" data-scope="floating-action-button-menu" data-part="surface">
-        <div class="m3-fab-menu-items" data-scope="floating-action-button-menu" data-part="items">
-          <slot />
-        </div>
+        <slot />
       </div>
     </div>
   </div>

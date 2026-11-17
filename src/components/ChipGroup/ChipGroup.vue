@@ -20,14 +20,11 @@ defineSlots<{
 
 <template>
   <SelectionGroupFieldset
+    v-bind="props"
     :selection-model="selection.modelValue"
-    :class="'m3-chip-group'"
+    class="m3-chip-group"
     data-scope="chip-group"
     data-part="root"
-    :disabled="props.disabled"
-    :selection-mode="props.selectionMode"
-    :name="props.name"
-    :aria-label="props.ariaLabel"
   >
     <slot />
   </SelectionGroupFieldset>

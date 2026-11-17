@@ -49,6 +49,7 @@ defineSlots<{
     :data-show-selected-icon="showSelectedIcon ? 'true' : undefined"
     :data-selection-motion="animateSelection ? undefined : 'none'"
     :disabled="option.disabled"
+    :label="option.label"
     :selected="selected"
     :close-on-select="false"
   >
@@ -78,7 +79,9 @@ defineSlots<{
       </span>
     </template>
 
-    <slot :option="option" :selected="selected">{{ option.label }}</slot>
+    <template v-if="slots.default" #default>
+      <slot :option="option" :selected="selected">{{ option.label }}</slot>
+    </template>
 
     <template v-if="option.supportingText" #supporting>
       {{ option.supportingText }}

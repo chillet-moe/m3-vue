@@ -7,7 +7,7 @@ import { buttonContextKey } from '@/components/Button/ButtonContext.ts';
 import { Icon } from '@/components/Icon';
 import { useLinkTag } from '@/composables/useLinkTag';
 import { usePressShapeMorphAttrs } from '@/composables/usePressShapeMorph';
-import { computed, inject, unref, useSlots } from 'vue';
+import { computed, inject, unref } from 'vue';
 import type { ButtonProps } from '@/components/Button';
 import '@/styles/icon-morph.css';
 
@@ -56,49 +56,42 @@ const appearance = computed(
   () => props.appearance ?? unref(defaults?.appearance) ?? unref(appearanceDefaults?.appearance) ?? 'standard',
 );
 const size = computed(() => props.size ?? unref(defaults?.size) ?? 'medium');
-const interactive = computed(() => props.interactive);
 const shape = useShape(() => props.shape ?? unref(context?.shape), 'rounded');
 const disabled = computed(() => props.disabled ?? unref(context?.disabled) ?? false);
 
 const link = useLinkTag({
-  defaultTag: () => (interactive.value ? 'button' : 'div'),
-  href: () => (interactive.value ? props.href : undefined),
+  defaultTag: () => (props.interactive ? 'button' : 'div'),
+  href: () => (props.interactive ? props.href : undefined),
   disabled,
 });
 
 const pressShapeMorphAttrs = usePressShapeMorphAttrs({
-  enabled: computed(() => interactive.value && appearance.value === 'expressive'),
+  enabled: computed(() => props.interactive && appearance.value === 'expressive'),
   disabled,
 });
 
+type ListItemSlotProps = { active: boolean; disabled: boolean };
+
 defineSlots<{
   /** Optional content above the main row. */
-  header(props: { active: boolean; disabled: boolean }): any;
+  header(props: ListItemSlotProps): any;
 
   /** Optional leading content. */
-  leading(props: { active: boolean; disabled: boolean }): any;
+  leading(props: ListItemSlotProps): any;
 
   /** Main title content. */
-  default(props: { active: boolean; disabled: boolean }): any;
+  default(props: ListItemSlotProps): any;
 
   /** Optional description below the title. */
-  description(props: { active: boolean; disabled: boolean }): any;
+  description(props: ListItemSlotProps): any;
 
   /** Optional trailing content. */
-  trailing(props: { active: boolean; disabled: boolean }): any;
+  trailing(props: ListItemSlotProps): any;
 
   /** Optional content below the main row. */
-  footer(props: { active: boolean; disabled: boolean }): any;
+  footer(props: ListItemSlotProps): any;
 }>();
 
-const slots = useSlots();
-
-const hasHeader = computed(() => Boolean(slots.header));
-const hasFooter = computed(() => Boolean(slots.footer));
-const hasTitle = computed(() => Boolean(props.title || slots.default));
-const hasDescription = computed(() => Boolean(props.description || slots.description));
-const hasTrailing = computed(() => !props.trailingIcon && Boolean(slots.trailing));
-const isSelected = computed(() => props.active);
 const slotProps = computed(() => ({
   active: props.active,
   disabled: disabled.value,
@@ -118,12 +111,11 @@ const slotProps = computed(() => ({
     :data-shape="shape"
     data-m3-shape
     :data-interactive="interactive ? 'true' : 'false'"
-    :data-active="isSelected ? 'true' : undefined"
-    :data-selected="isSelected ? 'true' : undefined"
+    :data-selected="active ? 'true' : undefined"
     :href="link.href"
     :disabled="link.nativeDisabled"
     :aria-disabled="link.ariaDisabled"
-    :aria-current="interactive && isSelected ? 'page' : undefined"
+    :aria-current="interactive && active ? 'page' : undefined"
     :tabindex="link.tabIndex"
     :type="link.type"
     v-bind="interactive ? pressShapeMorphAttrs : undefined"
@@ -142,7 +134,7 @@ const slotProps = computed(() => ({
 
     <span class="m3-item-main" data-scope="item" data-part="main">
       <span
-        v-if="hasHeader"
+        v-if="$slots.header"
         :class="['m3-item-header', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="header"
@@ -151,7 +143,7 @@ const slotProps = computed(() => ({
       </span>
 
       <span
-        v-if="hasTitle"
+        v-if="props.title || $slots.default"
         :class="['m3-item-title', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="title"
@@ -160,7 +152,7 @@ const slotProps = computed(() => ({
       </span>
 
       <span
-        v-if="hasDescription"
+        v-if="props.description || $slots.description"
         :class="['m3-item-description', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="description"
@@ -169,7 +161,7 @@ const slotProps = computed(() => ({
       </span>
 
       <span
-        v-if="hasFooter"
+        v-if="$slots.footer"
         :class="['m3-item-footer', appearance === 'expressive' && 'm3-text-morph']"
         data-scope="item"
         data-part="footer"
@@ -186,7 +178,7 @@ const slotProps = computed(() => ({
       data-part="trailing"
       :disabled="disabled"
     />
-    <span v-else-if="hasTrailing" class="m3-item-trailing-slot" data-scope="item" data-part="trailing">
+    <span v-else-if="$slots.trailing" class="m3-item-trailing-slot" data-scope="item" data-part="trailing">
       <slot name="trailing" v-bind="slotProps" />
     </span>
   </component>

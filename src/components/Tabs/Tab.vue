@@ -3,6 +3,7 @@ import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
 
 import { useLinkTag } from '@/composables/useLinkTag';
+import type { UseTabsReturn } from '@/composables/useTabs';
 import { computed, inject } from 'vue';
 import { tabsContextKey } from './TabsContext';
 
@@ -33,14 +34,16 @@ defineSlots<{
 const tabs = inject(tabsContextKey);
 
 const active = computed(() => tabs?.value.value === props.value);
-const triggerAttrs = computed<Record<string, unknown>>((previous) => {
+const triggerAttrs = computed<ReturnType<UseTabsReturn['getTriggerAttrs']> | undefined>((previous) => {
   const value = props.value;
   const selected = active.value;
   if (previous?.['data-tab-value'] === value && previous['aria-selected'] === selected) return previous;
-  return tabs?.getTriggerAttrs(value) ?? {};
+  return tabs?.getTriggerAttrs(value);
 });
 const triggerDomAttrs = computed(() => {
-  const { onClick, onKeydown, tabindex, ...domAttrs } = triggerAttrs.value;
+  const attrs = triggerAttrs.value;
+  if (!attrs) return undefined;
+  const { onClick, onKeydown, tabindex, ...domAttrs } = attrs;
   return domAttrs;
 });
 
@@ -48,14 +51,6 @@ const link = useLinkTag({
   defaultTag: 'button',
   href: () => props.href,
   disabled: () => props.disabled,
-});
-
-const resolvedTabIndex = computed(() => {
-  if (props.disabled) {
-    return link.value.tabIndex;
-  }
-
-  return triggerAttrs.value.tabindex as number | undefined;
 });
 
 const guardDisabledInteraction = (event: Event) => {
@@ -73,8 +68,7 @@ const handleClick = (event: MouseEvent) => {
     return;
   }
 
-  const onClick = triggerAttrs.value.onClick as ((event: MouseEvent) => void) | undefined;
-  onClick?.(event);
+  triggerAttrs.value?.onClick();
 };
 
 const handleKeydown = (event: KeyboardEvent) => {
@@ -82,8 +76,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     return;
   }
 
-  const onKeydown = triggerAttrs.value.onKeydown as ((event: KeyboardEvent) => void) | undefined;
-  onKeydown?.(event);
+  triggerAttrs.value?.onKeydown(event);
 
   if (event.defaultPrevented || link.value.tag !== 'a' || event.key !== ' ') {
     return;
@@ -110,7 +103,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     :href="link.href"
     :disabled="link.nativeDisabled"
     :aria-disabled="link.ariaDisabled"
-    :tabindex="resolvedTabIndex"
+    :tabindex="disabled ? link.tabIndex : triggerAttrs?.tabindex"
     :type="link.type"
     v-bind="triggerDomAttrs"
     @click="handleClick"

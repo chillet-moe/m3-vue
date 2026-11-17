@@ -36,7 +36,7 @@ describe.each([
         picker.canGoNextYear.value,
       ]).toEqual(Array(4).fill(!bounded));
       expect([0, 3, 11].map((month) => picker.monthOptions.value[month]?.disabled)).toEqual([bounded, false, bounded]);
-      expect([picker.yearOptions.value[0]?.year, picker.yearOptions.value.at(-1)?.year]).toEqual(
+      expect([picker.yearOptions.value[0]?.value, picker.yearOptions.value.at(-1)?.value]).toEqual(
         bounded ? [2026, 2026] : [1926, 2126],
       );
     };

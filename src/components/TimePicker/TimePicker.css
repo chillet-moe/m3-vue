@@ -116,7 +116,6 @@
     @apply surface-scrollbar;
 
     display: grid;
-    grid-template-rows: auto auto auto;
     box-sizing: border-box;
     inline-size: 100%;
     max-block-size: calc(100dvb - 2rem);
@@ -143,6 +142,11 @@
     padding-inline: 1.5rem;
   }
 
+  .m3-time-picker[data-input-mode='keyboard'] .m3-time-picker-header {
+    gap: calc(2 * --density-space(8, 4, 2));
+    padding-block-end: --density-space(16, 4, 2);
+  }
+
   .m3-time-picker-title {
     color: var(--_time-picker-title-text-color);
     font-family:
@@ -158,14 +162,18 @@
     letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   }
 
-  .m3-time-picker-display {
+  .m3-time-picker-display,
+  .m3-time-picker-inputs {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) var(--_time-picker-period-width, auto);
+  }
+
+  .m3-time-picker-display {
     align-items: stretch;
     gap: 0.5rem;
   }
 
-  .m3-time-picker[data-format='24h'] .m3-time-picker-display {
+  .m3-time-picker[data-format='24h'] :is(.m3-time-picker-display, .m3-time-picker-inputs) {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
 
@@ -332,16 +340,9 @@
   }
 
   .m3-time-picker-inputs {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 4.5rem;
+    --_time-picker-period-width: 4.5rem;
     align-items: start;
     gap: 0.75rem;
-    padding-block: --density-space(8, 4, 2) --density-space(16, 4, 2);
-    padding-inline: 1.5rem;
-  }
-
-  .m3-time-picker[data-format='24h'] .m3-time-picker-inputs {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
 
   .m3-time-picker-input-field {
@@ -447,8 +448,8 @@
     padding-inline: 1rem;
   }
 
-  .m3-time-picker-actions-spacer {
-    flex: 1;
+  .m3-time-picker-actions [data-part='mode-toggle'] {
+    margin-inline-end: auto;
   }
 
   .m3-time-picker[data-variant='modal'] {
@@ -505,8 +506,7 @@
     }
 
     .m3-time-picker-header,
-    .m3-time-picker-clock,
-    .m3-time-picker-inputs {
+    .m3-time-picker-clock {
       padding-inline: 1rem;
     }
 

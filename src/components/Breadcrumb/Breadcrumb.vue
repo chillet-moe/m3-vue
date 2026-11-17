@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import { computed, useSlots } from 'vue';
+import { computed } from 'vue';
 
 import { Icon } from '@/components/Icon';
 
@@ -47,34 +47,13 @@ const emit = defineEmits<{
   itemClick: [event: MouseEvent, item: BreadcrumbItem, index: number];
 }>();
 
-const slots = useSlots();
-
 const renderedItems = computed(() =>
-  props.items.map((item, index) => ({
-    ...item,
-    current: item.current ?? index === props.items.length - 1,
-  })),
+  props.items.map((source, index) => {
+    const item = { ...source, current: source.current ?? index === props.items.length - 1 };
+    const tag = item.current ? 'span' : item.href ? 'a' : 'button';
+    return { item, tag, href: item.current || item.disabled ? undefined : item.href };
+  }),
 );
-
-function getItemTag(item: BreadcrumbItem & { current: boolean }) {
-  if (item.current) {
-    return 'span';
-  }
-
-  return item.href ? 'a' : 'button';
-}
-
-function getItemHref(item: BreadcrumbItem & { current: boolean }) {
-  if (item.current || item.disabled) {
-    return undefined;
-  }
-
-  return item.href;
-}
-
-function getItemType(item: BreadcrumbItem & { current: boolean }) {
-  return !item.current && !item.href ? 'button' : undefined;
-}
 
 function handleItemClick(event: MouseEvent, item: BreadcrumbItem & { current: boolean }, index: number) {
   if (item.current || item.disabled) {
@@ -101,11 +80,11 @@ defineSlots<{
 </script>
 
 <template>
-  <nav class="m3-breadcrumb" role="navigation" data-scope="breadcrumb" data-part="root" :aria-label="ariaLabel">
-    <slot v-if="slots.default" />
+  <nav class="m3-breadcrumb" data-scope="breadcrumb" data-part="root" :aria-label="ariaLabel">
+    <slot v-if="$slots.default" />
 
     <ol v-else class="m3-breadcrumb-list" data-scope="breadcrumb" data-part="list">
-      <template v-for="(item, index) in renderedItems" :key="`${item.label}-${index}`">
+      <template v-for="({ item, tag, href }, index) in renderedItems" :key="`${item.label}-${index}`">
         <li class="m3-breadcrumb-item" data-scope="breadcrumb" data-part="item">
           <span
             v-if="item.ellipsis"
@@ -122,18 +101,18 @@ defineSlots<{
 
           <component
             v-state-layer
-            :is="getItemTag(item)"
+            :is="tag"
             v-else
             :class="['m3-state-layer', item.current ? 'm3-breadcrumb-page' : 'm3-breadcrumb-link']"
             data-scope="breadcrumb"
             :data-part="item.current ? 'page' : 'link'"
             :data-disabled="item.disabled ? 'true' : 'false'"
-            :href="getItemHref(item)"
-            :type="getItemType(item)"
-            :disabled="!item.current && !item.href && item.disabled ? true : undefined"
+            :href="href"
+            :type="tag === 'button' ? 'button' : undefined"
+            :disabled="tag === 'button' && item.disabled ? true : undefined"
             :aria-current="item.current ? 'page' : undefined"
-            :aria-disabled="!item.current && item.href && item.disabled ? 'true' : undefined"
-            :tabindex="!item.current && item.href && item.disabled ? -1 : undefined"
+            :aria-disabled="tag === 'a' && item.disabled ? 'true' : undefined"
+            :tabindex="tag === 'a' && item.disabled ? -1 : undefined"
             @click="handleItemClick($event, item, index)"
           >
             <slot name="item" :item="item" :index="index" :current="item.current" :disabled="item.disabled ?? false">
@@ -142,12 +121,16 @@ defineSlots<{
           </component>
         </li>
 
-        <li v-if="index < renderedItems.length - 1" class="m3-breadcrumb-item" data-scope="breadcrumb" data-part="item">
-          <span class="m3-breadcrumb-separator" data-scope="breadcrumb" data-part="separator" aria-hidden="true">
-            <slot name="separator" :index="index">
-              <Icon class="m3-breadcrumb-separator-icon" :name="separatorIcon" variant="inline" />
-            </slot>
-          </span>
+        <li
+          v-if="index < renderedItems.length - 1"
+          class="m3-breadcrumb-separator"
+          data-scope="breadcrumb"
+          data-part="separator"
+          aria-hidden="true"
+        >
+          <slot name="separator" :index="index">
+            <Icon class="m3-breadcrumb-separator-icon" :name="separatorIcon" variant="inline" />
+          </slot>
         </li>
       </template>
     </ol>

@@ -39,21 +39,10 @@ const iconStyle = computed<CSSProperties>(() => {
   }
 
   const resolvedWeight = weight ?? (variant === 'standalone' ? 400 : 'inherit');
-  const style: CSSProperties = {};
-
-  if (size) {
-    style.fontSize = size;
-  }
-  if (contentRatio !== undefined) {
-    style['--md-icon-content-ratio'] = String(contentRatio);
-  }
-
-  if (resolvedWeight === 'inherit') {
-    style.fontWeight = 'inherit';
-  } else {
-    style['--m3-icon-weight'] = String(resolvedWeight);
-  }
-
+  const style: CSSProperties =
+    resolvedWeight === 'inherit' ? { fontWeight: 'inherit' } : { '--m3-icon-weight': String(resolvedWeight) };
+  if (size) style.fontSize = size;
+  if (contentRatio !== undefined) style['--md-icon-content-ratio'] = String(contentRatio);
   return style;
 });
 </script>

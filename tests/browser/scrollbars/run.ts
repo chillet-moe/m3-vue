@@ -66,7 +66,8 @@ try {
         kind,
       );
       const root = page.locator('dialog[open]');
-      await verify(root.locator('[data-part="content"]'), root.locator('[data-part="surface"]'), `${scheme}-${kind}`);
+      const surface = kind === 'side-sheet' ? root : root.locator('[data-part="surface"]');
+      await verify(root.locator('[data-part="content"]'), surface, `${scheme}-${kind}`);
     }
   }
   for (const overflowProperty of ['overflow', 'overflow-x']) {

@@ -45,6 +45,7 @@
     opacity: 0;
     pointer-events: none;
     position-area: block-end span-inline-start;
+    transform-origin: top left;
     position-try-fallbacks:
       flip-block,
       flip-inline,
@@ -63,11 +64,6 @@
 
   .m3-popover[data-match-anchor-width='true'] {
     inline-size: min(anchor-size(width), calc(100vw - 2rem));
-  }
-
-  .m3-popover[data-placement='bottom-start'] {
-    position-area: block-end span-inline-start;
-    transform-origin: top left;
   }
 
   .m3-popover[data-placement='bottom'] {

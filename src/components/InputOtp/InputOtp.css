@@ -63,7 +63,9 @@
     --_input-color: var(--_input-otp-input-text-color);
     --_caret-color: var(--_input-otp-caret-color);
 
-    display: inline-grid;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     flex-shrink: 0;
     min-inline-size: 0;
   }
@@ -92,17 +94,6 @@
       --md-input-otp-input-text-line-height,
       var(--md-sys-typescale-title-large-line-height)
     );
-  }
-
-  .m3-input-otp-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    min-inline-size: 0;
-  }
-
-  .m3-input-otp-native {
-    display: none;
   }
 
   .m3-input-otp-input {

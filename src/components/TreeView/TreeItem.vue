@@ -14,9 +14,8 @@ export type TreeItemProps = {
   size?: RowSize;
 };
 const props = defineProps<TreeItemProps>();
-const tree = inject(treeContextKey);
-if (!tree) throw new Error('TreeItem must be used inside TreeView.');
-const actions = tree;
+const actions = inject(treeContextKey);
+if (!actions) throw new Error('TreeItem must be used inside TreeView.');
 const trailing = useTemplateRef<HTMLElement>('trailing');
 const row = useTemplateRef<HTMLElement>('row');
 const { attrs, activity } = actions.useItemAttrs(() => props.item.value);
@@ -33,21 +32,21 @@ defineSlots<{
   leading(props: TreeItemSlotProps): any;
   trailing(props: TreeItemSlotProps): any;
 }>();
-function handleDisclosureClick(event: MouseEvent) {
+const handleDisclosureClick = (event: MouseEvent) => {
   if (!state.value.branch) return;
   event.stopPropagation();
   actions.focus(props.item.value);
   actions.toggle(props.item.value);
-}
+};
 
-function handleActionKey(event: KeyboardEvent) {
-  if (event.target === event.currentTarget && row.value) {
-    if (event.key === 'Enter' || (event.key === ' ' && props.item.selectable !== false)) {
-      triggerKeyboardRipple(event, row.value);
-    }
+const handleActionKey = (event: KeyboardEvent) => {
+  const rowIsFocused = event.target === event.currentTarget;
+  const activates = event.key === 'Enter' || (event.key === ' ' && props.item.selectable !== false);
+  if (rowIsFocused && activates && row.value) {
+    triggerKeyboardRipple(event, row.value);
   }
   if (event.defaultPrevented) return;
-  if (event.key === 'F2' && event.target === event.currentTarget && !state.value.disabled) {
+  if (event.key === 'F2' && rowIsFocused && !state.value.disabled) {
     const controls = trailing.value?.querySelectorAll<HTMLElement>(
       'button, a[href], input, select, textarea, [tabindex]',
     );
@@ -63,7 +62,7 @@ function handleActionKey(event: KeyboardEvent) {
     event.stopPropagation();
     actions.focus(props.item.value);
   }
-}
+};
 const rowSize = provideRowSize(() => props.size);
 const shape = useShape(() => props.shape);
 </script>

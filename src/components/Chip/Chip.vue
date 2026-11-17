@@ -69,89 +69,16 @@ const selectionItem = useSelectionGroupItem({
 });
 const { mergedDisabled, selectFromInput } = selectionItem;
 
-const selectable = computed(() => {
-  return selectableVariant.value || selectionItem.participatesInGroup();
-});
-
-const isSelected = computed(() => {
-  if (!selectable.value) {
-    return false;
-  }
-
-  return selectionItem.isSelected.value;
-});
-
-const showAvatar = computed(() => {
-  return props.variant === 'input' && Boolean(props.avatarSrc);
-});
+const selectable = computed(() => selectableVariant.value || selectionItem.participatesInGroup());
+const isSelected = computed(() => selectable.value && selectionItem.isSelected.value);
 
 const leadingSource = computed(() => {
-  if (showAvatar.value) {
-    return 'avatar';
-  }
-
-  if (props.leadingIcon) {
-    return 'icon';
-  }
-
-  if (props.variant === 'filter' && isSelected.value && props.selectedIcon) {
-    return 'selected-icon';
-  }
-
-  return 'none';
-});
-
-const resolvedLeadingIcon = computed(() => {
-  if (leadingSource.value === 'avatar') {
-    return undefined;
-  }
-
-  if (leadingSource.value === 'icon') {
-    return props.leadingIcon;
-  }
-
-  if (leadingSource.value === 'selected-icon') {
-    return props.selectedIcon;
-  }
-
+  if (props.variant === 'input' && props.avatarSrc) return 'avatar';
+  if (props.leadingIcon) return 'icon';
+  if (props.variant === 'filter' && isSelected.value && props.selectedIcon) return 'selected-icon';
   return undefined;
 });
-
-const hasLeading = computed(() => {
-  return leadingSource.value !== 'none';
-});
-
-const hasTrailing = computed(() => {
-  if (props.variant !== 'filter' && props.variant !== 'input') {
-    return false;
-  }
-
-  return Boolean(props.trailingIcon);
-});
-
-const tag = computed(() => {
-  if (selectable.value) {
-    return 'label';
-  }
-
-  return 'button';
-});
-
-const nativeDisabled = computed(() => {
-  if (tag.value === 'button') {
-    return mergedDisabled.value;
-  }
-
-  return undefined;
-});
-
-const type = computed(() => {
-  if (tag.value === 'button') {
-    return 'button';
-  }
-
-  return undefined;
-});
+const hasTrailing = computed(() => selectableVariant.value && Boolean(props.trailingIcon));
 
 const pressShapeMorphAttrs = usePressShapeMorphAttrs({ disabled: mergedDisabled });
 
@@ -170,7 +97,7 @@ const shape = useShape(() => props.shape);
 <template>
   <component
     v-state-layer
-    :is="tag"
+    :is="selectable ? 'label' : 'button'"
     :class="['m3-state-layer', 'm3-chip']"
     data-scope="chip"
     data-part="root"
@@ -179,12 +106,11 @@ const shape = useShape(() => props.shape);
     :data-variant="variant"
     :data-selected="isSelected ? 'true' : 'false'"
     :data-elevated="elevated ? 'true' : 'false'"
-    :data-with-leading="hasLeading ? 'true' : 'false'"
     :data-with-trailing="hasTrailing ? 'true' : 'false'"
-    :data-leading-source="leadingSource !== 'none' ? leadingSource : undefined"
+    :data-leading-source="leadingSource"
     :aria-disabled="mergedDisabled ? 'true' : 'false'"
-    :disabled="nativeDisabled"
-    :type="type"
+    :disabled="selectable ? undefined : mergedDisabled"
+    :type="selectable ? undefined : 'button'"
     v-bind="pressShapeMorphAttrs"
   >
     <input
@@ -201,12 +127,17 @@ const shape = useShape(() => props.shape);
       @change="handleChange"
     />
 
-    <span v-if="showAvatar" :class="'m3-chip-avatar'" data-scope="chip" data-part="avatar" aria-hidden="true">
-      <img :src="avatarSrc" :class="'m3-chip-avatar-image'" data-scope="chip" data-part="avatar-image" alt="" />
-    </span>
+    <img
+      v-if="leadingSource === 'avatar'"
+      :src="avatarSrc"
+      class="m3-chip-avatar"
+      data-scope="chip"
+      data-part="avatar"
+      alt=""
+    />
     <Icon
-      v-if="resolvedLeadingIcon"
-      :name="resolvedLeadingIcon"
+      v-else-if="leadingSource"
+      :name="leadingSource === 'icon' ? leadingIcon : selectedIcon || undefined"
       :class="['m3-chip-leading', 'm3-chip-icon']"
       data-scope="chip"
       data-part="leading"

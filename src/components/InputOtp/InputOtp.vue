@@ -123,22 +123,9 @@ watch(normalizedLength, () => {
 function readCharacters(value: string, limit: number): string[] {
   const characters: string[] = [];
 
-  if (props.type === 'number') {
-    // Only ASCII digits can fill numeric cells.
-    const firstDigit = '0'.charCodeAt(0);
-    const lastDigit = '9'.charCodeAt(0);
-    for (let index = 0; index < value.length; index++) {
-      const code = value.charCodeAt(index);
-      if (code < firstDigit || code > lastDigit) continue;
-      characters.push(value[index]);
-      if (characters.length >= limit) break;
-    }
-    return characters;
-  }
-
-  const nonWhitespace = /\S/u;
+  const allowed = props.type === 'number' ? /^[0-9]$/ : /\S/u;
   for (const character of value) {
-    if (!nonWhitespace.test(character)) continue;
+    if (!allowed.test(character)) continue;
     characters.push(character);
     if (characters.length >= limit) break;
   }
@@ -158,19 +145,15 @@ function commitCharacters(nextCharacters: string[]) {
   }
 }
 
-function focusCell(index: number) {
-  inputRefs.value[index]?.focus();
-}
-
-function selectCell(index: number) {
-  inputRefs.value[index]?.select();
+function cellAt(index: number) {
+  return inputRefs.value[Math.min(Math.max(index, 0), normalizedLength.value - 1)];
 }
 
 function moveFocus(index: number) {
-  const nextIndex = Math.min(Math.max(index, 0), normalizedLength.value - 1);
   void nextTick(() => {
-    focusCell(nextIndex);
-    selectCell(nextIndex);
+    const cell = cellAt(index);
+    cell?.focus();
+    cell?.select();
   });
 }
 
@@ -240,65 +223,42 @@ function handleKeydown(event: KeyboardEvent, index: number) {
     return;
   }
 
-  if (event.key === 'Backspace') {
+  const key = event.key;
+  if (key === 'Backspace' || key === 'Delete') {
     event.preventDefault();
-    const cellToClear = characters.value[index] ? index : index - 1;
-    if (cellToClear < 0) return;
+    const cell = key === 'Backspace' && !characters.value[index] ? index - 1 : index;
+    if (cell < 0) return;
 
     const nextCharacters = characters.value.slice();
-    nextCharacters[cellToClear] = '';
+    nextCharacters[cell] = '';
     commitCharacters(nextCharacters);
-    moveFocus(cellToClear);
+    moveFocus(cell);
     return;
   }
 
-  if (event.key === 'Delete') {
-    event.preventDefault();
-    const nextCharacters = characters.value.slice();
-    nextCharacters[index] = '';
-    commitCharacters(nextCharacters);
-    moveFocus(index);
-    return;
+  let destination: number;
+  switch (key) {
+    case 'ArrowLeft':
+      destination = index - 1;
+      break;
+    case 'ArrowRight':
+      destination = index + 1;
+      break;
+    case 'Home':
+      destination = 0;
+      break;
+    case 'End':
+      destination = normalizedLength.value - 1;
+      break;
+    default:
+      return;
   }
-
-  if (event.key === 'ArrowLeft') {
-    event.preventDefault();
-    moveFocus(index - 1);
-    return;
-  }
-
-  if (event.key === 'ArrowRight') {
-    event.preventDefault();
-    moveFocus(index + 1);
-    return;
-  }
-
-  if (event.key === 'Home') {
-    event.preventDefault();
-    moveFocus(0);
-    return;
-  }
-
-  if (event.key === 'End') {
-    event.preventDefault();
-    moveFocus(normalizedLength.value - 1);
-  }
-}
-
-function handleChange(event: Event) {
-  emit('change', event);
-}
-
-function handleFocus(event: FocusEvent) {
-  emit('focus', event);
-}
-
-function handleBlur(event: FocusEvent) {
-  emit('blur', event);
+  event.preventDefault();
+  moveFocus(destination);
 }
 
 function focus(index = 0) {
-  focusCell(Math.min(Math.max(index, 0), normalizedLength.value - 1));
+  cellAt(index)?.focus();
 }
 
 function blur() {
@@ -308,7 +268,7 @@ function blur() {
 }
 
 function select(index = 0) {
-  selectCell(Math.min(Math.max(index, 0), normalizedLength.value - 1));
+  cellAt(index)?.select();
 }
 
 defineExpose({
@@ -338,46 +298,43 @@ const shape = useShape(() => props.shape);
     role="group"
     :aria-invalid="props.invalid ? 'true' : undefined"
   >
-    <div class="m3-input-otp-group" data-scope="input-otp" data-part="group">
-      <input
-        v-if="props.name"
-        class="m3-input-otp-native"
-        data-scope="input-otp"
-        data-part="native"
-        type="hidden"
-        :name="props.name"
-        :value="modelValue"
-        :disabled="props.disabled"
-      />
+    <input
+      v-if="props.name"
+      data-scope="input-otp"
+      data-part="native"
+      type="hidden"
+      :name="props.name"
+      :value="modelValue"
+      :disabled="props.disabled"
+    />
 
-      <input
-        v-for="(_, index) in normalizedLength"
-        :id="`${inputIdPrefix}-${index}`"
-        :key="index"
-        :ref="(el) => setInputRef(el, index)"
-        class="m3-input-otp-input"
-        data-scope="input-otp"
-        data-part="input"
-        :data-filled="characters[index] ? 'true' : 'false'"
-        :type="props.mask ? 'password' : 'text'"
-        :value="characters[index] ?? ''"
-        :placeholder="props.placeholder"
-        :disabled="props.disabled"
-        :readonly="props.readonly"
-        :required="props.required"
-        :inputmode="resolvedInputMode"
-        :autocomplete="index === 0 ? props.autocomplete : 'off'"
-        :aria-label="getInputAriaLabel(index)"
-        :aria-invalid="props.invalid ? 'true' : undefined"
-        :aria-describedby="rootAriaDescribedby"
-        @input="handleInput($event, index)"
-        @paste="handlePaste($event, index)"
-        @keydown="handleKeydown($event, index)"
-        @change="handleChange"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-    </div>
+    <input
+      v-for="(_, index) in normalizedLength"
+      :id="`${inputIdPrefix}-${index}`"
+      :key="index"
+      :ref="(el) => setInputRef(el, index)"
+      class="m3-input-otp-input"
+      data-scope="input-otp"
+      data-part="input"
+      :data-filled="characters[index] ? 'true' : 'false'"
+      :type="props.mask ? 'password' : 'text'"
+      :value="characters[index] ?? ''"
+      :placeholder="props.placeholder"
+      :disabled="props.disabled"
+      :readonly="props.readonly"
+      :required="props.required"
+      :inputmode="resolvedInputMode"
+      :autocomplete="index === 0 ? props.autocomplete : 'off'"
+      :aria-label="getInputAriaLabel(index)"
+      :aria-invalid="props.invalid ? 'true' : undefined"
+      :aria-describedby="rootAriaDescribedby"
+      @input="handleInput($event, index)"
+      @paste="handlePaste($event, index)"
+      @keydown="handleKeydown($event, index)"
+      @change="emit('change', $event)"
+      @focus="emit('focus', $event)"
+      @blur="emit('blur', $event)"
+    />
   </div>
 </template>
 

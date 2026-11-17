@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { useNativeDialog } from '@/composables/useNativeDialog';
-import { computed, type CSSProperties, useId, useSlots, useTemplateRef } from 'vue';
+import { computed, type CSSProperties, useId, useTemplateRef } from 'vue';
 
 export type DialogProps = {
   /** Corner style; inherits the shared shape default. */
@@ -45,7 +45,6 @@ defineSlots<{
   actions(): any;
 }>();
 
-const slots = useSlots();
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog');
 const surfaceRef = useTemplateRef<HTMLElement>('surface');
 const iconRef = useTemplateRef<HTMLElement>('icon');
@@ -56,20 +55,7 @@ const actionsRef = useTemplateRef<HTMLElement>('actions');
 const headlineId = `dialog-headline-${useId()}`;
 const contentId = `dialog-content-${useId()}`;
 
-const hasIcon = computed(() => Boolean(slots.icon));
-const hasHeadline = computed(() => Boolean(slots.headline));
-const hasContent = computed(() => Boolean(slots.default));
-const hasActions = computed(() => Boolean(slots.actions));
-
-const rootStyle = computed<CSSProperties>(() => {
-  const style: Record<string, string> = {};
-
-  if (props.width) {
-    style['--md-dialog-container-width'] = props.width;
-  }
-
-  return style as CSSProperties;
-});
+const rootStyle = computed<CSSProperties>(() => (props.width ? { '--md-dialog-container-width': props.width } : {}));
 
 const { showModal, close, onBeforeToggle, onCancel, onClose, onBackdropClick } = useNativeDialog({
   dialogRef,
@@ -98,24 +84,21 @@ const shape = useShape(() => props.shape);
     data-part="root"
     data-m3-shape
     :data-shape="shape"
-    :data-has-icon="hasIcon ? 'true' : 'false'"
-    :data-has-headline="hasHeadline ? 'true' : 'false'"
-    :data-has-actions="hasActions ? 'true' : 'false'"
     :style="rootStyle"
-    :aria-labelledby="hasHeadline ? headlineId : undefined"
-    :aria-describedby="hasContent ? contentId : undefined"
+    :aria-labelledby="$slots.headline ? headlineId : undefined"
+    :aria-describedby="$slots.default ? contentId : undefined"
     @beforetoggle="onBeforeToggle"
     @cancel="onCancel"
     @close="onClose"
     @click="onBackdropClick"
   >
     <div ref="surface" class="m3-dialog-surface" data-scope="dialog" data-part="surface">
-      <div v-if="hasIcon" ref="icon" :class="'m3-dialog-icon'" data-scope="dialog" data-part="icon">
+      <div v-if="$slots.icon" ref="icon" :class="'m3-dialog-icon'" data-scope="dialog" data-part="icon">
         <slot name="icon" />
       </div>
 
       <h2
-        v-if="hasHeadline"
+        v-if="$slots.headline"
         :id="headlineId"
         ref="headline"
         :class="'m3-dialog-headline'"
@@ -126,7 +109,7 @@ const shape = useShape(() => props.shape);
       </h2>
 
       <div
-        v-if="hasContent"
+        v-if="$slots.default"
         :id="contentId"
         ref="content"
         :class="'m3-dialog-content'"
@@ -136,7 +119,7 @@ const shape = useShape(() => props.shape);
         <slot />
       </div>
 
-      <div v-if="hasActions" ref="actions" :class="'m3-dialog-actions'" data-scope="dialog" data-part="actions">
+      <div v-if="$slots.actions" ref="actions" :class="'m3-dialog-actions'" data-scope="dialog" data-part="actions">
         <slot name="actions" />
       </div>
     </div>

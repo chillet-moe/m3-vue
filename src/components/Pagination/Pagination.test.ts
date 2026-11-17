@@ -154,10 +154,10 @@ describe('Pagination', () => {
     await nextTick();
 
     const ellipsisIcon = container.querySelector('.m3-pagination-ellipsis-icon');
-    const ellipsisLabel = container.querySelector('.m3-pagination-visually-hidden');
+    const ellipsis = container.querySelector('[role="img"][data-part="ellipsis"]');
 
     expect(ellipsisIcon?.textContent?.trim()).toBe('more_horiz');
-    expect(ellipsisLabel?.textContent?.trim()).toBe('More pages');
+    expect(ellipsis?.getAttribute('aria-label')).toBe('More pages');
 
     app.unmount();
   });

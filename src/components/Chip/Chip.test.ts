@@ -332,7 +332,7 @@ describe('Chip', () => {
     app.mount(container);
     await nextTick();
 
-    const avatar = container.querySelector<HTMLImageElement>('.m3-chip-avatar-image');
+    const avatar = container.querySelector<HTMLImageElement>('img[data-part="avatar"]');
 
     expect(avatar?.getAttribute('src')).toBe('https://example.com/avatar.png');
     expect(container.querySelector('.m3-chip')?.getAttribute('data-variant')).toBe('input');

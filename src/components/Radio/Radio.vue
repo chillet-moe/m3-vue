@@ -72,7 +72,6 @@ defineSlots<{
       :data-state-layer-hover-from="presentation ? undefined : 'target'"
       aria-hidden="true"
     >
-      <span :class="'m3-radio-outer'" data-scope="radio" data-part="outer" />
       <span :class="'m3-radio-inner'" data-scope="radio" data-part="inner" />
     </span>
 

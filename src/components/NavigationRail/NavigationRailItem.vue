@@ -4,7 +4,7 @@ import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
-import { computed, inject, useSlots } from 'vue';
+import { computed, inject } from 'vue';
 import { navigationRailContextKey } from './NavigationRailContext';
 import '@/styles/icon-morph.css';
 
@@ -45,15 +45,14 @@ const props = withDefaults(defineProps<NavigationRailItemProps>(), {
   ariaLabel: undefined,
 });
 
-defineSlots<{
+const slots = defineSlots<{
   /** Label content. */
-  default(props: { selected: boolean; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
+  default?(props: { selected: boolean; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
 
   /** Icon content. */
-  icon(props: { selected: boolean; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
+  icon?(props: { selected: boolean; disabled: boolean; state: 'collapsed' | 'expanded' }): any;
 }>();
 
-const slots = useSlots();
 const rail = inject(navigationRailContextKey, null);
 
 const railState = computed<'collapsed' | 'expanded'>(() => rail?.state.value ?? 'collapsed');
@@ -66,19 +65,10 @@ const { mergedDisabled, isSelected, link, handleClick, handleKeydown } = useNavi
   selected: () => props.selected,
 });
 
-const hasLabel = computed(() => Boolean(props.label || slots.default));
-
-const resolvedAriaLabel = computed(() => {
-  if (props.ariaLabel) {
-    return props.ariaLabel;
-  }
-
-  if (hasLabel.value) {
-    return undefined;
-  }
-
-  return props.label ?? props.value;
-});
+function resolveAriaLabel() {
+  if (props.ariaLabel) return props.ariaLabel;
+  return props.label || slots.default ? undefined : (props.label ?? props.value);
+}
 
 const slotProps = computed(() => ({
   selected: isSelected.value,
@@ -96,7 +86,7 @@ const shape = useShape(() => props.shape);
     :disabled="link.nativeDisabled"
     :aria-disabled="link.ariaDisabled"
     :aria-current="isSelected ? 'page' : undefined"
-    :aria-label="resolvedAriaLabel"
+    :aria-label="resolveAriaLabel()"
     :tabindex="link.tabIndex"
     :type="link.type"
     :data-size="rowSize"
@@ -130,7 +120,7 @@ const shape = useShape(() => props.shape);
       </span>
 
       <span
-        v-if="hasLabel"
+        v-if="props.label || slots.default"
         class="m3-navigation-rail-item-label m3-navigation-rail-item-label-expanded m3-text-morph"
         data-scope="navigation-rail-item"
         data-part="label"
@@ -141,7 +131,7 @@ const shape = useShape(() => props.shape);
     </span>
 
     <span
-      v-if="hasLabel"
+      v-if="props.label || slots.default"
       class="m3-navigation-rail-item-label m3-navigation-rail-item-label-collapsed m3-text-morph"
       data-scope="navigation-rail-item"
       data-part="label"

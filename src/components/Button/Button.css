@@ -756,190 +756,59 @@
   }
 
   [data-type='connected'] .m3-button {
-    border-start-start-radius: var(
+    --_button-outer-corner: var(
       --md-button-group-connected-container-shape,
       var(--_shape-radius, var(--_button-group-connected-container-shape))
     );
-    border-start-end-radius: var(
+    --_button-inner-corner: var(
       --md-button-group-connected-inner-corner-corner-size,
       var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
     );
-    border-end-end-radius: var(
-      --md-button-group-connected-inner-corner-corner-size,
-      var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
+    --_button-selected-corner: var(
+      --md-button-group-connected-selected-inner-corner-corner-size,
+      var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
     );
-    border-end-start-radius: var(
-      --md-button-group-connected-container-shape,
-      var(--_shape-radius, var(--_button-group-connected-container-shape))
-    );
+    --_button-pressed-corner: var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size));
 
-    &:first-of-type {
-      border-start-start-radius: var(
-        --md-button-group-connected-container-shape,
-        var(--_shape-radius, var(--_button-group-connected-container-shape))
-      );
-      border-start-end-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-      border-end-end-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-      border-end-start-radius: var(
-        --md-button-group-connected-container-shape,
-        var(--_shape-radius, var(--_button-group-connected-container-shape))
-      );
+    border-start-start-radius: var(--_button-inner-corner);
+    border-start-end-radius: var(--_button-inner-corner);
+    border-end-end-radius: var(--_button-inner-corner);
+    border-end-start-radius: var(--_button-inner-corner);
 
-      &[data-pressed='true'] {
-        --_button-group-connected-inner-corner-corner-size: var(
-          --md-button-group-connected-inner-corner-corner-size,
-          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
-        );
-      }
+    &:first-of-type:not(:last-of-type) {
+      border-start-start-radius: var(--_button-outer-corner);
+      border-end-start-radius: var(--_button-outer-corner);
     }
 
     &:last-of-type {
-      --_button-container-shape: var(
-        --md-button-container-shape,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-
-      border-start-start-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-      border-start-end-radius: var(
-        --md-button-group-connected-container-shape,
-        var(--_shape-radius, var(--_button-group-connected-container-shape))
-      );
-      border-end-end-radius: var(
-        --md-button-group-connected-container-shape,
-        var(--_shape-radius, var(--_button-group-connected-container-shape))
-      );
-      border-end-start-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-
-      &[data-pressed='true'] {
-        --_button-group-connected-inner-corner-corner-size: var(
-          --md-button-group-connected-inner-corner-corner-size,
-          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
-        );
-      }
+      border-start-end-radius: var(--_button-outer-corner);
+      border-end-end-radius: var(--_button-outer-corner);
     }
 
-    &:not(:first-of-type):not(:last-of-type) {
-      --_button-container-shape: var(
-        --md-button-container-shape,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-
-      border-start-start-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-      border-start-end-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-      border-end-end-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-      border-end-start-radius: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-inner-corner-corner-size))
-      );
-
-      &[data-pressed='true'] {
-        --_button-group-connected-inner-corner-corner-size: var(
-          --md-button-group-connected-inner-corner-corner-size,
-          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
-        );
-      }
+    &[data-pressed='true'],
+    &[data-press-shape-morph='true']:is(:first-of-type, :last-of-type):active {
+      --_button-inner-corner: var(--md-button-group-connected-inner-corner-corner-size, var(--_button-pressed-corner));
     }
 
-    /* Pressed state border-radius overrides */
-
-    &[data-press-shape-morph='true']:first-of-type:active,
-    &[data-press-shape-morph='true']:last-of-type:active {
-      --_button-group-connected-inner-corner-corner-size: var(
-        --md-button-group-connected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
+    &[data-pressed='true'] {
+      --_button-selected-corner: var(
+        --md-button-group-connected-selected-inner-corner-corner-size,
+        var(--_button-pressed-corner)
       );
     }
 
-    &[data-press-shape-morph='true']:not(:first-of-type):not(:last-of-type):active {
-      border-radius: var(
-        --md-button-group-connected-pressed-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
-      );
+    &:has(input:checked):is(:last-of-type, :not(:first-of-type)) {
+      border-start-start-radius: var(--_button-selected-corner);
+      border-end-start-radius: var(--_button-selected-corner);
     }
 
-    /* Selected state border-radius overrides */
-
-    &:first-of-type:has(input:checked) {
-      border-start-end-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-      border-end-end-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-
-      &[data-pressed='true'] {
-        --_button-group-connected-selected-inner-corner-corner-size: var(
-          --md-button-group-connected-selected-inner-corner-corner-size,
-          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
-        );
-      }
+    &:has(input:checked):is(:first-of-type, :not(:last-of-type)) {
+      border-start-end-radius: var(--_button-selected-corner);
+      border-end-end-radius: var(--_button-selected-corner);
     }
 
-    &:last-of-type:has(input:checked) {
-      border-start-start-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-      border-end-start-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-
-      &[data-pressed='true'] {
-        --_button-group-connected-selected-inner-corner-corner-size: var(
-          --md-button-group-connected-selected-inner-corner-corner-size,
-          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
-        );
-      }
-    }
-
-    &:not(:first-of-type):not(:last-of-type):has(input:checked) {
-      border-start-start-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-      border-start-end-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-      border-end-end-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-      border-end-start-radius: var(
-        --md-button-group-connected-selected-inner-corner-corner-size,
-        var(--_shape-radius, var(--_button-group-connected-selected-inner-corner-corner-size))
-      );
-
-      &[data-pressed='true'] {
-        --_button-group-connected-selected-inner-corner-corner-size: var(
-          --md-button-group-connected-selected-inner-corner-corner-size,
-          var(--_shape-radius, var(--_button-group-connected-pressed-inner-corner-corner-size))
-        );
-      }
+    &[data-press-shape-morph='true']:not(:first-of-type, :last-of-type):active {
+      border-radius: var(--md-button-group-connected-pressed-inner-corner-corner-size, var(--_button-pressed-corner));
     }
   }
 

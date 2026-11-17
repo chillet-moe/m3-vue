@@ -28,9 +28,8 @@
       var(--_progress-indicator-color)
     );
     --_track-color: var(--md-circular-progress-indicator-track-color, var(--_progress-indicator-track-color));
-    --_size: var(--md-circular-progress-indicator-size, 2.5em);
-    --_with-wave-size: var(--md-circular-progress-indicator-with-wave-size, 3em);
-    --_current-size: var(--_size);
+    --_size-default: 2.5em;
+    --_current-size: var(--md-circular-progress-indicator-size, var(--_size-default));
     --_track-thickness: var(--md-circular-progress-indicator-track-thickness, 0.25em);
     --_track-active-indicator-gap: var(--md-circular-progress-indicator-track-active-indicator-gap, 0.25em);
     --_wave-amplitude: var(--md-circular-progress-indicator-wave-amplitude, 0.1em);
@@ -44,23 +43,18 @@
     flex-shrink: 0;
     inline-size: var(--_current-size);
     block-size: var(--_current-size);
+    overflow: visible;
+    vertical-align: baseline;
     color: var(--_active-indicator-color);
     print-color-adjust: exact;
   }
 
   .m3-circular-progress-indicator[data-shape='wavy'] {
-    --_current-size: var(--md-circular-progress-indicator-size, var(--_with-wave-size));
+    --_size-default: var(--md-circular-progress-indicator-with-wave-size, 3em);
   }
 
-  .m3-circular-progress-indicator-svg {
-    display: block;
-    inline-size: 100%;
-    block-size: 100%;
-    overflow: visible;
-  }
-
-  .m3-circular-progress-indicator[data-direction='counterclockwise'] .m3-circular-progress-indicator-svg {
-    transform: scaleX(-1);
+  .m3-circular-progress-indicator[data-direction='counterclockwise'] {
+    scale: -1 1;
   }
 
   .m3-circular-progress-indicator-track,

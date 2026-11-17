@@ -26,43 +26,18 @@ const props = withDefaults(defineProps<BadgeProps>(), {
   ariaLabel: undefined,
 });
 
-const normalizedMax = computed(() => {
-  if (Number.isFinite(props.max) && props.max >= 0) {
-    return Math.trunc(props.max);
-  }
-
-  return 999;
-});
-
 const resolvedContent = computed(() => {
-  if (props.content === undefined || props.content === null) {
-    return '';
-  }
+  const { content, max } = props;
+  if (typeof content !== 'number' || !Number.isFinite(content)) return String(content ?? '');
 
-  if (typeof props.content === 'number' && Number.isFinite(props.content)) {
-    const normalizedValue = Math.max(0, Math.trunc(props.content));
-
-    if (normalizedValue > normalizedMax.value) {
-      return `${normalizedMax.value}+`;
-    }
-
-    return String(normalizedValue);
-  }
-
-  return String(props.content);
+  const count = Math.max(0, Math.trunc(content));
+  const limit = Number.isFinite(max) && max >= 0 ? Math.trunc(max) : 999;
+  return count > limit ? `${limit}+` : String(count);
 });
 
-const accessibleLabel = computed(() => {
-  if (props.ariaLabel) {
-    return props.ariaLabel;
-  }
-
-  if (props.variant === 'large' && resolvedContent.value) {
-    return resolvedContent.value;
-  }
-
-  return undefined;
-});
+const accessibleLabel = computed(
+  () => props.ariaLabel || (props.variant === 'large' ? resolvedContent.value : '') || undefined,
+);
 
 defineSlots<{
   /** Optional label content for large badges. */

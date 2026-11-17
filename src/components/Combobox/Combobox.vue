@@ -6,15 +6,6 @@ import type { SelectModelValue, SelectOption, SelectProps } from '@/components/S
 
 export type ComboboxProps = Omit<SelectProps, 'filterable'>;
 
-type SelectInstance = InstanceType<typeof Select> & {
-  el?: unknown;
-  focus?: () => void;
-  blur?: () => void;
-  show?: () => Promise<void>;
-  hide?: () => void;
-  toggle?: () => void;
-};
-
 const props = withDefaults(defineProps<ComboboxProps>(), { showSelectedIcon: undefined });
 // Vue forwards attrs to Select. Cache the declared props across attribute-only updates.
 const forwardedProps = computed(() => ({ ...props }));
@@ -28,39 +19,42 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
-  list(props: SelectListSlot): any;
-  leading(): any;
-  prefix(): any;
-  suffix(): any;
-  trailing(): any;
-  optionLeading(props: { option: SelectOption; selected: boolean }): any;
-  optionTrailing(props: { option: SelectOption; selected: boolean }): any;
+  list?(props: SelectListSlot): any;
+  leading?(): any;
+  prefix?(): any;
+  suffix?(): any;
+  trailing?(): any;
+  optionLeading?(props: { option: SelectOption; selected: boolean }): any;
+  optionTrailing?(props: { option: SelectOption; selected: boolean }): any;
 }>();
+
+const fieldSlots = ['leading', 'prefix', 'suffix', 'trailing'] as const;
+const optionSlots = ['optionLeading', 'optionTrailing'] as const;
 
 const modelValue = defineModel<SelectModelValue>();
 const query = defineModel<string>('query', { default: '' });
 const open = defineModel<boolean>('open', { default: false });
 
-const selectRef = ref<SelectInstance>();
+const selectRef = ref<InstanceType<typeof Select>>();
 
 function focus() {
-  selectRef.value?.focus?.();
+  selectRef.value?.focus();
 }
 
 function blur() {
-  selectRef.value?.blur?.();
+  selectRef.value?.blur();
 }
 
 async function show() {
-  await selectRef.value?.show?.();
+  await selectRef.value?.show();
 }
 
 function hide() {
-  selectRef.value?.hide?.();
+  selectRef.value?.hide();
 }
 
 function toggle() {
-  selectRef.value?.toggle?.();
+  selectRef.value?.toggle();
 }
 
 defineExpose({
@@ -89,28 +83,11 @@ defineExpose({
     <template v-if="$slots.list" #list="list">
       <slot name="list" v-bind="list" />
     </template>
-    <template v-if="$slots.leading" #leading>
-      <slot name="leading" />
+    <template v-for="name in fieldSlots.filter((name) => $slots[name])" #[name]>
+      <slot :name="name" />
     </template>
-
-    <template v-if="$slots.prefix" #prefix>
-      <slot name="prefix" />
-    </template>
-
-    <template v-if="$slots.suffix" #suffix>
-      <slot name="suffix" />
-    </template>
-
-    <template v-if="$slots.trailing" #trailing>
-      <slot name="trailing" />
-    </template>
-
-    <template v-if="$slots.optionLeading" #optionLeading="{ option, selected }">
-      <slot name="optionLeading" :option="option" :selected="selected" />
-    </template>
-
-    <template v-if="$slots.optionTrailing" #optionTrailing="{ option, selected }">
-      <slot name="optionTrailing" :option="option" :selected="selected" />
+    <template v-for="name in optionSlots.filter((name) => $slots[name])" #[name]="slotProps">
+      <slot :name="name" v-bind="slotProps" />
     </template>
   </Select>
 </template>

@@ -228,11 +228,11 @@
       font-weight var(--md-easing);
   }
 
-  .m3-item[data-active='true'] .m3-item-icon {
+  .m3-item[data-selected='true'] .m3-item-icon {
     color: var(--_item-current-icon-color);
   }
 
-  .m3-item[data-active='true'] {
+  .m3-item[data-selected='true'] {
     --_item-current-indicator-visual-width: 100%;
     --_item-current-indicator-opacity: 1;
     --_item-current-indicator-opacity-delay: 0ms;

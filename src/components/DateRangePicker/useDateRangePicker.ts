@@ -1,9 +1,5 @@
 import { type MaybeRefOrGetter, type Ref, computed, ref, toValue } from 'vue';
-import type {
-  DatePickerMonthOption,
-  DatePickerVariant,
-  DatePickerYearOption,
-} from '@/components/DatePicker/useDatePicker';
+import type { DatePickerVariant } from '@/components/DatePicker/useDatePicker';
 import {
   addDays,
   addMonths,
@@ -20,6 +16,7 @@ import {
 } from '../calendarDate';
 import { en } from '@/locales/en';
 import type { M3Messages } from '@/locales/types';
+import { useCalendarNavigation } from '../useCalendarNavigation';
 
 export type DateRangePickerVariant = DatePickerVariant;
 
@@ -75,11 +72,8 @@ export type UseDateRangePickerOptions = {
 export type UseDateRangePickerReturn = ReturnType<typeof useDateRangePicker>;
 
 export function useDateRangePicker(options: UseDateRangePickerOptions) {
-  const calendarView = ref<'days' | 'months' | 'years'>('days');
   const draftValue = ref<DateRangePickerModelValue>();
   const activeSelection = ref<DateRangePickerSelection>('start');
-  const displayedYear = ref(0);
-  const displayedMonth = ref(0);
 
   const minDate = computed(() => {
     return normalizeIsoDate(toValue(options.min));
@@ -109,13 +103,14 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return toValue(options.locale);
   });
 
-  const shortMonthFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', month: 'short' });
+  const { numberFormatter, setDisplayedMonthFromDate, ...navigation } = useCalendarNavigation({
+    initialDate: getInitialDisplayDate(),
+    minDate,
+    maxDate,
+    locale,
   });
-
-  const longMonthFormatter = computed(() => {
-    return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', month: 'long' });
-  });
+  const { displayedYear, displayedMonth } = navigation;
+  const displayedMonthDate = computed(() => createLocalDate(displayedYear.value, displayedMonth.value, 1));
 
   const monthYearFormatter = computed(() => {
     return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', month: 'long', year: 'numeric' });
@@ -137,22 +132,6 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
 
   const mediumDateFormatter = computed(() => {
     return new Intl.DateTimeFormat(locale.value, { calendar: 'gregory', dateStyle: 'medium' });
-  });
-
-  const numberFormatter = computed(() => {
-    return new Intl.NumberFormat(locale.value, { useGrouping: false });
-  });
-
-  const displayedMonthDate = computed(() => {
-    return createLocalDate(displayedYear.value, displayedMonth.value, 1);
-  });
-
-  const monthButtonLabel = computed(() => {
-    return shortMonthFormatter.value.format(displayedMonthDate.value);
-  });
-
-  const displayedYearLabel = computed(() => {
-    return numberFormatter.value.format(displayedYear.value);
   });
 
   const calendarLabel = computed(() => {
@@ -263,72 +242,6 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     });
   }
 
-  const monthOptions = computed<DatePickerMonthOption[]>(() => {
-    return Array.from({ length: 12 }, (_, month) => {
-      const date = createLocalDate(displayedYear.value, month, 1);
-
-      return {
-        month,
-        label: longMonthFormatter.value.format(date),
-        selected: month === displayedMonth.value,
-        disabled: isMonthDisabled(displayedYear.value, month),
-      };
-    });
-  });
-
-  const yearRange = computed(() => {
-    const lower = minDate.value ? Number(minDate.value.slice(0, 4)) : displayedYear.value - 100;
-    const upper = maxDate.value ? Number(maxDate.value.slice(0, 4)) : displayedYear.value + 100;
-
-    return {
-      start: Math.min(lower, upper),
-      end: Math.max(lower, upper),
-    };
-  });
-
-  const yearOptions = computed<DatePickerYearOption[]>(() => {
-    const { start, end } = yearRange.value;
-
-    return Array.from({ length: end - start + 1 }, (_, index) => {
-      const year = start + index;
-
-      return {
-        year,
-        label: numberFormatter.value.format(year),
-        selected: year === displayedYear.value,
-        disabled: isYearDisabled(year),
-      };
-    });
-  });
-
-  const canGoPreviousMonth = computed(() => {
-    const min = minDate.value;
-    const previousMonthLastDate = getLocalIsoDate(createLocalDate(displayedYear.value, displayedMonth.value, 0));
-
-    return !min || compareIsoDates(previousMonthLastDate, min) >= 0;
-  });
-
-  const canGoNextMonth = computed(() => {
-    const max = maxDate.value;
-    const nextMonthFirstDate = getLocalIsoDate(createLocalDate(displayedYear.value, displayedMonth.value + 1, 1));
-
-    return !max || compareIsoDates(nextMonthFirstDate, max) <= 0;
-  });
-
-  const canGoPreviousYear = computed(() => {
-    const min = minDate.value;
-    const previousYearLastDate = getLocalIsoDate(createLocalDate(displayedYear.value, 0, 0));
-
-    return !min || compareIsoDates(previousYearLastDate, min) >= 0;
-  });
-
-  const canGoNextYear = computed(() => {
-    const max = maxDate.value;
-    const nextYearFirstDate = getLocalIsoDate(createLocalDate(displayedYear.value + 1, 0, 1));
-
-    return !max || compareIsoDates(nextYearFirstDate, max) <= 0;
-  });
-
   function isDateDisabled(date: string) {
     return isDateOutsideBounds(date, minDate.value, maxDate.value);
   }
@@ -345,57 +258,12 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return false;
   }
 
-  function isMonthDisabled(year: number, month: number) {
-    const min = minDate.value;
-    const max = maxDate.value;
-    const monthFirstDate = getLocalIsoDate(createLocalDate(year, month, 1));
-    const monthLastDate = getLocalIsoDate(createLocalDate(year, month + 1, 0));
-
-    if (min && compareIsoDates(monthLastDate, min) < 0) {
-      return true;
-    }
-
-    if (max && compareIsoDates(monthFirstDate, max) > 0) {
-      return true;
-    }
-
-    return false;
-  }
-
-  function isYearDisabled(year: number) {
-    const min = minDate.value;
-    const max = maxDate.value;
-    const yearFirstDate = getLocalIsoDate(createLocalDate(year, 0, 1));
-    const yearLastDate = getLocalIsoDate(createLocalDate(year, 11, 31));
-
-    if (min && compareIsoDates(yearLastDate, min) < 0) {
-      return true;
-    }
-
-    if (max && compareIsoDates(yearFirstDate, max) > 0) {
-      return true;
-    }
-
-    return false;
-  }
-
   function getInitialDisplayDate() {
     const range = normalizeDateRange(options.modelValue.value);
     const preferred = range?.start ?? range?.end ?? normalizeIsoDate(toValue(options.today)) ?? todayDate.value;
     const parsed = parseIsoDate(preferred);
 
     return parsed ?? parseIsoDate(todayDate.value)!;
-  }
-
-  function setDisplayedMonthFromDate(date: string) {
-    const parsed = parseIsoDate(date);
-
-    if (!parsed) {
-      return;
-    }
-
-    displayedYear.value = parsed.year;
-    displayedMonth.value = parsed.month;
   }
 
   function resetDraftFromModel() {
@@ -481,70 +349,6 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     setDisplayedMonthFromDate(date);
   }
 
-  function goToPreviousMonth() {
-    if (!canGoPreviousMonth.value) {
-      return;
-    }
-
-    const next = addMonths(displayedYear.value, displayedMonth.value, -1);
-    displayedYear.value = next.year;
-    displayedMonth.value = next.month;
-    calendarView.value = 'days';
-  }
-
-  function goToNextMonth() {
-    if (!canGoNextMonth.value) {
-      return;
-    }
-
-    const next = addMonths(displayedYear.value, displayedMonth.value, 1);
-    displayedYear.value = next.year;
-    displayedMonth.value = next.month;
-    calendarView.value = 'days';
-  }
-
-  function goToPreviousYear() {
-    if (!canGoPreviousYear.value) {
-      return;
-    }
-
-    displayedYear.value -= 1;
-  }
-
-  function goToNextYear() {
-    if (!canGoNextYear.value) {
-      return;
-    }
-
-    displayedYear.value += 1;
-  }
-
-  function toggleMonthView() {
-    calendarView.value = calendarView.value === 'months' ? 'days' : 'months';
-  }
-
-  function toggleYearView() {
-    calendarView.value = calendarView.value === 'years' ? 'days' : 'years';
-  }
-
-  function selectMonth(month: number) {
-    if (isMonthDisabled(displayedYear.value, month)) {
-      return;
-    }
-
-    displayedMonth.value = month;
-    calendarView.value = 'days';
-  }
-
-  function selectYear(year: number) {
-    if (isYearDisabled(year)) {
-      return;
-    }
-
-    displayedYear.value = year;
-    calendarView.value = 'months';
-  }
-
   function getKeyboardDate(currentDate: string, key: string) {
     const current = dateFromIso(currentDate);
 
@@ -599,37 +403,24 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     return isStart ? messages.selectedStartDate(formattedDate) : messages.selectedEndDate(formattedDate);
   }
 
-  const initialDate = getInitialDisplayDate();
-  displayedYear.value = initialDate.year;
-  displayedMonth.value = initialDate.month;
   resetDraftFromModel();
 
   return {
-    calendarView,
+    ...navigation,
     draftValue,
     draftRange,
     activeSelection,
-    displayedYear,
-    displayedMonth,
     todayDate,
     selectedStartDate,
     selectedEndDate,
     fullDateFormatter,
     mediumDateFormatter,
-    monthButtonLabel,
-    displayedYearLabel,
     calendarLabel,
     weekdayLabels,
     calendarDays,
     getCalendarDayLabels,
     getCalendarPage,
     getCalendarDays,
-    monthOptions,
-    yearOptions,
-    canGoPreviousMonth,
-    canGoNextMonth,
-    canGoPreviousYear,
-    canGoNextYear,
     dateFromIso,
     normalizeDateRange,
     isDateDisabled,
@@ -638,14 +429,6 @@ export function useDateRangePicker(options: UseDateRangePickerOptions) {
     cancelDraft,
     setActiveSelection,
     selectDate,
-    goToPreviousMonth,
-    goToNextMonth,
-    goToPreviousYear,
-    goToNextYear,
-    toggleMonthView,
-    toggleYearView,
-    selectMonth,
-    selectYear,
     getNavigationDate,
     getDateAriaLabel,
   };

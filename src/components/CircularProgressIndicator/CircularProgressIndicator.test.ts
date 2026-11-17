@@ -20,7 +20,7 @@ async function mountCircularProgressIndicator(props: Record<string, unknown> = {
   return {
     app,
     container,
-    root: container.querySelector('.m3-circular-progress-indicator') as HTMLElement | null,
+    root: container.querySelector<SVGSVGElement>('.m3-circular-progress-indicator'),
     async updateProps(nextProps: Record<string, unknown>) {
       propsRef.value = {
         ...propsRef.value,
@@ -87,7 +87,6 @@ describe('CircularProgressIndicator', () => {
     expect(root?.dataset.shape).toBe('flat');
     expect(root?.dataset.progressState).toBe('partial');
     expect(track).not.toBeNull();
-    expect(active?.classList.contains('m3-circular-progress-indicator-active-determinate')).toBe(true);
     expect(track?.tagName.toLowerCase()).toBe('path');
     expect(active?.tagName.toLowerCase()).toBe('path');
     expect(track?.getAttribute('d')).not.toBe(active?.getAttribute('d'));
@@ -116,7 +115,7 @@ describe('CircularProgressIndicator', () => {
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-size')).toBe('3rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-thickness')).toBe('0.375rem');
     expect(root?.style.getPropertyValue('--md-circular-progress-indicator-track-active-indicator-gap')).toBe('0.25rem');
-    expect(root?.querySelector('svg')?.getAttribute('viewBox')).toBe('0 0 52.5 52.5');
+    expect(root?.getAttribute('viewBox')).toBe('0 0 52.5 52.5');
 
     app.unmount();
   });
@@ -215,7 +214,7 @@ describe('CircularProgressIndicator', () => {
     expect(root?.getAttribute('aria-valuenow')).toBeNull();
     expect(root?.getAttribute('aria-valuetext')).toBe('Loading');
     expect(container.querySelector('.m3-circular-progress-indicator-track')).not.toBeNull();
-    expect(active?.classList.contains('m3-circular-progress-indicator-active-indeterminate')).toBe(true);
+    expect(active?.getAttribute('d')).toMatch(/^M .+ A /);
 
     app.unmount();
   });

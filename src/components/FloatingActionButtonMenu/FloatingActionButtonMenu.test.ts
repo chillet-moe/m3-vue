@@ -220,13 +220,12 @@ describe('FloatingActionButtonMenu', () => {
     });
     surface?.style.setProperty('padding-inline-start', '12px');
     surface?.style.setProperty('padding-inline-end', '20px');
-    surface?.style.setProperty('row-gap', '8px');
 
     trigger?.click();
     await flushPopover();
 
     expect(menu?.style.getPropertyValue('--_fab-menu-popover-inline-start')).toBe('20px');
-    expect(menu?.style.getPropertyValue('--_fab-menu-popover-block-end')).toBe('88px');
+    expect(menu?.style.getPropertyValue('--_fab-menu-anchor-block-end')).toBe('80px');
     expect(menu?.dataset.effectiveAlignment).toBe('end');
 
     app.unmount();
@@ -410,13 +409,12 @@ describe('FloatingActionButtonMenu', () => {
     trigger?.style.setProperty('--_fab-menu-close-button-container-width', '56px');
     trigger?.style.setProperty('--_fab-menu-close-button-container-height', '56px');
     surface?.style.setProperty('padding-inline-end', '16px');
-    surface?.style.setProperty('row-gap', '8px');
 
     trigger?.click();
     await flushPopover();
 
     expect(menu?.style.getPropertyValue('--_fab-menu-popover-inline-start')).toBe('352px');
-    expect(menu?.style.getPropertyValue('--_fab-menu-popover-block-end')).toBe('88px');
+    expect(menu?.style.getPropertyValue('--_fab-menu-anchor-block-end')).toBe('80px');
 
     app.unmount();
 

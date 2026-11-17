@@ -195,10 +195,15 @@
 
   .m3-menu-item-content {
     min-inline-size: 0;
+    transition:
+      color 120ms var(--md-timing-function-fast),
+      transform 220ms var(--md-timing-function-fast-spatial);
+  }
+
+  .m3-menu-item-content:not(.m3-menu-item-label) {
     display: grid;
     align-content: center;
     row-gap: 0.125rem;
-    transition: transform 220ms var(--md-timing-function-fast-spatial);
   }
 
   .m3-menu-item-label,
@@ -212,6 +217,9 @@
 
   .m3-menu-item-label {
     color: var(--_menu-item-current-label-color);
+  }
+
+  .m3-menu-item-label:not(.m3-menu-item-content) {
     transition: color 120ms var(--md-timing-function-fast);
   }
 
@@ -309,30 +317,16 @@
     }
   }
 
-  .m3-menu-container > .m3-menu-item:first-child {
-    border-start-start-radius: var(
-      --md-menus-menu-item-shape,
-      var(--_shape-radius, var(--_menu-item-first-start-radius))
-    );
-    border-start-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-first-end-radius)));
-  }
-
+  .m3-menu-container > .m3-menu-item:first-child,
   .m3-menu-container > .m3-menu-submenu:first-child > .m3-menu-submenu-trigger > .m3-menu-item {
-    border-start-start-radius: var(
-      --md-menus-menu-item-shape,
-      var(--_shape-radius, var(--_menu-item-first-start-radius))
-    );
-    border-start-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-first-end-radius)));
+    border-start-start-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-first-radius)));
+    border-start-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-first-radius)));
   }
 
-  .m3-menu-container > .m3-menu-item:last-child {
-    border-end-start-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-start-radius)));
-    border-end-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-end-radius)));
-  }
-
+  .m3-menu-container > .m3-menu-item:last-child,
   .m3-menu-container > .m3-menu-submenu:last-child > .m3-menu-submenu-trigger > .m3-menu-item {
-    border-end-start-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-start-radius)));
-    border-end-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-end-radius)));
+    border-end-start-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-radius)));
+    border-end-end-radius: var(--md-menus-menu-item-shape, var(--_shape-radius, var(--_menu-item-last-radius)));
   }
 
   @media (prefers-reduced-motion: reduce) {

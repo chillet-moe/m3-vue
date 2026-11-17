@@ -476,7 +476,6 @@
   }
 
   .m3-menu[data-submenu='true'] > .m3-menu-surface {
-    transform: scale(var(--_menu-enter-scale-inline), var(--_menu-enter-scale-block));
     transform-origin: left top;
   }
 
@@ -531,19 +530,13 @@
     transition-timing-function: var(--md-timing-function-fast-spatial);
   }
 
-  .m3-menu[data-submenu='true'][popover]:popover-open > .m3-menu-surface {
-    transform: scale(1);
-  }
-
   .m3-menu-container {
     --_scrollbar-container-color: var(--_menu-container-color);
     --_scrollbar-content-color: var(--_menu-item-label-color);
     @apply surface-scrollbar;
 
-    --_menu-item-first-start-radius: var(--_menus-inactive-container-shape);
-    --_menu-item-first-end-radius: var(--_menus-inactive-container-shape);
-    --_menu-item-last-start-radius: var(--_menus-inactive-container-shape);
-    --_menu-item-last-end-radius: var(--_menus-inactive-container-shape);
+    --_menu-item-first-radius: var(--_menus-inactive-container-shape);
+    --_menu-item-last-radius: var(--_menus-inactive-container-shape);
 
     padding: var(--_menus-group-padding);
     min-inline-size: 10rem;
@@ -560,15 +553,13 @@
   }
 
   .m3-menu-container:first-of-type {
-    --_menu-item-first-start-radius: var(--_menus-menu-item-first-child-shape);
-    --_menu-item-first-end-radius: var(--_menus-menu-item-first-child-shape);
+    --_menu-item-first-radius: var(--_menus-menu-item-first-child-shape);
     border-start-start-radius: var(--_menus-active-container-shape);
     border-start-end-radius: var(--_menus-active-container-shape);
   }
 
   .m3-menu-container:last-of-type {
-    --_menu-item-last-start-radius: var(--_menus-menu-item-last-child-shape);
-    --_menu-item-last-end-radius: var(--_menus-menu-item-last-child-shape);
+    --_menu-item-last-radius: var(--_menus-menu-item-last-child-shape);
     border-end-start-radius: var(--_menus-active-container-shape);
     border-end-end-radius: var(--_menus-active-container-shape);
   }
@@ -624,10 +615,6 @@
     }
 
     .m3-menu[popover]:popover-open > .m3-menu-surface {
-      transform: scale(var(--_menu-enter-scale-inline), var(--_menu-enter-scale-block));
-    }
-
-    .m3-menu[data-submenu='true'][popover]:popover-open > .m3-menu-surface {
       transform: scale(var(--_menu-enter-scale-inline), var(--_menu-enter-scale-block));
     }
   }

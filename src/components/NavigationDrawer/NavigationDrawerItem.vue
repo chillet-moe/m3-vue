@@ -6,7 +6,7 @@ import { Icon } from '@/components/Icon';
 import { useNavigationItem } from '@/composables/useNavigationItem';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
-import { computed, inject, unref, useSlots } from 'vue';
+import { computed, inject, unref } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 import '@/styles/icon-morph.css';
 
@@ -51,18 +51,17 @@ const props = withDefaults(defineProps<NavigationDrawerItemProps>(), {
   ariaLabel: undefined,
 });
 
-defineSlots<{
+const slots = defineSlots<{
   /** Label content. */
-  default(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
+  default?(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Icon content. */
-  icon(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
+  icon?(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Optional trailing content. */
-  trailing(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
+  trailing?(props: { selected: boolean; disabled: boolean; iconOnly: boolean }): any;
 }>();
 
-const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 
@@ -76,24 +75,11 @@ const { mergedDisabled, isSelected, link, handleClick, handleKeydown } = useNavi
   selected: () => props.selected,
 });
 
-const hasLabel = computed(() => Boolean(props.label || slots.default));
-const hasTrailing = computed(() => Boolean(slots.trailing));
-
-const resolvedAriaLabel = computed(() => {
-  if (props.ariaLabel) {
-    return props.ariaLabel;
-  }
-
-  if (isIconOnly.value && props.label) {
-    return props.label;
-  }
-
-  if (hasLabel.value) {
-    return undefined;
-  }
-
-  return props.label ?? props.value;
-});
+function resolveAriaLabel() {
+  if (props.ariaLabel) return props.ariaLabel;
+  if (isIconOnly.value && props.label) return props.label;
+  return props.label || slots.default ? undefined : (props.label ?? props.value);
+}
 
 const slotProps = computed(() => ({
   selected: isSelected.value,
@@ -124,7 +110,7 @@ const rowSize = provideRowSize(() => props.size);
     :disabled="link.nativeDisabled"
     :aria-disabled="link.ariaDisabled"
     :aria-current="isSelected ? 'page' : undefined"
-    :aria-label="resolvedAriaLabel"
+    :aria-label="resolveAriaLabel()"
     :tabindex="link.tabIndex"
     :type="link.type"
     v-tooltip="tooltip"
@@ -152,7 +138,7 @@ const rowSize = provideRowSize(() => props.size);
     </span>
 
     <span
-      v-if="hasLabel"
+      v-if="props.label || slots.default"
       class="m3-navigation-drawer-item-label m3-text-morph"
       data-scope="navigation-drawer-item"
       data-part="label"
@@ -161,7 +147,7 @@ const rowSize = provideRowSize(() => props.size);
     </span>
 
     <span
-      v-if="hasTrailing"
+      v-if="slots.trailing"
       class="m3-navigation-drawer-item-trailing"
       data-scope="navigation-drawer-item"
       data-part="trailing"

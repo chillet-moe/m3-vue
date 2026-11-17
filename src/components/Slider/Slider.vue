@@ -138,18 +138,7 @@ const supportsInsetIcon = computed(
 const hasStartInsetIcon = computed(() => supportsInsetIcon.value && Boolean(startIcon));
 const hasEndInsetIcon = computed(() => supportsInsetIcon.value && Boolean(endIcon));
 const hasInsetIcon = computed(() => hasStartInsetIcon.value || hasEndInsetIcon.value);
-const insetIconPopThreshold = computed(() => {
-  switch (size.value) {
-    default:
-    case 'large':
-    case 'medium':
-      return 40;
-    case 'extra-large':
-      return 56;
-  }
-});
-const startInsetIconName = computed(() => startIcon ?? '');
-const endInsetIconName = computed(() => endIcon ?? '');
+const insetIconPopThreshold = computed(() => (size.value === 'extra-large' ? 56 : 40));
 
 // Native range inputs derive their step grid from min and discard an off-grid max. Keep the input
 // continuous and normalize values here so effective limits and shortened final intervals stay selectable.
@@ -835,7 +824,6 @@ onBeforeUnmount(() => {
         <div
           v-for="(style, index) in stopIndicatorStyles"
           :key="index"
-          aria-hidden="true"
           class="m3-slider-stop-indicator m3-slider-stop-indicator-active"
           :style="style"
         />
@@ -848,7 +836,6 @@ onBeforeUnmount(() => {
         <div
           v-for="(style, index) in stopIndicatorStyles"
           :key="index"
-          aria-hidden="true"
           class="m3-slider-stop-indicator m3-slider-stop-indicator-inactive"
           :style="style"
         />
@@ -866,7 +853,7 @@ onBeforeUnmount(() => {
         isStartInsetIconFlipped ? 'm3-slider-inset-icon-on-inactive' : 'm3-slider-inset-icon-on-active',
       ]"
     >
-      <Icon class="m3-slider-inset-icon-image" :name="startInsetIconName" />
+      <Icon class="m3-slider-inset-icon-image" :name="startIcon" />
     </span>
     <span
       v-if="hasEndInsetIcon"
@@ -880,7 +867,7 @@ onBeforeUnmount(() => {
         isEndInsetIconFlipped ? 'm3-slider-inset-icon-on-active' : 'm3-slider-inset-icon-on-inactive',
       ]"
     >
-      <Icon class="m3-slider-inset-icon-image" :name="endInsetIconName" />
+      <Icon class="m3-slider-inset-icon-image" :name="endIcon" />
     </span>
 
     <div

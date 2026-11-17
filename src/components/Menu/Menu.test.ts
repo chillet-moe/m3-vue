@@ -569,6 +569,8 @@ describe('Menu', () => {
     const menu = container.querySelector('[role="menu"]') as HTMLDivElement | null;
     const menuItem = container.querySelector<HTMLButtonElement>('button[role="menuitem"]');
 
+    // Vue ignores a bubbling click with the same timestamp as the parent listener registration.
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 0));
     menuItem?.click();
     await nextTick();
 

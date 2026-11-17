@@ -1,17 +1,7 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { useNativeDialog } from '@/composables/useNativeDialog';
-import {
-  computed,
-  nextTick,
-  onMounted,
-  onUnmounted,
-  ref,
-  type CSSProperties,
-  useId,
-  useSlots,
-  useTemplateRef,
-} from 'vue';
+import { computed, nextTick, ref, type CSSProperties, useId, useTemplateRef } from 'vue';
 
 export type BottomSheetProps = {
   /** Corner style; inherits the shared shape default. */
@@ -56,7 +46,6 @@ defineSlots<{
   actions(): any;
 }>();
 
-const slots = useSlots();
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog');
 const surfaceRef = useTemplateRef<HTMLElement>('surface');
 const contentRef = useTemplateRef<HTMLElement>('content');
@@ -66,10 +55,6 @@ const actionsRef = useTemplateRef<HTMLElement>('actions');
 
 const headlineId = `bottom-sheet-headline-${useId()}`;
 const contentId = `bottom-sheet-content-${useId()}`;
-
-const hasHeadline = computed(() => Boolean(slots.headline));
-const hasContent = computed(() => Boolean(slots.default));
-const hasActions = computed(() => Boolean(slots.actions));
 
 const dragOffset = ref(0);
 const dragging = ref(false);
@@ -82,21 +67,10 @@ let dragVelocity = 0;
 let dragStartedInContent = false;
 let dragActive = false;
 let touchDragActive = false;
-let removeTouchListeners: (() => void) | undefined;
-
-const rootStyle = computed<CSSProperties>(() => {
-  const style: Record<string, string> = {
-    '--md-bottom-sheet-drag-offset': `${dragOffset.value}px`,
-    '--md-bottom-sheet-translate-offset': `${Math.max(0, dragOffset.value)}px`,
-    '--md-bottom-sheet-background-extension': `${Math.max(0, -dragOffset.value)}px`,
-  };
-
-  if (props.maxHeight) {
-    style['--md-bottom-sheet-max-height'] = props.maxHeight;
-  }
-
-  return style as CSSProperties;
-});
+const rootStyle = computed<CSSProperties>(() => ({
+  '--md-bottom-sheet-drag-offset': `${dragOffset.value}px`,
+  ...(props.maxHeight ? { '--md-bottom-sheet-max-height': props.maxHeight } : {}),
+}));
 
 const resetDrag = () => {
   dragOffset.value = 0;
@@ -307,29 +281,6 @@ defineExpose({
   dialogRef,
 });
 
-onUnmounted(() => {
-  removeTouchListeners?.();
-});
-
-onMounted(() => {
-  const surface = surfaceRef.value;
-
-  if (!surface) {
-    return;
-  }
-
-  surface.addEventListener('touchstart', onSurfaceTouchStart, { passive: true });
-  surface.addEventListener('touchmove', onSurfaceTouchMove, { passive: false });
-  surface.addEventListener('touchend', finishSurfaceTouchDrag);
-  surface.addEventListener('touchcancel', finishSurfaceTouchDrag);
-
-  removeTouchListeners = () => {
-    surface.removeEventListener('touchstart', onSurfaceTouchStart);
-    surface.removeEventListener('touchmove', onSurfaceTouchMove);
-    surface.removeEventListener('touchend', finishSurfaceTouchDrag);
-    surface.removeEventListener('touchcancel', finishSurfaceTouchDrag);
-  };
-});
 const shape = useShape(() => props.shape);
 </script>
 
@@ -341,13 +292,10 @@ const shape = useShape(() => props.shape);
     data-part="root"
     data-m3-shape
     :data-shape="shape"
-    :data-has-drag-handle="props.showDragHandle ? 'true' : 'false'"
-    :data-has-headline="hasHeadline ? 'true' : 'false'"
-    :data-has-actions="hasActions ? 'true' : 'false'"
     :data-dragging="dragging ? 'true' : 'false'"
     :style="rootStyle"
-    :aria-labelledby="hasHeadline ? headlineId : undefined"
-    :aria-describedby="hasContent ? contentId : undefined"
+    :aria-labelledby="$slots.headline ? headlineId : undefined"
+    :aria-describedby="$slots.default ? contentId : undefined"
     @beforetoggle="onBeforeToggle"
     @cancel="onCancel"
     @close="onClose"
@@ -363,6 +311,10 @@ const shape = useShape(() => props.shape);
       @pointerup="finishSurfaceDrag"
       @pointercancel="finishSurfaceDrag"
       @lostpointercapture="finishSurfaceDrag"
+      @touchstart.passive="onSurfaceTouchStart"
+      @touchmove="onSurfaceTouchMove"
+      @touchend="finishSurfaceTouchDrag"
+      @touchcancel="finishSurfaceTouchDrag"
     >
       <div
         v-if="props.showDragHandle"
@@ -374,7 +326,7 @@ const shape = useShape(() => props.shape);
       />
 
       <h2
-        v-if="hasHeadline"
+        v-if="$slots.headline"
         :id="headlineId"
         ref="headline"
         class="m3-bottom-sheet-headline"
@@ -385,7 +337,7 @@ const shape = useShape(() => props.shape);
       </h2>
 
       <div
-        v-if="hasContent"
+        v-if="$slots.default"
         ref="content"
         :id="contentId"
         class="m3-bottom-sheet-content"
@@ -396,7 +348,7 @@ const shape = useShape(() => props.shape);
       </div>
 
       <div
-        v-if="hasActions"
+        v-if="$slots.actions"
         ref="actions"
         class="m3-bottom-sheet-actions"
         data-scope="bottom-sheet"

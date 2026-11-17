@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
-import { computed, inject, provide, toRef, unref, type FunctionalComponent } from 'vue';
+import { inject, provide, toRef, unref, type FunctionalComponent } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 
 export type NavigationDrawerIconSpace = 'none' | 'root' | 'all';
@@ -35,14 +35,13 @@ const props = withDefaults(defineProps<NavigationDrawerProps>(), {
 });
 
 const modelValue = defineModel<string>();
-const selectedValue = computed(() => modelValue.value);
 const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 const shape = useShape(() => props.shape ?? unref(globalShape?.shape));
 
 // Track selection in the slot only when its content reads it.
 const slotProps = {
   get value() {
-    return selectedValue.value;
+    return modelValue.value;
   },
   get disabled() {
     return props.disabled;
@@ -74,7 +73,7 @@ const activate = (value: string) => {
 };
 
 provide(navigationDrawerContextKey, {
-  value: selectedValue,
+  value: modelValue,
   disabled: toRef(() => props.disabled),
   iconOnly: toRef(() => props.iconOnly),
   shape,
@@ -87,7 +86,6 @@ const rowSize = provideRowSize(() => props.size);
   <nav
     class="m3-navigation-drawer"
     :data-size="rowSize"
-    role="navigation"
     data-scope="navigation-drawer"
     data-part="root"
     data-m3-shape

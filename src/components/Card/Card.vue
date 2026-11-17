@@ -15,7 +15,7 @@ export type CardProps = {
   clickable?: boolean;
 };
 
-const props = withDefaults(defineProps<CardProps>(), {});
+const props = defineProps<CardProps>();
 
 const context = inject(cardContextKey, undefined);
 
@@ -23,7 +23,7 @@ const color = computed(() => props.color ?? unref(context?.color) ?? 'filled');
 
 const pressShapeMorphAttrs = usePressShapeMorphAttrs();
 
-const slots = defineSlots<{
+defineSlots<{
   /** Default slot for the main content of the card. */
   default(): any;
 }>();
@@ -31,31 +31,21 @@ const shape = useShape(() => props.shape);
 </script>
 
 <template>
-  <div
-    v-if="!clickable"
-    :class="['m3-card']"
-    data-scope="card"
-    data-part="root"
-    data-m3-shape
-    :data-shape="shape"
-    :data-color="color"
-  >
-    <slot />
-  </div>
-  <button
+  <component
     v-state-layer
-    v-else
-    type="button"
-    :class="['m3-card', 'm3-state-layer']"
+    :is="clickable ? 'button' : 'div'"
+    class="m3-card"
+    :class="{ 'm3-state-layer': clickable }"
+    :type="clickable ? 'button' : undefined"
     data-scope="card"
     data-part="root"
     data-m3-shape
     :data-shape="shape"
     :data-color="color"
-    v-bind="pressShapeMorphAttrs"
+    v-bind="clickable ? pressShapeMorphAttrs : undefined"
   >
     <slot />
-  </button>
+  </component>
 </template>
 
 <style src="./Card.css"></style>

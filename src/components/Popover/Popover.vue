@@ -71,10 +71,10 @@ const emit = defineEmits<{
 const generatedId = useId();
 const popoverRef = ref<HTMLDivElement>();
 const surfaceRef = ref<HTMLDivElement>();
-const cssId = computed(() => generatedId.replace(/[^a-zA-Z0-9_-]/g, '-'));
-const popoverId = computed(() => props.id ?? `m3-popover-${generatedId}`);
+const cssId = generatedId.replace(/[^a-zA-Z0-9_-]/g, '-');
+const defaultId = `m3-popover-${generatedId}`;
 const resolvedAnchorName = computed(
-  () => props.anchorName ?? (props.anchorElement ? `--m3-popover-${cssId.value}` : undefined),
+  () => props.anchorName ?? (props.anchorElement ? `--m3-popover-${cssId}` : undefined),
 );
 const popoverStyle = computed(() => {
   if (!resolvedAnchorName.value) {
@@ -130,7 +130,7 @@ const shape = useShape(() => props.shape);
 
 <template>
   <div
-    :id="popoverId"
+    :id="props.id ?? defaultId"
     ref="popoverRef"
     class="m3-popover"
     data-scope="popover"

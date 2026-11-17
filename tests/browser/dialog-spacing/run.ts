@@ -54,7 +54,8 @@ try {
                       `--md-${kind === 'showDialog' ? 'dialog' : kind}-content-visual-overflow-inset`,
                       `${inset}px`,
                     );
-                    const surface = root.querySelector<HTMLElement>('[data-part="surface"]')!;
+                    const surface =
+                      kind === 'side-sheet' ? root : root.querySelector<HTMLElement>('[data-part="surface"]')!;
                     const content = root.querySelector<HTMLElement>('[data-part="content"]')!;
                     const probe = document.querySelector<HTMLElement>('#body-probe');
                     const textRange = document.createRange();

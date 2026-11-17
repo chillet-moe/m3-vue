@@ -1,47 +1,19 @@
-<script setup lang="ts">
-import { Icon } from '@/components/Icon';
-import PaginationLink, { type PaginationLinkProps } from './PaginationLink.vue';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { renderPaginationStep, stepLinkProps, type PaginationStepProps } from './renderPaginationStep';
 
-export type PaginationPreviousProps = Omit<PaginationLinkProps, 'isActive'> & {
-  /** Screen text shown beside the icon on larger viewports. */
-  text?: string;
-
-  /** Accessible label for assistive technology. */
-  ariaLabel?: string;
-};
-
-const props = withDefaults(defineProps<PaginationPreviousProps>(), {
-  text: 'Previous',
-  ariaLabel: 'Go to previous page',
-  variant: undefined,
-  size: 'small',
-  shape: undefined,
-  href: undefined,
-  disabled: false,
+export type PaginationPreviousProps = PaginationStepProps;
+export default defineComponent({
+  name: 'PaginationPrevious',
+  props: {
+    ...stepLinkProps,
+    /** Text shown beside the icon on larger viewports. */
+    text: { type: String, default: 'Previous' },
+    /** Accessible label for assistive technology. */
+    ariaLabel: { type: String, default: 'Go to previous page' },
+  },
+  setup(props) {
+    return () => renderPaginationStep('previous', props);
+  },
 });
 </script>
-
-<template>
-  <PaginationLink
-    class="m3-pagination-previous"
-    data-scope="pagination"
-    data-part="previous"
-    :aria-label="props.ariaLabel"
-    :variant="props.variant"
-    :size="props.size"
-    :shape="props.shape"
-    :href="props.href"
-    :disabled="props.disabled"
-  >
-    <Icon
-      name="chevron_left"
-      class="m3-pagination-nav-icon"
-      data-scope="pagination"
-      data-part="previous-icon"
-      aria-hidden="true"
-    />
-    <span class="m3-pagination-nav-text" data-scope="pagination" data-part="previous-text">{{ props.text }}</span>
-  </PaginationLink>
-</template>
-
-<style src="./Pagination.css"></style>

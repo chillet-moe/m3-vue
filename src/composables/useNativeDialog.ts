@@ -7,7 +7,7 @@ type DialogRef = Readonly<Ref<HTMLDialogElement | null | undefined>>;
 
 export type UseNativeDialogOptions = {
   dialogRef: DialogRef;
-  surfaceRef: Readonly<Ref<HTMLElement | null | undefined>>;
+  surfaceRef?: Readonly<Ref<HTMLElement | null | undefined>>;
   open: Ref<boolean>;
   exitElements?: () => readonly (HTMLElement | null | undefined)[];
   closeOnBackdrop?: MaybeRefOrGetter<boolean | undefined>;
@@ -26,7 +26,7 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
   const exitCompletion = useExitMotionCompletion<string, HTMLDialogElement>({
     rootRef: options.dialogRef,
     open: options.open,
-    ownedElements: () => [options.surfaceRef.value, ...(options.exitElements?.() ?? [])],
+    ownedElements: () => [options.surfaceRef?.value, ...(options.exitElements?.() ?? [])],
     onComplete: options.onClosed,
   });
 
@@ -109,7 +109,7 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
   });
 
   const onBeforeToggle = (event: ToggleEvent) => {
-    const surface = options.surfaceRef.value;
+    const surface = options.surfaceRef ? options.surfaceRef.value : options.dialogRef.value;
     if (surface) {
       // Native focus restoration runs while the surface can still be painted for its exit.
       surface.inert = event.newState === 'closed';
@@ -135,8 +135,17 @@ export function useNativeDialog(options: UseNativeDialogOptions) {
   };
 
   const onBackdropClick = (event: MouseEvent) => {
-    if (!shouldCloseOnBackdrop() || event.target !== options.dialogRef.value) {
+    const dialog = options.dialogRef.value;
+    if (!dialog || event.target !== dialog || !shouldCloseOnBackdrop()) {
       return;
+    }
+
+    if (!options.surfaceRef) {
+      // When the dialog is also the surface, clicks inside its padding target the dialog too.
+      const { left, right, top, bottom } = dialog.getBoundingClientRect();
+      if (event.clientX >= left && event.clientX < right && event.clientY >= top && event.clientY < bottom) {
+        return;
+      }
     }
 
     closeDialogElement();

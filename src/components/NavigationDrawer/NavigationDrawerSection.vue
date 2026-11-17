@@ -5,7 +5,7 @@ import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { Icon } from '@/components/Icon';
 import vTooltip from '@/directives/Tooltip/vTooltip';
 import type { VTooltipBinding } from '@/directives/Tooltip/types';
-import { computed, inject, provide, unref, useId, useSlots } from 'vue';
+import { computed, inject, provide, unref, useId } from 'vue';
 import { navigationDrawerContextKey, navigationDrawerShapeContextKey } from './NavigationDrawerContext';
 import '@/styles/icon-morph.css';
 
@@ -37,18 +37,17 @@ const expanded = defineModel<boolean>('expanded', {
   default: false,
 });
 
-defineSlots<{
+const slots = defineSlots<{
   /** Nested navigation destinations. */
-  default(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
+  default?(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Section label content. */
-  label(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
+  label?(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
 
   /** Icon content. */
-  icon(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
+  icon?(props: { expanded: boolean; disabled: boolean; iconOnly: boolean }): any;
 }>();
 
-const slots = useSlots();
 const drawer = inject(navigationDrawerContextKey, null);
 const globalShape = inject(navigationDrawerShapeContextKey, undefined);
 const contentId = `navigation-drawer-section-content-${useId()}`;
@@ -56,23 +55,11 @@ const shape = useShape(() => props.shape ?? drawer?.shape.value ?? unref(globalS
 
 const isIconOnly = computed(() => drawer?.iconOnly.value ?? false);
 const mergedDisabled = computed(() => props.disabled || drawer?.disabled.value || false);
-const hasLabel = computed(() => Boolean(props.label || slots.label));
-
-const resolvedAriaLabel = computed(() => {
-  if (props.ariaLabel) {
-    return props.ariaLabel;
-  }
-
-  if (isIconOnly.value && props.label) {
-    return props.label;
-  }
-
-  if (hasLabel.value) {
-    return undefined;
-  }
-
-  return props.label;
-});
+function resolveAriaLabel() {
+  if (props.ariaLabel) return props.ariaLabel;
+  if (isIconOnly.value && props.label) return props.label;
+  return props.label || slots.label ? undefined : props.label;
+}
 
 const slotProps = computed(() => ({
   expanded: expanded.value,
@@ -95,7 +82,7 @@ const tooltip = computed<VTooltipBinding>(() => {
 });
 
 provide(navigationDrawerContextKey, {
-  value: computed(() => drawer?.value.value),
+  value: drawer?.value ?? computed(() => undefined),
   disabled: mergedDisabled,
   iconOnly: isIconOnly,
   shape,
@@ -130,7 +117,7 @@ const rowSize = provideRowSize(() => props.size);
       :disabled="mergedDisabled"
       :aria-expanded="expanded ? 'true' : 'false'"
       :aria-controls="contentId"
-      :aria-label="resolvedAriaLabel"
+      :aria-label="resolveAriaLabel()"
       :data-shape="shape"
       data-m3-shape
       v-tooltip="tooltip"
@@ -148,7 +135,7 @@ const rowSize = provideRowSize(() => props.size);
       </span>
 
       <span
-        v-if="hasLabel"
+        v-if="props.label || slots.label"
         class="m3-navigation-drawer-section-label m3-text-morph"
         data-scope="navigation-drawer-section"
         data-part="label"

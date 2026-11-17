@@ -161,4 +161,39 @@ describe('Combobox', () => {
     expect(onClosed).toHaveBeenCalledOnce();
     app.unmount();
   });
+
+  it('forwards field and option slots only while they are provided', async () => {
+    installPopoverPolyfill();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const decorated = ref(true);
+    const app = createApp(() =>
+      h(
+        Combobox,
+        { options: stateOptions, open: true },
+        decorated.value
+          ? {
+              prefix: () => '$',
+              optionTrailing: ({ option }: { option: SelectOption }) => option.value,
+            }
+          : {},
+      ),
+    );
+    app.mount(container);
+
+    try {
+      await nextTick();
+      const prefix = () => container.querySelector('[data-scope="text-field"][data-part="prefix"]');
+      const decoration = () => container.querySelector('[role="option"] [data-part="trailing"]');
+      expect(prefix()?.textContent).toBe('$');
+      expect(decoration()?.textContent).toBe('alabama');
+
+      decorated.value = false;
+      await nextTick();
+      expect(prefix()).toBeNull();
+      expect(decoration()).toBeNull();
+    } finally {
+      app.unmount();
+    }
+  });
 });

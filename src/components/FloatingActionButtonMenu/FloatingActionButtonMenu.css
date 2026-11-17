@@ -336,11 +336,15 @@
   }
 
   .m3-fab-menu-popover[popover] {
+    --_fab-menu-popover-block-end: max(
+      0px,
+      var(--_fab-menu-anchor-block-end, 0px) + var(--_fab-menu-close-button-between-space)
+    );
     position: fixed;
     inset: auto;
     inset-inline-start: var(--_fab-menu-popover-inline-start, 1rem);
-    inset-block-end: var(--_fab-menu-popover-block-end, 1rem);
-    max-block-size: calc(100dvb - var(--_fab-menu-popover-block-end, 1rem) - 1rem);
+    inset-block-end: var(--_fab-menu-popover-block-end);
+    max-block-size: calc(100dvb - var(--_fab-menu-popover-block-end) - 1rem);
   }
 
   .m3-fab-menu-popover[popover]:popover-open {
@@ -352,7 +356,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--_fab-menu-close-button-between-space);
+    gap: var(--_fab-menu-item-between-space);
     padding-inline: var(--_fab-menu-container-padding-inline);
     align-items: flex-end;
     overflow: visible;
@@ -360,13 +364,6 @@
 
   .m3-fab-menu-popover[data-effective-alignment='start'] .m3-fab-menu-surface {
     align-items: flex-start;
-  }
-
-  .m3-fab-menu-items {
-    display: flex;
-    flex-direction: column;
-    gap: var(--_fab-menu-item-between-space);
-    align-items: inherit;
   }
 
   .m3-fab-menu-item {

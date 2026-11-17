@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useShape, type M3Shape } from '@/styles/shape';
 import { useNativeDialog } from '@/composables/useNativeDialog';
-import { computed, type CSSProperties, useId, useSlots, useTemplateRef } from 'vue';
+import { computed, type CSSProperties, useId, useTemplateRef } from 'vue';
 
 export type SideSheetProps = {
   /** Corner style; inherits the shared shape default. */
@@ -54,9 +54,7 @@ defineSlots<{
   actions(): any;
 }>();
 
-const slots = useSlots();
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog');
-const surfaceRef = useTemplateRef<HTMLElement>('surface');
 const headlineRef = useTemplateRef<HTMLElement>('headline');
 const contentRef = useTemplateRef<HTMLElement>('content');
 const actionsRef = useTemplateRef<HTMLElement>('actions');
@@ -64,23 +62,10 @@ const actionsRef = useTemplateRef<HTMLElement>('actions');
 const headlineId = `side-sheet-headline-${useId()}`;
 const contentId = `side-sheet-content-${useId()}`;
 
-const hasHeadline = computed(() => Boolean(slots.headline));
-const hasContent = computed(() => Boolean(slots.default));
-const hasActions = computed(() => Boolean(slots.actions));
-
-const rootStyle = computed<CSSProperties>(() => {
-  const style: Record<string, string> = {};
-
-  if (props.width) {
-    style['--md-side-sheet-width'] = props.width;
-  }
-
-  return style as CSSProperties;
-});
+const rootStyle = computed<CSSProperties>(() => (props.width ? { '--md-side-sheet-width': props.width } : {}));
 
 const { showModal, close, onBeforeToggle, onCancel, onClose, onBackdropClick } = useNativeDialog({
   dialogRef,
-  surfaceRef,
   open,
   closeOnBackdrop: () => props.closeOnBackdrop,
   exitElements: () => [headlineRef.value, contentRef.value, actionsRef.value],
@@ -108,42 +93,38 @@ const shape = useShape(() => props.shape);
     :data-shape="shape"
     :data-side="props.side"
     :data-variant="props.variant"
-    :data-has-headline="hasHeadline ? 'true' : 'false'"
-    :data-has-actions="hasActions ? 'true' : 'false'"
     :style="rootStyle"
-    :aria-labelledby="hasHeadline ? headlineId : undefined"
-    :aria-describedby="hasContent ? contentId : undefined"
+    :aria-labelledby="$slots.headline ? headlineId : undefined"
+    :aria-describedby="$slots.default ? contentId : undefined"
     @beforetoggle="onBeforeToggle"
     @cancel="onCancel"
     @close="onClose"
     @click="onBackdropClick"
   >
-    <div ref="surface" class="m3-side-sheet-surface" data-scope="side-sheet" data-part="surface">
-      <h2
-        v-if="hasHeadline"
-        :id="headlineId"
-        ref="headline"
-        class="m3-side-sheet-headline"
-        data-scope="side-sheet"
-        data-part="headline"
-      >
-        <slot name="headline" />
-      </h2>
+    <h2
+      v-if="$slots.headline"
+      :id="headlineId"
+      ref="headline"
+      class="m3-side-sheet-headline"
+      data-scope="side-sheet"
+      data-part="headline"
+    >
+      <slot name="headline" />
+    </h2>
 
-      <div
-        v-if="hasContent"
-        :id="contentId"
-        ref="content"
-        class="m3-side-sheet-content"
-        data-scope="side-sheet"
-        data-part="content"
-      >
-        <slot />
-      </div>
+    <div
+      v-if="$slots.default"
+      :id="contentId"
+      ref="content"
+      class="m3-side-sheet-content"
+      data-scope="side-sheet"
+      data-part="content"
+    >
+      <slot />
+    </div>
 
-      <div v-if="hasActions" ref="actions" class="m3-side-sheet-actions" data-scope="side-sheet" data-part="actions">
-        <slot name="actions" />
-      </div>
+    <div v-if="$slots.actions" ref="actions" class="m3-side-sheet-actions" data-scope="side-sheet" data-part="actions">
+      <slot name="actions" />
     </div>
   </dialog>
 </template>

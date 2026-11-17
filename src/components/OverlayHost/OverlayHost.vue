@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineComponent, inject, onBeforeUnmount, watch, shallowRef, useTemplateRef, type PropType } from 'vue';
-import { useElementEnvironment } from '@/internal/elementEnvironment';
+import { defineComponent, inject, watch, shallowRef, useTemplateRef, type PropType } from 'vue';
+import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import { snackbarDefaultsContextKey } from '@/components/Snackbar/config';
 import {
   registerOverlayHost,
@@ -14,22 +14,20 @@ provideOverlayHost(props.host);
 const root = useTemplateRef<HTMLElement>('root');
 const entries = shallowRef<OverlayEntry[]>([]);
 const snackbarDefaults = inject(snackbarDefaultsContextKey, undefined);
-let unregister: (() => void) | undefined;
 watch(
   root,
   (element, _, onCleanup) => {
     if (!element) return;
-    unregister = registerOverlayHost(props.host, entries, element, () => snackbarDefaults?.value);
+    const unregister = registerOverlayHost(props.host, entries, element, () => snackbarDefaults?.value);
     onCleanup(unregister);
+    const unbind = bindElementEnvironment(element, (document) => () => {
+      // An adopted host still owns its entries. Page teardown releases the current owner.
+      if (element.ownerDocument === document) unregister();
+    });
+    onCleanup(unbind);
   },
   { flush: 'sync' },
 );
-onBeforeUnmount(() => unregister?.());
-useElementEnvironment(root, (document, element) => {
-  return () => {
-    if (element.ownerDocument === document) unregister?.();
-  };
-});
 
 const OverlayEntryRenderer = defineComponent({
   name: 'OverlayEntryRenderer',

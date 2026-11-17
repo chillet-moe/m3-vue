@@ -86,6 +86,33 @@ try {
     });
     if (kind === 'side-sheet') {
       assert(openedWithSlide, 'The side sheet must slide in from its closed position');
+      const bounds = await modal.boundingBox();
+      assert(bounds);
+      await page.mouse.click(bounds.x + bounds.width / 2, bounds.y + 4);
+      assert(
+        await modal.evaluate((element: HTMLDialogElement) => element.open),
+        'Clicking sheet padding keeps it open',
+      );
+    }
+    if (kind === 'bottom-sheet') {
+      const surface = modal.locator('[data-part="surface"]');
+      const resting = await surface.boundingBox();
+      const handle = await modal.locator('[data-part="drag-handle"]').boundingBox();
+      assert(resting && handle);
+      const x = handle.x + handle.width / 2;
+      const y = handle.y + handle.height / 2;
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x, y - 60, { steps: 12 });
+      const stretched = await surface.boundingBox();
+      assert(stretched);
+      assert(Math.abs(stretched.height - resting.height - 13.2) < 0.1, 'An upward drag extends the surface');
+      assert.equal(stretched.y + stretched.height, resting.y + resting.height, 'The lower edge stays at the viewport');
+      await page.mouse.up();
+      await surface.evaluate(async (element) => {
+        await Promise.all(element.getAnimations().map((animation) => animation.finished));
+      });
+      assert.deepEqual(await surface.boundingBox(), resting, 'The surface rebounds to its original geometry');
     }
     await action.focus();
     assert.equal(await focusedId(), 'surface-action', kind);
@@ -139,7 +166,7 @@ try {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await trigger.press('Enter');
   assert.equal(await focusedId(), 'surface-action');
-  await page.keyboard.press('Escape');
+  await page.mouse.click(5, 5);
   await page.locator('#surface-trigger[data-closed-count="2"]').waitFor();
   assert.equal(await focusedId(), 'surface-trigger');
   await page.keyboard.press('Tab');

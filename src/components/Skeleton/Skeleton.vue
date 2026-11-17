@@ -11,18 +11,16 @@ export type SkeletonProps = {
   animation?: 'pulse' | 'wave' | 'none';
 };
 
-const props = withDefaults(defineProps<SkeletonProps>(), {
-  as: 'div',
-  animation: 'pulse',
-});
-
-const tag = computed(() => props.as.toLowerCase());
+const { as = 'div', animation = 'pulse' } = defineProps<SkeletonProps>();
 // Inert controls still participate in form submission and validation unless disabled.
-const isFormControl = computed(() => /^(button|fieldset|input|optgroup|option|select|textarea)$/.test(tag.value));
+const controlTag = computed(() => {
+  const tag = as.toLowerCase();
+  return /^(button|fieldset|input|optgroup|option|select|textarea)$/.test(tag) ? tag : undefined;
+});
 
 function resolveType(type: unknown) {
   // A disabled submit control can still become the form's default button.
-  if (tag.value === 'button' || (tag.value === 'input' && /^(submit|image)$/i.test(String(type)))) {
+  if (controlTag.value === 'button' || (controlTag.value === 'input' && /^(submit|image)$/i.test(String(type)))) {
     return 'button';
   }
 
@@ -32,13 +30,13 @@ function resolveType(type: unknown) {
 
 <template>
   <component
-    :is="props.as"
+    :is="as"
     v-bind="$attrs"
     class="m3-skeleton"
     data-scope="skeleton"
     data-part="root"
-    :data-animation="props.animation"
-    :disabled="isFormControl ? true : $attrs.disabled"
+    :data-animation="animation"
+    :disabled="controlTag ? true : $attrs.disabled"
     :type="resolveType($attrs.type)"
     aria-hidden="true"
     inert

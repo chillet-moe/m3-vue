@@ -65,7 +65,7 @@ const props = withDefaults(defineProps<CircularProgressIndicatorProps>(), {
 
 const isWavy = computed(() => props.shape === 'wavy');
 
-const rootRef = useTemplateRef<HTMLDivElement>('root');
+const rootRef = useTemplateRef<SVGSVGElement>('root');
 const {
   isDeterminate,
   clampedValue,
@@ -81,7 +81,6 @@ const {
   ariaValueText: () => props.ariaValueText,
 });
 
-const svgRef = useTemplateRef<SVGSVGElement>('svg');
 const activePathRef = useTemplateRef<SVGPathElement>('activePath');
 const trackPathRef = useTemplateRef<SVGPathElement>('trackPath');
 const layout = shallowRef({
@@ -119,27 +118,11 @@ const syncLayout = () => {
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {};
-
-  if (props.size) {
-    style['--md-circular-progress-indicator-size'] = props.size;
-  }
-
-  if (props.thickness) {
-    style['--md-circular-progress-indicator-track-thickness'] = props.thickness;
-  }
-
-  if (props.trackGap) {
-    style['--md-circular-progress-indicator-track-active-indicator-gap'] = props.trackGap;
-  }
-
-  if (props.waveAmplitude) {
-    style['--md-circular-progress-indicator-wave-amplitude'] = props.waveAmplitude;
-  }
-
-  if (props.wavelength) {
-    style['--md-circular-progress-indicator-wave-wavelength'] = props.wavelength;
-  }
-
+  if (props.size) style['--md-circular-progress-indicator-size'] = props.size;
+  if (props.thickness) style['--md-circular-progress-indicator-track-thickness'] = props.thickness;
+  if (props.trackGap) style['--md-circular-progress-indicator-track-active-indicator-gap'] = props.trackGap;
+  if (props.waveAmplitude) style['--md-circular-progress-indicator-wave-amplitude'] = props.waveAmplitude;
+  if (props.wavelength) style['--md-circular-progress-indicator-wave-wavelength'] = props.wavelength;
   return style;
 });
 
@@ -233,7 +216,7 @@ watch(() => props.indeterminate, syncAnimation);
 useElementEnvironment(rootRef, (document, root) => {
   const releaseAnimation = bindProgressAnimation(document);
   syncLayout();
-  animationController = registerSharedAnimationFrame(svgRef.value!, syncIndeterminatePresentation, {
+  animationController = registerSharedAnimationFrame(root, syncIndeterminatePresentation, {
     element: root,
     measure: syncLayout,
   });
@@ -247,7 +230,7 @@ useElementEnvironment(rootRef, (document, root) => {
 </script>
 
 <template>
-  <div
+  <svg
     ref="root"
     class="m3-circular-progress-indicator"
     data-scope="circular-progress-indicator"
@@ -263,38 +246,26 @@ useElementEnvironment(rootRef, (document, root) => {
     :aria-valuenow="isDeterminate ? clampedValue : undefined"
     :aria-valuetext="ariaValueTextResolved"
     :style="rootStyle"
+    :viewBox="viewBox"
+    focusable="false"
   >
-    <svg
-      ref="svg"
-      class="m3-circular-progress-indicator-svg"
+    <path
+      ref="trackPath"
+      v-if="initialTrackPath"
+      class="m3-circular-progress-indicator-track"
       data-scope="circular-progress-indicator"
-      data-part="svg"
-      :viewBox="viewBox"
-      focusable="false"
-      aria-hidden="true"
-    >
-      <path
-        ref="trackPath"
-        v-if="initialTrackPath"
-        class="m3-circular-progress-indicator-track"
-        data-scope="circular-progress-indicator"
-        data-part="track"
-        :d="initialTrackPath"
-      />
-      <path
-        ref="activePath"
-        v-if="initialActivePath"
-        class="m3-circular-progress-indicator-active"
-        :class="{
-          'm3-circular-progress-indicator-active-determinate': isDeterminate,
-          'm3-circular-progress-indicator-active-indeterminate': !isDeterminate,
-        }"
-        data-scope="circular-progress-indicator"
-        data-part="active-indicator"
-        :d="initialActivePath"
-      />
-    </svg>
-  </div>
+      data-part="track"
+      :d="initialTrackPath"
+    />
+    <path
+      ref="activePath"
+      v-if="initialActivePath"
+      class="m3-circular-progress-indicator-active"
+      data-scope="circular-progress-indicator"
+      data-part="active-indicator"
+      :d="initialActivePath"
+    />
+  </svg>
 </template>
 
 <style src="./CircularProgressIndicator.css"></style>

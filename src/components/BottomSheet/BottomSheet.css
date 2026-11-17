@@ -4,11 +4,9 @@
 @layer tokens {
   :where(:root) {
     /* Low-specificity public token placeholders; private tokens own defaults. */
-    --md-bottom-sheet-background-extension: initial;
     --md-bottom-sheet-drag-offset: initial;
     --md-bottom-sheet-content-visual-overflow-inset: initial;
     --md-bottom-sheet-max-height: initial;
-    --md-bottom-sheet-translate-offset: initial;
     --md-sheet-bottom-docked-container-color: initial;
     --md-sheet-bottom-docked-container-shape: initial;
     --md-sheet-bottom-docked-drag-handle-color: initial;
@@ -43,8 +41,8 @@
     --_sheet-bottom-docked-drag-handle-height: var(--md-sheet-bottom-docked-drag-handle-height, 0.25rem);
     --_bottom-sheet-max-height: var(--md-bottom-sheet-max-height, calc(100vb - 3rem));
     --_bottom-sheet-content-visual-overflow-inset: var(--md-bottom-sheet-content-visual-overflow-inset, 0.5rem);
-    --_bottom-sheet-translate-offset: var(--md-bottom-sheet-translate-offset, 0px);
-    --_bottom-sheet-background-extension: var(--md-bottom-sheet-background-extension, 0px);
+    --_bottom-sheet-translate-offset: max(0px, var(--md-bottom-sheet-drag-offset, 0px));
+    --_bottom-sheet-background-extension: max(0px, -1 * var(--md-bottom-sheet-drag-offset, 0px));
     --_bottom-sheet-container-padding-block-start: --density-space(16, 8, 2);
     --_bottom-sheet-container-padding-block-end: --density-space(24, 12, 2);
     --_bottom-sheet-container-padding-inline: --density-space(24, 12, 2);

@@ -35,7 +35,7 @@ export function provideSelectionGroup(modelValue: Ref<SelectionGroupModelValue>,
   };
 
   const select = (value: SelectionGroupValue, checked: boolean) => {
-    if (props.selectionMode === 'multiple') {
+    if (inputType.value === 'checkbox') {
       const currentValue = modelValue.value;
       const current = Array.isArray(currentValue) ? currentValue : [];
 

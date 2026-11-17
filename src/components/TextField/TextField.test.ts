@@ -365,19 +365,6 @@ describe('TextField', () => {
     app.unmount();
   });
 
-  it('clips the collapsed outline legend to a single line while retaining the animated notch', () => {
-    const legendRule = textFieldStyles.match(/\.m3-text-field-outline legend\s*\{([^}]*)\}/)?.[1];
-    const expandedLegendRule = textFieldStyles.match(
-      /\.m3-text-field:focus-within \.m3-text-field-outline legend,[\s\S]*?\.m3-text-field\[data-always-float-label='true'\] \.m3-text-field-outline legend\s*\{([^}]*)\}/,
-    )?.[1];
-
-    expect(legendRule).toContain('overflow: clip');
-    expect(legendRule).toContain('white-space: nowrap');
-    expect(legendRule).toContain('max-inline-size: 0.01px');
-    expect(expandedLegendRule).toContain('max-inline-size: 100%');
-    expect(expandedLegendRule).toContain('padding-inline: 0.25rem');
-  });
-
   it('uses the native fieldset border for continuous rounded corners and the floating-label notch', () => {
     const outlineRule = textFieldStyles.match(/\.m3-text-field-outline\s*\{([^}]*)\}/)?.[1];
     expect(outlineRule).toContain('border: var(--_outline-width) solid var(--_outline-color)');
@@ -714,6 +701,32 @@ describe('TextField', () => {
     }
 
     expect(field.style.getPropertyValue('anchor-name')).toBe('--authored-field-anchor');
+  });
+
+  it('closes the picker when switching between date and time controls', async () => {
+    installPopoverPolyfill();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const type = ref('date');
+    const app = createApp(() => h(TextField, { modelValue: '', type: type.value }));
+    app.mount(container);
+
+    try {
+      const input = container.querySelector('input')!;
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      await nextTick();
+      expect(input.getAttribute('aria-expanded')).toBe('true');
+      expect(isPopoverOpen(container.querySelector('[data-scope="date-picker"][data-part="root"]'))).toBe(true);
+
+      for (const kind of ['time', 'date']) {
+        type.value = kind;
+        await nextTick();
+        expect(input.getAttribute('aria-expanded')).toBe('false');
+        expect(isPopoverOpen(container.querySelector(`[data-scope="${kind}-picker"][data-part="root"]`))).toBe(false);
+      }
+    } finally {
+      app.unmount();
+    }
   });
 
   it('preserves the time segment when datetime-local inputs pick a new date', async () => {

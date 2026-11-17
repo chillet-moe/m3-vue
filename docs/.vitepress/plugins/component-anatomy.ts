@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import fg from 'fast-glob';
 import { parse as parseSFC } from 'vue/compiler-sfc';
+import { additionalAnatomyParts } from './component-anatomy-parts.ts';
 import { invalidateVirtualModuleAndReload, normalizeVitePath, type MinimalHotUpdateContext } from './hmr.ts';
 
 export interface ComponentAnatomyPluginOptions {
@@ -208,6 +209,17 @@ export function componentAnatomyPlugin(options: ComponentAnatomyPluginOptions) {
           }
         } else {
           result[scope] = anatomy;
+        }
+      }
+    }
+
+    for (const [scope, parts] of Object.entries(additionalAnatomyParts)) {
+      const anatomy = result[scope];
+      if (!anatomy) continue;
+      const existingNames = new Set(anatomy.parts.map(({ part }) => part));
+      for (const part of parts) {
+        if (!existingNames.has(part.part)) {
+          anatomy.parts.push({ ...part, children: [] });
         }
       }
     }

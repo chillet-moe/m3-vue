@@ -251,10 +251,10 @@
     inset-block: calc((var(--handle-height) - var(--track-height)) / 2);
 
     --valid-length: calc(100% - var(--track-inset) * 2 - var(--handle-inset) * 2 - var(--handle-width));
-    --track-clip-active-start: 0;
-    --track-clip-active-end: calc(100% * (1 - var(--percent)));
-    --track-clip-inactive-start: calc(100% * var(--percent));
-    --track-clip-inactive-end: 0;
+    border-start-start-radius: var(--_clip-radius-start);
+    border-end-start-radius: var(--_clip-radius-start);
+    border-start-end-radius: var(--_clip-radius-end);
+    border-end-end-radius: var(--_clip-radius-end);
 
     inline-size: var(--valid-length);
     will-change: clip-path;
@@ -262,79 +262,47 @@
 
   .m3-slider-track-active {
     background-color: var(--_slider-active-track-color);
-
     inset-inline-start: 0;
-
-    border-start-start-radius: var(--track-shape);
-    border-end-end-radius: var(--track-shape-inner);
-    border-start-end-radius: var(--track-shape-inner);
-    border-end-start-radius: var(--track-shape);
+    --_clip-start: 0px;
+    --_clip-end: calc(100% * (1 - var(--percent)));
+    --_clip-radius-start: var(--track-shape);
+    --_clip-radius-end: var(--track-shape-inner);
   }
 
   .m3-slider-track-inactive {
     background-color: var(--_slider-inactive-track-color);
-
     inset-inline-start: calc(100% - var(--valid-length));
-
-    border-start-end-radius: var(--track-shape);
-    border-end-start-radius: var(--track-shape-inner);
-    border-start-start-radius: var(--track-shape-inner);
-    border-end-end-radius: var(--track-shape);
+    --_clip-start: calc(100% * var(--percent));
+    --_clip-end: 0px;
+    --_clip-radius-start: var(--track-shape-inner);
+    --_clip-radius-end: var(--track-shape);
   }
 
-  .m3-slider-lrt.m3-slider-vertical .m3-slider-track-active {
+  .m3-slider-lrt.m3-slider-vertical :is(.m3-slider-track, .m3-slider-stop-indicator-container) {
     clip-path: inset(
-      var(--track-clip-active-start) 0 var(--track-clip-active-end) 0 round var(--track-shape) var(--track-shape)
-        var(--track-shape-inner) var(--track-shape-inner)
+      var(--_clip-start) 0 var(--_clip-end) 0 round var(--_clip-radius-start, 0px) var(--_clip-radius-start, 0px)
+        var(--_clip-radius-end, 0px) var(--_clip-radius-end, 0px)
     );
   }
 
-  .m3-slider-rtl.m3-slider-vertical .m3-slider-track-active {
+  .m3-slider-rtl.m3-slider-vertical :is(.m3-slider-track, .m3-slider-stop-indicator-container) {
     clip-path: inset(
-      var(--track-clip-active-end) 0 var(--track-clip-active-start) 0 round var(--track-shape-inner)
-        var(--track-shape-inner) var(--track-shape) var(--track-shape)
+      var(--_clip-end) 0 var(--_clip-start) 0 round var(--_clip-radius-end, 0px) var(--_clip-radius-end, 0px)
+        var(--_clip-radius-start, 0px) var(--_clip-radius-start, 0px)
     );
   }
 
-  .m3-slider-lrt.m3-slider-horizontal .m3-slider-track-active {
+  .m3-slider-lrt.m3-slider-horizontal :is(.m3-slider-track, .m3-slider-stop-indicator-container) {
     clip-path: inset(
-      0 var(--track-clip-active-end) 0 var(--track-clip-active-start) round var(--track-shape) var(--track-shape-inner)
-        var(--track-shape-inner) var(--track-shape)
+      0 var(--_clip-end) 0 var(--_clip-start) round var(--_clip-radius-start, 0px) var(--_clip-radius-end, 0px)
+        var(--_clip-radius-end, 0px) var(--_clip-radius-start, 0px)
     );
   }
 
-  .m3-slider-rtl.m3-slider-horizontal .m3-slider-track-active {
+  .m3-slider-rtl.m3-slider-horizontal :is(.m3-slider-track, .m3-slider-stop-indicator-container) {
     clip-path: inset(
-      0 var(--track-clip-active-start) 0 var(--track-clip-active-end) round var(--track-shape-inner) var(--track-shape)
-        var(--track-shape) var(--track-shape-inner)
-    );
-  }
-
-  .m3-slider-lrt.m3-slider-vertical .m3-slider-track-inactive {
-    clip-path: inset(
-      var(--track-clip-inactive-start) 0 var(--track-clip-inactive-end) 0 round var(--track-shape-inner)
-        var(--track-shape-inner) var(--track-shape) var(--track-shape)
-    );
-  }
-
-  .m3-slider-rtl.m3-slider-vertical .m3-slider-track-inactive {
-    clip-path: inset(
-      var(--track-clip-inactive-end) 0 var(--track-clip-inactive-start) 0 round var(--track-shape) var(--track-shape)
-        var(--track-shape-inner) var(--track-shape-inner)
-    );
-  }
-
-  .m3-slider-lrt.m3-slider-horizontal .m3-slider-track-inactive {
-    clip-path: inset(
-      0 var(--track-clip-inactive-end) 0 var(--track-clip-inactive-start) round var(--track-shape-inner)
-        var(--track-shape) var(--track-shape) var(--track-shape-inner)
-    );
-  }
-
-  .m3-slider-rtl.m3-slider-horizontal .m3-slider-track-inactive {
-    clip-path: inset(
-      0 var(--track-clip-inactive-start) 0 var(--track-clip-inactive-end) round var(--track-shape)
-        var(--track-shape-inner) var(--track-shape-inner) var(--track-shape)
+      0 var(--_clip-start) 0 var(--_clip-end) round var(--_clip-radius-end, 0px) var(--_clip-radius-start, 0px)
+        var(--_clip-radius-start, 0px) var(--_clip-radius-end, 0px)
     );
   }
 
@@ -541,54 +509,17 @@
     --valid-length: calc(100% - var(--track-inset) * 2);
   }
 
-  .m3-slider-stop-indicator-container {
-    --clip-active-start: calc(-1 * var(--stop-indicator-size) / 2);
-    --clip-active-end: calc(100% - (var(--valid-length) * var(--percent)) + var(--handle-inset) + var(--handle-width));
-
-    --clip-inactive-start: calc(
-      (var(--valid-length) * var(--percent)) + var(--handle-inset) * 2 + var(--handle-width) + var(--track-inset) -
-        var(--stop-indicator-size) / 2
-    );
-    --clip-inactive-end: calc(-1 * var(--stop-indicator-size) / 2);
-  }
-
   .m3-slider-stop-indicator-active-container {
-  }
-
-  /* clip-path: top right bottom left */
-  .m3-slider-lrt.m3-slider-vertical .m3-slider-stop-indicator-active-container {
-    clip-path: inset(var(--clip-active-start) 0 var(--clip-active-end) 0);
-  }
-
-  .m3-slider-rtl.m3-slider-vertical .m3-slider-stop-indicator-active-container {
-    clip-path: inset(var(--clip-active-end) 0 var(--clip-active-start) 0);
-  }
-
-  .m3-slider-lrt.m3-slider-horizontal .m3-slider-stop-indicator-active-container {
-    clip-path: inset(0 var(--clip-active-end) 0 var(--clip-active-start));
-  }
-
-  .m3-slider-rtl.m3-slider-horizontal .m3-slider-stop-indicator-active-container {
-    clip-path: inset(0 var(--clip-active-start) 0 var(--clip-active-end));
+    --_clip-start: calc(-1 * var(--stop-indicator-size) / 2);
+    --_clip-end: calc(100% - (var(--valid-length) * var(--percent)) + var(--handle-inset) + var(--handle-width));
   }
 
   .m3-slider-stop-indicator-inactive-container {
-  }
-
-  .m3-slider-lrt.m3-slider-vertical .m3-slider-stop-indicator-inactive-container {
-    clip-path: inset(var(--clip-inactive-start) 0 var(--clip-inactive-end) 0);
-  }
-
-  .m3-slider-rtl.m3-slider-vertical .m3-slider-stop-indicator-inactive-container {
-    clip-path: inset(var(--clip-inactive-end) 0 var(--clip-inactive-start) 0);
-  }
-
-  .m3-slider-lrt.m3-slider-horizontal .m3-slider-stop-indicator-inactive-container {
-    clip-path: inset(0 var(--clip-inactive-end) 0 var(--clip-inactive-start));
-  }
-
-  .m3-slider-rtl.m3-slider-horizontal .m3-slider-stop-indicator-inactive-container {
-    clip-path: inset(0 var(--clip-inactive-start) 0 var(--clip-inactive-end));
+    --_clip-start: calc(
+      (var(--valid-length) * var(--percent)) + var(--handle-inset) * 2 + var(--handle-width) + var(--track-inset) -
+        var(--stop-indicator-size) / 2
+    );
+    --_clip-end: calc(-1 * var(--stop-indicator-size) / 2);
   }
 }
 
@@ -625,8 +556,12 @@
   .m3-slider-standard .m3-slider-stop-indicator-container {
     inline-size: var(--handle-position-range);
     inset-inline-start: var(--track-inset-total);
-    --clip-active-end: calc(100% * (1 - var(--percent)));
-    --clip-inactive-start: calc(100% * var(--percent));
+  }
+  .m3-slider-standard .m3-slider-stop-indicator-active-container {
+    --_clip-end: calc(100% * (1 - var(--percent)));
+  }
+  .m3-slider-standard .m3-slider-stop-indicator-inactive-container {
+    --_clip-start: calc(100% * var(--percent));
   }
   .m3-slider-standard .m3-slider-handle {
     block-size: var(--handle-width);

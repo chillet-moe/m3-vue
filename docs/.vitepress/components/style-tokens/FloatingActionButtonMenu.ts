@@ -195,7 +195,7 @@ export const floatingActionButtonMenuStyleTokens = [
     description: 'Controls space between menu items and close button.',
     fallback: '8px',
     category: 'Spacing',
-    targets: [{ scope: 'floating-action-button-menu', part: 'surface' }],
+    targets: [{ scope: 'floating-action-button-menu', part: 'popover' }],
   },
   {
     name: '--md-fab-menu-item-container-height',
@@ -244,7 +244,7 @@ export const floatingActionButtonMenuStyleTokens = [
     description: 'Controls vertical space between menu items.',
     fallback: '4px',
     category: 'Spacing',
-    targets: [{ scope: 'floating-action-button-menu', part: 'items' }],
+    targets: [{ scope: 'floating-action-button-menu', part: 'popover' }],
   },
   {
     name: '--md-fab-menu-container-padding-inline',
