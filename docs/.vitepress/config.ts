@@ -7,8 +7,9 @@ import { sourceApiMetaPlugin } from './plugins/source-api-meta.ts';
 import { layerPreludePlugin } from './plugins/layer-prelude.ts';
 import { docsThemeLayers, themeLayersPlugin } from './plugins/theme-layers.ts';
 
-// Sync with theme.css
-const m3LayerOrder = ['reset', 'base', 'tokens', 'components'];
+const [vitepressDefaults, docsTheme] = docsThemeLayers;
+// Keep VitePress's defaults below the library styles and preserve the order from theme.css.
+const docsLayerOrder = ['reset', vitepressDefaults, 'base', 'tokens', 'components', docsTheme];
 
 const sidebarLabels: Record<string, string> = {
   'Getting Started': '快速开始',
@@ -233,7 +234,7 @@ export default () =>
         ],
       },
       plugins: [
-        layerPreludePlugin({ layers: [...m3LayerOrder, ...docsThemeLayers] }),
+        layerPreludePlugin({ layers: docsLayerOrder }),
         themeLayersPlugin(),
         componentMetaPlugin({
           tsconfigPath: 'tsconfig.docs.json',

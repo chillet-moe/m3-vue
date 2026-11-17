@@ -31,12 +31,20 @@ async function assertDocsThemeOrder(page: Page) {
     const heading = document.querySelector('.vp-doc h1')!;
     const subheading = document.querySelector('.vp-doc h2')!;
     const code = document.querySelector('.vp-doc div[class*="language-"]')!;
+    const sidebarLink = document.querySelector('.docs-sidebar-link[data-active="true"]')!;
+    const headerAction = document.querySelector('.docs-topbar .site-header-actions [data-scope="icon-button"]')!;
+    const readControl = (element: Element) => {
+      const style = getComputedStyle(element);
+      return { paddingStart: style.paddingInlineStart, paddingEnd: style.paddingInlineEnd, radius: style.borderRadius };
+    };
     const readStyles = () => ({
       background: getComputedStyle(document.body).backgroundColor,
       font: getComputedStyle(document.body).fontFamily,
       headingSize: getComputedStyle(heading).fontSize,
       subheadingPadding: getComputedStyle(subheading).paddingTop,
       codeMargin: getComputedStyle(code).marginTop,
+      sidebarLink: readControl(sidebarLink),
+      headerAction: readControl(headerAction),
     });
     const original = readStyles();
     const layers = new Map<string, string[]>([
@@ -75,6 +83,8 @@ async function assertDocsThemeOrder(page: Page) {
     headingSize: '36px',
     subheadingPadding: '18px',
     codeMargin: '20px',
+    sidebarLink: { paddingStart: '16px', paddingEnd: '16px', radius: '3px' },
+    headerAction: { paddingStart: '8px', paddingEnd: '8px', radius: '3px' },
   });
 }
 
