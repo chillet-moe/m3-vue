@@ -9,6 +9,23 @@ try {
   const page = await browser.newPage({ reducedMotion: 'reduce' });
   await page.addInitScript('window.__name = fn => fn');
   await openFixture(page, new URL('/tests/browser/surface-density/', server.resolvedUrls!.local[0]).href);
+  const offsets = await page.getByTestId('loading-indicator').evaluate((root) => {
+    const path = root.querySelector<SVGPathElement>('[data-part="active-indicator"]')!;
+    const container = root.getBoundingClientRect();
+    return [0, 180].map((angle) => {
+      path.style.transform = `rotate(${angle}deg)`;
+      const shape = path.getBoundingClientRect();
+      return Math.hypot(
+        shape.left + shape.width / 2 - (container.left + container.width / 2),
+        shape.top + shape.height / 2 - (container.top + container.height / 2),
+      );
+    });
+  });
+  assert(
+    offsets.every((offset) => offset < 0.25),
+    `Loading indicator center offsets: ${offsets} CSS px`,
+  );
+
   for (const typography of [14, 12]) {
     for (const density of [0, -2, -99, 3]) {
       await page.evaluate(

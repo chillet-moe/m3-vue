@@ -203,7 +203,7 @@ useElementEnvironment(activeIndicatorRef, (document, path) => {
         class="m3-loading-indicator-active-svg"
         data-scope="loading-indicator"
         data-part="active-indicator-svg"
-        viewBox="0 0 432 432"
+        viewBox="0 0 380 380"
         focusable="false"
         aria-hidden="true"
       >

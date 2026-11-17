@@ -8,6 +8,7 @@ import {
   Button,
   CircularProgressIndicator,
   LinearProgressIndicator,
+  LoadingIndicator,
 } from '@/index';
 createApp({
   setup() {
@@ -42,6 +43,7 @@ createApp({
           h(LinearProgressIndicator, { shape, value: 0.5, 'data-testid': `line-${shape}` }),
         ]),
         h(CircularProgressIndicator, { size: '3rem', thickness: '2px', 'data-testid': 'override' }),
+        h(LoadingIndicator, { variant: 'contained', indicatorSize: '38px', 'data-testid': 'loading-indicator' }),
       ]);
   },
 }).mount('#app');
