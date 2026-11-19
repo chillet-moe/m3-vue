@@ -1442,8 +1442,9 @@
       var(--_chip-flat-focus-outline-color, var(--_chip-outline-color))
     );
 
-    outline: var(--_chip-focus-indicator-thickness) solid var(--_chip-focus-indicator-color);
-    outline-offset: var(--_chip-focus-indicator-outline-offset);
+    --md-focus-ring-color: var(--_chip-focus-indicator-color);
+    --md-focus-ring-width: var(--_chip-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_chip-focus-indicator-outline-offset);
   }
 
   .m3-chip:has(.m3-chip-input:focus-visible)[data-elevated='true']:not([data-variant='input']),

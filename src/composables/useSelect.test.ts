@@ -198,6 +198,12 @@ describe('Select logical collection', () => {
     firstProps().onPointermove();
     expect(firstProps()['data-active']).toBe('true');
     expect(secondProps()['data-active']).toBeUndefined();
+
+    key('ArrowDown');
+    expect(secondProps()['data-keyboard-active']).toBe('true');
+    key('Tab');
+    expect(secondProps()['data-active']).toBeUndefined();
+    expect(secondProps()['data-keyboard-active']).toBeUndefined();
   });
 
   it('uses the option value if a pointer event still carries its previous row position', () => {

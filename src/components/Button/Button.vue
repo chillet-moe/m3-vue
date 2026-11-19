@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { useLinkTag } from '@/composables/useLinkTag';
@@ -94,6 +95,7 @@ const slots = defineSlots<{
   <component
     v-state-layer
     :is="link.tag"
+    v-focus-ring="{ within: true }"
     class="m3-state-layer m3-button"
     data-scope="button"
     data-part="root"

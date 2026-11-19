@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
@@ -99,6 +100,7 @@ const shape = useShape(() => props.shape);
 <template>
   <component
     v-state-layer
+    v-focus-ring
     :is="link.tag"
     role="menuitem"
     :href="link.href"

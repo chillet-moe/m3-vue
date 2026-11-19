@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { provideShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
@@ -461,6 +462,7 @@ provideShape(() => props.shape);
           <button
             v-state-layer
             v-if="props.clearable && select.hasValue.value && !props.disabled"
+            v-focus-ring
             class="m3-select-clear-button m3-state-layer"
             data-scope="select"
             data-part="clear-button"

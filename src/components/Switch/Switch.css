@@ -169,6 +169,7 @@
     flex-shrink: 0;
     position: relative;
     inline-size: fit-content;
+    min-block-size: var(--_switch-target-size);
     cursor: var(--md-cursor-action);
     user-select: none;
   }
@@ -202,10 +203,13 @@
   .m3-switch-control {
     position: relative;
     inline-size: var(--_switch-track-width);
-    block-size: max(var(--_switch-target-size), var(--_switch-track-height));
+    block-size: var(--_switch-track-height);
     display: inline-flex;
     align-items: center;
 
+    --md-focus-ring-color: var(--_switch-focus-indicator-color);
+    --md-focus-ring-width: var(--_switch-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_switch-focus-indicator-offset);
     --switch-handle-base-width: var(--_switch-unselected-handle-width);
     --switch-handle-base-height: var(--_switch-unselected-handle-height);
     --switch-handle-width: var(--switch-handle-base-width);
@@ -214,15 +218,7 @@
     --switch-handle-center-unchecked: calc(var(--switch-handle-unchecked-inset) + var(--switch-handle-base-width) / 2);
     --switch-handle-center-checked: calc(100% - var(--_switch-unit) * 4 - var(--_switch-selected-handle-width) / 2);
     --switch-handle-center: var(--switch-handle-center-unchecked);
-  }
 
-  .m3-switch-control::before {
-    content: '';
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline: 0;
-    block-size: var(--_switch-track-height);
-    transform: translateY(-50%);
     border-radius: var(--_switch-track-shape);
     background-color: var(--_switch-unselected-track-color);
     box-shadow: inset 0 0 0 var(--_switch-track-outline-width) var(--_switch-unselected-track-outline-color);
@@ -272,22 +268,20 @@
     --switch-handle-base-height: var(--_switch-with-icon-handle-height);
   }
 
-  .m3-switch[data-checked='true'] .m3-switch-control::before {
-    background-color: var(--_switch-selected-track-color);
-    box-shadow: none;
-  }
-
   .m3-switch[data-checked='true'] .m3-switch-control {
     --switch-handle-center: var(--switch-handle-center-checked);
     --switch-handle-width: var(--_switch-selected-handle-width);
     --switch-handle-height: var(--_switch-selected-handle-height);
+
+    background-color: var(--_switch-selected-track-color);
+    box-shadow: none;
   }
 
   .m3-switch[data-checked='true'] .m3-switch-control .m3-switch-handle {
     background-color: var(--_switch-selected-handle-color);
   }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-control::before {
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-control {
     background-color: var(--_switch-unselected-hover-track-color);
   }
 
@@ -295,7 +289,7 @@
     background-color: var(--_switch-unselected-hover-handle-color);
   }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control::before {
+  .m3-switch:has(.m3-switch-input:not(:disabled):hover) .m3-switch-input:checked + .m3-switch-control {
     background-color: var(--_switch-selected-hover-track-color);
   }
 
@@ -309,13 +303,11 @@
   .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-control {
     --switch-handle-width: var(--_switch-pressed-handle-width);
     --switch-handle-height: var(--_switch-pressed-handle-height);
-  }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-control::before {
     background-color: var(--_switch-unselected-pressed-track-color);
   }
 
-  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-input:checked + .m3-switch-control::before {
+  .m3-switch:has(.m3-switch-input:not(:disabled):active) .m3-switch-input:checked + .m3-switch-control {
     background-color: var(--_switch-selected-pressed-track-color);
   }
 
@@ -333,12 +325,7 @@
     background-color: var(--_switch-unselected-pressed-handle-color);
   }
 
-  .m3-switch-input:focus-visible + .m3-switch-control::before {
-    outline: var(--_switch-focus-indicator-thickness) solid var(--_switch-focus-indicator-color);
-    outline-offset: var(--_switch-focus-indicator-offset);
-  }
-
-  .m3-switch[data-disabled='true'] .m3-switch-control::before {
+  .m3-switch[data-disabled='true'] .m3-switch-control {
     background-color: --translucent(
       var(--_switch-disabled-unselected-track-color),
       var(--_switch-disabled-track-opacity)
@@ -354,7 +341,7 @@
     );
   }
 
-  .m3-switch[data-disabled='true'][data-checked='true'] .m3-switch-control::before {
+  .m3-switch[data-disabled='true'][data-checked='true'] .m3-switch-control {
     background-color: --translucent(
       var(--_switch-disabled-selected-track-color),
       var(--_switch-disabled-track-opacity)

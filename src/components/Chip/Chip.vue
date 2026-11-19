@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed } from 'vue';
@@ -98,6 +99,7 @@ const shape = useShape(() => props.shape);
   <component
     v-state-layer
     :is="selectable ? 'label' : 'button'"
+    v-focus-ring="{ within: true }"
     :class="['m3-state-layer', 'm3-chip']"
     data-scope="chip"
     data-part="root"

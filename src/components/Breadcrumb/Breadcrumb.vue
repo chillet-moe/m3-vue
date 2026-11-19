@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed } from 'vue';
 
@@ -101,6 +102,7 @@ defineSlots<{
 
           <component
             v-state-layer
+            v-focus-ring="!item.current"
             :is="tag"
             v-else
             :class="['m3-state-layer', item.current ? 'm3-breadcrumb-page' : 'm3-breadcrumb-link']"

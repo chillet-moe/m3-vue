@@ -73,6 +73,9 @@ try {
   );
   await coffee.press('ArrowDown');
   assert.equal(await coffee.evaluate((el) => el === el.ownerDocument.activeElement), true);
+  const coffeeDescendant = await coffee.getAttribute('aria-activedescendant');
+  assert(coffeeDescendant);
+  await listbox.locator(`[id="${coffeeDescendant}"] > .m3-focus-ring:popover-open`).waitFor();
   assert.equal(await rows.nth(0).getAttribute('aria-selected'), 'true');
   await coffee.press('Enter');
   assert.equal(await rows.nth(1).getAttribute('aria-selected'), 'true');
@@ -96,6 +99,7 @@ try {
   const descendant = await layer.getAttribute('aria-activedescendant');
   assert(descendant);
   assert.equal(await page.locator(`[id="${descendant}"]`).getAttribute('aria-posinset'), '10000');
+  await virtual.locator(`[id="${descendant}"] > .m3-focus-ring:popover-open`).waitFor();
   await layer.press('Enter');
   assert.equal(await layer.inputValue(), 'Layer 9999');
   await layer.click();
@@ -105,7 +109,23 @@ try {
   const remounted = virtual.getByRole('option', { name: 'Layer 9999', exact: true });
   await remounted.waitFor();
   assert.equal(await remounted.evaluate((el) => getComputedStyle(el, '::before').animationName), 'none');
-  await layer.press('Escape');
+  await remounted.locator('> .m3-focus-ring:popover-open').waitFor();
+  await layer.press('Tab');
+  assert.deepEqual(
+    await page.evaluate(async () => {
+      await new Promise(requestAnimationFrame);
+      const visibleRings = Array.from(document.querySelectorAll('.m3-focus-ring:popover-open')).filter(
+        (ring) => getComputedStyle(ring).visibility === 'visible',
+      );
+      return visibleRings.map((ring) => ({
+        part: ring.parentElement?.getAttribute('data-part'),
+        hasFocus: ring.parentElement === document.activeElement,
+        animations: ring.getAnimations().length,
+      }));
+    }),
+    [{ part: 'clear-button', hasFocus: true, animations: 0 }],
+    'Tab hands the ring from the active option to the clear button without overlap.',
+  );
 
   const find = page.getByRole('combobox', { name: 'Find layers', exact: true });
   await find.fill('Layer 999');

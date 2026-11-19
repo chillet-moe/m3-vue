@@ -112,8 +112,9 @@
 
   .m3-fab:focus-visible {
     box-shadow: var(--_fab-focused-container-elevation);
-    outline-offset: var(--_fab-focus-indicator-outline-offset);
-    outline: var(--_fab-focus-indicator-color) solid var(--_fab-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_fab-focus-indicator-outline-offset);
+    --md-focus-ring-color: var(--_fab-focus-indicator-color);
+    --md-focus-ring-width: var(--_fab-focus-indicator-thickness);
   }
 
   .m3-fab[data-pressed='true'] {

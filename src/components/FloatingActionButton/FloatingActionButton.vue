@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, mergeProps } from 'vue';
@@ -63,6 +64,7 @@ const shape = useShape(() => props.shape);
   <component
     v-state-layer
     :is="link.tag"
+    v-focus-ring
     :class="['m3-state-layer', 'm3-fab']"
     data-scope="floating-action-button"
     data-part="root"

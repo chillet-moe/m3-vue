@@ -396,8 +396,9 @@
   .m3-icon-button:has(input:focus-visible) {
     --md-color-on-container: var(--_icon-button-focused-icon-color);
 
-    outline-offset: var(--_icon-button-focus-indicator-outline-offset);
-    outline: var(--_icon-button-focus-indicator-color) solid var(--_icon-button-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_icon-button-focus-indicator-outline-offset);
+    --md-focus-ring-color: var(--_icon-button-focus-indicator-color);
+    --md-focus-ring-width: var(--_icon-button-focus-indicator-thickness);
 
     box-shadow: inset 0 0 0 var(--button-outline-width, 0) var(--outline-color, #000000);
   }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { isHTMLTag } from '@/internal/elementEnvironment';
 
 import { vStateLayer } from '@/components/StateLayer/state-layer';
@@ -40,6 +41,7 @@ defineSlots<{
 <template>
   <component
     :is="presentation ? 'span' : 'label'"
+    v-focus-ring="!presentation && { target: '.m3-radio-icon', within: true }"
     :class="'m3-radio'"
     data-scope="radio"
     data-part="root"
@@ -50,6 +52,10 @@ defineSlots<{
     :aria-hidden="presentation ? 'true' : undefined"
     :data-state-layer-hover-target="presentation ? undefined : ''"
   >
+    <span class="m3-radio-icon" data-scope="radio" data-part="icon" aria-hidden="true">
+      <span :class="'m3-radio-inner'" data-scope="radio" data-part="inner" />
+    </span>
+
     <input
       v-if="!presentation"
       :class="'m3-radio-input'"
@@ -71,9 +77,7 @@ defineSlots<{
       data-part="control"
       :data-state-layer-hover-from="presentation ? undefined : 'target'"
       aria-hidden="true"
-    >
-      <span :class="'m3-radio-inner'" data-scope="radio" data-part="inner" />
-    </span>
+    />
 
     <span v-if="$slots.default" :class="'m3-radio-label'" data-scope="radio" data-part="label"><slot /></span>
   </component>

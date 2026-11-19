@@ -860,14 +860,18 @@ describe('Slider', () => {
       value: () => createRect({ width: 48, height: 32 }),
     });
 
+    const slider = container.querySelector<HTMLElement>('[data-scope="slider"][data-part="root"]')!;
+    vi.spyOn(slider, 'getBoundingClientRect').mockReturnValue(
+      createRect({ left: 200, top: 120, width: 160, height: 32 }),
+    );
     input!.dispatchEvent(new Event('pointerenter', { bubbles: true }));
     await nextTick();
     await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
     expect(indicator!.dataset.vttOpen).toBe('1');
     expect(input?.getAttribute('aria-expanded')).toBe('true');
-    expect(indicator!.style.getPropertyValue('--value-indicator-slider-left')).toBe('0px');
-    expect(indicator!.style.getPropertyValue('--value-indicator-slider-top')).toBe('0px');
+    expect(slider.style.getPropertyValue('--_slider-viewport-left')).toBe('200px');
+    expect(slider.style.getPropertyValue('--_slider-viewport-top')).toBe('120px');
 
     input!.dispatchEvent(new Event('pointerleave', { bubbles: true }));
     await nextTick();

@@ -321,9 +321,9 @@
 
   .m3-navigation-drawer-item:focus-visible,
   .m3-navigation-drawer-section-trigger:focus-visible {
-    outline: var(--_navigation-drawer-item-focus-indicator-thickness) solid
-      var(--_navigation-drawer-item-focus-indicator-color);
-    outline-offset: var(--_navigation-drawer-item-focus-indicator-offset);
+    --md-focus-ring-color: var(--_navigation-drawer-item-focus-indicator-color);
+    --md-focus-ring-width: var(--_navigation-drawer-item-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_navigation-drawer-item-focus-indicator-offset);
   }
 
   .m3-navigation-drawer-item:disabled,

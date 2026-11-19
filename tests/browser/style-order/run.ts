@@ -9,6 +9,8 @@ const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH 
 
 try {
   const page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });
+  const pageErrors: Error[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error));
   await page.addInitScript('window.__name = (fn) => fn');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openFixture(page, new URL('/tests/browser/density/', server.resolvedUrls!.local[0]).href);
@@ -50,7 +52,8 @@ try {
     await page.keyboard.press('Tab');
     await item.focus();
     assert.deepEqual(await itemColors(), expectedItemColors, 'ListItem keyboard focus colors');
-    assert.equal(await item.evaluate((el) => getComputedStyle(el).outlineStyle), 'solid');
+    const ring = item.locator('> .m3-focus-ring:popover-open');
+    assert.equal(await ring.evaluate((el) => getComputedStyle(el).outlineStyle), 'solid');
   });
 
   const range = page.locator('[data-scope="date-range-picker"][data-part="root"]');
@@ -142,6 +145,7 @@ try {
       assert.deepEqual(style, { backgroundColor: 'rgba(0, 0, 0, 0)', transitionDuration: '0s' });
     }
   });
+  assert.deepEqual(pageErrors, [], 'Focus inside an opening picker can show its ring without throwing.');
   console.log(
     'Picker width, calendar typography, floating labels and ListItem states are independent of stylesheet order.',
   );

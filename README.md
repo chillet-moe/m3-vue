@@ -54,7 +54,7 @@ app.use(M3VuePlugin);
 app.mount('#app');
 ```
 
-After registration, you can use `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` directly in templates.
+After registration, you can use `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, `v-context-menu`, and `v-focus-ring` directly in templates.
 
 Render one `OverlayHost` near the application root when using the programmatic `showDialog()` or `showSnackbar()`
 functions. In descendant components, capture `const { showDialog, showSnackbar } = useOverlays()` during setup and keep using `showDialog(options)` / `showSnackbar(options)`. Outside components, use `createOverlayService(host)` to bind the functions once. It is not required for declaratively rendered `Dialog` or `Snackbar` components.
@@ -71,6 +71,18 @@ const overlays = provideOverlayHost(createOverlayHost());
 </template>
 ```
 
+### Focus rings on custom controls
+
+Apply `v-focus-ring` to a focusable element in your component. You can also import `vFocusRing` locally from `@chillet/m3-vue`.
+
+```vue
+<template>
+  <button v-focus-ring type="button">Save</button>
+</template>
+```
+
+Set `--md-focus-ring-color`, `--md-focus-ring-width`, `--md-focus-ring-offset`, or `--md-focus-ring-shape` on the element to customize the ring. For a native input, use `v-focus-ring="{ within: true }"` on its visual wrapper. To draw around a particular direct child of that wrapper, also pass `target: '.surface'`. Pass `active` when the component manages focus virtually, for example with `aria-activedescendant`.
+
 ## Nuxt
 
 ```ts
@@ -84,7 +96,7 @@ By default, the Nuxt module will:
 
 - register all components for auto import
 - add shared `@chillet/m3-vue/style.css` and `@chillet/m3-vue/themes/default.css` to `css`
-- install `M3VuePlugin` so `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, and `v-context-menu` are available
+- install `M3VuePlugin` so `v-tooltip`, `v-dropdown`, `v-dropdown-menu`, `v-context-menu`, and `v-focus-ring` are available
 
 You can customize it with `m3Vue`:
 

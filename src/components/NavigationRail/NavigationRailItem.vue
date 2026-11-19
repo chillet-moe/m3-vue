@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
@@ -90,6 +91,7 @@ const shape = useShape(() => props.shape);
     :tabindex="link.tabIndex"
     :type="link.type"
     :data-size="rowSize"
+    v-focus-ring
     class="m3-row-size m3-navigation-rail-item m3-morph-host"
     data-scope="navigation-rail-item"
     data-part="root"

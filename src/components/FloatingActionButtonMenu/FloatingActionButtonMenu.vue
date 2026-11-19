@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { provideShape, type M3Shape } from '@/styles/shape';
 import { isNode, useElementEnvironment } from '@/internal/elementEnvironment';
 import { registerSharedViewportChange } from '@/internal/sharedViewportChange';
@@ -322,6 +323,7 @@ const shape = provideShape(() => props.shape);
   >
     <button
       v-state-layer
+      v-focus-ring
       :id="triggerId"
       ref="trigger"
       type="button"

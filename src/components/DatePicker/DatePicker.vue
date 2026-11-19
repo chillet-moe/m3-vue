@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, inject, nextTick, ref, unref, useId } from 'vue';
@@ -231,6 +232,7 @@ const shape = useShape(() => props.shape);
               :key="day.date"
               type="button"
               role="gridcell"
+              v-focus-ring
               class="m3-date-picker-day m3-state-layer"
               data-scope="date-picker"
               data-part="day"

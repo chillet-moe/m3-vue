@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { computed, inject, useTemplateRef } from 'vue';
@@ -69,6 +70,7 @@ const shape = useShape(() => props.shape);
 
 <template>
   <div
+    v-focus-ring="{ target: '.m3-tree-row' }"
     v-bind="attrs()"
     class="m3-tree-item m3-row-size"
     :data-size="rowSize"

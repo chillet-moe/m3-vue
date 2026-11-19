@@ -15,10 +15,7 @@ try {
       .evaluate((el, density) => el.style.setProperty('--md-density', String(density)), density);
     const smallTrack = 24 + Math.max(-4, Math.min(4, density));
     assert.equal(
-      await page
-        .getByTestId('switch-small')
-        .locator('[data-part="control"]')
-        .evaluate((el) => el.getBoundingClientRect().height),
+      await page.getByTestId('switch-small').evaluate((el) => el.getBoundingClientRect().height),
       Math.max(smallTrack + 8, 32 + density * 2),
     );
     for (const [id, expected] of [
@@ -29,11 +26,10 @@ try {
     }
     const switchRoot = page.getByTestId('switch');
     const track = 32 + Math.max(-4, Math.min(4, density));
-    const metrics = await switchRoot.locator('[data-part="control"]').evaluate((el) => ({
-      height: el.getBoundingClientRect().height,
-      width: el.getBoundingClientRect().width,
-      track: parseFloat(getComputedStyle(el, '::before').height),
-    }));
+    const metrics = await switchRoot.evaluate((el) => {
+      const track = el.querySelector('[data-part="control"]')!.getBoundingClientRect();
+      return { height: el.getBoundingClientRect().height, width: track.width, track: track.height };
+    });
     assert.equal(metrics.height, Math.max(track + 8, 40 + density * 2));
     assert.equal(metrics.width, (track * 52) / 32);
     assert.equal(metrics.track, track);
@@ -86,8 +82,8 @@ try {
       const expected = (base * fontSize) / 14 - 2;
       const actual = await page
         .getByTestId(kind)
-        .locator('[data-part="control"]')
-        .evaluate((el) => parseFloat(getComputedStyle(el, '::before').height));
+        .locator(kind === 'radio' ? '[data-part="icon"]' : '[data-part="control"]')
+        .evaluate((el, kind) => parseFloat(getComputedStyle(el, kind === 'checkbox' ? '::before' : null).height), kind);
       assert(Math.abs(actual - expected) < 0.05, `${kind} follows custom typography`);
     }
   }
@@ -130,15 +126,49 @@ try {
   assert.equal(await checkbox.isChecked(), false);
   const radio = page.getByRole('radio', { name: 'Radio option' });
   await radio.focus();
+  const radioIcon = page.getByTestId('radio').locator('[data-part="icon"]');
+  const radioRing = radioIcon.locator('> .m3-focus-ring:popover-open');
+  await radioRing.waitFor();
+  const focusGeometry = () =>
+    radioRing.evaluate((ring) => {
+      const icon = ring.parentElement!;
+      const target = icon.parentElement!.querySelector('[data-part="control"]')!.getBoundingClientRect();
+      const { width, height, x, y } = ring.getBoundingClientRect();
+      const { outlineWidth, outlineOffset, borderRadius } = getComputedStyle(ring);
+      return {
+        width,
+        height,
+        centered: x + width / 2 === target.x + target.width / 2 && y + height / 2 === target.y + target.height / 2,
+        round: borderRadius === getComputedStyle(icon).borderRadius && parseFloat(borderRadius) >= width / 2,
+        outlineWidth,
+        outlineOffset,
+      };
+    });
+  const expectedFocus = {
+    width: 16,
+    height: 16,
+    centered: true,
+    round: true,
+    outlineWidth: '3px',
+    outlineOffset: '2px',
+  };
+  assert.deepEqual(await focusGeometry(), expectedFocus, 'The unselected radio ring surrounds the visible circle.');
   await page.keyboard.press('Space');
   assert(await radio.isChecked());
+  assert.deepEqual(
+    await focusGeometry(),
+    expectedFocus,
+    'Selecting a focused radio preserves the focus ring geometry.',
+  );
   for (const [kind, shapeToken, shapeSize] of [
     ['checkbox', '--md-checkbox-container-size', 14],
     ['radio', '--md-radio-icon-size', 16],
   ] as const) {
     const root = page.getByTestId(kind);
     assert.equal(
-      await root.locator('[data-part="control"]').evaluate((el) => parseFloat(getComputedStyle(el, '::before').width)),
+      await root
+        .locator(kind === 'radio' ? '[data-part="icon"]' : '[data-part="control"]')
+        .evaluate((el, kind) => parseFloat(getComputedStyle(el, kind === 'checkbox' ? '::before' : null).width), kind),
       shapeSize,
     );
     await root.evaluate((el, token) => (el as HTMLElement).style.setProperty(token, '30px'), shapeToken);

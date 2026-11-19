@@ -97,11 +97,6 @@
     text-decoration: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-
-    &:focus-visible {
-      outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
-      outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
-    }
   }
 
   .m3-breadcrumb-link:any-link {

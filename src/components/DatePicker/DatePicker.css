@@ -451,10 +451,13 @@
   }
 
   .m3-date-picker-day:focus-visible,
-  .m3-date-picker-switch:focus-visible,
   .m3-date-picker-list-item:focus-visible {
-    outline-offset: 0.125rem;
-    outline: var(--md-sys-color-secondary) solid var(--md-sys-state-focus-indicator-thickness);
+    --md-focus-ring-offset: 0.125rem;
+  }
+
+  .m3-date-picker-switch {
+    --md-button-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-button-focus-indicator-outline-offset: 0.125rem;
   }
 
   .m3-date-picker-list {

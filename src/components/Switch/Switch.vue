@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { computed, inject, unref } from 'vue';
 import { switchSizeContextKey, type SwitchSize } from './SwitchContext';
@@ -53,6 +54,7 @@ defineSlots<{
 <template>
   <component
     :is="presentation ? 'span' : 'label'"
+    v-focus-ring="!presentation && { target: '.m3-switch-control', within: true }"
     :class="'m3-switch'"
     :data-size="size"
     data-scope="switch"

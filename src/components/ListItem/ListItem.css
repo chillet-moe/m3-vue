@@ -99,11 +99,6 @@
     cursor: var(--md-cursor-link);
   }
 
-  .m3-item:focus-visible {
-    outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
-    outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
-  }
-
   .m3-item::before {
     content: '';
     position: absolute;

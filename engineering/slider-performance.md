@@ -44,8 +44,10 @@ The value indicator uses a manual popover without CSS anchor positioning:
 
 - The element keeps `popover="manual"` and `vtt-popover`.
 - Opening and closing are controlled by Slider state.
-- `syncValueIndicatorPosition()` reads the slider rect only when the popover opens, when placement/direction changes, on window scroll/resize, or when the slider resize observer reports a size change.
+- `syncViewportGeometry()` publishes the slider's viewport position for both the value indicator and the focus ring. It reads the root rect on focus, when the value indicator opens, on window scroll/resize, or when the slider measurements change.
 - CSS positions the fixed popover from those viewport variables, then follows the animated handle using the same `--percent` transform calculation.
+- Right and bottom insets are resolved against the CSS containing block so classic scrollbars do not shift either popover.
+- The focus ring uses the shared directive in manual positioning mode. Even with the stationary slider root as the CSS anchor, Chrome performs repeated layouts during handle animation.
 
 One layout when the browser opens a popover is acceptable. Repeated layout during the `--percent` animation is not.
 

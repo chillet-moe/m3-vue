@@ -1,0 +1,65 @@
+@layer components {
+  /* A separate visual target supplies the focus indicator for its focus source. */
+  :where(
+    [data-m3-focus-ring='within']:has(:focus-visible) :focus-visible:not([data-m3-focus-ring]),
+    [data-m3-focus-ring]:focus-visible:has(> [data-m3-focus-ring-target='child'])
+  ) {
+    outline: none;
+  }
+
+  :where(
+    [data-m3-focus-ring]:focus-visible,
+    [data-m3-focus-ring='within']:has(:focus-visible):not(
+        :has([data-m3-focus-ring]:focus-visible, [data-m3-focus-ring='within'] :focus-visible)
+      ),
+    [data-m3-focus-ring-active]
+  ) {
+    &:where([data-m3-focus-ring-target='self']),
+    > :where([data-m3-focus-ring-target='child']) {
+      &:not(:where(:has(> .m3-focus-ring:popover-open))) {
+        outline: var(--md-focus-ring-width, var(--md-sys-state-focus-indicator-thickness)) solid
+          var(--md-focus-ring-color, var(--md-sys-color-secondary));
+        outline-offset: var(--md-focus-ring-offset, var(--md-sys-state-focus-indicator-outer-offset));
+      }
+
+      &:where(:has(> .m3-focus-ring:popover-open)) {
+        outline: none;
+
+        > .m3-focus-ring:popover-open {
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  :where(.m3-focus-ring) {
+    display: none;
+  }
+
+  :where(.m3-focus-ring:popover-open) {
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--md-focus-ring-shape, inherit);
+    background: transparent;
+    outline: var(--md-focus-ring-width, var(--md-sys-state-focus-indicator-thickness)) solid
+      var(--md-focus-ring-color, var(--md-sys-color-secondary));
+    outline-offset: var(--md-focus-ring-offset, var(--md-sys-state-focus-indicator-outer-offset));
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  :where(.m3-focus-ring:popover-open:not([data-m3-focus-ring-positioned])) {
+    position-anchor: auto;
+    position-visibility: anchors-visible;
+    inset: anchor(top) auto auto anchor(left);
+    width: anchor-size(width);
+    height: anchor-size(height);
+  }
+
+  :where(.m3-focus-ring[data-m3-focus-ring-clipped]) {
+    opacity: 0;
+  }
+}

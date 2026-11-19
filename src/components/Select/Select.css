@@ -55,11 +55,6 @@
     --md-state-layer-color: currentColor;
   }
 
-  .m3-select-clear-button:focus-visible {
-    outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
-    outline-offset: var(--md-sys-state-focus-indicator-outer-offset);
-  }
-
   .m3-select-clear-icon {
     --md-icon-size: var(--_field-clear-icon-size);
   }
@@ -138,8 +133,7 @@
 
   /* The listbox keeps DOM focus in the field; reflect keyboard focus on its active option. */
   .m3-select-option[data-keyboard-active='true'] {
-    outline: var(--md-sys-state-focus-indicator-thickness) solid var(--md-sys-color-secondary);
-    outline-offset: var(--md-sys-state-focus-indicator-inner-offset);
+    --md-focus-ring-offset: var(--md-sys-state-focus-indicator-inner-offset);
   }
 
   .m3-select-option[data-keyboard-active='true']::after {

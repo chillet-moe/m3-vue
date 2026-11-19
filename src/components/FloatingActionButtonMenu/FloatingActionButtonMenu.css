@@ -220,8 +220,9 @@
   }
 
   .m3-fab-menu-trigger:focus-visible {
-    outline: var(--_fab-menu-focus-indicator-thickness) solid var(--_fab-menu-focus-indicator-color);
-    outline-offset: var(--_fab-menu-focus-indicator-outline-offset);
+    --md-focus-ring-color: var(--_fab-menu-focus-indicator-color);
+    --md-focus-ring-width: var(--_fab-menu-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_fab-menu-focus-indicator-outline-offset);
   }
 
   .m3-fab-menu-trigger:disabled {
@@ -417,8 +418,9 @@
 
   .m3-fab-menu-item:focus-visible {
     box-shadow: var(--_fab-menu-item-focused-container-elevation);
-    outline: var(--_fab-menu-focus-indicator-thickness) solid var(--_fab-menu-focus-indicator-color);
-    outline-offset: var(--_fab-menu-focus-indicator-outline-offset);
+    --md-focus-ring-color: var(--_fab-menu-focus-indicator-color);
+    --md-focus-ring-width: var(--_fab-menu-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_fab-menu-focus-indicator-outline-offset);
   }
 
   .m3-fab-menu-item[data-pressed='true'] {

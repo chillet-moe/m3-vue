@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape } from '@/styles/shape';
 import { appearanceContextKey } from '@/styles/appearance';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
@@ -102,6 +103,7 @@ const slotProps = computed(() => ({
   <component
     v-state-layer
     :is="link.tag"
+    v-focus-ring
     :class="['m3-item', appearance === 'expressive' && 'm3-morph-host', interactive && 'm3-state-layer']"
     data-scope="item"
     data-part="root"

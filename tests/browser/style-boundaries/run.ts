@@ -48,7 +48,9 @@ try {
   for (const name of ['Button link', 'List item link']) {
     const link = inside.getByRole('link', { name, exact: true });
     await link.focus();
-    assert.deepEqual(await readStyle(link, ['border-bottom-width', 'outline-style']), ['0px', 'solid'], name);
+    assert.deepEqual(await readStyle(link, ['border-bottom-width']), ['0px'], name);
+    const outline = link.locator('> .m3-focus-ring:popover-open');
+    assert.deepEqual(await readStyle(outline, ['outline-style', 'visibility']), ['solid', 'visible'], name);
   }
 
   for (const name of ['Article link', 'Link in nested prose']) {

@@ -434,10 +434,15 @@
 
   .m3-time-picker-display-field:focus-visible,
   .m3-time-picker-period-button:focus-visible,
-  .m3-time-picker-clock-option:focus-visible,
-  .m3-time-picker-actions :is(button, .m3-icon-button):focus-visible {
-    outline-offset: 0.125rem;
-    outline: var(--md-sys-color-secondary) solid var(--md-sys-state-focus-indicator-thickness);
+  .m3-time-picker-clock-option:focus-visible {
+    --md-focus-ring-offset: 0.125rem;
+  }
+
+  .m3-time-picker-action {
+    --md-button-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-button-focus-indicator-outline-offset: 0.125rem;
+    --md-icon-button-focus-indicator-color: var(--md-sys-color-secondary);
+    --md-icon-button-focus-indicator-outline-offset: 0.125rem;
   }
 
   .m3-time-picker-actions {

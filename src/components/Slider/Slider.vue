@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vPositionedFocusRing } from '@/directives/FocusRing';
 import { appearanceContextKey } from '@/styles/appearance';
 import { bindElementEnvironment } from '@/internal/elementEnvironment';
 import {
@@ -292,29 +293,17 @@ const isValueIndicatorPopoverOpen = (element: HTMLElement) => {
 };
 
 let sliderWindow: Window | null = null;
-const syncValueIndicatorPosition = () => {
+const syncViewportGeometry = () => {
   const slider = sliderRef.value;
-  const indicator = valueIndicatorRef.value;
-  if (!slider || !indicator) {
-    return;
-  }
+  if (!slider) return;
 
-  const sliderWindow = slider.ownerDocument.defaultView!;
   const rect = slider.getBoundingClientRect();
-  indicator.style.setProperty('--value-indicator-slider-left', `${rect.left}px`);
-  indicator.style.setProperty('--value-indicator-slider-right', `${rect.right}px`);
-  indicator.style.setProperty('--value-indicator-slider-top', `${rect.top}px`);
-  indicator.style.setProperty('--value-indicator-slider-bottom', `${rect.bottom}px`);
-  indicator.style.setProperty('--value-indicator-slider-center-x', `${rect.left + rect.width / 2}px`);
-  indicator.style.setProperty('--value-indicator-slider-center-y', `${rect.top + rect.height / 2}px`);
-  indicator.style.setProperty(
-    '--value-indicator-viewport-right',
-    `${Math.max(0, sliderWindow!.innerWidth - rect.right)}px`,
-  );
-  indicator.style.setProperty(
-    '--value-indicator-viewport-bottom',
-    `${Math.max(0, sliderWindow!.innerHeight - rect.bottom)}px`,
-  );
+  slider.style.setProperty('--_slider-viewport-left', `${rect.left}px`);
+  slider.style.setProperty('--_slider-viewport-right', `${rect.right}px`);
+  slider.style.setProperty('--_slider-viewport-top', `${rect.top}px`);
+  slider.style.setProperty('--_slider-viewport-bottom', `${rect.bottom}px`);
+  slider.style.setProperty('--_slider-viewport-center-x', `${rect.left + rect.width / 2}px`);
+  slider.style.setProperty('--_slider-viewport-center-y', `${rect.top + rect.height / 2}px`);
 };
 
 const showValueIndicatorPopover = () => {
@@ -323,7 +312,7 @@ const showValueIndicatorPopover = () => {
     return;
   }
 
-  syncValueIndicatorPosition();
+  syncViewportGeometry();
   if (!supportsValueIndicatorPopover(indicator) || isValueIndicatorPopoverOpen(indicator)) {
     return;
   }
@@ -548,10 +537,15 @@ const onValueIndicatorFocus = () => {
   }
 
   syncValueIndicatorFocusedState();
+  // Open the value indicator first so the focus ring can paint above it.
+  if (isValueIndicatorVisible.value) showValueIndicatorPopover();
+  else syncViewportGeometry();
+  syncWindowViewportListeners();
 };
 
 const onValueIndicatorBlur = () => {
   isValueIndicatorFocused.value = false;
+  queueMicrotask(syncWindowViewportListeners);
 };
 
 const onValueIndicatorPointerDown = (event: PointerEvent) => {
@@ -620,19 +614,22 @@ const onValueIndicatorKeyDown = (event: KeyboardEvent) => {
   setValueFromInteraction(nextValue, event.currentTarget as HTMLInputElement);
 };
 
+const shouldTrackViewport = () => isValueIndicatorVisible.value || inputRef.value?.matches(':focus');
+
 const onWindowScrollOrResize = () => {
-  if (isValueIndicatorVisible.value) {
-    syncValueIndicatorPosition();
+  if (shouldTrackViewport()) {
+    syncViewportGeometry();
   }
 };
 
 const syncWindowViewportListeners = () => {
   if (!sliderWindow || sliderWindow.closed) return;
-  if (isValueIndicatorVisible.value && !isWindowViewportListenerActive) {
+  const shouldTrack = shouldTrackViewport();
+  if (shouldTrack && !isWindowViewportListenerActive) {
     sliderWindow!.addEventListener('scroll', onWindowScrollOrResize, { capture: true, passive: true });
     sliderWindow!.addEventListener('resize', onWindowScrollOrResize);
     isWindowViewportListenerActive = true;
-  } else if (!isValueIndicatorVisible.value && isWindowViewportListenerActive) {
+  } else if (!shouldTrack && isWindowViewportListenerActive) {
     sliderWindow!.removeEventListener('scroll', onWindowScrollOrResize, true);
     sliderWindow!.removeEventListener('resize', onWindowScrollOrResize);
     isWindowViewportListenerActive = false;
@@ -652,8 +649,8 @@ const syncSliderInlineSize = () => {
 const syncSliderMeasurements = () => {
   syncSliderInlineSize();
   syncInsetIconPlacement();
-  if (isValueIndicatorVisible.value) {
-    syncValueIndicatorPosition();
+  if (shouldTrackViewport()) {
+    syncViewportGeometry();
   }
 };
 
@@ -761,6 +758,7 @@ onBeforeUnmount(() => {
 <template>
   <div
     ref="slider"
+    v-positioned-focus-ring="{ target: '.m3-slider-handle', within: true }"
     :aria-disabled="disabled"
     data-scope="slider"
     data-part="root"

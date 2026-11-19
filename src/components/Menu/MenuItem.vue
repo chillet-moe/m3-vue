@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { isHTMLElement, isHTMLTag } from '@/internal/elementEnvironment';
@@ -167,6 +168,7 @@ const shape = useShape(() => shapeProp);
 <template>
   <component
     v-state-layer
+    v-focus-ring="{ active: $attrs['data-keyboard-active'] === 'true' }"
     :is="link.tag"
     :role="resolvedRole"
     :href="link.href"

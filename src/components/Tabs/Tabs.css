@@ -785,8 +785,9 @@
   .m3-tab:focus-visible {
     --md-color-on-container: var(--_tabs-inactive-focus-label-color);
     border-radius: var(--_tabs-focus-indicator-shape);
-    outline: var(--_tabs-focus-indicator-thickness) solid var(--_tabs-focus-indicator-color);
-    outline-offset: var(--_tabs-focus-indicator-outline-offset);
+    --md-focus-ring-color: var(--_tabs-focus-indicator-color);
+    --md-focus-ring-width: var(--_tabs-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_tabs-focus-indicator-outline-offset);
 
     --md-state-layer-color: var(--_tabs-inactive-focus-state-layer-color);
   }

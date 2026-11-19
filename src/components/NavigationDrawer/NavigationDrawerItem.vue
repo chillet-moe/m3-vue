@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
@@ -115,6 +116,7 @@ const rowSize = provideRowSize(() => props.size);
     :type="link.type"
     v-tooltip="tooltip"
     :data-size="rowSize"
+    v-focus-ring
     class="m3-row-size m3-navigation-drawer-item m3-state-layer m3-morph-host"
     data-scope="navigation-drawer-item"
     data-part="root"

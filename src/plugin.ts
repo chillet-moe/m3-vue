@@ -3,6 +3,7 @@ import type { App, Directive, Plugin } from 'vue';
 import { installM3InteractionDefaults, type M3ComponentDefaultsOptions } from './defaults';
 import type { DropdownTargetBinding } from '@/directives/Dropdown';
 import { vContextMenu, vDropdown, vDropdownMenu } from './directives/Menu';
+import { vFocusRing } from './directives/FocusRing';
 import type { MenuTargetBinding } from './directives/Menu/helpers';
 import type { TooltipDirective } from './directives/Tooltip/types';
 import vTooltip from './directives/Tooltip/vTooltip';
@@ -16,6 +17,7 @@ export const m3VueDirectives = {
   dropdown: vDropdown,
   dropdownMenu: vDropdownMenu,
   contextMenu: vContextMenu,
+  focusRing: vFocusRing,
 } as const satisfies Record<string, Directive>;
 
 export const m3VueDirectiveNames = Object.freeze(Object.keys(m3VueDirectives) as Array<keyof typeof m3VueDirectives>);
@@ -77,5 +79,6 @@ declare module 'vue' {
     vDropdown: Directive<HTMLElement, DropdownTargetBinding>;
     vDropdownMenu: Directive<HTMLElement, DropdownTargetBinding>;
     vContextMenu: Directive<HTMLElement, MenuTargetBinding>;
+    vFocusRing: typeof vFocusRing;
   }
 }

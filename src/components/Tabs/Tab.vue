@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
 
@@ -95,6 +96,7 @@ const handleKeydown = (event: KeyboardEvent) => {
   <component
     v-state-layer
     :is="link.tag"
+    v-focus-ring
     class="m3-state-layer m3-tab"
     data-scope="tabs"
     data-part="trigger"

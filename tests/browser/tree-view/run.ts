@@ -22,9 +22,12 @@ try {
   await page.locator('#before').focus();
   await page.keyboard.press('Tab');
   assert.equal(await overview.evaluate((element) => element === document.activeElement), true);
+  const overviewRing = overview.locator(':scope > [data-part="row"] > .m3-focus-ring:popover-open');
+  await overviewRing.waitFor();
   await page.keyboard.press('Tab');
   const pin = project.getByRole('button', { name: 'Pin Overview', exact: true });
   assert.equal(await pin.evaluate((element) => element === document.activeElement), true);
+  await overviewRing.waitFor({ state: 'detached' });
   await page.keyboard.press('Enter');
   assert.equal(
     await project.getByRole('button', { name: 'Unpin Overview', exact: true }).getAttribute('aria-pressed'),

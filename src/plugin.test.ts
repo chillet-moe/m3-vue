@@ -32,7 +32,7 @@ describe('M3VuePlugin', () => {
       provide,
     } as unknown as App);
 
-    expect(m3VueDirectiveNames).toEqual(['tooltip', 'dropdown', 'dropdownMenu', 'contextMenu']);
+    expect(m3VueDirectiveNames).toEqual(['tooltip', 'dropdown', 'dropdownMenu', 'contextMenu', 'focusRing']);
     expect(directive.mock.calls).toEqual(m3VueDirectiveNames.map((name) => [name, m3VueDirectives[name]]));
     expect(provide).toHaveBeenCalledOnce();
   });

@@ -37,6 +37,8 @@
     --icon-size: 0;
     --stop-indicator-size: 0.25rem;
     --slider-inline-size: 0px;
+    --_slider-viewport-inline-start: var(--_slider-viewport-left);
+    --_slider-viewport-block-start: var(--_slider-viewport-top);
     --inline-direction-sign: 1;
     /* 必须是 var(--handle-width) / 2 + var(--handle-inset) */
     --track-inset: calc((var(--handle-width) / 2 + var(--handle-inset)));
@@ -151,6 +153,9 @@
 
   .m3-slider-vertical {
     writing-mode: vertical-rl;
+    --_slider-viewport-inline-start: var(--_slider-viewport-top);
+    /* Reverse insets use the fixed containing block, whose size excludes classic scrollbars. */
+    --_slider-viewport-block-start: calc(100% - var(--_slider-viewport-right));
   }
 
   .m3-slider-lrt {
@@ -160,7 +165,12 @@
 
   .m3-slider-rtl {
     direction: rtl;
+    --_slider-viewport-inline-start: calc(100% - var(--_slider-viewport-right));
     --inline-direction-sign: -1;
+  }
+
+  .m3-slider-vertical.m3-slider-rtl {
+    --_slider-viewport-inline-start: calc(100% - var(--_slider-viewport-bottom));
   }
 
   .m3-slider-extra-small {
@@ -199,30 +209,41 @@
   }
 
   .m3-slider-handle {
+    --_slider-handle-inline-inset: calc(var(--track-inset-total) - var(--handle-width) / 2);
+    --_slider-handle-block-inset: 0px;
+    --_slider-handle-translate: calc(var(--inline-direction-sign) * var(--handle-position-range) * var(--percent)) 0;
+    --_slider-handle-block-size: var(--handle-height);
+    --md-focus-ring-color: var(--md-sys-color-on-surface-variant);
+    --md-focus-ring-width: 0.25rem;
+    --md-focus-ring-offset: 0.25rem;
+
     position: absolute;
     pointer-events: none;
 
-    inset-block: 0;
-    inset-inline-start: calc(var(--track-inset-total) - var(--handle-width) / 2);
-    translate: calc(var(--inline-direction-sign) * var(--handle-position-range) * var(--percent)) 0;
+    inset-block: var(--_slider-handle-block-inset);
+    inset-inline-start: var(--_slider-handle-inline-inset);
+    translate: var(--_slider-handle-translate);
     will-change: translate;
 
     inline-size: var(--handle-width);
-    block-size: var(--handle-height);
+    block-size: var(--_slider-handle-block-size);
 
     border-radius: calc(var(--handle-height) * 2);
     background-color: var(--_slider-handle-color);
+  }
 
-    transition:
-      inline-size,
-      outline-width var(--md-easing-fast);
-
-    outline: var(--md-sys-color-on-surface-variant) solid 0;
-    outline-offset: 0.25rem;
+  .m3-slider-handle > .m3-focus-ring:popover-open {
+    /* Reuse the measured viewport position and the handle’s animation transform. */
+    inset: auto;
+    inset-inline-start: calc(var(--_slider-viewport-inline-start) + var(--_slider-handle-inline-inset));
+    inset-block-start: calc(var(--_slider-viewport-block-start) + var(--_slider-handle-block-inset));
+    inline-size: var(--handle-width);
+    block-size: var(--_slider-handle-block-size);
+    translate: var(--_slider-handle-translate);
   }
 
   .m3-slider-vertical .m3-slider-handle {
-    translate: 0 calc(var(--inline-direction-sign) * var(--handle-position-range) * var(--percent));
+    --_slider-handle-translate: 0 calc(var(--inline-direction-sign) * var(--handle-position-range) * var(--percent));
   }
 
   .m3-slider-expressive:has(input:not([disabled]):hover) {
@@ -234,12 +255,6 @@
   .m3-slider-expressive:has(input:not([disabled]):active) {
     .m3-slider-handle {
       --handle-width: 0.125rem;
-    }
-  }
-
-  .m3-slider:has(input:focus-visible) {
-    .m3-slider-handle {
-      outline-width: 0.25rem;
     }
   }
 
@@ -386,7 +401,7 @@
   }
 
   .m3-slider-horizontal.m3-slider-lrt .m3-slider-value-indicator {
-    left: calc(var(--value-indicator-slider-left) + var(--track-inset-total));
+    left: calc(var(--_slider-viewport-left) + var(--track-inset-total));
 
     --value-indicator-inline-axis-translate: calc(var(--handle-position-range) * var(--percent));
     --value-indicator-inline-center-translate: -50%;
@@ -395,7 +410,7 @@
   }
 
   .m3-slider-horizontal.m3-slider-rtl .m3-slider-value-indicator {
-    right: calc(var(--value-indicator-viewport-right) + var(--track-inset-total));
+    right: calc(max(0px, 100% - var(--_slider-viewport-right)) + var(--track-inset-total));
 
     --value-indicator-inline-axis-translate: calc(-1 * var(--handle-position-range) * var(--percent));
     --value-indicator-inline-center-translate: 50%;
@@ -404,29 +419,29 @@
   }
 
   .m3-slider-horizontal .m3-slider-value-indicator[data-value-indicator-placement='top'] {
-    top: var(--value-indicator-slider-top);
+    top: var(--_slider-viewport-top);
     translate: calc(var(--value-indicator-inline-axis-translate) + var(--value-indicator-inline-center-translate))
       calc(-100% - var(--value-indicator-offset));
   }
 
   .m3-slider-horizontal .m3-slider-value-indicator[data-value-indicator-placement='bottom'] {
-    top: var(--value-indicator-slider-bottom);
+    top: var(--_slider-viewport-bottom);
     translate: calc(var(--value-indicator-inline-axis-translate) + var(--value-indicator-inline-center-translate))
       var(--value-indicator-offset);
   }
 
   .m3-slider-horizontal .m3-slider-value-indicator[data-value-indicator-placement='start'] {
-    top: var(--value-indicator-slider-center-y);
+    top: var(--_slider-viewport-center-y);
     translate: calc(var(--value-indicator-inline-axis-translate) + var(--value-indicator-inline-start-translate)) -50%;
   }
 
   .m3-slider-horizontal .m3-slider-value-indicator[data-value-indicator-placement='end'] {
-    top: var(--value-indicator-slider-center-y);
+    top: var(--_slider-viewport-center-y);
     translate: calc(var(--value-indicator-inline-axis-translate) + var(--value-indicator-inline-end-translate)) -50%;
   }
 
   .m3-slider-vertical.m3-slider-lrt .m3-slider-value-indicator {
-    top: calc(var(--value-indicator-slider-top) + var(--track-inset-total));
+    top: calc(var(--_slider-viewport-top) + var(--track-inset-total));
 
     --value-indicator-block-axis-translate: calc(var(--handle-position-range) * var(--percent));
     --value-indicator-block-center-translate: -50%;
@@ -435,7 +450,7 @@
   }
 
   .m3-slider-vertical.m3-slider-rtl .m3-slider-value-indicator {
-    bottom: calc(var(--value-indicator-viewport-bottom) + var(--track-inset-total));
+    bottom: calc(max(0px, 100% - var(--_slider-viewport-bottom)) + var(--track-inset-total));
 
     --value-indicator-block-axis-translate: calc(-1 * var(--handle-position-range) * var(--percent));
     --value-indicator-block-center-translate: 50%;
@@ -444,24 +459,24 @@
   }
 
   .m3-slider-vertical .m3-slider-value-indicator[data-value-indicator-placement='start'] {
-    left: var(--value-indicator-slider-left);
+    left: var(--_slider-viewport-left);
     translate: calc(-1 * var(--value-indicator-offset))
       calc(var(--value-indicator-block-axis-translate) + var(--value-indicator-block-center-translate));
   }
 
   .m3-slider-vertical .m3-slider-value-indicator[data-value-indicator-placement='end'] {
-    left: var(--value-indicator-slider-right);
+    left: var(--_slider-viewport-right);
     translate: var(--value-indicator-offset)
       calc(var(--value-indicator-block-axis-translate) + var(--value-indicator-block-center-translate));
   }
 
   .m3-slider-vertical .m3-slider-value-indicator[data-value-indicator-placement='top'] {
-    left: var(--value-indicator-slider-center-x);
+    left: var(--_slider-viewport-center-x);
     translate: -50% calc(var(--value-indicator-block-axis-translate) + var(--value-indicator-block-top-translate));
   }
 
   .m3-slider-vertical .m3-slider-value-indicator[data-value-indicator-placement='bottom'] {
-    left: var(--value-indicator-slider-center-x);
+    left: var(--_slider-viewport-center-x);
     translate: -50% calc(var(--value-indicator-block-axis-translate) + var(--value-indicator-block-bottom-translate));
   }
 
@@ -564,21 +579,18 @@
     --_clip-start: calc(100% * var(--percent));
   }
   .m3-slider-standard .m3-slider-handle {
-    block-size: var(--handle-width);
-    inset-block: calc((var(--handle-height) - var(--handle-width)) / 2);
-    transition:
-      box-shadow 120ms ease,
-      outline-width 120ms ease;
-    outline-offset: 0.125rem;
+    --_slider-handle-block-size: var(--handle-width);
+    --_slider-handle-block-inset: calc((var(--handle-height) - var(--handle-width)) / 2);
+    --md-focus-ring-width: 2px;
+    --md-focus-ring-offset: 0.125rem;
+
+    transition: box-shadow 120ms ease;
   }
   .m3-slider-standard:has(input:not(:disabled):hover) .m3-slider-handle {
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--_slider-handle-color) 12%, transparent);
   }
   .m3-slider-standard:has(input:not(:disabled):active) .m3-slider-handle {
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--_slider-handle-color) 18%, transparent);
-  }
-  .m3-slider-standard:has(input:focus-visible) .m3-slider-handle {
-    outline-width: 2px;
   }
   .m3-slider-standard .m3-slider-value-indicator {
     border-radius: 0.375rem;

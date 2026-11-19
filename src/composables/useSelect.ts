@@ -204,7 +204,7 @@ export function useSelect(opts: UseSelectOptions) {
     }
   }
   function getActivity(value: UseSelectOptionValue) {
-    if (activeValue.value !== value) return undefined;
+    if (activeValue.value !== value || !opts.open.value) return undefined;
     return keyboardActive.value ? 'keyboard' : 'active';
   }
   function buildOptionProps(index: number, option: UseSelectOption, activity: ReturnType<typeof getActivity>) {

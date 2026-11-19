@@ -172,8 +172,9 @@
   }
 
   .m3-checkbox-input:focus-visible + .m3-checkbox-control {
-    outline: var(--_focus-indicator-thickness) solid var(--_focus-indicator-color);
-    outline-offset: var(--_focus-indicator-offset);
+    --md-focus-ring-color: var(--_focus-indicator-color);
+    --md-focus-ring-width: var(--_focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_focus-indicator-offset);
   }
 
   .m3-checkbox[data-disabled='true'] .m3-checkbox-control::before {

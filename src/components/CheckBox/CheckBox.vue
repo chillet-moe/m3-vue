@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 export type CheckBoxProps = {
@@ -49,6 +50,7 @@ const shape = useShape(() => shapeProp);
 <template>
   <component
     :is="presentation ? 'span' : 'label'"
+    v-focus-ring="!presentation && { target: '.m3-checkbox-control', within: true }"
     :class="'m3-checkbox'"
     data-scope="checkbox"
     data-part="root"

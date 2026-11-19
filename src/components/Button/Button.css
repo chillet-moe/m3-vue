@@ -255,8 +255,9 @@
     --md-color-on-container: var(--_button-focused-label-text-color);
     box-shadow: var(--_button-focused-container-elevation);
 
-    outline-offset: var(--_button-focus-indicator-outline-offset);
-    outline: var(--_button-focus-indicator-color) solid var(--_button-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_button-focus-indicator-outline-offset);
+    --md-focus-ring-color: var(--_button-focus-indicator-color);
+    --md-focus-ring-width: var(--_button-focus-indicator-thickness);
   }
 
   .m3-button[data-pressed='true'] {

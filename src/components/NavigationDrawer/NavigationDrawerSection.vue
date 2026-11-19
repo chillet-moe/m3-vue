@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
@@ -110,6 +111,7 @@ const rowSize = provideRowSize(() => props.size);
   >
     <button
       v-state-layer
+      v-focus-ring
       class="m3-navigation-drawer-section-trigger m3-state-layer"
       data-scope="navigation-drawer-section"
       data-part="trigger"

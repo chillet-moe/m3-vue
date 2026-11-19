@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { useShape, type M3Shape } from '@/styles/shape';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { isHTMLElement } from '@/internal/elementEnvironment';
@@ -435,6 +436,7 @@ const shape = useShape(() => props.shape);
             <button
               v-state-layer
               type="button"
+              v-focus-ring
               class="m3-time-picker-display-field m3-state-layer"
               data-scope="time-picker"
               data-part="hour-display"
@@ -452,6 +454,7 @@ const shape = useShape(() => props.shape);
             <button
               v-state-layer
               type="button"
+              v-focus-ring
               class="m3-time-picker-display-field m3-state-layer"
               data-scope="time-picker"
               data-part="minute-display"
@@ -545,6 +548,7 @@ const shape = useShape(() => props.shape);
               v-for="period in periods"
               :key="period"
               type="button"
+              v-focus-ring
               class="m3-time-picker-period-button m3-state-layer"
               data-scope="time-picker"
               data-part="period-option"
@@ -585,6 +589,7 @@ const shape = useShape(() => props.shape);
             v-for="(option, index) in picker.clockOptions.value"
             :key="`${picker.activeSelection.value}-${option.value}`"
             type="button"
+            v-focus-ring
             class="m3-time-picker-clock-option m3-state-layer"
             data-scope="time-picker"
             data-part="clock-option"
@@ -602,6 +607,7 @@ const shape = useShape(() => props.shape);
 
       <div class="m3-time-picker-actions" data-scope="time-picker" data-part="actions">
         <IconButton
+          class="m3-time-picker-action"
           :icon="isClock ? 'keyboard' : 'schedule'"
           variant="standard"
           size="small"
@@ -610,8 +616,14 @@ const shape = useShape(() => props.shape);
           data-part="mode-toggle"
           @click="toggleInputMode"
         />
-        <Button variant="text" @click="handleCancel">{{ cancelText }}</Button>
-        <Button variant="text" :disabled="picker.inputInvalid.value" @click="handleConfirm">{{ confirmText }}</Button>
+        <Button class="m3-time-picker-action" variant="text" @click="handleCancel">{{ cancelText }}</Button>
+        <Button
+          class="m3-time-picker-action"
+          variant="text"
+          :disabled="picker.inputInvalid.value"
+          @click="handleConfirm"
+          >{{ confirmText }}</Button
+        >
       </div>
     </div>
   </div>

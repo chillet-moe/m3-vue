@@ -60,7 +60,7 @@
 
 @layer components {
   .m3-radio {
-    display: inline-flex;
+    display: inline-grid;
     align-items: center;
     gap: --dp(4);
     flex-shrink: 0;
@@ -92,81 +92,77 @@
     cursor: inherit;
   }
 
-  .m3-radio-control {
+  .m3-radio-control,
+  .m3-radio-icon {
+    grid-area: 1 / 1;
     position: relative;
+  }
+
+  .m3-radio-control {
     inline-size: var(--_radio-target-size);
     block-size: var(--_radio-target-size);
     border-radius: var(--md-sys-shape-corner-full);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
   }
 
-  .m3-radio-control::before,
-  .m3-radio-inner {
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-  }
+  .m3-radio-icon {
+    --md-focus-ring-color: var(--_radio-focus-indicator-color);
+    --md-focus-ring-width: var(--_radio-focus-indicator-thickness);
+    --md-focus-ring-offset: var(--_radio-focus-indicator-offset);
 
-  .m3-radio-control::before {
-    content: '';
+    place-self: center;
+    pointer-events: none;
     inline-size: var(--_radio-icon-size);
     block-size: var(--_radio-icon-size);
     border-radius: var(--_radio-icon-shape);
     box-shadow: inset 0 0 0 var(--_radio-unselected-outline-width) var(--_radio-unselected-outline-color);
-    transform: translate(-50%, -50%);
     transition: box-shadow var(--md-easing-fast);
   }
 
   .m3-radio-inner {
+    position: absolute;
+    inset: 0;
+    margin: auto;
     inline-size: var(--_radio-selected-dot-size);
     block-size: var(--_radio-selected-dot-size);
     border-radius: var(--md-sys-shape-corner-full);
     background-color: var(--_radio-selected-dot-color);
-    transform: translate(-50%, -50%) scale(0);
-    transition: transform var(--md-easing-fast-spatial);
+    scale: 0;
+    transition: scale var(--md-easing-fast-spatial);
   }
 
-  .m3-radio[data-checked='true'] .m3-radio-control::before {
+  .m3-radio[data-checked='true'] > .m3-radio-icon {
     box-shadow: inset 0 0 0 var(--_radio-selected-outline-width) var(--_radio-selected-outline-color);
   }
 
-  .m3-radio[data-checked='true'] .m3-radio-control .m3-radio-inner {
-    transform: translate(-50%, -50%) scale(1);
+  .m3-radio[data-checked='true'] > .m3-radio-icon > .m3-radio-inner {
+    scale: 1;
   }
 
-  .m3-radio-input:not(:disabled):is(:hover, :active) + .m3-radio-control::before {
+  .m3-radio-icon:has(+ .m3-radio-input:not(:disabled):is(:hover, :active)) {
     box-shadow: inset 0 0 0 var(--_radio-unselected-outline-width) var(--md-sys-color-on-surface);
   }
 
-  .m3-radio-input:not(:disabled):checked:is(:hover, :active) + .m3-radio-control::before {
+  .m3-radio-icon:has(+ .m3-radio-input:not(:disabled):checked:is(:hover, :active)) {
     box-shadow: inset 0 0 0 var(--_radio-selected-outline-width) var(--md-sys-color-primary);
   }
 
-  .m3-radio-input:focus-visible + .m3-radio-control {
-    outline: var(--_radio-focus-indicator-thickness) solid var(--_radio-focus-indicator-color);
-    outline-offset: var(--_radio-focus-indicator-offset);
-    border-radius: var(--_radio-icon-shape);
-  }
-
-  .m3-radio[data-disabled='true'] .m3-radio-control::before {
+  .m3-radio[data-disabled='true'] > .m3-radio-icon {
     box-shadow: inset 0 0 0 var(--_radio-unselected-outline-width)
       --translucent(var(--_radio-disabled-unselected-outline-color), var(--_radio-disabled-outline-opacity));
   }
 
-  .m3-radio[data-disabled='true'][data-checked='true'] .m3-radio-control::before {
+  .m3-radio[data-disabled='true'][data-checked='true'] > .m3-radio-icon {
     box-shadow: inset 0 0 0 var(--_radio-selected-outline-width)
       --translucent(var(--_radio-disabled-selected-outline-color), var(--_radio-disabled-outline-opacity));
   }
 
-  .m3-radio[data-disabled='true'][data-checked='true'] .m3-radio-control .m3-radio-inner {
+  .m3-radio[data-disabled='true'][data-checked='true'] > .m3-radio-icon > .m3-radio-inner {
     background-color: --translucent(var(--_radio-disabled-selected-dot-color), var(--_radio-disabled-dot-opacity));
   }
 
   .m3-radio-label {
     @apply body-medium;
+    grid-area: 1 / 2;
     color: var(--md-sys-color-on-surface);
   }
 }

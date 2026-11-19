@@ -31,9 +31,6 @@
     background: var(--_tree-container);
     color: var(--_tree-label);
   }
-  .m3-tree-item {
-    outline: none;
-  }
   .m3-tree-row {
     --_tree-row-height: var(--md-tree-row-height, var(--_row-height));
     @apply body-medium;
@@ -58,8 +55,9 @@
     --md-state-layer-color: var(--_tree-selected-label);
   }
   .m3-tree-item:focus-visible > .m3-tree-row {
-    outline: --dp(2) solid var(--md-sys-color-primary);
-    outline-offset: --dp(-2);
+    --md-focus-ring-width: --dp(2);
+    --md-focus-ring-color: var(--md-sys-color-primary);
+    --md-focus-ring-offset: --dp(-2);
   }
   .m3-tree-item:focus-visible > .m3-tree-row::after {
     opacity: var(--md-sys-state-focus-state-layer-opacity);

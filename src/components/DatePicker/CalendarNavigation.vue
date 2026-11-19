@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vFocusRing } from '@/directives/FocusRing';
 import { computed } from 'vue';
 import Button from '@/components/Button/Button.vue';
 import Icon from '@/components/Icon/Icon.vue';
@@ -103,6 +104,7 @@ const list = computed(() =>
       v-for="option in list.options"
       :key="option.value"
       type="button"
+      v-focus-ring
       class="m3-date-picker-list-item m3-state-layer"
       :data-scope="scope"
       :data-part="list.part"

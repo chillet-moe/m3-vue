@@ -102,8 +102,7 @@
   }
 
   .m3-date-range-picker-endpoint:focus-visible {
-    outline-offset: 0.125rem;
-    outline: var(--md-sys-color-secondary) solid var(--md-sys-state-focus-indicator-thickness);
+    --md-focus-ring-offset: 0.125rem;
   }
 
   .m3-date-range-picker-value {
