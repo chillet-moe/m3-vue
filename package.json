@@ -36,6 +36,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
     },
+    "./theme": {
+      "types": "./dist/theme/colors.d.ts",
+      "import": "./dist/theme/colors.mjs"
+    },
     "./nuxt": {
       "types": "./dist/nuxt.d.ts",
       "import": "./dist/nuxt.mjs"
@@ -93,11 +97,11 @@
     "test:package": "pnpm run build && tsx tests/browser/preset-package/run.ts"
   },
   "dependencies": {
+    "@chillet/material-color-utilities": "^0.4.0",
     "@vueuse/core": "^15.0.0",
     "vue": "^3.5.45"
   },
   "devDependencies": {
-    "@chillet/material-color-utilities": "^0.4.0",
     "@chillet/postcss-custom-mixins": "^0.3.0",
     "@chillet/vue-scope-boundary": "^0.2.0",
     "@emnapi/core": "^1.11.3",

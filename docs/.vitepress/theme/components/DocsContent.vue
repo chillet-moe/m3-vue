@@ -43,7 +43,7 @@ import DocsPager from './DocsPager.vue';
   inline-size: 100%;
   margin-inline: auto;
   padding: 1.25rem;
-  --md-filled-card-container-color: var(--md-sys-color-surface);
+  --md-color-container: var(--md-sys-color-surface);
 }
 
 .docs-api-appendix:empty {

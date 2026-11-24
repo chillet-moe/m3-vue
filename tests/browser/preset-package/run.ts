@@ -30,6 +30,23 @@ try {
       fieldSize: 'small',
     });
     assert.equal(await page.getByRole('textbox', { name: 'Name' }).count(), 1);
+    // The published preset must resolve its roles again on the bound Button, in both schemes.
+    for (const scheme of ['light', 'dark'] as const) {
+      await page.emulateMedia({ colorScheme: scheme });
+      const colors = await page.getByRole('button', { name: 'Delete' }).evaluate(async (el) => {
+        const probe = document.createElement('span');
+        probe.style.color = 'var(--md-sys-color-primary)';
+        document.body.append(probe);
+        const outer = getComputedStyle(probe).color;
+        el.append(probe);
+        const local = getComputedStyle(probe).color;
+        probe.remove();
+        await Promise.allSettled(el.getAnimations().map((animation) => animation.finished));
+        return { outer, local, fill: getComputedStyle(el).backgroundColor };
+      });
+      assert.notEqual(colors.local, colors.outer);
+      assert.equal(colors.fill, colors.local);
+    }
     assert.equal(await page.locator('[data-scope="text-field"] label, [data-scope="text-field"] legend').count(), 0);
     console.log('Published compact entry imports its CSS and installs complete component defaults.');
   } finally {

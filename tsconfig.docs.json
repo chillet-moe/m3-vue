@@ -2,6 +2,8 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "paths": {
+      "@chillet/m3-vue": ["./src/index.ts"],
+      "@chillet/m3-vue/theme": ["./src/theme/colors.ts"],
       "@/*": ["./src/*"]
     }
   },

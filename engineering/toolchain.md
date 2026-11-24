@@ -29,7 +29,8 @@ Documentation structure and page authoring conventions are described in [Documen
 
 ## Theme generation
 
-`src/theme/tokens.json` owns default theme tokens and `src/theme/compact.json` owns compact typography values.
+`src/theme/palette.json` defines the reference color families and tones used by both the presets and `createColorTheme`.
+`src/theme/tokens.json` owns the role mappings and other default theme tokens, and `src/theme/compact.json` owns compact typography values.
 `src/presets/definitions.ts` owns complete presets, shared by plugin entries, theme generation and the documentation editor. `src/theme/presets.ts` supplies typography token maps. Run `pnpm run themes:generate`
 after editing theme data; `build` runs it automatically. Commit both generated files in `src/styles/themes/` so source
 fixtures and the documentation dev server can load a selected theme immediately. Consumers load shared `style.css`
@@ -61,3 +62,7 @@ To check that the color mode button has the correct accessible name after a prod
 With the documentation server running, use `pnpm exec tsx tests/browser/field-layout/run.ts` to verify inherited
 field gap tokens, independent row/column overrides, density and label-clearance separation, and the responsive preview.
 It accepts `DOCS_URL` and writes screenshots to `.tmp/field-layout/`.
+
+With the documentation server running, use `pnpm exec tsx tests/browser/local-colors/run.ts` to check the Styling
+guide's Button states, Card controls and teleported warning Dialog in both color schemes. It accepts `DOCS_URL`
+and writes screenshots to `.tmp/local-colors/`.

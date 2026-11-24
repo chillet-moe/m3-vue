@@ -18,6 +18,9 @@ importers:
 
   .:
     dependencies:
+      '@chillet/material-color-utilities':
+        specifier: ^0.4.0
+        version: 0.4.0
       '@vueuse/core':
         specifier: ^15.0.0
         version: 15.0.0(vue@3.5.45(typescript@6.0.3))
@@ -25,9 +28,6 @@ importers:
         specifier: ^3.5.45
         version: 3.5.45(typescript@6.0.3)
     devDependencies:
-      '@chillet/material-color-utilities':
-        specifier: ^0.4.0
-        version: 0.4.0
       '@chillet/postcss-custom-mixins':
         specifier: ^0.3.0
         version: 0.3.0(postcss@8.5.32)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))

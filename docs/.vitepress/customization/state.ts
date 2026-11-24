@@ -19,7 +19,8 @@ import { defaultSettings, tokenNames } from './catalog';
 import { themePresets, typographyPresets, type Preset } from '@/theme/presets';
 
 import { presetDefaultValues } from './defaults';
-import { colorTokens, isSourceColor } from './colors';
+import { createColorTheme } from '@chillet/m3-vue/theme';
+import { isSourceColor } from './colors';
 
 const storageKey = 'm3-vue-docs-theme';
 const key: InjectionKey<ReturnType<typeof provideDocsCustomization>> = Symbol('DocsCustomization');
@@ -31,7 +32,9 @@ export function provideDocsCustomization() {
     tokens: {} as Record<string, string>,
     defaults: {} as Record<string, string>,
   });
-  const paletteTokens = computed(() => (state.theme.sourceColor ? colorTokens(state.theme.sourceColor) : {}));
+  const paletteTokens = computed(() =>
+    state.theme.sourceColor ? createColorTheme(state.theme.sourceColor).style : {},
+  );
   const resolvedTokens = computed<Record<string, string>>(() => {
     const preset = themePresets[state.theme.preset];
     return {

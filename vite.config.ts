@@ -9,7 +9,7 @@ import finalizeLibraryCss from './scripts/finalize-library-css/index.ts';
 import { browserslistToTargets, Features } from 'lightningcss';
 import browserslist from 'browserslist';
 
-const externalPackages = [...new Set([...Object.keys(pkg.peerDependencies), '@nuxt/kit'])];
+const externalPackages = [...new Set([...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.dependencies)])];
 
 function vueWithScopeBoundary(options: VuePluginOptions = {}) {
   return vue(createScopeBoundaryVueOptions(options));
@@ -61,6 +61,7 @@ export default defineConfig({
       entry: {
         index: 'src/index.ts',
         nuxt: 'src/nuxt.ts',
+        'theme/colors': 'src/theme/colors.ts',
         'presets/compact': 'src/presets/compact.ts',
         'presets/default': 'src/presets/default.ts',
         'locales/en': 'src/locales/en.ts',

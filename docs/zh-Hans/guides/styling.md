@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import LocalButtonColors from '../../demos/guides/LocalButtonColors.vue';
+import LocalButtonColorsSrc from '../../demos/guides/LocalButtonColors.vue?raw';
+import CardControlColors from '../../demos/guides/CardControlColors.vue';
+import CardControlColorsSrc from '../../demos/guides/CardControlColors.vue?raw';
+import NestedColorScopes from '../../demos/guides/NestedColorScopes.vue';
+import NestedColorScopesSrc from '../../demos/guides/NestedColorScopes.vue?raw';
+</script>
+
 # 定制
 
 从完整预设开始，再覆盖应用所需的偏好。使用[预设预览](./presets)比较实际布局和组件图库。文档工具栏会编辑相同设置；其 **Code** 页签可导出预设导入、插件覆盖项和 CSS 修改。
@@ -161,7 +170,54 @@ provideRowSize('extra-small');
 }
 ```
 
-容器色和前景色是成对的角色。组件通过 `color-scheme` 解析浅色/深色角色。嵌套的自定义内容可使用 `--md-color-container`、`--md-color-on-container` 和 `--md-state-layer-color`，继承当前容器色、前景色和状态层颜色。
+### 局部颜色覆盖 {#local-color-overrides}
+
+使用一个六位十六进制种子色创建 Material 配色主题，再将它绑定到任意组件或 DOM 容器。创建一次后，可在多个元素上重复使用。
+
+```vue
+<script setup lang="ts">
+import { Button } from '@chillet/m3-vue';
+import { createColorTheme } from '@chillet/m3-vue/theme';
+
+const warning = createColorTheme('#b3261e');
+</script>
+
+<template>
+  <Button v-bind="warning" variant="filled">Delete file</Button>
+</template>
+```
+
+绑定对象会提供参考调色板和 `.m3-color-theme` class。该 class 会在绑定元素上解析公开系统角色、描边、浮动表面和 elevation，并随当前 `color-scheme` 切换。嵌套绑定会启用新的调色板；其外部的兄弟元素仍使用周围主题。
+
+若只需调整某个颜色，可在对应元素上设置公开角色。例如，`--md-sys-color-secondary` 控制 Button 焦点环，`--md-sys-color-on-surface` 提供其禁用颜色。使用 `light-dark(...)` 指定浅色和深色方案的不同值。对于没有主题 class 的普通元素，应直接覆盖不带后缀的角色：继承值已在最近的主题根节点计算完成。
+
+#### 单个 Button {#one-button}
+
+只有 **Delete file** 使用警告调色板。将鼠标悬停在它上面、按 Tab 聚焦它，或按住它以查看交互反馈。取消勾选 **Select file**，即可看到同一调色板下按标准不透明度降低处理的禁用表面和文字。**Preview** 保留页面主题。
+
+<DemoContainer :src="LocalButtonColorsSrc" :viewport="false">
+  <LocalButtonColors />
+</DemoContainer>
+
+若只需调整单个颜色，filled Button 也提供 `--md-color-container`、`--md-color-on-container` 和 `--md-state-layer-color`。组件会根据变体或状态自行设置这些上下文 token。若要让焦点环、禁用颜色和嵌套控件也使用同一主题，请改用底层系统角色。如果应用已设置组件专用颜色 token，而该组件也应跟随本地调色板，请同时在局部边界覆盖该 token。
+
+#### Card 中的多个控件 {#several-controls-in-a-card}
+
+Card、CheckBox 和描边 Button 都使用绑定在 Card 上的 teal 主题。切换 **Email reminders**，可比较未选中时的描边与选中时的填充和标记。**Restore default** 的标签、边框和交互状态也使用同一配色。
+
+<DemoContainer :src="CardControlColorsSrc" :viewport="false">
+  <CardControlColors />
+</DemoContainer>
+
+#### 嵌套区域与 Teleport {#nested-regions-and-teleport}
+
+在 teal 工作区的红色区域中打开 **Discard draft…**。警告 Dialog 会使用该区域的表面色、边框、标题、说明文字、文字操作和焦点颜色。关闭后可看到两个原始区域。
+
+Dialog 在 teal 工作区中声明，并 Teleport 到红色容器。CSS 继承遵循 **Teleport 目标的 DOM 祖先**。若目标位于 `body`，Dialog 会继承 body 的主题；若要在那里保留警告配色，可将 `v-bind="warning"` 应用于被 Teleport 的 Dialog。原生模态进入浏览器 top layer 后，仍保留其 DOM 父级关系，并继承相应颜色。
+
+<DemoContainer :src="NestedColorScopesSrc" :viewport="false">
+  <NestedColorScopes />
+</DemoContainer>
 
 ## 组件形状模式 {#component-shape-modes}
 

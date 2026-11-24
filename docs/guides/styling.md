@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import LocalButtonColors from '../demos/guides/LocalButtonColors.vue';
+import LocalButtonColorsSrc from '../demos/guides/LocalButtonColors.vue?raw';
+import CardControlColors from '../demos/guides/CardControlColors.vue';
+import CardControlColorsSrc from '../demos/guides/CardControlColors.vue?raw';
+import NestedColorScopes from '../demos/guides/NestedColorScopes.vue';
+import NestedColorScopesSrc from '../demos/guides/NestedColorScopes.vue?raw';
+</script>
+
 # Customization
 
 Start with a complete preset, then override only the preferences your application needs. Use the [preset preview](./presets) to compare a working layout and the component gallery. The documentation toolbar edits these same settings; its Code tab exports the preset import, plugin overrides and any CSS changes.
@@ -182,9 +191,54 @@ and its foreground in each color scheme:
 }
 ```
 
-Container and foreground roles are separate pairs. Components resolve light/dark roles through `color-scheme`.
-For nested custom content, `--md-color-container`, `--md-color-on-container` and `--md-state-layer-color` carry the
-current container, foreground and state-layer colors.
+### Local color overrides
+
+Create a Material color theme once from a six-digit hex seed, then bind it to any component or DOM container. Reuse the same theme on as many elements as needed.
+
+```vue
+<script setup lang="ts">
+import { Button } from '@chillet/m3-vue';
+import { createColorTheme } from '@chillet/m3-vue/theme';
+
+const warning = createColorTheme('#b3261e');
+</script>
+
+<template>
+  <Button v-bind="warning" variant="filled">Delete file</Button>
+</template>
+```
+
+The binding supplies a reference palette and the `.m3-color-theme` class. The class resolves the public system roles, outlines, floating surfaces and elevations at that element. They follow the active `color-scheme`. A nested binding starts a new palette. Siblings outside it keep the surrounding theme.
+
+For an individual adjustment, set the public role you want on that element. For example, `--md-sys-color-secondary` controls the Button focus ring, and `--md-sys-color-on-surface` supplies its disabled colors. Use `light-dark(...)` to specify separate values. On an ordinary element without the theme class, override the unsuffixed role directly: its inherited value was computed on the nearest theme root.
+
+#### One Button
+
+Only **Delete file** receives the warning palette. Hover over it, tab to it or hold it down. Clear **Select file** to see the same palette's disabled surface and text at the standard reduced opacities. **Preview** keeps the page theme.
+
+<DemoContainer :src="LocalButtonColorsSrc" :viewport="false">
+  <LocalButtonColors />
+</DemoContainer>
+
+For a single paint adjustment, a filled Button also exposes `--md-color-container`, `--md-color-on-container` and `--md-state-layer-color`. Components can set these context tokens themselves as their variant or state changes. Use the underlying roles for a theme that also covers focus rings, disabled colors and nested controls. If your application already sets a component-specific color token, override it at the local boundary too when it should follow the palette.
+
+#### Several controls in a Card
+
+The Card, CheckBox and outlined Button all use the teal theme bound to the Card. Toggle **Email reminders** to compare the unchecked outline with the checked fill and mark. **Restore default** uses the same palette for its label, border and interaction states.
+
+<DemoContainer :src="CardControlColorsSrc" :viewport="false">
+  <CardControlColors />
+</DemoContainer>
+
+#### Nested regions and Teleport
+
+Open **Discard draft…** inside the red region of the teal workspace. The warning Dialog uses the region's surface, border, headline, supporting text, text actions and focus colors. Closing it reveals both original regions.
+
+The Dialog is declared in the teal workspace and teleported into the red container. CSS inheritance follows the **Teleport target's DOM ancestors**. A target on `body` inherits the body theme. To keep a warning palette there, apply `v-bind="warning"` to the teleported Dialog itself. A native modal entering the browser's top layer keeps its DOM parent and its inherited colors.
+
+<DemoContainer :src="NestedColorScopesSrc" :viewport="false">
+  <NestedColorScopes />
+</DemoContainer>
 
 ## Component shape modes
 

@@ -225,6 +225,11 @@ export default () =>
     vite: {
       resolve: {
         alias: [
+          { find: /^@chillet\/m3-vue$/, replacement: fileURLToPath(new URL('../../src/index.ts', import.meta.url)) },
+          {
+            find: '@chillet/m3-vue/theme',
+            replacement: fileURLToPath(new URL('../../src/theme/colors.ts', import.meta.url)),
+          },
           { find: '@', replacement: fileURLToPath(new URL('../../src', import.meta.url)) },
           // Keep VitePress search behavior while using the library's themed trigger.
           {

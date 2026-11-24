@@ -13,7 +13,10 @@
     --md-sys-elevation-level3-ambient: 0 4px 8px 3px;
     --md-sys-elevation-level4-ambient: 0 6px 10px 4px;
     --md-sys-elevation-level5-ambient: 0 8px 12px 6px;
+  }
 
+  :root,
+  :where(.m3-color-theme) {
     --md-sys-elevation-shadow-key: rgb(from var(--md-sys-color-shadow) r g b / 0.19);
     --md-sys-elevation-shadow-ambient: rgb(from var(--md-sys-color-shadow) r g b / 0.04);
 

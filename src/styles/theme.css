@@ -16,14 +16,20 @@
 @import './prose.css';
 
 @layer tokens {
-  :where(:root) {
+  :where(:root, .m3-color-theme) {
     /* Context token placeholders; concrete values are provided by components or users. */
     --md-color-container: initial;
     --md-color-on-container: initial;
     --md-state-layer-color: initial;
   }
 
-  :root {
+  :where(.m3-color-theme) {
+    --md-focus-ring-color: initial;
+    color: var(--md-sys-color-on-surface);
+  }
+
+  :root,
+  :where(.m3-color-theme) {
     --md-sys-color-primary: light-dark(var(--md-sys-color-primary-light), var(--md-sys-color-primary-dark));
     --md-sys-color-on-primary: light-dark(var(--md-sys-color-on-primary-light), var(--md-sys-color-on-primary-dark));
     --md-sys-color-primary-container: light-dark(
@@ -145,9 +151,9 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
+@layer base {
+  :where(:root) {
+    color-scheme: light dark;
   }
 }
 
