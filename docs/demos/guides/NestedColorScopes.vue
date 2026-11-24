@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue';
 import { Button, Dialog } from '@chillet/m3-vue';
-import { createColorTheme } from '@chillet/m3-vue/theme';
-
-const warning = createColorTheme('#b3261e');
-const teal = createColorTheme('#008578');
 
 const open = ref(false);
 const warningRegion = useTemplateRef<HTMLDivElement>('warningRegion');
 </script>
 
 <template>
-  <div class="draft" v-bind="teal">
+  <div class="draft teal-theme">
     <span>Draft settings</span>
-    <div ref="warningRegion" class="draft-warning" v-bind="warning">
+    <div ref="warningRegion" class="draft-warning warning-theme">
       <Button @click="open = true">Discard draft…</Button>
     </div>
 

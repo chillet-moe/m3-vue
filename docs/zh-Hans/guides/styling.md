@@ -172,24 +172,46 @@ provideRowSize('extra-small');
 
 ### 局部颜色覆盖 {#local-color-overrides}
 
-使用一个六位十六进制种子色创建 Material 配色主题，再将它绑定到任意组件或 DOM 容器。创建一次后，可在多个元素上重复使用。
+对于固定配色，可在构建时为每个六位十六进制种子色定义一个 CSS class。Button、Dialog 和普通 DOM 容器都可以使用同一个 class。
 
-```vue
-<script setup lang="ts">
-import { Button } from '@chillet/m3-vue';
-import { createColorTheme } from '@chillet/m3-vue/theme';
+在 Vite 应用中，将主题插件与 Vue 插件一同加入配置：
 
-const warning = createColorTheme('#b3261e');
-</script>
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { m3ColorThemes } from '@chillet/m3-vue/vite';
 
-<template>
-  <Button v-bind="warning" variant="filled">Delete file</Button>
-</template>
+export default defineConfig({
+  plugins: [vue(), m3ColorThemes({ 'warning-theme': '#b3261e', 'teal-theme': '#008578' })],
+});
 ```
 
-绑定对象会提供参考调色板和 `.m3-color-theme` class。该 class 会在绑定元素上解析公开系统角色、描边、浮动表面和 elevation，并随当前 `color-scheme` 切换。嵌套绑定会启用新的调色板；其外部的兄弟元素仍使用周围主题。
+在应用入口中、库样式和预设之后导入一次生成的样式表：
 
-若只需调整某个颜色，可在对应元素上设置公开角色。例如，`--md-sys-color-secondary` 控制 Button 焦点环，`--md-sys-color-on-surface` 提供其禁用颜色。使用 `light-dark(...)` 指定浅色和深色方案的不同值。对于没有主题 class 的普通元素，应直接覆盖不带后缀的角色：继承值已在最近的主题根节点计算完成。
+```ts
+import 'virtual:m3-color-themes.css';
+```
+
+```vue
+<Button class="warning-theme" variant="filled">Delete file</Button>
+```
+
+每种主题的调色板只会在样式表中生成一次。各 class 共用浅色/深色角色、描边、浮动表面和 elevation 规则。嵌套 class 会启用新的调色板，其外部兄弟元素仍使用周围主题。
+
+若要通过 Node 构建脚本生成普通 CSS 文件，可调用同一个生成器，再在应用入口导入生成的文件：
+
+```js
+import { writeFile } from 'node:fs/promises';
+import { generateColorThemeCss } from '@chillet/m3-vue/theme/css';
+
+const css = generateColorThemeCss({ 'warning-theme': '#b3261e', 'teal-theme': '#008578' });
+await writeFile('src/color-themes.css', css);
+```
+
+若颜色在运行时才确定，可从 `@chillet/m3-vue/theme` 导入 `createColorTheme(seed)`，它会返回供 `v-bind` 使用的绑定对象。固定 class 和运行时绑定遵循相同的 DOM 继承与 `color-scheme` 规则。
+
+若只需调整某个颜色，可在对应元素上设置公开角色。例如，`--md-sys-color-secondary` 控制 Button 焦点环，`--md-sys-color-on-surface` 提供其禁用颜色。使用 `light-dark(...)` 指定不同方案的值。对于没有主题 class 的普通元素，应直接覆盖不带后缀的角色：继承值已在最近的主题根节点计算完成。
 
 #### 单个 Button {#one-button}
 
@@ -203,7 +225,7 @@ const warning = createColorTheme('#b3261e');
 
 #### Card 中的多个控件 {#several-controls-in-a-card}
 
-Card、CheckBox 和描边 Button 都使用绑定在 Card 上的 teal 主题。切换 **Email reminders**，可比较未选中时的描边与选中时的填充和标记。**Restore default** 的标签、边框和交互状态也使用同一配色。
+Card、CheckBox 和描边 Button 都使用 Card 上的 teal 主题 class。切换 **Email reminders**，可比较未选中时的描边与选中时的填充和标记。**Restore default** 的标签、边框和交互状态也使用同一配色。
 
 <DemoContainer :src="CardControlColorsSrc" :viewport="false">
   <CardControlColors />
@@ -213,7 +235,7 @@ Card、CheckBox 和描边 Button 都使用绑定在 Card 上的 teal 主题。�
 
 在 teal 工作区的红色区域中打开 **Discard draft…**。警告 Dialog 会使用该区域的表面色、边框、标题、说明文字、文字操作和焦点颜色。关闭后可看到两个原始区域。
 
-Dialog 在 teal 工作区中声明，并 Teleport 到红色容器。CSS 继承遵循 **Teleport 目标的 DOM 祖先**。若目标位于 `body`，Dialog 会继承 body 的主题；若要在那里保留警告配色，可将 `v-bind="warning"` 应用于被 Teleport 的 Dialog。原生模态进入浏览器 top layer 后，仍保留其 DOM 父级关系，并继承相应颜色。
+Dialog 在 teal 工作区中声明，并 Teleport 到红色容器。CSS 继承遵循 **Teleport 目标的 DOM 祖先**。若目标位于 `body`，Dialog 会继承 body 的主题；若要在那里保留警告配色，可将 `class="warning-theme"` 加到被 Teleport 的 Dialog。原生模态进入浏览器 top layer 后，仍保留其 DOM 父级关系，并继承相应颜色。
 
 <DemoContainer :src="NestedColorScopesSrc" :viewport="false">
   <NestedColorScopes />

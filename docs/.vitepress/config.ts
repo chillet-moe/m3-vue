@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { componentMetaPlugin } from './plugins/component-meta.ts';
 import { componentAnatomyPlugin } from './plugins/component-anatomy.ts';
 import { sourceApiMetaPlugin } from './plugins/source-api-meta.ts';
+import { m3ColorThemes } from '../../src/vite.ts';
 import { layerPreludePlugin } from './plugins/layer-prelude.ts';
 import { docsThemeLayers, themeLayersPlugin } from './plugins/theme-layers.ts';
 
@@ -239,6 +240,7 @@ export default () =>
         ],
       },
       plugins: [
+        m3ColorThemes({ 'warning-theme': '#b3261e', 'teal-theme': '#008578' }),
         layerPreludePlugin({ layers: docsLayerOrder }),
         themeLayersPlugin(),
         componentMetaPlugin({

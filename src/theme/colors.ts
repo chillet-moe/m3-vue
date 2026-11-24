@@ -1,5 +1,5 @@
 import { argbFromHex, DynamicScheme, Hct, hexFromArgb, Variant } from '@chillet/material-color-utilities';
-import defaultPalette from './palette.json';
+import defaultPalette from './palette.json' with { type: 'json' };
 
 /** Create reusable Vue bindings for a local Material color theme from a #RRGGBB seed. */
 export function createColorTheme(sourceColor: string) {

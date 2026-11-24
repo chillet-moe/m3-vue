@@ -30,9 +30,10 @@ Documentation structure and page authoring conventions are described in [Documen
 ## Theme generation
 
 `src/theme/palette.json` defines the reference color families and tones used by both the presets and `createColorTheme`.
-`src/theme/tokens.json` owns the role mappings and other default theme tokens, and `src/theme/compact.json` owns compact typography values.
+`src/theme/color-roles.json` maps system colors to palette tones. The preset generator and the named theme CSS generator share these mappings and the declarations in `src/theme/color-rules.ts`.
+`src/theme/tokens.json` owns the other default theme tokens, and `src/theme/compact.json` owns compact typography values.
 `src/presets/definitions.ts` owns complete presets, shared by plugin entries, theme generation and the documentation editor. `src/theme/presets.ts` supplies typography token maps. Run `pnpm run themes:generate`
-after editing theme data; `build` runs it automatically. Commit both generated files in `src/styles/themes/` so source
+after editing theme data; `build` runs it automatically. Commit `src/styles/color-roles.css` and both generated files in `src/styles/themes/` so source
 fixtures and the documentation dev server can load a selected theme immediately. Consumers load shared `style.css`
 and one preset entry. Preset entries preserve their public theme CSS imports in the published modules; these imports must remain external to the library build so theme tokens never leak into shared `style.css`. Component density rules are documented in [Density](density.md).
 

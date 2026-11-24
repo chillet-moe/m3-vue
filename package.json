@@ -40,6 +40,14 @@
       "types": "./dist/theme/colors.d.ts",
       "import": "./dist/theme/colors.mjs"
     },
+    "./theme/css": {
+      "types": "./dist/theme/css.d.ts",
+      "import": "./dist/theme/css.mjs"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.mjs"
+    },
     "./nuxt": {
       "types": "./dist/nuxt.d.ts",
       "import": "./dist/nuxt.mjs"
@@ -93,7 +101,7 @@
     "remove-unused-vars": "tsx scripts/remove-unused-vars/index.ts",
     "check": "pnpm run fmt:check && pnpm run lint && pnpm run typecheck && pnpm run docs:check",
     "docs:check": "node scripts/check-docs.mjs",
-    "themes:generate": "node --import tsx scripts/generate-themes.ts",
+    "themes:generate": "node --import tsx scripts/generate-themes.ts && oxfmt src/styles/color-roles.css",
     "test:package": "pnpm run build && tsx tests/browser/preset-package/run.ts"
   },
   "dependencies": {

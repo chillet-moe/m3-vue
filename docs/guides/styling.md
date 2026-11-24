@@ -193,22 +193,44 @@ and its foreground in each color scheme:
 
 ### Local color overrides
 
-Create a Material color theme once from a six-digit hex seed, then bind it to any component or DOM container. Reuse the same theme on as many elements as needed.
+For fixed colors, define a CSS class for each six-digit hex seed at build time. Buttons, dialogs and ordinary DOM containers can all use the same class.
 
-```vue
-<script setup lang="ts">
-import { Button } from '@chillet/m3-vue';
-import { createColorTheme } from '@chillet/m3-vue/theme';
+In a Vite app, add the theme plugin alongside the Vue plugin:
 
-const warning = createColorTheme('#b3261e');
-</script>
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { m3ColorThemes } from '@chillet/m3-vue/vite';
 
-<template>
-  <Button v-bind="warning" variant="filled">Delete file</Button>
-</template>
+export default defineConfig({
+  plugins: [vue(), m3ColorThemes({ 'warning-theme': '#b3261e', 'teal-theme': '#008578' })],
+});
 ```
 
-The binding supplies a reference palette and the `.m3-color-theme` class. The class resolves the public system roles, outlines, floating surfaces and elevations at that element. They follow the active `color-scheme`. A nested binding starts a new palette. Siblings outside it keep the surrounding theme.
+Import the generated stylesheet once in your application entry, after your library styles and preset:
+
+```ts
+import 'virtual:m3-color-themes.css';
+```
+
+```vue
+<Button class="warning-theme" variant="filled">Delete file</Button>
+```
+
+Each theme's palette appears once in the stylesheet. The classes share the rules for light/dark roles, outlines, floating surfaces and elevations. A nested class starts a new palette. Siblings outside it keep the surrounding theme.
+
+To generate an ordinary CSS file from a Node build script, call the same generator and import the resulting file in your application entry:
+
+```js
+import { writeFile } from 'node:fs/promises';
+import { generateColorThemeCss } from '@chillet/m3-vue/theme/css';
+
+const css = generateColorThemeCss({ 'warning-theme': '#b3261e', 'teal-theme': '#008578' });
+await writeFile('src/color-themes.css', css);
+```
+
+For a color chosen at runtime, `createColorTheme(seed)` from `@chillet/m3-vue/theme` returns a binding object for `v-bind`. Fixed classes and runtime bindings follow the same DOM inheritance and `color-scheme` rules.
 
 For an individual adjustment, set the public role you want on that element. For example, `--md-sys-color-secondary` controls the Button focus ring, and `--md-sys-color-on-surface` supplies its disabled colors. Use `light-dark(...)` to specify separate values. On an ordinary element without the theme class, override the unsuffixed role directly: its inherited value was computed on the nearest theme root.
 
@@ -224,7 +246,7 @@ For a single paint adjustment, a filled Button also exposes `--md-color-containe
 
 #### Several controls in a Card
 
-The Card, CheckBox and outlined Button all use the teal theme bound to the Card. Toggle **Email reminders** to compare the unchecked outline with the checked fill and mark. **Restore default** uses the same palette for its label, border and interaction states.
+The Card, CheckBox and outlined Button all use the teal theme class on the Card. Toggle **Email reminders** to compare the unchecked outline with the checked fill and mark. **Restore default** uses the same palette for its label, border and interaction states.
 
 <DemoContainer :src="CardControlColorsSrc" :viewport="false">
   <CardControlColors />
@@ -234,7 +256,7 @@ The Card, CheckBox and outlined Button all use the teal theme bound to the Card.
 
 Open **Discard draft…** inside the red region of the teal workspace. The warning Dialog uses the region's surface, border, headline, supporting text, text actions and focus colors. Closing it reveals both original regions.
 
-The Dialog is declared in the teal workspace and teleported into the red container. CSS inheritance follows the **Teleport target's DOM ancestors**. A target on `body` inherits the body theme. To keep a warning palette there, apply `v-bind="warning"` to the teleported Dialog itself. A native modal entering the browser's top layer keeps its DOM parent and its inherited colors.
+The Dialog is declared in the teal workspace and teleported into the red container. CSS inheritance follows the **Teleport target's DOM ancestors**. A target on `body` inherits the body theme. To keep a warning palette there, apply `class="warning-theme"` to the teleported Dialog itself. A native modal entering the browser's top layer keeps its DOM parent and its inherited colors.
 
 <DemoContainer :src="NestedColorScopesSrc" :viewport="false">
   <NestedColorScopes />

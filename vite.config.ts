@@ -61,6 +61,8 @@ export default defineConfig({
       entry: {
         index: 'src/index.ts',
         nuxt: 'src/nuxt.ts',
+        vite: 'src/vite.ts',
+        'theme/css': 'src/theme/css.ts',
         'theme/colors': 'src/theme/colors.ts',
         'presets/compact': 'src/presets/compact.ts',
         'presets/default': 'src/presets/default.ts',

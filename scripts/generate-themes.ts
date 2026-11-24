@@ -1,4 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
+import { cssRule, libraryColorRules } from '../src/theme/color-rules';
+import roleInputs from '../src/theme/color-roles.json';
 import palette from '../src/theme/palette.json';
 import tokens from '../src/theme/tokens.json';
 import { themePresets, typographyPresets } from '../src/theme/presets';
@@ -8,24 +10,16 @@ const referenceColors = Object.entries(palette).flatMap(([family, tones]) =>
 );
 
 await mkdir('src/styles/themes', { recursive: true });
+await writeFile('src/styles/color-roles.css', `@layer tokens {\n${libraryColorRules.join('\n\n')}\n}\n`);
 for (const [name, preset] of Object.entries(themePresets)) {
   const values = { ...tokens, ...typographyPresets[preset.typography], '--md-density': String(preset.density) };
-  const root = [...referenceColors];
-  const colorRoles: string[] = [];
-  for (const [token, value] of Object.entries(values)) {
-    // Resolve palette references wherever a new palette begins. Other preset defaults stay on the root.
-    const declarations = token.startsWith('--md-sys-color-') ? colorRoles : root;
-    declarations.push(`    ${token}: ${value};`);
-  }
+  const root = [...referenceColors, ...Object.entries(values).map(([name, value]) => `    ${name}: ${value};`)];
   const css = `@layer tokens {
   :root {
 ${root.join('\n')}
   }
 
-  :root,
-  :where(.m3-color-theme) {
-${colorRoles.join('\n')}
-  }
+${cssRule(':root,\n  :where(.m3-color-theme)', roleInputs)}
 }
 `;
   await writeFile(`src/styles/themes/${name}.css`, css);

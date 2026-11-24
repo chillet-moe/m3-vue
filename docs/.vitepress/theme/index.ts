@@ -6,6 +6,7 @@ import { M3VuePlugin } from '@/index';
 import Layout from './Layout.vue';
 
 import './style.css';
+import 'virtual:m3-color-themes.css';
 
 // 导入组件库样式
 import '../../../src/styles/theme.css';
