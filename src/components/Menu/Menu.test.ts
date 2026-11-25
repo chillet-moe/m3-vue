@@ -415,7 +415,11 @@ describe('Menu', () => {
     try {
       await nextTick();
       const item = container.querySelector('button')!;
-      const state = () => [item.getAttribute('aria-checked'), item.dataset.selected, item.textContent?.trim()];
+      const state = () => [
+        item.getAttribute('aria-checked'),
+        item.dataset.selected,
+        item.querySelector('[data-part="label"]')?.textContent,
+      ];
 
       expect(state()).toEqual(['false', undefined, 'checked=false selected=false']);
 
@@ -470,11 +474,8 @@ describe('Menu', () => {
     expect(menuItems[1]?.dataset.selected).toBe('true');
     expect(menuItems[1]?.getAttribute('role')).toBe('menuitemradio');
     expect(menuItems[1]?.querySelector('[data-part="leading"]')?.textContent).toBe('content_copy');
-    expect(menuItems[1]?.querySelector('[data-scope="radio"]')).toBeNull();
     expect(menuItems[2]?.querySelector('[data-part="trailing"]')?.textContent).toBe('arrow_forward');
-    expect(menuItems[3]?.querySelector('[data-scope="radio"][data-part="root"]')?.getAttribute('data-checked')).toBe(
-      'false',
-    );
+    expect(menuItems[3]?.querySelector('[data-part="leading"]')).toBeNull();
     expect(label?.textContent?.trim()).toBe('Danger zone');
     expect(gaps).toHaveLength(1);
 
@@ -1056,7 +1057,7 @@ describe('Menu', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLButtonElement>('button[role="menuitem"][data-submenu="true"]');
-    expect(trigger?.querySelector('[data-part="trailing"] [aria-hidden="true"]')?.textContent).toBe('chevron_right');
+    expect(trigger?.querySelector('[data-part="trailing"] [aria-hidden="true"]')?.textContent).toBe('arrow_right');
     trigger?.click();
     await nextTick();
 

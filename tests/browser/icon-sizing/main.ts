@@ -43,17 +43,17 @@ createApp({
       }),
       h(Chip, { leadingIcon: 'settings', 'data-test': 'chip' }, () => 'Chip'),
       h(Menu, { open: true }, () =>
-        h(MenuContainer, {}, () =>
+        h(MenuContainer, {}, () => [
           h(
             MenuItem,
-            { 'data-test': 'menu' },
+            { 'data-test': 'menu', submenu: true },
             {
               default: () => 'Menu',
               leading: () => h(Icon, { name: 'settings' }),
-              trailing: () => h(Icon, { name: 'chevron_right' }),
             },
           ),
-        ),
+          h(MenuItem, { 'data-test': 'menu-text', label: 'More', submenu: true }),
+        ]),
       ),
       h(ListItem, { leadingIcon: 'settings', 'data-test': 'list' }, () => 'List'),
       h('div', { 'data-test': 'field' }, [

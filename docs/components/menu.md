@@ -61,14 +61,19 @@ For an option backed by an existing boolean, omit `value`: set `role="menuitemch
 
 ### Interaction and presentation
 
-`MenuItem` displays a leading radio for `menuitemradio` and a checkbox for `menuitemcheckbox`, whether the role is inferred from the menu model or set explicitly. The indicator reflects the row's `checked` and `disabled` states. The row itself receives focus and handles activation. Use `selected` for row emphasis.
+`menuitemradio` and `menuitemcheckbox` both display a leading checkmark and a highlighted background when checked. Unchecked rows leave the icon space free for the label. The row itself receives focus and handles activation.
 
-To replace the indicator, provide `#leading` or set `leadingIcon` on a declarative item. The slot receives the resolved `checked` and `disabled` states. For example, this row uses a check mark for the active sort order:
+Use `leadingIcon` on a declarative item to replace the checkmark with a fixed icon. For an indicator that changes with the row, use `#leading` and its resolved `checked` and `disabled` states. This example sets the visible radio circle to 80% of the icon frame (16dp in a 20dp frame) and uses the row's leading color. For a custom `CheckBox presentation`, set `--md-checkbox-container-size` to size the visible square.
 
 ```vue
 <MenuItem value="name" label="Name">
-  <template #leading="{ checked }">
-    <Icon v-if="checked" name="check" aria-hidden="true" />
+  <template #leading="{ checked, disabled }">
+    <Radio
+      presentation
+      :checked="checked"
+      :disabled="disabled"
+      style="--md-radio-icon-size: 0.8em; --md-radio-selected-outline-color: currentColor; --md-radio-selected-dot-color: currentColor"
+    />
   </template>
 </MenuItem>
 ```
@@ -82,6 +87,8 @@ Presentation CheckBox and Radio reserve only their visible box or circle. Their 
 ### Custom item content
 
 Use `#leading` and `#trailing` for icons or small graphics such as color swatches. For a shortcut or current value on the same line as the label, use `#trailingText`. It uses the menu's text styling and can appear alongside the default submenu arrow. Use `#badge` for a count and `#supporting` for a description on a second line.
+
+At default density and typography, each icon slot provides a 20 × 20dp frame (20 × 20 CSS pixels at a 16px root font size), with 8dp between the frame and the label. `Icon` picks up the slot size and color. For a custom SVG, set its width and height to `1em` and use `currentColor` for its strokes or fill. Leave room within the SVG viewBox around the visible shape.
 
 ```vue
 <MenuItem label="Save">
@@ -139,6 +146,8 @@ context for a subtree. See [component defaults](/getting-started#component-defau
 
 Submenus inherit their parent menu's resolved color unless explicitly overridden. Select and Combobox menus use the
 same shared preference, with their `menuColor` prop taking precedence.
+
+Standard menus use `tertiary-container` for the selected row and `on-tertiary-container` for its text and checkmark. Vibrant menus use `tertiary` and `on-tertiary`. These colors follow the theme. A manually controlled item can use `:selected="false"` to show only its checked indicator.
 
 ### Density
 

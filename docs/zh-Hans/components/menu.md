@@ -61,14 +61,19 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 
 ### 交互和呈现
 
-无论 `menuitemradio` 角色是从菜单模型推导得出还是显式设置，`MenuItem` 都会显示前置单选按钮；对于 `menuitemcheckbox` 角色则会显示复选框。指示器会反映行的 `checked` 和 `disabled` 状态。行本身接收焦点并处理激活。使用 `selected` 控制行的强调样式。
+`menuitemradio` 和 `menuitemcheckbox` 在选中时都会显示前置勾号和高亮背景。未选中时，标签可占用图标位置。行本身接收焦点并处理激活。
 
-若要替换指示器，可提供 `#leading`，或在声明式条目上设置 `leadingIcon`。插槽会收到解析后的 `checked` 和 `disabled` 状态。例如，以下行会为当前排序顺序显示勾号：
+在声明式条目上设置 `leadingIcon`，可用固定图标替换勾号。若要使用会随行状态变化的指示器，请使用 `#leading` 及其解析后的 `checked` 和 `disabled` 状态。以下示例将可见的单选圆圈设为图标框的 80%（在 20dp 的框中为 16dp），并使用行前置区域的颜色。若要自定义 `CheckBox presentation`，请设置 `--md-checkbox-container-size` 来调整可见方框的大小。
 
 ```vue
 <MenuItem value="name" label="名称">
-  <template #leading="{ checked }">
-    <Icon v-if="checked" name="check" aria-hidden="true" />
+  <template #leading="{ checked, disabled }">
+    <Radio
+      presentation
+      :checked="checked"
+      :disabled="disabled"
+      style="--md-radio-icon-size: 0.8em; --md-radio-selected-outline-color: currentColor; --md-radio-selected-dot-color: currentColor"
+    />
   </template>
 </MenuItem>
 ```
@@ -82,6 +87,8 @@ Presentation CheckBox 和 Radio 仅占用可见的方框或圆圈。独立控件
 ### 自定义菜单项内容
 
 使用 `#leading` 和 `#trailing` 插入图标或色块等小型图形。若要在标签同一行显示快捷键或当前值，请使用 `#trailingText`。它使用菜单的文本样式，并可与默认子菜单箭头同时显示。使用 `#badge` 显示计数，或使用 `#supporting` 在第二行显示说明。
+
+在默认密度和排版下，每个图标插槽提供 20 × 20dp 的框（根字体大小为 16px 时即 20 × 20 CSS 像素），框与标签之间间隔 8dp。`Icon` 会自动采用插槽的尺寸和颜色。使用自定义 SVG 时，将宽度和高度设为 `1em`，并使用 `currentColor` 设置描边或填充。请在 SVG 的 viewBox 中为可见图形留出边距。
 
 ```vue
 <MenuItem label="保存">
@@ -136,6 +143,8 @@ Presentation CheckBox 和 Radio 仅占用可见的方框或圆圈。独立控件
 `color` 选择 `standard` 或 `vibrant` 调色板。显式属性优先于 `menuDefaultsContextKey` 中的 `color`，内置回退值为 `standard`。可在 `M3VuePlugin` 中设置 `menuColor` 作为应用默认值，或通过上下文配置子树。详见[组件默认值](/zh-Hans/getting-started#组件默认值)。
 
 子菜单会继承父菜单解析后的颜色，除非显式覆盖。Select 和 Combobox 菜单也使用相同的共享偏好，其 `menuColor` 属性优先。
+
+标准菜单的选中行使用 `tertiary-container` 作为背景色，文本和勾号使用 `on-tertiary-container`。鲜艳菜单使用 `tertiary` 作为背景色，文本和勾号使用 `on-tertiary`。这些颜色会随主题变化。对于手动控制状态的条目，可设置 `:selected="false"`，仅显示勾选指示器，不显示行高亮。
 
 ### 密度
 

@@ -71,6 +71,12 @@
     overscroll-behavior: contain;
   }
 
+  /* The selected checkmark animation moves the label and suffix together in these tracks. */
+  .m3-select-menu .m3-select-option {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
   .m3-select-option .m3-select-option-leading-content {
     display: grid;
     place-items: center;

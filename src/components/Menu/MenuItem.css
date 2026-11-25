@@ -21,8 +21,7 @@
     all: unset;
     position: relative;
     isolation: isolate;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    display: flex;
     align-items: center;
     column-gap: var(--_menus-menu-item-between-space);
     inline-size: 100%;
@@ -176,11 +175,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: var(--_menus-menu-item-leading-icon-size);
-    min-block-size: var(--_menus-menu-item-leading-icon-size);
-    font-size: var(--_menus-menu-item-leading-icon-size);
-
-    --md-icon-size: var(--_menus-menu-item-leading-icon-size);
+    min-inline-size: var(--md-icon-size);
+    min-block-size: var(--md-icon-size);
+    font-size: var(--md-icon-size);
 
     transition:
       color 120ms var(--md-timing-function-fast),
@@ -189,10 +186,12 @@
   }
 
   .m3-menu-item-leading {
+    --md-icon-size: var(--_menus-menu-item-leading-icon-size);
     color: var(--_menu-item-current-leading-icon-color);
   }
 
   .m3-menu-item-content {
+    flex: 1;
     min-inline-size: 0;
     transition:
       color 120ms var(--md-timing-function-fast),

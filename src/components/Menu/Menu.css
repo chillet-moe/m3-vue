@@ -174,7 +174,7 @@
 
     --_menus-menu-item-leading-space: var(--md-menus-menu-item-leading-space, --dp(12));
     --_menus-menu-item-trailing-space: var(--md-menus-menu-item-trailing-space, --dp(12));
-    --_menus-menu-item-between-space: var(--md-menus-menu-item-between-space, --dp(12));
+    --_menus-menu-item-between-space: var(--md-menus-menu-item-between-space, --dp(8));
     --_menus-menu-item-leading-icon-size: var(
       --md-menus-menu-item-leading-icon-size,
       --density-icon(20, label-large, 14)

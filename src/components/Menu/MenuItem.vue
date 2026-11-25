@@ -4,9 +4,7 @@ import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { isHTMLElement, isHTMLTag } from '@/internal/elementEnvironment';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
-import CheckBox from '@/components/CheckBox/CheckBox.vue';
 import Icon from '@/components/Icon/Icon.vue';
-import Radio from '@/components/Radio/Radio.vue';
 
 import { useLinkTag } from '@/composables/useLinkTag';
 import { computed, inject, useId } from 'vue';
@@ -33,7 +31,7 @@ export type MenuItemProps = {
   /** Whether selecting this item should close the menu chain. Ignored for submenu triggers. */
   closeOnSelect?: boolean;
 
-  /** Marks item as selected/active. */
+  /** Row emphasis. For manually controlled checkable items, defaults to their checked state. */
   selected?: boolean;
 
   /** Accessible menu item role for selectable items. */
@@ -57,7 +55,7 @@ const {
   label,
   disabled = false,
   closeOnSelect = true,
-  selected = false,
+  selected = undefined,
   role = undefined,
   checked = false,
   submenu = false,
@@ -70,7 +68,7 @@ const menuSelection = inject(menuSelectionContextKey, null);
 type MenuItemSlotProps = { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean };
 
 defineSlots<{
-  /** Replaces the default radio or checkbox indicator, or adds leading content to an ordinary item. */
+  /** Replaces the default checkmark, or adds leading content to an ordinary item. */
   leading(props: MenuItemSlotProps): any;
 
   /** Main menu item text. */
@@ -123,7 +121,7 @@ const slotProps = computed(() => {
   return {
     checked: selection ?? checked,
     disabled,
-    selected: selection ?? selected,
+    selected: selection ?? selected ?? (isCheckable.value && checked),
     submenu,
   };
 });
@@ -199,15 +197,14 @@ const shape = useShape(() => shapeProp);
     @click="handleClick"
     @keydown="handleKeydown"
   >
-    <span v-if="$slots.leading || isCheckable" class="m3-menu-item-leading" data-scope="menu-item" data-part="leading">
+    <span
+      v-if="$slots.leading || (isCheckable && slotProps.checked)"
+      class="m3-menu-item-leading"
+      data-scope="menu-item"
+      data-part="leading"
+    >
       <slot v-if="$slots.leading" name="leading" v-bind="slotProps" />
-      <Radio
-        v-else-if="resolvedRole === 'menuitemradio'"
-        presentation
-        :checked="slotProps.checked"
-        :disabled="disabled"
-      />
-      <CheckBox v-else presentation :checked="slotProps.checked" :disabled="disabled" />
+      <Icon v-else name="check" aria-hidden="true" />
     </span>
 
     <span
@@ -241,7 +238,7 @@ const shape = useShape(() => shapeProp);
     >
       <span v-if="$slots.trailing || submenu" class="m3-menu-item-trailing" data-scope="menu-item" data-part="trailing">
         <slot v-if="$slots.trailing" name="trailing" v-bind="slotProps" />
-        <Icon v-else name="chevron_right" aria-hidden="true" />
+        <Icon v-else name="arrow_right" aria-hidden="true" />
       </span>
 
       <span v-if="$slots.badge" class="m3-menu-item-badge" data-scope="menu-item" data-part="badge">

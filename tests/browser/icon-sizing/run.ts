@@ -10,6 +10,41 @@ try {
   const page = await browser.newPage();
   await page.addInitScript('window.__name = fn => fn');
   await openFixture(page, new URL('/tests/browser/icon-sizing/', server.resolvedUrls!.local[0]).href);
+  const menuRow = page.locator('[data-test="menu"]');
+  const menuMetrics = (row: typeof menuRow) =>
+    row.evaluate((el) => {
+      const bounds = el.getBoundingClientRect();
+      const label = el.querySelector('[data-part="content"]')!.getBoundingClientRect();
+      const leading = el.querySelector('[data-part="leading"] [data-source]')?.getBoundingClientRect();
+      const trailing = el.querySelector('[data-part="trailing"] [data-source]')!.getBoundingClientRect();
+      return {
+        start: (leading ?? label).left - bounds.left,
+        end: bounds.right - trailing.right,
+        leadingSize: leading && [leading.width, leading.height],
+        trailingSize: [trailing.width, trailing.height],
+        leadingGap: leading && label.left - leading.right,
+        trailingGap: trailing.left - label.right,
+      };
+    });
+  const defaultMenu = {
+    start: 12,
+    end: 12,
+    leadingSize: [20, 20],
+    trailingSize: [20, 20],
+    leadingGap: 8,
+    trailingGap: 8,
+  };
+  assert.deepEqual(await menuMetrics(menuRow), defaultMenu);
+  assert.deepEqual(await menuMetrics(page.locator('[data-test="menu-text"]')), {
+    ...defaultMenu,
+    leadingSize: undefined,
+    leadingGap: undefined,
+  });
+
+  const menu = page.getByRole('menu', { includeHidden: true });
+  await menu.evaluate((el) => el.style.setProperty('--md-menus-menu-item-trailing-icon-size', '24px'));
+  assert.deepEqual(await menuMetrics(menuRow), { ...defaultMenu, trailingSize: [24, 24] });
+  await menu.evaluate((el) => el.style.removeProperty('--md-menus-menu-item-trailing-icon-size'));
   for (const density of [-99, -2, 0, 2, 99]) {
     for (const scale of [0.5, 1, 2]) {
       await page.locator('main').evaluate(
