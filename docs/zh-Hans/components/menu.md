@@ -27,6 +27,8 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 
 ### 下拉菜单和子菜单
 
+带有 `submenu` 的 `MenuItem` 会显示尾随箭头。在 `MenuSubMenu` 的触发器插槽中绑定 `:submenu-open="open"`，以显示展开状态。使用 `#trailing` 替换箭头，或在声明式子菜单上设置 `trailingIcon`。
+
 <DemoContainer :src="MenuDropdownSrc" :viewport="false">
   <MenuDropdown />
 </DemoContainer>
@@ -43,7 +45,7 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 
 为 Menu 绑定 `v-model`，并为每个可选的 `MenuItem` 设置唯一的 `value`。单选值会选中一行；启用 `multiple` 后，模型值为数组。Menu 会根据每行的值推导其 `checked` 状态，以及 `menuitemradio` 或 `menuitemcheckbox` 角色。不要再单独维护每行的 checked 模型，也不要在点击处理程序中切换该值。
 
-互斥选项使用 `Radio presentation`，独立选项使用 `CheckBox presentation`。将行插槽中的 `checked` 和 `disabled` 传给它们。若要在连续选择时保持菜单打开，请设置 `:close-on-select="false"`。
+若要在连续选择时保持菜单打开，请设置 `:close-on-select="false"`。
 
 <DemoContainer :src="MenuSelectableSrc" :viewport="false">
   <MenuSelectable />
@@ -59,17 +61,37 @@ Menu 支持下拉菜单、上下文菜单、子菜单和由对象驱动的菜单
 
 ### 交互和呈现
 
-MenuItem 负责焦点、激活、无障碍状态和禁用行为。请在行上设置 `disabled`。Presentation 控件不会渲染原生 input，也不会增加焦点目标；它们只显示插槽状态。`selected` 控制行的强调样式，不能替代手动控制的复选框或单选项上的 `checked`。
+无论 `menuitemradio` 角色是从菜单模型推导得出还是显式设置，`MenuItem` 都会显示前置单选按钮；对于 `menuitemcheckbox` 角色则会显示复选框。指示器会反映行的 `checked` 和 `disabled` 状态。行本身接收焦点并处理激活。使用 `selected` 控制行的强调样式。
+
+若要替换指示器，可提供 `#leading`，或在声明式条目上设置 `leadingIcon`。插槽会收到解析后的 `checked` 和 `disabled` 状态。例如，以下行会为当前排序顺序显示勾号：
+
+```vue
+<MenuItem value="name" label="名称">
+  <template #leading="{ checked }">
+    <Icon v-if="checked" name="check" aria-hidden="true" />
+  </template>
+</MenuItem>
+```
 
 上/下方向键会在可用行之间移动。Enter 或 Space 会激活当前聚焦的行；复选框会切换状态，单选项则会选中其值。Escape 会关闭菜单。子菜单使用右方向键进入、左方向键返回。
 
-Presentation CheckBox 和 Radio 仅占用可见的方框或圆圈。独立控件的 target-size token 不会增加菜单内的占用空间。行尺寸、密度和菜单内边距 token 仍控制行间距；较大的内容可能会撑高菜单行。
+Presentation CheckBox 和 Radio 仅占用可见的方框或圆圈。独立控件的 target-size token 不会增加菜单内的占用空间。
 
 ## 其他组合
 
+### 自定义菜单项内容
+
+使用 `#leading` 和 `#trailing` 插入图标或色块等小型图形。若要在标签同一行显示快捷键或当前值，请使用 `#trailingText`。它使用菜单的文本样式，并可与默认子菜单箭头同时显示。使用 `#badge` 显示计数，或使用 `#supporting` 在第二行显示说明。
+
+```vue
+<MenuItem label="保存">
+  <template #trailingText>Ctrl+S</template>
+</MenuItem>
+```
+
 ### 内嵌 Select
 
-选择 Select 选项会关闭 Select 菜单，但不会关闭外层 Menu。
+将 Select 等可独立获取焦点的控件放在 `MenuContainer` 中，并与菜单项作为同级内容。选择选项会关闭 Select 下拉菜单，同时保持外层 Menu 打开。
 
 <DemoContainer :src="MenuWithSelectSrc" :viewport="false">
   <MenuWithSelect />
@@ -104,6 +126,8 @@ Presentation CheckBox 和 Radio 仅占用可见的方框或圆圈。独立控件
 ### 行尺寸
 
 可在 Menu 上设置 `size` 统一调整所有菜单行，在 MenuItem 上设置以调整单行，或在 MenuSubMenu 上设置以调整一个分支。声明式菜单项和子菜单条目也接受 `size`。Select/Combobox 菜单会继承共享的行尺寸，其尺寸与输入框自身的尺寸相互独立。
+
+行高是最小值。在默认密度下，中等尺寸的行至少高 3rem，其中内容上下各有 0.75rem 内边距。自定义图片高度设为不超过 1.5rem，可使其保持在单行空间内。内容较高时，行也会随之增高。
 
 尺寸比例、共享的 `rowSize` 默认值和密度行为，详见[行尺寸](../guides/styling#row-sizes)。
 

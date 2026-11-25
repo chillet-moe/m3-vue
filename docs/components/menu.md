@@ -27,6 +27,8 @@ Menu supports dropdown, context, submenu, and object-driven item rendering while
 
 ### Dropdown and submenus
 
+A `MenuItem` with `submenu` displays a trailing arrow. In the `MenuSubMenu` trigger slot, bind `:submenu-open="open"` to expose the expanded state. Use `#trailing` to replace the arrow, or `trailingIcon` on a declarative submenu.
+
 <DemoContainer :src="MenuDropdownSrc" :viewport="false">
   <MenuDropdown />
 </DemoContainer>
@@ -43,7 +45,7 @@ Menu supports dropdown, context, submenu, and object-driven item rendering while
 
 Bind `Menu v-model` and give each selectable `MenuItem` a unique `value`. A single value selects one row; with `multiple`, the model is an array. Menu derives each row's `checked` state and its `menuitemradio` or `menuitemcheckbox` role. Do not also maintain a per-row checked model or toggle the value in a click handler.
 
-Use `Radio presentation` for mutually exclusive choices and `CheckBox presentation` for independent choices. Pass `checked` and `disabled` from the row's slot. Set `:close-on-select="false"` to keep the menu open for repeated selections.
+Set `:close-on-select="false"` to keep the menu open for repeated selections.
 
 <DemoContainer :src="MenuSelectableSrc" :viewport="false">
   <MenuSelectable />
@@ -59,17 +61,37 @@ For an option backed by an existing boolean, omit `value`: set `role="menuitemch
 
 ### Interaction and presentation
 
-The MenuItem owns focus, activation, accessible state, and disabled behavior. Set `disabled` on the row. Presentation controls render no native input or additional focus target; they only display the slot state. `selected` controls row emphasis and is not a substitute for `checked` on manually controlled checkbox or radio items.
+`MenuItem` displays a leading radio for `menuitemradio` and a checkbox for `menuitemcheckbox`, whether the role is inferred from the menu model or set explicitly. The indicator reflects the row's `checked` and `disabled` states. The row itself receives focus and handles activation. Use `selected` for row emphasis.
+
+To replace the indicator, provide `#leading` or set `leadingIcon` on a declarative item. The slot receives the resolved `checked` and `disabled` states. For example, this row uses a check mark for the active sort order:
+
+```vue
+<MenuItem value="name" label="Name">
+  <template #leading="{ checked }">
+    <Icon v-if="checked" name="check" aria-hidden="true" />
+  </template>
+</MenuItem>
+```
 
 Up/Down move between enabled rows. Enter or Space activates the focused row; a checkbox toggles, while a radio selects its value. Escape closes the menu. Submenus use Right to enter and Left to return.
 
-Presentation CheckBox and Radio reserve only their visible box or circle. Their standalone target-size tokens do not add space inside the menu. Row size, density, and menu padding tokens still control row spacing; larger content can grow the row.
+Presentation CheckBox and Radio reserve only their visible box or circle. Their standalone target-size tokens do not add space inside the menu.
 
 ## Other compositions
 
+### Custom item content
+
+Use `#leading` and `#trailing` for icons or small graphics such as color swatches. For a shortcut or current value on the same line as the label, use `#trailingText`. It uses the menu's text styling and can appear alongside the default submenu arrow. Use `#badge` for a count and `#supporting` for a description on a second line.
+
+```vue
+<MenuItem label="Save">
+  <template #trailingText>Ctrl+S</template>
+</MenuItem>
+```
+
 ### Embedded Select
 
-Select options close the Select menu without closing the containing Menu.
+Place an independently focusable control such as `Select` inside `MenuContainer`, as a sibling of the menu items. Choosing an option closes the Select dropdown and keeps the containing Menu open.
 
 <DemoContainer :src="MenuWithSelectSrc" :viewport="false">
   <MenuWithSelect />
@@ -104,6 +126,8 @@ If you are using Vue Router, keep `MenuItem` as the rendered anchor and let `Rou
 ### Row sizes
 
 Set `size` on Menu for all rows, on MenuItem for one row, or on MenuSubMenu for a branch. Declarative item and submenu entries also accept `size`. Select/Combobox menus inherit the shared row size independently of their field size.
+
+Row height is a minimum. At default density, a medium row is at least 3rem tall, including 0.75rem of padding above and below the content. Size a custom image to 1.5rem tall or less to keep it within that single-line space. Taller content expands the row.
 
 See [Row sizes](../guides/styling#row-sizes) for the scale, shared `rowSize` default and density behavior.
 

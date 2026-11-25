@@ -2,8 +2,6 @@
 import { computed, ref } from 'vue';
 import { vDropdown } from '@/directives/Menu';
 import { Button } from '@/components/Button';
-import { CheckBox } from '@/components/CheckBox';
-import { Radio } from '@/components/Radio';
 import type { MenuModelValue } from '@/components/Menu';
 import { Menu, MenuContainer, MenuItem } from '@/components/Menu';
 
@@ -25,9 +23,6 @@ const multiple = ref<MenuModelValue>(['size']);
     <Menu ref="singleMenu" v-model="single">
       <MenuContainer>
         <MenuItem v-for="option in ['Name', 'Modified', 'Size']" :key="option" :value="option.toLowerCase()">
-          <template #leading="{ checked, disabled }">
-            <Radio presentation :checked="checked" :disabled="disabled" />
-          </template>
           {{ option }}
         </MenuItem>
       </MenuContainer>
@@ -42,9 +37,6 @@ const multiple = ref<MenuModelValue>(['size']);
           :disabled="option === 'Owner'"
           :close-on-select="false"
         >
-          <template #leading="{ checked, disabled }">
-            <CheckBox presentation :checked="checked" :disabled="disabled" />
-          </template>
           {{ option }}
         </MenuItem>
       </MenuContainer>

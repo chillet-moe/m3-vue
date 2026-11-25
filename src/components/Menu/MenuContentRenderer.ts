@@ -17,11 +17,7 @@ function itemSlots(item: MenuActionContent | MenuSubmenuContent) {
   if (item.badge) slots.badge = () => item.badge;
   if (item.trailingText) slots.trailingText = () => item.trailingText;
 
-  if (item.type === 'submenu') {
-    slots.trailing = () => h(Icon, { name: item.trailingIcon ?? 'chevron_right' });
-  } else if (item.trailingIcon) {
-    slots.trailing = () => h(Icon, { name: item.trailingIcon });
-  }
+  if (item.trailingIcon) slots.trailing = () => h(Icon, { name: item.trailingIcon });
 
   return slots;
 }

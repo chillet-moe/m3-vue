@@ -23,9 +23,6 @@ const size = ref<RowSize>('medium');
     <MenuContainer>
       <MenuItem>Command</MenuItem>
       <MenuItem role="menuitemcheckbox" :checked="checked" :close-on-select="false" @click="checked = !checked">
-        <template #leading="{ checked, disabled }"
-          ><CheckBox presentation :checked="checked" :disabled="disabled"
-        /></template>
         Include unchanged
       </MenuItem>
       <MenuItem
@@ -35,9 +32,6 @@ const size = ref<RowSize>('medium');
         :close-on-select="false"
         @click="checked = !checked"
       >
-        <template #leading="{ checked, disabled }"
-          ><CheckBox presentation :checked="checked" :disabled="disabled"
-        /></template>
         Locked option
       </MenuItem>
     </MenuContainer>

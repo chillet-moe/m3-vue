@@ -70,6 +70,7 @@ describe('Menu', () => {
           type: 'submenu',
           label: 'More',
           leadingIcon: 'more_horiz',
+          trailingIcon: 'arrow_forward',
           items: [
             {
               label: 'Rename',
@@ -468,6 +469,12 @@ describe('Menu', () => {
     expect(menuItems[1]?.textContent).toContain('Copy');
     expect(menuItems[1]?.dataset.selected).toBe('true');
     expect(menuItems[1]?.getAttribute('role')).toBe('menuitemradio');
+    expect(menuItems[1]?.querySelector('[data-part="leading"]')?.textContent).toBe('content_copy');
+    expect(menuItems[1]?.querySelector('[data-scope="radio"]')).toBeNull();
+    expect(menuItems[2]?.querySelector('[data-part="trailing"]')?.textContent).toBe('arrow_forward');
+    expect(menuItems[3]?.querySelector('[data-scope="radio"][data-part="root"]')?.getAttribute('data-checked')).toBe(
+      'false',
+    );
     expect(label?.textContent?.trim()).toBe('Danger zone');
     expect(gaps).toHaveLength(1);
 
@@ -1025,6 +1032,7 @@ describe('Menu', () => {
                     h(
                       MenuItem,
                       {
+                        id: 'more-trigger',
                         submenu: true,
                         submenuOpen: open,
                       },
@@ -1048,6 +1056,7 @@ describe('Menu', () => {
     await nextTick();
 
     const trigger = container.querySelector<HTMLButtonElement>('button[role="menuitem"][data-submenu="true"]');
+    expect(trigger?.querySelector('[data-part="trailing"] [aria-hidden="true"]')?.textContent).toBe('chevron_right');
     trigger?.click();
     await nextTick();
 
@@ -1055,7 +1064,7 @@ describe('Menu', () => {
 
     const submenu = container.querySelector<HTMLElement>('.m3-menu[data-submenu="true"]');
     expect(isPopoverOpen(submenu)).toBe(true);
-    expect(submenu?.dataset.popoverSourceId).toBe('More');
+    expect(submenu?.dataset.popoverSourceId).toBe('more-trigger');
 
     app.unmount();
   });

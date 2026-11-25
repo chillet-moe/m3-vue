@@ -35,7 +35,6 @@ const nestedSubmenuOpen = ref(false);
             <MenuItem submenu :submenu-open="open">
               <template #leading><Icon name="folder_open" /></template>
               More actions
-              <template #trailing><Icon name="chevron_right" /></template>
             </MenuItem>
           </template>
 
@@ -50,7 +49,6 @@ const nestedSubmenuOpen = ref(false);
                 <MenuItem submenu :submenu-open="open">
                   <template #leading><Icon name="share" /></template>
                   Share
-                  <template #trailing><Icon name="chevron_right" /></template>
                 </MenuItem>
               </template>
 

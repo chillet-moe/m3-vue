@@ -4,6 +4,9 @@ import { useShape, type M3Shape } from '@/styles/shape';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
 import { isHTMLElement, isHTMLTag } from '@/internal/elementEnvironment';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
+import CheckBox from '@/components/CheckBox/CheckBox.vue';
+import Icon from '@/components/Icon/Icon.vue';
+import Radio from '@/components/Radio/Radio.vue';
 
 import { useLinkTag } from '@/composables/useLinkTag';
 import { computed, inject, useId } from 'vue';
@@ -39,7 +42,7 @@ export type MenuItemProps = {
   /** Checked state for radio/checkbox menu items. */
   checked?: boolean;
 
-  /** Marks the item as a submenu trigger for future nested menus. */
+  /** Marks the item as a submenu trigger and shows a trailing arrow by default. */
   submenu?: boolean;
 
   /** Current open state of the submenu trigger, if applicable. */
@@ -67,13 +70,13 @@ const menuSelection = inject(menuSelectionContextKey, null);
 type MenuItemSlotProps = { checked: boolean; disabled: boolean; selected: boolean; submenu: boolean };
 
 defineSlots<{
-  /** Optional leading content, such as an icon. */
+  /** Replaces the default radio or checkbox indicator, or adds leading content to an ordinary item. */
   leading(props: MenuItemSlotProps): any;
 
   /** Main menu item text. */
   default(props: MenuItemSlotProps): any;
 
-  /** Optional trailing icon content. */
+  /** Trailing content. Replaces the default arrow on submenu triggers. */
   trailing(props: MenuItemSlotProps): any;
 
   /** Optional badge content. */
@@ -105,6 +108,8 @@ const resolvedRole = computed(() => {
 
   return menuSelection.multiple() ? 'menuitemcheckbox' : 'menuitemradio';
 });
+
+const isCheckable = computed(() => resolvedRole.value === 'menuitemradio' || resolvedRole.value === 'menuitemcheckbox');
 
 const link = useLinkTag({
   defaultTag: 'button',
@@ -182,9 +187,7 @@ const shape = useShape(() => shapeProp);
     :data-submenu="submenu ? 'true' : undefined"
     :aria-haspopup="submenu ? 'menu' : undefined"
     :aria-expanded="submenu ? (submenuOpen ? 'true' : 'false') : undefined"
-    :aria-checked="
-      resolvedRole === 'menuitemradio' || resolvedRole === 'menuitemcheckbox' ? slotProps.checked : undefined
-    "
+    :aria-checked="isCheckable ? slotProps.checked : undefined"
     :aria-selected="resolvedRole === 'option' ? slotProps.selected : undefined"
     :aria-describedby="$slots.supporting ? supportingId : undefined"
     class="m3-state-layer m3-menu-item m3-row-size"
@@ -196,8 +199,15 @@ const shape = useShape(() => shapeProp);
     @click="handleClick"
     @keydown="handleKeydown"
   >
-    <span v-if="$slots.leading" class="m3-menu-item-leading" data-scope="menu-item" data-part="leading">
-      <slot name="leading" v-bind="slotProps" />
+    <span v-if="$slots.leading || isCheckable" class="m3-menu-item-leading" data-scope="menu-item" data-part="leading">
+      <slot v-if="$slots.leading" name="leading" v-bind="slotProps" />
+      <Radio
+        v-else-if="resolvedRole === 'menuitemradio'"
+        presentation
+        :checked="slotProps.checked"
+        :disabled="disabled"
+      />
+      <CheckBox v-else presentation :checked="slotProps.checked" :disabled="disabled" />
     </span>
 
     <span
@@ -224,13 +234,14 @@ const shape = useShape(() => shapeProp);
     </span>
 
     <span
-      v-if="$slots.trailing || $slots.badge || $slots.trailingText"
+      v-if="submenu || $slots.trailing || $slots.badge || $slots.trailingText"
       class="m3-menu-item-suffix"
       data-scope="menu-item"
       data-part="suffix"
     >
-      <span v-if="$slots.trailing" class="m3-menu-item-trailing" data-scope="menu-item" data-part="trailing">
-        <slot name="trailing" v-bind="slotProps" />
+      <span v-if="$slots.trailing || submenu" class="m3-menu-item-trailing" data-scope="menu-item" data-part="trailing">
+        <slot v-if="$slots.trailing" name="trailing" v-bind="slotProps" />
+        <Icon v-else name="chevron_right" aria-hidden="true" />
       </span>
 
       <span v-if="$slots.badge" class="m3-menu-item-badge" data-scope="menu-item" data-part="badge">
