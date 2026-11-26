@@ -197,7 +197,7 @@ import 'virtual:m3-color-themes.css';
 <Button class="warning-theme" variant="filled">Delete file</Button>
 ```
 
-每种主题的调色板只会在样式表中生成一次。各 class 共用浅色/深色角色、描边、浮动表面和 elevation 规则。嵌套 class 会启用新的调色板，其外部兄弟元素仍使用周围主题。
+后代会继承最近主题祖先的颜色。将 class 加到容器上可统一设置其中控件的主题；加到单个控件上则不会影响同级元素。
 
 若要通过 Node 构建脚本生成普通 CSS 文件，可调用同一个生成器，再在应用入口导入生成的文件：
 
@@ -215,17 +215,26 @@ await writeFile('src/color-themes.css', css);
 
 #### 单个 Button {#one-button}
 
-只有 **Delete file** 使用警告调色板。将鼠标悬停在它上面、按 Tab 聚焦它，或按住它以查看交互反馈。取消勾选 **Select file**，即可看到同一调色板下按标准不透明度降低处理的禁用表面和文字。**Preview** 保留页面主题。
+将 `warning-theme` 用于 **Delete file**。取消勾选 **Select file** 可查看禁用状态；**Preview** 保留页面主题。
 
 <DemoContainer :src="LocalButtonColorsSrc" :viewport="false">
   <LocalButtonColors />
 </DemoContainer>
 
-若只需调整单个颜色，filled Button 也提供 `--md-color-container`、`--md-color-on-container` 和 `--md-state-layer-color`。组件会根据变体或状态自行设置这些上下文 token。若要让焦点环、禁用颜色和嵌套控件也使用同一主题，请改用底层系统角色。如果应用已设置组件专用颜色 token，而该组件也应跟随本地调色板，请同时在局部边界覆盖该 token。
+要更改启用状态的 filled Button 背景和标签颜色，请直接在 Button 上添加 `class="delete-file"`。容器可以为后代提供系统颜色角色，但每个 Button 都会设置自己的 `--md-color-container` 和 `--md-color-on-container`。
+
+```css
+.delete-file {
+  --md-color-container: var(--md-sys-color-error);
+  --md-color-on-container: var(--md-sys-color-on-error);
+}
+```
+
+在 Button 上使用 `--md-state-layer-color` 可覆盖其状态层颜色。组件专用颜色 token 优先于对应的主题默认值。
 
 #### Card 中的多个控件 {#several-controls-in-a-card}
 
-Card、CheckBox 和描边 Button 都使用 Card 上的 teal 主题 class。切换 **Email reminders**，可比较未选中时的描边与选中时的填充和标记。**Restore default** 的标签、边框和交互状态也使用同一配色。
+在 Card 上应用 `teal-theme`。其中的 CheckBox 和 Button 会继承该配色。描边 Button 使用半透明的标签色绘制边框，因此能透出 Card 表面。若要指定确切边框颜色，可设置 `--md-button-outlined-outline-color`。
 
 <DemoContainer :src="CardControlColorsSrc" :viewport="false">
   <CardControlColors />
@@ -233,9 +242,7 @@ Card、CheckBox 和描边 Button 都使用 Card 上的 teal 主题 class。切�
 
 #### 嵌套区域与 Teleport {#nested-regions-and-teleport}
 
-在 teal 工作区的红色区域中打开 **Discard draft…**。警告 Dialog 会使用该区域的表面色、边框、标题、说明文字、文字操作和焦点颜色。关闭后可看到两个原始区域。
-
-Dialog 在 teal 工作区中声明，并 Teleport 到红色容器。CSS 继承遵循 **Teleport 目标的 DOM 祖先**。若目标位于 `body`，Dialog 会继承 body 的主题；若要在那里保留警告配色，可将 `class="warning-theme"` 加到被 Teleport 的 Dialog。原生模态进入浏览器 top layer 后，仍保留其 DOM 父级关系，并继承相应颜色。
+打开 **Discard draft…**，查看嵌套警告主题中的 Dialog。Teleport 组件会从其 **DOM 目标位置**继承颜色；此例中目标就是 `.warning-theme` 容器。若 Teleport 到 `body`，请将主题 class 加到 Dialog 上以保留该配色。原生模态进入浏览器 top layer 时仍保留其 DOM 父级及继承的颜色。
 
 <DemoContainer :src="NestedColorScopesSrc" :viewport="false">
   <NestedColorScopes />
@@ -315,7 +322,7 @@ provideShape('sharp');
 </style>
 ```
 
-共享修改应使用库的语义 token：`--md-control-outline-*` 可协调控件静止状态的边框，[交互光标 token](./interaction-cursors) 可统一光标，[浮动表面 token](../utilities/elevation#floating-surfaces) 可协调浮层。以 `--_` 开头的变量属于内部实现细节。
+可使用 `--md-control-outline-width-*` 统一不同尺寸下 Button 和字段静止边框的宽度。TextField、Select 和 Combobox 可用 `--md-control-outline-color` 调整静止描边色调，或用 `--md-outlined-text-field-outline-color` 指定确切颜色。[交互光标 token](./interaction-cursors) 可统一光标，[浮动表面 token](../utilities/elevation#floating-surfaces) 可协调浮层。以 `--_` 开头的变量属于内部实现细节。
 
 ### data-scope 与 data-part
 

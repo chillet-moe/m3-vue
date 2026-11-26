@@ -37,6 +37,9 @@ export const cssFunctions = {
       content,
     );
   },
+  // The default weight fits the resting outline on the reference light and dark backgrounds.
+  // Mixing with transparent also preserves the relative emphasis of already translucent foregrounds.
+  '--outline-mix': (color, weight = '28.5%') => `color-mix(in srgb, ${color} ${weight}, transparent)`,
   // Preserve the input color channels and replace its opacity.
   '--translucent': (color, opacity) => `rgba(from ${color} r g b / ${opacity})`,
 };

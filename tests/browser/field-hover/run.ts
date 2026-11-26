@@ -19,6 +19,22 @@ try {
       const label = getComputedStyle(root.querySelector('[data-part="label"]')!);
       return { width: outline.borderTopWidth, color: outline.borderTopColor, label: label.color };
     });
+  const firstField = page.getByTestId('field-0');
+  await firstField.evaluate((el: HTMLElement) => el.style.setProperty('--md-control-outline-color', 'red'));
+  const tinted = await appearance(firstField);
+  assert.match(tinted.color, /^color\(srgb 1 0 0 \/ 0\.\d+\)$/);
+  await firstField.evaluate((el: HTMLElement) => el.style.setProperty('--md-button-outlined-outline-color', 'blue'));
+  assert.equal((await appearance(firstField)).color, 'rgb(0, 0, 255)');
+  await firstField.evaluate((el: HTMLElement) =>
+    el.style.setProperty('--md-outlined-text-field-outline-color', 'green'),
+  );
+  assert.equal((await appearance(firstField)).color, 'rgb(0, 128, 0)');
+  await firstField.evaluate((el: HTMLElement) => {
+    el.style.removeProperty('--md-control-outline-color');
+    el.style.removeProperty('--md-button-outlined-outline-color');
+    el.style.removeProperty('--md-outlined-text-field-outline-color');
+  });
+
   for (const invalid of [false, true]) {
     await page.locator('#invalid').setChecked(invalid);
     for (const index of [0, 1, 2]) {

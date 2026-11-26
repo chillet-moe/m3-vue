@@ -9,7 +9,7 @@
 
   .m3-divider {
     --_divider-thickness: var(--md-divider-thickness, 0.0625rem);
-    --_divider-color: var(--md-divider-color, var(--md-sys-color-outline-variant));
+    --_divider-color: var(--md-divider-color, --outline-mix(currentColor, 24%));
     --_divider-inset: var(--md-divider-inset, --dp(16));
   }
 }

@@ -416,7 +416,6 @@ describe('TextField', () => {
     expect(smallRule).toContain('--md-control-outline-width-small');
     expect(mediumRule).toContain('--md-button-medium-container-shape-square');
     expect(mediumRule).toContain('--md-control-outline-width-medium');
-    expect(textFieldStyles).toContain('var(--md-button-outlined-outline-color, var(--md-control-outline-color))');
   });
 
   it('aligns the floating label and legend notch from each size container padding', () => {

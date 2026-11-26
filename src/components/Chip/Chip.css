@@ -331,7 +331,7 @@
       --md-chip-elevated-container-color,
       var(--md-sys-color-surface-container-low)
     );
-    --_chip-flat-outline-color: var(--md-chip-flat-outline-color, var(--md-sys-color-outline-variant));
+    --_chip-flat-outline-color: var(--md-chip-flat-outline-color, --outline-mix(currentColor));
     --_chip-flat-outline-width: var(--md-chip-flat-outline-width, 0.0625rem);
     --_chip-label-default-color: var(--md-chip-label-default-color, var(--md-sys-color-on-surface));
     --_chip-hover-label-color: var(--md-chip-hover-label-color, var(--_chip-label-default-color));
@@ -497,7 +497,10 @@
       --md-chip-elevated-container-color,
       var(--md-assist-chip-elevated-container-color, var(--md-sys-color-surface-container-low))
     );
-    --_chip-flat-outline-color: var(--md-chip-flat-outline-color, var(--md-sys-color-outline));
+    --_chip-flat-outline-color: var(
+      --md-chip-flat-outline-color,
+      var(--md-assist-chip-flat-outline-color, --outline-mix(currentColor, 60%))
+    );
     --_chip-flat-outline-width: var(--md-chip-flat-outline-width, var(--md-assist-chip-flat-outline-width, 0.0625rem));
     --_chip-label-default-color: var(
       --md-chip-label-default-color,
@@ -599,7 +602,7 @@
     );
     --_chip-flat-focus-outline-color: var(
       --md-chip-flat-focus-outline-color,
-      var(--md-assist-chip-flat-focus-outline-color, var(--md-sys-color-on-surface))
+      var(--md-assist-chip-flat-focus-outline-color, --outline-mix(currentColor, 90%))
     );
     --_chip-elevated-hover-container-elevation: var(
       --md-chip-elevated-hover-container-elevation,
@@ -641,7 +644,7 @@
     );
     --_chip-flat-outline-color: var(
       --md-chip-flat-outline-color,
-      var(--md-filter-chip-flat-unselected-outline-color, var(--md-sys-color-outline-variant))
+      var(--md-filter-chip-flat-unselected-outline-color, --outline-mix(currentColor))
     );
     --_chip-flat-outline-width: var(
       --md-chip-flat-outline-width,
@@ -782,7 +785,7 @@
     );
     --_chip-flat-focus-outline-color: var(
       --md-chip-flat-focus-outline-color,
-      var(--md-filter-chip-flat-unselected-focus-outline-color, var(--md-sys-color-on-surface-variant))
+      var(--md-filter-chip-flat-unselected-focus-outline-color, --outline-mix(currentColor, 90%))
     );
     --_chip-flat-hover-container-elevation: var(
       --md-chip-flat-hover-container-elevation,
@@ -938,7 +941,7 @@
     --_chip-elevated-container-color: var(--md-chip-elevated-container-color, transparent);
     --_chip-flat-outline-color: var(
       --md-chip-flat-outline-color,
-      var(--md-input-chip-unselected-outline-color, var(--md-sys-color-outline-variant))
+      var(--md-input-chip-unselected-outline-color, --outline-mix(currentColor))
     );
     --_chip-flat-outline-width: var(
       --md-chip-flat-outline-width,
@@ -1073,7 +1076,7 @@
     );
     --_chip-flat-focus-outline-color: var(
       --md-chip-flat-focus-outline-color,
-      var(--md-input-chip-unselected-focus-outline-color, var(--md-sys-color-on-surface-variant))
+      var(--md-input-chip-unselected-focus-outline-color, --outline-mix(currentColor, 90%))
     );
     --_chip-flat-hover-container-elevation: var(
       --md-chip-flat-hover-container-elevation,
@@ -1236,7 +1239,10 @@
       --md-chip-elevated-container-color,
       var(--md-suggestion-chip-elevated-container-color, var(--md-sys-color-surface-container-low))
     );
-    --_chip-flat-outline-color: var(--md-chip-flat-outline-color, var(--md-sys-color-outline));
+    --_chip-flat-outline-color: var(
+      --md-chip-flat-outline-color,
+      var(--md-suggestion-chip-flat-outline-color, --outline-mix(currentColor, 70%))
+    );
     --_chip-flat-outline-width: var(
       --md-chip-flat-outline-width,
       var(--md-suggestion-chip-flat-outline-width, 0.0625rem)
@@ -1359,7 +1365,7 @@
     );
     --_chip-flat-focus-outline-color: var(
       --md-chip-flat-focus-outline-color,
-      var(--md-suggestion-chip-flat-focus-outline-color, var(--md-sys-color-on-surface-variant))
+      var(--md-suggestion-chip-flat-focus-outline-color, --outline-mix(currentColor, 90%))
     );
     --_chip-elevated-hover-container-elevation: var(
       --md-chip-elevated-hover-container-elevation,
@@ -1439,7 +1445,7 @@
     --_chip-container-elevation: var(--md-chip-container-elevation, var(--_chip-flat-focus-container-elevation));
     --_chip-outline-color: var(
       --md-chip-outline-color,
-      var(--_chip-flat-focus-outline-color, var(--_chip-outline-color))
+      var(--_chip-flat-focus-outline-color, var(--_chip-flat-outline-color))
     );
 
     --md-focus-ring-color: var(--_chip-focus-indicator-color);

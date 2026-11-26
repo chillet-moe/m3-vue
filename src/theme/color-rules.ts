@@ -41,7 +41,7 @@ const context = {
   '--md-color-container': 'initial',
   '--md-color-on-container': 'initial',
   '--md-state-layer-color': 'initial',
-  '--md-control-outline-color': 'var(--md-sys-color-outline-variant)',
+  '--md-control-outline-color': 'initial',
 };
 const local = {
   '--md-focus-ring-color': 'initial',

@@ -218,7 +218,7 @@ import 'virtual:m3-color-themes.css';
 <Button class="warning-theme" variant="filled">Delete file</Button>
 ```
 
-Each theme's palette appears once in the stylesheet. The classes share the rules for light/dark roles, outlines, floating surfaces and elevations. A nested class starts a new palette. Siblings outside it keep the surrounding theme.
+Descendants inherit colors from the nearest themed ancestor. Put the class on a container to theme its controls together, or on one control to leave its siblings in the surrounding theme.
 
 To generate an ordinary CSS file from a Node build script, call the same generator and import the resulting file in your application entry:
 
@@ -236,17 +236,26 @@ For an individual adjustment, set the public role you want on that element. For 
 
 #### One Button
 
-Only **Delete file** receives the warning palette. Hover over it, tab to it or hold it down. Clear **Select file** to see the same palette's disabled surface and text at the standard reduced opacities. **Preview** keeps the page theme.
+Apply `warning-theme` to **Delete file**. Clear **Select file** to see its disabled state. **Preview** keeps the page theme.
 
 <DemoContainer :src="LocalButtonColorsSrc" :viewport="false">
   <LocalButtonColors />
 </DemoContainer>
 
-For a single paint adjustment, a filled Button also exposes `--md-color-container`, `--md-color-on-container` and `--md-state-layer-color`. Components can set these context tokens themselves as their variant or state changes. Use the underlying roles for a theme that also covers focus rings, disabled colors and nested controls. If your application already sets a component-specific color token, override it at the local boundary too when it should follow the palette.
+To change the enabled filled Button’s background and label, put `class="delete-file"` directly on the Button. A container can supply system color roles to its descendants, but each Button sets its own `--md-color-container` and `--md-color-on-container`.
+
+```css
+.delete-file {
+  --md-color-container: var(--md-sys-color-error);
+  --md-color-on-container: var(--md-sys-color-on-error);
+}
+```
+
+Use `--md-state-layer-color` on the Button to override its state layer. Component-specific color tokens take precedence over their corresponding theme defaults.
 
 #### Several controls in a Card
 
-The Card, CheckBox and outlined Button all use the teal theme class on the Card. Toggle **Email reminders** to compare the unchecked outline with the checked fill and mark. **Restore default** uses the same palette for its label, border and interaction states.
+Apply `teal-theme` to the Card. Its CheckBox and Button inherit the palette. The outlined Button draws its border with a translucent version of its label color, so the Card surface shows through. To specify an exact border color, set `--md-button-outlined-outline-color`.
 
 <DemoContainer :src="CardControlColorsSrc" :viewport="false">
   <CardControlColors />
@@ -254,9 +263,7 @@ The Card, CheckBox and outlined Button all use the teal theme class on the Card.
 
 #### Nested regions and Teleport
 
-Open **Discard draft…** inside the red region of the teal workspace. The warning Dialog uses the region's surface, border, headline, supporting text, text actions and focus colors. Closing it reveals both original regions.
-
-The Dialog is declared in the teal workspace and teleported into the red container. CSS inheritance follows the **Teleport target's DOM ancestors**. A target on `body` inherits the body theme. To keep a warning palette there, apply `class="warning-theme"` to the teleported Dialog itself. A native modal entering the browser's top layer keeps its DOM parent and its inherited colors.
+Open **Discard draft…** to see the Dialog in the nested warning theme. A teleported component inherits colors from its **destination in the DOM**. Here the target is the `.warning-theme` container. If you teleport to `body`, apply the theme class to the Dialog to keep that palette. A native modal keeps its DOM parent when it enters the browser's top layer.
 
 <DemoContainer :src="NestedColorScopesSrc" :viewport="false">
   <NestedColorScopes />
@@ -351,8 +358,9 @@ Each component page lists its public tokens under **Styling**. Use them for loca
 </style>
 ```
 
-Use library semantics for shared changes: `--md-control-outline-*` coordinates resting control borders,
-[interaction cursor tokens](./interaction-cursors) coordinate cursors, and
+Use `--md-control-outline-width-*` to coordinate resting Button and field border widths across sizes.
+For TextField, Select and Combobox, `--md-control-outline-color` tints the resting outline. Set `--md-outlined-text-field-outline-color` to specify its exact color.
+The [interaction cursor tokens](./interaction-cursors) coordinate cursors, and
 [floating surface tokens](../utilities/elevation#floating-surfaces) coordinate overlays.
 Variables starting with `--_` are private implementation details.
 
