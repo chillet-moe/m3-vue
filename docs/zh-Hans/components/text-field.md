@@ -66,7 +66,7 @@ TextField 涵盖 Material 3 的基础输入场景，包括辅助文本、验证�
 
 ### 描边控件对比
 
-TextField 和描边 Button 使用相同的静止描边颜色、匹配尺寸的描边宽度、方形轮廓和容器高度。TextField 保留原生浮动标签缺口，以及字段专属的聚焦、错误和禁用状态。
+TextField 和描边 Button 使用匹配尺寸的描边宽度、方形轮廓和容器高度。两者的静止描边颜色不同：Button 使用半透明的文字颜色，TextField 使用 outline-variant 颜色。TextField 保留原生浮动标签缺口，以及字段专属的聚焦、错误和禁用状态。
 
 <DemoContainer :src="TextFieldButtonOutlineComparisonSrc">
   <TextFieldButtonOutlineComparison />

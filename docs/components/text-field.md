@@ -76,8 +76,9 @@ Place an `IconButton` directly in the `leading` or `trailing` slot for interacti
 
 ### Outlined control comparison
 
-TextField and outlined Button use the same resting outline color, size-matched outline width, square shape, and
-container height. TextField keeps its native floating-label notch and field-specific focus, error, and disabled states.
+TextField and outlined Button use size-matched outline widths, square shapes, and container heights. Their resting
+outline colors differ: Button uses a translucent text color, while TextField uses the outline-variant color. TextField
+keeps its native floating-label notch and field-specific focus, error, and disabled states.
 
 <DemoContainer :src="TextFieldButtonOutlineComparisonSrc">
   <TextFieldButtonOutlineComparison />

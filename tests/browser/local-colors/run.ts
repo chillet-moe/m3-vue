@@ -135,7 +135,7 @@ try {
     assert.equal((await paint(restore)).label, await role(card, 'on-surface-variant'));
     assert.equal(
       await restore.evaluate((el) => getComputedStyle(el).borderTopColor),
-      await role(card, 'outline-variant'),
+      await resolveStyle(card, 'color-mix(in srgb, var(--md-sys-color-on-surface-variant) 28.5%, transparent)'),
     );
     const box = card.locator('[data-part="control"]');
     assert.equal(await box.evaluate((el) => getComputedStyle(el, '::before').backgroundColor), local);
