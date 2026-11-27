@@ -44,6 +44,10 @@ export const en = {
       openDatePicker: (fieldLabel) => (fieldLabel ? `Choose ${fieldLabel}` : 'Choose date'),
       openTimePicker: (fieldLabel) => (fieldLabel ? `Choose ${fieldLabel}` : 'Choose time'),
     },
+    numberField: {
+      increment: 'Increase value',
+      decrement: 'Decrease value',
+    },
     select: {
       filterOptions: (fieldLabel) => (fieldLabel ? `Filter ${fieldLabel}` : 'Filter options'),
       noMatchingOptions: 'No matching options',

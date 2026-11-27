@@ -24,6 +24,7 @@ function mergeMessages(base: M3Messages, overrides: M3MessageOverrides | undefin
     dateRangePicker: { ...base.dateRangePicker, ...overrides.dateRangePicker },
     timePicker: { ...base.timePicker, ...overrides.timePicker },
     textField: { ...base.textField, ...overrides.textField },
+    numberField: { ...base.numberField, ...overrides.numberField },
     select: { ...base.select, ...overrides.select },
   };
 }

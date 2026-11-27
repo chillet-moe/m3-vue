@@ -42,6 +42,10 @@ export type M3Messages = {
     openDatePicker: (fieldLabel?: string) => string;
     openTimePicker: (fieldLabel?: string) => string;
   };
+  numberField: {
+    increment: string;
+    decrement: string;
+  };
   select: {
     filterOptions: (fieldLabel?: string) => string;
     noMatchingOptions: string;

@@ -44,6 +44,10 @@ export const zhHant = {
       openDatePicker: (fieldLabel) => (fieldLabel ? `選擇${fieldLabel}的日期` : '選擇日期'),
       openTimePicker: (fieldLabel) => (fieldLabel ? `選擇${fieldLabel}的時間` : '選擇時間'),
     },
+    numberField: {
+      increment: '增加數值',
+      decrement: '減少數值',
+    },
     select: {
       filterOptions: (fieldLabel) => (fieldLabel ? `篩選${fieldLabel}` : '篩選選項'),
       noMatchingOptions: '沒有符合的選項',

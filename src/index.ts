@@ -77,6 +77,7 @@ export * from './components/LoadingIndicator';
 export * from './components/Menu';
 export * from './components/NavigationDrawer';
 export * from './components/NavigationRail';
+export * from './components/NumberField';
 export * from './components/OverlayHost';
 export * from './components/Pagination';
 export * from './components/Popover';

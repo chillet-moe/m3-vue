@@ -44,6 +44,10 @@ export const zhHans = {
       openDatePicker: (fieldLabel) => (fieldLabel ? `选择${fieldLabel}的日期` : '选择日期'),
       openTimePicker: (fieldLabel) => (fieldLabel ? `选择${fieldLabel}的时间` : '选择时间'),
     },
+    numberField: {
+      increment: '增加数值',
+      decrement: '减少数值',
+    },
     select: {
       filterOptions: (fieldLabel) => (fieldLabel ? `筛选${fieldLabel}` : '筛选选项'),
       noMatchingOptions: '没有匹配的选项',
