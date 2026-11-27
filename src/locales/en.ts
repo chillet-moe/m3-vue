@@ -7,6 +7,11 @@ export const en = {
       confirm: 'OK',
       cancel: 'Cancel',
     },
+    commandPalette: {
+      label: 'Command palette',
+      search: 'Search commands',
+      noResults: 'No matching commands',
+    },
     colorPicker: {
       picker: 'Color picker',
       settings: 'Picker settings',

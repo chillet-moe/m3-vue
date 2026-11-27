@@ -77,7 +77,7 @@
     &:is(.m3-card, .m3-menu, .m3-popover, .m3-fab, .m3-fab-menu, .m3-navigation-drawer, .m3-navigation-rail) {
       --_shape-radius: var(--_shape-surface-radius);
     }
-    &:is(.m3-dialog, .m3-bottom-sheet, .m3-side-sheet, .m3-date-picker, .m3-time-picker) {
+    &:is(.m3-dialog, .m3-command-palette, .m3-bottom-sheet, .m3-side-sheet, .m3-date-picker, .m3-time-picker) {
       --_shape-radius: var(--_shape-overlay-radius);
     }
   }

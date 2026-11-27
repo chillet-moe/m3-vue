@@ -7,6 +7,11 @@ export const zhHans = {
       confirm: '确定',
       cancel: '取消',
     },
+    commandPalette: {
+      label: '命令面板',
+      search: '搜索命令',
+      noResults: '没有匹配的命令',
+    },
     colorPicker: {
       picker: '选色面板',
       settings: '选色设置',

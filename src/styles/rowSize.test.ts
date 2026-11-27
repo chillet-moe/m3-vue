@@ -2,6 +2,7 @@
 import { expect, it } from 'vitest';
 import { createApp, defineComponent, h, nextTick, ref } from 'vue';
 import {
+  CommandPalette,
   Menu,
   MenuItem,
   MenuSubMenu,
@@ -37,6 +38,7 @@ it('resolves reactive application, subtree, container and item row sizes', async
               },
             ),
           ]),
+          h(CommandPalette, { id: 'palette', commands: [], size: menuSize.value }),
           h(TreeView, { id: 'tree', items: [{ value: 'one', label: 'One' }] }),
           h(NavigationDrawer, { id: 'drawer' }, () => [
             h(NavigationDrawerItem, { id: 'destination', label: 'Home' }),
@@ -56,6 +58,7 @@ it('resolves reactive application, subtree, container and item row sizes', async
   const size = (selector: string) => host.querySelector(selector)?.getAttribute('data-size');
   try {
     expect(size('#item')).toBe('small');
+    expect(size('#palette')).toBe('small');
     expect(size('#tree [data-scope="tree-item"][data-part="root"]')).toBe('small');
     expect(size('#destination')).toBe('small');
     expect(size('#rail-item')).toBe('small');
@@ -70,10 +73,13 @@ it('resolves reactive application, subtree, container and item row sizes', async
     localSize.value = 'extra-small';
     menuSize.value = 'medium';
     await nextTick();
+    expect(size('#palette')).toBe('medium');
     expect(size('#item')).toBe('medium');
     expect(size('#destination')).toBe('extra-small');
     expect(size('#tree [data-scope="tree-item"][data-part="root"]')).toBe('extra-small');
     menuSize.value = undefined;
+    await nextTick();
+    expect(size('#palette')).toBe('extra-small');
     localSize.value = undefined;
     await nextTick();
     expect(size('#item')).toBe('large');

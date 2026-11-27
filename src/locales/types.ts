@@ -5,6 +5,11 @@ export type M3Messages = {
     confirm: string;
     cancel: string;
   };
+  commandPalette: {
+    label: string;
+    search: string;
+    noResults: string;
+  };
   colorPicker: {
     picker: string;
     settings: string;

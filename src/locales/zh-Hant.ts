@@ -7,6 +7,11 @@ export const zhHant = {
       confirm: '確定',
       cancel: '取消',
     },
+    commandPalette: {
+      label: '命令面板',
+      search: '搜尋命令',
+      noResults: '沒有符合的命令',
+    },
     colorPicker: {
       picker: '選色面板',
       settings: '選色設定',

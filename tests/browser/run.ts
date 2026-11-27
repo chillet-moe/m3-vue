@@ -1,6 +1,7 @@
 await import('./text-field-outline/run');
 await import('./field-hover/run');
 await import('./native-dialog-exit/run');
+await import('./command-palette/run');
 await import('./tooltip-visibility/run');
 await import('./button-disabled-link/run');
 await import('./focus-ring/run');

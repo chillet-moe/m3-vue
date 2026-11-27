@@ -20,6 +20,7 @@ function mergeMessages(base: M3Messages, overrides: M3MessageOverrides | undefin
 
   return {
     common: { ...base.common, ...overrides.common },
+    commandPalette: { ...base.commandPalette, ...overrides.commandPalette },
     colorPicker: { ...base.colorPicker, ...overrides.colorPicker },
     datePicker: { ...base.datePicker, ...overrides.datePicker },
     dateRangePicker: { ...base.dateRangePicker, ...overrides.dateRangePicker },

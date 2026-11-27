@@ -57,22 +57,22 @@ This keeps compact's button size while changing press behavior. Nested defaults 
 
 The customization panel preserves explicit component overrides when switching presets. An inherited choice displays the preset value; remove an override to follow the selected preset again. Choosing typography alone does not change the component defaults. Reset returns all settings to the default preset.
 
-| Option                                     | Applies to                                                                             |
-| ------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `shape`                                    | Shared component shapes                                                                |
-| `rowSize`                                  | Menu rows (including Select/Combobox menus), TreeView and navigation drawer/rail items |
-| `fieldLabelBehavior`                       | TextField, Select and Combobox label presentation (`floating` / `external`)            |
-| `fieldSize`                                | Single-line TextField, NumberField, Select, Combobox, ColorField and SliderField       |
-| `buttonDefaults`                           | Button size and press shape morph; ButtonGroup inherits press morph                    |
-| `switchSize`                               | Switch (`small` / `medium`)                                                            |
-| `iconButtonSize`                           | IconButton                                                                             |
-| `sliderDefaults`                           | Slider size, appearance, wheel input and value indicator                               |
-| `listItemDefaults`                         | ListItem size and appearance                                                           |
-| `selectDefaults`                           | Select and Combobox selected checkmarks (`showSelectedIcon`)                           |
-| `appearance`                               | Shared Slider and ListItem appearance                                                  |
-| `menuColor`                                | Menu and Select/Combobox menus                                                         |
-| `datePickerDefaults`, `timePickerDefaults` | Picker preferences                                                                     |
-| `snackbarDefaults`                         | Programmatic [Snackbar](../components/snackbar) preferences                            |
+| Option                                     | Applies to                                                                                                     |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `shape`                                    | Shared component shapes                                                                                        |
+| `rowSize`                                  | CommandPalette results, Menu rows (including Select/Combobox menus), TreeView and navigation drawer/rail items |
+| `fieldLabelBehavior`                       | TextField, Select and Combobox label presentation (`floating` / `external`)                                    |
+| `fieldSize`                                | Single-line TextField, NumberField, Select, Combobox, ColorField and SliderField                               |
+| `buttonDefaults`                           | Button size and press shape morph; ButtonGroup inherits press morph                                            |
+| `switchSize`                               | Switch (`small` / `medium`)                                                                                    |
+| `iconButtonSize`                           | IconButton                                                                                                     |
+| `sliderDefaults`                           | Slider size, appearance, wheel input and value indicator                                                       |
+| `listItemDefaults`                         | ListItem size and appearance                                                                                   |
+| `selectDefaults`                           | Select and Combobox selected checkmarks (`showSelectedIcon`)                                                   |
+| `appearance`                               | Shared Slider and ListItem appearance                                                                          |
+| `menuColor`                                | Menu and Select/Combobox menus                                                                                 |
+| `datePickerDefaults`, `timePickerDefaults` | Picker preferences                                                                                             |
+| `snackbarDefaults`                         | Programmatic [Snackbar](../components/snackbar) preferences                                                    |
 
 For one subtree, use the existing defaults helpers. They inherit fields you omit and accept refs or computed values:
 

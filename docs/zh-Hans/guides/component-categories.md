@@ -16,7 +16,7 @@
 | 分类             | 标准                         | 组件                                                                                                                                          |
 | ---------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Infrastructure` | 为组件提供共享基础设施       | `OverlayHost`                                                                                                                                 |
-| `Actions`        | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`, `FloatingActionButton`, `FloatingActionButtonMenu`                                                     |
+| `Actions`        | 触发命令或操作               | `Button`, `IconButton`, `ButtonGroup`, `CommandPalette`, `FloatingActionButton`, `FloatingActionButtonMenu`                                   |
 | `Feedback`       | 传达状态、提示、反馈或进度   | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`（`CircularProgressIndicator`, `LinearProgressIndicator`, `LoadingIndicator`） |
 | `Containment`    | 承载、分隔、组织或覆盖内容   | `Accordion`, `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet`                                                   |
 | `Display`        | 展示基础视觉内容             | `Icon`                                                                                                                                        |

@@ -97,6 +97,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
           { text: 'Button', link: '/components/button' },
           { text: 'IconButton', link: '/components/icon-button' },
           { text: 'ButtonGroup', link: '/components/button-group' },
+          { text: 'CommandPalette', link: '/components/command-palette' },
           { text: 'FloatingActionButton', link: '/components/floating-action-button' },
           { text: 'FloatingActionButtonMenu', link: '/components/floating-action-button-menu' },
         ],

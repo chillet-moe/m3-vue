@@ -20,6 +20,7 @@ export const m3VueComponentNames = [
   'ColorField',
   'ColorPicker',
   'Combobox',
+  'CommandPalette',
   'DatePicker',
   'DateRangePicker',
   'Dialog',

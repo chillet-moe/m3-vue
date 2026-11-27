@@ -88,6 +88,7 @@ export * from './components/SideSheet';
 export * from './components/ColorField';
 export * from './components/ColorPicker';
 export * from './components/Combobox';
+export * from './components/CommandPalette';
 export * from './components/Tabs';
 export * from './components/TreeView';
 export * from './components/TimePicker';
