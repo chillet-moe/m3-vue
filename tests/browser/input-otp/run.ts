@@ -43,6 +43,17 @@ try {
     assert.equal(await page.getByTestId('completed').textContent(), '["😺A"]');
   }
   console.log('OTP native input, paste and completion use Unicode code points.');
+
+  await openFixture(page, url + '?disabled');
+  await page.locator('#app').evaluate((parent) => parent.style.setProperty('--md-sys-color-outline', 'transparent'));
+  const cell = cells.first();
+  assert(await cell.isDisabled());
+  const actual = await cell.screenshot({ animations: 'disabled' });
+  const transparentBorder = await cell.screenshot({
+    animations: 'disabled',
+    style: 'input:disabled { border-color: transparent !important; }',
+  });
+  assert(actual.equals(transparentBorder), 'A transparent theme outline must stay invisible on disabled OTP cells.');
 } finally {
   await browser.close();
   await server.close();

@@ -5,10 +5,12 @@ import InputOtp from '@/components/InputOtp/InputOtp.vue';
 
 createApp({
   setup() {
+    const disabled = new URLSearchParams(location.search).has('disabled');
     const value = ref('');
     const completed = ref<string[]>([]);
     return () => [
       h(InputOtp, {
+        disabled,
         type: 'text',
         length: 2,
         name: 'code',
