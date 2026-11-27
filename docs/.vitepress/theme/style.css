@@ -108,7 +108,7 @@ body {
     var(--md-sys-typescale-headline-medium-line-height) var(--md-sys-typescale-headline-medium-font);
   margin-block: 2.5rem 1.125rem;
   padding-block-start: 1.125rem;
-  border-block-start: 1px solid --translucent(var(--vp-c-divider), 0.9);
+  border-block-start: 1px solid color-mix(in srgb, var(--vp-c-divider) 90%, transparent);
   color: var(--vp-c-text-1);
 }
 
@@ -171,7 +171,7 @@ body {
 
 .vp-doc pre:not(:where(.vp-raw, .vp-raw *)) {
   scrollbar-color: --translucent(currentColor, 0.35) transparent;
-  border: 1px solid --translucent(var(--vp-c-divider), 0.75);
+  border: 1px solid color-mix(in srgb, var(--vp-c-divider) 75%, transparent);
   border-radius: var(--docs-shape-surface);
 }
 
@@ -240,7 +240,7 @@ body {
 
 .vp-doc .custom-block.details:not(:where(.vp-raw, .vp-raw *)) {
   border-inline-start-color: var(--md-sys-color-outline);
-  background: --translucent(var(--md-sys-color-outline), 0.06);
+  background: color-mix(in srgb, var(--md-sys-color-outline) 6%, transparent);
 }
 
 .vp-doc .custom-block.details summary:not(:where(.vp-raw, .vp-raw *)) {
@@ -302,7 +302,7 @@ body {
 /* Code groups */
 .vp-doc .vp-code-group:not(:where(.vp-raw, .vp-raw *)) {
   margin-block: 1.25rem;
-  border: 1px solid --translucent(var(--vp-c-divider), 0.75);
+  border: 1px solid color-mix(in srgb, var(--vp-c-divider) 75%, transparent);
   border-radius: var(--docs-shape-surface);
   overflow: clip;
 }
