@@ -6,6 +6,8 @@ title: CommandPalette
 import { ref } from 'vue';
 import CommandPaletteDemo from '../../demos/command-palette/CommandPaletteDemo.vue';
 import demoSource from '../../demos/command-palette/CommandPaletteDemo.vue?raw';
+import CommandPaletteVirtual from '../../demos/command-palette/CommandPaletteVirtual.vue';
+import virtualDemoSource from '../../demos/command-palette/CommandPaletteVirtual.vue?raw';
 
 const props = ref({ label: '编辑器命令', size: undefined, shape: undefined });
 </script>
@@ -32,8 +34,32 @@ const props = ref({ label: '编辑器命令', size: undefined, shape: undefined 
 
 结果行继承共享的 `rowSize` 设置。可通过 `size` 为单个面板覆盖此设置。面板继承共享的 `shape` 设置。详情请参阅[样式指南](../guides/styling)。
 
+## 虚拟列表
+
+命令数量较多时，可使用 `list` 插槽仅渲染当前结果窗口。示例使用 `@tanstack/vue-virtual` 展示 3,000 条命令。
+
+<DemoContainer :src="virtualDemoSource" :viewport="false">
+  <CommandPaletteVirtual />
+</DemoContainer>
+
+插槽会接收经过排序的 `entries`、结果区域的 `scrollElement`、`open`、`activeIndex`（没有当前命令时为 −1）以及 `setScrollToIndex`。注册虚拟器的滚动回调，并在组件卸载时取消注册。视口应使用现有的滚动元素。
+
+为每个可见索引渲染一个 `CommandPaletteItem`。将对应的 `command` 及其在 `entries` 中从零开始的 `index` 传给组件，并使用 `command.id` 作为 key。面板会在全部结果中导航，包括视口外的命令。每个已挂载的选项都会报告其在完整结果集中的位置。当前选项的行挂载后，搜索框会引用该选项。
+
+<details><summary>虚拟列表适配器</summary>
+
+<<< ../../demos/command-palette/VirtualCommandList.vue
+
+<<< ../../demos/shared/useVirtualRows.ts
+
+<<< ../../demos/shared/virtualRows.css
+
+</details>
+
 ## 参考
 
 <AnatomyTable scope="command-palette" />
 
 <ApiTable component="CommandPalette" v-model="props" :exclude="['commands', 'open']" />
+
+<ApiTable component="CommandPaletteItem" />

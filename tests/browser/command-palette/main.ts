@@ -1,7 +1,10 @@
 import '@/styles/themes/default.css';
 import { createApp, h, ref } from 'vue';
-import { CommandPalette, Dialog, type CommandPaletteCommand } from '@/index';
+import { CommandPalette, Dialog, type CommandPaletteCommand, type CommandPaletteListSlot } from '@/index';
 
+import VirtualCommandList from '../../../docs/demos/command-palette/VirtualCommandList.vue';
+
+const virtual = new URLSearchParams(location.search).has('virtual');
 const initial: CommandPaletteCommand[] = [
   { id: 'file', name: 'Save', group: 'File' },
   { id: 'disabled', name: 'Delete', disabled: true },
@@ -36,12 +39,16 @@ createApp({
       h('button', { onClick: () => (open.value = true) }, 'Find commands'),
       h('input', { ref: editor, 'aria-label': 'Editor' }),
       h('output', { id: 'executed' }, executed.value.join(',')),
-      h(CommandPalette, {
-        commands: commands.value,
-        open: open.value,
-        'onUpdate:open': (v) => (open.value = v),
-        onSelect: select,
-      }),
+      h(
+        CommandPalette,
+        {
+          commands: commands.value,
+          open: open.value,
+          'onUpdate:open': (v) => (open.value = v),
+          onSelect: select,
+        },
+        virtual ? { list: (list: CommandPaletteListSlot) => h(VirtualCommandList, { list }) } : undefined,
+      ),
       h(
         Dialog,
         { open: preferences.value, 'onUpdate:open': (v) => (preferences.value = v) },

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, useId, useTemplateRef, watch, watchPostEffect } from 'vue';
+import { computed, nextTick, provide, ref, shallowReactive, useId, useTemplateRef, watch } from 'vue';
 import { Icon } from '@/components/Icon';
-import { vStateLayer } from '@/components/StateLayer/state-layer';
+import CommandPaletteItem from './CommandPaletteItem.vue';
+import { commandPaletteItemKey, type CommandPaletteListSlot } from './commandPaletteList';
 import { useNativeDialog } from '@/composables/useNativeDialog';
 import { useM3Locale } from '@/locales/context';
 import { provideRowSize, type RowSize } from '@/styles/rowSize';
@@ -25,6 +26,11 @@ const emit = defineEmits<{
   select: [command: CommandPaletteCommand];
 }>();
 
+defineSlots<{
+  /** Replaces the result rows with a custom or virtualized list. */
+  list(props: CommandPaletteListSlot): any;
+}>();
+
 const { messages, locale } = useM3Locale();
 const rowSize = provideRowSize(() => props.size);
 const shape = useShape(() => props.shape);
@@ -43,20 +49,54 @@ watch(open, (visible) => {
 });
 
 const results = computed(() => (open.value ? searchCommands(props.commands, query.value, locale.value) : []));
-const enabled = computed(() => results.value.filter((command) => !command.disabled));
+const activeIndex = computed(() => {
+  const id = activeId.value;
+  return id === undefined ? -1 : results.value.findIndex((command) => command.id === id && !command.disabled);
+});
+const firstEnabled = computed(() => results.value.find((command) => !command.disabled)?.id);
 watch(
-  [enabled, query],
-  ([commands, currentQuery], [, previousQuery]) => {
-    if (currentQuery !== previousQuery || !commands.some((command) => command.id === activeId.value)) {
-      activeId.value = commands[0]?.id;
-    }
+  [query, activeIndex, firstEnabled],
+  ([currentQuery, index, first], [previousQuery]) => {
+    if (currentQuery !== previousQuery || index < 0) activeId.value = first;
   },
   { immediate: true },
 );
 
-watchPostEffect(() => {
-  const index = results.value.findIndex((command) => command.id === activeId.value);
-  if (index >= 0) listRef.value?.children[index]?.scrollIntoView({ block: 'nearest' });
+const mountedRows = shallowReactive(new Map<string, HTMLElement>());
+const activeDescendant = computed(() => {
+  const id = activeId.value;
+  return open.value && id !== undefined && mountedRows.has(id) ? optionId(id) : undefined;
+});
+
+let scrollToIndex: ((index: number) => void) | undefined;
+function revealActive() {
+  if (activeIndex.value < 0 || activeId.value === undefined) return;
+  if (scrollToIndex) scrollToIndex(activeIndex.value);
+  else mountedRows.get(activeId.value)?.scrollIntoView({ block: 'nearest' });
+}
+watch([results, activeId, activeIndex], () => nextTick(revealActive));
+
+function setScrollToIndex(callback: typeof scrollToIndex) {
+  scrollToIndex = callback;
+  if (callback) void nextTick(revealActive);
+}
+const list = computed<CommandPaletteListSlot>(() => ({
+  entries: results.value,
+  scrollElement: listRef.value,
+  activeIndex: activeIndex.value,
+  open: open.value,
+  setScrollToIndex,
+}));
+
+provide(commandPaletteItemKey, {
+  activeId,
+  count: computed(() => results.value.length),
+  optionId,
+  execute,
+  setRow(id, element) {
+    if (element) mountedRows.set(id, element);
+    else mountedRows.delete(id);
+  },
 });
 
 function execute(command: CommandPaletteCommand) {
@@ -73,16 +113,21 @@ function handleKeydown(event: KeyboardEvent) {
     case 'ArrowDown':
     case 'ArrowUp': {
       event.preventDefault();
-      const commands = enabled.value;
-      if (!commands.length) return;
-      const index = commands.findIndex((command) => command.id === activeId.value);
+      const commands = results.value;
+      if (activeIndex.value < 0) return;
       const direction = event.key === 'ArrowDown' ? 1 : -1;
-      activeId.value = commands[(index + direction + commands.length) % commands.length]!.id;
+      let index = activeIndex.value;
+      do {
+        index = (index + direction + commands.length) % commands.length;
+      } while (commands[index]!.disabled);
+      // Cycling to the only enabled command must also reveal it after manual scrolling.
+      if (index === activeIndex.value) revealActive();
+      else activeId.value = commands[index]!.id;
       break;
     }
     case 'Enter': {
       event.preventDefault();
-      const command = enabled.value.find((item) => item.id === activeId.value);
+      const command = results.value[activeIndex.value];
       if (command) execute(command);
       break;
     }
@@ -118,7 +163,7 @@ function handleKeydown(event: KeyboardEvent) {
         :placeholder="messages.commandPalette.search"
         :aria-expanded="open"
         :aria-controls="listId"
-        :aria-activedescendant="activeId === undefined ? undefined : optionId(activeId)"
+        :aria-activedescendant="activeDescendant"
         autocomplete="off"
         autofocus
         @compositionstart="composing = true"
@@ -135,29 +180,9 @@ function handleKeydown(event: KeyboardEvent) {
       role="listbox"
       :aria-label="label ?? messages.commandPalette.label"
     >
-      <div
-        v-for="command in results"
-        :id="optionId(command.id)"
-        :key="command.id"
-        v-state-layer
-        class="palette-option m3-state-layer"
-        data-scope="command-palette"
-        data-part="option"
-        role="option"
-        :aria-selected="command.id === activeId"
-        :aria-disabled="command.disabled || undefined"
-        @mousedown.prevent
-        @click="execute(command)"
-      >
-        <Icon v-if="command.icon" :name="command.icon" aria-hidden="true" />
-        <span class="palette-name" data-scope="command-palette" data-part="name">{{ command.name }}</span>
-        <span v-if="command.group" class="palette-group" data-scope="command-palette" data-part="group">{{
-          command.group
-        }}</span>
-        <kbd v-if="command.shortcut" class="palette-shortcut" data-scope="command-palette" data-part="shortcut">{{
-          command.shortcut
-        }}</kbd>
-      </div>
+      <slot name="list" v-bind="list">
+        <CommandPaletteItem v-for="(command, index) in results" :key="command.id" :command="command" :index="index" />
+      </slot>
     </div>
     <div role="status" class="palette-status" data-scope="command-palette" data-part="status">
       {{ open && !results.length ? messages.commandPalette.noResults : '' }}

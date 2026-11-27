@@ -1,0 +1,55 @@
+@import '../../styles/typography.css';
+
+@layer components {
+  .palette-option {
+    @apply body-medium;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-block-size: var(--_row-height);
+    padding: var(--_row-padding) 0.75rem;
+    border-radius: var(--md-shape-popover-item);
+    cursor: var(--md-cursor-action);
+    --md-state-layer-color: currentColor;
+  }
+
+  .palette-option[data-last='true'] {
+    --_palette-last-radius: max(
+      var(--md-shape-popover-item),
+      var(--_palette-radius) - var(--md-overlay-border-width) - var(--_palette-results-inset)
+    );
+    scroll-margin-block-end: var(--_palette-results-inset);
+    border-end-start-radius: var(--_palette-last-radius);
+    border-end-end-radius: var(--_palette-last-radius);
+  }
+
+  .palette-option[aria-selected='true'] {
+    background: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  @media (forced-colors: active) {
+    .palette-option[aria-selected='true'] {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+  }
+
+  .palette-option[aria-disabled='true'] {
+    opacity: 0.38;
+    cursor: default;
+  }
+
+  .palette-name {
+    flex: 1;
+    overflow-wrap: anywhere;
+  }
+
+  .palette-group,
+  .palette-shortcut {
+    @apply label-medium;
+    overflow-wrap: anywhere;
+  }
+}

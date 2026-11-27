@@ -85,6 +85,10 @@ Select 提供锚定菜单以供选择一个或多个选项，并支持可选图�
 
 <<< ../../demos/select/VirtualSelectList.vue
 
+<<< ../../demos/shared/useVirtualRows.ts
+
+<<< ../../demos/shared/virtualRows.css
+
 </details>
 
 ## 搜索结果与选中标签

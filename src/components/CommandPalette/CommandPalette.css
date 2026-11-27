@@ -3,6 +3,8 @@
 
 @layer components {
   .m3-command-palette {
+    --_palette-radius: var(--_shape-radius, var(--md-shape-overlay));
+    --_palette-results-inset: 0.375rem;
     --md-color-container: var(--md-overlay-modal-color);
     --md-color-on-container: var(--md-sys-color-on-surface);
     position: fixed;
@@ -15,7 +17,7 @@
     padding: 0;
     overflow: hidden;
     border: var(--md-overlay-border-width) solid var(--md-overlay-border-color);
-    border-radius: var(--_shape-radius, var(--md-shape-overlay));
+    border-radius: var(--_palette-radius);
     background: var(--md-color-container);
     color: var(--md-color-on-container);
     box-shadow: var(--md-overlay-modal-elevation);
@@ -68,49 +70,7 @@
   }
 
   .palette-results:not(:empty) {
-    padding: 0.375rem;
-  }
-
-  .palette-option {
-    @apply body-medium;
-    position: relative;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    min-block-size: var(--_row-height);
-    padding: var(--_row-padding) 0.75rem;
-    border-radius: var(--md-shape-popover-item);
-    cursor: var(--md-cursor-action);
-    --md-state-layer-color: currentColor;
-  }
-
-  .palette-option[aria-selected='true'] {
-    background: var(--md-sys-color-secondary-container);
-    color: var(--md-sys-color-on-secondary-container);
-  }
-
-  @media (forced-colors: active) {
-    .palette-option[aria-selected='true'] {
-      outline: 2px solid Highlight;
-      outline-offset: -2px;
-    }
-  }
-
-  .palette-option[aria-disabled='true'] {
-    opacity: 0.38;
-    cursor: default;
-  }
-
-  .palette-name {
-    flex: 1;
-    overflow-wrap: anywhere;
-  }
-
-  .palette-group,
-  .palette-shortcut {
-    @apply label-medium;
-    overflow-wrap: anywhere;
+    padding: var(--_palette-results-inset);
   }
 
   .palette-status:not(:empty) {

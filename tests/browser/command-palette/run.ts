@@ -129,6 +129,101 @@ try {
   await page.evaluate(() => window.setCommands([{ id: 'found', name: 'Unknown format' }]));
   assert.equal(await active.textContent(), 'Unknown format');
   assert.equal(await search.getAttribute('aria-activedescendant'), await active.getAttribute('id'));
+
+  const url = new URL('/tests/browser/command-palette/?virtual', server.resolvedUrls!.local[0]);
+  await openFixture(page, url.href);
+  await page.evaluate(() =>
+    window.setCommands(
+      Array.from({ length: 3000 }, (_, index) => ({
+        id: String(index),
+        name: 'Action ' + index,
+        disabled: index === 2998,
+      })),
+    ),
+  );
+  await trigger.click();
+
+  // Wait for the logical selection to be both mounted and fully within the list's viewport.
+  async function expectVirtualActive(index: number, count = 3000) {
+    await page.waitForFunction(
+      ({ index, count }) => {
+        const input = document.querySelector('[role=combobox]')!;
+        const list = document.getElementById(input.getAttribute('aria-controls')!)!;
+        const option = document.getElementById(input.getAttribute('aria-activedescendant') ?? '');
+        if (!option || !list.contains(option) || document.activeElement !== input) return false;
+        const row = option.getBoundingClientRect();
+        const viewport = list.getBoundingClientRect();
+        return (
+          option.getAttribute('aria-posinset') === String(index + 1) &&
+          option.getAttribute('aria-setsize') === String(count) &&
+          option.getAttribute('aria-selected') === 'true' &&
+          row.top >= viewport.top - 1 &&
+          row.bottom <= viewport.bottom + 1
+        );
+      },
+      { index, count },
+      { timeout: 5000 },
+    );
+  }
+  await expectVirtualActive(0);
+  assert((await list.getByRole('option').count()) < 40);
+  await search.press('ArrowUp');
+  await expectVirtualActive(2999);
+  assert(await list.evaluate((el) => el.scrollTop > 0));
+
+  // Check the relationship exposed to assistive technology in Chromium's accessibility tree.
+  const ax = await session.send('Accessibility.getFullAXTree');
+  const combo = ax.nodes.find((node) => node.role?.value === 'combobox');
+  const lastOption = ax.nodes.find((node) => node.role?.value === 'option' && node.name?.value === 'Action 2999');
+  assert(lastOption?.backendDOMNodeId);
+  assert.equal(
+    combo?.properties?.find((p) => p.name === 'activedescendant')?.value.relatedNodes?.[0]?.backendDOMNodeId,
+    lastOption.backendDOMNodeId,
+  );
+
+  await search.press('ArrowUp');
+  await expectVirtualActive(2997);
+  // Scrolling the active option out of the mounted range must clear its accessibility reference.
+  await list.evaluate((el) => {
+    el.scrollTop = 0;
+  });
+  await page.waitForFunction(() => !document.querySelector('[role=combobox]')!.hasAttribute('aria-activedescendant'));
+  await search.press('ArrowDown');
+  await expectVirtualActive(2999);
+  await search.press('ArrowDown');
+  await expectVirtualActive(0);
+  // Cross the lower viewport edge one row at a time (including rows already in overscan).
+  for (let index = 1; index <= 16; index++) {
+    await search.press('ArrowDown');
+    await expectVirtualActive(index);
+  }
+  await search.fill('Action 2999');
+  await expectVirtualActive(0, 1);
+  await search.fill('');
+  await expectVirtualActive(0);
+  await search.press('ArrowUp');
+  await expectVirtualActive(2999);
+  await search.press('Enter');
+  await palette.waitFor({ state: 'hidden' });
+  assert.equal(await log.textContent(), '2999');
+
+  await page.evaluate(() =>
+    window.setCommands(
+      Array.from({ length: 3000 }, (_, index) => ({
+        id: String(index),
+        name: 'Action ' + index,
+        disabled: index !== 0,
+      })),
+    ),
+  );
+  await trigger.click();
+  await expectVirtualActive(0);
+  await list.evaluate((el) => {
+    el.scrollTop = el.scrollHeight;
+  });
+  await page.waitForFunction(() => !document.querySelector('[role=combobox]')!.hasAttribute('aria-activedescendant'));
+  await search.press('ArrowDown');
+  await expectVirtualActive(0);
 } finally {
   await browser?.close();
   await server?.close();

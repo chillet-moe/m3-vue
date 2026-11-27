@@ -102,6 +102,10 @@ Use `list` for custom lists with either Select or Combobox. TanStack is used onl
 
 <<< ../demos/select/VirtualSelectList.vue
 
+<<< ../demos/shared/useVirtualRows.ts
+
+<<< ../demos/shared/virtualRows.css
+
 </details>
 
 ## Search results and selected labels
