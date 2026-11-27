@@ -162,10 +162,7 @@
     );
     --_outlined-text-field-outline-color: var(
       --md-outlined-text-field-outline-color,
-      var(
-        --md-button-outlined-outline-color,
-        --outline-mix(var(--md-control-outline-color, var(--_outlined-text-field-label-text-color)))
-      )
+      var(--md-button-outlined-outline-color, var(--md-control-outline-color, var(--md-sys-color-outline-variant)))
     );
     --_outlined-text-field-label-text-color: var(
       --md-outlined-text-field-label-text-color,
@@ -268,7 +265,7 @@
     --_outlined-text-field-hover-outline-width: var(--md-outlined-text-field-hover-outline-width, --dp(1.75));
     --_outlined-text-field-hover-outline-color: var(
       --md-outlined-text-field-hover-outline-color,
-      --outline-mix(var(--md-sys-color-on-surface), 80%)
+      var(--md-sys-color-on-surface)
     );
     --_outlined-text-field-focus-label-text-color: var(
       --md-outlined-text-field-focus-label-text-color,
@@ -277,11 +274,11 @@
     --_outlined-text-field-focus-outline-width: var(--md-outlined-text-field-focus-outline-width, 0.1875rem);
     --_outlined-text-field-focus-outline-color: var(
       --md-outlined-text-field-focus-outline-color,
-      --outline-mix(var(--md-sys-color-primary), 92%)
+      var(--md-sys-color-primary)
     );
     --_outlined-text-field-error-focus-outline-color: var(
       --md-outlined-text-field-error-focus-outline-color,
-      --outline-mix(var(--md-sys-color-error), 92%)
+      var(--md-sys-color-error)
     );
     --_outlined-text-field-error-focus-label-text-color: var(
       --md-outlined-text-field-error-focus-label-text-color,
@@ -297,7 +294,7 @@
     );
     --_outlined-text-field-error-hover-outline-color: var(
       --md-outlined-text-field-error-hover-outline-color,
-      --outline-mix(var(--md-sys-color-on-error-container), 90%)
+      var(--md-sys-color-on-error-container)
     );
     --_outlined-text-field-error-hover-label-text-color: var(
       --md-outlined-text-field-error-hover-label-text-color,
@@ -466,6 +463,7 @@
   }
 
   .m3-text-field-outline {
+    color: var(--_label-color);
     position: absolute;
     inset: 0;
     margin: 0;
@@ -696,7 +694,7 @@
   }
 
   .m3-text-field[data-invalid='true'] {
-    --_outline-color: var(--md-outlined-text-field-error-outline-color, --outline-mix(var(--md-sys-color-error), 85%));
+    --_outline-color: var(--md-outlined-text-field-error-outline-color, var(--md-sys-color-error));
     --_label-color: var(--md-outlined-text-field-error-label-text-color, var(--md-sys-color-error));
     --_supporting-color: var(--md-outlined-text-field-error-supporting-text-color, var(--md-sys-color-error));
     --_trailing-icon-color: var(--md-outlined-text-field-error-trailing-icon-color, var(--md-sys-color-error));

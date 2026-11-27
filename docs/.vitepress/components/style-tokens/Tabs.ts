@@ -178,7 +178,7 @@ export const tabsStyleTokens = [
   {
     name: '--md-tabs-divider-color',
     description: 'Controls divider color.',
-    fallback: 'var(--md-sys-color-surface-variant)',
+    fallback: 'var(--md-sys-color-outline-variant)',
     category: 'Color',
   },
   {

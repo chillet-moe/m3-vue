@@ -88,7 +88,7 @@ export const chipStyleTokens = [
   {
     name: '--md-assist-chip-flat-outline-color',
     description: 'Controls chip flat outline color.',
-    fallback: 'var(--md-sys-color-outline-variant)',
+    fallback: 'var(--md-sys-color-outline)',
     category: 'Color',
   },
   {
@@ -1510,7 +1510,7 @@ export const chipStyleTokens = [
   {
     name: '--md-suggestion-chip-flat-outline-color',
     description: 'Controls chip flat outline color.',
-    fallback: 'var(--md-sys-color-outline-variant)',
+    fallback: 'var(--md-sys-color-outline)',
     category: 'Color',
   },
   {

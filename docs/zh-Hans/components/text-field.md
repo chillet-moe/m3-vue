@@ -66,9 +66,9 @@ TextField 涵盖 Material 3 的基础输入场景，包括辅助文本、验证�
 
 ### 描边控件对比
 
-TextField 和描边 Button 使用匹配尺寸的描边宽度、方形轮廓和容器高度。两者的静止描边均默认使用各自标签颜色的半透明版本。TextField 保留浮动标签缺口，以及字段专属的聚焦、错误和禁用状态。
+TextField 和描边 Button 使用匹配尺寸的描边宽度、方形轮廓和容器高度。两者的静止描边默认使用半透明的 `currentColor`。TextField 保留浮动标签缺口，以及字段专属的聚焦、错误和禁用状态。
 
-TextField 的静止描边优先取 `--md-outlined-text-field-outline-color`，其次取 `--md-button-outlined-outline-color`，两者均未设置时才用 `--md-control-outline-color`（默认为标签色）绘制半透明边框。
+TextField 的静止描边颜色优先级依次为 `--md-outlined-text-field-outline-color`、`--md-button-outlined-outline-color`、`--md-control-outline-color` 和 `--md-sys-color-outline-variant`。默认以字段标签色作为半透明描边的前景色。
 
 <DemoContainer :src="TextFieldButtonOutlineComparisonSrc">
   <TextFieldButtonOutlineComparison />

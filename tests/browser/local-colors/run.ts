@@ -135,8 +135,18 @@ try {
     assert.equal((await paint(restore)).label, await role(card, 'on-surface-variant'));
     assert.equal(
       await restore.evaluate((el) => getComputedStyle(el).borderTopColor),
-      await resolveStyle(card, 'color-mix(in srgb, var(--md-sys-color-on-surface-variant) 28.5%, transparent)'),
+      await resolveStyle(restore, 'var(--md-sys-color-outline-variant)', 'border-top-color'),
     );
+    const borderColor = async () => {
+      await paint(restore);
+      return restore.evaluate((el) => getComputedStyle(el).borderTopColor);
+    };
+    await card.evaluate((el) => el.style.setProperty('--md-sys-color-outline-variant', 'rgb(10 90 80 / 50%)'));
+    assert.equal(await borderColor(), 'rgba(10, 90, 80, 0.5)');
+    await restore.evaluate((el) => el.style.setProperty('--md-button-outlined-outline-color', 'tomato'));
+    assert.equal(await borderColor(), 'rgb(255, 99, 71)');
+    await restore.evaluate((el) => el.style.removeProperty('--md-button-outlined-outline-color'));
+    await card.evaluate((el) => el.style.removeProperty('--md-sys-color-outline-variant'));
     const box = card.locator('[data-part="control"]');
     assert.equal(await box.evaluate((el) => getComputedStyle(el, '::before').backgroundColor), local);
     assert.equal(
@@ -174,7 +184,7 @@ try {
     );
     assert.equal(
       await surface.evaluate((el) => getComputedStyle(el).borderTopColor),
-      await role(remove, 'outline-variant'),
+      await resolveStyle(surface, 'var(--md-sys-color-outline-variant)', 'border-top-color'),
     );
     assert.equal(
       await surface.evaluate((el) => getComputedStyle(el).boxShadow),

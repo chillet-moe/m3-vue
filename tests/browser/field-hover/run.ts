@@ -21,8 +21,7 @@ try {
     });
   const firstField = page.getByTestId('field-0');
   await firstField.evaluate((el: HTMLElement) => el.style.setProperty('--md-control-outline-color', 'red'));
-  const tinted = await appearance(firstField);
-  assert.match(tinted.color, /^color\(srgb 1 0 0 \/ 0\.\d+\)$/);
+  assert.equal((await appearance(firstField)).color, 'rgb(255, 0, 0)');
   await firstField.evaluate((el: HTMLElement) => el.style.setProperty('--md-button-outlined-outline-color', 'blue'));
   assert.equal((await appearance(firstField)).color, 'rgb(0, 0, 255)');
   await firstField.evaluate((el: HTMLElement) =>

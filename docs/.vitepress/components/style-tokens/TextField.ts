@@ -407,7 +407,8 @@ export const textFieldStyleTokens = [
   {
     name: '--md-outlined-text-field-outline-color',
     description: 'Controls text field outline color.',
-    fallback: 'var(--md-sys-color-outline)',
+    fallback:
+      'var(--md-button-outlined-outline-color, var(--md-control-outline-color, var(--md-sys-color-outline-variant)))',
     category: 'Color',
   },
   {

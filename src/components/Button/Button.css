@@ -463,7 +463,10 @@
     );
     --_button-outline-inset: var(--button-outline-width, var(--_button-reserved-outline-width));
 
-    border-color: var(--md-button-outlined-outline-color, --outline-mix(currentColor));
+    border-color: var(
+      --md-button-outlined-outline-color,
+      var(--md-control-outline-color, var(--md-sys-color-outline-variant))
+    );
     --_button-hovered-label-text-color: var(
       --md-button-hovered-label-text-color,
       var(--md-button-outlined-hovered-label-text-color, var(--md-sys-color-on-surface-variant))

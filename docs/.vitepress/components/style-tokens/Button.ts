@@ -412,7 +412,7 @@ export const buttonStyleTokens = [
   {
     name: '--md-button-outlined-outline-color',
     description: 'Controls outlined outline color.',
-    fallback: 'var(--md-sys-color-outline-variant)',
+    fallback: 'var(--md-control-outline-color, var(--md-sys-color-outline-variant))',
     category: 'Color',
   },
   {

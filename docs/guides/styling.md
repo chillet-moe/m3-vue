@@ -232,7 +232,7 @@ await writeFile('src/color-themes.css', css);
 
 For a color chosen at runtime, `createColorTheme(seed)` from `@chillet/m3-vue/theme` returns a binding object for `v-bind`. Fixed classes and runtime bindings follow the same DOM inheritance and `color-scheme` rules.
 
-For an individual adjustment, set the public role you want on that element. For example, `--md-sys-color-secondary` controls the Button focus ring, and `--md-sys-color-on-surface` supplies its disabled colors. Use `light-dark(...)` to specify separate values. On an ordinary element without the theme class, override the unsuffixed role directly: its inherited value was computed on the nearest theme root.
+For an individual adjustment, set the public role you want on that element. For example, `--md-sys-color-secondary` controls the Button focus ring, and `--md-sys-color-on-surface` supplies its disabled colors. `--md-sys-color-outline` and `--md-sys-color-outline-variant` default to translucent versions of `currentColor`. Set either unsuffixed role on a container to pass its color to descendants, or override the unsuffixed role on one component. Use `light-dark(...)` to specify separate values. On an ordinary element without the theme class, override the unsuffixed role directly: its inherited value was computed on the nearest theme root.
 
 #### One Button
 
@@ -255,7 +255,7 @@ Use `--md-state-layer-color` on the Button to override its state layer. Componen
 
 #### Several controls in a Card
 
-Apply `teal-theme` to the Card. Its CheckBox and Button inherit the palette. The outlined Button draws its border with a translucent version of its label color, so the Card surface shows through. To specify an exact border color, set `--md-button-outlined-outline-color`.
+Apply `teal-theme` to the Card. Its CheckBox and Button inherit the palette. Outlined controls use a translucent `currentColor` by default. To set one Button’s exact outline color, set `--md-button-outlined-outline-color` on that Button.
 
 <DemoContainer :src="CardControlColorsSrc" :viewport="false">
   <CardControlColors />
@@ -359,7 +359,7 @@ Each component page lists its public tokens under **Styling**. Use them for loca
 ```
 
 Use `--md-control-outline-width-*` to coordinate resting Button and field border widths across sizes.
-For TextField, Select and Combobox, `--md-control-outline-color` tints the resting outline. Set `--md-outlined-text-field-outline-color` to specify its exact color.
+For TextField, Select and Combobox, `--md-control-outline-color` tints the resting outline. `--md-control-outline-color` also sets an exact shared color for fields and outlined Buttons; `--md-outlined-text-field-outline-color` overrides it for one TextField.
 The [interaction cursor tokens](./interaction-cursors) coordinate cursors, and
 [floating surface tokens](../utilities/elevation#floating-surfaces) coordinate overlays.
 Variables starting with `--_` are private implementation details.

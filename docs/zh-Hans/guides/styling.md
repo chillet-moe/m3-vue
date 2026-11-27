@@ -211,7 +211,7 @@ await writeFile('src/color-themes.css', css);
 
 若颜色在运行时才确定，可从 `@chillet/m3-vue/theme` 导入 `createColorTheme(seed)`，它会返回供 `v-bind` 使用的绑定对象。固定 class 和运行时绑定遵循相同的 DOM 继承与 `color-scheme` 规则。
 
-若只需调整某个颜色，可在对应元素上设置公开角色。例如，`--md-sys-color-secondary` 控制 Button 焦点环，`--md-sys-color-on-surface` 提供其禁用颜色。使用 `light-dark(...)` 指定不同方案的值。对于没有主题 class 的普通元素，应直接覆盖不带后缀的角色：继承值已在最近的主题根节点计算完成。
+若只需调整某个颜色，可在对应元素上设置公开角色。例如，`--md-sys-color-secondary` 控制 Button 焦点环，`--md-sys-color-on-surface` 提供其禁用颜色。`--md-sys-color-outline` 和 `--md-sys-color-outline-variant` 默认是半透明的 `currentColor`。在容器上设置任一不带后缀的角色可将其颜色传给后代，也可在单个组件上覆盖该角色。使用 `light-dark(...)` 指定不同方案的值。对于没有主题 class 的普通元素，应直接覆盖不带后缀的角色：继承值已在最近的主题根节点计算完成。
 
 #### 单个 Button {#one-button}
 
@@ -234,7 +234,7 @@ await writeFile('src/color-themes.css', css);
 
 #### Card 中的多个控件 {#several-controls-in-a-card}
 
-在 Card 上应用 `teal-theme`。其中的 CheckBox 和 Button 会继承该配色。描边 Button 使用半透明的标签色绘制边框，因此能透出 Card 表面。若要指定确切边框颜色，可设置 `--md-button-outlined-outline-color`。
+在 Card 上应用 `teal-theme`。其中的 CheckBox 和 Button 会继承该配色。描边控件默认使用半透明的 `currentColor`。若要为单个 Button 设置确切描边色，可在该 Button 上设置 `--md-button-outlined-outline-color`。
 
 <DemoContainer :src="CardControlColorsSrc" :viewport="false">
   <CardControlColors />
@@ -322,7 +322,7 @@ provideShape('sharp');
 </style>
 ```
 
-可使用 `--md-control-outline-width-*` 统一不同尺寸下 Button 和字段静止边框的宽度。TextField、Select 和 Combobox 可用 `--md-control-outline-color` 调整静止描边色调，或用 `--md-outlined-text-field-outline-color` 指定确切颜色。[交互光标 token](./interaction-cursors) 可统一光标，[浮动表面 token](../utilities/elevation#floating-surfaces) 可协调浮层。以 `--_` 开头的变量属于内部实现细节。
+可使用 `--md-control-outline-width-*` 统一不同尺寸下 Button 和字段静止边框的宽度。TextField、Select 和 Combobox 可用 `--md-control-outline-color` 调整静止描边色调；它也可为字段和描边 Button 设置统一的确切颜色，单个 TextField 可用 `--md-outlined-text-field-outline-color` 覆盖。[交互光标 token](./interaction-cursors) 可统一光标，[浮动表面 token](../utilities/elevation#floating-surfaces) 可协调浮层。以 `--_` 开头的变量属于内部实现细节。
 
 ### data-scope 与 data-part
 
