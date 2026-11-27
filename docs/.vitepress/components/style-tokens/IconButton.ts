@@ -328,7 +328,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-large-container-shape-round',
     description: 'Controls large container shape round.',
-    fallback: 'var(--md-shape-action)',
+    fallback: 'Half the resolved container height, scaled by --md-shape-action relative to 1.75rem',
     category: 'Shape',
   },
   {
@@ -400,7 +400,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-large-selected-container-shape-square',
     description: 'Controls large selected container shape square.',
-    fallback: 'var(--md-shape-action)',
+    fallback: 'var(--md-shape-action-selected), then the round container radius for this size',
     category: 'Shape',
   },
   {
@@ -502,7 +502,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-medium-selected-container-shape-square',
     description: 'Controls medium selected container shape square.',
-    fallback: 'var(--md-shape-action)',
+    fallback: 'var(--md-shape-action-selected), then the round container radius for this size',
     category: 'Shape',
   },
   {
@@ -772,19 +772,19 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-selected-container-shape',
     description: 'Controls selected container shape.',
-    fallback: 'var(--md-icon-button-xsmall-selected-container-shape-round,var(--md-shape-action-selected-small))',
+    fallback: 'Selected radius for the button shape and size',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-selected-container-shape-round',
-    description: 'Controls selected container shape round.',
-    fallback: 'var(--md-shape-action-selected-small)',
+    description: 'Controls the selected radius of a round button.',
+    fallback: 'Size-specific selected radius for round buttons',
     category: 'Shape',
   },
   {
     name: '--md-icon-button-selected-container-shape-square',
-    description: 'Controls selected container shape square.',
-    fallback: 'var(--md-shape-action)',
+    description: 'Controls the selected radius of a square button.',
+    fallback: 'Size-specific selected radius for square buttons',
     category: 'Shape',
   },
   {
@@ -910,7 +910,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-small-selected-container-shape-square',
     description: 'Controls small selected container shape square.',
-    fallback: 'var(--md-shape-action)',
+    fallback: 'var(--md-shape-action-selected), then the round container radius for this size',
     category: 'Shape',
   },
   {
@@ -1342,7 +1342,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xlarge-container-shape-round',
     description: 'Controls xlarge container shape round.',
-    fallback: 'var(--md-shape-action)',
+    fallback: 'Half the resolved container height, scaled by --md-shape-action relative to 1.75rem',
     category: 'Shape',
   },
   {
@@ -1414,7 +1414,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xlarge-selected-container-shape-square',
     description: 'Controls xlarge selected container shape square.',
-    fallback: 'var(--md-shape-action)',
+    fallback: 'var(--md-shape-action-selected), then the round container radius for this size',
     category: 'Shape',
   },
   {
@@ -1510,7 +1510,7 @@ export const iconButtonStyleTokens = [
   {
     name: '--md-icon-button-xsmall-selected-container-shape-square',
     description: 'Controls xsmall selected container shape square.',
-    fallback: 'var(--md-shape-action)',
+    fallback: 'var(--md-shape-action-selected), then the round container radius for this size',
     category: 'Shape',
   },
   {

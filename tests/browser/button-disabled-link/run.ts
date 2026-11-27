@@ -79,6 +79,29 @@ try {
     );
   }
 
+  const backgroundPixel = (selector: string) =>
+    page.locator(selector).evaluate((element) => {
+      const context = document.createElement('canvas').getContext('2d')!;
+      context.fillStyle = getComputedStyle(element).backgroundColor;
+      context.fillRect(0, 0, 1, 1);
+      return Array.from(context.getImageData(0, 0, 1, 1).data);
+    });
+
+  for (const selector of [
+    '.standard-disabled',
+    '.standard-toggle-false',
+    '.standard-toggle-true',
+    '.outlined-disabled',
+    '.outlined-toggle-false',
+  ]) {
+    assert.equal((await backgroundPixel(selector))[3], 0, `${selector} should be transparent`);
+  }
+  const filled = await backgroundPixel('.icon-button-native-disabled');
+  assert(Math.abs(filled[3]! / 255 - 0.1) < 1 / 255);
+  assert.deepEqual(await backgroundPixel('.outlined-toggle-true'), filled);
+  assert.equal((await readVisualStyle(page, '.outlined-toggle-true')).boxShadow, 'none');
+  assert.notEqual((await readVisualStyle(page, '.outlined-toggle-false')).boxShadow, 'none');
+
   console.log('Disabled link action browser regressions passed.');
 } finally {
   await browser?.close();

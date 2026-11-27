@@ -64,11 +64,60 @@ try {
         ];
       });
     }, pseudo);
+  const iconToggleSelector = '[data-testid="icon-toggle"]';
+  const iconToggle = page.locator(iconToggleSelector);
+  const shapePicker = page.getByRole('combobox', { name: 'Shape', exact: true });
+  assert.deepEqual(await radii('[data-testid="icon"]'), [Array(4).fill('68px')]);
+  assert.deepEqual(await radii(iconToggleSelector), [Array(4).fill('28px')]);
+  await shapePicker.selectOption('square');
+  assert.deepEqual(await radii(iconToggleSelector), [Array(4).fill('48px')]);
+
+  const probes = page.locator('.probes');
+  await probes.evaluate((el) => el.style.setProperty('--md-shape-action', '0.875rem'));
+  assert.deepEqual(await radii(iconToggleSelector), [Array(4).fill('24px')]);
+  await probes.evaluate((el) => el.style.removeProperty('--md-shape-action'));
+
+  await iconToggle.evaluate((el) => {
+    el.style.setProperty('--md-icon-button-large-selected-container-shape-square', '19px');
+    el.style.setProperty('--md-icon-button-pressed-container-shape', '6px');
+  });
+  assert.deepEqual(await radii(iconToggleSelector), [Array(4).fill('19px')]);
+  // The delegated press can outlive :active. Exercise that state on a checked input.
+  await iconToggle.dispatchEvent('pointerdown', { pointerId: 1 });
+  assert.deepEqual(await radii(iconToggleSelector), [Array(4).fill('6px')]);
+  await iconToggle.evaluate((el) => el.style.setProperty('--md-icon-button-container-shape', '4px'));
+  assert.deepEqual(await radii(iconToggleSelector), [Array(4).fill('4px')]);
+  await iconToggle.dispatchEvent('pointerup', { pointerId: 1 });
+  await iconToggle.evaluate((el) => el.removeAttribute('style'));
+
+  await page.addStyleTag({
+    content: `
+    .probes { --md-sys-color-primary: #123456; --md-sys-color-on-secondary-container: #345678; }
+  `,
+  });
+  const iconColor = (id: string) =>
+    page.getByTestId(id).evaluate(async (el) => {
+      await Promise.all(el.getAnimations().map((a) => a.finished));
+      return getComputedStyle(el).color;
+    });
+  assert.equal(await iconColor('icon-toggle'), 'rgb(18, 52, 86)');
+  const tonal = page.getByTestId('tonal-toggle');
+  await tonal.hover();
+  assert.equal(await iconColor('tonal-toggle'), 'rgb(52, 86, 120)');
+  await page.mouse.down();
+  assert.equal(await iconColor('tonal-toggle'), 'rgb(52, 86, 120)');
+  await page.mouse.move(0, 0);
+  await page.mouse.up();
+  await iconToggle.locator('input').focus();
+  await page.keyboard.press('Tab');
+  assert(await tonal.locator('input').evaluate((el) => el.matches(':focus-visible')));
+  assert.equal(await iconColor('tonal-toggle'), 'rgb(52, 86, 120)');
+
   for (const [shape, radius] of [
     ['minimal', '2px'],
     ['sharp', '0px'],
   ] as const) {
-    await page.getByRole('combobox', { name: 'Shape', exact: true }).selectOption(shape);
+    await shapePicker.selectOption(shape);
     for (const [target, minimalRadius] of targets) {
       assert(await page.locator(target).count(), `Missing probe: ${target}`);
       for (const corners of await radii(target))

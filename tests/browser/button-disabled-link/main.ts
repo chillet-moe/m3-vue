@@ -37,6 +37,21 @@ createApp({
         icon: 'favorite',
         variant: 'filled',
       }),
+      h(IconButton, { class: 'standard-disabled', icon: 'favorite', disabled: true }),
+      h(IconButton, {
+        class: 'outlined-disabled',
+        icon: 'favorite',
+        variant: 'outlined',
+        href: '/blocked',
+        disabled: true,
+      }),
+      ...(['standard', 'outlined'] as const).flatMap((variant) =>
+        [false, true].map((checked) =>
+          h(IconButton, { class: `${variant}-toggle-${checked}`, icon: 'favorite', variant, toggleable: true }, () =>
+            h('input', { type: 'checkbox', checked, disabled: true }),
+          ),
+        ),
+      ),
       h(FloatingActionButton, {
         class: 'fab-native-disabled',
         disabled: true,

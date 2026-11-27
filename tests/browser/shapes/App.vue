@@ -52,9 +52,14 @@ const items = [{ value: 'node', label: 'Node' }];
       <Button data-testid="fixed" :press-shape-morph="false">Fixed</Button>
       <Button data-testid="local" shape="rounded">Local</Button>
       <Button data-testid="token" style="--md-button-container-shape: 7px">Token</Button>
-      <IconButton data-testid="icon" icon="edit" aria-label="Edit" />
+      <IconButton data-testid="icon" size="extra-large" icon="edit" aria-label="Edit" />
       <Button data-testid="toggle" toggleable><input type="checkbox" checked />Toggle</Button>
-      <IconButton data-testid="icon-toggle" toggleable icon="favorite"><input type="checkbox" checked /></IconButton>
+      <IconButton data-testid="icon-toggle" size="large" toggleable icon="favorite"
+        ><input type="checkbox" checked
+      /></IconButton>
+      <IconButton data-testid="tonal-toggle" variant="tonal" toggleable icon="favorite"
+        ><input type="checkbox"
+      /></IconButton>
       <ButtonGroup data-testid="group" type="connected" model-value="b"
         ><ButtonGroupItem value="a">A</ButtonGroupItem><ButtonGroupItem value="b">B</ButtonGroupItem
         ><ButtonGroupItem value="c">C</ButtonGroupItem></ButtonGroup
