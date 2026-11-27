@@ -57,22 +57,22 @@ app.use(M3VuePlugin, {
 
 定制面板在切换预设时会保留显式组件覆盖项。继承设置会显示预设值；移除覆盖项即可重新跟随所选预设。仅选择排版不会改变组件默认值。重置会恢复默认预设。
 
-| 选项                                       | 适用范围                                                                |
-| ------------------------------------------ | ----------------------------------------------------------------------- |
-| `shape`                                    | 共享组件形状                                                            |
-| `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目     |
-| `fieldSize`                                | 单行 TextField、NumberField、Select、Combobox 和 SliderField            |
-| `fieldLabelBehavior`                       | TextField、Select 和 Combobox 的标签呈现方式（`floating` / `external`） |
-| `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                     |
-| `switchSize`                               | Switch（`small` / `medium`）                                            |
-| `iconButtonSize`                           | IconButton                                                              |
-| `sliderDefaults`                           | Slider 尺寸、外观、滚轮输入和数值指示器                                 |
-| `listItemDefaults`                         | ListItem 尺寸和外观                                                     |
-| `selectDefaults`                           | Select 和 Combobox 的选中标记（`showSelectedIcon`）                     |
-| `appearance`                               | Slider 和 ListItem 的共享外观                                           |
-| `menuColor`                                | Menu、Select 和 Combobox 菜单                                           |
-| `datePickerDefaults`、`timePickerDefaults` | 日期与时间选择器偏好                                                    |
-| `snackbarDefaults`                         | 程序化 [Snackbar](../components/snackbar) 偏好                          |
+| 选项                                       | 适用范围                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------------ |
+| `shape`                                    | 共享组件形状                                                             |
+| `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目      |
+| `fieldSize`                                | 单行 TextField、NumberField、Select、Combobox、ColorField 和 SliderField |
+| `fieldLabelBehavior`                       | TextField、Select 和 Combobox 的标签呈现方式（`floating` / `external`）  |
+| `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                      |
+| `switchSize`                               | Switch（`small` / `medium`）                                             |
+| `iconButtonSize`                           | IconButton                                                               |
+| `sliderDefaults`                           | Slider 尺寸、外观、滚轮输入和数值指示器                                  |
+| `listItemDefaults`                         | ListItem 尺寸和外观                                                      |
+| `selectDefaults`                           | Select 和 Combobox 的选中标记（`showSelectedIcon`）                      |
+| `appearance`                               | Slider 和 ListItem 的共享外观                                            |
+| `menuColor`                                | Menu、Select 和 Combobox 菜单                                            |
+| `datePickerDefaults`、`timePickerDefaults` | 日期与时间选择器偏好                                                     |
+| `snackbarDefaults`                         | 程序化 [Snackbar](../components/snackbar) 偏好                           |
 
 对于一个子树，可使用现有 defaults helper。未指定的字段会继承，值也可使用 ref 或 computed：
 

@@ -62,7 +62,7 @@ The customization panel preserves explicit component overrides when switching pr
 | `shape`                                    | Shared component shapes                                                                |
 | `rowSize`                                  | Menu rows (including Select/Combobox menus), TreeView and navigation drawer/rail items |
 | `fieldLabelBehavior`                       | TextField, Select and Combobox label presentation (`floating` / `external`)            |
-| `fieldSize`                                | Single-line TextField, NumberField, Select, Combobox and SliderField                   |
+| `fieldSize`                                | Single-line TextField, NumberField, Select, Combobox, ColorField and SliderField       |
 | `buttonDefaults`                           | Button size and press shape morph; ButtonGroup inherits press morph                    |
 | `switchSize`                               | Switch (`small` / `medium`)                                                            |
 | `iconButtonSize`                           | IconButton                                                                             |

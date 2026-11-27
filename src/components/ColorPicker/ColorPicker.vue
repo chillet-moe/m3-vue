@@ -20,6 +20,7 @@ import {
   type PolarModel,
   type ColorPickerSpace,
 } from './color';
+import { useHexInput } from './useHexInput';
 import { useColorEditor } from './useColorEditor';
 
 export type ColorPickerProps = {
@@ -59,7 +60,16 @@ const layoutNames = computed(() => ({
 }));
 const diagramLayout = computed(() => pickerLayouts[layout.value]);
 const spaceName = computed(() => (space.value === 'srgb' ? 'sRGB' : names.value.linear));
-const hex = computed(() => formatHex(value.value, alpha));
+const {
+  text: hexText,
+  formatted: hex,
+  commit: commitHex,
+  keydown: onHexKeydown,
+} = useHexInput(
+  value,
+  () => alpha,
+  () => disabled,
+);
 const spaces = computed(
   () =>
     [
@@ -143,20 +153,6 @@ function setAlpha(a: number) {
   if (!disabled && alpha && value.value.a !== a) value.value = { ...value.value, a };
 }
 
-const hexDraft = ref<string>();
-watch(
-  [value, () => alpha, () => disabled],
-  () => {
-    hexDraft.value = undefined;
-  },
-  { deep: true },
-);
-function commitHex() {
-  if (hexDraft.value === undefined) return;
-  const parsed = parseHex(hexDraft.value);
-  hexDraft.value = undefined;
-  if (parsed && !disabled) value.value = { ...parsed, a: alpha ? (parsed.a ?? value.value.a) : value.value.a };
-}
 function reset() {
   if (!disabled && defaultValue) value.value = { ...defaultValue, a: alpha ? defaultValue.a : value.value.a };
 }
@@ -164,16 +160,7 @@ function keydown(event: KeyboardEvent) {
   if (event.isComposing || event.defaultPrevented) return;
   const editingText = isHTMLTag(event.target, 'input') && event.target.type === 'text' && !event.target.readOnly;
   if (event.key === 'Escape') {
-    if (hexDraft.value === undefined) {
-      emit('close');
-      return;
-    }
-    hexDraft.value = undefined;
-    event.preventDefault();
-    event.stopPropagation();
-  } else if (event.key === 'Enter' && event.target === hexField.value?.el) {
-    event.preventDefault();
-    commitHex();
+    emit('close');
   } else if (event.key === 'Backspace' && defaultValue && !disabled && !editingText) {
     event.preventDefault();
     reset();
@@ -241,8 +228,8 @@ async function sample() {
         spellcheck="false"
         autocomplete="off"
         :disabled="disabled"
-        :model-value="hexDraft ?? hex"
-        @update:model-value="hexDraft = $event"
+        v-model="hexText"
+        @keydown="onHexKeydown"
         @blur="commitHex"
       >
         <template #prefix>Hex</template>

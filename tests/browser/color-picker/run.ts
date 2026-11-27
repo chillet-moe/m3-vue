@@ -9,17 +9,55 @@ const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH 
 try {
   const page = await browser.newPage({ hasTouch: true });
   await openFixture(page, new URL('/tests/browser/color-picker/', server.resolvedUrls!.local[0]).href);
+  const trigger = page.getByRole('button', { name: 'Color picker (Color)', exact: true });
   const plane = page.locator('[data-part="plane"]');
   const entry = (name: string) => page.getByRole('textbox', { name, exact: true });
   const hex = entry('Hex');
   const channel = (name: string) => page.getByRole('spinbutton', { name, exact: true });
   const readChannel = async (name: string) => Number(await channel(name).getAttribute('aria-valuenow'));
+  const field = entry('Color');
+  await field.fill('#abc');
+  await field.press('Escape');
+  assert.equal(await field.inputValue(), '#2E75D4FF');
+  await field.press('Tab');
+  assert(await trigger.evaluate((el) => el === document.activeElement));
+  await page.keyboard.press('Enter');
+  await plane.waitFor();
+  assert(await plane.evaluate((el) => el === document.activeElement));
+  const surface = page.locator('[role="dialog"] [data-scope="popover"][data-part="surface"]');
+  async function checkPanelFits() {
+    const bounds = await surface.evaluate((el) => {
+      const picker = el.querySelector('[data-scope="color-picker"]')!;
+      const rect = el.getBoundingClientRect();
+      return {
+        width: el.clientWidth,
+        height: el.clientHeight,
+        contentWidth: el.scrollWidth,
+        contentHeight: el.scrollHeight,
+        panelWidth: picker.getBoundingClientRect().width,
+        visible: rect.x >= -1 && rect.y >= -1 && rect.right <= innerWidth + 1 && rect.bottom <= innerHeight + 1,
+      };
+    });
+    assert(
+      bounds.visible &&
+        bounds.contentHeight === bounds.height &&
+        bounds.contentWidth === bounds.width &&
+        Math.abs(bounds.panelWidth - bounds.width) < 1,
+      JSON.stringify(bounds),
+    );
+  }
+  await surface.evaluate((el) => Promise.all(el.getAnimations().map((animation) => animation.finished)));
+  await checkPanelFits();
   await hex.fill('f00');
   await page.keyboard.press('Escape');
   assert.equal(await hex.inputValue(), '#2E75D4FF');
   assert(await hex.isVisible());
   await hex.fill('00ff0080');
   await page.keyboard.press('Enter');
+  await page.keyboard.press('Escape');
+  await plane.waitFor({ state: 'hidden' });
+  assert(await trigger.evaluate((el) => el === document.activeElement));
+  await trigger.press('Space');
   assert.equal(await hex.inputValue(), '#00FF0080');
   await hex.press('End');
   await page.keyboard.press('Backspace');
@@ -148,8 +186,30 @@ try {
   await hex.press('ControlOrMeta+v');
   assert.equal(await hex.inputValue(), 'abc');
   await hex.press('Tab');
+  await page.getByRole('button', { name: 'Outside' }).click();
+  await plane.waitFor({ state: 'hidden' });
+  await trigger.click();
   assert.equal(await hex.inputValue(), '#AABBCCFF');
-  console.log('ColorPicker keyboard, touch capture, drag modifiers and diagram colors passed');
+  assert.equal(await field.inputValue(), '#AABBCCFF');
+  await plane.press('Escape');
+  await field.fill('#1234');
+  await field.press('ControlOrMeta+a');
+  await field.press('ControlOrMeta+c');
+  await field.fill('');
+  await field.press('ControlOrMeta+v');
+  assert.equal(await field.inputValue(), '#1234');
+  await trigger.click();
+  assert.equal(await hex.inputValue(), '#11223344');
+  assert.equal(await field.inputValue(), '#11223344');
+  await page.setViewportSize({ width: 360, height: 640 });
+  await trigger.evaluate((el) => {
+    el.style.position = 'fixed';
+    el.style.inset = '43% 1rem auto auto';
+  });
+  await checkPanelFits();
+  await page.setViewportSize({ width: 740, height: 390 });
+  await checkPanelFits();
+  console.log('ColorPicker popover, keyboard, touch capture, drag modifiers and diagram colors passed');
 } finally {
   await browser.close();
   await server.close();

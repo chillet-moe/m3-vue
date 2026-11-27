@@ -11,16 +11,16 @@ The component sidebar groups components by their primary purpose in the interfac
 
 ## Current categories
 
-| Category         | Purpose                                                 | Components                                                                                                                 |
-| ---------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `Infrastructure` | Provide shared infrastructure for component overlays    | `OverlayHost`                                                                                                              |
-| `Actions`        | Trigger commands or operations                          | `Button`, `IconButton`, `ButtonGroup`, `FloatingActionButton`, `FloatingActionButtonMenu`                                  |
-| `Feedback`       | Communicate status, guidance, feedback, or progress     | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`                                                            |
-| `Containment`    | Hold, divide, organize, or overlay content              | `Accordion`, `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet`                                |
-| `Display`        | Present basic visual content                            | `Icon`                                                                                                                     |
-| `Inputs`         | Accept text, structured values, or queries over options | `ColorPicker`, `Combobox`, `DatePicker`, `DateRangePicker`, `InputOtp`, `NumberField`, `Select`, `TextField`, `TimePicker` |
-| `Navigation`     | Move between pages, views, or content sections          | `Breadcrumb`, `Menu`, `NavigationDrawer`, `NavigationRail`, `Pagination`, `Tabs`                                           |
-| `Selection`      | Choose, toggle, or adjust an existing value             | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`                                                               |
+| Category         | Purpose                                                 | Components                                                                                                                               |
+| ---------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `Infrastructure` | Provide shared infrastructure for component overlays    | `OverlayHost`                                                                                                                            |
+| `Actions`        | Trigger commands or operations                          | `Button`, `IconButton`, `ButtonGroup`, `FloatingActionButton`, `FloatingActionButtonMenu`                                                |
+| `Feedback`       | Communicate status, guidance, feedback, or progress     | `Badge`, `Skeleton`, `Snackbar`, `Tooltip`, `ProgressIndicator`                                                                          |
+| `Containment`    | Hold, divide, organize, or overlay content              | `Accordion`, `BottomSheet`, `Card`, `Dialog`, `Divider`, `ListItem`, `Popover`, `SideSheet`                                              |
+| `Display`        | Present basic visual content                            | `Icon`                                                                                                                                   |
+| `Inputs`         | Accept text, structured values, or queries over options | `ColorField`, `ColorPicker`, `Combobox`, `DatePicker`, `DateRangePicker`, `InputOtp`, `NumberField`, `Select`, `TextField`, `TimePicker` |
+| `Navigation`     | Move between pages, views, or content sections          | `Breadcrumb`, `Menu`, `NavigationDrawer`, `NavigationRail`, `Pagination`, `Tabs`                                                         |
+| `Selection`      | Choose, toggle, or adjust an existing value             | `CheckBox`, `Chip`, `ChipGroup`, `Radio`, `Slider`, `Switch`                                                                             |
 
 ## Progress indicators
 

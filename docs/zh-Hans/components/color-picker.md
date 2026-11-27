@@ -7,6 +7,8 @@ import { ref } from 'vue';
 import { provideM3Locale } from '@/locales';
 import { zhHans } from '@/locales/zh-Hans';
 import { ColorPicker, type ColorPickerLayout, type ColorPickerSpace } from '@/components/ColorPicker';
+import ColorPickerPopover from '../../demos/color-picker/ColorPickerPopover.vue';
+import popoverSource from '../../demos/color-picker/ColorPickerPopover.vue?raw';
 
 provideM3Locale({ locale: zhHans });
 const value = ref({ r: 0.18, g: 0.46, b: 0.83, a: 0.9 });
@@ -38,6 +40,14 @@ const props = ref({ layout: 'sv-h' as ColorPickerLayout, channelSpace: 'srgb' as
 设置面板也提供五种示意图布局。使用 `v-model:layout` 可读取或设置所选布局：`sv-h`（默认）、`hs-v`、`hv-s`、`hsv-wheel` 和 `hsl-wheel`。点击或触摸可定位标记，然后拖动。按住 Shift 可降低拖动灵敏度，按住 Ctrl 可将色相吸附到 30° 间隔。在选色区上滚动可调整 HSV 明度或 HSL 亮度。
 
 可按 Tab 依次聚焦平面、轨道、选择器和文本字段。在 RGB、HSV 和 HSL 按钮组中，按左/右方向键可切换数值模型。按左/右和上/下方向键可调整平面的两个轴；在色轮上，这些按键分别调整色相和饱和度。聚焦轨道时，方向键可调整数值，Home/End 可选择端点。提供 `default-value` 后，可使用重置按钮，或在文本输入框外按 Backspace 重置。支持的浏览器中会显示屏幕吸管。
+
+## 在弹出层中使用
+
+使用 [ColorField](./color-field) 可直接编辑 Hex，并通过字段色块打开此面板。如果自行提供容器，请在打开后调用选择器的 `focus()`，并在 Escape 离开面板时处理其 `close` 事件。
+
+<DemoContainer :src="popoverSource" :viewport="false">
+  <ColorPickerPopover />
+</DemoContainer>
 
 ## 参考
 

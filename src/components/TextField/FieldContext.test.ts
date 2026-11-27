@@ -6,6 +6,7 @@ import {
   type FieldContext,
   TextField,
   SliderField,
+  ColorField,
   type TextFieldSize,
   Select,
   Combobox,
@@ -29,6 +30,11 @@ describe('field size defaults', () => {
       const controls = (prefix: string, explicit = false) => [
         h(TextField, { modelValue: '', class: `${prefix}-input`, size: explicit ? explicitSize.value : undefined }),
         h(SliderField, { value: 0, class: `${prefix}-slider-field`, size: explicit ? explicitSize.value : undefined }),
+        h(ColorField, {
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          class: `${prefix}-color-field`,
+          size: explicit ? explicitSize.value : undefined,
+        }),
         h(Combobox, { class: `${prefix}-combobox`, options: [], size: explicit ? explicitSize.value : undefined }),
         h(Select, { class: `${prefix}-select`, options: [], size: explicit ? explicitSize.value : undefined }),
         h(TextField, {
@@ -55,6 +61,7 @@ describe('field size defaults', () => {
       const expectSizes = (prefix: string, configuredSize?: TextFieldSize) => {
         const expected = configuredSize ?? 'medium';
         expect(element(`${prefix}-slider-field`).dataset.size).toBe(configuredSize ?? 'extra-small');
+        expect(element(`${prefix}-color-field`).dataset.size).toBe(expected);
         expect(element(`${prefix}-input`).dataset.size).toBe(expected);
         expect(element(`${prefix}-select`).dataset.size).toBe(expected);
         expect(element(`${prefix}-combobox`).dataset.size).toBe(expected);

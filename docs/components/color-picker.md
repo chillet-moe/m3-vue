@@ -5,6 +5,8 @@ title: ColorPicker
 <script setup lang="ts">
 import { ref } from 'vue';
 import { ColorPicker, type ColorPickerLayout, type ColorPickerSpace } from '@/components/ColorPicker';
+import ColorPickerPopover from '../demos/color-picker/ColorPickerPopover.vue';
+import popoverSource from '../demos/color-picker/ColorPickerPopover.vue?raw';
 
 const value = ref({ r: 0.18, g: 0.46, b: 0.83, a: 0.9 });
 const props = ref({ layout: 'sv-h' as ColorPickerLayout, channelSpace: 'srgb' as ColorPickerSpace, alpha: true, disabled: false });
@@ -35,6 +37,14 @@ Copy the current Hex value with the button at the end of the field, or use the u
 Picker settings also offers five diagrams. Use `v-model:layout` to read or set the choice among `sv-h` (default), `hs-v`, `hv-s`, `hsv-wheel` and `hsl-wheel`. Click or touch to position the marker, then drag. Hold Shift to reduce drag sensitivity or Ctrl to snap hue to 30° intervals. Scroll over the diagram to change HSV value or HSL lightness.
 
 Tab through the plane, tracks, selectors and text fields. Use Left/Right in the RGB, HSV and HSL button group to switch the numeric model. Left/Right and Up/Down adjust the two plane axes. On a wheel they adjust hue and saturation respectively. Arrow keys adjust a focused track, and Home/End select its endpoints. With `default-value` supplied, use the reset button or press Backspace outside a text input. The screen eyedropper appears in supporting browsers.
+
+## In a popover
+
+Use [ColorField](./color-field) to edit Hex directly and open this panel from the field’s swatch. If you provide your own container, call the picker’s `focus()` after opening and handle its `close` event when Escape leaves the panel.
+
+<DemoContainer :src="popoverSource" :viewport="false">
+  <ColorPickerPopover />
+</DemoContainer>
 
 ## Reference
 

@@ -1,0 +1,44 @@
+@layer components {
+  .m3-color-field {
+    --md-outlined-text-field-input-text-font: ui-monospace, monospace;
+  }
+  .m3-color-field-swatch {
+    inline-size: 1.25rem;
+  }
+  .m3-color-field-popover {
+    --md-popover-padding: 0;
+    --md-popover-max-height: 100dvb;
+    inline-size: max-content;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline,
+      --m3-color-field-side,
+      --m3-color-field-side flip-inline,
+      --m3-color-field-viewport;
+  }
+  @media (max-width: 40rem), (max-height: 34rem) {
+    .m3-color-field-popover {
+      position-area: none;
+      position-try-fallbacks: none;
+      inset: 0;
+      margin: auto;
+      block-size: max-content;
+    }
+  }
+  @media (min-width: 36rem) and (max-height: 34rem) {
+    .m3-color-field-popover {
+      --md-popover-max-width: 35rem;
+      inline-size: 35rem;
+      container: m3-color-picker-host / inline-size;
+    }
+  }
+  @position-try --m3-color-field-side {
+    position-area: inline-end span-all;
+  }
+  @position-try --m3-color-field-viewport {
+    position-area: none;
+    inset: 0;
+    margin: auto;
+  }
+}
