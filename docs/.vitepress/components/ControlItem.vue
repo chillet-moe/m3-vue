@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 
-import { Chip, ChipGroup, Switch, TextField } from '@/index';
+import { Chip, ChipGroup, NumberField, Switch, TextField } from '@/index';
 import type { PropMeta } from '../plugins/component-meta';
 import { getControlType } from './control-meta';
 
@@ -36,24 +36,15 @@ const textValue = computed({
   },
 });
 
-function normalizeNumberControlValue(value: unknown) {
-  if (typeof value === 'number') {
-    return Number.isFinite(value) ? value : undefined;
-  }
-
-  if (typeof value !== 'string') {
-    return undefined;
-  }
-
-  const trimmedValue = value.trim();
-
-  if (trimmedValue === '') {
-    return undefined;
-  }
-
-  const nextValue = Number(trimmedValue);
-  return Number.isNaN(nextValue) ? undefined : nextValue;
-}
+const numberValue = computed<number | null>({
+  get() {
+    const value = props.modelValue;
+    return typeof value === 'number' && Number.isFinite(value) ? value : null;
+  },
+  set(value) {
+    emit('update:modelValue', value ?? undefined);
+  },
+});
 
 function formatNumberArrayControlValue(value: unknown) {
   return Array.isArray(value) && value.every((item) => typeof item === 'number' && Number.isFinite(item))
@@ -82,19 +73,6 @@ function normalizeNumberArrayControlValue(value: string) {
 
   return { valid: true, value: values };
 }
-
-const numberTextValue = computed<string, string | number | undefined>({
-  get() {
-    if (typeof props.modelValue === 'number' && Number.isFinite(props.modelValue)) {
-      return String(props.modelValue);
-    }
-
-    return '';
-  },
-  set(value) {
-    emit('update:modelValue', normalizeNumberControlValue(value));
-  },
-});
 
 const isNumberArrayFocused = ref(false);
 const numberArrayTextValue = ref(formatNumberArrayControlValue(props.modelValue));
@@ -167,15 +145,12 @@ const inputLabel = computed(() => {
     :placeholder="prop.name"
   />
 
-  <TextField
+  <NumberField
     v-else-if="controlType === 'number'"
-    v-model="numberTextValue"
+    v-model:value="numberValue"
     class="control-item-field"
     :aria-label="inputLabel"
     :placeholder="prop.name"
-    inputmode="decimal"
-    type="number"
-    step="any"
   />
 
   <TextField

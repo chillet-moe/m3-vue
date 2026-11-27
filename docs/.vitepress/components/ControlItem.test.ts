@@ -110,7 +110,7 @@ describe('ControlItem', () => {
     app.unmount();
   });
 
-  it('updates numeric prop controls as numbers', async () => {
+  it('edits and steps numeric props and clears them to undefined', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -137,16 +137,23 @@ describe('ControlItem', () => {
     app.mount(container);
     await nextTick();
 
-    const input = container.querySelector<HTMLInputElement>('input[type="number"]');
+    const input = container.querySelector<HTMLInputElement>('[role="spinbutton"]')!;
 
-    expect(input).not.toBeNull();
-    expect(input!.value).toBe('0');
+    expect(input.value).toBe('0');
 
-    input!.value = '2';
-    input!.dispatchEvent(new Event('input', { bubbles: true }));
+    input.value = '2.125';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
     await nextTick();
+    expect(modelValue.value).toBe(2.125);
 
-    expect(modelValue.value).toBe(2);
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+    await nextTick();
+    expect(modelValue.value).toBe(3.125);
+
+    input.value = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await nextTick();
+    expect(modelValue.value).toBeUndefined();
 
     app.unmount();
   });
