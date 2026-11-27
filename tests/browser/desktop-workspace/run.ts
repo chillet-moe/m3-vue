@@ -33,6 +33,13 @@ try {
   [32, 4, 16, 16].forEach((expected, index) => {
     assert(Math.abs(geometry[index]! - expected) < 0.01);
   });
+  const exactOpacity = page.getByRole('spinbutton', { name: 'Exact opacity' });
+  const previewOpacity = page.getByRole('slider', { name: 'Preview opacity' });
+  await exactOpacity.fill('37.125');
+  await exactOpacity.fill('');
+  assert.equal(await previewOpacity.getAttribute('aria-valuenow'), '37.125');
+  await exactOpacity.blur();
+  assert.equal(await exactOpacity.inputValue(), '37.125');
   mkdirSync('/tmp/m3-desktop-previews', { recursive: true });
   await page.screenshot({ path: '/tmp/m3-desktop-previews/light.png' });
   await page.evaluate(() => {

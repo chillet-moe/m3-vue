@@ -10,6 +10,7 @@ import {
   Slider,
   Select,
   Combobox,
+  NumberField,
   TextField,
   Popover,
   Tabs,
@@ -72,10 +73,16 @@ const panelStyle = computed(() =>
     ),
   ),
 );
-const density = computed(() => resolvedTokens.value['--md-density'] ?? '0');
-function updateDensity(value: string) {
-  if (value.trim() && Number.isFinite(Number(value))) state.theme.density = Number(value);
-  else if (!value.trim()) delete state.theme.density;
+const density = computed<number, number | null>({
+  get: () => Number(resolvedTokens.value['--md-density']),
+  set(value) {
+    if (value === null) delete state.theme.density;
+    else state.theme.density = value;
+  },
+});
+function iconTokenValue(token: string) {
+  const value = Number(state.tokens[token]);
+  return Number.isFinite(value) ? value : null;
 }
 const currentRole = ref('body-large');
 const roleOptions = typeRoles.flatMap((role) => [role, `emphasized-${role}`]).map((value) => ({ value, label: value }));
@@ -195,13 +202,11 @@ watch(open, async (value) => {
             </div>
             <div class="customization-labeled-field">
               <label v-if="externalLabels" :for="`${panelId}-field-1`">{{ t('density') }}</label>
-              <TextField
+              <NumberField
                 :id="`${panelId}-field-1`"
-                :model-value="density"
-                type="number"
+                v-model:value="density"
                 :label="t('density')"
                 :supporting-text="t('densityHint')"
-                @update:model-value="updateDensity"
               />
             </div>
             <div class="customization-fields">
@@ -220,16 +225,15 @@ watch(open, async (value) => {
             <div class="customization-fields">
               <div v-for="setting in iconSettings" :key="setting.token" class="customization-labeled-field">
                 <label v-if="externalLabels" :for="`${panelId}-field-3-${setting.token}`">{{ t(setting.key) }}</label>
-                <TextField
+                <NumberField
                   :id="`${panelId}-field-3-${setting.token}`"
-                  type="number"
-                  step="0.05"
-                  :min="String(setting.min)"
-                  :max="String(setting.max)"
+                  :step="0.05"
+                  :min="setting.min"
+                  :max="setting.max"
                   :label="t(setting.key)"
-                  :model-value="state.tokens[setting.token] ?? ''"
+                  :value="iconTokenValue(setting.token)"
                   :placeholder="setting.fallback"
-                  @update:model-value="setToken(setting.token, $event)"
+                  @update:value="setToken(setting.token, String($event ?? ''))"
                 />
               </div>
             </div>

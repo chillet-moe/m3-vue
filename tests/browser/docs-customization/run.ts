@@ -65,7 +65,12 @@ try {
   assert.equal(await themeColor.inputValue(), '#84ceb7');
   await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-density') === '-2');
   assert(await panel.getByRole('radio', { name: 'Compact', exact: true }).isChecked());
-  await panel.getByRole('spinbutton', { name: 'Density', exact: true }).fill('3');
+  const density = panel.getByRole('spinbutton', { name: 'Density', exact: true });
+  await density.press('ArrowUp');
+  await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-density') === '-1');
+  await density.fill('');
+  await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-density') === '-2');
+  await density.fill('3');
   await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--md-density') === '3');
   assert(await panel.getByRole('radio', { name: 'Compact', exact: true }).isChecked());
   await panel.getByRole('textbox', { name: 'Field row gap', exact: true }).fill('24px');
@@ -207,6 +212,13 @@ try {
   await page.setViewportSize({ width: 390, height: 740 });
   await page.getByRole('button', { name: 'Customize', exact: true }).click();
   await panel.waitFor();
+  await panel.getByRole('spinbutton', { name: 'Icon size multiplier', exact: true }).fill('');
+  await panel.getByRole('spinbutton', { name: 'Icon source content ratio', exact: true }).fill('');
+  await page.waitForFunction(() =>
+    ['--md-icon-scale', '--md-icon-content-ratio'].every(
+      (token) => document.documentElement.style.getPropertyValue(token) === '',
+    ),
+  );
   await panel.getByRole('tab', { name: 'Shapes', exact: true }).click();
   await panel.evaluate(async (el) => {
     await Promise.all(el.getAnimations({ subtree: true }).map((animation) => animation.finished.catch(() => {})));

@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
+import { NumberField } from '@/components/NumberField';
 import { Slider } from '@/components/Slider';
-import { TextField } from '@/components/TextField';
+
 const value = ref(42.125);
-const numberText = computed({
-  get: () => String(value.value),
-  set: (text) => {
-    if (text !== '' && Number.isFinite(Number(text))) value.value = Number(text);
-  },
-});
 </script>
 <template>
   <div class="precise-slider">
     <label for="workspace-number">Opacity</label>
     <div class="workspace-number-row">
       <Slider v-model:value="value" :min="0" :max="100" :step="1" :value-indicator="false" aria-label="Opacity" />
-      <TextField
+      <NumberField
         id="workspace-number"
-        v-model="numberText"
-        type="number"
+        :value="value"
+        :min="0"
+        :max="100"
         size="extra-small"
         aria-label="Exact opacity"
+        @update:value="value = $event ?? value"
       />
     </div>
     <Slider
