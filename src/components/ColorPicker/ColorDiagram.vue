@@ -201,28 +201,26 @@ const tracks = computed(() => {
       data-scope="color-picker"
       data-part="plane"
       :data-wheel="layout.wheel"
-      :style="{ backgroundImage: background }"
+      :style="{
+        backgroundImage: background,
+        '--_marker-x': position.x * 100 + '%',
+        '--_marker-y': position.y * 100 + '%',
+        '--_marker-color': cssRgb(value),
+      }"
       role="group"
       :aria-label="`${label(layout.x)} / ${label(layout.y)}`"
       :aria-disabled="disabled"
       :tabindex="disabled ? -1 : 0"
       @pointerdown="start($event, 'plane')"
       @keydown="keydown($event, 'plane')"
-    >
-      <span
-        class="m3-color-marker"
-        data-scope="color-picker"
-        data-part="marker"
-        :style="{ left: position.x * 100 + '%', top: position.y * 100 + '%', backgroundColor: cssRgb(value) }"
-      />
-    </div>
+    />
     <div
       v-for="track in tracks"
       :key="track.part"
       class="m3-color-track"
       data-scope="color-picker"
       :data-part="track.part"
-      :style="{ '--_gradient': track.gradient }"
+      :style="{ '--_gradient': track.gradient, '--_marker-x': fraction(track.axis) * 100 + '%' }"
       role="slider"
       :aria-label="label(track.axis)"
       :aria-valuemin="0"
@@ -232,13 +230,6 @@ const tracks = computed(() => {
       :tabindex="disabled ? -1 : 0"
       @pointerdown="start($event, track.part)"
       @keydown="keydown($event, track.part)"
-    >
-      <span
-        class="m3-color-marker"
-        data-scope="color-picker"
-        data-part="marker"
-        :style="{ left: fraction(track.axis) * 100 + '%' }"
-      />
-    </div>
+    />
   </div>
 </template>

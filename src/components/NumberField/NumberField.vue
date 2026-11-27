@@ -71,8 +71,7 @@ function nextValue(direction: 1 | -1) {
   return Number.isFinite(next) ? next : value;
 }
 
-const increment = computed(() => nextValue(1));
-const decrement = computed(() => nextValue(-1));
+const steps = computed(() => ({ increment: nextValue(1), decrement: nextValue(-1) }));
 
 function applyStep(next: number | null) {
   draft.value = undefined;
@@ -84,7 +83,7 @@ function onKeydown(event: KeyboardEvent) {
   if (disabled || readonly || event.isComposing) return;
   if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
   event.preventDefault();
-  applyStep(event.key === 'ArrowUp' ? increment.value : decrement.value);
+  applyStep(steps.value[event.key === 'ArrowUp' ? 'increment' : 'decrement']);
 }
 </script>
 
@@ -110,26 +109,17 @@ function onKeydown(event: KeyboardEvent) {
     <template #trailing>
       <span class="m3-number-field-controls" data-scope="number-field" data-part="controls">
         <IconButton
+          v-for="(next, direction) in steps"
+          :key="direction"
           variant="standard"
-          icon="keyboard_arrow_up"
+          :icon="direction === 'increment' ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
           data-scope="number-field"
-          data-part="increment"
-          :aria-label="messages.numberField.increment"
-          :disabled="increment === value"
+          :data-part="direction"
+          :aria-label="messages.numberField[direction]"
+          :disabled="next === value"
           tabindex="-1"
           @mousedown.prevent
-          @click="applyStep(increment)"
-        />
-        <IconButton
-          variant="standard"
-          icon="keyboard_arrow_down"
-          data-scope="number-field"
-          data-part="decrement"
-          :aria-label="messages.numberField.decrement"
-          :disabled="decrement === value"
-          tabindex="-1"
-          @mousedown.prevent
-          @click="applyStep(decrement)"
+          @click="applyStep(next)"
         />
       </span>
     </template>

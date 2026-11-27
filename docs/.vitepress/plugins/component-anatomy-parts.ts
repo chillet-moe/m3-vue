@@ -19,6 +19,10 @@ const calendarNavigation = [
 ];
 
 export const additionalAnatomyParts = {
+  'number-field': [
+    { part: 'increment', element: 'IconButton', conditional: false },
+    { part: 'decrement', element: 'IconButton', conditional: false },
+  ],
   'date-picker': calendarNavigation,
   'date-range-picker': calendarNavigation,
   'time-picker': [

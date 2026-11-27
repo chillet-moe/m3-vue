@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, type ComponentPublicInstance } from 'vue';
+import { inject, type ComponentPublicInstance } from 'vue';
 import { Icon } from '@/components/Icon';
 import { vStateLayer } from '@/components/StateLayer/state-layer';
 import { commandPaletteItemKey } from './commandPaletteList';
@@ -16,7 +16,6 @@ const props = defineProps<CommandPaletteItemProps>();
 const palette = inject(commandPaletteItemKey);
 if (!palette) throw new Error('CommandPaletteItem must be rendered inside CommandPalette.');
 const { activeId, setRow } = palette;
-const active = computed(() => props.command.id === activeId.value);
 function bindRow(element: Element | ComponentPublicInstance | null) {
   setRow(props.command.id, element as HTMLElement | null);
 }
@@ -32,7 +31,7 @@ function bindRow(element: Element | ComponentPublicInstance | null) {
     data-part="option"
     :data-last="index + 1 === palette.count.value ? 'true' : undefined"
     role="option"
-    :aria-selected="active"
+    :aria-selected="command.id === activeId"
     :aria-posinset="index + 1"
     :aria-setsize="palette.count.value"
     :aria-disabled="command.disabled || undefined"

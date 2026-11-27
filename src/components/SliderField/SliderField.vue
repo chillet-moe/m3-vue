@@ -141,20 +141,11 @@ function cancelPointer(event: PointerEvent) {
   if (gesture?.id === event.pointerId) gesture = undefined;
 }
 
-// A replacement from the parent supersedes text entered against the previous value.
-watch(value, () => {
+// Parent updates supersede an in-progress draft; disabling also ends the pointer gesture.
+watch([value, () => disabled], () => {
   draft.value = undefined;
+  if (disabled) gesture = undefined;
 });
-
-watch(
-  () => disabled,
-  (isDisabled) => {
-    if (isDisabled) {
-      gesture = undefined;
-      draft.value = undefined;
-    }
-  },
-);
 </script>
 
 <template>

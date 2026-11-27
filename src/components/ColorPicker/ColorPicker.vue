@@ -333,7 +333,7 @@ async function sample() {
         data-scope="color-picker"
         data-part="channel"
       >
-        <span>{{ field.symbol }}</span>
+        {{ field.symbol }}
         <SliderField
           :value="field.value"
           :max="field.max"

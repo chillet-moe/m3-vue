@@ -53,9 +53,8 @@ const activeIndex = computed(() => {
   const id = activeId.value;
   return id === undefined ? -1 : results.value.findIndex((command) => command.id === id && !command.disabled);
 });
-const firstEnabled = computed(() => results.value.find((command) => !command.disabled)?.id);
 watch(
-  [query, activeIndex, firstEnabled],
+  [query, activeIndex, () => results.value.find((command) => !command.disabled)?.id],
   ([currentQuery, index, first], [previousQuery]) => {
     if (currentQuery !== previousQuery || index < 0) activeId.value = first;
   },
