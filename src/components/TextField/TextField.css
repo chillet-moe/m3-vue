@@ -95,55 +95,7 @@
   }
 
   :where(.m3-text-field) {
-    /* Size roles keep field text, icons and adjustable whitespace in proportion. */
-    --_field-text-font: var(--md-sys-typescale-body-large-font);
-    --_field-text-size: var(--md-sys-typescale-body-large-size);
-    --_field-text-line-height: var(--md-sys-typescale-body-large-line-height);
-    --_field-text-weight: var(--md-sys-typescale-body-large-weight);
-    --_field-text-tracking: var(--md-sys-typescale-body-large-tracking);
-    --_field-icon-size: --density-icon(24, body-large, 16);
     --_field-clear-icon-size: --density-icon(20, body-large, 16);
-    --_field-content-height: max(
-      var(--_outlined-text-field-input-text-line-height),
-      var(--_outlined-text-field-leading-icon-size),
-      var(--_outlined-text-field-trailing-icon-size)
-    );
-    --_outlined-text-field-extra-small-container-height: var(
-      --md-outlined-text-field-extra-small-container-height,
-      --density-height(32, var(--_field-content-height), 20, 4)
-    );
-    --_outlined-text-field-extra-small-container-horizontal-padding: var(
-      --md-outlined-text-field-extra-small-container-horizontal-padding,
-      --density-space(8, 8, 2)
-    );
-    --_outlined-text-field-extra-small-container-vertical-padding: var(
-      --md-outlined-text-field-extra-small-container-vertical-padding,
-      --density-space(4, 4, 2)
-    );
-    --_outlined-text-field-small-container-height: var(
-      --md-outlined-text-field-small-container-height,
-      --density-height(40, var(--_field-content-height), 20, 4)
-    );
-    --_outlined-text-field-small-container-horizontal-padding: var(
-      --md-outlined-text-field-small-container-horizontal-padding,
-      --density-space(12, 8, 2)
-    );
-    --_outlined-text-field-small-container-vertical-padding: var(
-      --md-outlined-text-field-small-container-vertical-padding,
-      --density-space(8, 4, 2)
-    );
-    --_outlined-text-field-medium-container-height: var(
-      --md-outlined-text-field-medium-container-height,
-      --density-height(56, var(--_field-content-height), 24, 4)
-    );
-    --_outlined-text-field-medium-container-horizontal-padding: var(
-      --md-outlined-text-field-medium-container-horizontal-padding,
-      --density-space(16, 8, 2)
-    );
-    --_outlined-text-field-medium-container-vertical-padding: var(
-      --md-outlined-text-field-medium-container-vertical-padding,
-      --density-space(8, 4, 2)
-    );
     --_outlined-text-field-container-shape: var(
       --md-outlined-text-field-container-shape,
       var(--_outlined-text-field-container-shape-round)
@@ -309,6 +261,11 @@
 
 @layer components {
   .m3-text-field {
+    --_field-content-height: max(
+      var(--_outlined-text-field-input-text-line-height),
+      var(--_outlined-text-field-leading-icon-size),
+      var(--_outlined-text-field-trailing-icon-size)
+    );
     --_outline-color: var(--_outlined-text-field-outline-color);
     --_outline-width: var(--_outlined-text-field-outline-width);
     --_label-color: var(--_outlined-text-field-label-text-color);
@@ -319,15 +276,15 @@
     --_caret-color: var(--_outlined-text-field-caret-color);
     --_container-height: var(
       --md-outlined-text-field-container-height,
-      var(--_outlined-text-field-medium-container-height)
+      var(--md-outlined-text-field-medium-container-height, var(--_field-height))
     );
     --_container-horizontal-padding: var(
       --md-outlined-text-field-container-horizontal-padding,
-      var(--_outlined-text-field-medium-container-horizontal-padding)
+      var(--md-outlined-text-field-medium-container-horizontal-padding, var(--_field-padding-inline))
     );
     --_container-vertical-padding: var(
       --md-outlined-text-field-container-vertical-padding,
-      var(--_outlined-text-field-medium-container-vertical-padding)
+      var(--md-outlined-text-field-medium-container-vertical-padding, var(--_field-padding-block))
     );
     --_floating-label-inline-start: var(--_container-horizontal-padding);
     /* A fieldset lays out its legend inside the border; subtract that inset to align it with the floating label. */
@@ -348,12 +305,6 @@
   }
 
   .m3-text-field:is([data-size='extra-small'], [data-size='small']) {
-    --_field-text-font: var(--md-sys-typescale-body-medium-font);
-    --_field-text-size: var(--md-sys-typescale-body-medium-size);
-    --_field-text-line-height: var(--md-sys-typescale-body-medium-line-height);
-    --_field-text-weight: var(--md-sys-typescale-body-medium-weight);
-    --_field-text-tracking: var(--md-sys-typescale-body-medium-tracking);
-    --_field-icon-size: --density-icon(20, body-medium, 14);
     --_field-clear-icon-size: --density-icon(20, body-medium, 14);
     --_trailing-action-size: max(1.5rem, var(--_field-clear-icon-size));
   }
@@ -369,15 +320,15 @@
     );
     --_container-height: var(
       --md-outlined-text-field-container-height,
-      var(--_outlined-text-field-extra-small-container-height)
+      var(--md-outlined-text-field-extra-small-container-height, var(--_field-height))
     );
     --_container-horizontal-padding: var(
       --md-outlined-text-field-container-horizontal-padding,
-      var(--_outlined-text-field-extra-small-container-horizontal-padding)
+      var(--md-outlined-text-field-extra-small-container-horizontal-padding, var(--_field-padding-inline))
     );
     --_container-vertical-padding: var(
       --md-outlined-text-field-container-vertical-padding,
-      var(--_outlined-text-field-extra-small-container-vertical-padding)
+      var(--md-outlined-text-field-extra-small-container-vertical-padding, var(--_field-padding-block))
     );
     /* Keep the notch clear of the 0.75rem square corner while preserving the compact input padding. */
     --_floating-label-inline-start: max(var(--_container-horizontal-padding), 0.75rem);
@@ -397,15 +348,15 @@
     );
     --_container-height: var(
       --md-outlined-text-field-container-height,
-      var(--_outlined-text-field-small-container-height)
+      var(--md-outlined-text-field-small-container-height, var(--_field-height))
     );
     --_container-horizontal-padding: var(
       --md-outlined-text-field-container-horizontal-padding,
-      var(--_outlined-text-field-small-container-horizontal-padding)
+      var(--md-outlined-text-field-small-container-horizontal-padding, var(--_field-padding-inline))
     );
     --_container-vertical-padding: var(
       --md-outlined-text-field-container-vertical-padding,
-      var(--_outlined-text-field-small-container-vertical-padding)
+      var(--md-outlined-text-field-small-container-vertical-padding, var(--_field-padding-block))
     );
     --_slot-action-margin-block: -0.5rem;
   }
@@ -418,18 +369,6 @@
     --_outlined-text-field-outline-width: var(
       --md-outlined-text-field-outline-width,
       var(--md-button-medium-outlined-outline-width, var(--md-control-outline-width-medium))
-    );
-    --_container-height: var(
-      --md-outlined-text-field-container-height,
-      var(--_outlined-text-field-medium-container-height)
-    );
-    --_container-horizontal-padding: var(
-      --md-outlined-text-field-container-horizontal-padding,
-      var(--_outlined-text-field-medium-container-horizontal-padding)
-    );
-    --_container-vertical-padding: var(
-      --md-outlined-text-field-container-vertical-padding,
-      var(--_outlined-text-field-medium-container-vertical-padding)
     );
   }
 

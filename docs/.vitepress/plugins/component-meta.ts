@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import fg from 'fast-glob';
 import ts from 'typescript';
@@ -42,98 +41,20 @@ export interface ComponentMeta {
   slots: SlotMeta[];
 }
 
-function parseUnionOptions(type: string): string[] | undefined {
-  const parts = type
-    .split('|')
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  const optionParts = parts.filter((part) => {
-    return part !== 'undefined' && part !== 'null';
-  });
-
-  if (!optionParts.length) {
-    return undefined;
-  }
-
-  if (optionParts.some((part) => !/^"[^"]*"|'[^']*'$/.test(part))) {
-    return undefined;
-  }
-
-  return [...new Set(optionParts.map((part) => part.slice(1, -1)))];
-}
-
-function parseStringLiteralUnionTypeNode(typeNode: ts.TypeNode): string[] | undefined {
-  const nodes = ts.isUnionTypeNode(typeNode) ? typeNode.types : [typeNode];
-  const options: string[] = [];
-
-  for (const node of nodes) {
-    if (!ts.isLiteralTypeNode(node) || !ts.isStringLiteral(node.literal)) {
-      return undefined;
+function getStringOptions(type: ts.Type): string[] | undefined {
+  // TypeScript can reorder union members. Prefer the declared order for named option lists.
+  const alias = type.aliasSymbol?.declarations?.find(ts.isTypeAliasDeclaration);
+  if (alias && ts.isUnionTypeNode(alias.type)) {
+    const literals = alias.type.types.map((node) => (ts.isLiteralTypeNode(node) ? node.literal : undefined));
+    if (literals.every((literal) => literal !== undefined && ts.isStringLiteral(literal))) {
+      return [...new Set(literals.map((literal) => literal.text))];
     }
-
-    options.push(node.literal.text);
   }
 
-  return options.length ? [...new Set(options)] : undefined;
-}
-
-function collectLocalTypeAliasOptions(file: string): Map<string, string[]> {
-  const source = fs.readFileSync(file, 'utf8');
-  const script = Array.from(source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g), (match) => match[1]).join('\n');
-  const aliases = new Map<string, string[]>();
-
-  if (!script) {
-    return aliases;
+  const members = type.isUnion() ? type.types : [type];
+  if (members.every((member) => member.isStringLiteral())) {
+    return members.map((member) => member.value);
   }
-
-  const sourceFile = ts.createSourceFile(file, script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-
-  function visit(node: ts.Node) {
-    if (ts.isTypeAliasDeclaration(node)) {
-      const options = parseStringLiteralUnionTypeNode(node.type);
-
-      if (options?.length) {
-        aliases.set(node.name.text, options);
-      }
-    }
-
-    ts.forEachChild(node, visit);
-  }
-
-  visit(sourceFile);
-
-  return aliases;
-}
-
-function parseUnionOptionsFromLocalTypeAliases(type: string, aliases: Map<string, string[]>): string[] | undefined {
-  const parts = type
-    .split('|')
-    .map((part) => part.trim())
-    .filter((part) => part && part !== 'undefined' && part !== 'null');
-
-  if (!parts.length) {
-    return undefined;
-  }
-
-  const options: string[] = [];
-
-  for (const part of parts) {
-    if (/^"[^"]*"|'[^']*'$/.test(part)) {
-      options.push(part.slice(1, -1));
-      continue;
-    }
-
-    const aliasOptions = aliases.get(part);
-
-    if (!aliasOptions) {
-      return undefined;
-    }
-
-    options.push(...aliasOptions);
-  }
-
-  return [...options];
 }
 
 export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
@@ -156,6 +77,9 @@ export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
       },
     );
 
+    const typeChecker = checker.getProgram()?.getTypeChecker();
+    if (!typeChecker) throw new Error('vue-component-meta did not create a TypeScript program');
+
     const patterns = Array.isArray(options.components) ? options.components : [options.components];
     const files = await fg(patterns, { cwd: root, absolute: true, onlyFiles: true });
     // Keep TypeScript's inferred union member order consistent across the client and SSR builds.
@@ -166,14 +90,11 @@ export function componentMetaPlugin(options: ComponentMetaPluginOptions) {
     for (const file of files) {
       const meta = checker.getComponentMeta(file);
       const baseName = meta.name || path.parse(file).name;
-      const localTypeAliasOptions = collectLocalTypeAliasOptions(file);
 
       const props: PropMeta[] = (meta.props ?? [])
         .filter((p) => !p.global)
         .map((p) => ({
-          options:
-            parseUnionOptions(p.type ?? '') ??
-            parseUnionOptionsFromLocalTypeAliases(p.type ?? '', localTypeAliasOptions),
+          options: getStringOptions(typeChecker.getNonNullableType(p.getTypeObject())),
           default: p.default,
           description: p.description,
           name: p.name,

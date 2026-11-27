@@ -3,6 +3,7 @@ import { computed, ref, useTemplateRef, watch } from 'vue';
 import { IconButton } from '@/components/IconButton';
 import { TextField, type TextFieldSingleLineProps } from '@/components/TextField';
 import { useM3Locale } from '@/locales/context';
+import { parseDecimal } from '@/internal/parseDecimal';
 import { addDecimalStep } from './addDecimalStep';
 
 export type NumberFieldProps = Pick<
@@ -46,10 +47,8 @@ function clamp(number: number) {
 const draft = ref<string>();
 function parseDraft(text: string) {
   if (text === '') return null;
-  if (!/^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(text)) return undefined;
-
-  const number = Number(text);
-  return Number.isFinite(number) ? clamp(number) : undefined;
+  const number = parseDecimal(text);
+  return number === undefined ? undefined : clamp(number);
 }
 
 function edit(text: string) {

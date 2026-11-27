@@ -267,6 +267,23 @@ try {
   await openFixture(page, `${base}/getting-started`);
   await page.locator('.vp-doc h1').waitFor();
   await assertDocsThemeOrder(page);
+  for (const prefix of ['', '/zh-Hans']) {
+    await openFixture(page, `${base}${prefix}/components/slider-field`);
+    const sizeRow = page
+      .locator('.api-table tr')
+      .filter({ has: page.locator('td:first-child code', { hasText: /^size$/ }) });
+    const chips = sizeRow.locator('[data-scope="chip"][data-part="root"]');
+    assert.deepEqual(await chips.allTextContents().then((labels) => labels.map((label) => label.trim())), [
+      'extra-small',
+      'small',
+      'medium',
+    ]);
+    const preview = page.locator('.demo-preview [data-scope="slider-field"]').first();
+    for (const size of ['medium', 'small', 'extra-small']) {
+      await chips.filter({ has: page.getByRole('radio', { name: size, exact: true }) }).click();
+      assert.equal(await preview.getAttribute('data-size'), size);
+    }
+  }
   assert.deepEqual(errors, []);
   console.log('Home components, theme inheritance, responsive search and stylesheet order passed.');
 } finally {

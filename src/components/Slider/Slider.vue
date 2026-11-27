@@ -15,6 +15,7 @@ import {
   useTemplateRef,
   watch,
 } from 'vue';
+import { isValidStep, moveSliderSteps, normalizeValuePrecision, snapSliderValue } from '@/internal/sliderSteps';
 import { sliderContextKey } from './SliderContext';
 import { useAnimatedNumberState } from '@/composables/useAnimatedNumber';
 import { Icon } from '@/components/Icon';
@@ -145,50 +146,7 @@ const insetIconPopThreshold = computed(() => (size.value === 'extra-large' ? 56 
 // continuous and normalize values here so effective limits and shortened final intervals stay selectable.
 const valueMinimum = computed(() => Math.min(max, Math.max(min, lowerLimit ?? min)));
 const valueMaximum = computed(() => Math.max(valueMinimum.value, Math.max(min, Math.min(max, upperLimit ?? max))));
-const isValidStep = (valueStep: number) => Number.isFinite(valueStep) && valueStep > 0;
 const hasValidStep = computed(() => isValidStep(step));
-
-const normalizeValuePrecision = (nextValue: number) => {
-  const normalizedValue = Number(nextValue.toPrecision(15));
-  return Object.is(normalizedValue, -0) ? 0 : normalizedValue;
-};
-
-const clampValue = (nextValue: number) => {
-  if (nextValue < valueMinimum.value) {
-    return [true, valueMinimum.value] as const;
-  } else if (nextValue > valueMaximum.value) {
-    return [true, valueMaximum.value] as const;
-  }
-  return [false, nextValue] as const;
-};
-
-const snapValueToStep = (nextValue: number) => {
-  const [, clampedValue] = clampValue(nextValue);
-  if (!hasValidStep.value || valueMinimum.value === valueMaximum.value) {
-    return clampedValue;
-  }
-
-  const stepIndex = Math.round((clampedValue - valueMinimum.value) / step);
-  const steppedValue = normalizeValuePrecision(valueMinimum.value + stepIndex * step);
-  const steppedCandidate = Math.min(valueMaximum.value, Math.max(valueMinimum.value, steppedValue));
-
-  // The upper endpoint is always selectable, even when the final interval is shorter than one step.
-  return Math.abs(valueMaximum.value - clampedValue) <= Math.abs(steppedCandidate - clampedValue)
-    ? valueMaximum.value
-    : steppedCandidate;
-};
-
-const getAdjacentStepValue = (currentValue: number, direction: -1 | 1, valueStep: number) => {
-  const [, clampedValue] = clampValue(currentValue);
-  if (!isValidStep(valueStep) || valueMinimum.value === valueMaximum.value) {
-    return clampedValue;
-  }
-
-  const stepIndex = (clampedValue - valueMinimum.value) / valueStep;
-  const nextStepIndex = direction > 0 ? Math.floor(stepIndex + 1e-10) + 1 : Math.ceil(stepIndex - 1e-10) - 1;
-  const steppedValue = normalizeValuePrecision(valueMinimum.value + nextStepIndex * valueStep);
-  return Math.min(valueMaximum.value, Math.max(valueMinimum.value, steppedValue));
-};
 
 const setValueFromInteraction = (nextValue: number, target: HTMLInputElement) => {
   const normalizedValue = normalizeValuePrecision(nextValue);
@@ -200,7 +158,7 @@ const setValueFromInteraction = (nextValue: number, target: HTMLInputElement) =>
 const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const inputValue = target.valueAsNumber;
-  const snappedValue = snapValueToStep(inputValue);
+  const snappedValue = snapSliderValue(inputValue, valueMinimum.value, valueMaximum.value, step);
 
   valueCurrent.value = snappedValue;
   if (isValueDragging.value) {
@@ -225,7 +183,7 @@ const onWheel = (event: WheelEvent) => {
   event.preventDefault();
   const dir = event.deltaY < 0 ? 1 : -1;
   const valueStep = event.altKey ? step : (wheelStep ?? step);
-  const nextValue = getAdjacentStepValue(valueCurrent.value, dir, valueStep);
+  const nextValue = moveSliderSteps(valueCurrent.value, dir, valueMinimum.value, valueMaximum.value, valueStep);
   setValueFromInteraction(nextValue, event.currentTarget as HTMLInputElement);
 };
 
@@ -603,7 +561,7 @@ const onValueIndicatorKeyDown = (event: KeyboardEvent) => {
     if (!hasValidStep.value) {
       return;
     }
-    nextValue = getAdjacentStepValue(valueCurrent.value, stepDirection, step);
+    nextValue = moveSliderSteps(valueCurrent.value, stepDirection, valueMinimum.value, valueMaximum.value, step);
   }
 
   if (nextValue === undefined) {

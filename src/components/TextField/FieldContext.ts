@@ -16,7 +16,7 @@ export type FieldLabelBehavior = 'floating' | 'external';
 export interface FieldContext {
   /** Whether fields render a floating label or leave visible labeling to the parent. */
   labelBehavior?: MaybeRef<FieldLabelBehavior | undefined>;
-  /** Default size for single-line TextField and Select controls. */
+  /** Default size for single-line field controls. */
   size?: MaybeRef<TextFieldSize | undefined>;
   /** Default block-start clearance reserved for floating labels in this component subtree. */
   labelClearance?: MaybeRef<string | undefined>;
@@ -39,9 +39,9 @@ export function useFieldLabelClearanceStyle(
   });
 }
 
-export function useFieldSize(size: MaybeRefOrGetter<TextFieldSize | undefined>) {
+export function useFieldSize(size: MaybeRefOrGetter<TextFieldSize | undefined>, fallback: TextFieldSize = 'medium') {
   const fieldContext = inject(fieldContextKey, undefined);
-  return computed<TextFieldSize>(() => toValue(size) ?? unref(fieldContext?.size) ?? 'medium');
+  return computed<TextFieldSize>(() => toValue(size) ?? unref(fieldContext?.size) ?? fallback);
 }
 
 export function useFieldLabelBehavior(behavior: MaybeRefOrGetter<FieldLabelBehavior | undefined>) {

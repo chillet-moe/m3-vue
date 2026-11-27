@@ -1,0 +1,45 @@
+@layer components {
+  .m3-slider-field {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    min-block-size: var(--_field-height);
+    padding-block: var(--_field-padding-block);
+    padding-inline: var(--_field-padding-inline);
+    border: 0;
+    border-radius: var(--md-shape-compact);
+    box-shadow: inset 0 0 0 1px var(--md-sys-color-outline-variant);
+    background-color: var(--md-color-container, var(--md-sys-color-surface-container-high));
+    background-image: linear-gradient(
+      to right,
+      --translucent(var(--md-sys-color-primary), 0.22) var(--_fill),
+      transparent var(--_fill)
+    );
+    color: var(--md-color-on-container, var(--md-sys-color-on-surface));
+    text-align: center;
+    font-family: var(--_field-text-font), sans-serif;
+    font-size: var(--_field-text-size);
+    font-weight: var(--_field-text-weight);
+    line-height: var(--_field-text-line-height);
+    letter-spacing: var(--_field-text-tracking);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .m3-slider-field:read-only {
+    cursor: ew-resize;
+    user-select: none;
+    caret-color: transparent;
+    touch-action: pan-y;
+  }
+
+  .m3-slider-field:focus-visible,
+  .m3-slider-field:read-write {
+    outline: --dp(2) solid var(--md-sys-color-primary);
+    outline-offset: --dp(1);
+  }
+
+  .m3-slider-field:disabled {
+    opacity: 0.38;
+    cursor: default;
+  }
+}

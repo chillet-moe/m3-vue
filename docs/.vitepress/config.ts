@@ -144,6 +144,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
           { text: 'InputOtp', link: '/components/input-otp' },
           { text: 'NumberField', link: '/components/number-field' },
           { text: 'Select', link: '/components/select' },
+          { text: 'SliderField', link: '/components/slider-field' },
           { text: 'TextField', link: '/components/text-field' },
           { text: 'TimePicker', link: '/components/time-picker' },
         ],

@@ -18,7 +18,7 @@ export type M3ShapeOptions = {
 };
 
 export type M3FieldOptions = {
-  /** Default size for single-line TextField and Select controls. Accepts a reactive ref. */
+  /** Default size for single-line field controls. Accepts a reactive ref. */
   fieldSize?: FieldContext['size'];
   /** Default label presentation for TextField, Select and Combobox. */
   fieldLabelBehavior?: FieldContext['labelBehavior'];

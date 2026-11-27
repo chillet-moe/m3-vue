@@ -61,7 +61,7 @@ app.use(M3VuePlugin, {
 | ------------------------------------------ | ----------------------------------------------------------------------- |
 | `shape`                                    | 共享组件形状                                                            |
 | `rowSize`                                  | 菜单行（包括 Select/Combobox 菜单）、TreeView 和导航抽屉/导航栏条目     |
-| `fieldSize`                                | 单行 TextField、Select 和 Combobox                                      |
+| `fieldSize`                                | 单行 TextField、NumberField、Select、Combobox 和 SliderField            |
 | `fieldLabelBehavior`                       | TextField、Select 和 Combobox 的标签呈现方式（`floating` / `external`） |
 | `buttonDefaults`                           | Button 尺寸和按压形变；ButtonGroup 继承按压形变设置                     |
 | `switchSize`                               | Switch（`small` / `medium`）                                            |

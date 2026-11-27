@@ -16,6 +16,21 @@ try {
     }, typographyPresets[preset]);
     for (const density of [0, -2, -4, -99, 2]) {
       await page.locator('main').evaluate((el, value) => el.style.setProperty('--md-density', String(value)), density);
+      const fieldSizes = await page.locator('section[data-size]').evaluateAll((sections) =>
+        sections.map((section) => {
+          const slider = section.querySelector<HTMLElement>('[data-scope="slider-field"]')!;
+          const text = section.querySelector<HTMLElement>('[data-scope="text-field"][data-part="container"]')!;
+          const input = text.querySelector('input')!;
+          return {
+            size: section.getAttribute('data-size'),
+            slider: [slider.getBoundingClientRect().height, getComputedStyle(slider).fontSize],
+            text: [text.getBoundingClientRect().height, getComputedStyle(input).fontSize],
+          };
+        }),
+      );
+      for (const { size, slider, text } of fieldSizes) {
+        assert.deepEqual(slider, text, `SliderField and TextField must align: ${preset}, ${density}, ${size}`);
+      }
       const metrics = await page.locator('section[data-size="small"]').evaluate((root) => ({
         button: root.querySelector('[data-scope="button"][data-part="root"]')!.getBoundingClientRect().height,
         fields: [...root.querySelectorAll('[data-scope="text-field"][data-part="container"]')].map((el) => {

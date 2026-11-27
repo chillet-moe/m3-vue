@@ -383,7 +383,7 @@ defineExpose({
 <template>
   <div
     ref="rootRef"
-    :class="['m3-text-field', attrs.class]"
+    :class="['m3-text-field m3-field-size', attrs.class]"
     data-scope="text-field"
     data-part="root"
     :data-invalid="invalid ? 'true' : 'false'"

@@ -5,6 +5,7 @@ import {
   fieldContextKey,
   type FieldContext,
   TextField,
+  SliderField,
   type TextFieldSize,
   Select,
   Combobox,
@@ -27,6 +28,7 @@ describe('field size defaults', () => {
       const labelClearance = ref('0.5rem');
       const controls = (prefix: string, explicit = false) => [
         h(TextField, { modelValue: '', class: `${prefix}-input`, size: explicit ? explicitSize.value : undefined }),
+        h(SliderField, { value: 0, class: `${prefix}-slider-field`, size: explicit ? explicitSize.value : undefined }),
         h(Combobox, { class: `${prefix}-combobox`, options: [], size: explicit ? explicitSize.value : undefined }),
         h(Select, { class: `${prefix}-select`, options: [], size: explicit ? explicitSize.value : undefined }),
         h(TextField, {
@@ -50,7 +52,9 @@ describe('field size defaults', () => {
       document.body.appendChild(container);
       app.mount(container);
       const element = (name: string) => container.querySelector<HTMLElement>(`.${name}`)!;
-      const expectSizes = (prefix: string, expected: TextFieldSize) => {
+      const expectSizes = (prefix: string, configuredSize?: TextFieldSize) => {
+        const expected = configuredSize ?? 'medium';
+        expect(element(`${prefix}-slider-field`).dataset.size).toBe(configuredSize ?? 'extra-small');
         expect(element(`${prefix}-input`).dataset.size).toBe(expected);
         expect(element(`${prefix}-select`).dataset.size).toBe(expected);
         expect(element(`${prefix}-combobox`).dataset.size).toBe(expected);
@@ -62,7 +66,7 @@ describe('field size defaults', () => {
         expect(element(`${prefix}-textarea`).querySelector('textarea')).not.toBeNull();
       };
       try {
-        expectSizes('app', installation === 'unconfigured' ? 'medium' : 'small');
+        expectSizes('app', installation === 'unconfigured' ? undefined : size.value);
         expectSizes('local', 'medium');
         expectSizes('explicit', 'extra-small');
         if (installation !== 'unconfigured') {
@@ -77,7 +81,7 @@ describe('field size defaults', () => {
         size.value = 'extra-small';
         subtreeSize.value = 'small';
         await nextTick();
-        expectSizes('app', installation === 'unconfigured' ? 'medium' : 'extra-small');
+        expectSizes('app', installation === 'unconfigured' ? undefined : size.value);
         expectSizes('local', 'small');
         expectSizes('explicit', 'extra-small');
         if (installation !== 'unconfigured') expect(element('local-input').dataset.shape).toBe('square');
@@ -85,7 +89,7 @@ describe('field size defaults', () => {
         size.value = undefined;
         explicitSize.value = undefined;
         await nextTick();
-        expectSizes('app', 'medium');
+        expectSizes('app');
         expectSizes('explicit', 'small');
       } finally {
         app.unmount();

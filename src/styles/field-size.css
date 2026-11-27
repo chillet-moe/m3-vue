@@ -1,0 +1,35 @@
+@layer tokens {
+  :where(.m3-field-size) {
+    /* Size roles keep field text, icons and adjustable whitespace in proportion. */
+    --_field-text-font: var(--md-sys-typescale-body-large-font);
+    --_field-text-size: var(--md-sys-typescale-body-large-size);
+    --_field-text-line-height: var(--md-sys-typescale-body-large-line-height);
+    --_field-text-weight: var(--md-sys-typescale-body-large-weight);
+    --_field-text-tracking: var(--md-sys-typescale-body-large-tracking);
+    --_field-icon-size: --density-icon(24, body-large, 16);
+    --_field-content-height: max(var(--_field-text-line-height), var(--_field-icon-size));
+    --_field-height: --density-height(56, var(--_field-content-height), 24, 4);
+    --_field-padding-inline: --density-space(16, 8, 2);
+    --_field-padding-block: --density-space(8, 4, 2);
+  }
+
+  .m3-field-size:is([data-size='extra-small'], [data-size='small']) {
+    --_field-text-font: var(--md-sys-typescale-body-medium-font);
+    --_field-text-size: var(--md-sys-typescale-body-medium-size);
+    --_field-text-line-height: var(--md-sys-typescale-body-medium-line-height);
+    --_field-text-weight: var(--md-sys-typescale-body-medium-weight);
+    --_field-text-tracking: var(--md-sys-typescale-body-medium-tracking);
+    --_field-icon-size: --density-icon(20, body-medium, 14);
+  }
+
+  .m3-field-size[data-size='extra-small'] {
+    --_field-height: --density-height(32, var(--_field-content-height), 20, 4);
+    --_field-padding-inline: --density-space(8, 8, 2);
+    --_field-padding-block: --density-space(4, 4, 2);
+  }
+
+  .m3-field-size[data-size='small'] {
+    --_field-height: --density-height(40, var(--_field-content-height), 20, 4);
+    --_field-padding-inline: --density-space(12, 8, 2);
+  }
+}
