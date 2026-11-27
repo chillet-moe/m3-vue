@@ -138,6 +138,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'Inputs',
         items: [
+          { text: 'ColorPicker', link: '/components/color-picker' },
           { text: 'Combobox', link: '/components/combobox' },
           { text: 'DatePicker', link: '/components/date-picker' },
           { text: 'DateRangePicker', link: '/components/date-range-picker' },

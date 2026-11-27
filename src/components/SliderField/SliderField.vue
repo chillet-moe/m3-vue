@@ -12,12 +12,16 @@ export type SliderFieldProps = {
   max?: number;
   /** Increment for dragging and arrow keys. */
   step?: number;
+  /** Format the resting field. Text editing uses the full numeric value. */
+  formatValue?: (value: number) => string;
+  /** Discard an out-of-range text entry on commit instead of clamping it. */
+  rejectOutOfRange?: boolean;
   /** Field size. Inherits the field default and falls back to extra-small. */
   size?: TextFieldSize;
   disabled?: boolean;
 };
 
-const { min = 0, max = 100, step = 1, size, disabled } = defineProps<SliderFieldProps>();
+const { min = 0, max = 100, step = 1, size, disabled, formatValue, rejectOutOfRange } = defineProps<SliderFieldProps>();
 const effectiveSize = useFieldSize(() => size, 'extra-small');
 const value = defineModel<number>('value', { required: true });
 const input = useTemplateRef('input');
@@ -51,8 +55,10 @@ function onInput(event: Event) {
 function commit() {
   if (draft.value === undefined) return;
   const number = parseDecimal(draft.value.trim());
-  if (!disabled && number !== undefined) value.value = Math.min(max, Math.max(min, number));
   draft.value = undefined;
+  if (disabled || number === undefined) return;
+  if (rejectOutOfRange && (number < min || number > max)) return;
+  value.value = Math.min(max, Math.max(min, number));
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -135,6 +141,11 @@ function cancelPointer(event: PointerEvent) {
   if (gesture?.id === event.pointerId) gesture = undefined;
 }
 
+// A replacement from the parent supersedes text entered against the previous value.
+watch(value, () => {
+  draft.value = undefined;
+});
+
 watch(
   () => disabled,
   (isDisabled) => {
@@ -161,7 +172,7 @@ watch(
     :aria-valuemax="editing ? undefined : max"
     :readonly="!editing"
     :disabled="disabled"
-    :value="draft ?? String(value)"
+    :value="draft ?? formatValue?.(value) ?? String(value)"
     :style="{ '--_fill': fill * 100 + '%' }"
     @input="onInput"
     @blur="commit"

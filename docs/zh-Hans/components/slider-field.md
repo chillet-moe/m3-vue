@@ -26,7 +26,7 @@ const props = ref({ min: 0, max: 100, step: 1 });
 
 ## 步进调整与精确输入
 
-点击字段或聚焦后按 Enter，可选中数值进行编辑。按 Enter 或离开字段即可提交；按 Escape 会放弃编辑。未完成的输入（例如 `-`）不会改变模型。超出范围的数值会限制到最近的端点。
+点击字段或聚焦后按 Enter，可选中数值进行编辑。按 Enter 或离开字段即可提交；按 Escape 会放弃编辑。未完成的输入（例如 `-`）不会改变模型。超出范围的数值会限制到最近的端点。设置 `reject-out-of-range` 后，提交时会丢弃超出范围的输入。使用 `format-value` 可添加单位或舍入非编辑状态下的显示值。编辑从完整数值开始。如果绑定的数值在外部发生变化，字段会丢弃待提交的草稿。
 
 <DemoContainer :src="SliderFieldDefaultSrc">
   <SliderFieldDefault />

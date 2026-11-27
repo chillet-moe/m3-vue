@@ -17,6 +17,7 @@ export const m3VueComponentNames = [
   'Chip',
   'ChipGroup',
   'CircularProgressIndicator',
+  'ColorPicker',
   'Combobox',
   'DatePicker',
   'DateRangePicker',

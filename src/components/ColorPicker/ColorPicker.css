@@ -1,0 +1,118 @@
+@import '../../styles/typography.css';
+
+@layer components {
+  .m3-color-picker {
+    --_checker: repeating-conic-gradient(#c6c6c6 0 25%, #fff 0 50%) 0 0 / 12px 12px;
+    box-sizing: border-box;
+    display: grid;
+    gap: 0.625rem;
+    inline-size: 20rem;
+    max-inline-size: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    min-inline-size: 0;
+    padding: 0.75rem;
+    color: var(--md-color-on-container, var(--md-sys-color-on-surface));
+    background-color: var(--md-color-container, var(--md-sys-color-surface));
+    border-radius: var(--md-shape-card);
+    @apply body-medium;
+    font-variant-numeric: tabular-nums;
+  }
+  .m3-color-row {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .m3-color-preview {
+    flex: 0 0 2rem;
+    block-size: 2rem;
+  }
+  .m3-color-row[data-part='representation'] {
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .m3-color-settings {
+    padding-inline: 0.25rem;
+  }
+  .m3-color-plane:focus-visible,
+  .m3-color-track:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 3px;
+  }
+  .m3-color-channels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.375rem;
+  }
+  .m3-color-channel {
+    display: grid;
+    grid-template-columns: 2em minmax(0, 1fr);
+    align-items: center;
+  }
+  .m3-color-hex {
+    --md-outlined-text-field-input-text-font: ui-monospace, monospace;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+  .m3-color-diagram {
+    display: grid;
+    gap: 0.375rem;
+  }
+  .m3-color-plane,
+  .m3-color-track {
+    position: relative;
+    touch-action: none;
+    user-select: none;
+    cursor: crosshair;
+  }
+  .m3-color-plane {
+    aspect-ratio: 1;
+    border-radius: var(--md-shape-compact);
+    box-shadow: inset 0 0 0 1px #0003;
+  }
+  .m3-color-plane[data-wheel='true'] {
+    border-radius: 50%;
+  }
+  .m3-color-track {
+    display: grid;
+    align-items: center;
+    block-size: 1.5rem;
+    cursor: ew-resize;
+  }
+  .m3-color-track::before {
+    content: '';
+    block-size: 0.875rem;
+    border-radius: 100vmax;
+    background: var(--_gradient), var(--_checker);
+    box-shadow: inset 0 0 0 1px #0003;
+  }
+  .m3-color-marker {
+    position: absolute;
+    box-sizing: border-box;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 1px #222,
+      inset 0 0 0 1px #222;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .m3-color-track > .m3-color-marker {
+    top: 50%;
+  }
+  .m3-color-picker[aria-disabled='true'] :is(.m3-color-plane, .m3-color-track) {
+    cursor: default;
+  }
+
+  @container m3-color-picker-host (min-width: 32rem) {
+    .m3-color-picker {
+      inline-size: 100%;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+      align-items: center;
+    }
+    .m3-color-diagram {
+      grid-area: 1 / 1 / span 3;
+    }
+  }
+}

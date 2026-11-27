@@ -85,6 +85,7 @@ export * from './components/Popover';
 export * from './components/TextField';
 export * from './components/Select';
 export * from './components/SideSheet';
+export * from './components/ColorPicker';
 export * from './components/Combobox';
 export * from './components/Tabs';
 export * from './components/TreeView';

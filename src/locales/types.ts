@@ -5,6 +5,27 @@ export type M3Messages = {
     confirm: string;
     cancel: string;
   };
+  colorPicker: {
+    picker: string;
+    settings: string;
+    layout: string;
+    hsvWheel: string;
+    hslWheel: string;
+    model: string;
+    space: string;
+    linear: string;
+    red: string;
+    green: string;
+    blue: string;
+    hue: string;
+    saturation: string;
+    value: string;
+    lightness: string;
+    alpha: string;
+    copyHex: string;
+    sample: string;
+    reset: string;
+  };
   datePicker: {
     chooseDate: string;
     previousMonth: string;

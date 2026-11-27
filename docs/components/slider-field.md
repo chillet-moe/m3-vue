@@ -26,7 +26,7 @@ Use `size="extra-small"`, `size="small"`, or `size="medium"` to align with a sin
 
 ## Step adjustments and exact input
 
-Click the field or focus it and press Enter to select the number for editing. Press Enter or leave the field to commit. Escape discards the edit. An unfinished entry such as `-` leaves the model unchanged. A number outside the range is clamped to the nearest endpoint.
+Click the field or focus it and press Enter to select the number for editing. Press Enter or leave the field to commit. Escape discards the edit. An unfinished entry such as `-` leaves the model unchanged. A number outside the range is clamped to the nearest endpoint. Set `reject-out-of-range` to discard that entry on commit. Use `format-value` to add units or round the resting display. Editing starts with the full numeric value. If the bound number changes externally, the field discards its pending draft.
 
 <DemoContainer :src="SliderFieldDefaultSrc">
   <SliderFieldDefault />
