@@ -124,6 +124,12 @@ const API_ENTRIES: ApiEntry[] = [
     ],
   },
   {
+    id: 'showSnackbarStatus',
+    source: 'src/components/Snackbar/showSnackbarStatus.ts',
+    functionName: 'showSnackbarStatus',
+    types: [{ name: 'ShowSnackbarStatusOptions' }, { name: 'SnackbarStatusHandle' }],
+  },
+  {
     id: 'vTooltip',
     source: 'src/directives/Tooltip/types.ts',
     functionName: 'vTooltip',

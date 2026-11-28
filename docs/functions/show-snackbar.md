@@ -142,3 +142,5 @@ The tables below are generated from source types and stay in sync with API chang
 - Leaving the snackbar resumes the remaining time instead of restarting the full duration.
 
 For manually rendered snackbars, see [Snackbar](/components/snackbar).
+
+For application-controlled status messages in the same stack, see [showSnackbarStatus](/functions/show-snackbar-status).

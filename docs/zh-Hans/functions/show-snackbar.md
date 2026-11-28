@@ -134,3 +134,5 @@ Snackbar 关闭时 Promise 会返回结果。
 - 离开 Snackbar 后会继续剩余时间，而不是重新开始完整计时。
 
 手动渲染 Snackbar 时，请参阅 [Snackbar](/zh-Hans/components/snackbar)。
+
+如需在同一堆栈中显示由应用状态控制的状态消息，请参阅 [showSnackbarStatus](/zh-Hans/functions/show-snackbar-status)。

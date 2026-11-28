@@ -4,7 +4,6 @@ import {
   defineComponent,
   h,
   nextTick,
-  shallowReactive,
   shallowRef,
   triggerRef,
   useTemplateRef,
@@ -21,17 +20,23 @@ import {
 } from '@/internal/overlayHost/overlayHost';
 import './PopoverStackHost.css';
 
-type PopoverStackItemRecord = {
-  id: number;
-  closing: ShallowRef<boolean>;
+type PopoverStackItemOptions = {
+  /** Ordered items precede unordered items. Equal orders retain insertion order. */
+  order?: number;
+  itemClass?: string;
   render: () => VNodeChild;
   onHostUnmounted?: (error: Error) => void;
 };
 
+type PopoverStackItemRecord = PopoverStackItemOptions & {
+  id: number;
+  closing: ShallowRef<boolean>;
+};
+
 type PopoverStackConfig = {
+  stackId: string;
   popoverClass?: string;
   stackClass?: string;
-  itemClass?: string;
   role?: string;
   ariaLive?: 'off' | 'polite' | 'assertive';
   ariaAtomic?: 'true' | 'false';
@@ -49,15 +54,19 @@ type PopoverStackController = {
   state: PopoverStackState;
 };
 
-export type ShowPopoverStackItemOptions = PopoverStackConfig & {
-  stackId: string;
-  render: () => VNodeChild;
-  onHostUnmounted?: (error: Error) => void;
-};
-
 export type PopoverStackItemHandle = {
   close: () => void;
 };
+
+// A caller can keep close (including a destructured copy) beyond the item's lifetime.
+function createCloseHandle(startExit: (() => void) | undefined) {
+  return {
+    close: () => startExit?.(),
+    release: () => {
+      startExit = undefined;
+    },
+  };
+}
 
 const stacks = new WeakMap<OverlayHostController, Map<string, PopoverStackController>>();
 function controllers(host: OverlayHostController) {
@@ -110,21 +119,18 @@ function getExitDuration(element: HTMLElement | null): number {
 }
 
 // Isolate each item's render so a staggered timeout only updates the affected item.
-const PopoverStackItem: FunctionalComponent<{ item: PopoverStackItemRecord; itemClass?: string }> = ({
-  item,
-  itemClass,
-}) =>
+const PopoverStackItem: FunctionalComponent<{ item: PopoverStackItemRecord }> = ({ item }) =>
   h(
     'div',
     {
       'data-stack-item-id': item.id,
       'data-state': item.closing.value ? 'closing' : 'open',
-      class: ['m3-popover-stack-item', itemClass],
+      class: ['m3-popover-stack-item', item.itemClass],
     },
     [item.render()],
   );
 
-PopoverStackItem.props = ['item', 'itemClass'];
+PopoverStackItem.props = ['item'];
 
 const PopoverStackHost = defineComponent({
   name: 'PopoverStackHost',
@@ -174,9 +180,7 @@ const PopoverStackHost = defineComponent({
             {
               class: ['m3-popover-stack', props.state.config.stackClass],
             },
-            props.state.items.value.map((item) =>
-              h(PopoverStackItem, { key: item.id, item, itemClass: props.state.config.itemClass }),
-            ),
+            props.state.items.value.map((item) => h(PopoverStackItem, { key: item.id, item })),
           ),
         ],
       );
@@ -195,33 +199,16 @@ function teardownPopoverStack(host: OverlayHostController, stackId: string) {
   stackControllers.delete(stackId);
 }
 
-function ensurePopoverStack(owner: OverlayHostController, options: ShowPopoverStackItemOptions) {
-  const { stackId } = options;
+function ensurePopoverStack(owner: OverlayHostController, config: PopoverStackConfig) {
+  const { stackId } = config;
   const stackControllers = controllers(owner);
   const existing = stackControllers.get(stackId);
 
-  if (existing) {
-    existing.state.config.popoverClass = options.popoverClass;
-    existing.state.config.stackClass = options.stackClass;
-    existing.state.config.itemClass = options.itemClass;
-    existing.state.config.role = options.role;
-    existing.state.config.ariaLive = options.ariaLive;
-    existing.state.config.ariaAtomic = options.ariaAtomic;
-    existing.state.config.dataAttributes = options.dataAttributes;
-    return existing;
-  }
+  if (existing) return existing;
 
   const state: PopoverStackState = {
     items: shallowRef([]),
-    config: shallowReactive({
-      popoverClass: options.popoverClass,
-      stackClass: options.stackClass,
-      itemClass: options.itemClass,
-      role: options.role,
-      ariaLive: options.ariaLive,
-      ariaAtomic: options.ariaAtomic,
-      dataAttributes: options.dataAttributes,
-    }),
+    config,
   };
 
   let host: HTMLDivElement | null = null;
@@ -255,34 +242,45 @@ function ensurePopoverStack(owner: OverlayHostController, options: ShowPopoverSt
 
 export function showPopoverStackItem(
   owner: OverlayHostController,
-  options: ShowPopoverStackItemOptions,
+  config: PopoverStackConfig,
+  options: PopoverStackItemOptions,
 ): PopoverStackItemHandle {
   if (typeof document === 'undefined') {
     throw new Error('showPopoverStackItem requires a browser environment.');
   }
 
-  const controller = ensurePopoverStack(owner, options);
+  const controller = ensurePopoverStack(owner, config);
   const itemId = ++nextItemId;
   let disposed = false;
   let releaseExit: (() => void) | undefined;
+  const { close, release } = createCloseHandle(startExit);
+
+  const dispose = () => {
+    disposed = true;
+    release();
+    releaseExit?.();
+  };
 
   const item: PopoverStackItemRecord = {
+    ...options,
     id: itemId,
     closing: shallowRef(false),
-    render: options.render,
     onHostUnmounted: (error) => {
-      disposed = true;
-      releaseExit?.();
+      dispose();
       options.onHostUnmounted?.(error);
     },
   };
-  controller.state.items.value.push(item);
+  const items = controller.state.items.value;
+  const { order } = item;
+  const insertBefore =
+    order === undefined ? -1 : items.findIndex((other) => other.order === undefined || other.order > order);
+  if (insertBefore === -1) items.push(item);
+  else items.splice(insertBefore, 0, item);
   triggerRef(controller.state.items);
 
   const removeItem = () => {
     if (disposed) return;
-    disposed = true;
-    releaseExit?.();
+    dispose();
     const items = controller.state.items.value;
     const index = items.indexOf(item);
     if (index !== -1) items.splice(index, 1);
@@ -297,11 +295,11 @@ export function showPopoverStackItem(
         return;
       }
 
-      if (controllers(owner).get(options.stackId) === controller) teardownPopoverStack(owner, options.stackId);
+      if (controllers(owner).get(config.stackId) === controller) teardownPopoverStack(owner, config.stackId);
     });
   };
 
-  const close = () => {
+  function startExit() {
     if (item.closing.value) {
       return;
     }
@@ -328,7 +326,7 @@ export function showPopoverStackItem(
         return () => view.clearTimeout(timer);
       });
     });
-  };
+  }
 
   return { close };
 }

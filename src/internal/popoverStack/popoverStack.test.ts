@@ -7,6 +7,7 @@ import { OverlayHost } from '@/components/OverlayHost';
 import { showPopoverStackItem } from './popoverStack';
 
 const overlayHost = createOverlayHost();
+const stackConfig = { stackId: 'test-stack' };
 let app: App<Element> | null = null;
 
 beforeAll(installPopoverPolyfill);
@@ -38,12 +39,10 @@ describe('showPopoverStackItem', () => {
       },
     });
 
-    const first = showPopoverStackItem(overlayHost, {
-      stackId: 'test-stack',
+    const first = showPopoverStackItem(overlayHost, stackConfig, {
       render: () => h('div', { 'data-testid': 'native-surface' }, 'Native item'),
     });
-    const second = showPopoverStackItem(overlayHost, {
-      stackId: 'test-stack',
+    const second = showPopoverStackItem(overlayHost, stackConfig, {
       render: () => h(CustomSurface),
     });
 
@@ -71,12 +70,10 @@ describe('showPopoverStackItem', () => {
   it('preserves a focused entry and updates its content as other entries leave and enter', async () => {
     vi.useFakeTimers();
     const label = ref('Original label');
-    const first = showPopoverStackItem(overlayHost, {
-      stackId: 'test-stack',
+    const first = showPopoverStackItem(overlayHost, stackConfig, {
       render: () => h('span', 'First item'),
     });
-    showPopoverStackItem(overlayHost, {
-      stackId: 'test-stack',
+    showPopoverStackItem(overlayHost, stackConfig, {
       render: () => h('input', { 'aria-label': label.value }),
     });
     await nextTick();
@@ -86,8 +83,7 @@ describe('showPopoverStackItem', () => {
     input.value = 'Unsubmitted text';
 
     first.close();
-    showPopoverStackItem(overlayHost, {
-      stackId: 'test-stack',
+    showPopoverStackItem(overlayHost, stackConfig, {
       render: () => h('span', 'Last item'),
     });
     label.value = 'Updated label';
@@ -100,8 +96,7 @@ describe('showPopoverStackItem', () => {
   });
 
   it('keeps a new entry queued between the final removal and stack teardown', async () => {
-    const first = showPopoverStackItem(overlayHost, {
-      stackId: 'test-stack',
+    const first = showPopoverStackItem(overlayHost, stackConfig, {
       render: () => h('span', 'First item'),
     });
     await nextTick();
@@ -111,8 +106,7 @@ describe('showPopoverStackItem', () => {
     await nextTick();
     // The close callback queues removal. Enqueue after that removal but before its teardown check.
     const successor = await Promise.resolve().then(() =>
-      showPopoverStackItem(overlayHost, {
-        stackId: 'test-stack',
+      showPopoverStackItem(overlayHost, stackConfig, {
         render: () => h('span', 'Successor'),
       }),
     );

@@ -10,6 +10,7 @@ import { OverlayHost } from '@/components/OverlayHost';
 import { M3VuePlugin } from '@/plugin';
 import { provideSnackbarDefaults, type ShowSnackbarDefaults } from './config';
 import { showSnackbar, useSnackbar, type UseSnackbarReturn } from './showSnackbar';
+import { showSnackbarStatus } from './showSnackbarStatus';
 
 const overlayHost = createOverlayHost();
 let app: App<Element> | null = null;
@@ -398,5 +399,84 @@ describe('showSnackbar', () => {
     await Promise.resolve();
 
     expect(document.querySelector('[popover="manual"]')).toBeNull();
+  });
+});
+
+describe('showSnackbarStatus', () => {
+  it('keeps both arrival orders stable while an old status exits and its replacement updates', async () => {
+    const position = 'top-end';
+    const first = showSnackbar(overlayHost, { position, message: 'First', duration: null, action: { label: 'Undo' } });
+    const second = showSnackbar(overlayHost, { position, message: 'Second', duration: null });
+    await nextTick();
+    const action = document.querySelector<HTMLButtonElement>('.m3-snackbar-action-button')!;
+    action.focus();
+
+    const label = ref('Working');
+    const later = showSnackbarStatus(overlayHost, { position, order: 1, render: () => 'Offline' });
+    const earlier = showSnackbarStatus(overlayHost, { position, render: () => label.value });
+    const tied = showSnackbarStatus(overlayHost, { position, order: 0, render: () => 'Read only' });
+    await nextTick();
+
+    const stack = document.querySelector('[popover][data-position="top-end"]')!;
+    const messages = () =>
+      Array.from(
+        stack.querySelectorAll('[data-stack-item-id]'),
+        (item) => item.querySelector('[data-part="content"]')?.textContent ?? item.textContent,
+      );
+    expect(messages()).toEqual(['Working', 'Read only', 'Offline', 'First', 'Second']);
+    expect(document.activeElement).toBe(action);
+
+    label.value = 'Finishing';
+    await nextTick();
+    expect(messages()[0]).toBe('Finishing');
+
+    earlier.close();
+    earlier.close();
+    const replacement = showSnackbarStatus(overlayHost, { position, render: () => 'Retrying' });
+    await vi.waitFor(() => expect(messages()).toEqual(['Read only', 'Retrying', 'Offline', 'First', 'Second']));
+    later.close();
+    await vi.waitFor(() => expect(messages()).toEqual(['Read only', 'Retrying', 'First', 'Second']));
+
+    action.click();
+    await expect(first).resolves.toBe('action');
+    await vi.waitFor(() => expect(messages()).toEqual(['Read only', 'Retrying', 'Second']));
+    stack.querySelector<HTMLButtonElement>('[aria-label="Dismiss notification"]')!.click();
+    await expect(second).resolves.toBe('dismiss');
+
+    tied.close();
+    replacement.close();
+    await vi.waitFor(() => expect(document.querySelector('[popover]')).toBeNull());
+  });
+
+  it('scopes statuses by host and position and disposes handles with their owner', async () => {
+    const otherHost = createOverlayHost();
+    const otherRoot = document.createElement('div');
+    document.body.append(otherRoot);
+    const otherApp = createApp(() => h(OverlayHost, { host: otherHost }));
+    otherApp.mount(otherRoot);
+    try {
+      const service = createOverlayService(overlayHost);
+      const stale = service.showSnackbarStatus({ position: 'top-end', render: () => 'Old owner' });
+      service.showSnackbarStatus({ position: 'bottom', render: () => 'Bottom' });
+      showSnackbarStatus(otherHost, { position: 'top-end', render: () => 'Other owner' });
+      await nextTick();
+      expect(Array.from(document.querySelectorAll('[popover]'), (stack) => stack.textContent)).toEqual([
+        'Old owner',
+        'Bottom',
+        'Other owner',
+      ]);
+
+      app!.unmount();
+      mountOverlayHost();
+      service.showSnackbarStatus({ position: 'top-end', render: () => 'New owner' });
+      stale.close();
+      await nextTick();
+      expect(Array.from(document.querySelectorAll('[popover]'), (stack) => stack.textContent)).toEqual([
+        'Other owner',
+        'New owner',
+      ]);
+    } finally {
+      otherApp.unmount();
+    }
   });
 });

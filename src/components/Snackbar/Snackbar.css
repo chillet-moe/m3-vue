@@ -132,7 +132,7 @@
   }
 
   @media (width < 40rem) {
-    .m3-snackbar {
+    .m3-snackbar:where(:not(.m3-snackbar-stacked)) {
       inline-size: min(100%, calc(100vi - 2rem));
     }
   }

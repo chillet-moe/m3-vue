@@ -3,38 +3,56 @@
     position: fixed;
     inset: auto;
     margin: 0;
-    inline-size: min(calc(100vi - 2rem), 36rem);
+    inline-size: min(calc(100vi - 32px), 36rem);
   }
 
   .m3-snackbar-stack-popover[data-position='bottom'],
   .m3-snackbar-stack-popover[data-position='bottom-start'],
   .m3-snackbar-stack-popover[data-position='bottom-end'] {
-    inset-block-end: 1rem;
+    inset-block-end: 16px;
   }
 
   .m3-snackbar-stack-popover[data-position='top'],
   .m3-snackbar-stack-popover[data-position='top-start'],
   .m3-snackbar-stack-popover[data-position='top-end'] {
-    inset-block-start: 1rem;
+    inset-block-start: 16px;
   }
 
   .m3-snackbar-stack-popover[data-position='top'],
   .m3-snackbar-stack-popover[data-position='bottom'] {
-    inset-inline-start: 50%;
-    transform: translateX(-50%);
+    inset-inline: 0;
+    margin-inline: auto;
   }
 
   .m3-snackbar-stack {
     inline-size: 100%;
   }
 
+  .m3-snackbar-stack:has(> .m3-snackbar-status) {
+    gap: 8px;
+  }
+
+  .m3-snackbar-status {
+    align-self: center;
+    max-inline-size: 100%;
+    pointer-events: none;
+  }
+
+  .m3-snackbar-stack-popover[data-position$='-start'] .m3-snackbar-status {
+    align-self: start;
+  }
+
+  .m3-snackbar-stack-popover[data-position$='-end'] .m3-snackbar-status {
+    align-self: end;
+  }
+
   .m3-snackbar-stack-popover[data-position='top-start'],
   .m3-snackbar-stack-popover[data-position='bottom-start'] {
-    inset-inline-start: 1rem;
+    inset-inline-start: 16px;
   }
 
   .m3-snackbar-stack-popover[data-position='top-end'],
   .m3-snackbar-stack-popover[data-position='bottom-end'] {
-    inset-inline-end: 1rem;
+    inset-inline-end: 16px;
   }
 }

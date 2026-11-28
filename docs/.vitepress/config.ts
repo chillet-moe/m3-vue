@@ -189,6 +189,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     items: [
       { text: 'showDialog', link: '/functions/show-dialog' },
       { text: 'showSnackbar', link: '/functions/show-snackbar' },
+      { text: 'showSnackbarStatus', link: '/functions/show-snackbar-status' },
     ],
   },
   {

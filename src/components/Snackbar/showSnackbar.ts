@@ -9,7 +9,7 @@ import { h, inject } from 'vue';
 import Snackbar from './Snackbar.vue';
 import { snackbarDefaultsContextKey, type ShowSnackbarDefaults, type SnackbarPosition } from './config';
 import { showPopoverStackItem } from '@/internal/popoverStack/popoverStack';
-import './SnackbarStack.css';
+import { snackbarStack } from './snackbarStack';
 
 export type { ShowSnackbarDefaults, SnackbarPosition } from './config';
 
@@ -109,13 +109,7 @@ function showSnackbarWithDefaults(
       remainingDuration = Math.max(0, remainingDuration - (view.performance.now() - startedAt));
     };
 
-    const handle = showPopoverStackItem(host, {
-      stackId: `snackbar:${position}`,
-      popoverClass: 'm3-snackbar-stack-popover',
-      stackClass: 'm3-snackbar-stack',
-      dataAttributes: {
-        'data-position': position,
-      },
+    const handle = showPopoverStackItem(host, snackbarStack(position), {
       onHostUnmounted: (error) => {
         clearTimer();
         releaseTimerEnvironment();
@@ -125,6 +119,7 @@ function showSnackbarWithDefaults(
         h(
           Snackbar,
           {
+            class: 'm3-snackbar-stacked',
             actionLabel: action?.label,
             actionDisabled: action?.disabled,
             actionAutofocus: action?.autofocus,
@@ -140,6 +135,10 @@ function showSnackbarWithDefaults(
             onVnodeMounted: (vnode) => {
               if (settled) return;
               snackbarElement = vnode.el as HTMLElement;
+              // Opening a popover handles autofocus natively. Appending to an open stack does not.
+              if (action?.autofocus) {
+                snackbarElement.querySelector<HTMLElement>('[autofocus]')?.focus({ preventScroll: true });
+              }
               syncTimer();
             },
             onPointerenter: syncTimer,

@@ -1,10 +1,16 @@
 import { showDialog, type ShowDialogOptions } from './components/Dialog/showDialog';
 import { showSnackbar, useSnackbar, type ShowSnackbarOptions } from './components/Snackbar/showSnackbar';
+import {
+  showSnackbarStatus,
+  type ShowSnackbarStatusOptions,
+  type SnackbarStatusHandle,
+} from './components/Snackbar/showSnackbarStatus';
 import { useOverlayHost, type OverlayHostController } from './internal/overlayHost/overlayHost';
 
 export type OverlayService = {
   showDialog: (options?: ShowDialogOptions) => Promise<string>;
   showSnackbar: (options?: ShowSnackbarOptions) => Promise<string>;
+  showSnackbarStatus: (options: ShowSnackbarStatusOptions) => SnackbarStatusHandle;
 };
 
 /** Bind programmatic overlays to a UI host without requiring a Vue setup context. */
@@ -12,6 +18,7 @@ export function createOverlayService(host: OverlayHostController): OverlayServic
   return {
     showDialog: (options) => showDialog(host, options),
     showSnackbar: (options) => showSnackbar(host, options),
+    showSnackbarStatus: (options) => showSnackbarStatus(host, options),
   };
 }
 
@@ -21,5 +28,6 @@ export function useOverlays(): OverlayService {
   return {
     showDialog: (options) => showDialog(host, options),
     showSnackbar: useSnackbar(),
+    showSnackbarStatus: (options) => showSnackbarStatus(host, options),
   };
 }

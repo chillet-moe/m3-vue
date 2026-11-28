@@ -54,7 +54,113 @@ try {
     await page.waitForFunction(() => document.querySelector('output')?.textContent === 'timeout');
     await stack.waitFor({ state: 'detached' });
   }
-  console.log('Snackbar native visibility, dismissal and overlapping pause reasons passed.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.getByRole('button', { name: 'Show persistent' }).click();
+  await page.getByRole('button', { name: 'Toggle mode' }).click();
+  await page.getByRole('button', { name: 'Toggle previews' }).click();
+
+  const previews = stack.getByTestId('status-0');
+  const mode = stack.getByTestId('status-1');
+  const snackbar = stack.getByRole('status');
+  const wide = (await previews.boundingBox())!;
+  await page.setViewportSize({ width: 320, height: 640 });
+  const wrapped = (await previews.boundingBox())!;
+  const modeBox = (await mode.boundingBox())!;
+  const snackbarBox = (await snackbar.boundingBox())!;
+  assert(wrapped.height > wide.height, 'The preview message wraps in the narrow viewport');
+  assert.equal(wrapped.y, 16);
+  assert.equal(modeBox.y - (wrapped.y + wrapped.height), 8);
+  assert.equal(snackbarBox.y - (modeBox.y + modeBox.height), 8);
+
+  // Hit the content, empty stack space beside the short status, and the gap above the snackbar.
+  await page.mouse.click(wrapped.x + 5, wrapped.y + 5);
+  await page.mouse.click(wrapped.x + 5, modeBox.y + 5);
+  await page.mouse.click(modeBox.x + 5, snackbarBox.y - 4);
+  assert.equal(await page.getByRole('button', { name: /Background clicks/ }).textContent(), 'Background clicks: 3');
+
+  for (const rootSize of [16, 20]) {
+    await page.evaluate((size) => {
+      document.documentElement.style.fontSize = size + 'px';
+    }, rootSize);
+    for (const surface of [previews, mode, snackbar]) {
+      const box = (await surface.boundingBox())!;
+      assert.equal(320 - box.x - box.width, 16, `Right inset at ${rootSize}px root font size`);
+    }
+    assert.equal((await page.getByTestId('standalone').boundingBox())!.width, 320 - 2 * rootSize);
+  }
+
+  await page.getByRole('button', { name: 'Toggle previews' }).click();
+  await previews.waitFor({ state: 'detached' });
+  assert.equal((await mode.boundingBox())!.y, 16);
+  await action.click();
+  await snackbar.waitFor({ state: 'detached' });
+  assert.equal(await result.textContent(), 'action');
+  assert(await mode.isVisible());
+  await page.getByRole('button', { name: 'Toggle mode' }).click();
+  await stack.waitFor({ state: 'detached' });
+  const toggleMode = page.getByRole('button', { name: 'Toggle mode' });
+  const autofocusLauncher = page.getByRole('button', { name: 'Show with autofocus' });
+  for (const statusFirst of [false, true]) {
+    if (statusFirst) {
+      await toggleMode.click();
+      await mode.waitFor({ state: 'visible' });
+      assert(await toggleMode.evaluate((button) => button.matches(':focus')), 'Opening a status preserves focus');
+    }
+    await autofocusLauncher.click();
+    await action.waitFor({ state: 'visible' });
+    assert(
+      await action.evaluate((button) => button.matches(':focus')),
+      `Explicit action autofocus (status first: ${statusFirst})`,
+    );
+    await page.keyboard.press('Enter');
+    await action.waitFor({ state: 'detached' });
+    assert.equal(await result.textContent(), 'action');
+    if (statusFirst) await toggleMode.click();
+    await stack.waitFor({ state: 'detached' });
+  }
+
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  // Vue's development build buffers component events while waiting for a DevTools client.
+  await page.waitForFunction(() => !(window as any).__VUE_DEVTOOLS_HOOK_REPLAY__);
+  const heap = await page.context().newCDPSession(page);
+  for (const method of ['close', 'unmount']) {
+    const retired = await page.evaluateHandle((method) => (window as any).retireStatus(method), method);
+    await page.getByTestId('retired-status').waitFor({ state: 'detached' });
+    await heap.send('HeapProfiler.collectGarbage');
+    await heap.send('HeapProfiler.collectGarbage');
+    assert.deepEqual(
+      await retired.evaluate(({ close, element, payload }) => {
+        close();
+        return { element: !!element.deref(), payload: !!payload.deref() };
+      }),
+      { element: false, payload: false },
+      `Keeping a close callback after ${method} must release the retired DOM and render payload`,
+    );
+    await retired.dispose();
+  }
+  await heap.detach();
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const position of ['top', 'bottom', 'top-end']) {
+    await openFixture(page, `${url}?position=${position}`);
+    await toggleMode.click();
+    await page.getByRole('button', { name: 'Show persistent' }).click();
+    for (const direction of ['ltr', 'rtl']) {
+      await page.evaluate((dir) => {
+        document.documentElement.dir = dir;
+      }, direction);
+      for (const surface of [snackbar, mode]) {
+        const box = (await surface.boundingBox())!;
+        if (position === 'top-end') {
+          const inset = direction === 'ltr' ? 320 - box.x - box.width : box.x;
+          assert.equal(inset, 16, `Inline-end inset in ${direction}`);
+        } else {
+          assert.equal(Math.round(box.x + box.width / 2), 160, `${position} center in ${direction}`);
+        }
+      }
+    }
+  }
+  console.log('Snackbar lifecycle, resource release, LTR/RTL layout, pointer pass-through and autofocus passed.');
 } finally {
   await browser.close();
   await server.close();
